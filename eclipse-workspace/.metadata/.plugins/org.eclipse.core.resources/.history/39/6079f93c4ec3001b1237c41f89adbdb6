@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.RepairCDInfoDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.RepairCDInfoDto">
+  		<id property="repNo" column="REP_NO" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="repDt" column="REP_DT" javaType="java.lang.String" />
+		<result property="repCar" column="REP_CAR" javaType="java.lang.String" />
+		<result property="custId" column="REP_CUST_ID" javaType="java.lang.Long" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="brkPartNo" column="BRK_PART_NO" javaType="java.lang.String" />
+		<result property="brkPartNm" column="BRK_PART_NM" javaType="java.lang.String" />
+		<result property="repPartNo" column="REP_PART_NO" javaType="java.lang.String" />
+		<result property="repPartNm" column="REP_PART_NM" javaType="java.lang.String" />
+		<result property="custEmpId" column="REP_EMP_SEQ" javaType="java.lang.Long" />
+		<result property="custEmpNm" column="REP_EMP_NM" javaType="java.lang.String" />
+		<result property="qty" column="QTY" javaType="java.lang.String" />
+		<result property="ngType" column="NG_TYPE" javaType="java.lang.String" />
+		<result property="ngCn" column="NG_CN" javaType="java.lang.String" />
+		<result property="status" column="REP_STATUS" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.RepairCDInfoDomain">
+
+    SELECT *
+    FROM TB_REP_INFO
+    WHERE REP_NO = #{repNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+				SELECT REP_NO
+  			   			,TO_CHAR(TO_DATE(REP_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS REP_DT
+  			   			,REP_CAR 
+  			   			,REP_CUST_ID
+  			   			,(SELECT CUST_NM FROM TB_CM_CUST WHERE REP_CUST_ID = ID) AS CUST_NM
+  			   			,(SELECT FST_NM FROM TB_CM_USER WHERE REP_EMP_SEQ = USER_ID) AS REP_EMP_NM
+  			   			,REP_EMP_SEQ
+  			   			,BRK_PART_NO
+  			   			,(SELECT ITEM_KOR_NM FROM TB_DC_ITEM_INFO WHERE BRK_PART_NO = PART_NO) AS BRK_PART_NM
+  			   			,REP_PART_NO
+  			   			,(SELECT ITEM_KOR_NM FROM TB_DC_ITEM_INFO WHERE REP_PART_NO = PART_NO) AS REP_PART_NM
+  			   			,QTY
+  			   			,NG_TYPE
+  			   			,NG_CN
+  			   			,REP_STATUS
+  			   			,ETC_CN
+  				FROM TB_REP_INFO
+  				WHERE WK_TYPE = 'CD'
+  	  <if test="criteria.status != null and criteria.status != ''">
+		AND REP_STATUS = UPPER(#{criteria.status})
+	  </if>
+	  <if test="criteria.searchRepDtFr != null and criteria.searchRepDtFr != ''">
+		AND REP_DT  &gt;=  #{criteria.searchRepDtFr}
+	  </if>
+	  <if test="criteria.searchRepDtTo != null and criteria.searchRepDtTo != ''">
+		AND REP_DT  &lt;=  #{criteria.searchRepDtTo}  || '9999'
+	  </if>
+	  <if test="criteria.custNm != null and criteria.custNm != ''">
+		AND CUST_NM  LIKE '%' || #{criteria.custNm} || '%'
+	  </if>
+	  <if test="criteria.partNo != null and criteria.partNo != ''">
+		AND PART_NO  LIKE '%' || #{criteria.partNo} || '%'
+	  </if>
+	  <if test="criteria.repNo != null and criteria.repNo != ''">
+		AND A.REP_NO  LIKE  '%' || #{criteria.repNo} || '%'
+	  </if>
+	  <if test="criteria.ngType != null and criteria.ngType != ''">
+		AND NG_TYPE  LIKE  '%' || #{criteria.ngType} || '%'
+	  </if>
+  		
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(REP_NO) AS CNT
+    FROM TB_REP_INFO
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.RepairCDInfoDomain">
+   
+    INSERT INTO TB_REP_INFO(
+			 REP_NO
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,REP_CAR
+			,WK_TYPE
+			,REP_DT
+			,BRK_PART_NO
+			,REP_PART_NO
+			,REP_CUST_ID
+			,REP_EMP_SEQ
+			,REP_STATUS
+			,QTY
+			,NG_TYPE
+			,NG_CN
+			,ETC_CN
+	)VALUES(
+			 #{repNo}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,#{repCar}
+			,'CD'
+			,replace(#{repDt},'-')
+			,#{brkPartNo}
+			,#{repPartNo}
+			,#{custId}
+			,#{custEmpId}
+			,#{status}
+			,#{qty}
+			,#{ngType}
+			,#{ngCn}
+			,#{remark}
+	)
+
+    <selectKey resultType="String" keyProperty="repNo" order="BEFORE">
+      SELECT FN_GET_RECT('REP') FROM DUAL	
+    </selectKey>
+
+  </insert>
+
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.RepairCDInfoDomain">
+
+    UPDATE TB_REP_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,REP_DT = replace(#{repDt},'-')
+		,REP_CUST_ID = #{custId}
+		,REP_CAR = #{repCar}
+		,QTY = #{qty}
+		,REP_STATUS = #{status}
+		,REP_EMP_SEQ = #{custEmpId}
+		,BRK_PART_NO = #{brkPartNo}
+		,REP_PART_NO = #{repPartNo}
+		,NG_TYPE = #{ngType}
+		,NG_CN = #{ngCn}
+		,ETC_CN = #{remark}
+ 	WHERE REP_NO = #{repNo}
+ 	
+  </update>
+
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.RepairCDInfoDomain">
+
+ 	DELETE FROM TB_REP_INFO
+    WHERE REP_NO = #{repNo}
+
+  </delete>
+
+</mapper>

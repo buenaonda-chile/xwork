@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.TrainingAppRegistDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.TrainingAppRegistDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="applyId" column="APPLY_ID" javaType="java.lang.Long" />
+		
+		<result property="eduDiv" column="EDU_DIV" javaType="java.lang.String" />
+		<result property="eduItem" column="EDU_ITEM" javaType="java.lang.Long" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="reprNm" column="REPR_NM" javaType="java.lang.String" />
+		<result property="officeTel" column="OFFICE_TEL" javaType="java.lang.String" />
+		<result property="telNo" column="TEL_NO" javaType="java.lang.String" />
+		<result property="officePw" column="OFFICE_PW" javaType="java.lang.String" />
+		<result property="infoYn" column="INFO_YN" javaType="java.lang.String" />
+		
+		<result property="rnkCd" column="RNK_CD" javaType="java.lang.String" />
+		<result property="traineeNm" column="TRAINEE_NM" javaType="java.lang.String" />
+		<result property="moblphonNo" column="MOBLPHON_NO" javaType="java.lang.String" />
+		<result property="email" column="EMAIL" javaType="java.lang.String" />
+		<result property="email2" column="EMAIL2" javaType="java.lang.String" />
+		
+		<result property="eduNm" column="EDU_NM" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+  	select *
+  	   from(
+			 
+	       select ID
+					,RGSTR_ID
+					,RGST_DT
+					,UPDTR_ID
+					,UPDT_DT
+					,APPLY_ID
+					,RNK_CD
+					,TRAINEE_NM
+					,OFFICE_TEL
+					,MOBLPHON_NO
+					,EMAIL  
+			    from TB_ED_EDUCATION_SUB
+			    where id = -1
+	   ) X
+  </sql>
+  
+  <sql id="select_02">
+  	select *
+  	   from(
+			 select  ID
+					,RGSTR_ID
+					,RGST_DT
+					,UPDTR_ID
+					,UPDT_DT
+					,APPLY_ID
+					,EDU_DIV
+					,EDU_ITEM
+					,CUST_NM
+					,OFFICE_NM
+					,REPR_NM
+					,OFFICE_TEL
+					,TEL_NO
+					,EMAIL
+					,OFFICE_PW
+					,INFO_YN
+	       		from TB_ED_EDUCATION_MASTER
+	       	 
+	   ) X
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.applyId != null and criteria.applyId != ''">
+		  AND APPLY_ID = UPPER(#{criteria.applyId})
+	  </if>
+  </sql>
+
+  <sql id="where_02">
+  
+	  <if test="criteria.eduDiv != null and criteria.eduDiv != ''">
+		  AND EDU_DIV = UPPER(#{criteria.eduDiv})
+	  </if>
+	  
+	  <if test="criteria.eduItem != null and criteria.eduItem != ''">
+		  AND EDU_ITEM = UPPER(#{criteria.eduItem})
+	  </if>
+	  
+	  <if test="criteria.custNm != null and criteria.custNm != ''">
+		  AND CUST_NM = UPPER(#{criteria.custNm})
+	  </if>
+	  
+	  <if test="criteria.reprNm != null and criteria.reprNm != ''">
+		  AND REPR_NM = UPPER(#{criteria.reprNm})
+	  </if>
+	  
+	  <if test="criteria.officeNm != null and criteria.officeNm != ''">
+		  AND OFFICE_NM = UPPER(#{criteria.officeNm})
+	  </if>
+
+  </sql>
+
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.TrainingAppRegistDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+	  AND ROWNUM = 1
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+			  <include refid="where_01"/>
+          </where>
+	      ORDER BY ID DESC
+          ) A
+
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+
+	<select id="searchBySdCondition" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="select_02" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		ORDER BY ID DESC
+		) A
+
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY RN
+
+	</select>
+	
+	<select id="searchBySdCondition2" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		select *
+		  from TB_ED_EDUCATION_INFO
+		 where 1 = 1
+	 	   and USE_YN = 'Y'
+		ORDER BY EDU_DT DESC, ID DESC
+		) A
+
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY RN
+
+	</select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+	<select id="searchSdCount" resultType="int" parameterType="Map">
+
+		SELECT COUNT(ID) AS CNT
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		) AA
+
+	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.TrainingAppRegistDomain">
+
+    INSERT INTO TB_ED_EDUCATION_MASTER(
+				ID
+			   ,RGSTR_ID
+			   ,RGST_DT
+			   ,UPDTR_ID
+			   ,UPDT_DT
+			   ,APPLY_ID
+			   ,EDU_DIV
+			   ,EDU_ITEM
+			   ,OFFICE_NM
+			   ,REPR_NM
+			   ,OFFICE_TEL
+			   ,TEL_NO
+			   ,EMAIL
+			   ,OFFICE_PW
+			   ,INFO_YN
+	   )VALUES(
+	   			#{id}
+			   ,#{rgstrId}
+			   ,#{rgstDt}
+			   ,#{updtrId}
+			   ,#{updtDt}
+			   ,#{id}
+			   ,#{eduDiv}
+			   ,#{eduItem}
+			   ,#{officeNm}
+			   ,#{reprNm}
+			   ,#{officeTel}
+			   ,#{telNo}
+			   ,#{email}
+			   ,#{officePw}
+			   ,#{infoYn}
+	   )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_ED_EDUCATION_MASTER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+  
+  <insert id="create2" parameterType="com.globaldenso.dicas.business.domain.TrainingAppRegistDomain">
+
+    INSERT INTO TB_ED_EDUCATION_SUB(
+			 ID
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,APPLY_ID
+			,RNK_CD
+			,TRAINEE_NM
+			,OFFICE_TEL
+			,MOBLPHON_NO
+			,EMAIL
+	   )VALUES(
+			 #{id}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,#{applyId}
+			,#{rnkCd}
+			,#{traineeNm}
+			,#{officeTel}
+			,#{moblphonNo}
+			,#{email}
+	   )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_ED_EDUCATION_SUB.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.TrainingAppRegistDomain">
+
+    UPDATE TB_ED_EDUCATION_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,EDU_DIV = #{eduDiv}
+		,EDU_NM = #{eduNm}
+		,EDU_DT = TO_DATE(#{eduDt}, 'YYYY-MM-DD HH24:MI')
+		,RECEIPT_END_DATE = TO_DATE(#{receiptEndDate}, 'YYYY-MM-DD HH24:MI')
+		,PERS_CNT = #{persCnt}
+		,ONOFF_YN = #{onoffYn}
+		,USE_YN = #{useYn}
+		,REMARK = #{remark}
+		
+ WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.TrainingAppRegistDomain">
+
+    DELETE FROM TB_ED_EDUCATION_INFO
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

@@ -1,0 +1,1012 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.BoardDao">
+
+	<resultMap id="BoardText" type="BoardTextDomain">
+        <result property="boardId" column="BOARD_ID" />
+        <result property="idx" column="IDX" />
+        <result property="prntIdx" column="PRNT_IDX" />
+        <result property="title" column="TITLE" />
+        <result property="titleCut" column="TITLE_CUT" />
+        <result property="cnts" column="CNTS" />
+        <result property="cntsCut" column="CNTS_CUT" />
+        <result property="pwd" column="PWD" />
+        <result property="userIp" column="USER_IP" />
+        <result property="noticeYn" column="NOTICE_YN" />
+        <result property="secretYn" column="SECRET_YN" />
+        <result property="editorYn" column="EDITOR_YN" />
+        <result property="item" column="ITEM" />
+        <result property="hits" column="HITS" />
+        <result property="writer" column="WRITER" />
+        <result property="fileId" column="FILE_ID" />
+        <result property="regiId" column="REGI_ID" />
+        <result property="regiDtm" column="REGI_DTM" />
+        <result property="modiDtm" column="MODI_DTM" />
+        <result property="rowNum" column="ROW_NUM" />
+        <result property="prevIdx" column="PREV_IDX" />
+        <result property="prevTitle" column="PREV_TITLE" />
+        <result property="nextIdx" column="NEXT_IDX" />
+        <result property="nextTitle" column="NEXT_TITLE" />
+        <result property="fileCnt" column="FILE_CNT" />
+        <result property="category" column="CATEGORY" />
+        <result property="circulation_Id" column="CIRCULATION_ID" />
+        <result property="circulation_Id_Team" column="CIRCULATION_TEAM" />
+    </resultMap>
+    
+	<resultMap id="BoardInfo" type="BoardInfoDomain">
+        <result property="boardId" column="BOARD_ID" />
+        <result property="boardNm" column="BOARD_NM" />
+        <result property="boardGrp" column="BOARD_GRP" />
+        <result property="boardType" column="BOARD_TYPE" />
+        <result property="boardSkin" column="BOARD_SKIN" />
+        <result property="writeAuth" column="WRITE_AUTH" />
+        <result property="readAuth" column="READ_AUTH" />
+        <result property="notiAuth" column="NOTI_AUTH" />
+        <result property="nsrAuth" column="NSR_AUTH" />
+        <result property="memoAuth" column="MEMO_AUTH" />
+        <result property="secretUse" column="SECRET_USE" />
+        <result property="editorUse" column="EDITOR_USE" />
+        <result property="itemUse" column="ITEM_USE" />
+        <result property="fileNum" column="FILE_NUM" />
+        <result property="fileSize" column="FILE_SIZE" />
+        <result property="fileExt" column="FILE_EXT" />
+        <result property="newiconDay" column="NEWICON_DAY" />
+        <result property="items" column="ITEMS" />
+        <result property="fileNum" column="FILE_NUM" />
+        <result property="fileSize" column="FILE_SIZE" />
+        <result property="fileExt" column="FILE_EXT" />
+        <result property="newiconDay" column="NEWICON_DAY" />
+        <result property="items" column="ITEMS" />
+        <result property="rowCnt" column="ROW_CNT" />
+        <result property="pageCnt" column="PAGE_CNT" />
+        <result property="regiId" column="REGI_ID" />
+        <result property="regiDtm" column="REGI_DTM" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+    
+    <resultMap id="BoardFile" type="BoardFileDomain">
+        <result property="fidx" column="FIDX" />
+        <result property="idx" column="IDX" />
+        <result property="saveName" column="SAVE_NAME" />
+        <result property="realName" column="REAL_NAME" />
+        <result property="fileSize" column="FILE_SIZE" />
+        <result property="fileType" column="FILE_TYPE" />
+        <result property="downCnt" column="DOWN_CNT" />
+        <result property="boardId" column="BOARD_ID" />
+        <result property="saveDir" column="SAVE_DIR" />
+        <result property="pass" column="PASS" />
+        <result property="regDate" column="REG_DATE" />
+    </resultMap>
+    
+    <select id="searchById" resultMap="BoardText" parameterType="BoardTextDomain">
+    	<![CDATA[
+        select 
+                A.BOARD_ID
+              , A.IDX
+              , A.PRNT_IDX
+              , A.TITLE
+              , A.CNTS
+              , FNC_GET_BOARD_CNTS_CUT(A.BOARD_ID, A.IDX, '20') AS CNTS_CUT
+              , A.PWD
+              , A.USER_IP
+              , A.NOTICE_YN
+              , A.SECRET_YN
+              , A.EDITOR_YN
+              , A.ITEM
+              , A.HITS
+              , A.WRITER
+              , A.FILE_ID
+              , A.REGI_ID
+              , A.CATEGORY
+              , A.CIRCULATION_ID
+              , A.CIRCULATION_TEAM
+              , TO_CHAR(A.REGI_DTM, 'YYYY-MM-DD') AS REGI_DTM
+              , TO_CHAR(A.MODI_DTM, 'YYYY-MM-DD') AS MODI_DTM
+              , FNC_GET_BOARD_NEXT_DATA(A.BOARD_ID, A.IDX, 'PREV_IDX', #{user_Id}) 	AS PREV_IDX
+              , FNC_GET_BOARD_NEXT_DATA(A.BOARD_ID, A.IDX, 'PREV_TITLE', #{user_Id}) AS PREV_TITLE
+              , FNC_GET_BOARD_NEXT_DATA(A.BOARD_ID, A.IDX, 'NEXT_IDX', #{user_Id}) 	AS NEXT_IDX
+              , FNC_GET_BOARD_NEXT_DATA(A.BOARD_ID, A.IDX, 'NEXT_TITLE', #{user_Id}) AS NEXT_TITLE
+              , (SELECT COUNT(*) FROM BOARD_FILE WHERE BOARD_ID = A.BOARD_ID AND IDX = A.IDX) AS FILE_CNT
+        from 
+                BOARD_TEXT A
+        ]]>
+        where 
+            'SqlMap-Board.searchById' = 'SqlMap-Board.searchById'
+ 			and A.BOARD_ID 	  = #{boardId }
+ 			and A.IDX			= #{idx }
+    </select>
+    
+    <select id="searchByConditionForMain" resultMap="BoardText"
+        parameterType="BoardTextDomain">
+        select 
+                BOARD_ID
+              , IDX
+              , PRNT_IDX
+              , TITLE
+              , TITLE_CUT
+              , CNTS
+              , CNTS_CUT
+              , PWD
+              , USER_IP
+              , NOTICE_YN
+              , SECRET_YN
+              , EDITOR_YN
+              , ITEM
+              , HITS
+              , WRITER
+              , FILE_ID
+              , REGI_ID
+              , REGI_DTM
+              , MODI_DTM
+              , ROW_NUM
+              , CATEGORY
+              , CIRCULATION_ID
+              , CIRCULATION_TEAM
+              , FILE_CNT
+        from (
+	            select 
+	        		BOARD_ID
+	              , IDX
+	              , PRNT_IDX
+	              , TITLE
+	              , FNC_GET_BOARD_TITLE_CUT(BOARD_ID, IDX, '20') AS TITLE_CUT
+	              , CNTS
+	              , FNC_GET_BOARD_CNTS_CUT(BOARD_ID, IDX, '100') AS CNTS_CUT
+	              , PWD
+	              , USER_IP
+	              , NOTICE_YN
+	              , SECRET_YN
+	              , EDITOR_YN
+	              , ITEM
+	              , HITS
+	              , WRITER
+	              , FILE_ID
+	              , REGI_ID
+	              , CATEGORY
+	              , CIRCULATION_ID
+	              , CIRCULATION_TEAM
+	              , TO_CHAR(REGI_DTM, 'YYYY-MM-DD') AS REGI_DTM
+	              , TO_CHAR(MODI_DTM, 'YYYY-MM-DD') AS MODI_DTM
+	              , row_number() over (order by BOARD_ID) ROW_NUM
+	              , (SELECT COUNT(*) FROM BOARD_FILE WHERE BOARD_ID = BOARD_TEXT.BOARD_ID AND IDX = BOARD_TEXT.IDX) AS FILE_CNT
+            from 
+                BOARD_TEXT
+	        where 
+                  'SqlMap-Board.searchByConditionForMain' = 'SqlMap-Board.searchByConditionForMain'
+        <if test="noticeYn != null and noticeYn != ''">
+                and NOTICE_YN = #{noticeYn }
+        </if>
+        <if test="boardId != null and boardId != ''">
+            	and BOARD_ID = #{boardId}
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team != null and circulation_Id_Team != '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or CIRCULATION_TEAM like '%' || #{circulation_Id_Team} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team == null or circulation_Id_Team == '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+        <if test="sv != null and sv != ''">
+			<if test="sv == 'title'">
+				and TITLE like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'cnts'">
+				and CNTS like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'dual'">
+				and (TITLE like '%' || #{sw} || '%' or CNTS like '%' || #{sw} || '%') 
+			</if>	
+		</if>
+			order by REGI_DTM DESC
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <select id="searchByCondition" resultMap="BoardText"
+        parameterType="BoardTextDomain">
+        select 
+                BOARD_ID
+              , IDX
+              , PRNT_IDX
+              , TITLE
+              , CNTS
+              , CNTS_CUT
+              , PWD
+              , USER_IP
+              , NOTICE_YN
+              , SECRET_YN
+              , EDITOR_YN
+              , ITEM
+              , HITS
+              , WRITER
+              , FILE_ID
+              , REGI_ID
+              , REGI_DTM
+              , MODI_DTM
+              , ROW_NUM
+              , FILE_CNT
+              , CATEGORY
+              , CIRCULATION_ID
+              , CIRCULATION_TEAM
+        from (
+	            select 
+	        		BOARD_ID
+	              , IDX
+	              , PRNT_IDX
+	              , TITLE
+	              , CNTS
+	              , FNC_GET_BOARD_CNTS_CUT(BOARD_ID, IDX, '300') AS CNTS_CUT
+	              , PWD
+	              , USER_IP
+	              , NOTICE_YN
+	              , SECRET_YN
+	              , EDITOR_YN
+	              , ITEM
+	              , HITS
+	              , WRITER
+	              , FILE_ID
+	              , REGI_ID
+	              , CATEGORY
+	              , CIRCULATION_ID
+	              , CIRCULATION_TEAM
+	              , TO_CHAR(REGI_DTM, 'YYYY-MM-DD') AS REGI_DTM
+	              , TO_CHAR(MODI_DTM, 'YYYY-MM-DD') AS MODI_DTM
+	              , row_number() over (order by BOARD_ID) ROW_NUM
+	              , (SELECT COUNT(*) FROM BOARD_FILE WHERE BOARD_ID = BOARD_TEXT.BOARD_ID AND IDX = BOARD_TEXT.IDX) AS FILE_CNT
+            from 
+                BOARD_TEXT
+	        where 
+                  'SqlMap-Board.searchByConditionForPaging' = 'SqlMap-Board.searchByConditionForPaging'
+               and NOTICE_YN = 'Y'
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID = #{boardId}
+        </if>
+            )
+    </select>
+    
+    <select id="noticeCount" resultType="java.lang.Integer"
+        parameterType="BoardTextDomain">
+        select 
+               count(rownum) 
+        from 
+               BOARD_TEXT
+        where 
+               'SqlMap-Board.searchCount' = 'SqlMap-Board.searchCount'
+               and NOTICE_YN = 'Y'
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID = #{boardId}
+        </if>
+    </select>
+    
+    <select id="searchByConditionForPaging" resultMap="BoardText"
+        parameterType="BoardTextDomain">
+        select 
+                BOARD_ID
+              , IDX
+              , PRNT_IDX
+              , TITLE
+              , CNTS
+              , CNTS_CUT
+              , PWD
+              , USER_IP
+              , NOTICE_YN
+              , SECRET_YN
+              , EDITOR_YN
+              , ITEM
+              , HITS
+              , WRITER
+              , FILE_ID
+              , REGI_ID
+              , REGI_DTM
+              , MODI_DTM
+              , ROW_NUM
+              , FILE_CNT
+              , CATEGORY
+              , CIRCULATION_ID
+              , CIRCULATION_TEAM
+        from (
+	            select 
+	        		BOARD_ID
+	              , IDX
+	              , PRNT_IDX
+	              , TITLE
+	              , CNTS
+	              , FNC_GET_BOARD_CNTS_CUT(BOARD_ID, IDX, '300') AS CNTS_CUT
+	              , PWD
+	              , USER_IP
+	              , NOTICE_YN
+	              , SECRET_YN
+	              , EDITOR_YN
+	              , ITEM
+	              , HITS
+	              , WRITER
+	              , FILE_ID
+	              , REGI_ID
+	              , CATEGORY
+	              , CIRCULATION_ID
+	              , CIRCULATION_TEAM
+	              , TO_CHAR(REGI_DTM, 'YYYY-MM-DD') AS REGI_DTM
+	              , TO_CHAR(MODI_DTM, 'YYYY-MM-DD') AS MODI_DTM
+	              , row_number() over (order by IDX DESC) ROW_NUM
+	              , (SELECT COUNT(*) FROM BOARD_FILE WHERE BOARD_ID = BOARD_TEXT.BOARD_ID AND IDX = BOARD_TEXT.IDX) AS FILE_CNT
+            from 
+                BOARD_TEXT
+	        where 
+                  'SqlMap-Board.searchByConditionForPaging' = 'SqlMap-Board.searchByConditionForPaging'
+        <if test="noticeYn != null and noticeYn != ''">
+               and NOTICE_YN = #{noticeYn }
+        </if>
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID = #{boardId}
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team != null and circulation_Id_Team != '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or CIRCULATION_TEAM like '%' || #{circulation_Id_Team} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team == null or circulation_Id_Team == '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+	    <if test="category != null and category != ''">
+        	and CATEGORY = #{category} 
+        </if>   
+        <if test="sv != null and sv != ''">
+			<if test="sv == 'title'">
+				and TITLE like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'cnts'">
+				and CNTS like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'dual'">
+				and (TITLE like '%' || #{sw} || '%' or CNTS like '%' || #{sw} || '%') 
+			</if>	
+		</if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="BoardTextDomain">
+        select 
+               count(rownum) 
+        from 
+               BOARD_TEXT
+        where 
+               'SqlMap-Board.searchCount' = 'SqlMap-Board.searchCount'
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID = #{boardId}
+        </if>
+    </select>
+    
+    <select id="boardCount" resultType="java.lang.Integer"
+        parameterType="BoardTextDomain">
+        select 
+               count(rownum) 
+        from 
+               BOARD_TEXT
+        where 
+               'SqlMap-Board.searchCount' = 'SqlMap-Board.searchCount'
+        <if test="noticeYn != null and noticeYn != ''">
+               and NOTICE_YN = #{noticeYn }
+        </if>
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID = #{boardId}
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team != null and circulation_Id_Team != '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or CIRCULATION_TEAM like '%' || #{circulation_Id_Team} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+        <if test="(circulation_Id != null and circulation_Id != '' and circulation_Id != 'Admin') and (circulation_Id_Team == null or circulation_Id_Team == '')">
+        	and (CIRCULATION_ID like '%' || #{circulation_Id} || '%'
+        	or (CIRCULATION_ID is null and CIRCULATION_TEAM is null))
+        </if>
+        <if test="category != null and category != ''">
+        	and CATEGORY = #{category} 
+        </if>
+        <if test="sv != null and sv != ''">
+			<if test="sv == 'title'">
+				and TITLE like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'cnts'">
+				and CNTS like '%' || #{sw} || '%' 
+			</if>	
+			<if test="sv == 'dual'">
+				and (TITLE like '%' || #{sw} || '%' or CNTS like '%' || #{sw} || '%') 
+			</if>	
+		</if>
+    </select>
+    
+    <select id="boardNextIdx" resultType="java.lang.String"
+        parameterType="BoardTextDomain">
+        SELECT 'IDX' || lpad(DNKR_BOARD_TEXT_SEQ.NEXTVAL, 7, '0') FROM DUAL
+    </select>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="BoardTextDomain">
+        insert into BOARD_TEXT (
+                /* SqlMap-Board.create */
+                BOARD_ID,
+                IDX,
+            <if test="prntIdx != null">
+                PRNT_IDX,
+            </if>
+            <if test="title != null">
+                TITLE,
+            </if>
+            <if test="cnts != null">
+                CNTS,
+            </if>
+            <if test="pwd != null">
+                PWD,
+            </if>
+            <if test="userIp != null">
+                USER_IP,
+            </if>
+            <if test="noticeYn != null">
+                NOTICE_YN,
+            </if>
+            
+                SECRET_YN,
+                EDITOR_YN,
+            
+            <if test="writer != null">
+                WRITER,
+            </if>
+            <if test="category != null">
+                CATEGORY,
+            </if>
+            <if test="fileId != null">
+                FILE_ID,
+            </if>
+            
+            <if test="regiId != null">
+                REGI_ID,
+            </if>
+            
+            <if test="circulation_Id != null">
+                CIRCULATION_ID,
+            </if>
+            
+            <if test="circulation_Id_Team != null">
+                CIRCULATION_TEAM,
+            </if>
+            	HITS,
+                REGI_DTM
+        ) values (
+        		#{boardId},
+        	#{idx},
+            <if test="prntIdx != null">
+                #{prntIdx},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="cnts != null">
+                #{cnts},
+            </if>
+            <if test="pwd != null">
+                #{pwd},
+            </if>
+            <if test="userIp != null">
+                #{userIp},
+            </if>
+            <if test="noticeYn != null">
+                #{noticeYn},
+            </if>
+            
+                'N',
+            	'N' ,
+            
+            <if test="writer != null">
+                #{writer},
+            </if>
+            <if test="category != null">
+                #{category},
+            </if>
+            <if test="fileId != null">
+                #{fileId},
+            </if>
+            
+            <if test="regiId != null">
+                #{regiId},
+            </if>
+            
+            <if test="circulation_Id != null">
+                #{circulation_Id},
+            </if>
+            
+            <if test="circulation_Id_Team != null">
+                #{circulation_Id_Team},
+            </if>
+            	0,
+                SYSTIMESTAMP
+        )
+    </insert>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="hitsUpdate" parameterType="BoardTextDomain">
+        update 
+                BOARD_TEXT
+        set
+	            HITS = HITS + 1
+        where 
+                'SqlMap-Board.hitsUpdate' = 'SqlMap-Board.hitsUpdate'
+            and BOARD_ID = #{boardId}
+            and IDX	= #{idx }
+    </update>
+    
+    <update id="update" parameterType="BoardTextDomain">
+        update 
+                BOARD_TEXT
+        set
+            <if test="title != null">
+            	TITLE = #{title},
+	        </if>
+	        <if test="cnts != null">
+	            CNTS = #{cnts},
+	        </if>
+	        <if test="pwd != null">
+	            PWD = #{pwd },
+	        </if>
+	        <if test="noticeYn != null">
+	            NOTICE_YN = #{noticeYn},
+	        </if>
+	        <if test="category != null">
+	            CATEGORY = #{category},
+	        </if>
+	        <if test="circulation_Id != null">
+	            CIRCULATION_ID = #{circulation_Id},
+	        </if>
+	        <if test="circulation_Id_Team != null">
+	            CIRCULATION_TEAM = #{circulation_Id_Team},
+	        </if>
+	            MODI_DTM = SYSTIMESTAMP
+        where 
+                'SqlMap-Board.update' = 'SqlMap-Board.update'
+            and IDX = #{idx}
+    </update>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="chkDelete" parameterType="BoardTextDomain">
+        delete from 
+                BOARD_TEXT
+        where 
+                'SqlMap-Board.delete' = 'SqlMap-Board.delete'
+            and BOARD_ID = #{boardId}
+            and IDX in
+            <foreach collection="idxArr" item="idx" open="(" close=")" separator=",">
+            	#{idx}
+            </foreach>
+    </delete>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="BoardTextDomain">
+        delete from 
+                BOARD_TEXT
+        where 
+                'SqlMap-Board.delete' = 'SqlMap-Board.delete'
+            and BOARD_ID = #{boardId}
+            and IDX = #{idx}
+    </delete>
+    
+    <select id="searchInfoById" resultMap="BoardInfo" parameterType="BoardInfoDomain">
+        select 
+                BOARD_ID
+              , BOARD_NM
+              , BOARD_GRP
+              , BOARD_TYPE
+              , BOARD_SKIN
+              , WRITE_AUTH
+              , READ_AUTH
+              , NOTI_AUTH
+              , NSR_AUTH
+              , MEMO_AUTH
+              , SECRET_USE
+              , EDITOR_USE
+              , ITEM_USE
+              , FILE_NUM
+              , FILE_SIZE
+              , FILE_EXT
+              , NEWICON_DAY
+              , ITEMS
+              , ROW_CNT
+              , PAGE_CNT
+              , REGI_ID
+              , REGI_DTM
+        from 
+                BOARD_INFO
+        where 
+            'SqlMap-Board.searchInfoById' = 'SqlMap-Board.searchInfoById'
+ 			and BOARD_ID 	  = #{boardId }
+    </select>
+    
+    <select id="searchByInfoConditionForPaging" resultMap="BoardInfo"
+        parameterType="BoardInfoDomain">
+        select 
+                BOARD_ID
+              , BOARD_NM
+              , BOARD_GRP
+              , BOARD_TYPE
+              , BOARD_SKIN
+              , WRITE_AUTH
+              , READ_AUTH
+              , NOTI_AUTH
+              , NSR_AUTH
+              , MEMO_AUTH
+              , SECRET_USE
+              , EDITOR_USE
+              , ITEM_USE
+              , FILE_NUM
+              , FILE_SIZE
+              , FILE_EXT
+              , NEWICON_DAY
+              , ITEMS
+              , ROW_CNT
+              , PAGE_CNT
+              , REGI_ID
+              , REGI_DTM
+              , ROW_NUM
+        from (
+	            select 
+	        		BOARD_ID
+	              , BOARD_NM
+	              , BOARD_GRP
+	              , BOARD_TYPE
+	              , BOARD_SKIN
+	              , WRITE_AUTH
+	              , READ_AUTH
+	              , NOTI_AUTH
+	              , NSR_AUTH
+	              , MEMO_AUTH
+	              , SECRET_USE
+	              , EDITOR_USE
+	              , ITEM_USE
+	              , FILE_NUM
+	              , FILE_SIZE
+	              , FILE_EXT
+	              , NEWICON_DAY
+	              , ITEMS
+	              , ROW_CNT
+	              , PAGE_CNT
+	              , REGI_ID
+	              , REGI_DTM
+	              , row_number() over (order by BOARD_ID) ROW_NUM
+            from 
+                BOARD_INFO
+	        where 
+                  'SqlMap-Board.searchByInfoConditionForPaging' = 'SqlMap-Board.searchByInfoConditionForPaging'
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID like '%' || #{boardId} || '%'
+        </if>
+        <if test="boardNm != null and boardNm != ''">
+            and BOARD_NM like '%' || #{boardNm} || '%'
+        </if>
+        <if test="boardType != null and boardType != ''">
+            and BOARD_TYPE = #{boardType}
+        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <select id="searchInfoCount" resultType="java.lang.Integer"
+        parameterType="BoardInfoDomain">
+        select 
+               count(rownum) 
+        from 
+               BOARD_INFO
+        where 
+               'SqlMap-Board.searchInfoCount' = 'SqlMap-Board.searchInfoCount'
+        <if test="boardId != null and boardId != ''">
+            and BOARD_ID like '%' || #{boardId} || '%'
+        </if>
+        <if test="boardNm != null and boardNm != ''">
+            and BOARD_NM like '%' || #{boardNm} || '%'
+        </if>
+        <if test="boardType != null and boardType != ''">
+            and BOARD_TYPE = #{boardType}
+        </if>
+    </select>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="infoCreate" parameterType ="BoardInfoDomain">
+        insert into BOARD_INFO (
+                /* SqlMap-Emp.create */
+                BOARD_ID,
+            <if test="boardNm != null">
+                BOARD_NM,
+            </if>
+            <if test="boardType != null">
+                BOARD_TYPE,
+            </if>
+            <if test="writeAuth != null">
+                WRITE_AUTH,
+            </if>
+            <if test="readAuth != null">
+                READ_AUTH,
+            </if>
+            <if test="notiAuth != null">
+                NOTI_AUTH,
+            </if>
+            <if test="nsrAuth != null">
+                NSR_AUTH,
+            </if>
+            <if test="secretUse != null">
+                SECRET_USE,
+            </if>
+            <if test="fileNum != null">
+                FILE_NUM,
+            </if>
+            <if test="fileSize != null">
+                FILE_SIZE,
+            </if>
+            <if test="fileExt != null">
+                FILE_EXT,
+            </if>
+            <if test="rowCnt != null">
+                ROW_CNT,
+            </if>
+            <if test="pageCnt != null">
+                PAGE_CNT,
+            </if>
+            
+            <if test="regiId != null">
+                REGI_ID,
+            </if>
+                REGI_DTM
+        ) values (
+        	'BID' || lpad(DNKR_BOARD_INFO_SEQ.NEXTVAL, 4, '0') ,
+            <if test="boardNm != null">
+                #{boardNm},
+            </if>
+            <if test="boardType != null">
+                #{boardType},
+            </if>
+            <if test="writeAuth != null">
+                #{writeAuth},
+            </if>
+            <if test="readAuth != null">
+                #{readAuth},
+            </if>
+            <if test="notiAuth != null">
+                #{notiAuth},
+            </if>
+            <if test="nsrAuth != null">
+                #{nsrAuth},
+            </if>
+            <if test="secretUse != null">
+                #{secretUse},
+            </if>
+            <if test="fileNum != null">
+                #{fileNum},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize},
+            </if>
+            <if test="fileExt != null">
+                #{fileExt},
+            </if>
+            <if test="rowCnt != null">
+                #{rowCnt},
+            </if>
+            <if test="pageCnt != null">
+                #{pageCnt},
+            </if>
+            
+            <if test="regiId != null">
+                #{regiId},
+            </if>
+                SYSTIMESTAMP
+        )
+    </insert>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="infoUpdate" parameterType="BoardInfoDomain">
+        update 
+                BOARD_INFO
+        set
+            <if test="boardNm != null">
+            	BOARD_NM = #{boardNm},
+	        </if>
+	        <if test="boardType != null">
+	            BOARD_TYPE = #{boardType},
+	        </if>
+	        <if test="writeAuth != null">
+	            WRITE_AUTH = #{writeAuth},
+	        </if>
+	        <if test="readAuth != null">
+	            READ_AUTH = #{readAuth},
+	        </if>
+	        <if test="notiAuth != null">
+	            NOTI_AUTH = #{notiAuth},
+	        </if>
+	        <if test="nsrAuth != null">
+	            NSR_AUTH = #{nsrAuth},
+	        </if>
+	        <if test="memoAuth != null">
+	            MEMO_AUTH = #{memoAuth},
+	        </if>
+	        <if test="secretUse != null">
+	            SECRET_USE = #{secretUse},
+	        </if>
+	        <if test="fileNum != null">
+	            FILE_NUM = #{fileNum},
+	        </if>
+	        <if test="fileSize != null">
+	            FILE_SIZE = #{fileSize},
+	        </if>
+	        <if test="fileExt != null">
+	            FILE_EXT = #{fileExt},
+	        </if>
+	        <if test="rowCnt != null">
+	            ROW_CNT = #{rowCnt},
+	        </if>
+	        <if test="pageCnt != null">
+	            PAGE_CNT = #{pageCnt},
+	        </if>
+	            REGI_DTM = REGI_DTM
+        where 
+                'SqlMap-Board.infoUpdate' = 'SqlMap-Board.infoUpdate'
+            and BOARD_ID = #{boardId}
+    </update>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="infoDelete" parameterType="BoardInfoDomain">
+        delete from 
+                BOARD_INFO
+        where 
+                'SqlMap-Board.infoDelete' = 'SqlMap-Board.infoDelete'
+            and BOARD_ID = #{boardId}
+    </delete>
+    
+    <select id="searchFileList" resultMap="BoardFile" parameterType="BoardFileDomain">
+	        SELECT FIDX
+	        	 , IDX
+	        	 , SAVE_NAME
+	        	 , REAL_NAME
+	        	 , FILE_SIZE
+	        	 , FILE_TYPE
+	        	 , DOWN_CNT
+	        	 , BOARD_ID
+	        	 , SAVE_DIR
+	        	 , PASS
+	        	 , REG_DATE
+              FROM BOARD_FILE
+	         WHERE 'SqlMap-Board.searchFileList' = 'SqlMap-Board.searchFileList'
+        <if test="boardId != null and boardId != ''">
+            AND BOARD_ID = #{boardId}
+        </if>
+        <if test="idx != null and idx != ''">
+            AND IDX = #{idx }
+        </if>
+    </select>
+    
+    <select id="searchFileById" resultMap="BoardFile" parameterType="BoardFileDomain">
+	        SELECT FIDX
+	        	 , IDX
+	        	 , SAVE_NAME
+	        	 , REAL_NAME
+	        	 , FILE_SIZE
+	        	 , FILE_TYPE
+	        	 , DOWN_CNT
+	        	 , BOARD_ID
+	        	 , SAVE_DIR
+	        	 , PASS
+	        	 , REG_DATE
+              FROM BOARD_FILE
+	         WHERE 'SqlMap-Board.searchFileList' = 'SqlMap-Board.searchFileList'
+        <if test="fidx != null and fidx != ''">
+            AND FIDX = #{fidx}
+        </if>
+    </select>
+    
+    <insert id="fileCreate" parameterType ="BoardInfoDomain">
+        insert into BOARD_FILE (
+                /* SqlMap-Board.fileCreate */
+               FIDX
+	       	 , IDX
+	       	 , SAVE_NAME
+	       	 , REAL_NAME
+	       	 , FILE_SIZE
+	       	 , FILE_TYPE
+	       	 , DOWN_CNT
+	       	 , BOARD_ID
+	       	 , SAVE_DIR
+	       	 , REG_DATE
+        ) values (
+        	   DNKR_BOARD_FILE_SEQ.NEXTVAL
+        	 , #{idx }
+        	 , #{saveName } 
+        	 , #{realName } 
+        	 , #{fileSize } 
+        	 , #{fileType } 
+        	 , 0 
+        	 , #{boardId } 
+        	 , #{saveDir } 
+             , SYSTIMESTAMP
+        )
+    </insert>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="fileUpdate" parameterType="BoardFileDomain">
+        update 
+                BOARD_TEXT
+        set
+            <if test="fidx != null">
+            	FIDX = #{fidx},
+	        </if>
+	        <if test="idx != null">
+	            IDX = #{idx},
+	        </if>
+	        <if test="saveName != null">
+	            SAVE_NAME = #{saveName},
+	        </if>
+	        <if test="realName != null">
+	            REAL_NAME = #{realName},
+	        </if>
+	        <if test="fileSize != null">
+	            FILE_SIZE = #{fileSize},
+	        </if>
+	        <if test="fileType != null">
+	            FILE_TYPE = #{fileType},
+	        </if>
+	        <if test="downCnt != null">
+	            DOWN_CNT = #{downCnt},
+	        </if>
+	        <if test="boardId != null">
+	            BOARD_ID = #{boardId},
+	        </if>
+	        <if test="saveDir != null">
+	            SAVE_DIR = #{saveDir},
+	        </if>
+        where 
+                'SqlMap-Board.fileUpdate' = 'SqlMap-Board.fileUpdate'
+            <if test="fidx != null and fidx != ''">
+            	and FIDX = #{fidx}
+            </if>
+            <if test="idx != null and idx != ''">
+            	and IDX = #{idx}
+            </if>
+            <if test="boardId != null and boardId != ''">
+            	and BOARD_ID = #{boardId}
+            </if>
+            
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="downCntUpdate" parameterType="BoardFileDomain">
+        update 
+                BOARD_FILE
+        set
+	            DOWN_CNT = DOWN_CNT + 1
+        where 
+                'SqlMap-Board.downCntUpdate' = 'SqlMap-Board.downCntUpdate'
+           <if test="idx != null and idx != ''">
+           		and FIDX = #{fidx}
+           </if>
+           <if test="idx != null and idx != ''">
+           		and IDX = #{idx }
+           </if>
+    </update>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="fileDelete" parameterType="BoardInfoDomain">
+        delete from 
+                BOARD_FILE
+        where 
+                'SqlMap-Board.infoDelete' = 'SqlMap-Board.infoDelete'
+           <if test="idx != null and idx != ''">
+           		and FIDX = #{fidx}
+           </if>
+           <if test="idx != null and idx != ''">
+           		and IDX = #{idx }
+           </if>
+    </delete>
+    
+</mapper>

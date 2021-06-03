@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * log4j2-miyabi-pro.xml
+ * 
+ * This is a configuration file Log4j. (Miyabi, For production environment)
+ * 
+ * Log DEBUG, INFO-level application of log (logs / ai_App.log), 
+ * more than WARN log level is output to the (logs / ai_Sys.log) system log.
+ * 
+ * In addition, a log of all levels are output as standard output.
+ * 
+ * The settings made in the size of rotation in order to limit the size of the log file.
+ * If you want to output a fixed Appender Please change the settings of the individual.
+ * 
+ * If you are deploying production environment / semi-production environment, 
+ * please replace the configuration file for each environment.
+ * (replaced automatically if using the build.xml)
+ *  
+ *  $ log4j2-miyabi-pro.xml 1779 2015-07-06 01:52:17Z 100011308867 $
+ *
+ *  Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+
+<Configuration>
+    
+    <!-- Appender ========================================================== -->
+    <Appenders>
+        <!-- Application Log (fixed output file) -->
+        <File name="app_file_fix" fileName="D:/Tomcat8.0/ins01/logs/ai_App.log" append="true">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </File>
+        
+        <!-- System Log (fixed output file) -->
+        <File name="sys_file_fix" fileName="D:/Tomcat8.0/ins01/logs/ai_Sys.log" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="OFF" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </File>
+        
+        <!-- Application Log (size rotation: not used) -->
+        <!--RollingFile name="app_file_roll" fileName="D:/Tomcat8.0/ins01/logs/ai_App.log" filePattern="D:/Tomcat8.0/ins01/logs/ai_App.log.%i" append="true">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="30MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </RollingFile-->
+        
+        <!-- System Log (size rotation: not used) -->
+        <!--RollingFile name="sys_file_roll" fileName="D:/Tomcat8.0/ins01/logs/ai_Sys.log" filePattern="D:/Tomcat8.0/ins01/logs/ai_Sys.log.%i" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="30MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="OFF" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </RollingFile-->
+        
+        <!-- Application Log (standard output: not used) -->
+        <!--Console name="app_stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </Console-->
+
+        <!-- System Log (standard output: not used) -->
+        <!--Console name="sys_stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] DSC-ID[%X{DSC_ID}] SID[%X{SID}] RID[%X{RID}] [%-5p] %m%n" />
+            
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="OFF" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </Console-->
+    </Appenders>
+    
+    <!-- Logger ============================================================ -->
+    <Loggers>
+        <!-- Application Development Infrastructure -->
+        <Logger name="com.globaldenso.ai" level="INFO" additivity="false" >
+            <AppenderRef ref="app_file_fix" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+        
+        <!-- Spring Framework transaction information output -->
+        <Logger name="org.springframework.transaction.support.TransactionSynchronizationManager" level="TRACE" additivity="false" >
+            <AppenderRef ref="app_file_fix" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+        <Logger name="org.springframework.transaction" level="DEBUG" additivity="false" >
+            <AppenderRef ref="app_file_fix" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+        
+        <!-- information output MyBATIS SQL  -->
+        <Logger name="com.globaldenso" level="DEBUG" additivity="false" >
+            <AppenderRef ref="app_file_fix" />
+            <AppenderRef ref="sys_file_fix" />
+            
+            <MarkerFilter marker="MYBATIS" />
+        </Logger>
+        
+        <!-- Root ============================================================== -->
+        <Root level="ERROR" >
+            <AppenderRef ref="sys_file_fix" />
+        </Root>
+    </Loggers>
+    
+</Configuration>

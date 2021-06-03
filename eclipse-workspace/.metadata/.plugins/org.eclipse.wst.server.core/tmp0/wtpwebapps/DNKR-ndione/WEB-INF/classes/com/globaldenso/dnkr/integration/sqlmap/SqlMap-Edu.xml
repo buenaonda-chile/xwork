@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EduDao">
+
+	<!-- 교육결과 리스트 -->
+	<select id="getEduDtlRtlList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT T2.*
+			  FROM (SELECT T1.*, FLOOR((ROWNUM - 1) / #{pageSize} + 1 ) AS PAGE
+			          FROM 
+			          (
+			 		SELECT 
+			               DISTINCT	A.EMP_NUMBER
+			        	  , COUNT(*) OVER() AS CNT
+			              , B.REL_NAME CLS_NAME
+			              , C.REL_NAME LOC_NAME
+			              , D.REL_NAME TEAM_NAME
+			              , A.EMP_NAME
+			              , A.EMP_ID   
+			              , NVL2(G.EMP_NUMBER, 'O', 'X')  as EDU_COMPLETE
+                   		  , G.DESCRIPT as USER_DESCRIPT
+                   		  , A.EMP_STEP_NM
+			        FROM DNKR_EMP A
+			        LEFT JOIN DNKR_RELATION_NM B ON A.CLS_CODE = B.REL_CODE AND B.CMC_CODE = 'kr'
+			        LEFT JOIN DNKR_RELATION_NM C ON A.LOC_CODE = C.REL_CODE AND C.CMC_CODE = 'kr'
+			        LEFT JOIN DNKR_RELATION_NM D ON A.H_TEAM_CODE = D.REL_CODE AND D.CMC_CODE = 'kr'
+			        LEFT JOIN DNKR_RELATION_NM E ON A.RELATION_COP_LOC = E.REL_CODE AND E.CMC_CODE = 'kr'
+			        LEFT JOIN TB_EDU_EMP F ON A.EMP_NUMBER = F.EMP_NUMBER
+			        LEFT JOIN TB_EDU_USER G ON A.EMP_NUMBER = G.EMP_NUMBER AND G.EDU_PK = #{edu_pk}  
+			        WHERE 'SqlMap-Emp.searchByCondition' = 'SqlMap-Emp.searchByCondition'
+			        AND F.EDU_PK = #{edu_pk}     
+			        		       
+			        <!--AND  (select ',' || EMP_NUMBER || ',' from TB_EDU_EMP where EDU_PK = #{edu_pk}) = A.EMP_NUMBER--> 
+			        <!--  AND (select dept from TB_EDU where pk = #{edu_p  k}) like '%' || A.H_TEAM_CODE || '%'-->
+			        <if test='p_subject != null and !p_subject.equalsIgnoreCase("")'>
+						AND A.EMP_NAME LIKE '%' || #{p_subject} || '%'
+					</if>        
+					
+					<if test='p_complete.equals("O")'>
+						AND F.EMP_NUMBER is not null
+					</if>
+					<if test='p_complete.equals("X")'>
+						AND F.EMP_NUMBER is null
+					</if>
+					  
+			        ) T1 WHERE 1=1
+			       )T2
+		WHERE PAGE = #{curPageNo}
+		
+		ORDER BY CLS_NAME,LOC_NAME,TEAM_NAME DESC
+    </select>
+                
+    <resultMap id="eduListMap"  type="org.apache.commons.collections4.map.CaseInsensitiveMap" >
+    	<result property="PAGE" 	column="PAGE" />
+    	<result property="CNT" 	column="CNT" />
+		<result property="PK" 	column="PK" />
+		<result property="SUBJECT" 	column="SUBJECT" />
+		<result property="TIME" 	column="TIME" />
+		<result property="START_DATE" 	column="START_DATE" />
+		<result property="REG_DATE" 	column="REG_DATE" />
+		<result property="REG_USER" 	column="REG_USER" />
+		<result property="MOD_DATE" column="MOD_DATE" />
+		<result property="MOD_USER" 	column="MOD_USER" />
+		<result property="DEPT" 		column="DEPT"  jdbcType="CLOB"  javaType="java.lang.String" />
+		<result property="INSTRUCTOR" 		column="INSTRUCTOR" />
+		<result property="DESCRIPTION_USE" 		column="DESCRIPTION_USE" />
+		<result property="EDU_USER_COMPLETION" 	column="EDU_USER_COMPLETION" />
+		<result property="STATUS_CNT" 		column="STATUS_CNT" />
+		<result property="EDU_USER_CNT" 		column="EDU_USER_CNT" />
+		<result property="EDU_USER_NOTCOMPLETION" 		column="EDU_USER_NOTCOMPLETION" />
+		<result property="EMP_NUMBER"   column="EMP_NUMBER"  jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="EMP_TYPE_JP" 	column="EMP_TYPE_JP" />
+		<result property="EMP_TYPE_STEP" 	column="EMP_TYPE_STEP" />
+		<result property="REG_EMP_NUMBER"	column="REG_EMP_NUMBER" />
+	</resultMap>
+                
+	<!-- 교육목록 리스트 -->
+	<select id="getEduList" resultMap="eduListMap" parameterType="java.util.Map">
+		SELECT T2.*
+		  FROM (SELECT T1.*
+		             , FLOOR((ROWNUM - 1) / #{pageSize} + 1 ) AS PAGE
+		             , T1.EDU_USER_CNT - T1.EDU_USER_COMPLETION as EDU_USER_NOTCOMPLETION   <!-- 총인원 -완료자수=미완료자수 -->
+		          FROM 
+		          (
+					SELECT COUNT(*) OVER() AS CNT
+						 , A.PK
+	                     , A.SUBJECT
+	                     , A.TIME
+	                     , TO_CHAR(A.START_DATE,'YYYY-MM-DD') || ' ~ ' || TO_CHAR(A.END_DATE,'YYYY-MM-DD') AS START_DATE
+	                     , TO_CHAR(A.REG_DATE,'YYYY-MM-DD') AS REG_DATE
+	                     , A.REG_USER
+	                     , TO_CHAR(A.MOD_DATE,'YYYY-MM-DD') AS MOD_DATE
+					     , A.MOD_USER
+					     <!-- A.DEPT -->
+					     , A.INSTRUCTOR
+					     , A.DESCRIPTION_USE
+					     , (SELECT COUNT(*) FROM TB_EDU_USER WHERE EDU_PK = A.PK) AS EDU_USER_COMPLETION
+					     ,(SELECT COUNT(*)
+							FROM   TB_EDU_USER
+							WHERE 1=1
+							AND STATUS = 'Y'
+							AND EDU_PK = A.PK
+							AND EMP_NUMBER = #{emp_number}) AS STATUS_CNT
+						,( SELECT COUNT(DISTINCT EMP_NUMBER) FROM TB_EDU_EMP WHERE EDU_PK = A.PK ) AS EDU_USER_CNT
+						, A.EMP_TYPE_JP
+		     			, A.EMP_TYPE_STEP
+		     			, A.REG_EMP_NUMBER
+					FROM TB_EDU A
+					WHERE 1=1
+					<if test='p_subject != null and !p_subject.equalsIgnoreCase("")'>
+						AND SUBJECT LIKE '%' || #{p_subject} || '%'
+					</if> 
+					<if test="p_start_date != null and p_start_date !='' ">
+						AND START_DATE <![CDATA[>=]]> TO_DATE(#{p_start_date,jdbcType=VARCHAR},'YYYY-MM-DD')
+					</if>
+					<if test="p_end_date != null and p_end_date !='' ">
+						AND END_DATE <![CDATA[<]]>  TO_DATE(#{p_end_date,jdbcType=VARCHAR},'YYYY-MM-DD')+1
+					</if>
+					ORDER BY A.PK ASC
+					) T1
+				) T2
+		 WHERE PAGE = #{curPageNo}
+		 ORDER BY MOD_DATE DESC
+	</select>
+	
+	<resultMap id="eduInfoMap"  type="java.util.HashMap" >
+		<result property="SUBJECT" 	column="SUBJECT" />
+		<result property="CONTENT" 	column="CONTENT" 	jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="AGREE" 	column="AGREE" 		jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="START_DATE" 	column="START_DATE" />
+		<result property="END_DATE" 	column="END_DATE" />
+		<result property="REG_DATE" 	column="REG_DATE" />
+		<result property="REG_USER" 	column="REG_USER" />
+		<result property="MOD_DATE" 	column="MOD_DATE" />
+		<result property="MOD_USER" 	column="MOD_USER" />
+		<result property="ORG_ATT_NAME" column="ORG_ATT_NAME" />
+		<result property="ATT_NAME" 	column="ATT_NAME" />
+		<result property="DELETE_YN" column="DELETE_YN" />
+		<result property="DEPT" 		column="DEPT"  jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="DEPT_NM" 			column="DEPT_NM" jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="INSTRUCTOR" 		column="INSTRUCTOR" />
+		<result property="AGREE_TITLE" 		column="AGREE_TITLE" />
+		<result property="DESCRIPTION_USE" 	column="DESCRIPTION_USE" />
+		<result property="DESCRIPT" 		column="DESCRIPT" />
+		<result property="EMP_NUMBER"   column="EMP_NUMBER"  jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="EMP_NM"   column="EMP_NM"  jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="EMP_TYPE_JP" 	column="EMP_TYPE_JP" />
+		<result property="EMP_TYPE_STEP" 	column="EMP_TYPE_STEP" />
+	</resultMap>
+	
+	<!-- 교육상세 정보 -->
+	<select id="getEdu" resultMap="eduInfoMap" parameterType="java.util.Map">
+		SELECT A.SUBJECT
+		     , A.CONTENT
+		     , A.AGREE
+		     , A.TIME
+		     , TO_CHAR(A.START_DATE,'YYYY-MM-DD') AS START_DATE
+		     , TO_CHAR(A.END_DATE,'YYYY-MM-DD')	AS END_DATE
+		     , TO_CHAR(A.REG_DATE,'YYYY-MM-DD') AS REG_DATE
+		     , A.REG_USER AS REG_USER
+		     , TO_CHAR(A.MOD_DATE,'YYYY-MM-DD') AS MOD_DATE
+		     , A.MOD_USER AS MOD_USER
+		    <!--  ,(SELECT TAA.ORG_FILE_NAME
+		       FROM    TB_ATT TAA
+		       WHERE   TAA.EDU_PK = A.PK
+		       AND     TAA.USE_IMG = 'N'
+		       )
+		       AS ORG_ATT_NAME
+		     ,(SELECT TAA.FILE_NAME
+		       FROM    TB_ATT TAA
+		       WHERE   TAA.EDU_PK = A.PK
+		       AND     TAA.USE_IMG = 'N'
+		       )
+		       AS ATT_NAME
+		        -->
+		     , (SELECT WM_CONCAT(DEPT) FROM TB_EDU_DEPT WHERE EDU_PK= #{edu_pk}) AS DEPT  
+		     , (SELECT rtrim(xmlagg(xmlelement(DEPT_NM,DEPT_NM || ',')).extract('//text()').getClobVal(), ',') FROM TB_EDU_DEPT where EDU_PK = #{edu_pk}) AS DEPT_NM  
+		     , A.INSTRUCTOR AS INSTRUCTOR  
+		     , A.AGREE_TITLE AS AGREE_TITLE  
+		     , A.DESCRIPTION_USE AS DESCRIPTION_USE  
+		     , A.DESCRIPT AS DESCRIPT  
+		     , (SELECT WM_CONCAT(EMP_NUMBER) FROM TB_EDU_EMP WHERE EDU_PK= #{edu_pk} AND TEAM_YN = 'N') AS EMP_NUMBER
+		     , (SELECT WM_CONCAT(EMP_NAME) FROM TB_EDU_EMP WHERE EDU_PK= #{edu_pk} AND TEAM_YN = 'N') AS EMP_NM
+		     , A.EMP_TYPE_JP AS EMP_TYPE_JP
+		     , A.EMP_TYPE_STEP AS EMP_TYPE_STEP
+		FROM   TB_EDU A
+		WHERE  1  =1
+		AND    PK = #{edu_pk}
+	</select>
+	
+	<!-- 교육상세 수정을 위한 PK정보 -->
+	<select id="getEduPk" resultType="int" parameterType="java.util.Map">
+		 select TB_EDU_PK_SEQ.nextval from dual
+	</select>
+	
+	<!-- 교육대상 사번 취득 ( 팀코드의 최상위코드로 취득, 퇴사자 포함안되게 사용여부'Y')-->
+	<select id="getEmpNumber" parameterType="org.apache.commons.collections4.map.CaseInsensitiveMap" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" >
+		
+		SELECT EMP_NUMBER FROM DNKR_EMP WHERE 
+		
+		H_TEAM_CODE IN 
+		
+		<foreach collection="deptList" item="type" open="(" close=")" separator=",">
+			#{type}
+		</foreach>
+		
+		AND EMP_USE ='Y'
+		
+		<if test='empNation == "N"'>
+			AND EMP_NATION != '002'
+		</if>
+		<if test='empNation == "Y"'>
+			AND EMP_NATION = '002'
+		</if>
+		
+		<if test='empType == "N"'>
+			AND EMP_TYPE = 100
+		</if>
+		<if test='empType == "Y"'>
+			AND EMP_TYPE != 100
+		</if>
+	</select>
+	
+	<!-- 교육상세 정보 입력 -->
+	<insert id="eduInsert" parameterType="java.util.Map">
+		INSERT INTO   TB_EDU
+	       (
+	              PK
+	            , SUBJECT
+	            , AGREE
+	            , TIME
+	            , START_DATE
+	            , END_DATE
+	            , REG_DATE
+	            , REG_USER
+	            , MOD_DATE
+	            , MOD_USER
+	            <!--, DEPT
+	            , DEPT_NM-->
+	            , INSTRUCTOR
+	            , AGREE_TITLE
+	            , DESCRIPTION_USE
+	            , CONTENT
+	            , DESCRIPT
+	            <!--, EMP_NUMBER-->
+	            , EMP_TYPE_JP
+	            , EMP_TYPE_STEP
+	            , REG_EMP_NUMBER
+	       )
+	       VALUES
+	       (
+	              #{edu_pk}
+	            , #{p_subject}
+	            , #{p_agree}
+	            , #{p_time}
+	            , #{p_start_date}
+	            , #{p_end_date}
+	            , SYSDATE
+	            , #{user_name}
+	            , SYSDATE
+	            , #{user_name}
+	            <!--, #{p_dept_cd}
+	            , #{p_dept_name}-->
+	            , #{p_instructor}
+	            , #{p_agree_title}
+	            , #{p_description_use}
+	            , #{p_content}
+	            , #{p_descript}
+	            <!--, #{emp_number}-->
+	            , #{p_emp_type_jp}
+	            , #{p_emp_type_step}
+	            , #{reg_emp_number}
+	       )
+	</insert>
+	
+	<!-- 교육과제 부서 테이블 인서트 -->
+	<insert id="eduDeptInsert" parameterType="java.util.Map">
+		INSERT INTO   TB_EDU_DEPT
+	       (
+	              PK
+	            , EDU_PK
+	            , REG_DATE
+	            , REG_USER
+	            , MOD_DATE
+	            , MOD_USER
+	            , DEPT
+	            , DEPT_NM
+	       )
+	       VALUES
+	       (
+	              (SELECT NVL(MAX(PK),0)+1 FROM TB_EDU_DEPT)
+	            , #{edu_pk}
+	            , SYSDATE
+	            , #{user_name}
+	            , SYSDATE
+	            , #{user_name}
+	            , #{deptCd}
+	            , #{deptName}
+	       )
+	</insert>
+
+	<!-- 교육과제 사원 테이블 인서트 -->
+	<insert id="eduEmpInsert" parameterType="java.util.Map">
+		INSERT INTO   TB_EDU_EMP
+	       (
+	              PK
+	            , EDU_PK
+	            , EMP_NUMBER
+	            , REG_DATE
+	            , REG_USER
+	            , MOD_DATE
+	            , MOD_USER
+	            , TEAM_YN
+	            , EMP_NAME
+	       )
+	       VALUES
+	       (
+	              (SELECT NVL(MAX(PK),0)+1 FROM TB_EDU_EMP)
+	            , #{edu_pk}
+	            , #{empNumber}
+	            , SYSDATE
+	            , #{user_name}
+	            , SYSDATE
+	            , #{user_name}
+	            , #{team_yn}
+	            , (SELECT EMP_NAME FROM DNKR_EMP WHERE 1=1 AND EMP_NUMBER = #{empNumber})
+	       )
+	</insert>
+	
+		<!-- 교욱과제 부서 테이블 삭제 -->
+	<delete id="eduDeptDel" parameterType="java.util.Map">
+		DELETE FROM TB_EDU_DEPT
+		WHERE EDU_PK = #{edu_pk}
+	</delete>
+	
+		<!-- 교욱과제 사원 테이블 삭제 -->
+	<delete id="eduEmpDel" parameterType="java.util.Map">
+		DELETE FROM TB_EDU_EMP
+		WHERE EDU_PK = #{edu_pk}
+		<if test='team_yn != null'>
+			AND TEAM_YN = #{team_yn}
+		</if>
+	</delete>
+	
+
+	
+	<!-- 교육상세 첨부파일 입력 -->
+	<insert id="eduAttchInsert" parameterType="java.util.Map">
+	
+		<selectKey keyProperty="pk" resultType="int" order="BEFORE">
+	    	SELECT NVL(MAX(PK),0)+1 FROM TB_ATT where edu_pk =  #{edu_pk}
+	  	</selectKey>
+	
+		INSERT
+		INTO   TB_ATT
+		       (
+		              PK
+		            ,EDU_PK
+		            ,FILE_NAME
+		            ,FILE_PATH
+		            ,FILE_SIZE
+		            ,FILE_EXT
+		            ,REG_DATE
+		            ,REG_USER
+		            ,MOD_DATE
+		            ,MOD_USER
+		            ,ORG_FILE_NAME
+		            ,DELETE_YN
+		       )
+		       VALUES
+		       (	#{pk}
+		            , #{edu_pk}
+		            , #{file_name}
+		            , #{file_path}
+		            , #{file_size}
+		            , #{file_ext}
+		            , SYSDATE
+		            , #{reg_user}
+		            , SYSDATE
+		            , #{mod_user}
+		            , #{org_file_name}
+		            , #{delete_yn}
+		       )
+	</insert>
+	
+	<!-- 교육상세 수정 -->
+	<update id="eduUpdate" parameterType="java.util.Map">
+		UPDATE TB_EDU
+		SET    SUBJECT         = #{p_subject}
+		     , AGREE           = #{p_agree}
+		     , TIME            = #{p_time}
+		     , START_DATE      = #{p_start_date}
+		     , END_DATE        = #{p_end_date}
+		     , MOD_DATE        = SYSDATE
+		     , MOD_USER        = #{user_name}
+		     <!--, DEPT            = #{p_dept_cd}
+		     , DEPT_NM         = #{p_dept_name}-->
+		     , INSTRUCTOR      = #{p_instructor}
+		     , AGREE_TITLE     = #{p_agree_title}
+		     , DESCRIPTION_USE = #{p_description_use}
+		     , DESCRIPT        = #{p_descript}
+		     , CONTENT         = #{p_content}
+		     <!--, EMP_NUMBER      = #{emp_number}-->
+		WHERE  PK              = #{edu_pk}
+	</update>
+	
+	<!-- 교육상세 첨부파일 수정 -->
+  <!--	<update id="eduAttachUpdate" parameterType="java.util.Map">
+		MERGE
+		INTO             TB_ATT S
+		USING            DUAL
+		ON (
+		                                  S.EDU_PK = #{edu_pk}
+		                 )
+		WHEN MATCHED     THEN UPDATE SET S.FILE_NAME = #{file_name}
+		               , S.FILE_PATH                 = #{file_path}
+		               , S.FILE_SIZE                 = #{file_size}
+		               , S.FILE_EXT                  = #{file_ext}
+		               , S.MOD_DATE                  = SYSDATE
+		               , S.MOD_USER                  = #{user_name}
+		               , S.ORG_FILE_NAME             = #{org_file_name}
+		WHEN NOT MATCHED THEN INSERT (PK ,EDU_PK ,FILE_NAME ,FILE_PATH ,FILE_SIZE ,FILE_EXT ,REG_DATE ,REG_USER ,MOD_DATE ,MOD_USER ,ORG_FILE_NAME) VALUES
+		                 (
+		                 (SELECT NVL(MAX(PK),0)+1
+		                 FROM    TB_ATT
+		                 )
+		               , #{edu_pk}
+		               , #{file_name}
+		               , #{file_path}
+		               , #{file_size}
+		               , #{file_ext}
+		               , SYSDATE
+		               , #{user_name}
+		               , SYSDATE
+		               , #{user_name}
+		               , #{org_file_name}
+		                 )
+	</update>-->
+	
+	<!--교육상세 첨부파일  - 첨부파일 List로 취득 -->
+	<select id="getFileDataList" parameterType="java.util.Map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" >
+        SELECT  PK
+	            ,EDU_PK
+	            ,FILE_NAME
+	            ,FILE_PATH
+	            ,FILE_SIZE
+	            ,FILE_EXT
+	            ,REG_DATE
+	            ,REG_USER
+	            ,MOD_DATE
+	            ,MOD_USER
+	            ,ORG_FILE_NAME
+	            ,DELETE_YN
+        FROM   TB_ATT
+        WHERE  1       = 1
+        AND    EDU_PK = #{edu_pk}
+        AND    DELETE_YN = 'N'
+    </select>
+	
+	<!-- 교육상세 삭제 -->
+	<delete id="eduDel" parameterType="java.util.Map">
+		DELETE FROM TB_EDU
+		WHERE PK = #{edu_pk}
+	</delete>
+	
+	<!-- 교육상세 첨부파일 전체논리삭제 -->
+	<update id="eduAttachAllDel" parameterType="java.util.Map">
+		UPDATE TB_ATT
+		SET DELETE_YN = 'Y'
+		WHERE EDU_PK = #{edu_pk}
+	</update>
+	
+	<!-- 교육상세 첨부파일 1건논리삭제 -->
+	<update id="eduAttachDel" parameterType="java.util.Map">
+        UPDATE TB_ATT
+        SET DELETE_YN = 'Y'
+        WHERE EDU_PK = #{edu_pk}
+		AND    PK = #{pk}
+    </update>
+	
+	<!-- 문제목록 리스트 -->
+	<select id="getQueList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT T2.*
+		  FROM (SELECT T1.*
+		             , FLOOR((ROWNUM - 1) / #{pageSize} + 1 ) AS PAGE
+		          FROM 
+		          (
+					SELECT COUNT(*) OVER() AS CNT
+						 , A.PK
+					     , A.EDU_PK
+					     , A.SUBJECT
+					     , A.ANSWER
+					     , TO_CHAR(A.REG_DATE,'YYYY-MM-DD') AS REG_DATE
+					     , A.REG_USER
+					     , TO_CHAR(A.MOD_DATE,'YYYY-MM-DD') AS MOD_DATE
+					     , A.MOD_USER
+					     , ( SELECT REPLACE(SUBJECT, '@@', ',') AS SUBJECT
+														FROM   ( SELECT  ROW_NUMBER() OVER(PARTITION BY QUE_PK ORDER BY PK) AS SEQ
+														              , SUBJECT
+														              , QUE_PK
+														       FROM     TB_ANS
+														       )
+														       T
+														WHERE QUE_PK = A.PK 
+														AND T.SEQ = A.ANSWER
+                        ) AS ANS_SUBJECT
+					FROM TB_QUE A
+					WHERE 1=1
+					AND EDU_PK = #{edu_pk}
+					<if test='p_subject != null and !p_subject.equalsIgnoreCase("")'>
+						AND SUBJECT LIKE '%' || #{p_subject} || '%'
+					</if> 
+					ORDER BY A.PK ASC
+					) T1
+				) T2
+		 WHERE PAGE = #{curPageNo}
+	</select>
+	
+	<!-- 문제상세 수정을 위한 PK정보 -->
+	<select id="getQuePk" resultType="int" parameterType="java.util.Map">
+		SELECT NVL(MAX(PK),0)+1 FROM TB_QUE
+	</select>
+	
+	<!-- 문제상세 입력 -->
+	<insert id="queInsert" parameterType="java.util.Map">
+		INSERT
+		INTO   TB_QUE
+		       (
+		              PK
+		            ,EDU_PK
+		            ,SUBJECT
+		            ,ANSWER
+		            ,REG_DATE
+		            ,REG_USER
+		            ,MOD_DATE
+		            ,MOD_USER
+		       )
+		       VALUES
+		       (	  #{que_pk}
+		            , #{edu_pk}
+		            , #{p_subject}
+		            , #{p_answer}
+		            , SYSDATE
+		            , #{user_name}
+		            , SYSDATE
+		            , #{user_name}
+		       )
+	</insert>
+	
+	<!-- 문제상세 수정 -->
+	<update id="queUpdate" parameterType="java.util.Map">
+		UPDATE TB_QUE
+		SET    SUBJECT  = #{p_subject}
+		     , ANSWER   = #{p_answer}
+		     , MOD_DATE = SYSDATE
+		     , MOD_USER = #{user_name}
+		WHERE  PK       = #{que_pk}
+	</update>
+	
+	<!-- 답안지 입력 -->
+	<insert id="ansInsert" parameterType="java.util.Map">
+		INSERT
+		INTO   TB_ANS
+		       (
+		              PK
+		            ,QUE_PK
+		            ,SUBJECT
+		            ,REG_DATE
+		            ,REG_USER
+		            ,MOD_DATE
+		            ,MOD_USER
+		       )
+		       VALUES
+		       (	  (SELECT NVL(MAX(PK),0)+1 FROM TB_ANS)
+		            , #{que_pk}
+		            , #{ans_subject}
+		            , SYSDATE
+		            , #{user_name}
+		            , SYSDATE
+		            , #{user_name}
+		       )
+	</insert>
+	
+	<!-- 문제상세 정보 -->
+	<select id="getQue" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT A.PK
+		     , A.EDU_PK
+		     , A.SUBJECT
+		     , A.ANSWER
+		     , A.REG_DATE
+		     , A.REG_USER
+		     , A.MOD_DATE
+		     , A.MOD_USER
+		FROM   TB_QUE A
+		WHERE  1  =1
+		AND    PK = #{que_pk}
+	</select>
+	
+	<!-- 문제에 따른 답안지 리스트 -->
+	<select id="getAnsList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT REPLACE(A.SUBJECT, '@@', ',') AS SUBJECT	     
+		FROM   TB_ANS A
+		WHERE  1      =1
+		AND    QUE_PK = #{que_pk}
+		ORDER BY A.PK
+	</select>
+	
+	<!-- 문제상세 삭제 -->
+	<delete id="queDel" parameterType="java.util.Map">
+		DELETE FROM TB_QUE
+		WHERE EDU_PK = #{edu_pk}
+	</delete>
+	
+	<!-- 답안지 리스트 삭제 -->
+	<delete id="ansDel" parameterType="java.util.Map">
+		DELETE FROM TB_ANS
+		WHERE QUE_PK IN (SELECT PK FROM TB_QUE WHERE EDU_PK = #{edu_pk})
+	</delete>
+	
+	<!-- 문제에 따른 답안지 삭제 -->
+	<delete id="queToAnsDel" parameterType="java.util.Map">
+		DELETE FROM TB_ANS
+		WHERE QUE_PK = #{que_pk}
+	</delete>
+	
+	<!-- 문제에 따른 문제 삭제 -->
+	<delete id="queToQueDel" parameterType="java.util.Map">
+		DELETE FROM TB_QUE
+		WHERE PK = #{que_pk}
+	</delete>
+	
+	<!-- 교육대상 사업부 리스트 -->
+	<select id="getClsCodeList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT 	 COUNT(*) OVER() AS CNT  
+			   , A.CLS_CODE
+		       , A.RLTN_CODE
+		       , A.CLS_USE
+		       , B.REL_NAME
+		FROM     DNKR_RELATION_CLASS A
+		       , DNKR_RELATION_NM B
+		WHERE    'SqlMap-RelationCls.searchByCondition' = 'SqlMap-RelationCls.searchByCondition'
+		AND      A.CLS_CODE                             = B.REL_CODE
+		AND      B.CMC_CODE                             = #{cmcLangCode}
+		AND 	 A.CLS_USE 								= 'Y'
+		<if test='clsQuery != null and !clsQuery.equalsIgnoreCase("")'>
+			AND B.REL_NAME LIKE '%' || #{clsQuery} || '%'
+		</if> 			
+		ORDER BY A.CLS_CODE ASC
+	</select>
+	
+	<!-- 교육대상 사업장 리스트 -->
+	<select id="getLocCodeList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT COUNT(*) OVER() AS CNT  
+			   , A.LOC_CODE
+		       , A.RLTN_CODE
+		       , A.LOC_USE
+		       , A.CLS_CODE
+		       , B.REL_NAME
+		FROM     DNKR_RELATION_LOCATION A
+		       , DNKR_RELATION_NM B
+		WHERE    'SqlMap-RelationLoc.searchByCondition' = 'SqlMap-RelationLoc.searchByCondition'
+		AND      A.LOC_CODE                             = B.REL_CODE
+		AND      B.CMC_CODE                             = #{cmcLangCode}
+		AND      A.CLS_CODE                             = #{cls_code}
+		AND 	 A.LOC_USE 								= 'Y'
+		<if test='locQuery != null and !locQuery.equalsIgnoreCase("")'>
+			AND B.REL_NAME LIKE '%' || #{locQuery} || '%'
+		</if>
+		ORDER BY A.LOC_CODE ASC
+	</select>
+	
+	<!-- 교육대상 부서(팀) 리스트 -->
+	<select id="getTeamCodeList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT  COUNT(*) OVER() AS CNT   
+			   , A.TEAM_CODE
+		       , A.LOC_CODE
+		       , A.TEAM_USE
+		       , A.AUTH_CODE
+		       , A.RLTN_CODE
+		       , A.CLS_CODE
+		       , A.H_RLTN_CODE
+		       , B.REL_NAME
+		FROM     VIEW_RELATION_H_TEAM A
+		       , DNKR_RELATION_NM B
+		WHERE    'SqlMap-RelationTeam.searchByCondition' = 'SqlMap-RelationTeam.searchByCondition'
+		AND      A.TEAM_CODE                             = B.REL_CODE
+		AND      B.CMC_CODE                              = #{cmcLangCode}
+		AND      A.LOC_CODE                              = #{loc_code}
+		AND		 A.TEAM_USE								 = 'Y'
+		<if test='teamQuery != null and !teamQuery.equalsIgnoreCase("")'>
+			AND B.REL_NAME LIKE '%' || #{teamQuery} || '%'
+		</if>
+		ORDER BY A.LOC_CODE
+		       , A.TEAM_USE DESC
+		       , A.RLTN_CODE
+	</select>
+	
+		<!-- 교육대상 사원(개인) 리스트 -->
+	<select id="getEmpCodeList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT  COUNT(*) OVER() AS CNT   
+			   , A.EMP_NUMBER
+			   , A.EMP_NAME
+		       , A.LOC_CODE
+		       , A.EMP_USE
+		FROM     DNKR_EMP A
+		WHERE    'SqlMap-RelationTeam.searchByCondition' = 'SqlMap-RelationTeam.searchByCondition'
+		AND      A.TEAM_CODE                             = #{team_code}
+		AND		 A.EMP_USE								 = 'Y'
+		<if test='empQuery != null and !empQuery.equalsIgnoreCase("")'>
+			AND A.EMP_NAME LIKE '%' || #{empQuery} || '%'
+		</if>
+		ORDER BY A.LOC_CODE
+		       , A.EMP_USE DESC
+	</select>
+	
+	
+	
+	<!-- 교육대상자중 미완료자 메일 취득 -->
+	<select id="getNoEduMailList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT A.EMP_NUMBER, A.EMP_EMAIL from DNKR_EMP A, 
+			(SELECT A.EMP_NUMBER FROM TB_EDU A WHERE A.PK = #{edu_pk}) B
+        WHERE ',' || B.EMP_NUMBER || ',' LIKE '%,' || A.EMP_NUMBER || ',%' 
+       		AND A.EMP_NUMBER NOT IN ( SELECT EMP_NUMBER FROM TB_EDU_USER WHERE EDU_PK = #{edu_pk} ) 
+        	AND A.EMP_EMAIL IS NOT NULL
+    </select>
+</mapper>

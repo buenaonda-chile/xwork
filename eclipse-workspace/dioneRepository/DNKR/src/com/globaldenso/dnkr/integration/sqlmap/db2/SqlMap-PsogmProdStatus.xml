@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PsogmProdStatusDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PsogmProdDb2Status" type="PsogmProdStatusDb2Domain">
+        <result property="comps" column="COMPS" />
+        <result property="runcd" column="RUNCD" />
+        <result property="procs" column="PROCS" />
+        <result property="prosm" column="PROSM" />
+        <result property="mstsm" column="MSTSM" />
+        <result property="daygu" column="DAYGU" />
+        <result property="prtno" column="PRTNO" />
+        <result property="ordat" column="ORDAT" />
+        <result property="cyctm" column="CYCTM" />
+        <result property="fstqy" column="FSTQY" />
+        <result property="atoqy" column="ATOQY" />
+        <result property="prdqy" column="PRDQY" />
+        <result property="fstqyRate" column="FSTQY_RATE" />
+        <result property="atoqyRate" column="ATOQY_RATE" />
+        <result property="rowgb" column="ROWGB" />
+        <result property="sum1" column="SUM1" />
+        <result property="sum2" column="SUM2" />
+        <result property="sum3" column="SUM3" />
+        <result property="per1" column="PER1" />
+        <result property="per2" column="PER2" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+    
+    <!--  -->
+    <select id="selectOBSE01" resultMap="PsogmProdDb2Status" parameterType="PsogmProdStatusDb2Domain">
+        SELECT
+				TRIM (B.COMPS) COMPS
+			  , TRIM(RUNCD) AS RUNCD
+			  , TRIM(A.PROCS) PROCS
+			  , TRIM(B.PROSM) PROSM
+			  , TRIM(D.MSTSM) MSTSM
+			  , TRIM(DAYGU) DAYGU
+			  , TRIM(A.PRTNO) PRTNO
+			  , TRIM(CHAR(ORDAT)) ORDAT
+			  , A.CYCTM
+			  , A.FSTQY
+			  , A.ATOQY
+			  , A.PRDQY
+			  , CASE 
+			  		WHEN A.FSTQY=0 THEN 0.0
+		  			ELSE Decimal(A.PRDQY)*100/Decimal(A.FSTQY) 
+	  			END AS FSTQY_RATE
+			  , CASE 
+			  		WHEN A.ATOQY=0 THEN 0.0
+		  			ELSE Decimal(A.PRDQY)*100/Decimal(A.ATOQY) 
+ 				END AS ATOQY_RATE
+		FROM 
+				${lib2}.FGP230PF A
+		LEFT OUTER JOIN ${lib2}.MST060PF AS B ON	B.PROCS = A.PROCS
+		LEFT OUTER JOIN PSEDBLIB.MST100PF AS C ON A.PRTNO = C.PRTNO
+		LEFT OUTER JOIN PSEDBLIB.MST051LF AS D ON C.CARCD = D.MSTCD
+		LEFT OUTER JOIN PSEDBLIB.FGP100PF AS E ON A.PROCS = E.PROCS
+	
+		where
+				'SqlMap-PsogmProdStatus.selectOBSE01' = 'SqlMap-PsogmProdStatus.selectOBSE01'
+		<if test="comps != null and comps != ''">
+			and B.COMPS = #{comps}
+		</if>
+		<if test="ordat != null and ordat != ''">
+			and A.ORDAT = #{ordat}
+		</if>
+		<if test="procs != null and procs != ''">
+			and A.PROCS LIKE '%' || '#{procs}' || '%'
+		</if>
+		<if test="daygu != null and daygu != ''">
+			and A.DAYGU = #{daygu}
+		</if>
+		<if test="rowgb != null and rowgb != ''">
+			and A.PROCS IN ( SELECT PROCS FROM ${lib2}.FGP100PF WHERE ROWGB = #{rowgb} )
+		</if>
+		ORDER BY E.SEQNO
+	</select>	
+	<!--  -->
+    <select id="selectOBSE01_Sum" resultMap="PsogmProdDb2Status" parameterType="PsogmProdStatusDb2Domain">
+    	SELECT 
+				coalesce(SUM(FSTQY),0) as SUM1
+			  , coalesce(SUM(ATOQY),0) as SUM2
+			  , coalesce(SUM(PRDQY),0) as SUM3
+			  , (
+			  		case 
+				  		when SUM(FSTQY) <![CDATA[<>]]> 0 
+				  			then DEC(SUM(PRDQY)*100/SUM(FSTQY),10,2)			
+						else 0			
+					end
+				) PER1
+			  , (
+			  		case 
+			  			when SUM(ATOQY) <![CDATA[<>]]> 0 
+			  				then DEC(SUM(PRDQY*100)/SUM(ATOQY),10,2) 
+						else 0
+					end
+				) PER2 
+		from 
+				PSEDBLIB.FGP230PF 
+		WHERE 
+				PROCS IN (SELECT PROCS FROM PSEDBLIB.FGP100PF WHERE ROWGB = #{rowgb})
+			AND ORDAT = #{ordat}
+		<if test="daygu != null and daygu != ''">
+			AND DAYGU = #{daygu}		
+		</if>
+    </select>
+</mapper>

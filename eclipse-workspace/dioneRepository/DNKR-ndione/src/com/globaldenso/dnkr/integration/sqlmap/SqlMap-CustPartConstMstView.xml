@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustPartConstMstViewDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustPartConstMstView" type="CustPartConstMstViewDomain">
+        <result property="comps" column="COMPS" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="pspno" column="PSPNO" />        
+        <result property="cinbr" column="CINBR" />
+        <result property="qtypr" column="QTYPR" />
+        <result property="carcd" column="CARCD" />       
+        <result property="carnm" column="CARNM" />
+        <result property="bdycd" column="BDYCD" />
+        <result property="bdynm" column="BDYNM" />
+                        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustPartConstMstView" parameterType="CustPartConstMstViewDomain">
+		SELECT 
+			A.COMPS, TRIM(B.CUSNM) AS CUSNM, A.PYVND, TRIM(A.PSPNO) AS PSPNO, 
+			TRIM(A.CINBR) AS CINBR, A.QTYPR, C.CARCD, TRIM(D.MSTSM) AS CARNM, C.BDYCD, TRIM(E.MSTSM) AS BDYNM 
+		FROM 
+			PSZDBLIB.SVZ050PF A
+			LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+			LEFT OUTER JOIN ${lib2}.MST100PF C ON A.COMPS=C.COMPS AND A.CINBR=C.PRTNO
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+				WHERE GRPCD='CAR') D ON A.COMPS=D.COMPS AND C.CARCD=D.MSTCD
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+				WHERE GRPCD='BDY') E ON A.COMPS=E.COMPS AND C.BDYCD=E.MSTCD
+		WHERE
+		      'SqlMap-CustPartConstMstView.searchByCondition' = 'SqlMap-CustPartConstMstView.searchByCondition'
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+		<if test="pspno != null and pspno !='' ">
+		  AND A.PSPNO BETWEEN #{pspno} AND '9999-9999'
+		</if>	
+    </select>
+
+</mapper>

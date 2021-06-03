@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="64" Id="top" Left="8" OnLoadCompleted="onLoadcompleted" OnSize="on_size" PidAttrib="7" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1280" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_btnAuth"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_bookMark">
+				<Contents>
+					<colinfo id="USER_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENU_ID" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userNotice"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mngflag"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuGroup"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="64" Id="Image0" ImageID="top_img9" TabOrder="11" Width="1280"></Image>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button0" ImageID="sum_add" ImageStatus="DISABLE" Left="600" OnClick="gCommonInput" OnMouseOut="Button0_OnMouseOut" OnMouseOver="Button0_OnMouseOver" TabOrder="1" Text="검색" Top="35" Width="70"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button1" ImageID="sum_delete" ImageStatus="DISABLE" Left="680" OnClick="gCommonDelete" OnMouseOut="Button1_OnMouseOut" OnMouseOver="Button1_OnMouseOver" TabOrder="2" Text="검색" Top="35" Width="70"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button3" ImageID="sum_save" ImageStatus="DISABLE" Left="759" OnClick="gCommonSave" OnMouseOut="Button3_OnMouseOut" OnMouseOver="Button3_OnMouseOver" TabOrder="3" Text="검색" Top="35" Width="70"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button4" ImageID="sum_print" ImageStatus="DISABLE" Left="838" OnClick="gCommonPrint" OnMouseOut="Button4_OnMouseOut" OnMouseOver="Button4_OnMouseOver" TabOrder="4" Text="검색" Top="35" Width="70"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button5" ImageID="sum_excel" ImageStatus="DISABLE" Left="917" OnClick="gCommonExcel" OnMouseOut="Button5_OnMouseOut" OnMouseOver="Button5_OnMouseOver" TabOrder="5" Text="검색" Top="35" Width="70"></Button>
+		<Button Cursor="HAND" Height="26" Id="Button6" ImageID="sum_logout2" Left="944" OnClick="gCommonLogout" OnMouseOut="Button6_OnMouseOut" OnMouseOver="Button6_OnMouseOver" TabOrder="6" Text="검색" Top="6" Transparent="TRUE" Width="90"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button7" ImageID="sum_help" ImageStatus="DISABLE" Left="997" OnClick="gCommonHelp" OnMouseOut="Button7_OnMouseOut" OnMouseOver="Button7_OnMouseOver" TabOrder="7" Text="검색" Top="35" Width="70"></Button>
+		<Static Height="13" Id="Static2" Left="796" TabOrder="8" Text="님&#32;반갑습니다." Top="13" Width="120"></Static>
+		<Button Color="#666666" Cursor="HAND" Font="굴림,8" Height="26" Id="Button8" ImageID="sum_password2" Left="693" OnClick="Button8_OnClick" OnMouseOut="Button8_OnMouseOut" OnMouseOver="Button8_OnMouseOver" TabOrder="9" Top="6" Transparent="TRUE" Width="130"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button2" ImageID="sum_search" ImageStatus="DISABLE" Left="520" OnClick="gCommonSearch" OnMouseOut="Button2_OnMouseOut" OnMouseOver="Button2_OnMouseOver" TabOrder="10" Text="검색" Top="35" Width="70"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="image1" ImageID="sum_favorites_add" ImageStatus="DISABLE" Left="250" OnClick="Image1_OnClick" OnMouseOut="image1_OnMouseOut" OnMouseOver="Image1_OnMouseOver" TabOrder="12" Text="검색" Top="35" Transparent="TRUE" Width="120"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="image2" ImageID="sum_favorites_delete" ImageStatus="DISABLE" Left="374" OnClick="Image2_OnClick" OnMouseOut="image2_OnMouseOut" OnMouseOver="Image2_OnMouseOver" TabOrder="13" Text="검색" Top="35" Transparent="TRUE" Width="120"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::Mi_common.js";
+#include "script::form_init.js";
+#include "script::formResize.js";
+#include "script::Dynamic.js";
+#include "script::lib_script_common.js";
+
+function onLoadcompleted(obj)
+{
+
+	
+	Static2.Text = G_ds_user.GetColumn(0,"USER_NAME") + "님 반갑습니다.";
+	if(G_ds_user.GetColumn(0,"COMPANY") == "PS"){
+		Image0.ImageID = "top_img8";
+	}else if(G_ds_user.GetColumn(0,"COMPANY") == "PE"){
+		Image0.ImageID = "top_img9";
+	}else {
+		Image0.ImageID = "top_img(DIKR)";
+	}
+	
+	getUserNotice();
+	viewUserNotice();
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+}
+
+
+
+// 버튼권한 체크
+function btnAuthCheck(btnId)
+{
+	http.sync = true;
+	var sParam = "";
+
+	if(GetTopWindow().id == "MDIForm0"){
+		return false ;
+	}
+	
+	sParam += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID")); // 필수 인자
+	sParam += " MENU_ID=" + quote(GetTopWindow().div_content.sMenuId); // 필수 인자
+
+	Transaction(
+		"btnAuth",								// Transaction ID
+		"service::login/btnAuth.do",			// service
+		"",										// input Dataset
+		"ds_btnAuth=ds_btnAuth",
+		sParam,             					// parameter
+		""					// callback
+	);
+
+	if(ds_btnAuth.GetColumn(0,"BTN" +btnId) != "1"){
+	
+		alert(setPopMessage("1007"));
+		setMessage("1007");
+		return false ;
+	}  
+	return true;
+	
+
+}
+
+
+
+function getUserNotice()
+{
+	http.sync = true;
+	var sParam = "";
+
+	var nowDate = today();	
+
+	sParam += " TODAY=" + quote(nowDate);	
+	sParam += " COMPANY=" + quote(G_ds_user.GetColumn(0,"COMPANY"));
+	sParam += " PLANT_CD=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+
+	Transaction(
+		"getUserNotice",								// Transaction ID
+		"service::login/selectUserNotice.do",			// service
+		"",												// input Dataset
+		"ds_userNotice=ds_userNotice",
+		sParam,             							// parameter
+		""												// callback
+	);
+}
+
+
+function viewUserNotice()
+{
+
+	if(ds_userNotice.rowcount != 0){
+		var str = Open("Common::PopNotice.xml","",100,100,"Taskbar=true resize=false AutoSize=true",210,90);
+	}
+
+
+	/*
+	var cab = 0; 
+	for(i=0;i<ds_userNotice.rowcount;i++){
+		cab = cab + 200;
+		var str = Open("Common::PopNotice.xml","NTC_SEQ=" + ds_userNotice.GetColumn(i,"NTC_SEQ"),100,100,"Taskbar=true resize=false AutoSize=true",210 + cab,90 + cab);
+	}
+	*/
+}
+
+
+
+// 조회
+function gCommonSearch(obj)
+{
+	//MRP시스템 활성화관리
+	//1 :정상, 2: 야간배치, 3:실사
+	if(G_ds_topbutton.GetColumn(0,"SEARCH") != "disable"){
+		getMngFlag();//MPR시스템 운영FLAG
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck("1") == false) return;
+			GetTopWindow().div_content.fn_Search(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck("1") == false) return;
+			GetTopWindow().div_content.fn_Search(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 추가
+function gCommonInput(obj)
+{
+/*
+	if(G_ds_topbutton.GetColumn(0,"ADD") != "disable"){
+		if(btnAuthCheck(2) == false) return;
+		GetTopWindow().div_content.fn_Input(); 
+	}
+*/
+	if(G_ds_topbutton.GetColumn(0,"ADD") != "disable"){
+		getMngFlag();
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck(2) == false) return;
+			GetTopWindow().div_content.fn_Input(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck(2) == false) return;
+			GetTopWindow().div_content.fn_Input(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 삭제
+function gCommonDelete(obj)
+{
+/*
+	if(G_ds_topbutton.GetColumn(0,"DELETE") != "disable"){
+		if(btnAuthCheck(3) == false) return;
+		GetTopWindow().div_content.fn_Delete(); 
+	}
+*/
+	if(G_ds_topbutton.GetColumn(0,"DELETE") != "disable"){
+		getMngFlag();
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck(3) == false) return;
+			GetTopWindow().div_content.fn_Delete(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck(3) == false) return;
+			GetTopWindow().div_content.fn_Delete(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 저장
+function gCommonSave(obj)
+{
+/*
+	if(G_ds_topbutton.GetColumn(0,"SAVE") != "disable"){
+		if(btnAuthCheck(4) == false) return;
+		GetTopWindow().div_content.fn_Save(); 
+	}
+*/
+	if(G_ds_topbutton.GetColumn(0,"SAVE") != "disable"){
+		getMngFlag();
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck(4) == false) return;
+			GetTopWindow().div_content.fn_Save(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck(4) == false) return;
+			GetTopWindow().div_content.fn_Save(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 출력
+function gCommonPrint(obj)
+{
+/*
+	if(G_ds_topbutton.GetColumn(0,"PRINT") != "disable"){
+		if(btnAuthCheck(5) == false) return;
+		GetTopWindow().div_content.fn_print(); 
+	}
+*/
+	if(G_ds_topbutton.GetColumn(0,"PRINT") != "disable"){
+		getMngFlag();
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck(5) == false) return;
+			GetTopWindow().div_content.fn_print(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck(5) == false) return;
+			GetTopWindow().div_content.fn_print(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 엑셀
+function gCommonExcel(obj)
+{
+/*
+	if(G_ds_topbutton.GetColumn(0,"EXCEL") != "disable"){
+		if(btnAuthCheck(6) == false) return;
+		GetTopWindow().div_content.fn_Excel(); 
+	}
+*/
+	if(G_ds_topbutton.GetColumn(0,"EXCEL") != "disable"){
+		getMngFlag();
+		getMenuGroup();
+		var pgmUSETF = substr(ds_menuGroup.GetColumn(0,"TOP_MENU"),0,1);
+		if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+			if(btnAuthCheck(6) == false) return;
+			GetTopWindow().div_content.fn_Excel(); 
+		}else if ((ds_mngflag.GetColumn(0,"USER_YN") = 8 || ds_mngflag.GetColumn(0,"USER_YN") = 9 )&& pgmUSETF!="m") {
+			if(btnAuthCheck(6) == false) return;
+			GetTopWindow().div_content.fn_Excel(); 
+		}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8 && pgmUSETF=="m") {
+			alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+			setMessage("9997");
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+		else if (ds_mngflag.GetColumn(0,"USER_YN") = 9  && pgmUSETF=="m") {
+			alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+			setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+			getLeft();//메인메뉴로 이동
+			GetTopWindow().close();//활성화된 창닫기
+			return;
+		}
+	}
+}
+
+
+// 도움말
+function gCommonHelp(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"HELP") != "disable"){
+		if(btnAuthCheck(7) == false) return;
+		GetTopWindow().div_content.fn_Help(); 
+	}
+}
+
+
+
+
+// 즐겨찾기 추가
+function addBookMark()
+{
+	//ds_bookMark.DeleteAll();
+	
+	ds_bookMark.ClearData();
+	
+	ds_bookMark.UpdateControl = true;
+	
+	if(GetTopWindow().id == "MDIForm0"){
+		return false ;
+	}
+	
+	if(GetTopWindow().div_content.sMenuId == ""){
+		return false ;
+	}
+
+	if(confirm("즐겨찾기에 추가하시겠습니까?              ") == false) return;
+
+	http.sync = true;
+	var sParam = "";
+
+	ds_bookMark.AddRow();
+
+	ds_bookMark.SetColumn(0,"USER_ID",G_ds_user.GetColumn(0,"USER_ID"));
+	ds_bookMark.SetColumn(0,"MENU_ID",GetTopWindow().div_content.sMenuId);
+
+	Transaction(
+		"bookMarkSave",								// Transaction ID
+		"service::login/saveBookMark.do",			// service
+		"ds_bookMark=ds_bookMark:U",				// input Dataset
+		"",
+		"",             							// parameter
+		"callback"											// callback
+	);
+
+}
+
+// 즐겨찾기 삭제
+function delBookMark()
+{
+	ds_bookMark.ClearData();
+	ds_bookMark.UpdateControl = false;
+
+	if(GetTopWindow().id == "MDIForm0"){
+		return false ;
+	}
+
+	if(confirm("즐겨찾기를 삭제하시겠습니까?              ") == false) return;
+
+	http.sync = true;
+	var sParam = "";
+
+	ds_bookMark.AddRow();
+
+	ds_bookMark.SetColumn(ds_bookMark.row,"USER_ID",G_ds_user.GetColumn(0,"USER_ID"));
+	ds_bookMark.SetColumn(ds_bookMark.row,"MENU_ID",GetTopWindow().div_content.sMenuId);
+	
+	ds_bookMark.SetRowType(ds_bookMark.row,"Delete");
+
+	Transaction(
+		"bookMarkSave",								// Transaction ID
+		"service::login/saveBookMark.do",			// service
+		"ds_bookMark=ds_bookMark:U",				// input Dataset
+		"",
+		"",             							// parameter
+		"callback"									// callback
+	);			
+}
+
+
+
+// 로그아웃
+function gCommonLogout(obj)
+{
+	if(confirm("로그아웃 하시겠습니까?          ") == true )
+	{
+		exit();
+	}
+}
+
+function on_size(obj,nCx,nCy,nState)
+{
+	Static2.Left = nCx - 365;
+	Static2.Right = nCx - 245;	
+	
+	Button8.Left = nCx - 235;
+	Button8.Right = nCx - 105; 	
+	
+	Button6.Left = nCx - 100;
+	Button6.Right = nCx - 10;	
+	
+	//52
+	Button2.Left = nCx - 530;
+	Button2.Right = nCx - 460;
+	
+	//52
+	Button0.Left = nCx - 455;
+	Button0.Right = nCx - 385;	
+	
+	//52
+	Button1.Left = nCx - 380;
+	Button1.Right = nCx - 310;
+	
+	//52
+	Button3.Left = nCx - 305;
+	Button3.Right = nCx - 235;
+	
+	//52
+	Button4.Left = nCx - 230;
+	Button4.Right = nCx - 160;
+	
+	//59
+	Button5.Left = nCx - 155;
+	Button5.Right = nCx - 85;
+			
+	//53	
+	Button7.Left = nCx -  80;
+	Button7.Right = nCx - 10;				
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd == 0){
+		alert(setPopMessage("2054"));	// 20110103l-koowgnojeel, 2005 == 처리 되었습니다.
+	}	
+}
+
+
+// 즐겨찾기 추가
+function Image1_OnClick(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_ADD") != "disable"){
+		addBookMark();
+		if(global.FrameLeft.treeType != 1){
+			fcGetMenuTreeBookMark();
+		}
+	}
+}
+function Image1_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_ADD") == "disable"){
+		Image1.ImageStatus = "disable";				
+	}else{
+		Image1.ImageStatus = "select";				
+	}	
+}
+function image1_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_ADD") == "disable"){
+		Image1.ImageStatus = "disable";				
+	}else{
+		Image1.ImageStatus = "pop";				
+	}		
+}
+
+// 즐겨찾기 삭제
+function Image2_OnClick(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_DEL") != "disable"){
+		delBookMark();
+		if(global.FrameLeft.treeType != 1){
+			fcGetMenuTreeBookMark();
+		}	
+	}
+}
+function Image2_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_DEL") == "disable"){
+		Image2.ImageStatus = "disable";				
+	}else{
+		Image2.ImageStatus = "select";				
+	}	
+}
+function image2_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"FAV_DEL") == "disable"){
+		Image2.ImageStatus = "disable";				
+	}else{
+		Image2.ImageStatus = "pop";				
+	}		
+}
+
+function Button8_OnClick(obj)
+{
+	var str = dialog("Common::PopPersonalInfo.xml","" ,300,300);	
+}
+
+
+function Button2_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"SEARCH") == "disable"){
+		Button2.ImageStatus = "disable";				
+	}else{
+		Button2.ImageStatus = "pop";				
+	}
+}
+
+function Button2_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"SEARCH") == "disable"){
+		Button2.ImageStatus = "disable";				
+	}else{
+		Button2.ImageStatus = "select";				
+	}
+}
+
+function Button0_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"ADD") == "disable"){
+		Button0.ImageStatus = "disable";				
+	}else{
+		Button0.ImageStatus = "pop";				
+	}
+}
+
+function Button0_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"ADD") == "disable"){
+		Button0.ImageStatus = "disable";				
+	}else{
+		Button0.ImageStatus = "select";				
+	}	
+}
+
+function Button1_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"DELETE") == "disable"){
+		Button1.ImageStatus = "disable";				
+	}else{
+		Button1.ImageStatus = "pop";				
+	}
+}
+
+function Button1_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"DELETE") == "disable"){
+		Button1.ImageStatus = "disable";				
+	}else{
+		Button1.ImageStatus = "select";				
+	}
+}
+
+function Button3_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"SAVE") == "disable"){
+		Button3.ImageStatus = "disable";				
+	}else{
+		Button3.ImageStatus = "pop";				
+	}
+}
+
+function Button3_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"SAVE") == "disable"){
+		Button3.ImageStatus = "disable";				
+	}else{
+		Button3.ImageStatus = "select";				
+	}	
+}
+
+function Button4_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"PRINT") == "disable"){
+		Button4.ImageStatus = "disable";				
+	}else{
+		Button4.ImageStatus = "pop";				
+	}
+}
+
+function Button4_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"PRINT") == "disable"){
+		Button4.ImageStatus = "disable";				
+	}else{
+		Button4.ImageStatus = "select";				
+	}
+}
+
+function Button5_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"EXCEL") == "disable"){
+		Button5.ImageStatus = "disable";				
+	}else{
+		Button5.ImageStatus = "pop";				
+	}
+}
+
+function Button5_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"EXCEL") == "disable"){
+		Button5.ImageStatus = "disable";				
+	}else{
+		Button5.ImageStatus = "select";				
+	}		
+}
+
+function Button7_OnMouseOut(obj)
+{
+	if(G_ds_topbutton.GetColumn(0,"HELP") == "disable"){
+		Button7.ImageStatus = "disable";				
+	}else{
+		Button7.ImageStatus = "pop";				
+	}
+}
+
+function Button7_OnMouseOver(obj,nX,nY)
+{
+	if(G_ds_topbutton.GetColumn(0,"HELP") == "disable"){
+		Button7.ImageStatus = "disable";				
+	}else{
+		Button7.ImageStatus = "select";				
+	}	
+}
+
+
+//패스워드 변경 버튼
+function Button8_OnMouseOut(obj)
+{
+	Button8.ImageStatus = "pop";					
+}
+function Button8_OnMouseOver(obj,nX,nY)
+{
+	Button8.ImageStatus = "select";						
+}
+//로그아웃 버튼 
+function Button6_OnMouseOut(obj)
+{
+	Button6.ImageStatus = "pop";						
+}
+function Button6_OnMouseOver(obj,nX,nY)
+{
+	Button6.ImageStatus = "select";						
+}
+
+function getLeft(){
+	var wi = -1;
+	while (wi < global.windows.count){
+	wi++;
+		if (global.windows[wi].id == "FrameLeft") {
+			global.windows[wi].Div0_Button0_OnClick();
+			return; 
+		} 
+	} 
+}
+function getMenuGroup(){
+	http.Sync = true;
+	var sKind		= "getMenuGroup";						
+	var sMethodName = "service::user/selectMenuList.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_menuGroup=ds_menuList";    			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument   += " URL=" + quote(GetTopWindow().id);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}]]></Script>
+</Window>

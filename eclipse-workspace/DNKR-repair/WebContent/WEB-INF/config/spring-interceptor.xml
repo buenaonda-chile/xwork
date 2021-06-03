@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+  <!-- Configures the interceptors to invoke methods before and after HandlerMethod execution -->
+  <mvc:interceptors>
+    <!-- This interceptor to evacuate and restore the BindingException from forward or redirect -->
+    <bean class="com.globaldenso.ai.miyabi.errorback.ErrorBackInterceptor"/>
+    <!-- This interceptor to check the token parameter and the token session attribute and to save the token in the session (fixed) -->
+    <bean class="com.globaldenso.ai.miyabi.token.FixedTokenInterceptor" p:usable="false"/>
+    <!-- This interceptor to check the token parameter and the token session attribute and to save the token in the session (one-time) -->
+    <bean class="com.globaldenso.ai.miyabi.token.TransactionTokenInterceptor"/>
+    <!-- This interceptor to insert the view id of ViewId annotation to model -->
+    <bean class="com.globaldenso.ai.miyabi.viewid.ViewIdInterceptor"/>
+    <!-- This interceptor to change the locale with the locale parameter -->
+    <bean class="com.globaldenso.ai.miyabi.locale.DensoContextLocaleApplyInterceptor"/>
+    <!-- This interceptor to store MessageContext in request for message area -->
+    <bean class="com.globaldenso.ai.miyabi.message.MessageContextInterceptor" p:sorted="true"/>
+    <!-- This interceptor to store the attributes for WarningDialog in request -->
+    <bean class="com.globaldenso.ai.miyabi.exception.WarningExceptionMessageInterceptor"/>
+    <!-- This interceptor to resolve the device that originated the web request -->
+    <bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor" />
+    <!-- This interceptor to manage the user's site preference -->
+    <bean class="org.springframework.mobile.device.site.SitePreferenceHandlerInterceptor" />
+  </mvc:interceptors>
+
+</beans>

@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="품목정보마스타" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MSTZ100" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITCLS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLANN" size="256" summ="default" type="STRING"/>
+					<colinfo id="CPRTN" size="256" summ="default" type="STRING"/>
+					<colinfo id="CPDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CARCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CARNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BDYCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="BDYNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ROLCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="ROLNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="QYEXT" size="256" summ="default" type="STRING"/>
+					<colinfo id="QYENM" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="COLOR" size="256" summ="default" type="STRING"/>
+					<colinfo id="COLNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="REGCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="REGNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="WKARE" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKFAC" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKLOC" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKCAR" size="256" summ="default" type="STRING"/>
+					<colinfo id="CTNNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMA" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMB" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMC" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERME" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMF" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMG" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMH" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMI" size="256" summ="default" type="STRING"/>
+					<colinfo id="FRERMJ" size="256" summ="default" type="STRING"/>
+					<colinfo id="SUSER" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM008PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST050PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SVM100PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MSTZ100_CHECK"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="497" Id="Static4" TabOrder="41" Top="118" Width="1060"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="64" Id="Static3" TabOrder="40" Top="63" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="6" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="0" Top="8" Width="1032"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static10" Left="120" TabOrder="30" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="1" Top="39" Width="88"></Combo>
+		<Button Height="26" Id="btn_SEL" ImageID="btn2_search2" Left="744" OnClick="fn_Search" TabOrder="32" Text="조회" Top="34" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="btn_ADD" ImageID="btn2_add2" Left="824" OnClick="fn_Input" TabOrder="31" Text="추가" Top="34" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="btn_SAVE" ImageID="sum_save" Left="904" OnClick="fn_Save" TabOrder="34" TabStop="FALSE" Text="Button2" Top="34" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="btn_DEL" ImageID="btn2_delete2" Left="976" OnClick="fn_Delete" TabOrder="33" Text="Button1" Top="35" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="220" TabOrder="35" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="336" TabOrder="36" Top="35" VAlign="Middle" Width="398"></Static>
+		<Image Cursor="HAND" Height="16" Id="imgPspno" ImageID="ic_search" Left="708" OnClick="imgPspno_OnClick" Static="FALSE" TabOrder="37" Top="40" Width="14"></Image>
+		<Edit AutoSelect="TRUE" AutoSkip="TRUE" Height="20" Id="ed_PSPNO" ImeMode="none" Left="338" MaxLength="15" OnChanged="ed_PSPNO_OnChanged" OnCharChanged="ed_PSPNO_OnCharChanged" OnKillFocus="ed_PSPNO_OnKillFocus" TabOrder="2" Top="38" UpperOnly="TRUE" UseIME="FALSE" Width="128"></Edit>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="4" TabOrder="42" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;명" Top="73" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static14" Left="362" TabOrder="43" Text="차&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;종" Top="139" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static15" Left="480" TabOrder="44" Top="139" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="CARCD" Height="21" Id="ed_CARCD" ImeMode="none" Left="484" MaxLength="3" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="5" Top="142" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static91" Left="712" TabOrder="45" Text="규&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;격" Top="139" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static92" Left="830" TabOrder="46" Top="139" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="BDYCD" Enable="FALSE" Height="21" Id="ed_BDYCD" ImeMode="none" Left="834" MaxLength="3" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="7" Top="142" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Height="15" Id="st_PSPNO" Left="472" TabOrder="39" Top="37" VAlign="Bottom" Width="216"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static13" Left="472" TabOrder="38" Top="56" Width="220"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static59" Left="134" TabOrder="47" Top="92" Width="220"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="ITDSC" Height="15" Id="st_ITDSC" Left="135" TabOrder="48" Top="73" VAlign="Bottom" Width="216"></Static>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static68" Left="580" TabOrder="50" Text="분&#32;&#32;&#32;&#32;&#32;&#32;&#32;류" Top="70" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static75" Left="804" TabOrder="51" Text="담&#32;&#32;당&#32;&#32;자" Top="70" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BindDataset="ds_MSTZ100" Column="ITCLS" Height="15" Id="st_ITCLS" Left="710" TabOrder="53" Top="73" VAlign="Bottom" Width="60"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static79" Left="709" TabOrder="52" Top="92" Width="64"></Static>
+		<Static Align="Center" BindDataset="ds_MSTZ100" Column="PLANN" Height="15" Id="st_PLANN" Left="934" TabOrder="55" Top="73" VAlign="Bottom" Width="60"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static81" Left="933" TabOrder="54" Top="92" Width="64"></Static>
+		<Static Align="Center" BindDataset="ds_MSTZ100" Column="ITTYP" Height="15" Id="st_ITTYP" Left="502" TabOrder="57" Top="73" VAlign="Bottom" Width="60"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static83" Left="501" TabOrder="56" Top="92" Width="64"></Static>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static84" Left="372" TabOrder="49" Text="형&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;태" Top="70" VAlign="Middle" Width="116"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="CPRTN" Height="15" Id="st_CPRTN" Left="135" TabOrder="60" Top="99" VAlign="Bottom" Width="216"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static7" Left="134" TabOrder="59" Top="118" Width="220"></Static>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="4" TabOrder="58" Text="업&#32;체&#32;품&#32;번" Top="99" VAlign="Middle" Width="116"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="CPDSC" Height="15" Id="st_CPDSC" Left="505" TabOrder="63" Top="99" VAlign="Bottom" Width="216"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static12" Left="502" TabOrder="62" Top="118" Width="220"></Static>
+		<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static43" Left="372" TabOrder="61" Text="업&#32;체&#32;품&#32;명" Top="99" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="12" TabOrder="64" Text="제&#32;품&#32;코&#32;드" Top="139" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="130" TabOrder="65" Top="139" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="PRDCD" Enable="FALSE" Height="21" Id="ed_PRDCD" ImeMode="none" Left="134" MaxLength="1" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="3" Top="142" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static9" Left="201" TabOrder="66" Top="161" Width="120"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="PRDNM" Height="15" Id="st_PRDNM" Left="202" TabOrder="67" Top="142" VAlign="Bottom" Width="116"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="CARNM" Height="15" Id="st_CARNM" Left="552" TabOrder="69" Top="142" VAlign="Bottom" Width="116"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static18" Left="551" TabOrder="68" Top="161" Width="120"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="BDYNM" Height="15" Id="st_BDYNM" Left="902" TabOrder="71" Top="142" VAlign="Bottom" Width="116"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static20" Left="901" TabOrder="70" Top="161" Width="120"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static21" Left="362" TabOrder="72" Text="수량&#32;계산용" Top="171" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static22" Left="480" TabOrder="73" Top="171" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="QYEXT" Height="21" Id="ed_QYEXT" ImeMode="none" Left="484" MaxLength="1" OnKillFocus="ed_QYEXT_OnKillFocus" TabOrder="9" Top="174" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static23" Left="712" TabOrder="74" Text="관&#32;리&#32;코&#32;드" Top="171" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static24" Left="830" TabOrder="75" Top="171" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="MGMCD" Enable="FALSE" Height="21" Id="ed_MGMCD" ImeMode="none" Left="834" MaxLength="1" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="10" Top="174" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static26" Left="12" TabOrder="76" Text="차&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;륜" Top="171" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static27" Left="130" TabOrder="77" Top="171" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="ROLCD" Enable="FALSE" Height="21" Id="ed_ROLCD" ImeMode="none" Left="134" MaxLength="3" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="8" Top="174" UpperOnly="TRUE" UseIME="FALSE" Width="60"></Edit>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static28" Left="201" TabOrder="78" Top="193" Width="120"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="ROLNM" Height="15" Id="st_ROLNM" Left="202" TabOrder="79" Top="174" VAlign="Bottom" Width="116"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="QYENM" Height="15" Id="st_QYENM" Left="552" TabOrder="81" Top="174" VAlign="Bottom" Width="116"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static31" Left="551" TabOrder="80" Top="193" Width="120"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="MGMNM" Height="15" Id="st_MGMNM" Left="902" TabOrder="83" Top="174" VAlign="Bottom" Width="116"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static33" Left="901" TabOrder="82" Top="193" Width="120"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static16" Left="130" TabOrder="85" Top="291" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static17" Left="12" TabOrder="84" Text="자유항목&#32;01" Top="291" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMA" Height="21" Id="ed_FRERMA" ImeMode="none" Left="134" MaxLength="42" TabOrder="18" Top="294" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static29" Left="130" TabOrder="87" Top="323" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static30" Left="12" TabOrder="86" Text="자유항목&#32;02" Top="323" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMB" Height="21" Id="ed_FRERMB" ImeMode="none" Left="134" MaxLength="42" TabOrder="19" Top="326" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static44" Left="130" TabOrder="89" Top="355" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static45" Left="12" TabOrder="88" Text="자유항목&#32;03" Top="355" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMC" Height="21" Id="ed_FRERMC" ImeMode="none" Left="134" MaxLength="42" TabOrder="20" Top="358" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static52" Left="130" TabOrder="91" Top="387" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static53" Left="12" TabOrder="90" Text="자유항목&#32;04" Top="387" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMD" Height="21" Id="ed_FRERMD" ImeMode="none" Left="134" MaxLength="42" TabOrder="21" Top="390" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static61" Left="130" TabOrder="93" Top="419" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static62" Left="12" TabOrder="92" Text="자유항목&#32;05" Top="419" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERME" Height="21" Id="ed_FRERME" ImeMode="none" Left="134" MaxLength="42" TabOrder="22" Top="422" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static70" Left="130" TabOrder="95" Top="451" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static71" Left="12" TabOrder="94" Text="자유항목&#32;06" Top="451" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMF" Height="21" Id="ed_FRERMF" ImeMode="none" Left="134" MaxLength="42" TabOrder="23" Top="454" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static80" Left="130" TabOrder="97" Top="483" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static82" Left="12" TabOrder="96" Text="자유항목&#32;07" Top="483" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMG" Height="21" Id="ed_FRERMG" ImeMode="none" Left="134" MaxLength="42" TabOrder="24" Top="486" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static93" Left="130" TabOrder="99" Top="515" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static94" Left="12" TabOrder="98" Text="서열&#32;코드" Top="515" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMH" Height="21" Id="ed_FRERMH" ImeMode="none" Left="134" MaxLength="8" TabOrder="25" Top="518" UpperOnly="TRUE" UseIME="FALSE" Width="890"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static101" Left="130" TabOrder="101" Top="547" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static102" Left="12" TabOrder="100" Text="EO&#32;번호" Top="547" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMI" Height="21" Id="ed_FRERMI" ImeMode="none" Left="134" MaxLength="9" TabOrder="26" Top="550" UpperOnly="TRUE" UseIME="FALSE" Width="890"></Edit>
+		<Static Align="Center" BKColor="white" Border="Flat" BorderColor="white" Font="굴림,14,Bold" Height="26" Id="Static109" Left="420" TabOrder="102" Text="&lt;&#32;&#32;&#32;&#32;QR&#32;자료입력&#32;&#32;&#32;&#32;&gt;" Top="199" VAlign="Middle" Width="240"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static110" Left="130" TabOrder="104" Top="579" VAlign="Middle" Width="900"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static111" Left="12" TabOrder="103" Text="자유항목&#32;10" Top="579" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="FRERMJ" Height="21" Id="ed_FRERMJ" ImeMode="none" Left="134" MaxLength="42" TabOrder="27" Top="582" UpperOnly="TRUE" Width="890"></Edit>
+		<Static Height="15" Id="Static118" Left="272" TabOrder="105" Top="264" VAlign="Bottom" Width="110"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static119" Left="130" TabOrder="107" Top="227" VAlign="Middle" Width="145"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static120" Left="12" TabOrder="106" Text="색&#32;상&#32;코&#32;드" Top="227" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="COLOR" Height="21" Id="ed_COLOR" ImeMode="none" Left="134" MaxLength="3" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="11" Top="230" UpperOnly="TRUE" UseIME="FALSE" Width="40"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static121" Left="278" TabOrder="108" Text="지&#32;역&#32;코&#32;드" Top="227" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static122" Left="396" TabOrder="109" Top="227" VAlign="Middle" Width="145"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static123" Left="549" TabOrder="110" Text="작&#32;&#32;&#32;업&#32;&#32;&#32;장" Top="227" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static124" Left="667" TabOrder="111" Top="227" VAlign="Middle" Width="120"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static125" Left="792" TabOrder="112" Text="납&#32;품&#32;공&#32;장" Top="227" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static126" Left="910" TabOrder="113" Top="227" VAlign="Middle" Width="120"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="REGCD" Height="21" Id="ed_REGCD" ImeMode="none" Left="400" MaxLength="1" OnCharChanged="MST050CHK_OnCharChanged" OnKillFocus="MST050CHK_OnKillFocus" TabOrder="12" Top="230" UpperOnly="TRUE" UseIME="FALSE" Width="40"></Edit>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="WKARE" Height="21" Id="ed_WKARE" ImeMode="none" Left="671" MaxLength="10" TabOrder="13" Top="230" UpperOnly="TRUE" Width="110"></Edit>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="MKFAC" Height="21" Id="ed_MKFAC" ImeMode="none" Left="913" MaxLength="10" TabOrder="14" Top="230" UpperOnly="TRUE" Width="110"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static128" Left="130" TabOrder="115" Top="259" VAlign="Middle" Width="200"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static129" Left="12" TabOrder="114" Text="용&#32;기&#32;번&#32;호" Top="259" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="CTNNO" Height="21" Id="ed_CTNNO" ImeMode="none" Left="134" MaxLength="10" TabOrder="15" Top="262" UpperOnly="TRUE" Width="190"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static130" Left="364" TabOrder="116" Text="납&#32;품&#32;장&#32;소" Top="259" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static131" Left="482" TabOrder="117" Top="259" VAlign="Middle" Width="200"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static132" Left="712" TabOrder="118" Text="차&#32;종&#32;명&#32;칭" Top="259" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static133" Left="830" TabOrder="119" Top="259" VAlign="Middle" Width="200"></Static>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="MKLOC" Height="21" Id="ed_MKLOC" ImeMode="none" Left="486" MaxLength="10" TabOrder="16" Top="262" UpperOnly="TRUE" Width="190"></Edit>
+		<Edit AutoSelect="TRUE" BindDataset="ds_MSTZ100" CheckLength="Byte" Column="MKCAR" Height="21" Id="ed_MKCAR" ImeMode="none" Left="834" MaxLength="18" TabOrder="17" Top="262" UpperOnly="TRUE" Width="190"></Edit>
+		<Static BindDataset="ds_MSTZ100" Column="REGNM" Height="15" Id="st_REGNM" Left="448" TabOrder="123" Top="232" VAlign="Bottom" Width="84"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static25" Left="443" TabOrder="122" Top="248" Width="90"></Static>
+		<Static BindDataset="ds_MSTZ100" Column="COLNM" Height="15" Id="st_COLNM" Left="178" TabOrder="121" Top="230" VAlign="Bottom" Width="84"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static34" Left="177" TabOrder="120" Top="249" Width="90"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : MSTZ100.xml
+ * ● PROGRAM DESCRIPTION  : 품목정보마스타
+ * ● DATE WRITTEN         : 2013.06.04
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	//getDesign();
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); //공장구분 선택
+	//ed_PSPNO.Text="03101-32000H";
+	//ed_PSPNO.Text="03101-31900K";
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+}
+
+function getMSTZ100(){
+	
+	if(!validationChk()){
+		return;
+	}		
+	
+	var sKind		= "getMSTZ100";						
+	var sMethodName = "service::psmstlib/selectMSTZ100.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MSTZ100=ds_MSTZ100";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@PSPNO=" + quote(ed_PSPNO.Text); //업체
+	var str = dialog("Common::PGMLOAD_MST.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));  //[알림] 신규입력입니다.
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+function setMSTZ100(){
+	
+	var sKind		= "setMSTZ100";						
+	var sMethodName = "service::psmstlib/saveMSTZ100.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_MSTZ100=ds_MSTZ100:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MSTZ100_CHECK=ds_MSTZ100_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_MSTZ100_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_MSTZ100_CHECK.GetRowCount();i++){
+			alert("품번 : " +ds_MSTZ100_CHECK.GetColumn(i,"PRTNO") + " = " + ds_MSTZ100_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getMSTZ100();  //error항목이 존재시에는 재조회
+		return;
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+	var result = true;
+	var pspnoVal = ed_PSPNO.Text;
+		ed_PSPNO.BKColor="white";
+		
+	if (pspnoVal == "")
+	{
+		ed_PSPNO.BKColor="paleturquoise";
+		//alert("품번을 입력하세요.");
+		alert(setPopMessage("2017"));
+		setMessage("2017");	
+		result = false;
+	}
+	return result;
+}
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MSTZ100.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "품목정보마스타";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|품목정보마스타";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getMSTZ100();
+}
+
+function fn_Input()
+{
+	if(ComboBoxPlant.Text!="E1"){//PS는 수정만가능
+		alert(setPopMessage("6003"));//[경고] 이미 등록된 자료입니다.
+		setPopMessage("6003");	
+		//alert("[알림]수정만 가능합니다.(추가불가)");
+		return;
+	}
+	if(!validationChk()){
+		return;
+	}
+	
+	if(checkInsertCount("ds_MSTZ100")== false) return;
+	if(ds_MSTZ100.rowcount < 1) fn_Search(); 
+	if(ds_MSTZ100.GetRowCount() < 1){
+		//alert("[알림] 신규입력입니다.");
+		alert(setPopMessage("1013"));//[알림] 신규입력입니다.
+		setPopMessage("1013");			
+		var sKind		= "getMSTZ100_NEW";						
+		var sMethodName = "service::psmstlib/selectMSTZ100_NEW.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_MSTZ100=ds_MSTZ100";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " PSPNO=" + quote(ed_PSPNO.Text); //업체
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+			
+		ds_MSTZ100.SetColumn(ds_MSTZ100.currow,"COMPS",ComboBoxPlant.Value);
+		ds_MSTZ100.SetColumn(ds_MSTZ100.currow,"PRTNO",ed_PSPNO.Text);
+		ds_MSTZ100.SetColumn(ds_MSTZ100.currow,"SUSER",userId);
+		ds_MSTZ100.UpdateControl=false;
+		ds_MSTZ100.SetRowType(0,"insert");
+		ds_MSTZ100.UpdateControl=true;
+	}
+	else{
+		//alert("[경고] 이미 등록된 자료입니다.");
+		alert(setPopMessage("1520"));//[경고] 이미 등록된 자료입니다.
+		setPopMessage("1520");	
+		//ds_MSTZ100.ClearData();
+	}
+}
+
+function fn_Delete()
+{
+	if(ds_MSTZ100.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_MSTZ100.DeleteRow(ds_MSTZ100.currow);	//삭제		
+	alert(setPopMessage("1011"));	
+	setPopMessage("1011");	
+}
+
+function fn_Save()
+{
+	setMSTZ100();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function ed_PSPNO_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_PSPNO.Text="";
+}
+
+function ed_PSPNO_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//품번Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectBM008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM008PR=ds_BM008PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " ITNBR=" + quote(ed_PSPNO.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_BM008PR.GetRowCount() < 1){
+		alert(setPopMessage("1501"));
+		setMessage("1501");	
+		ed_pspno.SetFocus();
+		return;
+	}
+	st_PSPNO.Text=ds_BM008PR.GetColumn(0,"ITDSC");
+}
+
+function ed_PSPNO_OnChanged(obj,strText)
+{
+	ds_MSTZ100.ClearData();
+}
+
+function imgPspno_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pspno.Text);
+	if (length(trim(ed_pspno.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "A1";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pspno.Text = rtn[0];
+		st_pspno.Text = rtn[1];
+	}
+}
+
+function ed_QYEXT_OnKillFocus(obj)
+{
+	if(ed_QYEXT.Text!="Y" && ed_QYEXT.Text!="N"){
+		ed_QYEXT.SetFocus();
+		//alert("[확인] 'Y'는 계산함, 'N'는 계산안함 입니다.");
+		alert(setPopMessage("4025"));//[확인] 'Y'는 계산함, 'N'는 계산안함 입니다.
+		setMessage("4025");	
+	}else{
+		if(ed_QYEXT.Text=="Y"){
+			st_QYENM.Text="계산함";
+		}
+		else{
+			st_QYENM.Text="계산안함";		
+		}
+	}
+}
+
+function MST050CHK_OnKillFocus(obj)
+{
+
+//제품코드, 차종코드, 규격, 차륜, 수량계산, 관리코드, 지역코드  사용
+//색상제외
+	if(length(trim(obj.Text)) < 1) return;
+	//품번Check
+	var grpVal = "";
+	var grpChk = substr(obj.ID,3,5);
+	if( grpChk == "PRDCD"){
+		grpVal="PRD";
+	}
+	else if( grpChk == "CARCD"){
+		grpVal="CAR";
+	}
+	else if( grpChk == "BDYCD"){
+		grpVal="BDY";
+	}
+	else if( grpChk == "ROLCD"){
+		grpVal="ROL";
+	}
+	else if( grpChk == "MGMCD"){
+		grpVal="MGM";
+	}
+	else if( grpChk == "COLOR"){
+		grpVal="COL";
+	}
+	else if( grpChk == "REGCD"){
+		grpVal="REG";
+	}				
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getMST050";		
+	var sMethodName = "service::pscomlib/selectMST050PF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST050PF=ds_MST050PF";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument  += " GRPCD=" + quote(grpVal);
+		sArgument  += " MSTCD=" + quote(obj.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if(grpVal!="COL"){
+		if (ds_MST050PF.GetRowCount() < 1){
+			alert(setPopMessage("4023"));
+			setMessage("4023");	
+			obj.SetFocus();
+			return;
+		}
+	}
+		
+	if( grpChk == "PRDCD"){
+		st_PRDNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTRM"));	
+	}
+	else if( grpChk == "CARCD"){
+		st_CARNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTSM"));	
+	}
+	else if( grpChk == "BDYCD"){
+		st_BDYNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTSM"));	
+	}
+	else if( grpChk == "ROLCD"){
+		st_ROLNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTSM"));	
+	}
+	else if( grpChk == "MGMCD"){
+		st_MGMNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTRM"));	
+	}
+	else if( grpChk == "COLOR"){
+		st_COLNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTRM"));	
+	}
+	else if( grpChk == "REGCD"){
+		st_REGNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTRM"));	
+	}	
+}
+function MST050CHK_OnCharChanged(obj,strPreText,strPostText)
+{
+	var grpVal = "";
+	var grpChk = substr(obj.ID,3,5);
+	if( grpChk == "PRDCD"){
+		st_PRDNM="";
+	}
+	else if( grpChk == "CARCD"){
+		st_CARNM="";
+	}
+	else if( grpChk == "BDYCD"){
+		st_BDYNM="";
+	}
+	else if( grpChk == "ROLCD"){
+		st_ROLNM="";
+	}
+	else if( grpChk == "MGMCD"){
+		st_MGMNM="";
+	}
+	else if( grpChk == "COLOR"){
+		st_COLNM="";
+	}
+	else if( grpChk == "REGCD"){
+		st_REGNM="";
+	}	
+}]]></Script>
+</Window>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="공통코드" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_mngflag"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_viewyn">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>0</cd>
+						<cdnm>0&#32;사용가능</cdnm>
+					</record>
+					<record>
+						<cd>8</cd>
+						<cdnm>8&#32;야간배치중</cdnm>
+					</record>
+					<record>
+						<cd>9</cd>
+						<cdnm>9&#32;재고실사중</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset Auto="false" DataSetType="Dataset" Id="ds_in">
+				<Contents>
+					<colinfo id="code" size="255" summ="default" type="STRING"/>
+					<colinfo id="value" size="255" summ="default" type="STRING"/>
+					<record>
+						<code>PS</code>
+						<value>PS&#32;:&#32;Denso&#32;Korea&#32;Automotive</value>
+					</record>
+					<record>
+						<code>PE</code>
+						<value>PE&#32;:&#32;Denso&#32;Korea&#32;Electronics</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SILTM">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRNDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRNTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static16" Left="384" TabOrder="3" Top="334" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static2" Left="718" TabOrder="6" Top="336" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static9" Left="386" TabOrder="2" Top="336" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static15" Left="410" Style="static" TabOrder="1" Text="회&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;사" Top="341" VAlign="Middle" Width="78"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_mngflag" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="328" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="296" Id="CodeGrd" InputPanel="FALSE" Left="384" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1052" TabOrder="4" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="668">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="150"/>
+						<col width="150"/>
+						<col width="327"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="사용구분"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사용구분명"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="COMPS" display="normal"/>
+						<cell align="center" col="2" colid="USER_YN" color="#333333" display="normal"/>
+						<cell align="left" col="3" colid="USER_NAME" color="#333333" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static1" Left="745" Style="static" TabOrder="5" Text="사&#32;&#32;업&#32;&#32;부" Top="341" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_mngflag" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CLASS" Enable="FALSE" Height="29" Id="ed_class" Left="537" MaxLength="4" TabOrder="7" Top="336" Width="180"></Edit>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static0" Left="384" TabOrder="10" Top="367" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static3" Left="718" TabOrder="12" Top="369" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static4" Left="386" TabOrder="9" Top="369" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static5" Left="410" Style="static" TabOrder="8" Text="사&#32;용&#32;구&#32;분" Top="374" VAlign="Middle" Width="69"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static6" Left="744" Style="static" TabOrder="11" Text="사용구분&#32;명" Top="374" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_mngflag" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="USER_NAME" Enable="FALSE" Height="29" Id="Edit2" Left="869" MaxLength="5" TabOrder="13" Top="369" Width="180"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Enable="FALSE" Height="29" Id="Edit4" Left="537" MaxLength="15" TabOrder="14" Top="370" Width="180"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="15" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="15" Top="8" Width="1032"></Static>
+		<Edit BindDataset="ds_mngflag" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="COMPS" Enable="FALSE" Height="29" Id="Edit1" Left="869" TabOrder="17" Top="336" Width="180"></Edit>
+		<Combo BindDataset="ds_mngflag" Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" Column="USER_YN" DataColumn="cdnm" Height="25" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_viewyn" Left="538" OnChanged="cb_comp_OnChanged" ResetIndex="FIRST" TabOrder="18" Top="371" Width="180"></Combo>
+		<radio Border="None" BorderColor="user1" BottomMargin="10" CodeColumn="code" DataColumn="value" Height="64" Id="radio1" INDEX="0" InnerDataset="ds_in" Left="56" LeftMargin="10" OnChanged="radio1_OnChanged" RightMargin="10" TabOrder="19" Top="40" TopMargin="10" Width="248"></radio>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="26" Id="Button3" ImageID="sum_save" ImageStatus="SELECT" Left="264" OnClick="fn_Save" TabOrder="20" Text="검색" Top="544" Width="70"></Button>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static7" Left="384" TabOrder="23" Top="431" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static8" Left="718" TabOrder="25" Top="433" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static10" Left="386" TabOrder="22" Top="433" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static11" Left="410" Style="static" TabOrder="21" Text="실사기준날짜" Top="438" VAlign="Middle" Width="110"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static12" Left="744" Style="static" TabOrder="24" Text="실사기준시간" Top="438" VAlign="Middle" Width="112"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Enable="FALSE" Height="29" Id="Edit3" Left="537" MaxLength="15" TabOrder="26" Top="434" Width="180"></Edit>
+		<Calendar BindDataset="ds_SILTM" Border="Flat" BorderColor="SCROLLBAR" Column="TRNDT" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="25" Id="cmd_TRNDT" Left="537" LeftMargin="40" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="27" Top="436" Width="180"></Calendar>
+		<MaskEdit Align="Center" BindDataset="ds_SILTM" Column="TRNTM" Height="29" Id="ed_TRNTM" Left="870" Mask="@@:@@:@@" MaxLength="6" TabOrder="28" Top="434" Type="STRING" Width="178"></MaskEdit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static13" Left="387" Style="static" TabOrder="29" Text="&lt;DNKA만&#32;사용&gt;" Top="409" VAlign="Middle" Width="110"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : LSK
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : YNmrpSytem.xml
+ * ● PROGRAM DESCRIPTION  : mrp system 사용여부 관리
+ * ● DATE WRITTEN         : 2013.09.27
+----------------------------------------------------------------*/
+
+
+#include "script::lib_script_common.js";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	fn_Search();
+}
+
+function getYNmrpSystem(){
+	http.Sync = true;
+	var sKind		= "getYNmrpSystem";						
+	var sMethodName = "service::user/selectMngFlag.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SILTM=ds_SILTM ds_mngflag=ds_mngflag";    	// 조회 후 돌려 받을 DataSet 명칭
+	
+	var sArgument   = "";
+	sArgument += " CLASS=" + quote(radio1.Value);
+	sArgument += " COMPS_ORG=" + quote(radio1.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setYNmrpSystem(){
+	if(!validationChk()) return;
+	var sKind		= "setYNmrpSystem";						
+	var sMethodName = "service::user/updateMngFlag.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_SILTM=ds_SILTM:U ds_mngflag=ds_mngflag:U";     		//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    								// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+function validationChk(){
+	for(var i=0; i<ds_mngflag.rowcount(); i++){
+		if(length(trim(ds_mngflag.GetColumn(i, "CLASS")))==0){
+			alert(setPopMessage("2045"));	//[알림] 소속회사를 입력해 주세요.
+			ds_mngflag.row = i;
+			return false;
+		}
+		if(length(trim(ds_mngflag.GetColumn(i, "COMPS")))==0){
+			alert(setPopMessage("1510"));	// [경고] 사업부 구분을 확인바랍니다.
+			ds_mngflag.row = i;
+			return false;
+		}
+	}
+	return true;
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getYNmrpSystem"){
+		// 조회건수가 없을경우
+		if(ds_mngflag.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			//alert(setPopMessage("1004"));
+			//setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setYNmrpSystem"){
+		//getComCodeClass();
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Search()
+{
+	getYNmrpSystem();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setYNmrpSystem();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+function radio1_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	fn_Search();
+}
+
+function cb_comp_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_mngflag.SetColumn(ds_mngflag.row,"USER_NAME",cb_comp.Text);
+}
+]]></Script>
+</Window>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="744" Id="userList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="인사발령이력" Top="8" Ver="1.0" Width="968" WorkArea="true">
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="Default,20,Bold" Height="39" Id="Static83" TabOrder="1" Text="인&#32;사&#32;발&#32;령&#32;이&#32;력" VAlign="Middle" Width="968"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_HAEZ02Q_TAB2" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="white" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="736" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="696" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="968" SelColor="black" TabOrder="0" TabStop="true" Top="40" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="968">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="120"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="280"/>
+						<col width="200"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="발령일자"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="발령코드" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="직급" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="이동부서"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="비고"/>
+					</head>
+					<body>
+						<cell align="right" checklength="Byte" col="0" color="#333333" display="normal" expr="row+1" limit="12"/>
+						<cell align="center" checklength="Byte" col="1" colid="APDAT" color="#333333" display="date" limit="8" TrimType="Both"/>
+						<cell checklength="Byte" col="2" colid="APDCD" color="#333333" display="normal" TrimType="Both"/>
+						<cell checklength="Byte" col="3" colid="APDCL" color="#333333" display="normal" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="4" colid="APDDL" color="#333333" display="normal" limit="12"/>
+						<cell align="left" checklength="Byte" col="5" colid="APDNM" color="#333333" display="normal" limit="12"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAEZ02_TAB2xml
+ * ● PROGRAM DESCRIPTION  : 인사기록카드-인사발령
+ * ● DATE WRITTEN         : 2016.04.27
+ ----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("0");
+}
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+
+function getDesign(){
+
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	//MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+}
+
+]]></Script>
+</Window>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="선택하세요" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="DS_SELECT">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="8" Top="30" Width="523"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="3" TabOrder="7" Top="32" Visible="FALSE" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="527"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Select" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="582" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="518" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="menuGrd2_OnCellDblClick" Right="524" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="524">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="대분류명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="중분류명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="소분류명"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="CLGNM" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="2" colid="CMDNM" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="3" colid="CSMNM" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_info" Left="40" TabOrder="2" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="4" Top="8" Width="104"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="15" LineColor="#dceaf7" Right="20" TabOrder="5" Top="41" Type="Ellipse" Visible="FALSE" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="25" Style="static" TabOrder="6" Text="찾&#32;기" Top="37" VAlign="Middle" Visible="FALSE" Width="69"></Static>
+		<Edit Height="25" Id="ed_select" Left="96" TabOrder="9" Top="32" UpperOnly="TRUE" Visible="FALSE" Width="152"></Edit>
+		<Image Cursor="HAND" Height="27" Id="imgQuery" ImageID="btn2_sear" Left="285" OnClick="imgQuery_OnClick" Static="FALSE" TabOrder="10" Top="31" Visible="FALSE" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgSelect" ImageID="btn2_sele" Left="365" OnClick="imgSelect_OnClick" Static="FALSE" TabOrder="11" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgClose" ImageID="btn2_out" Left="445" OnClick="imgClose_OnClick" Static="FALSE" TabOrder="12" Top="31" Width="75"></Image>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE_FIND.xml
+ * ● PROGRAM DESCRIPTION  : 공통사용(선택된 값으로 명 찾기)
+ * ● DATE WRITTEN         : 2012.09.25
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-10-25
+ * 내용설명 : 화면 로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj)
+{
+	//alert(TAB);
+	imgQuery_OnClick();
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-10-25
+ * 내용설명 : 선택별 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgQuery_OnClick(obj,nX,nY)
+{
+	http.Sync 	= true;
+	var sKind		= "getOBSE5_FIND";		
+	var sMethodName = "service::psogmlib/selectOBSE05_Find.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "DS_SELECT=DS_SELECT";
+	var sArgument   = "";
+	
+	if (TAB == 1) {		
+		sArgument   += " clsgu=" + quote("S");
+	} else {
+		sArgument   += " clsgu=" + quote("B");
+	}
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-10-25
+ * 내용설명 : 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgSelect_OnClick(obj,nX,nY)
+{
+	var arrReturn  =  Array();
+	arrReturn[0]  = DS_SELECT.GetColumn(DS_SELECT.row,"CLSLG");
+	arrReturn[1]  = DS_SELECT.GetColumn(DS_SELECT.row,"CLSMD");
+	arrReturn[2]  = DS_SELECT.GetColumn(DS_SELECT.row,"CLSSM");	
+	arrReturn[3]  = DS_SELECT.GetColumn(DS_SELECT.row,"CLGNM") + " / " + DS_SELECT.GetColumn(DS_SELECT.row,"CMDNM") + " / " + DS_SELECT.GetColumn(DS_SELECT.row,"CSMNM");	
+	close(arrReturn);
+}
+
+function menuGrd2_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	imgSelect_OnClick();
+}
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-10-25
+ * 내용설명 : close
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgClose_OnClick(obj,nX,nY)
+{
+	Close();
+}]]></Script>
+</Window>

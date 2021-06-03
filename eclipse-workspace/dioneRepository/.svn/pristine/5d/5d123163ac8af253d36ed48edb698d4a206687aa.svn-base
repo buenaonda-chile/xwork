@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.AuthDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Auth" type="AuthDomain">
+        <result property="authCode" column="AUTH_CODE" />
+        <result property="useYn" column="AUTH_USE" />
+        <result property="authName" column="AUTH_NAME" />
+        <result property="authDescription" column="AUTH_DESCRIPTION" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="menuCode" column="MCD_CODE" />
+        <result property="authNum" column="AUTH_NUM" />
+        <result property="menuName" column="MCD_NAME" />
+        <result property="menuDepth" column="MCD_DEPTH" />
+        <result property="menuDepthFullName" column="DEPTH_FULLNAME" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Auth" parameterType="AuthDomain">
+        select 
+                A.AUTH_CODE
+              , A.AUTH_USE
+              , B.CMC_CODE
+              , B.AUTH_NAME
+              , B.AUTH_DESCRIPTION
+        from 
+                DNKR_AUTH_CODE A
+              , DNKR_AUTH_CODE_NM B
+        where 
+                'SqlMap-Auth.searchByKey' = 'SqlMap-Auth.searchByKey'
+            and A.AUTH_CODE = B.AUTH_CODE
+            and A.AUTH_CODE = #{authCode}
+            and B.CMC_CODE = #{cmcLangCode}
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Auth" parameterType="AuthDomain">
+        select 
+                A.AUTH_CODE
+              , A.AUTH_USE
+              , B.CMC_CODE
+              , B.AUTH_NAME
+              , B.AUTH_DESCRIPTION
+        from 
+                DNKR_AUTH_CODE A
+              , DNKR_AUTH_CODE_NM B
+        where 
+                'SqlMap-Auth.searchByCondition' = 'SqlMap-Auth.searchByCondition'
+            and A.AUTH_CODE = B.AUTH_CODE
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.AUTH_USE = #{useYn}
+        </if>
+        <if test="authName != null and authName != ''">
+            and B.AUTH_NAME like '%' || #{authName} || '%'
+        </if>
+        <if test="authDescription != null and authDescription != ''">
+            and B.AUTH_DESCRIPTION = #{authDescription}
+        </if>
+                order by 
+                to_number(A.AUTH_CODE) desc
+    </select>
+    
+     <!-- 検索 SQL文（任意条件） -->
+    <select id="searchTeamMenuList" resultMap="Auth" parameterType="AuthDomain">
+        select 
+                AUTH_CODE
+              , AUTH_NUM
+              , MCD_CODE
+        from 
+                DNKR_AUTH_DETAIL
+        where 
+                'SqlMap-Auth.searchByCondition' = 'SqlMap-Auth.searchByCondition'
+        <if test="authCode != null and authCode != ''">
+            and AUTH_CODE = #{authCode}
+        </if>
+        <if test="authNum != null and authNum != ''">
+            and AUTH_NUM = #{authNum}
+        </if>
+        <if test="authNum == null or authNum == ''">
+            and AUTH_NUM > 0
+        </if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="Auth"
+        parameterType="AuthDomain">
+        select 
+                AUTH_CODE
+              , AUTH_USE
+              , CMC_CODE
+              , AUTH_NAME
+              , AUTH_DESCRIPTION
+              , ROW_NUM
+        from (
+            select 
+                A.AUTH_CODE AUTH_CODE
+              , A.AUTH_USE AUTH_USE
+              , B.CMC_CODE CMC_CODE
+              , B.AUTH_NAME AUTH_NAME
+              , B.AUTH_DESCRIPTION AUTH_DESCRIPTION
+              , row_number() over (order by to_number(A.AUTH_CODE) desc) ROW_NUM
+        from 
+                DNKR_AUTH_CODE A
+              , DNKR_AUTH_CODE_NM B
+        where 
+                'SqlMap-Auth.searchByCondition' = 'SqlMap-Auth.searchByCondition'
+            and A.AUTH_CODE = B.AUTH_CODE
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.AUTH_USE = #{useYn}
+        </if>
+        <if test="authName != null and authName != ''">
+            and B.AUTH_NAME like '%' || #{authName} || '%'
+        </if>
+        <if test="authDescription != null and authDescription != ''">
+            and B.AUTH_DESCRIPTION = #{authDescription}
+        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+     <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchAuthDetail" resultMap="Auth"
+        parameterType="AuthDomain">
+        select 
+                A.AUTH_CODE AUTH_CODE
+              , B.MCD_CODE MCD_CODE
+              , A.AUTH_NUM AUTH_NUM
+              , B.MCD_NAME MCD_NAME
+              , B.MCD_DEPTH MCD_DEPTH
+              , B.DEPTH_FULLNAME DEPTH_FULLNAME
+        from 
+              ( select 
+              		  MCD_CODE
+              		, AUTH_CODE
+              		, AUTH_NUM 
+             	from 
+             		DNKR_AUTH_DETAIL 
+             	where 
+             		'SqlMap-Auth.searchAuthDetail' = 'SqlMap-Auth.searchAuthDetail'
+             	<if test="authCode != null and authCode != ''">	
+             		and AUTH_CODE = #{authCode}
+            	</if>	
+              ) A 
+        	RIGHT OUTER JOIN 
+    		  ( SELECT 
+    		  		MCD_CODE
+    		  	  , MCD_REF
+    		  	  , MCD_DEPTH
+    		  	  , MCD_NAME
+    		  	  , LTRIM (SYS_CONNECT_BY_PATH (MCD_NAME, ' > '), ' > ') AS DEPTH_FULLNAME 
+        		FROM (
+            			select 
+            				  A.MCD_CODE MCD_CODE
+            				, A.MCD_USE MCD_USE
+            				, A.MCD_SORT MCD_SORT
+            				, A.MCD_REF MCD_REF
+            				, A.MCD_URI MCD_URI
+            				, A.MCD_DEPTH MCD_DEPTH
+            				, A.MCD_ICON MCD_ICON
+            				, A.MCD_NEW_WINDOW MCD_NEW_WINDOW
+            				, B.CMC_CODE CMC_CODE
+            				, B.MCD_NAME MCD_NAME 
+            			from 
+            				  DNKR_MENU_CODE A
+            				, DNKR_MENU_CODE_NM B 
+            			where 
+            					A.MCD_CODE = B.MCD_CODE 
+            					AND A.MCD_USE = 'Y'
+           				<if test="cmcLangCode != null and cmcLangCode != ''">
+            				and B.CMC_CODE=#{cmcLangCode}
+            			</if>	
+            			) 
+        		 START WITH MCD_REF = 0 CONNECT BY PRIOR MCD_CODE = MCD_REF
+        	  )B
+        ON 
+            A.MCD_CODE = B.MCD_CODE 
+        <!-- ORDER BY 
+        	to_number(B.MCD_CODE) ASC -->
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="AuthDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_AUTH_CODE A
+              , DNKR_AUTH_CODE_NM B
+        where 
+                'SqlMap-Auth.searchCount' = 'SqlMap-Auth.searchCount'
+            and A.AUTH_CODE = B.AUTH_CODE
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.AUTH_USE = #{useYn}
+        </if>
+        <if test="authName != null and authName != ''">
+            and B.AUTH_NAME like '%' || #{authName} || '%'
+        </if>
+        <if test="authDescription != null and authDescription != ''">
+            and B.AUTH_DESCRIPTION = #{authDescription}
+        </if>
+    </select>
+    
+     <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchAuthDetailCount" resultType="java.lang.Integer"
+        parameterType="AuthDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_AUTH_DETAIL
+        where 
+                'SqlMap-Auth.searchAuthDetailCount' = 'SqlMap-Auth.searchAuthDetailCount'
+        <if test="authCode != null and authCode != ''">
+            and AUTH_CODE = #{authCode}
+        </if>
+        <if test="menuCode != null and menuCode != ''">
+            and MCD_CODE = #{menuCode}
+        </if>
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="createCode" parameterType ="AuthDomain">
+        insert into DNKR_AUTH_CODE (
+                /* SqlMap-Auth.createCode */
+            <if test="useYn != null">
+                AUTH_USE,
+            </if>
+            <if test="authCode != null">
+                AUTH_CODE
+            </if>
+        ) values (
+            <if test="useYn != null">
+                #{useYn},
+            </if>
+            <if test="authCode != null">
+                DNKR_AUTH_CODE_SEQ.NEXTVAL
+            </if>
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createName" parameterType ="AuthDomain">
+        insert into DNKR_AUTH_CODE_NM (
+                /* SqlMap-Auth.createName */
+            <if test="authName != null">
+                AUTH_NAME,
+            </if>
+            <if test="authDescription != null">
+                AUTH_DESCRIPTION,
+            </if>
+            <if test="cmcLangCode != null">
+                CMC_CODE,
+            </if>
+            <if test="authCode != null">
+                AUTH_CODE
+            </if>
+        ) values (
+            <if test="authName != null">
+                #{authName},
+            </if>
+            <if test="authDescription != null">
+                #{authDescription},
+            </if>
+            <if test="cmcLangCode != null">
+                #{cmcLangCode},
+            </if>
+            <if test="authCode != null">
+                DNKR_AUTH_CODE_SEQ.CURRVAL
+            </if>
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createDetail" parameterType ="AuthDomain">
+        insert into DNKR_AUTH_DETAIL (
+                /* SqlMap-Auth.createDetail */
+            <if test="authNum != null">
+                AUTH_NUM,
+            </if>
+            <if test="menuCode != null">
+                MCD_CODE,
+            </if>
+            <if test="authCode != null">
+                AUTH_CODE
+            </if>
+        ) values (
+            <if test="authNum != null">
+                #{authNum},
+            </if>
+            <if test="menuCode != null">
+                #{menuCode},
+            </if>
+            <if test="authCode != null">
+                #{authCode}
+            </if>
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateCode" parameterType="AuthDomain">
+        update 
+                DNKR_AUTH_CODE
+        set
+            <if test="useYn != null">
+                AUTH_USE = #{useYn}
+            </if>
+        where 
+                'SqlMap-Auth.updateCode' = 'SqlMap-Auth.updateCode'
+            and AUTH_CODE = #{authCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateName" parameterType="AuthDomain">
+        update 
+                DNKR_AUTH_CODE_NM 
+        set
+            <if test="authDescription != null">
+                AUTH_DESCRIPTION = #{authDescription},
+            </if>
+            <if test="authName != null">
+                AUTH_NAME = #{authName}
+            </if>
+        where 
+                'SqlMap-Auth.updateName' = 'SqlMap-Auth.updateName'
+            and AUTH_CODE = #{authCode}
+            and CMC_CODE = #{cmcLangCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateDetail" parameterType="AuthDomain">
+        update 
+                DNKR_AUTH_DETAIL 
+        set
+            <if test="authNum != null">
+                AUTH_NUM = #{authNum}
+            </if>
+            <if test="authNum == null">
+                AUTH_NUM = 0
+            </if>
+        where 
+                'SqlMap-Auth.updateDetail' = 'SqlMap-Auth.updateDetail'
+            and AUTH_CODE = #{authCode}
+            and MCD_CODE = #{menuCode}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteCode" parameterType="AuthDomain">
+        delete from 
+                DNKR_AUTH_CODE
+        where 
+                'SqlMap-Auth.deleteCode' = 'SqlMap-Auth.deleteCode'
+            and AUTH_CODE = #{authCode}
+    </delete>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteName" parameterType="AuthDomain">
+        delete from 
+                DNKR_AUTH_CODE_NM
+        where 
+                'SqlMap-Auth.deleteName' = 'SqlMap-Auth.deleteName'
+        <if test="authCode != null and authCode != ''">
+            and AUTH_CODE = #{authCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and CMC_CODE = #{cmcLangCode}
+        </if>
+    </delete>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteDetail" parameterType="AuthDomain">
+        delete from 
+                DNKR_AUTH_DETAIL
+        where 
+                'SqlMap-Auth.deleteDetail' = 'SqlMap-Auth.deleteDetail'
+        <if test="authCode != null and authCode != ''">
+            and AUTH_CODE = #{authCode}
+        </if>
+        <if test="menuCode != null and menuCode != ''">
+            and MCD_CODE = #{menuCode}
+        </if>
+    </delete>
+</mapper>

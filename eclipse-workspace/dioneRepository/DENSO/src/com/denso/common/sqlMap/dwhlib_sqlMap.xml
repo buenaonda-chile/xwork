@@ -1,0 +1,1838 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="dwhlib">
+
+	<!-- 구매단가현황 DWHZ002Q-->
+	<sql id="count">
+		SELECT COUNT(1) AS CNT FROM (
+	</sql>
+	
+	<!-- 부품입고현황 DWHZ001Q-->
+	<sql id="tblBaseSqldwhz001q">
+		SELECT  a.comps 
+		       ,a.house 
+		       ,trim(a.vndnr) as vndnr 
+		       ,trim(c.vname) as vname
+		       ,trim(a.pspno) as pspno
+		       ,trim(b.itdsc) as itdsc
+		       ,a.ittyp
+		       ,a.itcls
+		       ,a.prdgu
+		       ,a.prdcd
+		       ,a.supgu
+		       ,a.trcst
+		       ,a.crcyw
+		       ,a.trfot
+		       <!--  수정 (2018.05.30)
+		       ,sum (case when int(a.trndt/100) = $YYYY$01 then trqty else 0 end) AS month1
+		       ,sum (case when int(a.trndt/100) = $YYYY$02 then trqty else 0 end) AS month2
+		       ,sum (case when int(a.trndt/100) = $YYYY$03 then trqty else 0 end) AS month3
+		       ,sum (case when int(a.trndt/100) = $YYYY$04 then trqty else 0 end) AS month4
+		       ,sum (case when int(a.trndt/100) = $YYYY$05 then trqty else 0 end) AS month5
+		       ,sum (case when int(a.trndt/100) = $YYYY$06 then trqty else 0 end) AS month6
+		       ,sum (case when int(a.trndt/100) = $YYYY$07 then trqty else 0 end) AS month7
+		       ,sum (case when int(a.trndt/100) = $YYYY$08 then trqty else 0 end) AS month8
+		       ,sum (case when int(a.trndt/100) = $YYYY$09 then trqty else 0 end) AS month9
+		       ,sum (case when int(a.trndt/100) = $YYYY$10 then trqty else 0 end) AS month10
+		       ,sum (case when int(a.trndt/100) = $YYYY$11 then trqty else 0 end) AS month11
+		       ,sum (case when int(a.trndt/100) = $YYYY$12 then trqty else 0 end) AS month12
+		        -->
+		        ,sum (case when int(a.trndt/100) = $YM_0$ then trqty else 0 end) AS month1
+		       ,sum (case when int(a.trndt/100) = $YM_1$ then trqty else 0 end) AS month2
+		       ,sum (case when int(a.trndt/100) = $YM_2$ then trqty else 0 end) AS month3
+		       ,sum (case when int(a.trndt/100) = $YM_3$ then trqty else 0 end) AS month4
+		       ,sum (case when int(a.trndt/100) = $YM_4$ then trqty else 0 end) AS month5
+		       ,sum (case when int(a.trndt/100) = $YM_5$ then trqty else 0 end) AS month6
+		       ,sum (case when int(a.trndt/100) = $YM_6$ then trqty else 0 end) AS month7
+		       ,sum (case when int(a.trndt/100) = $YM_7$ then trqty else 0 end) AS month8
+		       ,sum (case when int(a.trndt/100) = $YM_8$ then trqty else 0 end) AS month9
+		       ,sum (case when int(a.trndt/100) = $YM_9$ then trqty else 0 end) AS month10
+		       ,sum (case when int(a.trndt/100) = $YM_10$ then trqty else 0 end) AS month11
+		       ,sum (case when int(a.trndt/100) = $YM_11$ then trqty else 0 end) AS month12
+		       
+		 FROM   $LIB2$.bid100pf a left outer join $LIB1$.vennam c on a.vndnr = c.vndnr
+		       ,$LIB1$.bm008pr b
+		 WHERE a.pspno = b.itnbr 
+		 AND   a.trndt <![CDATA[>=]]> #STARTDATE# 
+		 AND   a.trndt <![CDATA[<=]]> #ENDDATE# 
+		 AND   a.inpgu in('11', '32','41')
+		 <isNotEmpty prepend="AND" property="VNDNR">
+				a.vndnr=#VNDNR#	 <!--  업체코드추가(2018.05.30) -->
+		</isNotEmpty>
+		<!-- AND   a.vndnr in('K25', 'G50','K13', 'K48','K52') --> 
+		 GROUP by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot
+		 ORDER by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot
+	</sql>
+	
+	<!--  카운트 조회 -->
+	<select id="selectdwhz001qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz001q"/>
+	    ) A
+	</select>
+	
+	<!--  부품입고현황 DWHZ001Q 조회 -->
+	<select id="selectdwhz001q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY G.comps) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz001q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+	
+	<sql id="tblBaseSqldwhz002q">
+		SELECT    b.packc
+		        , b.recid
+		        , a.prtno
+		        , b.itdsc
+		        , a.spcod
+		        , c.vname as vname
+		        , b.unmsr
+		        , b.itcls
+		        , b.ittyp
+		        , a.crcye
+		        , a.tempe
+		        , a.resne
+		        , a.prcee
+		        , a.edate as edate
+		 FROM 
+		         (SELECT  prtno
+		                    , spcod
+		                    , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN crcy3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN crcy2 ELSE crcy1 END AS crcye
+		                    , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN temp3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN temp2 ELSE temp1 END AS tempe
+		                    , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN edat3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN edat2 ELSE edat1 END AS edate
+		                    , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN prce3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN prce2 ELSE prce1 END AS prcee
+		                    , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN resn3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN resn2 ELSE resn1 END AS resne
+		          FROM $LIB1$.CM001PR) a, 
+		          $LIB1$.bm008pr b, 
+		          $LIB1$.vennam c 
+		 WHERE a.prtno=b.itnbr AND a.spcod=c.vndnr
+	</sql>
+	<!--  카운트 조회 -->
+	<select id="selectdwhz002qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz002q"/>
+	    ) A
+	</select>
+	
+	<!--  구매단가현황 DWHZ002Q 조회 -->
+	<select id="selectdwhz002q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY G.packc) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz002q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+	
+	<!-- Standard Cost 이력 현황 dwh003q-->
+	<sql id="tblBaseSqldwhz003q">	
+		SELECT
+			AA.*,BB.ITDSC
+		FROM(	
+			SELECT
+				 X.PRTNO
+				,X.PROCD
+				,X.MNFCS
+				,X.DIRCS
+				,X.MCOST
+				,X.RMATC
+				,X.RMATL
+				,X.RMATI
+				,X.RMIMC
+				,X.PURCS
+				,X.PURCL
+				,X.PURCI
+				,X.PPIMC
+				,X.PRCST
+				,X.LABCS
+				,X.DEPCS
+				,X.MFEXP
+				,X.DIECS
+				,X.MOHCS
+				,X.FIXDT
+				,X.RCOMP
+				,X.BRMTL
+				,X.BRMTI
+				,X.BRMIC
+				,X.BPURL
+				,X.BPURI
+				,X.BPPIC
+				,X.BLABC
+				,X.BDEPC
+				,X.BMEXP
+				,X.BDIEC
+				,X.OCEAN,
+				<!-- psedblib의 이력 현황 조회 -->
+				<isEqual property="GUB" compareValue="A">
+				0 AS INSDT
+				FROM $LIB1$.$D30PF$ X
+					<isNotEmpty property="ITCLS1">
+					WHERE PROCD = #ITCLS1#
+					</isNotEmpty>	
+				</isEqual>
+				
+				<!-- psedblib의 이력 현황 조회 -->
+				<isEqual property="GUB" compareValue="B">
+				X.INSDT
+				FROM $LIB2$.$D30PF$ X
+					WHERE D30DT = #D30DT#
+					<isNotEmpty property="ITCLS1">
+					AND PROCD = #ITCLS1#
+					</isNotEmpty>
+				</isEqual>
+		) AA LEFT OUTER JOIN (SELECT ITNBR,ITDSC FROM $LIB1$.BM008PR) BB ON AA.PRTNO=BB.ITNBR
+	</sql>
+	
+	<!-- Standard Cost 이력 현황 카운트 dwh003q-->
+	<select id="selectdwhz003qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz003q"/>
+	    ) A
+	</select>
+	
+	<!-- Standard Cost 이력 현황 조회 dwh003q-->
+	<select id="selectdwhz003q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY 1) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz003q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+
+	<!-- 재료비 산출 리스트 DWHZ005Q-->
+	<select id="selectdwhz005q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT
+		 		  X.PYVND
+		 		, X.PSPNO
+		 		, X.ITDSC
+		 		, X.MSTSM
+		 		, X.YESCS
+		 		, Y.PRICE
+		 		, Z.KRSUR
+		 		, Z.SURKR
+		 		, Z.SURUS
+		 		, Z.SURJP
+		 		, Z.SURUR
+		 		, Z.KRPUR
+		 		, Z.KRCKD
+		 		, Z.CKDUS
+		 		, Z.CKDJP
+		 		, Z.CKDUR
+		 		, Z.CKDKR
+		 		, X.QY04
+		 		, X.QY05
+		 		, X.QY06
+		 		, X.QY07
+		 		, X.QY08
+		 		, X.QY09
+		 		, X.QY10
+		 		, X.QY11
+		 		, X.QY12
+		 		, X.QY01
+		 		, X.QY02
+		 		, X.QY03
+		    FROM
+				 (SELECT
+				  		A.*
+				  		,B.ITDSC
+				  		,C.MSTSM
+		          FROM
+					  (SELECT 
+						     PYVND
+						   , PSPNO
+						   , CARCD
+						   , YESCS
+						   , SUM(CASE PLNYM WHEN $YEAR$04 THEN MONQY ELSE 0 END) QY04
+						   , SUM(CASE PLNYM WHEN $YEAR$05 THEN MONQY ELSE 0 END) QY05
+						   , SUM(CASE PLNYM WHEN $YEAR$06 THEN MONQY ELSE 0 END) QY06
+						   , SUM(CASE PLNYM WHEN $YEAR$07 THEN MONQY ELSE 0 END) QY07
+						   , SUM(CASE PLNYM WHEN $YEAR$08 THEN MONQY ELSE 0 END) QY08
+						   , SUM(CASE PLNYM WHEN $YEAR$09 THEN MONQY ELSE 0 END) QY09
+						   , SUM(CASE PLNYM WHEN $YEAR$10 THEN MONQY ELSE 0 END) QY10
+						   , SUM(CASE PLNYM WHEN $YEAR$11 THEN MONQY ELSE 0 END) QY11
+						   , SUM(CASE PLNYM WHEN $YEAR$12 THEN MONQY ELSE 0 END) QY12
+						   , SUM(CASE PLNYM WHEN $YEARPLUS$01 THEN MONQY ELSE 0 END) QY01
+						   , SUM(CASE PLNYM WHEN $YEARPLUS$02 THEN MONQY ELSE 0 END) QY02
+						   , SUM(CASE PLNYM WHEN $YEARPLUS$03 THEN MONQY ELSE 0 END) QY03
+				  	   FROM $LIB2$.spy200pf 
+				  	   WHERE PLNYM BETWEEN $YEAR$04 AND $YEARPLUS$03 and plngb='2'
+				       GROUP BY PYVND, PSPNO, CARCD, YESCS
+				      ) A
+				      
+				  LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PSPNO=B.ITNBR
+				  LEFT OUTER JOIN $LIB2$.MST051LF C ON A.CARCD=C.MSTCD
+				 )X
+				 LEFT OUTER JOIN 
+				 	(SELECT A.PRTNO
+				 	       ,A.CUSNO
+				 	       ,A.EDATM
+				 	       ,A.PRICE 
+				 	 FROM $LIB1$.EM001PR A 
+				 	 WHERE EDATM = (SELECT MAX(EDATM) 
+				 	                FROM $LIB1$.EM001PR B 
+				 	                WHERE A.CUSNO=B.CUSNO 
+				 	                AND A.PRTNO=B.PRTNO)) Y on X.PYVND=Y.CUSNO 
+				 	 AND X.PSPNO=Y.PRTNO
+				 LEFT OUTER JOIN $LIB2$.CJJ500PF Z ON X.PSPNO=Z.STPNO
+		  ORDER BY X.PYVND, X.PSPNO
+	</select>
+	
+	<!-- 인원코드리스트 DWHZ006Q-->
+	<select id="selectdwhz006q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		 SELECT  a.dptcd
+		        ,b.dpconm
+		        ,a.sabun
+		        ,a.kornm
+		        ,a.yscda
+		        ,a.yscdb
+		        ,a.yscdc 
+		 FROM   $LIB3$.hmd020pf a LEFT OUTER JOIN $LIB2$.mst650pf b ON a.dptcd=b.dpcode AND b.dpcomp= #COMPS#
+	     WHERE  a.cndcd <![CDATA[<>]]> 'R'
+	     ORDER BY 1, 3
+	</select>
+	
+	<!-- 성과급 지급내역 리스트 DWHZ007Q-->
+	<select id="selectdwhz007q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT   c.dpsqno
+				,b.dptcd
+				,trim(c.dpdpnm) as dpdpnm
+				,a.sabun
+				,trim(b.kornm) as kornm
+				,b.grade
+				,trim(d.pcont) as granm
+				,b.paycd
+				,a.spemt
+				,a.spdat
+				,a.spe01
+				,a.spemr
+				,a.spemn
+		FROM $LIB2$.HBS051PF A
+			 LEFT OUTER JOIN $LIB3$.HMD020PF B ON A.SABUN = B.SABUN
+			 LEFT OUTER JOIN $LIB2$.MST650PF C ON B.DPTCD = C.DPCODE
+			 LEFT OUTER JOIN $LIB3$.HUM010PF D ON D.PCODE = 'ODCD' <![CDATA[||]]> B.GRADE
+	    ORDER BY c.dpsqno, b.dptcd,  b.grade, a.sabun
+	</select>
+	
+	<!-- 성과급 지급내역 리스트(월별) DWHZ008Q-->
+	<sql id="tblBaseSqldwhz008q">
+		SELECT 
+		        a.dptcdp,
+		        trim(b.dpconm) as dpconm, 
+ 	            a.sabun,
+		        trim(c.kornm) as kornm, 
+		        a.SEXCDP,
+				a.PAYCDP,
+				a.PCDCDP,
+				a.GRADEP,
+				a.GNDATP,
+				a.PASSAP,
+				a.KNYYM,
+				a.PTYPE,
+				a.KIBONP,
+				a.JKSUDP,
+				a.TESUDP,
+				a.QLSUDP,
+				a.BJSUDP,
+				a.GSSUDP,
+				a.WHSUDP,
+				a.CJSUDP,
+				a.JMSUDP,
+				a.WFSUDP,
+				a.YHSUDP,
+				a.DOSUDP,
+				a.GTSUDP,
+				a.HASUDP,
+				a.TQSUDP,
+				a.OTSUDP,
+				a.FILL1P,
+				a.FILL2P,
+				a.FILL3P,
+				a.FILL4P,
+				a.FILL5P,
+				a.LABOMP,
+				a.PMKJMP,
+				a.PMKBMP,
+				a.EDUCMP,
+				a.SLSUDP,
+				a.YCSUDP,
+				a.UCSUDP,
+				a.OVSUDP,
+				a.ANSUDP,
+				a.HKSUDP,
+				a.YUSUDP,
+				a.ORSUDP,
+				a.PAMTTP,
+				a.TAX1MP,
+				a.TAX2MP,
+				a.TAX3MP,
+				a.TAX4MP,
+				a.GGTTMP,
+				a.SSTTMP
+		FROM $LIB3$.HPC200PF A
+			 LEFT OUTER JOIN $LIB2$.MST650PF B ON A.DPTCDP=B.DPCODE AND B.DPCOMP=#COMPS#
+			 LEFT OUTER JOIN $LIB3$.HMD020PF C ON A.SABUN=C.SABUN
+		WHERE 
+			 KNYYM BETWEEN #STARTDATE# AND #ENDDATE#
+			 AND PTYPE IN ('P1', 'B1')
+			 <isNotEmpty property="PAYCD">
+				<isEqual prepend="AND" property="PAYCD" compareValue="1">
+				a.PAYCDP = 1
+				</isEqual>
+				<isEqual prepend="AND" property="PAYCD" compareValue="2">
+				a.PAYCDP != 1
+				</isEqual>
+			</isNotEmpty>
+			 ORDER BY A.DPTCDP, A.SABUN, A.KNYYM, A.PTYPE
+	</sql>
+	<!--  카운트 조회 -->
+	<select id="selectdwhz008qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz008q"/>
+	    ) A
+	</select>
+	
+	<!--  구매단가현황 DWHZ002Q 조회 -->
+	<select id="selectdwhz008q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY DPTCDP, SABUN, KNYYM, PTYPE) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz008q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+	
+	<!-- 성과급 지급내역 리스트(합산분) DWHZ009Q-->
+	<select id="selectdwhz009q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+				A.DPTCDT,		
+	            TRIM(B.DPCONM) AS DPCONM,
+				a.KORNMT,
+				a.SABUNT,
+				a.GNDATT,
+				a.SEXCDT,
+				a.GRADET,
+				a.HOBONT,
+				a.GUNHOT,
+				a.KIBONT,
+				a.EKBONT,
+				a.JKSUDT,
+				a.TESUDT,
+				a.QLSUDT,
+				a.BJSUDT,
+				a.GSSUDT,
+				a.WHSUDT,
+				a.CJSUDT,
+				a.JMSUDT,
+				a.WFSUDT,
+				a.YHSUDT,
+				a.DOSUDT,
+				a.GTSUDT,
+				a.HASUDT,
+				a.TQSUDT,
+				a.OTSUDT,
+				a.FILL1T,
+				a.FILL2T,
+				a.FILL3T,
+				a.FILL4T,
+				a.FILL5T,
+				a.LABOMT,
+				a.KDPYDT,
+				a.KDPYTT,
+				a.KIBYTT,
+				a.SLSUDT,
+				a.YCSUDT,
+				a.UCSUDT,
+				a.OVSUDT,
+				a.ANSUDT,
+				a.HKSUDT,
+				a.YUSUDT,
+				a.ORSUDT,
+				a.OVSGAT,
+				a.ANSGAT,
+				a.HKSGAT,
+				a.YUSGAT,
+				a.ORSGAT,
+				a.TDP01T,
+				a.TDP02T,
+				a.PAMTTT,
+				a.TAX1MT,
+				a.TAX2MT,
+				a.TAX3MT,
+				a.TAX4MT,
+				a.GGTTMT,
+				a.SSTTMT
+		FROM SOGLIBPEC.SPC888TFT A
+		LEFT OUTER JOIN $LIB2$.MST650PF B ON A.DPTCDT=B.DPCODE AND B.DPCOMP=#COMPS#  
+	</select>
+		<!-- CKD품 매입내역 DWHZ018Q -->
+	<!-- 미사용
+	<select id="selectDWHZ018Q_CNT" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT COUNT(*) AS CNT FROM $LIB1$.CM001PR
+	</select>
+	<select id="selectDWHZ018Q_CM001PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			A.*
+		 FROM  (SELECT ROWNUMBER() OVER() AS ROWNM, Z.* FROM $LIB1$.CM001PR Z ) A
+		WHERE A.ROWNM BETWEEN $ROWF$ AND $ROWT$
+	</select>
+	 -->
+	<select id="selectDWHZ018Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		<isEqual property="FLAG" compareValue="T">
+		<!-- CKD -->
+			SELECT
+				  TRIM(X.PSPNO) AS PSPNO
+				, X.TAXQY01
+				, X.TAXAM01
+				, TRIM(Y.PSPART) AS PSPART
+				, TRIM(Y.ITDSC) AS ITDSC
+				, Y.QTYPR
+				, Y.EDATM
+				, Y.EDATO
+				, Y.PRCEE
+				, Y.CRCYE
+				, Z.RYTCD
+				, Z.RYTRL
+				<!--X.BREAKLVL, X.OVERFLOW, Y.PPANO, Z.PSPNO-->
+			FROM
+				(
+				SELECT
+					PSPNO
+					,SUM(TAXQY)TAXQY01
+					,SUM(TAXAM)TAXAM01
+				FROM
+					$LIB2$.SJT110PF
+				WHERE
+					TAXDT BETWEEN $TAXDTF$ AND $TAXDTT$
+				GROUP BY PSPNO
+				)X
+			LEFT OUTER JOIN (
+				SELECT
+					  B.PPANO
+					, A.PSPART
+					, A.CRCYE
+					, A.PRCEE
+					, A.ITDSC
+					, B.QTYPR
+					, B.EDATM
+					, B.EDATO
+				FROM (
+					SELECT
+						  A.PSPART
+						, B.SPCOD
+						, B.CRCYE
+						, B.EDATE
+						, B.PRCEE
+						, C.ITDSC 
+					FROM
+						$LIB1$.BM012PR A
+					LEFT OUTER JOIN $LIB2$.BZZ900PF B ON A.PSPART=B.PRTNO
+					LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PSPART=C.ITNBR
+					)A, PSCOBLIB.BD040PR B
+				WHERE
+					A.PSPART=B.CPANO
+			)Y ON X.PSPNO=Y.PPANO
+			LEFT OUTER JOIN $LIB2$.CRR210PF Z ON X.PSPNO=Z.PSPNO
+		</isEqual>	
+		<isEqual property="FLAG" compareValue="F">
+		<!-- CKD외 -->
+		SELECT			
+			  TRIM(X.PSPNO) AS PSPNO
+			, X.TAXQY01
+			, X.TAXAM01
+			, TRIM(Y.DPPRTN) AS PSPART
+			, TRIM(Y.ITDSC) AS ITDSC
+			, Y.QTYPR
+			, Y.EDATM
+			, Y.EDATO
+			, Y.PRCEE
+			, Y.CRCYE
+			, Z.RYTCD
+			, Z.RYTRL
+		<!--  X.BREAKLVL, X.OVERFLOW, Y.PPANO,Z.PSPNO  -->
+		FROM
+			(
+			SELECT
+				 PSPNO
+				,SUM(TAXQY) TAXQY01
+				,SUM(TAXAM) TAXAM01
+			FROM
+				$LIB2$.SJT110PF 
+			WHERE
+				TAXDT BETWEEN $TAXDTF$ AND $TAXDTT$
+			GROUP BY PSPNO
+			) X 
+			LEFT OUTER JOIN(
+				SELECT
+					B.PPANO
+					,A.DPPRTN
+					,A.CRCYE
+					,A.PRCEE
+					,A.ITDSC
+					,B.QTYPR
+					,B.EDATM
+					,B.EDATO
+				FROM(
+					SELECT
+						A.DPPRTN
+						,B.CRCYE
+						,B.PRCEE
+						,A.DPG1S1
+						,D.ITDSC 
+					FROM
+						$LIB1$.BM400PR A
+						LEFT OUTER JOIN $LIB2$.BZZ900PF B ON A.DPPRTN=B.PRTNO
+						LEFT OUTER JOIN $LIB1$.VENNAM C ON A.DPG1S1=C.VNDNR
+						LEFT OUTER JOIN $LIB1$.BM008PR D ON A.DPPRTN=D.ITNBR
+					WHERE
+						C.VCNTR != 'KR'
+				)A, PSCOBLIB.BD040PR B 
+				WHERE
+					A.DPPRTN=B.CPANO
+				)Y ON X.PSPNO=Y.PPANO
+			LEFT OUTER JOIN $LIB2$.CRR210PF Z ON X.PSPNO=Z.PSPNO
+			</isEqual>	
+	</select>
+	<!-- 월별제품별 수입품 사용현황 DWHZ025Q -->
+	<select id="selectdwhz025q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">	
+		SELECT
+                '현조' AS KUBUN
+                ,SUBSTR(G.ITCLS,1,1) CC
+                ,A.PSPNO
+                ,E.ITDSC
+                ,G.ITTYP
+                ,G.ITCLS
+                ,A.JPSQY
+                ,B.CPANO
+                ,SUBSTR(e.ITCLS,1,1) EE
+                ,E.ITTYP
+                ,E.ITCLS
+                ,B.QTYPR
+                ,B.EDATM
+                ,B.EDATO
+                ,C.DPG1S1
+                ,C.VCNTR
+                ,D.MNFCS
+                ,A.JPSQY*B.QTYPR AA
+                ,(A.JPSQY*B.QTYPR)*D.MNFCS BB
+                ,F.CRCYE
+                ,F.PRCEE						
+			FROM
+				(SELECT PSPNO,SUM(JPSQY) JPSQY FROM PSCDBLIB.SMD110PF WHERE JPSDT BETWEEN #STARTDATE# AND #ENDDATE# GROUP BY PSPNO) A
+				LEFT OUTER JOIN (SELECT * FROM $LIB1$.BD040PR UNION ALL SELECT * FROM $LIB1$.BD463PR) B ON A.PSPNO=B.PPANO
+				LEFT OUTER JOIN 
+				(SELECT A.DPPRTN,A.DPG1S1,B.VCNTR FROM $LIB1$.BM400PR A LEFT OUTER JOIN $LIB1$.VENNAM B ON A.DPG1S1=B.VNDNR) C ON B.CPANO=C.DPPRTN
+				LEFT OUTER JOIN $LIB1$.$TABLE$ D ON B.CPANO=D.PRTNO
+				LEFT OUTER JOIN $LIB1$.BM008PR E ON B.CPANO=E.ITNBR
+				LEFT OUTER JOIN 
+				(SELECT
+					PRTNO,SPCOD,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN crcy3	
+				         WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN crcy2
+        				 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN crcy1 END AS CRCYE,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN PRCE3	
+       				     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN PRCE2			
+				  		 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN PRCE1 END AS PRCEE
+			  	 FROM $LIB1$.CM001PR WHERE PRCLS='1'
+				) F ON B.CPANO=F.PRTNO AND C.DPG1S1=F.SPCOD
+				LEFT OUTER JOIN $LIB1$.BM008PR G ON A.PSPNO=G.ITNBR
+			WHERE
+				C.VCNTR != ' ' AND C.VCNTR != 'KR'
+			UNION ALL
+			SELECT
+			    '일조' AS KUBUN
+			    ,SUBSTR(G.ITCLS,1,1) CC
+			    ,A.PSPNO
+			    ,E.ITDSC
+			    ,G.ITTYP
+			    ,G.ITCLS
+			    ,A.JPSQY
+			    ,B.CPANO
+			    ,SUBSTR(e.ITCLS,1,1) EE
+			    ,E.ITTYP
+			    ,E.ITCLS
+			    ,B.QTYPR
+			    ,B.EDATM
+			    ,B.EDATO
+			    ,C.DPG1S1
+			    ,C.VCNTR
+			    ,D.MNFCS
+			    ,A.JPSQY*B.QTYPR AA
+				,(A.JPSQY*B.QTYPR)*D.MNFCS BB
+				,F.CRCYE
+				,F.PRCEE
+			FROM
+				(SELECT PSPNO,SUM(JPSQY) JPSQY FROM PSCDBLIB.SMD110PF WHERE JPSDT BETWEEN #STARTDATE# AND #ENDDATE# GROUP BY PSPNO) A
+				LEFT OUTER JOIN (SELECT * FROM $LIB1$.BD040PR UNION ALL SELECT * FROM $LIB1$.BD463PR) B ON A.PSPNO=B.PPANO
+				LEFT OUTER JOIN 
+				(SELECT A.DPPRTN,A.DPG1S1,B.VCNTR FROM $LIB1$.BM400PR A LEFT OUTER JOIN $LIB1$.VENNAM B ON A.DPG1S1=B.VNDNR) C ON B.CPANO=C.DPPRTN
+				LEFT OUTER JOIN $LIB1$.$TABLE$ D ON B.CPANO=D.PRTNO
+				LEFT OUTER JOIN $LIB1$.BM008PR E ON B.CPANO=E.ITNBR
+				LEFT OUTER JOIN 
+				(SELECT				
+					X.*			
+				FROM				
+					(SELECT			
+						A.*,ROWNUMBER() OVER (PARTITION BY A.PRTNO ORDER BY A.EDAT DESC,A.SPCOD DESC) AS ROWNUM		
+					 FROM			
+						(SELECT		
+							PRTNO,SPCOD,	
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN resn3	
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN resn2
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN resn1
+							END AS RESN,	
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN crcy3	
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN crcy2
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN crcy1			
+							END AS CRCYE,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN PRCE3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN PRCE2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN PRCE1			
+							END AS PRCEE,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN EDAT3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN EDAT2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN EDAT1			
+							END AS EDAT,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN TEMP3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN TEMP2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN TEMP1			
+							END AS TEMP,				
+							SPPNO,MDATE				
+						FROM					
+							$LIB1$.CM001PR				
+						WHERE					
+							PRCLS='1'				
+						) A					
+					)X						
+				WHERE					
+					X.ROWNUM=1			
+				) F ON B.CPANO=F.PRTNO			
+				LEFT OUTER JOIN $LIB1$.BM008PR G ON A.PSPNO=G.ITNBR			
+				LEFT OUTER JOIN $LIB1$.BM012PR H ON B.CPANO=H.PSPART			
+			WHERE			
+			H.PSPART IS NOT NULL					
+	</select>
+	
+	<!-- 일조 및 로컬 수입 입고내역(내역자료) DWHZ026Q -->
+	<select id="selectdwhz026q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">	
+		SELECT 
+		       a.vndnr
+		     , c.vname
+		     , supgu
+		     , pspno
+		     , b.itdsc
+		     , b.ittyp
+		     , b.itcls
+		     , a.unmsr
+		     , trndt
+		     , trcst
+		     , stcst
+		     , crcyw
+		     , trqty
+		     , tramt
+		  FROM pscdblib.bid100pf a LEFT OUTER JOIN $LIB1$.bm008pr b ON a.pspno = b.itnbr
+		                           LEFT OUTER JOIN $LIB1$.vennam  c ON a.vndnr = c.vndnr
+		 WHERE trndt BETWEEN #STARTDATE# AND #ENDDATE#
+		   AND supgu >= '02'
+		ORDER BY pspno, trndt
+	</select>
+	
+	<!-- 일조 및 로컬 수입 입고내역(집계자료) DWHZ024Q -->
+	<select id="selectdwhz024q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">	
+		SELECT a.vndnr
+		     , c.vname
+		     , supgu
+		     , pspno
+		     , b.itdsc
+		     , b.ittyp
+		     , b.itcls
+		     , a.unmsr
+		     , ''
+		     , ''
+		     , ''
+		     , crcyw
+		     , SUM(trqty) as trqty
+		     , SUM(tramt) as tramt
+		  FROM pscdblib.bid100pf a LEFT OUTER JOIN $LIB1$.bm008pr b ON a.pspno = b.itnbr
+		                           LEFT OUTER JOIN $LIB1$.vennam  c ON a.vndnr = c.vndnr
+		 WHERE trndt BETWEEN #STARTDATE# AND #ENDDATE#
+		   AND supgu <![CDATA[>=]]> '02'
+		 GROUP BY a.vndnr, c.vname, supgu, pspno, b.itdsc, b.ittyp, b.itcls, a.unmsr, crcyw
+		ORDER BY pspno, itcls
+	</select>
+	
+	<!-- 종업원명부(DNKA 퇴사자, 입사자 명부) DWHZ027Q -->
+	<select id="selectdwhz027q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			   b.dpcomp, 
+		       b.dpsqno, 
+		       a.dptcd, 
+		       b.dpconm, 
+		       a.sabun, 
+		       a.kornm, 
+		       a.paycd, 
+		       SUBSTR(DIGITS(a.passa),3,6)||'-'||DIGITS(a.passb)||DIGITS(a.passc) as juminnum, 
+		       a.gndat, 
+		       a.cndat
+	    FROM $LIB3$.hmd020pf a left OUTER JOIN pscdblib.mst650pf b ON a.dptcd=b.dpcode 
+	    WHERE a.cndcd <![CDATA[<>]]> 'R'
+	    <isNotEmpty prepend="AND" property="COMPS">
+			b.dpcomp=#COMPS#
+		</isNotEmpty>
+	    ORDER BY b.dpcomp, b.dpsqno, a.dptcd	
+	</select>
+	
+	<!-- 월급자료(DNKA) DWHZ028Q -->
+	<select id="selectdwhz028q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">	
+		SELECT 
+		       c.dpcomp, 
+		       b.ptype, 
+		       b.knyym, 
+		       c.dpsqno, 
+		       a.dptcd, 
+		       c.dpconm, 
+		       a.sabun, 
+		       a.kornm, 
+		       a.sexcd, 
+		       a.paycd, 
+		       a.ynbcd, 
+		       a.grade, 
+		       a.gndat, 
+		       a.passa,
+               b.kdpytp, 
+               b.kibytp,
+               b.kibonp, 
+               b.jksudp, 
+               b.tesudp, 
+               b.qlsudp, 
+               b.bjsudp, 
+               b.gssudp, 
+               b.whsudp, 
+               b.cjsudp, 
+               b.jmsudp, 
+          	   b.wfsudp, 
+          	   b.yhsudp, 
+          	   b.dosudp, 
+          	   b.gtsudp, 
+          	   b.hasudp, 
+          	   b.tqsudp, 
+          	   b.otsudp, 
+          	   b.fill1p, 
+          	   b.fill2p,
+               b.fill3p, 
+               b.pmkjmp, 
+               b.pmkbmp, 
+               b.educmp, 
+               b.slsudp, 
+               b.ucsudp, 
+               b.ycsudp,
+               b.ottim, 
+               b.antim, 
+               b.httim, 
+               b.yttim,
+               b.ovsudp, 
+               b.ansudp, 
+               b.hksudp, 
+               b.yusudp, 
+               b.orsudp, 
+               b.pamttp
+        FROM   $LIB3$.hmd020pf a, $LIB3$.hpc200pf b, $LIB2$.mst650pf c
+        WHERE  a.sabun=b.sabun and a.dptcd = c.dpcode
+        AND   (b.knyym <![CDATA[>=]]> 201504 and b.knyym <![CDATA[<=]]> 201509) and (b.ptype='P0' or b.ptype='B0')
+        AND    a.cndcd <![CDATA[<>]]> 'R'
+        AND    c.dpcomp='S1'
+        ORDER BY 3, 4, 12, 13, 7
+	</select>
+	
+	<!-- jde 분개현황(년간,반기) (DNKA) DWHZ031Q -->
+	<select id="selectdwhz031q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT a.glicu
+		     , a.gldgj
+		     , ''
+		     , a.glicut
+		     , a.gljeln
+		     , a.globj
+		     , b.gmdl01
+		     , a.glexr
+		     , a.glexa
+		     , a.gldoc
+		     , a.gldct
+		     , a.glmcu
+		     , c.gmdl01
+		     , a.glan8
+		     , d.abtax
+		     , a.glaa
+             , CASE WHEN a.glaa <![CDATA[>]]> 0 then a.glaa ELSE 0 end
+             , CASE WHEN a.glaa <![CDATA[<]]> 0 then a.glaa*-1 ELSE 0 end
+		FROM cltdtas.f0911 a LEFT OUTER JOIN (SELECT GMDL01, gmmcu, gmobj, gmsub FROM cltdtas.f0901 WHERE gmsub = '') b ON a.glmcu=b.gmmcu and a.globj=b.gmobj
+		                     LEFT OUTER JOIN (SELECT GMDL01, gmmcu, gmobj, gmsub FROM cltdtas.f0901 WHERE gmsub <![CDATA[<>]]> '') c ON a.glmcu=c.gmmcu and a.globj=c.gmobj AND a.glsub=c.gmsub
+		                     LEFT OUTER JOIN cltdtas.f0101 d ON a.glan8=d.aban8
+		WHERE a.glpost='P' AND gldgj <![CDATA[>=]]> 112092 AND a.gldgj <![CDATA[<=]]> 113090
+		ORDER BY 1
+	</select>
+	
+	<!-- G010040_20160403.xlsx (DNKA) DWHZ032Q -->
+	<select id="selectdwhz032q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB1$.gd004lr1 
+		WHERE scflg = 'B' 
+		ORDER BY invct, prlcd, prtno
+	</select>
+	<!-- G011020_20160403.xlsx (DNKA) DWHZ033Q -->
+	<select id="selectdwhz033q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		 SELECT
+		        a.*
+		      , b.cnt AS cnt
+		 FROM  pswrklib.g01103r a LEFT OUTER JOIN 
+		               (SELECT pprtn, COUNT(*) cnt FROM $LIB1$.bm030pr 
+		                 WHERE reccl = 1 AND #STARTDATE# BETWEEN edatm AND edato
+		                 GROUP BY pprtn) b 
+		         ON a.prtno = b.pprtn 
+		 WHERE acqty <![CDATA[<>]]> 0 OR reqty <![CDATA[<>]]> 0
+		 ORDER BY invct, house, prddv, prlcd, prtno 
+	</select>
+	
+	<!-- G011030_20160403.xlsx (DNKA) DWHZ034Q -->
+	<select id="selectdwhz034q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * 
+		FROM pswrklib.g01104r 
+		WHERE house = ' '  
+		ORDER BY invct, house, prddv, prlcd, wkctr, prtno
+	</select>
+	
+	<!-- G011060_20160403.xlsx (DNKA) DWHZ035Q -->
+	<select id="selectdwhz035q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * 
+		FROM pswrklib.g01105r
+		WHERE acqty <![CDATA[<>]]> 0 OR reqty <![CDATA[<>]]> 0
+		ORDER BY spcod, invct, house, prddv, prlcd, prtno
+	</select>
+	
+	<!-- G011060_20160403.xlsx (DNKA) DWHZ037Q -->
+	<select id="selectdwhz037q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	<!-- JHB수정 : 2018.04.05
+		SELECT 
+			a.*, 
+		    b.mnfcs
+		 FROM pscdblib.buu120pf a LEFT OUTER JOIN $LIB1$.$TABLE$ b ON a.pspno = b.prtno
+		 WHERE imhyy = #YEAR#
+	 -->	
+	SELECT
+		a.comps, a.imhyy, a.conno, a.pspno, a.house, a.ittyp, a.itcls, a.imq00,
+		a.imi04, a.imi05, a.imi06, a.imi07, a.imi08, a.imi09, a.imi10, a.imi11, a.imi12, a.imi01, a.imi02, a.imi03,  
+		a.imo04, a.imo05, a.imo06, a.imo07, a.imo08, a.imo09, a.imo10, a.imo11, a.imo12, a.imo01, a.imo02, a.imo03,  
+		a.imc04, a.imc05, a.imc06, a.imc07, a.imc08, a.imc09, a.imc10, a.imc11, a.imc12, a.imc01, a.imc02, a.imc03, 
+		a.dif09, a.dif03, b.mnfcs
+	FROM
+		pscdblib.buu120pf a LEFT OUTER JOIN $LIB1$.$TABLE$ b ON a.pspno = b.prtno
+	WHERE
+		imhyy = #YEAR#
+	</select>
+	
+	<!-- G011060_20160403.xlsx (DNKA) DWHZ038Q -->
+	<select id="selectdwhz038q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	<!-- JHB수정 : 2018.04.05
+
+		 SELECT 
+			a.*, 
+		    b.mnfcs
+		 FROM pscdblib.BHZ100PF a LEFT OUTER JOIN $LIB1$.$TABLE$ b ON a.pspno = b.prtno
+		 WHERE imhyy = #YEAR#
+	-->
+		SELECT
+			a.comps, a.imhyy, a.pspno, a.house, a.gubun, a.clsgu, a.ittyp, a.itcls, a.crygu, a.prdcd, a.imq00,
+			a.imi04, a.imi05, a.imi06, a.imi07, a.imi08, a.imi09, a.imi10, a.imi11, a.imi12, a.imi01, a.imi02, a.imi03,  
+			a.imo04, a.imo05, a.imo06, a.imo07, a.imo08, a.imo09, a.imo10, a.imo11, a.imo12, a.imo01, a.imo02, a.imo03,  
+			a.imc04, a.imc05, a.imc06, a.imc07, a.imc08, a.imc09, a.imc10, a.imc11, a.imc12, a.imc01, a.imc02, a.imc03, 
+			a.dif09, a.dif03, b.mnfcs
+		FROM
+			PSCDBLIB.BHZ100PF a LEFT OUTER JOIN $LIB1$.$TABLE$ b ON a.pspno = b.prtno
+		WHERE
+			imhyy = #YEAR#
+	</select>
+	
+	<!-- 판매 단가 (DNKA) DWHZ039Q -->
+	<sql id="tblBaseSqldwhz039q">
+	<!-- JHB수정 : 2018.04.05
+		SELECT   SUBSTR(b.itcls,1,1) as itcls
+		         , a.prtno 
+		         , b.itdsc 
+		         , a.cusno 
+		         , c.cusnm 
+		         , a.price 
+		         , a.edatm 
+		   FROM  $LIB1$.em001pr a, $LIB1$.bm008pr b, $LIB1$.cusmas c
+		 where  a.prtno = b.itnbr
+		      AND  a.cusno = c.cusno
+		 ORDER  BY  SUBSTR(b.itcls,1,1), a.prtno, a.cusno, a.edatm
+	-->
+		SELECT   SUBSTR(b.itcls,1,1) as itcls
+		         , TRIM(a.prtno) AS PRTNO
+		         , TRIM(b.itdsc) AS ITDSC
+		         , a.cusno 
+		         , TRIM(c.cusnm) AS CUSNM 
+		         , a.price 
+		         , a.edatm 
+		   FROM  $LIB1$.em001pr a, $LIB1$.bm008pr b, $LIB1$.cusmas c
+		 where  a.prtno = b.itnbr
+		      AND  a.cusno = c.cusno
+		 ORDER  BY  SUBSTR(b.itcls,1,1), a.prtno, a.cusno, a.edatm
+		 
+	</sql>
+	
+	<!--  판매 단가 (DNKA) 카운트 조회 -->
+	<select id="selectdwhz039qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz039q"/>
+	    ) A
+	</select>
+	
+	<!--  판매 단가 상세 조회 -->
+	<select id="selectdwhz039q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	<!-- JHB수정 : 2018.04.05
+
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY 1) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz039q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	-->		
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY ITCLS, PRTNO,CUSNO, EDATM) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz039q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+	
+	<!-- 표준원가테이블_20160403 (DNKA) DWHZ040Q -->
+	<select id="selectdwhz040q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		 SELECT a.cusno
+		      , a.cusnm
+		      , b.spcod 
+		 FROM $LIB1$.cusmas a LEFT OUTER JOIN $LIB1$.em040pr b ON a.cusno=b.conno
+		 WHERE 1=1
+		 <isEqual prepend="and" property="CODE" compareValue="1">
+			cusno BETWEEN 8000 AND 8999
+		 </isEqual>
+		 <isEqual prepend="and" property="CODE" compareValue="2">
+			cusno BETWEEN 9000 AND 9999
+		 </isEqual>
+	</select>
+	
+	<!-- 무상/유상 사급 업체코드 (DNKA) DWHZ042Q -->
+	<sql id="tblBaseSqldwhz042q">
+		SELECT * FROM $LIB1$.$TABLE$
+	</sql>
+	
+	<!--  무상/유상 사급 업체코드 (DNKA) DWHZ042Q 카운트 조회 -->
+	<select id="selectdwhz042qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz042q"/>
+	    ) A
+	</select>
+	
+	<!--  무상/유상 사급 업체코드 (DNKA) DWHZ042Q -->
+	<select id="selectdwhz042q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY 1) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz042q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+ 
+ 	<!-- 국내 구매단가 정단가화 List(1년분)(DNKA) DWHZ043Q -->
+	<sql id="tblBaseSqldwhz043q">
+			SELECT  SUBSTR(a.itcls,1,1) as ITCLS
+			      , TRIM(a.vndnr) AS VNDNR
+			      , TRIM(a.pspno) AS PSPNO
+			      , TRIM(b.itdsc) AS ITDSC
+			      , a.trndt
+			      , a.trqty
+			      , a.trfot
+			      , a.trcst
+		  	FROM pscdblib.bid100pf a LEFT OUTER JOIN $LIB1$.bm008pr b ON a.pspno = b.itnbr 
+		    INNER JOIN (
+		             	SELECT  prvndr, pritno
+		                FROM pscdblib.bid500pf
+		                WHERE prfrdt <![CDATA[<=]]> #ENDDATE#
+		                AND prtodt <![CDATA[>=]]> #STARTDATE#
+		                AND prexch = 'KW'
+		                GROUP BY prvndr, pritno
+		                HAVING MAX(prprdv) <![CDATA[<>]]> MIN(prprdv)
+		               ) c ON a.vndnr = c.prvndr AND a.pspno = c.pritno
+			WHERE a.trndt BETWEEN #STARTDATE# AND #ENDDATE#
+			ORDER BY a.vndnr, a.pspno, a.trndt
+	</sql>
+	
+	<!--  국내 구매단가 정단가화 List(1년분)(DNKA) DWHZ043Q 카운트 조회 -->
+	<select id="selectdwhz043qCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqldwhz043q"/>
+	    ) A
+	</select>
+	
+	<!--  국내 구매단가 정단가화 List(1년분)(DNKA) DWHZ043Q -->
+	<select id="selectdwhz043q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	<!-- JHB수정 : 2018.04.06
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY 1) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz043q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	 -->
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY VNDNR, PSPNO, TRNDT) AS rnum  FROM (
+	    		<include refid="tblBaseSqldwhz043q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 	 
+	</select>
+				
+	<!-- 국내 구매단가 정단가화 List(1년분)(DNKA) DWHZ044Q -->
+	<select id="selectdwhz044q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			  A.dpsqno
+			, A.dptcd
+			, A.dpdpnm
+			, A.sabun
+			, A.kornm
+			, A.pamttp
+			, A.p1
+			, A.p2
+			, A.p3
+			, A.p4
+			, A.p5
+			, A.p6
+			, A.p7
+			, A.p8
+			, A.p9,
+			COALESCE(B.yyamt,0) as yyamt
+		FROM(
+		SELECT  c.dpsqno, b.dptcd, c.dpdpnm, DIGITS(a.sabun) as sabun, b.kornm,
+		              SUM(pamttp) as pamttp,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND a.ptype='P0' THEN (a.pamttp-a.educmp-a.pmkjmp+pmkbmp) ELSE 0 END) as p1,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND a.ptype='P1' THEN a.pamttp ELSE 0 END) as p2,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND SUBSTR(a.ptype,1,1)='P' THEN a.educmp ELSE 0 END) as p3,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND SUBSTR(a.ptype,1,1)='P' THEN a.pmkjmp+pmkbmp ELSE 0 END) as p4,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND a.ptype='B0' THEN (a.pamttp-a.pmkjmp+pmkbmp) ELSE 0 END) as p5,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND a.ptype='B1' THEN a.pamttp ELSE 0 END) as p6,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND SUBSTR(a.ptype,1,1)='B' THEN a.pmkjmp+pmkbmp ELSE 0 END) as p7,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND a.ptype<![CDATA[>=]]>'BA' AND a.ptype<![CDATA[<=]]>'BZ' THEN a.pamttp ELSE 0 END) as p8,
+		              SUM(CASE WHEN a.knyym<![CDATA[>=]]> #STARTDATE# AND a.knyym<![CDATA[<=]]> #ENDDATE# AND SUBSTR(a.ptype,1,1)='C' THEN a.pamttp ELSE 0 END)  as p9
+		   FROM  $LIB3$.hpc200pf a, $LIB3$.hmd020pf b, $LIB2$.mst650pf c
+		WHERE  a.knyym <![CDATA[>=]]> #STARTDATE#
+		      AND  a.knyym <![CDATA[<=]]> #ENDDATE#
+		      AND  a.sabun = b.sabun
+		      AND  b.dptcd = c.dpcode
+		      AND  c.dpcomp = #COMPS#
+		GROUP  BY  c.dpsqno, b.dptcd, c.dpdpnm, DIGITS(a.sabun), b.kornm
+		) A
+		LEFT OUTER JOIN $LIB3$.HPM100PF B ON A.SABUN=B.SABUN AND B.YYEAR=#YYYY#
+		ORDER  BY  A.dpsqno, A.sabun
+	</select>
+	
+	<!-- 월별 부서별 개인별 잔업.특근현황 DWHZ047Q -->
+	<select id="selectdwhz047q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  b.dptcd
+		      , c.dpdpnm
+		      , b.kornm
+		      , a.kndat
+		      , SUM(CASE WHEN a.kntcd<![CDATA[>=]]>60 AND a.kntcd<![CDATA[<=]]>64 THEN a.kntil ELSE 0 END) as kntcd60
+		      , SUM(CASE WHEN a.kntcd=30 THEN a.kntil ELSE 0 END) as kntcd30
+		      , SUM(CASE WHEN a.kntcd=31 THEN a.kntil ELSE 0 END) as kntcd31
+		      , SUM(CASE WHEN a.kntcd<![CDATA[>=]]>32 AND a.kntcd<![CDATA[<=]]>33 THEN a.kntil ELSE 0 END) as kntcd32
+		      , SUM(CASE WHEN a.kntcd<![CDATA[>=]]>21 AND a.kntcd<![CDATA[<=]]>23 THEN a.kntil ELSE 0 END) as kntcd21
+		   FROM  $LIB3$.hwd010pf a, $LIB3$.hmd020pf b, $LIB2$.mst650pf c
+		WHERE  a.kndat <![CDATA[>=]]>     #STARTDATE#
+		      AND  a.kndat <![CDATA[<=]]> #ENDDATE#
+		      AND  b.paycd = 9
+		      AND  a.sabun = b.sabun
+		      AND  b.dptcd = c.dpcode
+		      AND  c.dpcomp = #COMPS#
+		 GROUP  BY  b.dptcd, c.dpdpnm, b.kornm, a.kndat
+		HAVING  SUM(CASE WHEN a.kntcd<![CDATA[>=]]>60 AND a.kntcd<![CDATA[<=]]>64 THEN a.kntil ELSE 0 END) <![CDATA[<>]]> 0
+		       OR   SUM(CASE WHEN a.kntcd=30 THEN a.kntil ELSE 0 END) <![CDATA[<>]]> 0
+		       OR   SUM(CASE WHEN a.kntcd=31 THEN a.kntil ELSE 0 END) <![CDATA[<>]]> 0
+		       OR   SUM(CASE WHEN a.kntcd<![CDATA[>=]]>32 AND a.kntcd<![CDATA[<=]]>33 THEN a.kntil ELSE 0 END) <![CDATA[<>]]> 0
+		       OR   SUM(CASE WHEN a.kntcd<![CDATA[>=]]>21 AND a.kntcd<![CDATA[<=]]>23 THEN a.kntil ELSE 0 END) <![CDATA[<>]]> 0
+		 ORDER  BY  1, 3, 4
+	</select>
+	
+	<!-- 직급별근속년수현황, 직급별연령분포현황 DWHZ050Q -->
+	<select id="selectdwhz050q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  grade
+		        , count(sabun) as sabun
+		        , sum(ageyy) as ageyy
+                , (sum(ageyy) / count(sabun)) as avrageyy
+		        , sum(agemm) as agemm
+		        , sum(cntyy) as cntyy
+                , (sum(cntyy) / count(sabun)) as avrcntyy
+		        , sum(cntmm)  as cntmm
+		FROM $LIB3$.hmd020pf where cndat=0 group by grade
+		ORDER BY 1
+	</select>
+	
+	<!-- 부서별 개인별 학자금 지급현황 DWHZ053Q -->
+	<select id="selectdwhz053q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  a.dptcd
+		      , c.dpdpnm
+		      , a.kornm
+		      , DIGITS(a.sabun) as sabun
+		      , b.knyym
+		      , SUM(b.educmp) as educmp
+		FROM  $LIB3$.hmd020pf a, $LIB3$.hpc200pf b, $LIB2$.mst650pf c
+		WHERE  a.cndcd <![CDATA[<>]]>'R'
+		     AND  b.knyym <![CDATA[>=]]> #STARTDATE#
+		     AND  b.knyym <![CDATA[<=]]> #ENDDATE#
+		     AND  b.ptype like 'P%'
+		     AND  b.educmp <![CDATA[<>]]> 0
+		     AND  a.sabun = b.sabun
+		     AND  a.dptcd = c.dpcode
+		     AND  c.dpcomp = #COMPS#
+		GROUP  BY  a.dptcd, c.dpdpnm, a.kornm, DIGITS(a.sabun), b.knyym
+		ORDER  BY  1,4,5
+	</select>
+	
+	<!-- CIGMA 공수 조회(반기)(DNKA) DWHZ054Q -->
+	<select id="selectdwhz054q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  A.PROCS
+		       ,A.PRTNO
+		       ,B.ITDSC
+		       ,B.ITCLS
+		       ,A.STRDT
+		       ,A.MANTM
+		FROM $LIB2$.FZH100PF A left outer join $LIB1$.bm008pr b on a.prtno=b.itnbr
+		where b.packc='S1'
+		ORDER BY A.PROCS,A.PRTNO,A.STRDT
+	</select>
+	<!-- LSK Start -->	
+	<select id="selectDWHZ000Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		* 
+	FROM 
+		$LIB2$.DWH000PF
+	WHERE 
+		JOBFL='$JOBFL$' 
+	ORDER BY JYYMM DESC 
+	FETCH FIRST 1 ROW ONLY
+	</select>
+	
+	<select id="selectDWHXXXXQ" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		* 
+	FROM 
+		$LIB2$.$JOBFL$
+	<dynamic prepend="WHERE">
+		<isNotEmpty prepend="AND" property="COMPS">
+		COMPS = #COMPS#
+		</isNotEmpty> 
+	</dynamic>
+	</select>
+	
+	<select id="selectDWHXXXYQ" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		Z.*
+		<!-- (Z.MNFCS * Z.IMQ12) AS SUMIMQ12  -->
+	FROM 
+		(SELECT ROWNUMBER() OVER() AS ROWNUM, A.* FROM $LIB2$.$JOBFL$ A)Z
+	<dynamic prepend="WHERE">
+		<isNotEqual prepend="AND" property="F_ROWNUM" compareValue="0">
+		Z.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+		</isNotEqual>
+	</dynamic>
+	</select>
+	
+	<select id="selectDWHC501Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT
+		CASE WHEN B.SEXCD = 'F' THEN '2' ELSE '1' END GUBUN,        
+		SUM(CASE WHEN A.PTYPE = 'P0' THEN 1 ELSE 0 END) PECNT,           
+		SUM(CASE WHEN A.PTYPE = 'P0' THEN A.KNTDT ELSE 0 END) KNTDT,      
+		SUM(CASE WHEN A.PTYPE = 'P0' AND A.YTTIM+A.HTTIM != 0 THEN 1 ELSE 0 END) HACHL,                
+		SUM(CASE WHEN A.PTYPE = 'P0' THEN (A.UCCDT+A.YCCDT+A.SLCDT+A.IJCDT+A.BGCDT+A.MGCDT+A.UGCDT) ELSE 0 END) YTHTM,
+		SUM(CASE WHEN A.PTYPE = 'P0' THEN INT(A.KNTDT)*8+(A.KNTDT-INT(A.KNTDT)) ELSE 0 END) JCCTM, 
+		SUM(CASE WHEN A.PTYPE = 'P0' THEN A.OTTIM+A.ANTIM+A.YTTIM+A.HTTIM ELSE 0 END) CHOTM,                       
+		SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN A.PAMTTP ELSE 0 END) - SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN A.OTSUDP+A.ORSUDP+A.OVSUDP+A.ANSUDP+A.YUSUDP+A.HKSUDP+A.EDUCMP ELSE 0 END) JUSAM,
+		SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN A.OTSUDP+A.ORSUDP+A.OVSUDP+A.ANSUDP+A.YUSUDP+A.HKSUDP ELSE 0 END) SUDAM, 
+		SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN A.EDUCMP ELSE 0 END) EDUAM,                                              
+		SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN A.PAMTTP ELSE 0 END) PAMAM,                                                
+		SUM(CASE WHEN SUBSTR(A.PTYPE,1,1) = 'P' THEN 0 ELSE A.PAMTTP END) TUKAM,                                         
+		SUM(CASE WHEN A.PTYPE <![CDATA[>=]]> 'B0' AND A.PTYPE <![CDATA[<=]]> 'B9' THEN A.PAMTTP ELSE 0 END) BONAM                                              
+	FROM
+		$LIB3$.HPC200PF A, $LIB3$.HMD020PF B 
+	WHERE
+		A.KNYYM = $RVSDT$
+		AND  A.SABUN = B.SABUN                                          
+	GROUP  BY
+		CASE WHEN B.SEXCD = 'F' THEN '2' ELSE '1' END
+	</select>
+	<select id="selectDWHC502Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT
+		COALESCE(B.DPSQNO,'') DPSQNO,COALESCE(C.DPTCD,'') DPTCD,
+		COALESCE(B.DPDPNM,'') DPDPNM,C.PAYCD,
+		SUM(A.UCCDT) UCCDT, SUM(A.YCCDT) YCCDT, SUM(A.SLCDT) SLCDT, SUM(A.IJCDT) IJCDT,
+		SUM(A.BGCDT) BGCDT, SUM(A.MGCDT+A.UGCDT) MGCDT
+	FROM
+		$LIB3$.HPC200PF A, $LIB2$.MST650PF B, $LIB3$.HMD020PF C
+	WHERE
+		A.KNYYM = $RVSDT$
+		AND  A.PTYPE = 'P0'
+		AND  B.DPCOMP = '$COMPS$'
+		AND  B.DPCODE = C.DPTCD
+		AND  C.SABUN = A.SABUN
+	GROUP  BY COALESCE(B.DPSQNO,''),COALESCE(C.DPTCD,''), COALESCE(B.DPDPNM,''),C.PAYCD
+	order by COALESCE(B.DPSQNO,'')
+	</select>
+	<select id="selectDWHC503Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT  
+		COALESCE(B.DPSQNO,'') DPSQNO, COALESCE(B.DPDPNM,'') DPDPNM,
+		COALESCE(B.DPCODE,'') DPTCD,
+		SUM(CASE WHEN A.SEXCD = 'M' THEN 1 ELSE 0 END) MINWON,
+		SUM(CASE WHEN A.SEXCD = 'M' THEN 0 ELSE 1 END) FINWON
+	FROM
+		$LIB3$.HMD020PF A,  $LIB2$.MST650PF B
+	WHERE  
+		(A.CNDAT = 0  OR A.CNDAT <![CDATA[>]]> $RVSDT$31)
+		AND  A.ENDAT <![CDATA[<=]]> $RVSDT$31
+		AND  A.GRADE <![CDATA[>]]> '49'
+		AND  NOT  ((SUBSTR(A.BALCD,1,2)='21' OR SUBSTR(A.BALCD,1,2)='22')
+		AND  A.BSDAT != 0  AND A.BSDAT <![CDATA[<]]> $RVSDT$31
+		AND  A.BEDAT != 0  AND A.BEDAT <![CDATA[>=]]> $RVSDT$31)
+		AND  A.DPTCD = B.DPCODE
+		AND  B.DPCOMP = '$COMPS$'
+	GROUP BY COALESCE(B.DPSQNO,''),COALESCE(B.DPDPNM,''),COALESCE(B.DPCODE,'')
+	ORDER BY COALESCE(B.DPSQNO,'')
+	</select>
+	<select id="selectDWHC504Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT  
+		COALESCE(C.DPSQNO,'') DPSQNO, COALESCE(C.DPDPNM,'') DPDPNM,
+		COALESCE(SUBSTR(B.DPDPCD,5,4),'') DPTCD,
+		SUM(CASE WHEN A.SEXCD='M' AND  A.GRADE <![CDATA[<]]> '49' THEN 1 ELSE 0 END) GMINWN,
+		SUM(CASE WHEN A.SEXCD='F' AND  A.GRADE <![CDATA[<]]> '49' THEN 1 ELSE 0 END) GFINWN,
+		SUM(CASE WHEN A.GRADE = '5A' THEN 1 ELSE 0 END) KINUWN,
+		SUM(CASE WHEN A.SEXCD='M' AND  A.GRADE <![CDATA[>]]> '5A' THEN 1 ELSE 0 END) KMINWN,
+		SUM(CASE WHEN A.SEXCD='F' AND  A.GRADE <![CDATA[>]]> '5A' THEN 1 ELSE 0 END) KFINWN
+	FROM 
+		$LIB3$.HMD020PF A, $LIB2$.MST650PF B, $LIB2$.MST650PF C
+	WHERE
+		(A.CNDAT = 0  OR  INT(A.CNDAT/100) <![CDATA[>]]> $RVSDT$)
+		AND  INT(A.ENDAT/100) <![CDATA[<=]]> $RVSDT$
+		AND  NOT ((SUBSTR(A.BALCD,1,2)='21' OR SUBSTR(A.BALCD,1,2)='22')
+		AND  A.BSDAT != 0  AND INT(A.BSDAT/100) <![CDATA[<=]]> $RVSDT$
+		AND  A.BEDAT != 0  AND INT(A.BEDAT/100) <![CDATA[>]]> $RVSDT$)
+		AND  A.DPTCD = B.DPCODE
+		AND  SUBSTR(B.DPDPCD,5,4) = C.DPCODE
+		AND  B.DPCOMP = '$COMPS$'
+		AND  C.DPCOMP = '$COMPS$'
+	GROUP BY 'C1',COALESCE(C.DPSQNO,''),COALESCE(C.DPDPNM,''),COALESCE(SUBSTR(B.DPDPCD,5,4),'')
+	ORDER BY COALESCE(C.DPSQNO,'')
+	</select>
+	<select id="selectDWHC505Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT                                                       
+		CASE WHEN INT(A.CNDAT/100)= $RVSDT$ THEN 'OUT'	WHEN INT(A.ENDAT/100)= $RVSDT$ THEN 'IN'	WHEN A.BALCD='21' OR A.BALCD='22' THEN 'LONG TIMEOFF'	WHEN SUBSTR(A.BALCD,1,1)='2' THEN 'SHORT TIMEOFF'	ELSE ' ' END GUBUN,
+		DIGITS(A.SABUN) SABUN, A.KORNM, B.DPDPNM,                          
+		CASE WHEN A.SEXCD='M' THEN 'M' ELSE 'F' END SEXNM, 
+		CASE WHEN INT(A.ENDAT/100)= $RVSDT$ OR INT(A.CNDAT/100)= $RVSDT$ THEN A.ENDAT ELSE A.BSDAT END FRDTE, 
+		CASE WHEN INT(A.CNDAT/100)= $RVSDT$ THEN A.BSDAT ELSE A.BEDAT END TODTE,         
+		COALESCE(A.BALCD,' ') BALCD, A.DPTCD,A.CNDAT                       
+	FROM 
+		$LIB3$.HMD020PF A, $LIB2$.MST650PF B                       
+	WHERE 
+		(INT(A.CNDAT/100)= $RVSDT$ OR INT(A.ENDAT/100)= $RVSDT$ 
+		OR (SUBSTR(A.BALCD,1,1) = '2' AND A.BSDAT != 0 AND A.BSDAT <![CDATA[<]]> $RVSDT$31 AND A.BEDAT != 0 AND A.BEDAT <![CDATA[>=]]> $RVSDT$31)
+		OR (SUBSTR(A.BALCD,1,1) = '2' AND A.BSDAT != 0 AND A.BSDAT <![CDATA[<]]> $RVSDT$31 AND A.BEDAT != 0 AND A.BEDAT <![CDATA[>=]]> $RVSDT$31))
+		AND A.DPTCD = B.DPCODE 
+		AND B.DPCOMP = '$COMPS$'
+	</select>
+	<select id="selectDWHC506Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT
+		C.DPSQNO, C.DPDPNM, SUBSTR(B.DPDPCD,5,4) DPTCD,
+		SUM(CASE WHEN A.GRADE = '00' THEN 1 ELSE 0 END) GRA00,
+		SUM(CASE WHEN A.GRADE = '1A' THEN 1 ELSE 0 END) GRA1A,
+		SUM(CASE WHEN A.GRADE = '1B' THEN 1 ELSE 0 END) GRA1B,
+		SUM(CASE WHEN A.GRADE = '2A' THEN 1 ELSE 0 END) GRA2A,
+		SUM(CASE WHEN A.GRADE = '2B' THEN 1 ELSE 0 END) GRA2B,
+		SUM(CASE WHEN A.GRADE = '3A' AND A.SEXCD = 'M' THEN 1 ELSE 0 END) GRA3AM,
+		SUM(CASE WHEN A.GRADE = '3A' AND A.SEXCD !='M' THEN 1 ELSE 0 END) GRA3AF,
+		SUM(CASE WHEN A.GRADE = '3B' THEN 1 ELSE 0 END) GRA3B,
+		SUM(CASE WHEN A.GRADE <![CDATA[>=]]> '5A' THEN 1 ELSE 0 END) GRA5A
+	FROM 
+		$LIB3$.HMD020PF A, $LIB2$.MST650PF B, $LIB2$.MST650PF C
+	WHERE 
+		(A.CNDAT = 0 OR A.CNDAT <![CDATA[>]]> $RVSDT$31 )
+		AND A.ENDAT <![CDATA[<=]]> $RVSDT$31
+		AND NOT ((SUBSTR(A.BALCD,1,2)='21' OR SUBSTR(A.BALCD,1,2)='22')
+		AND A.BSDAT != 0 AND A.BSDAT <![CDATA[<]]> $RVSDT$31
+		AND A.BEDAT != 0 AND A.BEDAT <![CDATA[>=]]> $RVSDT$31)
+		AND A.DPTCD = B.DPCODE
+		AND SUBSTR(B.DPDPCD,5,4) = C.DPCODE
+		AND B.DPCOMP = '$COMPS$'
+		AND C.DPCOMP = '$COMPS$'
+	GROUP BY C.DPSQNO, C.DPDPNM, SUBSTR(B.DPDPCD,5,4)
+	ORDER BY C.DPSQNO
+	</select>
+	<select id="selectDWHC507Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT
+		A.DPTCDP DPTCD, C.DPDPNM, DIGITS(A.SABUN) SABUN, B.KORNM,
+		SUM((A.GBCDT-A.YCCDT-A.UCCDT-A.SLCDT-A.IJCDT-A.MGCDT-A.HJCDT)*8-A.JGTIM-JTTIM-OCTIM) GBTIM,
+		SUM(A.OTTIM+A.HTTIM+A.YTTIM) YTTIM, 
+		SUM(A.ANTIM) ANTIM,
+		SUM(A.OVSUDP+A.OTSUDP+A.YUSUDP+A.HKSUDP+A.ANSUDP) OVSUDP,
+		SUM(A.YCCDT+A.UCCDT+A.SLCDT) YCCDT, 
+		SUM(A.MGCDT) MGCDT,
+		SUM(A.IJCDT) IJCDT, 
+		SUM(A.GSCDT) GSCDT, 
+		SUM(A.HJCDT) HJCDT
+	FROM 
+		$LIB3$.HPC200PF A, $LIB3$.HMD020PF B, $LIB2$.MST650PF C
+	WHERE 
+		A.KNYYM = $RVSDT$
+		AND SUBSTR(A.PTYPE,1,2) = 'P0'
+		AND A.GRADEP <![CDATA[>]]> '49'
+		AND A.SABUN = B.SABUN
+		AND C.DPCOMP = '$COMPS$'
+		AND A.DPTCDP = C.DPCODE
+	GROUP BY A.DPTCDP, C.DPDPNM, A.SABUN, B.KORNM
+	</select>
+	<select id="selectDWHE111Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		A.WKDAT,A.SABUN,A.MCHNO,COALESCE(C.TGBCD,0) TGBCD,
+		CASE WHEN C.TGBCD = 1 THEN 460 WHEN C.TGBCD = 2 THEN 570 WHEN C.TGBCD = 3 THEN 630 WHEN C.TGBCD = 4 THEN 230 WHEN C.TGBCD = 9 THEN 600 ELSE 0 END TGBTM,
+		A.ITNBR,D.ITDSC,A.ORQTY,A.GDQTY,A.BDQTY,
+		COALESCE(B.A1,0) BADQ11,COALESCE(B.A2,0) BADQ12,COALESCE(B.A3,0) BADQ13,
+		COALESCE(B.A4,0) BADQ14,COALESCE(B.A5,0) BADQ15,COALESCE(B.A6,0) BADQ16,
+		COALESCE(B.A7,0) BADQ17,COALESCE(B.A8,0) BADQ18,COALESCE(B.A9,0) BADQ19,
+		COALESCE(B.A10,0) BADQ1A,COALESCE(B.A11,0) BADQ1B,COALESCE(B.A12,0) BADQ1C,
+		COALESCE(B.B1,0) BADQ21,COALESCE(B.B2,0) BADQ22,COALESCE(B.B3,0) BADQ23,
+		COALESCE(B.B4,0) BADQ24,COALESCE(B.B5,0) BADQ25,COALESCE(B.B6,0) BADQ26,
+		COALESCE(B.B7,0) BADQ27,COALESCE(B.B8,0) BADQ28,COALESCE(B.B9,0) BADQ29,
+		COALESCE(B.B10,0) BADQ2A,COALESCE(B.B11,0) BADQ2B,COALESCE(B.B12,0) BADQ2C
+	FROM 
+		$LIB2$.FDD010PF A LEFT OUTER JOIN
+		(SELECT SABUN,WKDAT,ITNBR,
+			SUM(CASE WHEN BADCD = 1 THEN BADQ1 ELSE 0 END) AS A1,
+			SUM(CASE WHEN BADCD = 1 THEN BADQ2 ELSE 0 END) AS B1,
+			SUM(CASE WHEN BADCD = 2 THEN BADQ1 ELSE 0 END) AS A2,
+			SUM(CASE WHEN BADCD = 2 THEN BADQ2 ELSE 0 END) AS B2,
+			SUM(CASE WHEN BADCD = 3 THEN BADQ1 ELSE 0 END) AS A3,
+			SUM(CASE WHEN BADCD = 3 THEN BADQ2 ELSE 0 END) AS B3,
+			SUM(CASE WHEN BADCD = 4 THEN BADQ1 ELSE 0 END) AS A4,
+			SUM(CASE WHEN BADCD = 4 THEN BADQ2 ELSE 0 END) AS B4,
+			SUM(CASE WHEN BADCD = 5 THEN BADQ1 ELSE 0 END) AS A5,
+			SUM(CASE WHEN BADCD = 5 THEN BADQ2 ELSE 0 END) AS B5,
+			SUM(CASE WHEN BADCD = 6 THEN BADQ1 ELSE 0 END) AS A6,
+			SUM(CASE WHEN BADCD = 6 THEN BADQ2 ELSE 0 END) AS B6,
+			SUM(CASE WHEN BADCD = 7 THEN BADQ1 ELSE 0 END) AS A7,
+			SUM(CASE WHEN BADCD = 7 THEN BADQ2 ELSE 0 END) AS B7,
+			SUM(CASE WHEN BADCD = 8 THEN BADQ1 ELSE 0 END) AS A8,
+			SUM(CASE WHEN BADCD = 8 THEN BADQ2 ELSE 0 END) AS B8,
+			SUM(CASE WHEN BADCD = 9 THEN BADQ1 ELSE 0 END) AS A9,
+			SUM(CASE WHEN BADCD = 9 THEN BADQ2 ELSE 0 END) AS B9,
+			SUM(CASE WHEN BADCD = 10 THEN BADQ1 ELSE 0 END) AS A10,
+			SUM(CASE WHEN BADCD = 10 THEN BADQ2 ELSE 0 END) AS B10,
+			SUM(CASE WHEN BADCD = 11 THEN BADQ1 ELSE 0 END) AS A11,
+			SUM(CASE WHEN BADCD = 11 THEN BADQ2 ELSE 0 END) AS B11,
+			SUM(CASE WHEN BADCD = 12 THEN BADQ1 ELSE 0 END) AS A12,
+			SUM(CASE WHEN BADCD = 12 THEN BADQ2 ELSE 0 END) AS B12
+		FROM $LIB2$.FDD050PF
+		WHERE	WKDAT BETWEEN $RVSDT1$ AND $RVSDT2$
+		GROUP BY SABUN,WKDAT,ITNBR
+		) B ON A.SABUN=B.SABUN AND A.WKDAT=B.WKDAT AND A.ITNBR=B.ITNBR
+		LEFT OUTER JOIN (SELECT * FROM $LIB2$.FDD030PF WHERE WRKDT BETWEEN $RVSDT1$ AND $RVSDT2$) C ON A.SABUN=C.SABUN AND A.WKDAT=C.WRKDT
+		,$LIB1$.BM008PR D
+	WHERE 
+		A.ITNBR=D.ITNBR AND A.WKDAT BETWEEN $RVSDT1$ AND $RVSDT2$
+	</select>
+<!-- LSK END -->
+
+<!-- JHB START -->
+	<select id="selectDWHZ046Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	<isEqual property="SELCD" compareValue="1">
+	<!-- 월별 개인 특근/근태조회 -->
+	<!-- 
+	  1.월 급여내역기준
+	  2.부서,부서명,성명,년월,기본시간,연장,특근(휴일+200%),휴가(월차+년차+생휴+병가),
+	  3.인정,교육,훈련,출장,조퇴,지각,외출(사용+공용),결근(무결+유결),휴직+정직,산재,공상
+	 -->
+	<!--
+	SELECT
+		C.DPSQNO,
+		A.DPTCDP, COALESCE(TRIM(C.DPDPNM),' ') AS DPDPNM,	
+		TRIM(B.KORNM) AS KORNM, DIGITS(A.SABUN) AS SABUN, A.KNYYM,
+		
+		CASE WHEN A.PAYCDP= 1 THEN '관리직' WHEN A.PAYCDP= 2 THEN '직장'
+				 WHEN A.PAYCDP= 3 THEN '반장' WHEN A.PAYCDP= 4 THEN '노동조합'
+				 WHEN A.PAYCDP= 9 THEN '기능직' ELSE '' END AS PAYNM,
+		CASE WHEN A.YNBCDP='1' THEN '연봉자' ELSE '월급자' END AS YNBNM,
+		A.GBCTT, A.OTTIM, A.HTTIM+A.YTTIM AS TOT_HTYT, 
+		A.UCCTT, A.YCCTT, A.SLCTT, A.BGCTT, A.UCCTT+A.YCCTT+A.SLCTT+A.BGCTT AS TOT_VAC,
+		A.IJCTT, A.EDCTT, A.HYCTT, A.CJCTT, A.JTTIM, A.JGTIM, 
+		A.OCTIM+A.GCTIM AS TOT_OCGC, A.MGCTT+A.UGCTT AS TOT_MGUG, A.HJCTT+A.JJCTT AS TOT_HJJJ, A.SJCTT, A.GSCTT,
+		A.IJCTT+A.EDCTT+A.HYCTT+A.CJCTT+A.JTTIM+A.JGTIM+ 
+		A.OCTIM+A.GCTIM+A.MGCTT+A.UGCTT+A.HJCTT+A.JJCTT+A.SJCTT+A.GSCTT AS TOT_EXTIME
+	FROM
+		$LIB3$.HPC200PF A
+		LEFT OUTER JOIN $LIB2$.MST650PF C ON A.DPTCDP = C.DPCODE AND C.DPCOMP = #COMPS#, $LIB3$.HMD020PF B
+	WHERE
+		A.KNYYM BETWEEN $KNYYM$ AND $KNYYM$
+		AND A.PTYPE = 'P0'
+		<isNotEmpty prepend="AND" property="PAYCD">
+			<isEqual property="PAYCD" compareValue="1">
+				A.PAYCDP != 9
+			</isEqual>
+			<isEqual property="PAYCD" compareValue="2">
+				A.PAYCDP = 9
+			</isEqual>
+		</isNotEmpty>
+		AND A.SABUN = B.SABUN
+	ORDER BY C.DPSQNO, A.DPTCDP, DPDPNM, KORNM, A.KNYYM
+	-->
+	<!-- 현부서 기준 -->
+	SELECT
+		C.DPSQNO,
+		B.DPTCD, COALESCE(TRIM(C.DPDPNM),' ') AS DPDPNM,	
+		TRIM(B.KORNM) AS KORNM, DIGITS(A.SABUN) AS SABUN, A.KNYYM,
+		
+		CASE WHEN A.PAYCDP= 1 THEN '관리직' WHEN A.PAYCDP= 2 THEN '직장'
+				 WHEN A.PAYCDP= 3 THEN '반장' WHEN A.PAYCDP= 4 THEN '노동조합'
+				 WHEN A.PAYCDP= 9 THEN '기능직' ELSE '' END AS PAYNM,
+		CASE WHEN A.YNBCDP='1' THEN '연봉자' ELSE '월급자' END AS YNBNM,
+		A.GBCTT, A.OTTIM, A.HTTIM+A.YTTIM AS TOT_HTYT, 
+		A.UCCTT, A.YCCTT, A.SLCTT, A.BGCTT, A.UCCTT+A.YCCTT+A.SLCTT+A.BGCTT AS TOT_VAC,
+		A.IJCTT, A.EDCTT, A.HYCTT, A.CJCTT, A.JTTIM, A.JGTIM, 
+		A.OCTIM+A.GCTIM AS TOT_OCGC, A.MGCTT+A.UGCTT AS TOT_MGUG, A.HJCTT+A.JJCTT AS TOT_HJJJ, A.SJCTT, A.GSCTT,
+		A.IJCTT+A.EDCTT+A.HYCTT+A.CJCTT+A.JTTIM+A.JGTIM+ 
+		A.OCTIM+A.GCTIM+A.MGCTT+A.UGCTT+A.HJCTT+A.JJCTT+A.SJCTT+A.GSCTT AS TOT_EXTIME
+	FROM
+		$LIB3$.HPC200PF A
+		LEFT OUTER JOIN $LIB3$.HMD020PF B ON A.SABUN=B.SABUN
+		LEFT OUTER JOIN $LIB2$.MST650PF C ON B.DPTCD = C.DPCODE AND C.DPCOMP = #COMPS#
+	WHERE
+		A.KNYYM BETWEEN $KNYYM$ AND $KNYYM$
+		AND A.PTYPE = 'P0'
+		<isNotEmpty prepend="AND" property="PAYCD">
+			<isEqual property="PAYCD" compareValue="1">
+				A.PAYCDP != 9
+			</isEqual>
+			<isEqual property="PAYCD" compareValue="2">
+				A.PAYCDP = 9
+			</isEqual>			
+		</isNotEmpty>
+		AND A.SABUN = B.SABUN
+	ORDER BY C.DPSQNO, B.DPTCD, DPDPNM, KORNM, A.KNYYM
+	</isEqual>
+	<isEqual property="SELCD" compareValue="2">
+	<!-- 일별 개인 근태/특근 조회 -->
+	<!-- 부서,부서명,성명,근태일,휴가(년차+월차+생휴),지각,조퇴,외출(공용+사용),특근(연장+200%+휴일) -->
+	SELECT
+		C.DPSQNO,
+		B.DPTCD, TRIM(C.DPDPNM) AS DPDPNM, TRIM(B.KORNM) AS KORNM, DIGITS(B.SABUN) AS SABUN,
+		CASE WHEN B.PAYCD= 1 THEN '관리직' WHEN B.PAYCD= 2 THEN '직장'
+			 WHEN B.PAYCD= 3 THEN '반장' WHEN B.PAYCD= 4 THEN '노동조합'
+			 WHEN B.PAYCD= 9 THEN '기능직' ELSE '' END AS PAYNM,
+		A.KNDAT, 
+		SUM(CASE WHEN A.KNTCD>=60 AND A.KNTCD <![CDATA[<=]]> 64 THEN A.KNTIL ELSE 0 END) AS TOT_VAC,
+		SUM(CASE WHEN A.KNTCD=30 THEN A.KNTIL ELSE 0 END) AS TOT_JGTIM,
+		SUM(CASE WHEN A.KNTCD=31 THEN A.KNTIL ELSE 0 END) AS TOT_JTTIM,
+		SUM(CASE WHEN A.KNTCD>=32 AND A.KNTCD <![CDATA[<=]]> 33 THEN A.KNTIL ELSE 0 END) AS TOT_OCGC,
+		SUM(CASE WHEN A.KNTCD>=21 AND A.KNTCD <![CDATA[<=]]> 23 THEN A.KNTIL ELSE 0 END) AS TOT_HTYT
+	FROM
+		$LIB3$.HWD010PF A, $LIB3$.HMD020PF B, $LIB2$.MST650PF C
+	WHERE
+		A.KNDAT BETWEEN $KNYYM$||'01' AND $KNYYM$||'31'
+		<isNotEmpty prepend="AND" property="PAYCD">
+			<isEqual property="PAYCD" compareValue="1">
+				B.PAYCD = 1
+			</isEqual>
+			<isEqual property="PAYCD" compareValue="2">
+				B.PAYCD != 1
+			</isEqual>				
+		</isNotEmpty>
+		AND A.SABUN = B.SABUN
+		AND B.DPTCD = C.DPCODE
+		AND C.DPCOMP = #COMPS#
+	GROUP BY C.DPSQNO, B.DPTCD, TRIM(C.DPDPNM), TRIM(B.KORNM), DIGITS(B.SABUN), 
+			CASE WHEN B.PAYCD= 1 THEN '관리직' WHEN B.PAYCD= 2 THEN '직장'
+			 WHEN B.PAYCD= 3 THEN '반장' WHEN B.PAYCD= 4 THEN '노동조합'
+			 WHEN B.PAYCD= 9 THEN '기능직' ELSE '' END, A.KNDAT
+	HAVING SUM(CASE WHEN A.KNTCD>=60 AND A.KNTCD <![CDATA[<=]]> 64 THEN A.KNTIL ELSE 0 END) <![CDATA[<>]]> 0
+	    OR SUM(CASE WHEN A.KNTCD=30 THEN A.KNTIL ELSE 0 END) <![CDATA[<>]]> 0
+	    OR SUM(CASE WHEN A.KNTCD=31 THEN A.KNTIL ELSE 0 END) <![CDATA[<>]]> 0
+	    OR SUM(CASE WHEN A.KNTCD>=32 AND A.KNTCD <![CDATA[<=]]> 33 THEN A.KNTIL ELSE 0 END) <![CDATA[<>]]> 0
+	    OR SUM(CASE WHEN A.KNTCD>=21 AND A.KNTCD <![CDATA[<=]]> 23 THEN A.KNTIL ELSE 0 END) <![CDATA[<>]]> 0
+	ORDER BY B.DPTCD, KORNM, A.KNDAT
+	</isEqual>
+	<isEqual property="SELCD" compareValue="3">
+	<!-- 일별 개인 특근조회 -->
+	<!-- 일일근태마스터 기준 - 부서,성명,일자,시간,특근  -->
+	SELECT
+		C.DPSQNO,
+		B.DPTCD, TRIM(C.DPDPNM) AS DPDPNM, TRIM(B.KORNM) AS KORNM, DIGITS(B.SABUN) AS SABUN, B.PAYCD,
+		CASE WHEN B.PAYCD= 1 THEN '관리직' WHEN B.PAYCD= 2 THEN '직장'
+			 WHEN B.PAYCD= 3 THEN '반장' WHEN B.PAYCD= 4 THEN '노동조합'
+			 WHEN B.PAYCD= 9 THEN '기능직' ELSE '' END AS PAYNM,
+		A.KNDAT, A.KNTIL, TRIM(D.PCONT) AS PCONT
+	FROM
+		$LIB3$.HWD010PF A, $LIB3$.HMD020PF B, $LIB2$.MST650PF C, $LIB3$.HUM010PF D
+	WHERE
+		A.KNDAT BETWEEN $KNYYM$||'01' AND $KNYYM$||'31'
+		AND A.KNTCD <![CDATA[>=]]> 21
+		AND A.KNTCD <![CDATA[<=]]> 23
+		<isNotEmpty prepend="AND" property="PAYCD">
+			<isEqual property="PAYCD" compareValue="1">
+				B.PAYCD = 1
+			</isEqual>
+			<isEqual property="PAYCD" compareValue="2">
+				B.PAYCD != 1
+			</isEqual>				
+		</isNotEmpty>
+		AND A.SABUN = B.SABUN
+		AND B.DPTCD = C.DPCODE
+		AND C.DPCOMP = #COMPS#
+		AND D.PCODE = 'KNTA'||DIGITS(A.KNTCD)
+	ORDER BY C.DPSQNO, B.DPTCD, KORNM, B.PAYCD
+	</isEqual>
+	</select>
+	
+<!-- JDE예산계획대 실적 PGM관련  Start -->
+	<select id="selectJdeF0902_BU" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.GBCTRY, A.GBFY, TRIM(GBMCU) AS MCMCU,
+		MAX(TRIM(D.MCDC)) AS MCDC,
+		TRIM(GBMCU) ||':'|| MAX(TRIM(D.MCDC)) AS MCNAME
+	FROM
+		$LIB4$.F0902 A
+		LEFT OUTER JOIN $LIB4$.F0006LB D ON A.GBMCU=D.MCMCU
+	WHERE
+		'dwhlib_sqlMap.selectJdeF0902_BU'='dwhlib_sqlMap.selectJdeF0902_BU'
+		AND (A.GBAN01 !=0 OR A.GBAN02 !=0 OR A.GBAN03 !=0 OR A.GBAN04 !=0 OR A.GBAN05 !=0 OR A.GBAN06 !=0 OR
+				A.GBAN07 !=0 OR A.GBAN08 !=0 OR A.GBAN09 !=0 OR A.GBAN10 !=0 OR A.GBAN11 !=0 OR A.GBAN12 !=0 )
+		AND TRIM(A.GBOBJ) BETWEEN #GBOBJ_FR# AND #GBOBJ_TO#	<!-- AND TRIM(A.GBMCU) BETWEEN 2000 AND 7999 -->
+		AND TRIM(A.GBOBJ) NOT BETWEEN #NotGBOBJ_FR# AND #NotGBOBJ_TO#
+		AND A.GBFY = $GBFY$
+	GROUP BY A.GBCTRY, A.GBFY, GBMCU
+	</select>
+	<select id="selectJdeF0902_DP" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.GBCTRY, A.GBFY, A.DPCODE, CASE WHEN A.DPCODE=B.DPCODE THEN B.DPDPNM WHEN LENGTH(A.DPCODE)=0 THEN '부서없음' ELSE '확인불가' END AS DPNAME,
+		A.DPCODE  ||':'|| CASE WHEN A.DPCODE=B.DPCODE THEN B.DPDPNM WHEN LENGTH(A.DPCODE)=0 THEN '부서없음' ELSE '확인불가' END  ||':'||
+		 CASE WHEN B.DPCOMP='E1' THEN '마산' WHEN B.DPCOMP='C1' THEN '창원' WHEN B.DPCOMP='S1' THEN '화성' WHEN B.DPCOMP='H1' THEN '홍성'ELSE '' END DPCODPNM
+	FROM(
+		SELECT 
+			A.GBCTRY, A.GBFY, TRIM(A.GBSBL) AS DPCODE
+		FROM
+			$LIB4$.F0902 A
+		WHERE
+			'dwhlib_sqlMap.selectJdeF0902_DP'='dwhlib_sqlMap.selectJdeF0902_DP'
+			AND (A.GBAN01 !=0 OR A.GBAN02 !=0 OR A.GBAN03 !=0 OR A.GBAN04 !=0 OR A.GBAN05 !=0 OR A.GBAN06 !=0 OR
+					A.GBAN07 !=0 OR A.GBAN08 !=0 OR A.GBAN09 !=0 OR A.GBAN10 !=0 OR A.GBAN11 !=0 OR A.GBAN12 !=0 )
+			AND TRIM(A.GBOBJ) BETWEEN #GBOBJ_FR# AND #GBOBJ_TO#	<!-- AND TRIM(A.GBMCU) BETWEEN 2000 AND 7999 -->
+			AND TRIM(A.GBOBJ) NOT BETWEEN #NotGBOBJ_FR# AND #NotGBOBJ_TO#
+			AND A.GBFY = $GBFY$
+		GROUP BY A.GBCTRY, A.GBFY, A.GBSBL
+	) A
+	LEFT OUTER JOIN ( 
+		SELECT
+			DPCOMP, TRIM(DPCODE) AS DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM
+		FROM 
+			PSEDBLIB.MST650PF
+			WHERE DPCOMP='E1'
+			AND TRIM(DPCODE) BETWEEN '4000' AND '4999'
+		UNION ALL
+		SELECT
+			DPCOMP, TRIM(DPCODE) AS DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM
+		FROM 
+			PSCDBLIB.MST650PF
+			WHERE DPCOMP IN ('C1','S1')
+			<!-- AND TRIM(DPCODE) BETWEEN '2000' AND '3999' -->
+		)B ON A.DPCODE =B.DPCODE	
+	ORDER BY DPCODPNM
+	</select>
+	
+	<select id="selectJdeF0902_GBOBJ" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.GBCTRY, A.GBFY, TRIM(A.GBOBJ) AS GBOBJ, MAX(B.GMDL01) AS GMDL01,
+		TRIM(A.GBOBJ) ||':'|| MAX(B.GMDL01) AS GBNAME
+	FROM
+		$LIB4$.F0902 A
+		LEFT OUTER JOIN (
+			SELECT TRIM(GMOBJ) AS GMOBJ, MAX(TRIM(GMDL01)) AS GMDL01 FROM $LIB4$.F0901 WHERE trim(GMSUB)='' GROUP BY GMOBJ
+		) B ON TRIM(A.GBOBJ)=B.GMOBJ
+	WHERE
+		'dwhlib_sqlMap.selectJdeF0902_GBOBJ'='dwhlib_sqlMap.selectJdeF0902_GBOBJ'
+		AND (A.GBAN01 !=0 OR A.GBAN02 !=0 OR A.GBAN03 !=0 OR A.GBAN04 !=0 OR A.GBAN05 !=0 OR A.GBAN06 !=0 OR
+				A.GBAN07 !=0 OR A.GBAN08 !=0 OR A.GBAN09 !=0 OR A.GBAN10 !=0 OR A.GBAN11 !=0 OR A.GBAN12 !=0 )
+		AND TRIM(A.GBOBJ) BETWEEN #GBOBJ_FR# AND #GBOBJ_TO#
+		AND TRIM(A.GBOBJ) NOT BETWEEN #NotGBOBJ_FR# AND #NotGBOBJ_TO#
+		AND A.GBFY = $GBFY$
+	GROUP BY A.GBCTRY, A.GBFY, GBOBJ
+	</select>
+	
+	<sql id="JdeBudget">
+	SELECT
+		A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+	FROM(
+		SELECT 
+		A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+	FROM
+		$LIB4$.F0902 A
+	WHERE
+		'dwhlib_sqlMap.searchByJdeBudget'='dwhlib_sqlMap.searchByJdeBudget'
+		AND (A.GBAN01 !=0 OR A.GBAN02 !=0 OR A.GBAN03 !=0 OR A.GBAN04 !=0 OR A.GBAN05 !=0 OR A.GBAN06 !=0 OR
+				A.GBAN07 !=0 OR A.GBAN08 !=0 OR A.GBAN09 !=0 OR A.GBAN10 !=0 OR A.GBAN11 !=0 OR A.GBAN12 !=0 )
+		AND TRIM(A.GBOBJ) BETWEEN #GBOBJ_FR# AND #GBOBJ_TO# <!--  AND TRIM(A.GBOBJ) BETWEEN 91100 AND 92590 -->
+		AND TRIM(A.GBOBJ) NOT BETWEEN #NotGBOBJ_FR# AND #NotGBOBJ_TO#
+		AND A.GBFY = $GBFY$
+		<!-- 
+		<isEqual property="GBMCU" compareValue="0">
+			AND TRIM(A.GBMCU) in (
+		    	SELECT TRIM(MCMCU) FROM	$LIB4$.F0006LB	WHERE trim(MCRP12) != '' 삭제 : AND trim(MCSTYL)='EX' AND trim(MCRP11)='001' 
+		    )
+		</isEqual>
+		 -->
+		
+		GROUP BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL
+		) A
+		WHERE 
+		'dwhlib_sqlMap.searchByJdeBudget'='dwhlib_sqlMap.searchByJdeBudget'
+		<!--
+		<isNotEqual property="GBMCU" compareValue="0">
+			AND TRIM(A.GBMCU) = #GBMCU#
+		</isNotEqual>
+		<isNotEmpty property="GBSBL">
+			AND TRIM(A.GBSBL) = #GBSBL#
+		</isNotEmpty>
+		<isNotEmpty property="GBOBJ">
+			AND TRIM(A.GBOBJ) = #GBOBJ#
+		</isNotEmpty>
+		 -->
+
+		 <isEqual property="P_MULTI" compareValue="0">
+			 AND TRIM(A.GBSBL) BETWEEN #P_GBSBL1# AND #P_GBSBL2#
+		</isEqual>
+		 <isEqual property="P_MULTI" compareValue="1">
+			 AND TRIM(A.GBSBL) IN $P_MULTICODE$
+		</isEqual>
+		 AND TRIM(A.GBMCU) BETWEEN #P_GBMCU1# AND #P_GBMCU2#
+		 AND TRIM(A.GBOBJ) BETWEEN #P_GBOBJ1# AND #P_GBOBJ2# 
+		 
+	</sql>
+	<select id="selectJDEZ001Q"  parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		A.GBCTRY || A.GBFY AS BUDYEAR, 
+		TRIM(A.GBMCU) AS GBMCU, TRIM(D.MCDC) AS MCDC,
+		TRIM(A.GBOBJ) AS GBOBJ, TRIM(A.GBSUB) AS GBSUB, TRIM(B.GMDL01) AS GMDL01, <!--  TRIM(C.GMDL01) AS GMDL02,-->
+		CASE WHEN LENGTH(TRIM(COALESCE(C.GMDL01,''))) =0 THEN TRIM(B.GMDL01) ELSE TRIM(C.GMDL01) END AS GMDL02,
+		TRIM(A.GBSBL) AS GBSBL,
+		<!-- '계획' AS GBLT1, -->
+		A.GBAN01BA, A.GBAN02BA, A.GBAN03BA, A.GBAN04BA, A.GBAN05BA, A.GBAN06BA,
+		A.GBAN07BA, A.GBAN08BA, A.GBAN09BA, A.GBAN10BA, A.GBAN11BA, A.GBAN12BA,
+		A.GBAN01BA+A.GBAN02BA+A.GBAN03BA+A.GBAN04BA+A.GBAN05BA+A.GBAN06BA+A.GBAN07BA+A.GBAN08BA+A.GBAN09BA+A.GBAN10BA+A.GBAN11BA+A.GBAN12BA AS TOTGBANBA,
+		<!-- '실적' AS GBLT2, -->
+		A.GBAN01AA, A.GBAN02AA, A.GBAN03AA, A.GBAN04AA, A.GBAN05AA, A.GBAN06AA,
+		A.GBAN07AA, A.GBAN08AA, A.GBAN09AA, A.GBAN10AA, A.GBAN11AA, A.GBAN12AA,
+		A.GBAN01AA+A.GBAN02AA+A.GBAN03AA+A.GBAN04AA+A.GBAN05AA+A.GBAN06AA+A.GBAN07AA+A.GBAN08AA+A.GBAN09AA+A.GBAN10AA+A.GBAN11AA+A.GBAN12AA AS TOTGBANAA,
+		<!-- '차이' AS GBLT3,
+		A.GBAN01CA, A.GBAN02CA, A.GBAN03CA, A.GBAN04CA, A.GBAN05CA, A.GBAN06CA,
+		A.GBAN07CA, A.GBAN08CA, A.GBAN09CA, A.GBAN10CA, A.GBAN11CA, A.GBAN12CA,
+		A.GBAN01CA+A.GBAN02CA+A.GBAN03CA+A.GBAN04CA+A.GBAN05CA+A.GBAN06CA+A.GBAN07CA+A.GBAN08CA+A.GBAN09CA+A.GBAN10CA+A.GBAN11CA+A.GBAN12CA AS TOTGBANCA,
+		'계획비%' AS GBLT4,
+		A.GBAN01DA, A.GBAN02DA, A.GBAN03DA, A.GBAN04DA, A.GBAN05DA, A.GBAN06DA,
+		A.GBAN07DA, A.GBAN08DA, A.GBAN09DA, A.GBAN10DA, A.GBAN11DA, A.GBAN12DA,
+		A.GBAN01DA+A.GBAN02DA+A.GBAN03DA+A.GBAN04DA+A.GBAN05DA+A.GBAN06DA+A.GBAN07DA+A.GBAN08DA+A.GBAN09DA+A.GBAN10DA+A.GBAN11DA+A.GBAN12DA AS TOTGBANDA, -->
+		A.GBCTRY, A.GBFY
+	FROM(
+		SELECT 
+			A.*,
+			COALESCE(B.GBAN01, 0) AS GBAN01BA, COALESCE(B.GBAN02, 0) AS GBAN02BA, COALESCE(B.GBAN03, 0) AS GBAN03BA, COALESCE(B.GBAN04, 0) AS GBAN04BA,
+			COALESCE(B.GBAN05, 0) AS GBAN05BA, COALESCE(B.GBAN06, 0) AS GBAN06BA, COALESCE(B.GBAN07, 0) AS GBAN07BA, COALESCE(B.GBAN08, 0) AS GBAN08BA,
+			COALESCE(B.GBAN09, 0) AS GBAN09BA, COALESCE(B.GBAN10, 0) AS GBAN10BA, COALESCE(B.GBAN11, 0) AS GBAN11BA, COALESCE(B.GBAN12, 0) AS GBAN12BA,
+			                                                                                                                                          
+			COALESCE(C.GBAN01, 0) AS GBAN01AA, COALESCE(C.GBAN02, 0) AS GBAN02AA, COALESCE(C.GBAN03, 0) AS GBAN03AA, COALESCE(C.GBAN04, 0) AS GBAN04AA,
+			COALESCE(C.GBAN05, 0) AS GBAN05AA, COALESCE(C.GBAN06, 0) AS GBAN06AA, COALESCE(C.GBAN07, 0) AS GBAN07AA, COALESCE(C.GBAN08, 0) AS GBAN08AA,
+			COALESCE(C.GBAN09, 0) AS GBAN09AA, COALESCE(C.GBAN10, 0) AS GBAN10AA, COALESCE(C.GBAN11, 0) AS GBAN11AA, COALESCE(C.GBAN12, 0) AS GBAN12AA
+			<!-- 
+			COALESCE(D.GBAN01, 0) AS GBAN01CA, COALESCE(D.GBAN02, 0) AS GBAN02CA, COALESCE(D.GBAN03, 0) AS GBAN03CA, COALESCE(D.GBAN04, 0) AS GBAN04CA,
+			COALESCE(D.GBAN05, 0) AS GBAN05CA, COALESCE(D.GBAN06, 0) AS GBAN06CA, COALESCE(D.GBAN07, 0) AS GBAN07CA, COALESCE(D.GBAN08, 0) AS GBAN08CA,
+			COALESCE(D.GBAN09, 0) AS GBAN09CA, COALESCE(D.GBAN10, 0) AS GBAN10CA, COALESCE(D.GBAN11, 0) AS GBAN11CA, COALESCE(D.GBAN12, 0) AS GBAN12CA,
+					
+			COALESCE(D.GBAN01DA, 0) AS GBAN01DA, COALESCE(D.GBAN02DA, 0) AS GBAN02DA, COALESCE(D.GBAN03DA, 0) AS GBAN03DA, COALESCE(D.GBAN04DA, 0) AS GBAN04DA,
+			COALESCE(D.GBAN05DA, 0) AS GBAN05DA, COALESCE(D.GBAN06DA, 0) AS GBAN06DA, COALESCE(D.GBAN07DA, 0) AS GBAN07DA, COALESCE(D.GBAN08DA, 0) AS GBAN08DA,
+			COALESCE(D.GBAN09DA, 0) AS GBAN09DA, COALESCE(D.GBAN10DA, 0) AS GBAN10DA, COALESCE(D.GBAN11DA, 0) AS GBAN11DA, COALESCE(D.GBAN12DA, 0) AS GBAN12DA
+			 -->
+			FROM (
+			<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN $LIB4$.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+		LEFT OUTER JOIN $LIB4$.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'
+		<!-- 
+		LEFT OUTER JOIN (
+			SELECT 
+				A.*,
+				COALESCE(B.GBAN01, 0)-COALESCE(C.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0)-COALESCE(C.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0)-COALESCE(C.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0)-COALESCE(C.GBAN04, 0) AS GBAN04,
+				COALESCE(B.GBAN05, 0)-COALESCE(C.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0)-COALESCE(C.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0)-COALESCE(C.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0)-COALESCE(C.GBAN08, 0) AS GBAN08,
+				COALESCE(B.GBAN09, 0)-COALESCE(C.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0)-COALESCE(C.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0)-COALESCE(C.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0)-COALESCE(C.GBAN12, 0) AS GBAN12,
+					
+				CASE WHEN COALESCE(B.GBAN01, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN01, 0)/COALESCE(B.GBAN01, 0)*100,2)) ELSE 0.00 END AS GBAN01DA,
+				CASE WHEN COALESCE(B.GBAN02, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN02, 0)/COALESCE(B.GBAN02, 0)*100,2)) ELSE 0.00 END AS GBAN02DA,
+				CASE WHEN COALESCE(B.GBAN03, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN03, 0)/COALESCE(B.GBAN03, 0)*100,2)) ELSE 0.00 END AS GBAN03DA,
+				CASE WHEN COALESCE(B.GBAN04, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN04, 0)/COALESCE(B.GBAN04, 0)*100,2)) ELSE 0.00 END AS GBAN04DA,
+				CASE WHEN COALESCE(B.GBAN05, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN05, 0)/COALESCE(B.GBAN05, 0)*100,2)) ELSE 0.00 END AS GBAN05DA,
+				CASE WHEN COALESCE(B.GBAN06, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN06, 0)/COALESCE(B.GBAN06, 0)*100,2)) ELSE 0.00 END AS GBAN06DA,
+				CASE WHEN COALESCE(B.GBAN07, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN07, 0)/COALESCE(B.GBAN07, 0)*100,2)) ELSE 0.00 END AS GBAN07DA,
+				CASE WHEN COALESCE(B.GBAN08, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN08, 0)/COALESCE(B.GBAN08, 0)*100,2)) ELSE 0.00 END AS GBAN08DA,
+				CASE WHEN COALESCE(B.GBAN09, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN09, 0)/COALESCE(B.GBAN09, 0)*100,2)) ELSE 0.00 END AS GBAN09DA,
+				CASE WHEN COALESCE(B.GBAN10, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN10, 0)/COALESCE(B.GBAN10, 0)*100,2)) ELSE 0.00 END AS GBAN10DA,
+				CASE WHEN COALESCE(B.GBAN11, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN11, 0)/COALESCE(B.GBAN11, 0)*100,2)) ELSE 0.00 END AS GBAN11DA,
+				CASE WHEN COALESCE(B.GBAN12, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN12, 0)/COALESCE(B.GBAN12, 0)*100,2)) ELSE 0.00 END AS GBAN12DA
+			FROM (
+				<include refid="JdeBudget"></include>
+			) A
+			LEFT OUTER JOIN $LIB4$.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+			LEFT OUTER JOIN $LIB4$.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'
+			) D ON A.GBCTRY=D.GBCTRY AND A.GBFY=D.GBFY AND A.GBMCU=D.GBMCU AND A.GBOBJ = D.GBOBJ AND A.GBSUB=D.GBSUB AND A.GBSBL=D.GBSBL
+		  -->
+		) A
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM $LIB4$.F0901 WHERE trim(GMSUB)='') B ON A.GBMCU=B.GMMCU AND A.GBOBJ=B.GMOBJ
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM $LIB4$.F0901 WHERE trim(GMSUB) != '') C ON A.GBMCU=C.GMMCU AND A.GBOBJ=C.GMOBJ AND A.GBSUB=C.GMSUB
+	LEFT OUTER JOIN $LIB4$.F0006LB D ON A.GBMCU=D.MCMCU
+	<isEqual property="SORTTYPE" compareValue="BU">
+	ORDER BY BUDYEAR, A.GBFY, GBMCU, GBSBL, GBOBJ, GBSUB
+	</isEqual>
+	<isEqual property="SORTTYPE" compareValue="DP">
+	ORDER BY BUDYEAR, A.GBFY, GBSBL, GBMCU, GBOBJ, GBSUB
+	</isEqual>	
+	<isEqual property="SORTTYPE" compareValue="GB">
+	ORDER BY BUDYEAR, A.GBFY, GBOBJ, GBSUB, GBMCU, GBSBL
+	</isEqual>
+	</select>
+<!-- JDE예산계획대 실적 PGM관련  End -->
+
+
+<!--  월차사용제품조정자료 DWHZ103Q 조회 -->
+	<sql id="tblBaseSqlDWHZ103Q">
+	SELECT	 
+		TRIM(A.PNITNO) AS PNITNO, TRIM(B.ITDSC) AS ITDSC,
+		A.PNPRDT,
+		A.ITCLS1,
+		TRIM(A.PNCITN) AS PNCITN, TRIM(C.ITDSC) AS ITDSC2,
+		A.PNOGQT,
+		A.PNPNQT,
+		A.PNUQTY,
+		A.MNFCS,
+		A.RMATC,
+		A.PURCS,
+		A.PRCST,
+		A.MOHCS,
+		TRIM(A.TRNCON) AS TRNCON
+	FROM 
+	$LIB2$.DWH103PF A
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PNITNO=B.ITNBR
+	LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PNCITN=C.ITNBR
+	</sql>
+	
+	<select id="selectDWHZ103QCnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    <include refid="count"/>
+	    <include refid="tblBaseSqlDWHZ103Q"/>
+	    ) A
+	</select>
+	<select id="selectDWHZ103Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM (
+	   		SELECT G.*, ROWNUMBER() OVER(ORDER BY G.PNITNO) AS rnum  FROM (
+	    		<include refid="tblBaseSqlDWHZ103Q"/>
+			) G) X WHERE x.rnum BETWEEN #STARTNUM# AND #ENDNUM# 
+	</select>
+	
+
+<!-- JHB END -->
+</sqlMap>

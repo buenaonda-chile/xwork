@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="528" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="즐겨찾기" TooltipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_favorite">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmenuLev"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="528"></Image>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_favorite" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="517" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="461" Id="menuGrd2" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadDBLClick="allCehck" Right="524" TabOrder="1" TabStop="true" Top="56" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="524">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="150"/>
+						<col width="150"/>
+						<col width="150"/>
+						<col width="73"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="대메뉴"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="중메뉴"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="소메뉴"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="즐겨찾기"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="STEP1_NAME" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="STEP2_NAME" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="2" colid="STEP3_NAME" display="normal"/>
+						<cell align="center" bkcolor="lightcoral" col="3" colid="USER_YN" display="checkbox" edit="checkbox" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Cursor="HAND" Height="20" Id="Button3" ImageID="comBtn_save" Left="472" OnClick="fn_save" TabOrder="2" Text="검색" Top="4" Width="51"></Button>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_user" Left="40" TabOrder="3" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="5" Text="즐겨찾기&#32;정보" Top="8" Width="104"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="10" Top="29" Width="524"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="3" TabOrder="9" Top="31" Width="91"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="MENU_ID" Color="#333333" DataColumn="MENU_NAME" Height="24" Id="cb_group" ImeMode="none" INDEX="0" InnerDataset="ds_menuAuthGroup" Left="94" OnChanged="groupChange" ResetIndex="FIRST" TabOrder="6" Top="30" Width="430"></Combo>
+		<Shape BKColor="#888888" Bottom="45" Height="5" Id="Shape2" Left="15" LineColor="#dceaf7" Right="20" TabOrder="7" Top="40" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="25" Style="static" TabOrder="8" Text="대메뉴" Top="36" VAlign="Middle" Width="69"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : UserfavAuth.xml
+ * ● PROGRAM DESCRIPTION  : 츨겨찾기 관리
+ * ● DATE WRITTEN         : 2015.04.17
+----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-04-17
+ * 내용설명 : 화면 로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj)
+{
+
+	title_user.Value = USER_ID;
+
+	http.Sync 	= true;
+	
+	Transaction("getUserAuthGroup", "service::system/getMenuAuthGroupList", "", "ds_menuAuthGroup=ds_menuAuthGroup", "", "");	
+
+	ds_menuAuthGroup.InsertRow(0);
+	ds_menuAuthGroup.SetColumn(0,"MENU_ID","");
+	ds_menuAuthGroup.SetColumn(0,"MENU_NAME","[전체]");
+	cb_group.index = 0;		
+	
+	var sKind		= "getUserFavAuth";		
+	var sMethodName = "service::system/getFavoriteAuthList";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_favorite=ds_favorite";
+	var sArgument   = "";
+		sArgument   += " USER_ID=" + quote(USER_ID);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-04-17
+ * 내용설명 : 전체 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+var chkStatus = 0;
+function allCehck(obj,nCell,nX,nY,nPivotIndex)
+{
+	chkStatus = 1 - chkStatus;
+
+	for(i=0;i<ds_favorite.rowcount;i++){
+		ds_favorite.SetColumn(i,"USER_YN", chkStatus) ;
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-04-17
+ * 내용설명 : 화면 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function fn_save(obj)
+{
+	var sKind		= "setUserFavAuth";						
+	var sMethodName = "service::system/setFavoriteAuth";
+	var sInDataSet  = "ds_favorite=ds_favorite:U";
+	var sOutDataSet = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-04-17
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd == 0){
+		alert(setPopMessage("2005"));	// 20110103l-koowgnojeel, 2005 == 처리 되었습니다.
+		Close();
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-04-17
+ * 내용설명 : 그리드 필터링
+ * 주요변수 : 
+ **********************************************************************/ 
+function groupChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cb_group.Value == ""){
+		ds_favorite.UnFilter();
+	} else {
+		ds_favorite.Filter("STEP1_CODE=='" + cb_group.Value + "'");
+	}
+
+}]]></Script>
+</Window>

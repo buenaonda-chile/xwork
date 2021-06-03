@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.PartNumberDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.PartNumberDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="exhaustReg" column="EXHAUST_REG" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+		<result property="exchangeNm" column="EXCHANGE_NM" javaType="java.lang.String" />
+		<result property="hmc" column="HMC" javaType="java.lang.String" />
+		<result property="denso" column="DENSO" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="groupId" column="GROUP_ID" javaType="java.lang.String" />
+		<result property="partsCost" column="PARTS_COST" javaType="java.lang.Long" />
+		<result property="margin" column="MARGIN" javaType="java.lang.Long" />
+		<result property="workHour" column="WORK_HOUR" javaType="java.lang.Double" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,MAKER
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,EXCHANGE_NM
+		,HMC
+		,DENSO
+		,AUTOINSERT
+		,PART_DIV
+		,USE_YN
+		,GROUP_ID
+		,PARTS_COST
+		,MARGIN
+		,WORK_HOUR
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    FROM TB_BA_EXCHANGE_PART_NUMBER
+
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.maker != null and criteria.maker != ''">
+		  AND MAKER = #{criteria.maker}
+	  </if>
+
+	  <if test="criteria.partDiv != null and criteria.partDiv != ''">
+		  AND PART_DIV = #{criteria.partDiv}
+	  </if>
+
+	  <if test="criteria.groupId != null and criteria.groupId != ''">
+		  AND GROUP_ID = #{criteria.groupId}
+	  </if>
+
+	  <if test="criteria.exhaustReg != null and criteria.exhaustReg != ''">
+		  AND EXHAUST_REG = #{criteria.exhaustReg}
+	  </if>
+
+	  <if test="criteria.useYn != null and criteria.useYn != ''">
+		  AND USE_YN = #{criteria.useYn}
+	  </if>
+
+	  <if test="criteria.exchangeNm != null and criteria.exchangeNm != ''">
+		  AND LOWER(EXCHANGE_NM) LIKE '%'||LOWER(#{criteria.exchangeNm})||'%'
+	  </if>
+
+	  <if test="criteria.hmc != null and criteria.hmc != ''">
+		  AND HMC LIKE '%'||#{criteria.hmc}||'%'
+	  </if>
+
+	  <if test="criteria.denso != null and criteria.denso != ''">
+		  AND DENSO LIKE '%'||#{criteria.denso}||'%'
+	  </if>
+
+	  <if test="criteria.engineType != null and criteria.engineType != ''">
+		  AND ENGINE_TYPE LIKE '%'||#{criteria.engineType}||'%'
+	  </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.PartNumberDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.PartNumberDomain">
+
+    INSERT INTO TB_BA_EXCHANGE_PART_NUMBER (
+		ID
+		,MAKER
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,EXCHANGE_NM
+		,HMC
+		,DENSO
+		,AUTOINSERT
+		,PART_DIV
+		,USE_YN
+		,GROUP_ID
+		,PARTS_COST
+		,MARGIN
+		,WORK_HOUR
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{maker}
+		,#{exhaustReg}
+		,#{engineType}
+		,#{exchangeNm}
+		,#{hmc}
+		,#{denso}
+		,#{autoinsert}
+		,#{partDiv}
+		,#{useYn}
+		,#{groupId}
+		,#{partsCost}
+		,#{margin}
+		,#{workHour}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_EXCHANGE_PART_NUMBER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.PartNumberDomain">
+
+    UPDATE TB_BA_EXCHANGE_PART_NUMBER SET
+		MAKER = #{maker}
+		,EXHAUST_REG = #{exhaustReg}
+		,ENGINE_TYPE = #{engineType}
+		,EXCHANGE_NM = #{exchangeNm}
+		,HMC = #{hmc}
+		,DENSO = #{denso}
+		,AUTOINSERT = #{autoinsert}
+		,PART_DIV = #{partDiv}
+		,USE_YN = #{useYn}
+		,GROUP_ID = #{groupId}
+		,PARTS_COST = #{partsCost}
+		,MARGIN = #{margin}
+		,WORK_HOUR = #{workHour}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.PartNumberDomain">
+
+    DELETE FROM TB_BA_EXCHANGE_PART_NUMBER
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

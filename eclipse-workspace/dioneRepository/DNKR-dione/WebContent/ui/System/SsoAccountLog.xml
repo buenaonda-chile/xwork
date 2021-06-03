@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="외부시스템&#32;계정&#32;로그" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoAccountLog"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnm>사용</cdnm>
+					</record>
+					<record>
+						<cd>0</cd>
+						<cdnm>미사용</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="7" Top="30" Width="1057"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static14" Left="902" TabOrder="6" Top="32" Width="66"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static15" Left="924" Style="static" TabOrder="2" Text="이름" Top="37" VAlign="Middle" Width="37"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static16" Left="735" TabOrder="5" Top="32" Width="76"></Static>
+		<Shape BKColor="#888888" Bottom="47" Height="5" Id="Shape4" Left="914" LineColor="#dceaf7" Right="919" TabOrder="1" Top="42" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape5" Left="748" LineColor="#dceaf7" Right="753" TabOrder="3" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static21" Left="757" Style="static" TabOrder="4" Text="아이디" Top="37" VAlign="Middle" Width="42"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_searchUserId" Left="814" MaxLength="10" TabOrder="8" Top="34" Width="86"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_searchUserName" Left="969" MaxLength="10" TabOrder="9" Top="34" Width="86"></Edit>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ssoAccountLog" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="588" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="525" Id="MainGrid" InputPanel="FALSE" Left="1" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1056" TabOrder="10" TabStop="true" Top="63" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1055">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="106"/>
+						<col width="105"/>
+						<col width="124"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="변경일자"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="변경시간"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="사업장"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="아이디"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="이름"/>
+						<cell align="center" bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="시스템명"/>
+						<cell align="center" bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="아이디(외부)"/>
+						<cell align="center" bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="비밀번호(외부)"/>
+						<cell align="center" bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="그룹(외부)"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="MENU_DATE" display="text" LimitDec="0" Mask="####-##-##"/>
+						<cell align="center" col="2" colid="MENU_TIME" display="text" LimitDec="0" Mask="##:##&#32;##"/>
+						<cell align="center" col="3" colid="COMPANY" combocol="code1" combodataset="ds_VComCode_COMP" combotext="code_name" display="combo"/>
+						<cell align="center" col="4" colid="PLANT_CD" combocol="CODE2" combodataset="ds_VComCode_PLNT" combotext="CODE_NAME" display="combo"/>
+						<cell align="center" autosizing="none" col="5" colid="USER_ID" display="normal"/>
+						<cell align="center" col="6" colid="USER_NAME" color="#333333" display="normal"/>
+						<cell align="center" autosizing="none" col="7" colid="SYS_NAME" display="normal"/>
+						<cell align="left" autosizing="none" col="8" colid="SYSTEM_ID" display="normal"/>
+						<cell align="left" autosizing="none" col="9" colid="SYSTEM_PW" display="normal"/>
+						<cell align="left" autosizing="none" col="10" colid="SYSTEM_GRU" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="260" TabOrder="16" Top="32" Width="67"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="4" TabOrder="13" Top="32" Width="77"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0" Left="15" LineColor="#dceaf7" Right="20" TabOrder="11" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static0" Left="25" Style="static" TabOrder="12" Text="접속기간" Top="37" VAlign="Middle" Width="53"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape1" Left="272" LineColor="#dceaf7" Right="277" TabOrder="14" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="282" Style="static" TabOrder="15" Text="사업부" Top="37" VAlign="Middle" Width="45"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code1" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_COMP" Left="328" OnChanged="compChange" ResetIndex="FIRST" TabOrder="17" Top="33" Width="88"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="419" TabOrder="20" Top="32" Width="67"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="431" LineColor="#dceaf7" Right="436" TabOrder="18" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="441" Style="static" TabOrder="19" Text="사업장" Top="37" VAlign="Middle" Width="39"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_PLNT" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="489" ResetIndex="FIRST" TabOrder="21" Top="33" Width="88"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="578" TabOrder="24" Top="32" Width="67"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="600" Style="static" TabOrder="23" Text="시스템" Top="37" VAlign="Middle" Width="40"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape3" Left="590" LineColor="#dceaf7" Right="595" TabOrder="22" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_syyyymmdd" Left="81" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="26" Top="34" Width="85"></Calendar>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static2" Left="164" Style="static" TabOrder="25" Text="~" Top="39" VAlign="Middle" Width="8"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_eyyyymmdd" Left="174" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="27" Top="34" Width="85"></Calendar>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="SYSTEM_SEQ" Color="#333333" DataColumn="SYS_NAME" Height="21" Id="cb_system" ImeMode="none" INDEX="0" InnerDataset="ds_userCompany" Left="646" ResetIndex="FIRST" TabOrder="28" Top="33" Width="88"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="29" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="29" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="31" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="30" Width="24"></File>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SsoaccountLog.xml
+ * ● PROGRAM DESCRIPTION  : 외부시스템 계정 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	
+	ed_syyyymmdd.Value = substr(nowDate,0,6) + "01";
+	ed_eyyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)					
+	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	ds_VComCode_COMP.Copy("ds_ComCode_COMP");
+	
+	ds_ComCode_COMP.InsertRow(0);
+	ds_ComCode_COMP.SetColumn(0,"CODE1","");
+	ds_ComCode_COMP.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;	
+
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_PLNT.index = 0;	
+
+	var sKind		= "getUserCompany";						
+	var sMethodName = "service::user/selectUserCompany.do";   // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             		// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_userCompany=ds_userCompany";    	// 조회 후 돌려 받을 DataSet 명칭
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "");	
+	
+	ds_userCompany.InsertRow(0);
+	ds_userCompany.SetColumn(0,"SYSTEM_SEQ","");
+	ds_userCompany.SetColumn(0,"SYS_NAME","[전체]");
+	cb_system.index = 0;		
+	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSsoAccountLog(){
+	var sKind		= "getSsoAccountLog";						
+	var sMethodName = "service::user/selectSsoAccountLog.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ssoAccountLog=ds_ssoAccountLog";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " USER_ID=" + quote(ed_searchUserId.Value);
+	sArgument += " USER_NAME=" + quote(ed_searchUserName.Value);
+
+	sArgument += " SDATE=" + quote(ed_syyyymmdd.Value);
+	sArgument += " EDATE=" + quote(ed_eyyyymmdd.Value);
+	sArgument += " COMPANY=" + quote(cb_comp.Value);
+	sArgument += " PLANT_CD=" + quote(cb_PLNT.Value);
+	sArgument += " SYSTEM_SEQ=" + quote(cb_system.Value);
+	
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+function compChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(cb_comp.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_PLNT.index = 0;	
+
+}
+
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getSsoAccountLog"){
+		// 조회건수가 없을경우
+		if(ds_ssoAccountLog.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	}	
+}
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSsoAccountLog();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "외부시스템 사용 LOG";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|외부시스템 사용 LOG";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

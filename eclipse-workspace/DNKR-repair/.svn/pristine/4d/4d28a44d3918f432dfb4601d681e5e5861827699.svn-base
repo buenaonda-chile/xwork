@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+
+  <security:http pattern="/assets/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/templates/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="\A/WEB-INF/jsp/.*\Z" request-matcher="regex" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/favicon.ico" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/login" security="none" auto-config="false"/>
+  <security:http pattern="/training" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/mainTraining" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/subTraining/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/code/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/trainingAppRegist/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/trainingAppView/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/trainingAppcntView/**" security="none" create-session="never" auto-config="false"/>
+  <security:http pattern="/popup/trainingAppView/**" security="none" create-session="never" auto-config="false"/>
+
+  <security:http access-decision-manager-ref="accessDecisionManager"
+    authentication-manager-ref="authenticationManager"
+    use-expressions="true" auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+    <security:headers>
+      <security:frame-options policy="SAMEORIGIN"/>
+    </security:headers>
+    <security:intercept-url pattern="/**" access="hasRole('ROLE_SD_AC') or hasRole('ROLE_SD')"/>
+    <security:custom-filter position="FORM_LOGIN_FILTER" ref="authenticationFilter"/>
+    <security:anonymous/>
+    <security:logout logout-url="/j_spring_security_logout" invalidate-session="true"
+      logout-success-url="/login?loggedout=true"/>
+    <security:csrf disabled="true"/>
+  </security:http>
+
+  <bean id="messageDigestPasswordEncoder"
+    class="com.globaldenso.dicas.security.authentication.encoding.CustomMessageDigestPasswordEncoder">
+    <constructor-arg name="algorithm" value="SHA-256"/>
+    <property name="encodeHashAsBase64" value="true"/>
+  </bean>
+
+  <security:authentication-manager id="authenticationManager">
+    <security:authentication-provider user-service-ref="jdbcUserService">
+      <security:password-encoder ref="messageDigestPasswordEncoder">
+        <security:salt-source user-property="username"/>
+      </security:password-encoder>
+    </security:authentication-provider>
+  </security:authentication-manager>
+
+
+  <bean id="loginUrlAuthenticationEntryPoint"
+    class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    <constructor-arg name="loginFormUrl" value="/login"/>
+  </bean>
+
+  <bean id="authenticationFilter"
+    class="com.globaldenso.dicas.security.web.authentication.CustomUsernamePasswordAuthenticationFilter">
+    <property name="postOnly" value="false"/>
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="usernameParameter" value="j_username"/>
+    <property name="passwordParameter" value="j_password"/>
+    <property name="servicetypeParameter" value="j_servicetype"/>
+    <property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
+  </bean>
+
+  <bean id="authenticationFailureHandler"
+    class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+    <property name="defaultFailureUrl" value="/login"/>
+  </bean>
+
+  <bean id="webexpressionHandler"
+    class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+    <property name="roleHierarchy" ref="roleHierarchy"/>
+  </bean>
+
+  <bean id="accessDecisionManager"
+    class="org.springframework.security.access.vote.AffirmativeBased">
+    <constructor-arg>
+      <list>
+        <bean class="org.springframework.security.access.vote.RoleVoter">
+          <property name="rolePrefix" value="ROLE_"/>
+        </bean>
+        <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+        <bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="jdbcUserService"
+    class="egovframework.rte.fdl.security.userdetails.jdbc.EgovJdbcUserDetailsManager">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="usersByUsernameQuery">
+      <value>
+        select *
+        from (
+          select a.acct_id as username,
+                 a.acct_pw as password,
+                 a.user_id,
+                 a.email,
+                 a.tel_no,
+                 a.moblphon_no,
+                 a.fst_nm,
+                 a.mdl_nm,
+                 a.lst_nm,
+                 a.dept_cd,
+                 b.dept_ko_nm,
+                 b.dept_en_nm,
+                 b.dept_ja_nm,
+                 a.office_cd,
+                 c.office_nm,
+                 case when a.use_yn = 'Y' then 1 else 0 end as enabled
+        from tb_cm_user a
+        inner join tb_cm_group b
+        on a.dept_cd = b.dept_cd
+        left outer join tb_ba_office_master c
+        on a.office_cd = c.office_cd
+        ) AA where username = ?
+      </value>
+    </property>
+    <property name="authoritiesByUsernameQuery">
+      <value>
+        select null as username, role_cd as authority
+        from tb_cm_role
+        start with role_cd in (
+          select a.role_cd
+          from tb_cm_user_role a
+          inner join tb_cm_user b
+          on a.user_id = b.user_id
+          where b.acct_id = ?
+        )
+        connect by prior role_cd = upper_role_cd
+      </value>
+    </property>
+    <property name="roleHierarchy" ref="roleHierarchy"/>
+    <property name="mapClass" value="com.globaldenso.dicas.security.common.DicasSessionMapping"/>
+  </bean>
+
+  <bean id="securedObjectService" class="egovframework.rte.fdl.security.securedobject.impl.SecuredObjectServiceImpl">
+    <property name="securedObjectDAO" ref="securedObjectDAO" />
+    <property name="requestMatcherType" value="regex" />
+  </bean>
+
+  <bean id="securedObjectDAO" class="egovframework.rte.fdl.security.securedobject.impl.SecuredObjectDAO">
+    <property name="dataSource" ref="dataSource" />
+    <property name="sqlHierarchicalRoles">
+      <value>
+        SELECT A.ROLE_CD AS CHILD, A.UPPER_ROLE_CD AS PARENT
+        FROM TB_CM_ROLE A LEFT OUTER JOIN TB_CM_ROLE B ON A.ROLE_CD = B.UPPER_ROLE_CD
+      </value>
+    </property>
+    <property name="sqlRolesAndUrl">
+      <value>
+        SELECT NULL AS URL, NULL AS AUTHORITY FROM DUAL
+      </value>
+    </property>
+    <property name="sqlRolesAndMethod">
+      <value>
+        SELECT NULL AS METHOD, NULL AS AUTHORITY FROM DUAL
+      </value>
+    </property>
+    <property name="sqlRolesAndPointcut">
+      <value>
+        SELECT NULL AS POINTCUT, NULL AS AUTHORITY FROM DUAL
+      </value>
+    </property>
+  </bean>
+
+  <bean id="hierarchyStrings" class="egovframework.rte.fdl.security.userdetails.hierarchicalroles.HierarchyStringsFactoryBean" init-method="init">
+    <property name="securedObjectService" ref="securedObjectService" />
+  </bean>
+
+  <bean id="roleHierarchy"
+    class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+    <property name="hierarchy" ref="hierarchyStrings" />
+  </bean>
+</beans>

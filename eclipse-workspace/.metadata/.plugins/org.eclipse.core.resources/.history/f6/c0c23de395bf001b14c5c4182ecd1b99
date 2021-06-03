@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.OrderCDRepairItemAdmissDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.OrderCDRepairItemAdmissDto">
+  		<id property="orderNo" column="PO_NO" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="rectDt" column="PO_DT" javaType="java.lang.String" />
+		<result property="rectDiv" column="RECT_DIV" javaType="java.lang.String" />
+		<result property="custId" column="RECT_CUST_ID" javaType="java.lang.Long" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="custEmpNm" column="RECT_EMP_NM" javaType="java.lang.String" />
+		<result property="admissStatus" column="ADMISS_STATUS" javaType="java.lang.String" />
+		<result property="status" column="RECT_STATUS" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="partNo" column="PART_NO" javaType="java.lang.String" />	
+		<result property="partNm" column="ITEM_KOR_NM" javaType="java.lang.String" />	
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+  
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.OrderCDRepairItemAdmissDomain">
+
+    SELECT *
+    FROM TB_PO_MST
+    WHERE PO_NO = #{orderNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT * FROM
+				((SELECT PO_NO
+  			   			,TO_CHAR(TO_DATE(PO_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS PO_DT 
+						,PO_CUST_ID
+  			   			,(SELECT CUST_NM FROM TB_CM_CUST WHERE PO_CUST_ID = ID) AS CUST_NM
+  			   			,(SELECT FST_NM FROM TB_CM_USER WHERE PO_EMP_SEQ = USER_ID) AS PO_EMP_NM
+  			   			,PO_STATUS
+  			   			,ADMISS_STATUS
+  			   			,ETC_CN
+  				FROM TB_PO_MST
+  				WHERE PO_DIV = 'B1') A LEFT OUTER JOIN
+   				( SELECT C.PART_NO,C.PO_NO,D.ITEM_KOR_NM FROM
+   						(SELECT PART_NO
+   								,PO_NO
+    					FROM TB_PO_DTL) C JOIN 
+    					(SELECT ITEM_KOR_NM, PART_NO
+    					FROM TB_DC_ITEM_INFO) D ON C.PART_NO=D.PART_NO
+    			) B ON A.PO_NO=B.PO_NO)
+    	WHERE 'SqlMap-OrderCDRepairItemAdmiss.searchByCondition' = 'SqlMap-OrderCDRepairItemAdmiss.searchByCondition'
+      <if test="criteria.status != null and criteria.status != ''">
+		AND PO_STATUS = UPPER(#{criteria.status})
+	  </if>
+	  <if test="criteria.searchOrdDtFr != null and criteria.searchOrdDtFr != ''">
+		AND PO_DT  &gt;=  #{criteria.searchOrdDtFr}
+	  </if>
+	  <if test="criteria.searchOrdDtTo != null and criteria.searchOrdDtTo != ''">
+		AND PO_DT  &lt;=  #{criteria.searchOrdDtTo}  || '9999'
+	  </if>
+	  <if test="criteria.custNm != null and criteria.custNm != ''">
+		AND CUST_NM  LIKE '%' || #{criteria.custNm} || '%'
+	  </if>
+	  <if test="criteria.partNo != null and criteria.partNo != ''">
+		AND PART_NO  LIKE '%' || #{criteria.partNo} || '%'
+	  </if>
+	  <if test="criteria.orderNo != null and criteria.orderNo != ''">
+		AND A.PO_NO  LIKE  '%' || #{criteria.orderNo} || '%'
+	  </if>
+    			
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+   		SELECT COUNT(PO_NO) AS CNT
+    	FROM TB_PO_MST
+
+  	</select>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.OrderCDRepairItemAdmissDomain">
+
+    UPDATE TB_PO_MST
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,PO_STATUS = #{status}
+		,ADMISS_STATUS =  #{admissStatus}
+ 	WHERE PO_NO = #{orderNo}
+
+  </update>
+ 
+</mapper>

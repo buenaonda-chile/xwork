@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncMtReprtExlDao">
+	
+	<resultMap id="SalPlnPerfmncMtReprtExl" type="SalPlnPerfmncMtReprtExlDomain">
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="pQtyM" column="P_QTY_M" />
+		<result property="pQtyS" column="P_QTY_S" />
+		<result property="pQtyY" column="P_QTY_Y" />
+		<result property="rate" column="RATE" />
+		<result property="comps" column="COMPS" />
+		<result property="cd1" column="CD1" />
+		<result property="cd2" column="CD2" />
+		<result property="plnym" column="PLNYM" />
+		<result property="data" column="DATA" />
+		<result property="jan" column="Jan" />
+		<result property="feb" column="Feb" />
+		<result property="mar" column="Mar" />
+		<result property="apr" column="Apr" />
+		<result property="may" column="May" />
+		<result property="jun" column="Jun" />
+		<result property="jul" column="Jul" />
+		<result property="aug" column="Aug" />
+		<result property="sep" column="Sep" />
+		<result property="oct" column="Oct" />
+		<result property="nov" column="Nov" />
+		<result property="dec" column="Dec" />		
+		<result property="pCostY" column="P_COST_Y" />
+		<result property="pCostM" column="P_COST_M" />
+		<result property="pCostS" column="P_COST_S" />   	
+	</resultMap>	
+	
+	<select id="searchBySalPlnList" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+			SELECT A.PLNYM,
+			(CASE WHEN #{orgComps} = 'AL' THEN A.P_COST_Y + D.P_COST_Y WHEN #{orgComps}
+			= 'PE' THEN A.P_COST_Y ELSE D.P_COST_Y END) AS P_COST_Y,
+			(CASE WHEN #{orgComps} = 'AL' THEN B.P_COST_M + E.P_COST_M WHEN #{orgComps}
+			= 'PE' THEN B.P_COST_M ELSE E.P_COST_M END) AS P_COST_M,
+			(CASE WHEN #{orgComps} = 'AL' THEN C.P_COST_S + F.P_COST_S WHEN #{orgComps}
+			= 'PE' THEN C.P_COST_S ELSE F.P_COST_S END) AS P_COST_S
+			/*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnList' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnList'*/
+			FROM (
+			(SELECT A.PLNYM,
+			<choose>
+				<when test='allCheckbox2.equals("E")'>
+					0 AS P_COST_Y
+				</when>
+				<otherwise>
+					SUM(A.MONQY*A.YESCS) / 100000000 AS P_COST_Y
+				</otherwise>
+			</choose>
+			FROM PSEDBLIB.SPY200PF A
+			WHERE A.PLNYM <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND A.PLNYM <![CDATA[ <= ]]>
+			#{edumcb}
+			<if test='allCheckbox2.equals("E1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>
+			GROUP BY A.PLNYM) AS A
+			LEFT OUTER JOIN 
+			(SELECT A.PLNYM,
+			<choose>
+				<when test='allCheckbox2.equals("E")'>
+					0 AS P_COST_M
+				</when>
+				<otherwise>
+					SUM(CASE WHEN 1=1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END) /
+					100000000 AS P_COST_M
+				</otherwise>
+			</choose>
+			FROM PSEDBLIB.SPM110PF A
+			WHERE A.PLNYM <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND A.PLNYM <![CDATA[ <= ]]>
+			#{edumcb}		
+			<if test='allCheckbox2.equals("E1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>		
+			GROUP BY A.PLNYM) AS B ON A.PLNYM = B.PLNYM
+			LEFT OUTER JOIN 
+			(SELECT SUBSTR(A.JPSDT, 1, 6) AS PLNYM,
+			<choose>
+				<when test='allCheckbox2.equals("E")'>
+					0 AS P_COST_S
+				</when>
+				<otherwise>
+					SUM(A.JPSAM) / 100000000 AS P_COST_S
+				</otherwise>
+			</choose>
+			FROM PSEDBLIB.SMD110PF A
+			WHERE SUBSTR(A.JPSDT, 1, 6) <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND SUBSTR(A.JPSDT, 1, 6) <![CDATA[ <= ]]>
+			#{dumcb}
+			
+			<if test='allCheckbox2.equals("E1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>		
+			GROUP BY SUBSTR(A.JPSDT, 1, 6)) AS C ON A.PLNYM = C.PLNYM
+			LEFT OUTER JOIN 
+			(SELECT A.PLNYM,
+			<choose>
+				<when test='allCheckbox1.equals("S")'>
+					0 AS P_COST_Y
+				</when>
+				<otherwise>
+					SUM(A.MONQY * A.YESCS) / 100000000 AS P_COST_Y
+				</otherwise>
+			</choose>
+			FROM PSCDBLIB.SPY200PF A
+			WHERE A.PLNYM <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND A.PLNYM <![CDATA[ <= ]]>
+			#{edumcb}
+			<if test='allCheckbox1.equals("S1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>
+			GROUP BY A.PLNYM) AS D ON A.PLNYM = D.PLNYM
+			LEFT OUTER JOIN 
+			(SELECT A.PLNYM,
+			<choose>
+				<when test='allCheckbox1.equals("S")'>
+					0 AS P_COST_M
+				</when>
+				<otherwise>
+					SUM(CASE WHEN 1 = 1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END) /
+					100000000 AS P_COST_M
+				</otherwise>
+			</choose>
+			FROM PSCDBLIB.SPM110PF A
+			WHERE A.PLNYM <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND A.PLNYM <![CDATA[ <= ]]>
+			#{edumcb}
+			<if test='allCheckbox1.equals("S1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>
+			GROUP BY A.PLNYM) AS E ON A.PLNYM = E.PLNYM
+			LEFT OUTER JOIN 
+			(SELECT SUBSTR(A.JPSDT, 1, 6) AS PLNYM,
+			<choose>
+				<when test='allCheckbox1.equals("S")'>
+					0 AS P_COST_S
+				</when>
+				<otherwise>
+					SUM(A.JPSAM) / 100000000 AS P_COST_S
+				</otherwise>
+			</choose>
+			FROM PSCDBLIB.SMD110PF A
+			WHERE SUBSTR(A.JPSDT, 1, 6) <![CDATA[ >= ]]>
+			#{sdumcb}
+			AND SUBSTR(A.JPSDT, 1, 6) <![CDATA[ <= ]]>
+			#{dumcb}
+			<if test='allCheckbox1.equals("S1List")'>
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i"
+					separator="," open="(" close=")">
+					#{arr}
+				</foreach>
+			</if>
+			GROUP BY SUBSTR(A.JPSDT, 1, 6)) AS F ON A.PLNYM = F.PLNYM )
+			ORDER BY A.PLNYM
+		
+	</select>
+	
+	<select id="searchBySalPlnListSum" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+	SELECT 
+			(CASE WHEN #{orgComps}='AL' THEN SUM(A.P_COST_Y + C.P_COST_Y) WHEN #{orgComps}='PE' THEN SUM(A.P_COST_Y) ELSE SUM(C.P_COST_Y) END) AS P_COST_Y,
+			(CASE WHEN #{orgComps}='AL' THEN SUM(B.P_COST_S + D.P_COST_S) WHEN #{orgComps}='PE' THEN SUM(B.P_COST_S) ELSE SUM(D.P_COST_S) END) AS P_COST_S,
+            (CASE WHEN #{orgComps}='AL' THEN SUM(B.P_COST_S + D.P_COST_S)-SUM(A.P_COST_Y + C.P_COST_Y) WHEN #{orgComps}='PE' THEN SUM(B.P_COST_S)- SUM(A.P_COST_Y) ELSE SUM(D.P_COST_S)-SUM(C.P_COST_Y) END) AS RATE
+		/*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnListSum' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnListSum'*/
+	FROM
+			(
+			SELECT
+				A.PLNYM,
+				<choose>
+					<when test='allCheckbox2.equals("E")'>
+						0 AS P_COST_Y
+					</when>
+					<otherwise>
+						SUM(A.MONQY*A.YESCS) / 100000000 AS P_COST_Y
+					</otherwise>
+				</choose>				
+				FROM
+				PSEDBLIB.SPY200PF A
+				WHERE
+				A.PLNYM <![CDATA[ >= ]]> #{sdumcb}
+				AND A.PLNYM <![CDATA[ <= ]]> #{edumcb}
+				<if test='allCheckbox2.equals("E1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+				</if>
+				GROUP BY A.PLNYM
+		) AS A LEFT OUTER JOIN
+		(
+			SELECT  
+			  	SUBSTR(A.JPSDT, 1,6) AS PLNYM,
+			     <choose>
+					<when test='allCheckbox2.equals("E")'>
+						0 AS P_COST_S
+					</when>
+					<otherwise>
+						SUM(A.JPSAM) / 100000000 AS P_COST_S
+					</otherwise>
+				</choose>
+				FROM
+				PSEDBLIB.SMD110PF A
+				WHERE
+				SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb}
+				AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb}
+				<if test='allCheckbox2.equals("E1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+				</if>
+				GROUP BY SUBSTR(A.JPSDT, 1,6)
+		) AS B ON A.PLNYM = B.PLNYM
+		  LEFT OUTER JOIN
+		(
+			SELECT
+			 	A.PLNYM,  
+			 	<choose>
+					<when test='allCheckbox1.equals("S")'>
+						0 AS P_COST_Y
+					</when>
+					<otherwise>
+						SUM(A.MONQY*A.YESCS) / 100000000 AS P_COST_Y
+					</otherwise>
+				</choose>	 
+				FROM
+				PSCDBLIB.SPY200PF A
+				WHERE
+				A.PLNYM <![CDATA[ >= ]]> #{sdumcb}
+				AND A.PLNYM <![CDATA[ <= ]]> #{edumcb}
+				<if test='allCheckbox1.equals("S1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+				</if>
+				GROUP BY A.PLNYM
+		) AS C ON A.PLNYM = C.PLNYM
+			LEFT OUTER JOIN
+		(
+			SELECT 
+				SUBSTR(A.JPSDT, 1,6) AS PLNYM,
+			     <choose>
+					<when test='allCheckbox1.equals("S")'>
+						0 AS P_COST_S
+					</when>
+					<otherwise>
+						SUM(A.JPSAM) / 100000000 AS P_COST_S
+					</otherwise>
+				</choose>
+				FROM
+				PSCDBLIB.SMD110PF A
+				WHERE
+				SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb}
+				AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb}
+				<if test='allCheckbox1.equals("S1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+				</if>
+				GROUP BY SUBSTR(A.JPSDT, 1,6)
+		) AS D ON A.PLNYM = D.PLNYM
+		
+	</select>
+	
+	<select id="searchByCondition" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PE")'>
+		
+			select 
+				(select Z.mstrm from PSEDBLIB.mst050pf Z where trim(Z.grpcd) = 'PRD' and trim(Z.mstcd) = A.PRDCD  fetch first 1 row only) as ITEM_CD,
+		        A.P_QTY_M AS P_QTY_M,
+		        B.P_QTY_S AS P_QTY_S,
+		        CASE B.P_QTY_S  WHEN 0 THEN 0 
+				ELSE 	
+					CASE A.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(B.P_QTY_S as FLOAT) / CAST(A.P_QTY_M as FLOAT))  *  100, 2) END 
+				END AS RATE	     
+				/*'SqlMap-SalPlnPerfmncMtReprtExl.searchByCondition' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchByCondition'*/   
+			from 
+				(SELECT
+					A.prdcd AS prdcd,  
+					SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) / 1000000 AS P_QTY_M
+				FROM PSEDBLIB.SPM110PF A
+				WHERE
+					A.PLNYM = #{dumcb}--계획년월
+					<if test='allCheckbox2.equals("E1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+					</if>					
+					<if test='allCheckbox2.equals("E")'>
+						AND A.PRDCD = '9999'
+					</if>
+				GROUP BY A.prdcd
+				) A,
+				(SELECT
+					A.prdcd AS prdcd,
+					SUM(A.JPSAM) / 1000000 AS P_QTY_S
+				FROM
+					PSEDBLIB.SMD110PF A
+				WHERE
+					SUBSTR(A.JPSDT, 1,6) = #{dumcb}
+					<if test='allCheckbox2.equals("E1List")'>	 	
+					 AND A.PRDCD IN
+					<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+					</if>	
+					<if test='allCheckbox2.equals("E")'>
+						AND A.PRDCD = '9999'
+					</if>					
+					GROUP BY A.prdcd) B
+					
+			WHERE
+				 A.prdcd = B.prdcd
+		</if>
+		
+		<if test='orgComps.equals("AL")'>
+			UNION ALL
+		</if>
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PS")'>
+		
+			select 
+				(select Z.mstrm from PSCDBLIB.mst050pf Z where trim(Z.grpcd) = 'PRD' and trim(Z.mstcd) = A.PRDCD fetch first 1 row only) as ITEM_CD,
+		        A.P_QTY_M AS P_QTY_M,
+		        B.P_QTY_S AS P_QTY_S,
+		        CASE B.P_QTY_S  WHEN 0 THEN 0 
+				ELSE 	
+					CASE A.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(B.P_QTY_S as FLOAT) / CAST(A.P_QTY_M as FLOAT))  *  100, 2) END 				 
+				END AS RATE
+				/*'SqlMap-SalPlnPerfmncMtReprtExl.searchByCondition' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchByCondition'*/   
+			from 
+				(SELECT
+					A.prdcd AS prdcd,  
+					SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) / 1000000 AS P_QTY_M
+				FROM PSCDBLIB.SPM110PF A
+				WHERE
+					A.PLNYM = #{dumcb}--계획년월
+					<if test='allCheckbox1.equals("S1List")'>	 		 
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+					</if>
+					<if test='allCheckbox1.equals("S")'>
+						AND A.PRDCD = '9999'
+					</if>
+				GROUP BY A.prdcd
+				) A,
+				(SELECT
+					A.prdcd AS prdcd,
+					SUM(A.JPSAM) / 1000000 AS P_QTY_S
+				FROM
+					PSCDBLIB.SMD110PF A
+				WHERE
+ 					SUBSTR(A.JPSDT, 1,6) = #{dumcb}
+					<if test='allCheckbox1.equals("S1List")'>	 	
+					AND A.PRDCD IN
+					<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+					 #{arr}
+					</foreach>	
+					</if>	
+					<if test='allCheckbox1.equals("S")'>
+						AND A.PRDCD = '9999'
+					</if>					
+					GROUP BY A.prdcd) B
+					
+			WHERE
+				A.prdcd = B.prdcd
+		</if>
+		
+	</select>
+	
+	<select id="searchBySalPlnGrid" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PE")'>
+		
+		select
+		  '${locNm1}' as COMPS,
+		  'P_QTY_Y' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_Y end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_Y end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_Y end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_Y end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_Y end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_Y end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_Y end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_Y end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_Y end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_Y end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_Y end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_Y end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(      select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_Y / CAST(100000000 AS FLOAT)),0) AS P_QTY_Y 
+		      from
+		      (SELECT
+		      A.PLNYM, 
+		      SUM(A.MONQY*A.YESCS) AS P_QTY_Y
+		      FROM PSEDBLIB.SPY200PF A
+		      WHERE
+		      A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+		      AND A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월 
+      		  AND A.PLNYM <![CDATA[ <= ]]> #{edumcb} --계획년월
+			<if test='allCheckbox2.equals("E1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+			</if>
+			<if test='allCheckbox2.equals("E")'>
+						AND A.PRDCD = '9999'
+			</if>	  		  
+		GROUP BY A.PLNYM) A
+		
+		) A
+		
+		</if>
+		
+		<if test='orgComps.equals("AL")'>		
+		UNION ALL
+		</if>
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PS")'>
+		
+		select
+		  '${locNm2}' as COMPS,
+		  'P_QTY_Y' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_Y end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_Y end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_Y end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_Y end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_Y end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_Y end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_Y end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_Y end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_Y end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_Y end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_Y end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_Y end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(      select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_Y / CAST(100000000 AS FLOAT)),0) AS P_QTY_Y
+		      from
+		      (SELECT
+		      A.PLNYM, 
+		      SUM(A.MONQY*A.YESCS) AS P_QTY_Y
+		      FROM PSCDBLIB.SPY200PF A
+		      WHERE
+		      A.PLNGB = #{plngb} --계획구분) 1 : 계획, 2:수정
+		      AND A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월 
+      		  AND A.PLNYM <![CDATA[ <= ]]> #{edumcb} --계획년월
+			<if test='allCheckbox1.equals("S1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+			</if>
+			<if test='allCheckbox1.equals("S")'>
+						AND A.PRDCD = '9999'
+			</if>
+		      GROUP BY A.PLNYM) A
+		
+		) A
+		
+		</if>
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PE")'>
+		
+		UNION ALL
+		
+		select
+		  '${locNm1}' as COMPS,
+		  'P_QTY_M' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_M end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_M end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_M end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_M end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_M end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_M end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_M end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_M end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_M end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_M end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_M end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_M end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(            
+		
+		select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_M / CAST(100000000 AS FLOAT)),0) AS P_QTY_M
+		      from
+		
+		(SELECT
+		      A.PLNYM,   
+		      SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_QTY_M
+		      FROM PSEDBLIB.SPM110PF A
+		      WHERE
+		      A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월 
+      		  AND A.PLNYM <![CDATA[ <= ]]> #{edumcb} --계획년월
+			<if test='allCheckbox2.equals("E1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+			</if>
+			<if test='allCheckbox2.equals("E")'>
+						AND A.PRDCD = '9999'
+			</if>
+		      GROUP BY A.PLNYM) A
+		) A
+		
+		</if>		
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PS")'>
+		
+		UNION ALL
+		
+		select
+		  '${locNm2}' as COMPS,
+		  'P_QTY_M' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_M end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_M end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_M end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_M end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_M end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_M end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_M end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_M end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_M end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_M end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_M end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_M end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(            
+		
+		select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_M / CAST(100000000 AS FLOAT)),0) AS P_QTY_M
+		      from
+		(SELECT
+		      A.PLNYM,   
+		      SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_QTY_M
+		      FROM PSCDBLIB.SPM110PF A
+		      WHERE
+		      A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월 
+      		  AND A.PLNYM <![CDATA[ <= ]]> #{edumcb} --계획년월 
+			<if test='allCheckbox1.equals("S1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+				</if>
+			<if test='allCheckbox1.equals("S")'>
+						AND A.PRDCD = '9999'
+			</if>    		  
+		      GROUP BY A.PLNYM) A
+		
+		) A
+		
+		</if>
+		
+		<if test='orgComps.equals("AL") or orgComps.equals("PE")'>
+		
+		UNION ALL
+		
+		select
+		  '${locNm1}' as COMPS,
+		  'P_QTY_S' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_S end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_S end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_S end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_S end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_S end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_S end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_S end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_S end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_S end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_S end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_S end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_S end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(            
+		
+		select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_S / CAST(100000000 AS FLOAT)),0) AS P_QTY_S
+		      from
+		
+		(SELECT
+		      SUBSTR(A.JPSDT, 1,6) AS PLNYM,  
+		      SUM(A.JPSAM) AS P_QTY_S
+		      FROM
+		      PSEDBLIB.SMD110PF A
+		      WHERE
+		      SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb} --계획년월
+		      AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb} --계획년월 
+			<if test='allCheckbox2.equals("E1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPe" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+				</if>
+			<if test='allCheckbox2.equals("E")'>
+						AND A.PRDCD = '9999'
+			</if>
+		      GROUP BY SUBSTR(A.JPSDT, 1,6)) A
+		) A
+		
+		</if>
+				
+		<if test='orgComps.equals("AL") or orgComps.equals("PS")'>
+		
+		UNION ALL
+		
+		select
+		  '${locNm2}' as COMPS,
+		  'P_QTY_S' as CD1,
+		  COALESCE(SUM(case when PLNYM = #{sdumcb} then P_QTY_S end),0) as Apr,
+		  COALESCE(SUM(case when PLNYM = #{mayStr} then P_QTY_S end),0) as May,
+		  COALESCE(SUM(case when PLNYM = #{junStr} then P_QTY_S end),0) as Jun,
+		  COALESCE(SUM(case when PLNYM = #{julStr} then P_QTY_S end),0) as Jul,
+		  COALESCE(SUM(case when PLNYM = #{augStr} then P_QTY_S end),0) as Aug,
+		  COALESCE(SUM(case when PLNYM = #{sepStr} then P_QTY_S end),0) as Sep,
+		  COALESCE(SUM(case when PLNYM = #{octStr} then P_QTY_S end),0) as Oct,
+		  COALESCE(SUM(case when PLNYM = #{novStr} then P_QTY_S end),0) as Nov,
+		  COALESCE(SUM(case when PLNYM = #{decStr} then P_QTY_S end),0) as Dec,
+		  COALESCE(SUM(case when PLNYM = #{janStr} then P_QTY_S end),0) as Jan,
+		  COALESCE(SUM(case when PLNYM = #{febStr} then P_QTY_S end),0) as Feb,
+		  COALESCE(SUM(case when PLNYM = #{edumcb} then P_QTY_S end),0) as Mar
+		 /*'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid'*/   
+		from
+		(            
+		
+		select 
+		      A.PLNYM,
+		      ROUND((A.P_QTY_S / CAST(100000000 AS FLOAT)),0) AS P_QTY_S
+		      from
+		(SELECT
+		      SUBSTR(A.JPSDT, 1,6) AS PLNYM,  
+		      SUM(A.JPSAM) AS P_QTY_S
+		      FROM
+		      PSCDBLIB.SMD110PF A
+		      WHERE
+		      SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb} --계획년월
+		      AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb} --계획년월 
+		      	<if test='allCheckbox1.equals("S1List")'>	 
+				AND A.PRDCD IN
+				<foreach collection="checkBoxPs" item="arr" index="i" separator="," open="(" close=")">
+				 #{arr}
+				</foreach>	
+				</if>
+				<if test='allCheckbox1.equals("S")'>
+						AND A.PRDCD = '9999'
+				</if>			
+		      GROUP BY SUBSTR(A.JPSDT, 1,6)) A
+		
+		) A
+		
+		</if>		
+		
+	</select>
+	
+	<select id="searchBySalPlnGrid_old" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+		
+      SELECT
+      '${gridLb1}' AS CD1,
+      '${locNm1}' AS CD2,
+      A.PLNYM, 
+      SUM(A.MONQY*A.YESCS) / 100000000 AS DATA
+      FROM PSEDBLIB.SPY200PF A
+      WHERE
+      'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid_old' = 'SqlMap-SalPlnPerfmncMtReprtExl.searchBySalPlnGrid_old'
+      AND A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+      AND A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월 
+      AND A.PLNYM <![CDATA[ <= ]]> #{dumcb} --계획년월 
+
+         AND A.COMPS IN ('E1') --C1:창원, S1:화성, H1:홍성
+         AND A.PLTCD = 'A1' --C1:창원, S1:화성, H1:홍성, A1:마산
+
+      GROUP BY A.PLNYM
+
+	UNION ALL
+	
+	SELECT
+	      '${gridLb1}' AS CD1,
+	      '${locNm2}' AS CD2,
+	      A.PLNYM, 
+	      SUM(A.MONQY*A.YESCS) / 100000000 AS DATA
+	      FROM PSCDBLIB.SPY200PF A
+	      WHERE
+	      A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+	      AND A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월
+	      AND A.PLNYM <![CDATA[ <= ]]> #{dumcb} --계획년월
+	
+	         AND A.COMPS IN ('C1', 'S1') --C1:창원, S1:화성, H1:홍성
+	         AND A.PLTCD IN ('C1', 'S1') --C1:창원, S1:화성, H1:홍성, A1:마산
+	
+	      GROUP BY A.PLNYM
+	
+	
+	UNION ALL
+	
+	      SELECT
+	      '${gridLb2}' AS CD1,
+	      '${locNm1}' AS CD2,
+	      A.PLNYM,   
+	      SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) / 100000000 AS DATA
+	      FROM PSEDBLIB.SPM110PF A
+	      WHERE
+	      A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월
+	      AND A.PLNYM <![CDATA[ <= ]]> #{dumcb} --계획년월
+	
+	         AND A.COMPS IN ('E1') --C1:창원, S1:화성, H1:홍성
+	         AND A.PLTCD = 'A1' --C1:창원, S1:화성, H1:홍성, A1:마산
+	
+	      GROUP BY A.PLNYM
+	
+	UNION ALL
+	
+	SELECT
+	      '${gridLb2}' AS CD1,
+	      '${locNm2}' AS CD2,
+	      A.PLNYM,   
+	      SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) / 100000000 AS DATA
+	      FROM PSCDBLIB.SPM110PF A
+	      WHERE
+	      A.PLNYM <![CDATA[ >= ]]> #{sdumcb} --계획년월
+	      AND A.PLNYM <![CDATA[ <= ]]> #{dumcb} --계획년월
+	
+	         AND A.COMPS IN ('C1', 'S1') --C1:창원, S1:화성, H1:홍성
+	         AND A.PLTCD IN ('C1', 'S1') --C1:창원, S1:화성, H1:홍성, A1:마산
+	
+	      GROUP BY A.PLNYM
+	
+	UNION ALL
+	
+	SELECT
+	      '${gridLb3}' AS CD1,
+	      '${locNm1}' AS CD2,
+	      SUBSTR(A.JPSDT, 1,6) AS PLNYM,  
+	      SUM(A.JPSAM) / 100000000 AS DATA
+	      FROM
+	      PSEDBLIB.SMD110PF A
+	      WHERE
+	      SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb} --계획년월
+	      AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb}  --계획년월
+	
+	         AND A.COMPS IN ('E1') --C1:창원, S1:화성, H1:홍성
+	
+	      GROUP BY SUBSTR(A.JPSDT, 1,6)
+	
+	UNION ALL
+	
+	SELECT
+	      '${gridLb3}' AS CD1,
+	      '${locNm2}' AS CD2,
+	      SUBSTR(A.JPSDT, 1,6)  AS PLNYM,  
+	      SUM(A.JPSAM) / 100000000 AS DATA
+	      FROM
+	      PSCDBLIB.SMD110PF A
+	      WHERE
+	      SUBSTR(A.JPSDT, 1,6) <![CDATA[ >= ]]> #{sdumcb} --계획년월
+	      AND SUBSTR(A.JPSDT, 1,6) <![CDATA[ <= ]]> #{dumcb}  --계획년월
+	
+	         AND A.COMPS IN ('C1', 'S1') --C1:창원, S1:화성, H1:홍성
+	
+	      GROUP BY SUBSTR(A.JPSDT, 1,6)
+	
+	ORDER BY CD1, CD2, PLNYM
+			
+	</select>
+	
+</mapper>

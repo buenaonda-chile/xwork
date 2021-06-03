@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.denso.mapper.LoginMapper">
+	
+	<select id="test" resultType="java.util.HashMap">
+
+		select X.PSPNO, X.TAXDTM, SUM(X.TAXQY) AS TAXQY from (
+			select  A.PSPNO, INT(A.TAXDT/100) as taxdtm, A.TAXQY
+			from psedblib.SJT110PF A 
+		 	LEFT OUTER JOIN pereslib.bm008pr B on A.pspno = B.ITNBR	
+			LEFT OUTER JOIN (SELECT Y.* FROM pereslib.em000pr Y where Y.edatm = (select max(X.edatm) from pereslib.em000pr x where Y.cusno=x.cusno and Y.prtno=x.prtno)) F ON A.PYVND=F.CUSNO AND A.PSPNO=F.PRTNO
+			LEFT OUTER JOIN PERESLIB.CUSMAS H ON A.PYVND = H.CUSNO
+			LEFT OUTER JOIN PSEDBLIB.MST100PF C  ON A.PSPNO=C.PRTNO 
+			where TAXDT BETWEEN 20020101 AND 20150331
+			 
+			ORDER  BY  A.PSPNO, A.TAXDT
+		) X
+		group by X.PSPNO, X.taxdtm
+	
+	</select>
+	
+	<select id="testGroup" resultType="tblSjt">
+			select TRIM(X.PSPNO) as pspno, TRIM(X.CPRTN) as cprtn , TRIM(X.ITDSC) as itdsc, TRIM(X.BDYCD) as bdycd, TRIM(X.CARCD) as carcd, TRIM(X.PYVND) as pyvnd, TRIM(X.CUSNM) as cusnm, TRIM(X.TAXDTM) as taxdtm , SUM(X.TAXQY) AS taxqy ,SUM(X.TAXAM) AS taxam
+				from (
+					select  A.PSPNO, F.CPRTN, B.ITDSC, C.BDYCD, C.CARCD, A.PYVND, H.CUSNM, INT(A.TAXDT/100) as TAXDTM, A.TAXQY, A.TAXAM
+					from psedblib.SJT110PF A 
+			 		LEFT OUTER JOIN pereslib.bm008pr B on A.pspno = B.ITNBR	
+					LEFT OUTER JOIN (SELECT Y.* FROM pereslib.em000pr Y where Y.edatm = (select max(X.edatm) from pereslib.em000pr x where Y.cusno=x.cusno and Y.prtno=x.prtno)) F ON A.PYVND=F.CUSNO AND A.PSPNO=F.PRTNO
+					LEFT OUTER JOIN PERESLIB.CUSMAS H ON A.PYVND = H.CUSNO
+					LEFT OUTER JOIN PSEDBLIB.MST100PF C  ON A.PSPNO=C.PRTNO 
+					where TAXDT BETWEEN 20020101 AND 20150331
+					ORDER  BY  A.PSPNO, A.TAXDT
+				) X
+			group by X.PSPNO, X.PSPNO, X.CPRTN, X.ITDSC, X.BDYCD, X.CARCD, X.PYVND, X.CUSNM, X.TAXDTM
+			ORDER BY X.PSPNO, X.TAXDTM
+	</select>
+	
+</mapper>

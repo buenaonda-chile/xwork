@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="600" Id="form_HttpMultiPart" Left="8" PidAttrib="7" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset1">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<FileDialog Bottom="32" Height="24" Id="FileDlg" Left="744" Right="768" TabOrder="4" Top="8" Width="24"></FileDialog>
+		<Grid BindDataset="Dataset1" BkColor2="default" BoldHead="true" Bottom="208" Editable="TRUE" Enable="true" EndLineColor="default" Height="160" Id="Grid0" InputPanel="FALSE" Left="56" LineColor="default" OnCellDBLClick="Grid0_OnCellDblClick" Right="616" RowHeight="30" TabOrder="2" TabStop="true" Top="48" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="default" WheelScrollRow="1" Width="560">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="121"/>
+						<col width="301"/>
+						<col width="123"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="filename"/>
+						<cell col="1" display="text" text="prog_bar"/>
+						<cell col="2" display="text"/>
+					</head>
+					<body>
+						<cell col="0" colid="filename" display="text"/>
+						<cell align="left" col="1" colid="prog_bar" color="red" display="bar"/>
+						<cell align="center" col="2" colid="filesize" display="text" expr='progsize+&quot;/&quot;&#32;+&#32;filesize'/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="34" Id="Button2" Left="326" OnClick="Button2_OnClick" TabOrder="2" Text="첨부파일&#32;올리기" Top="216" Width="158"></Button>
+		<CyHttpFile Height="24" Id="CyHttpFile0" Left="712" Top="8" Width="24"></CyHttpFile>
+		<Button Height="34" Id="Button1" Left="170" OnClick="Button1_OnClick" TabOrder="3" Text="파일선택" Top="216" Width="148"></Button>
+		<Image Height="248" Id="Image0" Left="56" TabOrder="4" Top="296" Width="560"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::fileupdown.js"
+
+
+//파일 업로드(httpfile 컨포넌트이용)
+function Button2_OnClick(obj)
+{
+	var ret;
+	var isNewRow = 0;
+	
+	trace("데이터셋 로우 수:" + Dataset1.rowcount);
+	
+	//파일선택 버튼을 이용해서 선택된 파일이 없는 경우 처리 생략
+	if(Dataset1.rowcount != 0){
+	
+		//데이터셋 로우 수 만큼 루프
+		for ( var i = 0 ; i < Dataset1.rowcount ; i++ )
+		{
+			
+			// 풀경로 취득
+			var file_url = Dataset1.getColumn(i,"fullname");
+			// 파일 사이즈 취득
+			file_size = CyHttpFile0.GetFileSizeLocal(file_url);
+			trace("파일사이즈" + file_size);
+			
+			//사이즈 체크(5MB제한)
+			if(file_size > 5000000){
+				alert("업로드 가능 용량은 5MB입니다. 확인하고 다시 시도해주십시오.");
+				return;
+			}
+			
+			//현재 한 파일을 먼저 업로드 하고 다시 다른 파일을 선택하고 업로드 버튼 누르면 처음 파일도 같이 업로드 됨  
+			//위의 문제 점을 해결하기 위해 기존에 업로드 되었는지 체크
+			var chkflag = Dataset1.getColumn(i,"chk");
+			trace("체크플래그:" + chkflag);
+			
+			//기존에 업로드 되었다면 1, 안되었다면 공백
+			if(chkflag != "1"){
+				
+				trace("체크인:" + i);
+				
+				//체크항목에 1설정(업로드 되었다는 의미)	
+				Dataset1.setColumn(i,"chk", "1");
+				
+				//추가된 파일의 존재 유무(유:1, 무:0)	
+				isNewRow = 1;
+				
+				//로컬에서 선택한 파일명을 취득하여 변수에 설정
+				var str_param = Dataset1.getColumn(i,"filename");
+				//업로드 할 서버 경로와 파일명
+				var str_param_server = "D:/04.develop/workspace/DENSO/WebContent/bojen/images/" + str_param;
+				
+				//스크립트 파일의 함수 호출 
+				//CyHttpFile0객체(대용량데이터 이동지원 객체), 경로(파일명포함), 파일명
+				//ret = gfn_FileWrite(CyHttpFile0,Dataset1.getColumn(i,"fullname"), str_param, i, "prog_bar", grid0);
+				ret = gfn_FileWrite(CyHttpFile0,file_url, str_param_server, i, "prog_bar", grid0);
+				
+
+				
+				trace("파일명:" + str_param);
+				trace("경로명:" + Dataset1.getColumn(i,"fullname"));
+				
+				//호출함수 리턴값 처리
+				if ( ret[0] == "FAIL" )
+				{
+					alert(ret[1]);
+					break;
+				}
+			} 
+		}
+		
+		//추가된 파일이 없으면 메세지출력
+		if(isNewRow != 1){
+			alert("새롭게 선택된 파일이 없습니다. 새롭게 파일을 선택하고 업로드 해주십시오.");
+		}
+		
+	}else{
+	
+		alert("선택된 파일이 없습니다. 파일을 선택해 주십시오.");
+	}
+}
+
+//파일 다운로드(httpfile 컨포넌트이용)
+function Grid0_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+
+	//다운로드 받을 파일명을 취득하여 변수에 설정(클릭한 로우의 파일)
+	var str_param = Dataset1.getColumn(nRow,"filename");
+	//다운로드 받을 파일이 저장되어있는 서버 경로와 파일명
+	var str_param_server = "D:/04.develop/workspace/DENSO/WebContent/bojen/images/" + str_param;
+				
+	trace("str_param:" + str_param);
+	trace("str_param_server:" + str_param_server);
+	
+	//-----------  다이얼로그창  설정------------------
+    //다이얼로그창에 다운받을 파일명 설정
+	FileDlg.FileName= str_param;
+    //다이얼로그창에 다운받을 기본경로 설정
+	FileDlg.FilePath= "C:\\";
+	//다이얼로그창 버튼 SAVE로 설정
+	FileDlg.Type = "SAVE";
+	//확장자가 없을 때 기본 확장자 설정
+	FileDlg.AppendExtDefault = "TRUE";
+	
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 처리 계속
+	if(FileDlg.Open()){
+	
+		//다운로드 받을 경로(로컬)
+		//var str_param_full = "C:/download/" + Dataset1.getColumn(nRow,"filename"); //다이얼로그창 미사용시(고정폴더)
+		var str_param_full = FileDlg.FilePath + "\\" + FileDlg.FileName;
+		
+		
+		trace("파일명:" + str_param);
+		trace("경로(파일명):" + str_param_full);
+		
+		//스크립트 파일의 함수 호출 
+		var ret = gfn_FileRead(CyHttpFile0, str_param_full,str_param_server, dataset1.getColumn(nRow,"filesize"),nRow, "prog_bar", grid0);
+		
+		//호출함수 리턴값 처리
+		if ( ret[0] == "FAIL" )
+		{
+			alert(ret[1]);
+		}	
+		
+		//다운받은 이미지 화면에 표시(이미지 컴포넌트에 로컬경로 연결시 "/"가 아닌 "\\"기재해야함
+		//Image0.ImageID = "c:\\download\\" + str_param;
+		Image0.ImageID = str_param_full;
+	}
+}
+
+//파일 선택 
+function Button1_OnClick(obj)
+{
+	//다이얼로그창에 업로드 할 파일 기본경로 설정
+	FileDlg.FilePath= "C:\\";
+	//다이얼로그창 버튼 OPEN으로 설정(안해주면 저장 후 다시 파일찾기 할 경우 저장버튼으로 됨)
+	FileDlg.Type = "OPEN";
+	//다이얼로그창에서 보여지는 파일의 확장자 설정
+	//현재 jpg 또는 gif만 보여지도록 설정
+	FileDlg.Filter = "*.jpg|*.JPG|*.gif|*.GIF|";
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 데이터셋에 설정
+	if(FileDlg.Open()){
+	
+		//데이터셋에 로우 추가
+		Dataset1.addRow();
+		//다이얼로그에서 선택한 파일의 경로명(파일명포함)을 데이터셋에 저장
+		Dataset1.SetColumn(Dataset1.row,"fullname",FileDlg.FilePath + "\\" + FileDlg.FileName);
+		//다이얼로그에서 선택한 파일명을 데이터셋에 저장
+		Dataset1.SetColumn(Dataset1.row,"filename",FileDlg.FileName);	
+	}
+	
+	//다이얼로그창에 다운받을 파일명 초기화설정(안해주면 이전에 올렸던 파일명 그대로 존속)
+	FileDlg.FileName= "";
+}
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrivateAuthDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrivateAuth" type="PrivateAuthDomain">
+    	<result property="authCode" column="AUTH_CODE" />
+    	<result property="empNumber" column="EMP_NUMBER" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="menuCode" column="MCD_CODE" />
+        <result property="authNum" column="AUTH_NUM" />
+        <result property="menuName" column="MCD_NAME" />
+        <result property="menuDepth" column="MCD_DEPTH" />
+        <result property="menuDepthFullName" column="DEPTH_FULLNAME" />
+    </resultMap>
+
+    <resultMap id="SsoAuth" type="SsoAuthDomain">
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="empId" column="EMP_ID" />
+        <result property="company" column="COMPANY" />
+        <result property="sysSeq" column="SYS_SEQ" />
+        <result property="sysName" column="SYS_NAME" />
+        <result property="useTf" column="USE_TF"/>
+        <result property="useCompany" column="USE_COMPANY"/>
+    </resultMap>
+    
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="PrivateAuth" parameterType="PrivateAuthDomain">
+        select 
+                A.EMP_NUMBER EMP_NUMBER
+              , B.MCD_CODE MCD_CODE
+              , A.AUTH_NUM AUTH_NUM
+              , B.MCD_NAME MCD_NAME
+              , B.MCD_DEPTH MCD_DEPTH
+              , B.DEPTH_FULLNAME DEPTH_FULLNAME
+        from 
+              ( select 
+              		  MCD_CODE
+              		, EMP_NUMBER
+              		, AUTH_NUM 
+             	from 
+             		DNKR_PRIVATE_AUTH 
+             	where 
+             		'SqlMap-PrivateAuth.searchByKey' = 'SqlMap-PrivateAuth.searchByKey'
+             	<if test="empNumber != null and empNumber != ''">	
+             		and EMP_NUMBER = #{empNumber}
+            	</if>	
+              ) A 
+        	RIGHT OUTER JOIN 
+    		  ( SELECT 
+    		  		MCD_CODE
+    		  	  , MCD_REF
+    		  	  , MCD_DEPTH
+    		  	  , MCD_NAME
+    		  	  , LTRIM (SYS_CONNECT_BY_PATH (MCD_NAME, ' > '), ' > ') AS DEPTH_FULLNAME 
+        		FROM (
+            			select 
+            				  A.MCD_CODE MCD_CODE
+            				, A.MCD_USE MCD_USE
+            				, A.MCD_SORT MCD_SORT
+            				, A.MCD_REF MCD_REF
+            				, A.MCD_URI MCD_URI
+            				, A.MCD_DEPTH MCD_DEPTH
+            				, A.MCD_ICON MCD_ICON
+            				, A.MCD_NEW_WINDOW MCD_NEW_WINDOW
+            				, B.CMC_CODE CMC_CODE
+            				, B.MCD_NAME MCD_NAME 
+            			from 
+            				  DNKR_MENU_CODE A
+            				, DNKR_MENU_CODE_NM B 
+            			where 
+            					A.MCD_CODE = B.MCD_CODE 
+        				<if test="cmcLangCode != null and cmcLangCode != ''">
+            				and B.CMC_CODE=#{cmcLangCode}
+            			</if>	
+            			) 
+        		 START WITH MCD_REF = 0 CONNECT BY PRIOR MCD_CODE = MCD_REF
+        	  )B
+        ON 
+            A.MCD_CODE = B.MCD_CODE 
+        ORDER BY 
+        	to_number(B.MCD_CODE) ASC
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="PrivateAuth" parameterType="PrivateAuthDomain">
+        select 
+                A.EMP_NUMBER EMP_NUMBER
+              , B.MCD_CODE MCD_CODE
+              , A.AUTH_NUM AUTH_NUM
+              , B.MCD_NAME MCD_NAME
+              , B.MCD_DEPTH MCD_DEPTH
+              , B.DEPTH_FULLNAME DEPTH_FULLNAME
+        from 
+              ( select 
+              		  T.MCD_CODE AS MCD_CODE
+              		, P.EMP_NUMBER AS EMP_NUMBER
+              		, NVL(P.AUTH_NUM, T.AUTH_NUM) AS AUTH_NUM
+             	from 
+             		DNKR_AUTH_DETAIL T
+              LEFT JOIN DNKR_PRIVATE_AUTH P
+                ON P.MCD_CODE = T.MCD_CODE
+             	<if test="empNumber != null and empNumber != ''">	
+                and P.EMP_NUMBER = #{empNumber}
+            	</if>	
+             	where 
+             		'SqlMap-PrivateAuth.searchByCondition' = 'SqlMap-PrivateAuth.searchByCondition'
+       		  	<if test="authCode != null and authCode != ''">	
+             		AND T.AUTH_CODE = #{authCode}
+       			</if> 	   
+              ) A 
+        	RIGHT OUTER JOIN 
+    		  ( SELECT 
+    		  		MCD_CODE
+    		  	  , MCD_REF
+    		  	  , MCD_DEPTH
+    		  	  , MCD_NAME
+    		  	  , LTRIM (SYS_CONNECT_BY_PATH (MCD_NAME, ' > '), ' > ') AS DEPTH_FULLNAME 
+        		FROM (
+            			select 
+            				  A.MCD_CODE MCD_CODE
+            				, A.MCD_USE MCD_USE
+            				, A.MCD_SORT MCD_SORT
+            				, A.MCD_REF MCD_REF
+            				, A.MCD_URI MCD_URI
+            				, A.MCD_DEPTH MCD_DEPTH
+            				, A.MCD_ICON MCD_ICON
+            				, A.MCD_NEW_WINDOW MCD_NEW_WINDOW
+            				, B.CMC_CODE CMC_CODE
+            				, B.MCD_NAME MCD_NAME 
+            			from 
+            				  DNKR_MENU_CODE A
+            				, DNKR_MENU_CODE_NM B 
+            			where 
+            					A.MCD_CODE = B.MCD_CODE 
+        				<if test="cmcLangCode != null and cmcLangCode != ''">
+            				and B.CMC_CODE=#{cmcLangCode}
+            			</if>	
+            			) 
+        		 START WITH MCD_REF = 0 CONNECT BY PRIOR MCD_CODE = MCD_REF
+        	  )B
+        ON 
+            A.MCD_CODE = B.MCD_CODE
+        <!-- ORDER BY 
+        	to_number(B.MCD_CODE) ASC -->
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchAuthDetail" resultMap="PrivateAuth" parameterType="PrivateAuthDomain">
+        select
+                A.EMP_NUMBER EMP_NUMBER
+              , B.MCD_CODE MCD_CODE
+              , A.AUTH_NUM AUTH_NUM
+              , B.MCD_NAME MCD_NAME 
+              , B.MCD_DEPTH MCD_DEPTH
+              , B.DEPTH_FULLNAME DEPTH_FULLNAME
+        from 
+              ( select 
+              		  B.MCD_CODE MCD_CODE
+              		, A.EMP_NUMBER EMP_NUMBER 
+              		, B.AUTH_NUM AUTH_NUM
+             	from 
+             		  ( select 
+		              		  T.MCD_CODE AS MCD_CODE
+		              		, P.EMP_NUMBER AS EMP_NUMBER
+		              		, NVL(T.AUTH_NUM, P.AUTH_NUM) AS AUTH_NUM
+		             	from 
+		             		DNKR_AUTH_DETAIL T
+		              LEFT JOIN DNKR_PRIVATE_AUTH P
+		                ON P.MCD_CODE = T.MCD_CODE
+		             	<if test="empNumber != null and empNumber != ''">	
+		                and P.EMP_NUMBER = #{empNumber}
+		            	</if>	
+		             	where 
+		             		'SqlMap-PrivateAuth.searchByCondition' = 'SqlMap-PrivateAuth.searchByCondition'
+		       		  	<if test="authCode != null and authCode != ''">	
+		             		AND T.AUTH_CODE = #{authCode}
+		       			</if> 	   		
+            		  ) A
+            	right outer join	  
+             		  ( select
+             		  		  MCD_CODE
+		              		, AUTH_CODE 
+		              		, AUTH_NUM
+             		  	from 
+             		  		  DNKR_AUTH_DETAIL
+             		  	where
+             		  		'SqlMap-PrivateAuth.searchAuthDetail' = 'SqlMap-PrivateAuth.searchAuthDetail'
+             		  	<if test="authCode != null and authCode != ''">	
+             				and AUTH_CODE = #{authCode}
+            			</if> 	   
+             		  ) B
+             	on 
+             			A.MCD_CODE = B.MCD_CODE	
+             		
+              ) A 
+        	RIGHT OUTER JOIN 
+    		  ( SELECT 
+    		  		MCD_CODE
+    		  	  , MCD_REF
+    		  	  , MCD_DEPTH
+    		  	  , MCD_NAME
+    		  	  , LTRIM (SYS_CONNECT_BY_PATH (MCD_NAME, ' > '), ' > ') AS DEPTH_FULLNAME 
+        		FROM (
+            			select 
+            				  A.MCD_CODE MCD_CODE
+            				, A.MCD_USE MCD_USE
+            				, A.MCD_SORT MCD_SORT
+            				, A.MCD_REF MCD_REF
+            				, A.MCD_URI MCD_URI
+            				, A.MCD_DEPTH MCD_DEPTH
+            				, A.MCD_ICON MCD_ICON
+            				, A.MCD_NEW_WINDOW MCD_NEW_WINDOW
+            				, B.CMC_CODE CMC_CODE
+            				, B.MCD_NAME MCD_NAME 
+            			from 
+            				  DNKR_MENU_CODE A
+            				, DNKR_MENU_CODE_NM B 
+            			where 
+            					A.MCD_CODE = B.MCD_CODE 
+        				<if test="cmcLangCode != null and cmcLangCode != ''">
+            				and B.CMC_CODE=#{cmcLangCode}
+            			</if>	
+            			) 
+        		 START WITH MCD_REF = 0 CONNECT BY PRIOR MCD_CODE = MCD_REF
+        	  )B
+        ON 
+            A.MCD_CODE = B.MCD_CODE 
+        <!-- ORDER BY 
+        	to_number(B.MCD_CODE) ASC -->
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchMenuList" resultMap="PrivateAuth"
+        parameterType="PrivateAuthDomain">
+        select 
+                A.MCD_CODE
+              , B.MCD_NAME
+              , B.CMC_CODE
+              , A.MCD_DEPTH
+              , C.EMP_NUMBER
+              , C.AUTH_NUM
+        from 
+                DNKR_MENU_CODE A
+              , DNKR_MENU_CODE_NM B
+              , DNKR_PRIVATE_AUTH C
+        where 
+                'SqlMap-PrivateAuth.searchMenuList' = 'SqlMap-PrivateAuth.searchMenuList'
+            and A.MCD_CODE = B.MCD_CODE
+            and A.MCD_CODE = C.MCD_CODE
+        	and C.EMP_NUMBER = #{empNumber}
+            and A.MCD_USE = 'Y'
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="authNum != null and authNum != ''">
+            and C.AUTH_NUM = ${authNum}
+        </if>
+        <if test="authNum == null or authNum == ''">
+            and C.AUTH_NUM > 0
+        </if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="PrivateAuth"
+        parameterType="PrivateAuthDomain">
+        
+        select 
+                AUTH_CODE
+              , AUTH_USE
+              , CMC_CODE
+              , AUTH_NAME
+              , AUTH_DESCRIPTION
+        from (
+            select 
+                A.AUTH_CODE AUTH_CODE
+              , A.AUTH_USE AUTH_USE
+              , B.CMC_CODE CMC_CODE
+              , B.AUTH_NAME AUTH_NAME
+              , B.AUTH_DESCRIPTION AUTH_DESCRIPTION
+              , row_number() over (order by to_number(A.AUTH_CODE) desc) ROW_NUM
+        from 
+                DNKR_AUTH_CODE A
+              , DNKR_AUTH_CODE_NM B
+        where 
+                'SqlMap-PrivateAuth.searchByCondition' = 'SqlMap-PrivateAuth.searchByCondition'
+            and A.AUTH_CODE = B.AUTH_CODE
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.AUTH_USE = #{useYn}
+        </if>
+        <if test="authName != null and authName != ''">
+            and B.AUTH_NAME like '%' || #{authName} || '%'
+        </if>
+        <if test="authDescription != null and authDescription != ''">
+            and B.AUTH_DESCRIPTION = #{authDescription}
+        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="PrivateAuthDomain">
+        select 
+                count(rownum) 
+        from 
+             
+           		DNKR_PRIVATE_AUTH 
+       	where 
+           		'SqlMap-PrivateAuth.searchCount' = 'SqlMap-PrivateAuth.searchCount'
+           	<if test="empNumber != null and empNumber != ''">	
+   	    		and EMP_NUMBER = #{empNumber}
+           	</if>
+           	<if test="menuCode != null and menuCode != ''">	
+           		and MCD_CODE = #{menuCode}
+           	</if>	
+             
+    </select>
+    
+    <!-- 登録 SQL文  -->
+    <insert id="create" parameterType ="PrivateAuthDomain">
+        insert into DNKR_PRIVATE_AUTH (
+                /* SqlMap-PrivateAuth.create */
+            <if test="authNum != null">
+                AUTH_NUM,
+            </if>
+            <if test="menuCode != null">
+                MCD_CODE,
+            </if>
+            <if test="empNumber != null">
+                EMP_NUMBER
+            </if>
+        ) values (
+            <if test="authNum != null">
+                #{authNum},
+            </if>
+            <if test="menuCode != null">
+                #{menuCode},
+            </if>
+            <if test="empNumber != null">
+                #{empNumber}
+            </if>
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="PrivateAuthDomain">
+        update 
+                DNKR_PRIVATE_AUTH
+        set
+            <if test="authNum != null">
+                AUTH_NUM = #{authNum}
+            </if>
+        where 
+                'SqlMap-PrivateAuth.update' = 'SqlMap-PrivateAuth.update'
+            and EMP_NUMBER = #{empNumber}
+            and MCD_CODE = #{menuCode}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="PrivateAuthDomain">
+        delete from 
+                DNKR_PRIVATE_AUTH
+        where 
+                'SqlMap-PrivateAuth.delete' = 'SqlMap-PrivateAuth.delete'
+            and EMP_NUMBER = #{empNumber}
+    </delete>
+    
+    <select id="searchByConditionSsoAuth" resultMap="SsoAuth" parameterType="SsoAuthDomain">
+    <!--  
+	SELECT
+		A.SYS_SEQ, A.SYS_NAME, B.EMP_NUMBER, B.EMP_ID, B.COMPANY, nvl(B.USE_TF,'N') as USE_TF,
+		A.USE_COMPANY
+	FROM(
+		SELECT
+			A.SYS_SEQ, MAX(A.SYS_NAME) AS SYS_NAME, 
+		    CASE WHEN COUNT(A.SYS_SEQ)='2'THEN '공통' ELSE MAX(A.COMPANY) END AS USE_COMPANY
+		FROM
+			DNKR_SSO_LIST A
+		WHERE
+			'SqlMap-Auth.searchByConditionSsoAuth' = 'SqlMap-Auth.searchByConditionSsoAuth'
+			AND A.USE_YN='Y'
+			<if test="sysType != null and sysType != ''">
+				AND A.SYS_TYPE =#{sysType}
+            </if>
+            <if test="inoutType != null and inoutType != ''">
+				AND A.INOUT_TYPE =#{inoutType}
+            </if>
+			<if test="company != null and company != ''">
+                AND A.COMPANY=#{company}
+            </if>
+		GROUP BY A.SYS_SEQ
+		) A
+		LEFT OUTER JOIN DNKR_SSO_AUTH B ON A.SYS_SEQ=B.SYS_SEQ AND B.EMP_NUMBER=#{empNumber}
+	ORDER BY TO_NUMBER(A.SYS_SEQ)
+	-->
+	SELECT
+		A.SYS_SEQ, A.SYS_NAME, '${empNumber}' AS EMP_NUMBER, B.EMP_ID, '${changeCompany}' AS COMPANY, nvl(B.USE_TF,'N') as USE_TF, A.COMPANY AS USE_COMPANY
+	FROM
+		DNKR_SSO_LIST A
+		LEFT OUTER JOIN DNKR_SSO_AUTH B ON A.SYS_SEQ=B.SYS_SEQ AND B.EMP_NUMBER=#{empNumber} AND B.COMPANY = #{changeCompany}
+	WHERE
+		'SqlMap-Auth.searchByConditionSsoAuth' = 'SqlMap-Auth.searchByConditionSsoAuth'
+		AND A.USE_YN='Y'
+		<if test="sysType != null and sysType != ''">
+			AND A.SYS_TYPE =#{sysType}
+        </if>
+		<if test="inoutType != null and inoutType != ''">
+			AND A.INOUT_TYPE =#{inoutType}
+		</if>
+		<if test="company != null and company != ''">
+			AND A.COMPANY=#{company}
+		</if>
+    ORDER BY TO_NUMBER(A.SYS_SEQ)        
+    </select>
+    
+    <select id="searchCountSsoAuth" resultType="java.lang.Integer"
+        parameterType="SsoAuthDomain">
+        select 
+                count(rownum) 
+        from 
+             
+           		DNKR_SSO_AUTH 
+       	where 
+           		'SqlMap-PrivateAuth.searchCount' = 'SqlMap-PrivateAuth.searchCount'
+           	<if test="empNumber != null and empNumber != ''">	
+   	    		and EMP_NUMBER = #{empNumber}
+           	</if>
+           	<if test="sysSeq != null and sysSeq != ''">	
+           		and SYS_SEQ = #{sysSeq}
+           	</if>
+           	              
+    </select>
+    
+    <!-- 登録 SQL文  -->
+    <insert id="createSsoAuth" parameterType ="SsoAuthDomain">
+        insert into DNKR_SSO_AUTH (
+                /* SqlMap-PrivateAuth.createSsoAuth */
+            <if test="empNumber != null">
+                EMP_NUMBER,
+            </if>
+            <if test="empId != null">
+                EMP_ID,
+            </if>
+            <if test="sysSeq != null">
+                SYS_SEQ,
+            </if>
+            <if test="company != null">
+                COMPANY,
+            </if>
+            <if test="useTf != null">
+                USE_TF,
+            </if>
+            CREATE_USER, CREATE_DATE
+        ) values (
+            <if test="empNumber != null">
+                #{empNumber},
+            </if>
+             <if test="empId != null">
+                #{empId},
+            </if>
+             <if test="sysSeq != null">
+                #{sysSeq},
+            </if>
+             <if test="company != null">
+                #{company},
+            </if>
+             <if test="useTf != null">
+                #{useTf},
+            </if>             
+             #{createUser}, SYSDATE
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateSsoAuth" parameterType="SsoAuthDomain">
+        update 
+                DNKR_SSO_AUTH
+        set
+            <if test="useTf != null">
+                USE_TF = #{useTf},
+                UPDATE_USER = #{createUser},
+          		UPDATE_DATE = SYSDATE
+            </if>
+        where 
+			'SqlMap-PrivateAuth.updateSsoAuth' = 'SqlMap-PrivateAuth.updateSsoAuth'
+            and EMP_NUMBER = #{empNumber} and SYS_SEQ = #{sysSeq}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteSsoAuth" parameterType="SsoAuthDomain">
+        delete from 
+                DNKR_SSO_AUTH
+        where 
+			'SqlMap-PrivateAuth.deleteSsoAuth' = 'SqlMap-PrivateAuth.deleteSsoAuth'
+            and EMP_NUMBER = #{empNumber} and SYS_SEQ = #{sysSeq}
+    </delete>
+</mapper>

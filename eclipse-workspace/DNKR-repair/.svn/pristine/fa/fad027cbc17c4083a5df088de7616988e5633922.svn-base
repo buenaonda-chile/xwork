@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.RepairSDBrkVehicleDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.RepairSDBrkVehicleDto">
+		<id property="repNo" column="REP_NO" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="repDt" column="REP_DT" javaType="java.lang.String" />
+		<result property="repCar" column="REP_CAR" javaType="java.lang.String" />
+		<result property="brkPartNo" column="BRK_PART_NO" javaType="java.lang.String" />
+		<result property="repPartNo" column="REP_PART_NO" javaType="java.lang.String" />
+		<result property="brkLotId" column="BRK_LOT_ID" javaType="java.lang.String" />
+		<result property="repLotId" column="REP_LOT_ID" javaType="java.lang.String" />
+		<result property="repCustId" column="REP_CUST_ID" javaType="java.lang.String" />
+		<result property="repEmpNm" column="REP_EMP_NM" javaType="java.lang.String" />
+		<result property="qty" column="QTY" javaType="java.lang.Long" />
+		<result property="ngType" column="NG_TYPE" javaType="java.lang.String" />
+		<result property="ngCn" column="NG_CN" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+  	select *
+  	   from(
+	 select  ID
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,EDU_DIV
+			,(SELECT CODE_KO_NM FROM TB_CM_CODE WHERE GRP_CD = 'EDUCATION' AND CODE_CD  = EDU_DIV) AS EDU_DIV_NM
+			,EDU_NM
+			,TO_CHAR(EDU_DT, 'YYYYMMDDHH24MI') AS EDU_DT
+			,TO_CHAR(RECEIPT_END_DATE, 'YYYYMMDDHH24MI') AS RECEIPT_END_DATE
+			,PERS_CNT
+			,ONOFF_YN
+			,USE_YN
+			,REMARK
+			,'' AS CHK
+	   from TB_ED_EDUCATION_INFO
+	   ) X
+  </sql>
+
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.RepairSDBrkVehicleDomain">
+
+    SELECT *
+    FROM TB_REP_INFO
+    WHERE REP_NO = #{repNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT * FROM TB_REP_INFO
+  		WHERE 1=1
+  	<if test="criteria.repNo != null and criteria.repNo != '' ">
+  		  AND REP_NO = #{criteria.repNo}
+  	</if>
+  	<if test="criteria.searchRepDtFr != null and criteria.searchRepDtFr != '' ">
+		  AND REP_DT  <![CDATA[ >= ]]>  #{criteria.searchRepDtFr}
+	</if>
+	<if test="criteria.searchRepDtTo != null and criteria.searchRepDtTo != '' ">
+		  AND REP_DT  <![CDATA[ <= ]]>  #{criteria.searchRepDtTo}  || '9999'
+	</if>
+  		
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(REP_NO) AS CNT
+    FROM TB_REP_INFO
+    
+ 	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.RepairSDBrkVehicleDomain">
+
+    INSERT INTO TB_REP_INFO(
+			 REP_NO
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,REP_DT
+			,REP_CAR
+			,BRK_PART_NO
+			,BRK_LOT_ID
+			,REP_PART_NO
+			,REP_LOT_ID
+			,REP_CUST_ID
+			,REP_EMP_NM
+			,QTY
+			,NG_TYPE
+			,NG_CN
+			,ETC_CN
+	)VALUES(
+			 #{repNo}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,#{repDt}
+			,#{repCar}
+			,#{brkPartNo}
+			,#{brkLotId}
+			,#{repPartNo}
+			,#{repLotId}
+			,#{repCustId}
+			,#{repEmpNm}
+			,'1'
+			,#{ngType}
+			,#{ngCn}
+			,#{remark}
+	)
+
+<!--     <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_RECT_MST.NEXTVAL FROM DUAL
+    </selectKey>
+ -->
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.RepairSDBrkVehicleDomain">
+
+    UPDATE TB_REP_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,REP_DT = #{repDt}
+		,REP_CAR = #{repCar}
+		,BRK_PART_NO = #{brkPartNo}
+		,REP_PART_NO = #{repPartNo}
+		,REP_CUST_ID = #{repCustId}
+		,REP_EMP_NM = #{repEmpNm}
+		,NG_TYPE = #{ngType}
+		,NG_CN = #{ngCn}
+		,ETC_CN = #{remark}
+ 	WHERE REP_NO = #{repNo}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.RepairSDBrkVehicleDomain">
+
+    DELETE FROM TB_REP_INFO
+    WHERE REP_NO = #{repNo}
+
+  </delete>
+
+
+</mapper>

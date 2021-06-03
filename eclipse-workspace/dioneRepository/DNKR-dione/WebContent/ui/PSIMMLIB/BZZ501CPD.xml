@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="수입품&#32;현재고&#32;조회&#32;상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_house">
+				<Contents>
+					<colinfo id="housecd" size="256" summ="default" type="STRING"/>
+					<colinfo id="housenm" size="256" summ="default" type="STRING"/>
+					<record>
+						<housecd>1</housecd>
+						<housenm>1</housenm>
+					</record>
+					<record>
+						<housecd>V</housecd>
+						<housenm>V</housenm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BZZ501CPD">
+				<Contents>
+					<colinfo id="EXPNO" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMCDT1" size="255" summ="default" type="STRING"/>
+					<colinfo id="VNAME" size="255" summ="default" type="STRING"/>
+					<colinfo id="M10QY" size="255" summ="default" type="STRING"/>
+					<colinfo id="M00QY" size="255" summ="default" type="STRING"/>
+					<colinfo id="EXPHS" size="255" summ="default" type="STRING"/>
+					<colinfo id="M30QY" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMDQY1" size="255" summ="default" type="STRING"/>
+					<colinfo id="VNDNR" size="255" summ="default" type="STRING"/>
+					<colinfo id="PSPNO" size="255" summ="default" type="STRING"/>
+					<colinfo id="M20QY" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMCQY1" size="255" summ="default" type="STRING"/>
+					<colinfo id="CARCD" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMDDT1" size="255" summ="default" type="STRING"/>
+					<colinfo id="EXRAT" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMAQY1" size="255" summ="default" type="STRING"/>
+					<colinfo id="EXDSC" size="255" summ="default" type="STRING"/>
+					<colinfo id="MSTSM" size="255" summ="default" type="STRING"/>
+					<colinfo id="D6" size="255" summ="default" type="STRING"/>
+					<colinfo id="D5" size="255" summ="default" type="STRING"/>
+					<colinfo id="D4" size="255" summ="default" type="STRING"/>
+					<colinfo id="BUYRM" size="255" summ="default" type="STRING"/>
+					<colinfo id="SMADT1" size="255" summ="default" type="STRING"/>
+					<colinfo id="BUYCD" size="255" summ="default" type="STRING"/>
+					<colinfo id="EXRTT" size="255" summ="default" type="STRING"/>
+					<colinfo id="D2" size="255" summ="default" type="STRING"/>
+					<colinfo id="D3" size="255" summ="default" type="STRING"/>
+					<colinfo id="D1" size="255" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BZZ501CPD1">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static16" Left="-1" TabOrder="9" Top="36" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static1" Left="-1" TabOrder="6" Top="101" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static0" Left="34" Style="static" TabOrder="5" Text="구매업체코드" Top="106" VAlign="Middle" Width="90"></Static>
+		<Static BKColor="gold" Border="Flat" BorderColor="#888888" Height="29" Id="Static50" TabOrder="4" Top="128" Width="150"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1061"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static51" Left="46" Style="static" TabOrder="4" Text="무상사급" Top="134" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="VNDNR" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit06" Left="148" MaxLength="10" TabOrder="7" Top="101" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit09" Left="148" MaxLength="10" TabOrder="8" Top="128" Width="150"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static15" Left="47" Style="static" TabOrder="10" Text="수입품번" Top="41" VAlign="Middle" Width="70"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="EXPNO" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit00" Left="148" MaxLength="10" TabOrder="11" Top="36" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static19" Left="297" TabOrder="12" Top="36" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static21" Left="360" Style="static" TabOrder="13" Text="품명" Top="41" VAlign="Middle" Width="70"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="EXDSC" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit01" Left="446" MaxLength="10" TabOrder="14" Top="36" Width="299"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static23" Left="744" TabOrder="15" Top="36" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static24" Left="794" Style="static" TabOrder="16" Text="안전재고" Top="41" VAlign="Middle" Width="70"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="EXRTT" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit02" Left="893" MaxLength="10" RightMargin="3" TabOrder="17" Top="36" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static37" Left="-1" TabOrder="18" Top="73" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static17" Left="47" Style="static" TabOrder="19" Text="차종코드" Top="78" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CARCD" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit03" Left="148" MaxLength="10" TabOrder="20" Top="73" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static2" Left="297" TabOrder="22" Top="101" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static3" Left="340" Style="static" TabOrder="21" Text="구매업체명" Top="106" VAlign="Middle" Width="72"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="VNAME" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit07" Left="446" MaxLength="10" TabOrder="23" Top="101" Width="299"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static18" Left="297" TabOrder="24" Top="73" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static20" Left="353" Style="static" TabOrder="25" Text="차종명" Top="78" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="BUYRM" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit04" Left="446" MaxLength="10" TabOrder="26" Top="73" Width="299"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static9" Left="744" TabOrder="30" Top="101" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static22" Left="791" Style="static" TabOrder="29" Text="풍성품번" Top="106" VAlign="Middle" Width="90"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static25" Left="744" TabOrder="28" Top="129" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static26" Left="791" Style="static" TabOrder="27" Text="단위환산" Top="134" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="PSPNO" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit08" Left="893" MaxLength="10" TabOrder="31" Top="101" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static27" Left="744" TabOrder="32" Top="73" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static28" Left="802" Style="static" TabOrder="33" Text="HSNO" Top="78" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="EXPHS" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit05" Left="893" MaxLength="10" TabOrder="34" Top="73" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="EXRAT" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit10" Left="893" MaxLength="10" RightMargin="3" TabOrder="35" Top="129" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static29" Left="-1" TabOrder="38" Top="215" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static31" Left="-1" TabOrder="37" Top="243" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static32" Left="46" Style="static" TabOrder="36" Text="자재재고" Top="248" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D3" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit12" Left="148" MaxLength="10" TabOrder="39" Top="215" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static33" Left="-1" TabOrder="40" Top="187" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static34" Left="47" Style="static" TabOrder="41" Text="발주재고" Top="192" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D2" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit11" Left="148" MaxLength="10" TabOrder="42" Top="187" Width="150"></Edit>
+		<Static BKColor="gold" Border="Flat" BorderColor="#888888" Height="29" Id="Static35" Left="-1" TabOrder="45" Top="271" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static36" Left="-1" TabOrder="44" Top="299" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static39" Left="46" Style="static" TabOrder="43" Text="미통관수" Top="304" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D5" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit14" Left="148" MaxLength="10" TabOrder="46" Top="271" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D4" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit13" Left="148" MaxLength="10" TabOrder="47" Top="243" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="D6" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit15" Left="148" MaxLength="10" TabOrder="48" Top="299" Width="150"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static30" Left="47" Style="static" TabOrder="49" Text="보세재고" Top="220" VAlign="Middle" Width="58"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static38" Left="46" Style="static" TabOrder="50" Text="재고합계" Top="276" VAlign="Middle" Width="58"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static40" Left="-3" TabOrder="53" Top="387" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static41" Left="-3" TabOrder="52" Top="415" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static42" Left="24" Style="static" TabOrder="51" Text="M+2" Top="420" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="M10QY" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit17" Left="146" MaxLength="10" TabOrder="54" Top="387" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static43" Left="-3" TabOrder="55" Top="359" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static44" Left="25" Style="static" TabOrder="56" Text="M" Top="364" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="M00QY" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit16" Left="146" MaxLength="10" TabOrder="57" Top="359" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static45" Left="-3" TabOrder="58" Top="443" Width="150"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="M30QY" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit19" Left="146" MaxLength="10" TabOrder="59" Top="443" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="M20QY" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit18" Left="146" MaxLength="10" TabOrder="60" Top="415" Width="150"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static48" Left="25" Style="static" TabOrder="61" Text="M+1" Top="392" VAlign="Middle" Width="58"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static49" Left="24" Style="static" TabOrder="62" Text="M+3" Top="448" VAlign="Middle" Width="58"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static4" Left="-1" TabOrder="65" Top="525" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static5" Left="-1" TabOrder="64" Top="553" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static6" Left="46" Style="static" TabOrder="63" Text="과소재고" Top="558" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMAQY1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit21" Left="148" MaxLength="10" TabOrder="66" Top="525" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static7" Left="-1" TabOrder="67" Top="497" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static8" Left="47" Style="static" TabOrder="68" Text="일소요량" Top="502" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMDQY1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit20" Left="148" MaxLength="10" Number="TRUE" TabOrder="69" Top="497" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMCQY1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit22" Left="148" MaxLength="10" Number="TRUE" TabOrder="70" Top="553" Width="150"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static10" Left="47" Style="static" TabOrder="71" Text="안전재고" Top="530" VAlign="Middle" Width="58"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static12" Left="297" TabOrder="74" Top="525" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static13" Left="297" TabOrder="73" Top="553" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static14" Left="344" Style="static" TabOrder="72" Text="과소일수" Top="558" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMADT1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit24" Left="446" MaxLength="10" Number="TRUE" TabOrder="75" Top="525" Width="150"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static52" Left="297" TabOrder="76" Top="497" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static53" Left="345" Style="static" TabOrder="77" Text="현재고일" Top="502" VAlign="Middle" Width="58"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMDDT1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit23" Left="446" MaxLength="10" Number="TRUE" TabOrder="78" Top="497" Width="150"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_BZZ501CPD" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SMCDT1" DisableBKColor="MENU" Enable="FALSE" Height="29" Id="Edit25" Left="446" MaxLength="10" Number="TRUE" TabOrder="79" Top="553" Width="150"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static54" Left="345" Style="static" TabOrder="80" Text="안전일수" Top="530" VAlign="Middle" Width="58"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static11" Left="3" Style="static" TabOrder="81" Text="&lt;&#32;현재재고량&#32;&gt;" Top="168" VAlign="Middle" Width="133"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static55" Left="3" Style="static" TabOrder="82" Text="&lt;&#32;기본소요량기준&#32;&gt;" Top="477" VAlign="Middle" Width="133"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static46" Left="67" Style="static" TabOrder="83" Text="기준변경소요량&#32;&gt;" Top="340" VAlign="Middle" Width="133"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static47" Left="-1" Style="static" TabOrder="84" Text="&lt;&#32;" Top="340" VAlign="Middle" Width="13"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="st_YYMM" Left="11" Style="static" TabOrder="85" Text="2011/03" Top="340" VAlign="Middle" Width="53"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static56" Left="663" Style="static" TabOrder="86" Text="&lt;오더&#32;미입고&#32;&gt;" Top="180" VAlign="Middle" Width="133"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_BZZ501CPD1" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="584" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="384" Id="MainGrid" InputPanel="FALSE" Left="664" LineColor="#888888" MinWidth="100" Right="1042" TabOrder="87" TabStop="true" ToolTipType="Default" Top="200" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="378">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="ORDER&#32;NO"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="납기일자"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="발주수량"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="ORDER" display="normal"/>
+						<cell align="right" col="1" colid="DUDAT" display="text" Mask="####/##/##"/>
+						<cell align="right" col="2" colid="ORQTY" display="number" Mask="#,##0.#0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="2" display="text" text="TOTAL"/>
+						<cell align="right" col="2" display="number" expr='SUM(&quot;ORQTY&quot;)' Mask="#,##0.#0"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static Height="29" Id="Static57" Left="1044" TabOrder="88" Text="%" Top="36" VAlign="Middle" Width="11"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : 황규철
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI001.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+var nowYYMM = substr(nowDate,0,6);
+var YYMMtxt = substr(nowDate,0,4)+'/'+substr(nowDate,4,2);
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)			
+	st_YYMM.Text = YYMMtxt;	
+    fn_Align();	
+	getBZZ501CPD();
+	ds_BZZ501CPD.row=0;
+	ds_BZZ501CPD_CanRowPosChange(obj,-1,0);	
+
+}
+function ds_BZZ501CPD_CanRowPosChange(obj,nOldRow,nRow)
+{
+	EDIT20.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMDQY1"),3);
+	EDIT23.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMDDT1"),3);
+    EDIT21.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMAQY1"),3);
+    EDIT24.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMADT1"),3);
+    EDIT22.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMCQY1"),3);
+    EDIT25.Text = round(ds_BZZ501CPD.getColumn(nRow,"SMCDT1"),3);
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+	
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	ds_VComCode_COMP.Copy("ds_ComCode_COMP");
+	
+	ds_VComCode_COMP.InsertRow(0);
+	ds_VComCode_COMP.SetColumn(0,"CODE1","");
+	ds_VComCode_COMP.SetColumn(0,"CODE_NAME","[전체]");
+	//cb_searchCompany.index = 0;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+	
+	cb_searchCodeName.index = 0;
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getBZZ501CPD(){
+	var sKind		= "getBZZ501CPD";						
+	var sMethodName = "service::psimmlib/selectBZZ501CPD1.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BZZ501CPD1=ds_BZZ501CPD1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB1=" + quote(Lib1);
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(COMPS);
+	sArgument += " EXPNO=" + quote(EXPNO);	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	var sKind		= "getBZZ501CPD";						
+	var sMethodName = "service::psimmlib/selectBZZ501CPD.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BZZ501CPD=ds_BZZ501CPD";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(COMPS);
+	sArgument += "@EXPNO=" + quote(EXPNO);	
+	sArgument += "@NDATE=" + quote(nowYYMM);
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "수입품 현재고 조회 상세";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|수입품 현재고 조회 상세";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getBZZ501CPD"){
+		// 조회건수가 없을경우
+		if(ds_BZZ501CPD.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Align()
+{
+	Edit00.Align = "LEFT";
+	Edit01.Align = "LEFT";
+	Edit03.Align = "LEFT";
+	Edit04.Align = "LEFT";
+	Edit05.Align = "LEFT";
+	Edit06.Align = "LEFT";
+	Edit07.Align = "LEFT";
+	Edit08.Align = "LEFT";
+}
+
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getBZZ501CPD();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+]]></Script>
+</Window>

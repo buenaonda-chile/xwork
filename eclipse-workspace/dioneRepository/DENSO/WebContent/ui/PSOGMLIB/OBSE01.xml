@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="UserList" Left="8" OnFocus="UserList_OnFocus" OnLoadCompleted="on_LoadCompleted" OnTimer="UserList_OnTimer" PidAttrib="7" Title="전광판&#32;생산현황&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_3"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<value>Combi&#32;Assy,&#32;A/P,&#32;SMK,&#32;HUD</value>
+					</record>
+					<record>
+						<cd>2</cd>
+						<value>A/P,&#32;SMK,&#32;HUD,&#32;전자공장</value>
+					</record>
+					<record>
+						<cd>3</cd>
+						<value>전자공장,&#32;성형반</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_interval">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>10</cd>
+						<value>10</value>
+					</record>
+					<record>
+						<cd>20</cd>
+						<value>20</value>
+					</record>
+					<record>
+						<cd>30</cd>
+						<value>30</value>
+					</record>
+					<record>
+						<cd>40</cd>
+						<value>40</value>
+					</record>
+					<record>
+						<cd>50</cd>
+						<value>50</value>
+					</record>
+					<record>
+						<cd>60</cd>
+						<value>60</value>
+					</record>
+					<record>
+						<cd>정지</cd>
+						<value>정지</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_4"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_sum_4">
+				<Contents>
+					<colinfo id="sum1" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum2" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum3" size="256" summ="default" type="STRING"/>
+					<colinfo id="per1" size="256" summ="default" type="STRING"/>
+					<colinfo id="per2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_sum_3">
+				<Contents>
+					<colinfo id="sum1" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum2" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum3" size="256" summ="default" type="STRING"/>
+					<colinfo id="per1" size="256" summ="default" type="STRING"/>
+					<colinfo id="per2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_sum_1">
+				<Contents>
+					<colinfo id="sum1" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum2" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum3" size="256" summ="default" type="STRING"/>
+					<colinfo id="per1" size="256" summ="default" type="STRING"/>
+					<colinfo id="per2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001m_sum_2">
+				<Contents>
+					<colinfo id="sum1" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum2" size="256" summ="default" type="STRING"/>
+					<colinfo id="sum3" size="256" summ="default" type="STRING"/>
+					<colinfo id="per1" size="256" summ="default" type="STRING"/>
+					<colinfo id="per2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="160" Id="Static11" Left="532" TabOrder="28" Text="생산실적&#32;합계" Top="452" Width="515"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="160" Id="Static10" Left="4" TabOrder="27" Text="생산실적&#32;합계" Top="452" Width="515"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="371" Id="st_2" Left="532" TabOrder="26" Text="A/P,&#32;SMK,&#32;HUD" Top="78" Width="515"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="371" Id="st_1" Left="4" TabOrder="25" Text="Combi&#32;Assy" Top="78" Width="515"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="3" Top="30" Width="1047"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="200" TabOrder="14" Top="32" Width="85"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static16" Left="564" TabOrder="2" Top="32" Width="89"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static21" Left="584" Style="static" TabOrder="1" Text="화면선택" Top="37" VAlign="Middle" Width="50"></Static>
+		<Static BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="4" TabOrder="5" Top="32" Width="100"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="9" Style="static" TabOrder="4" Text="사&#32;업&#32;장" Top="37" VAlign="Middle" Width="90"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="105" ResetIndex="FIRST" TabOrder="6" Top="33" Width="90"></Combo>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="880" TabOrder="8" Top="32" Width="104"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="888" Style="static" TabOrder="7" Text="리플레시&#32;타임" Top="37" VAlign="Middle" Width="88"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="381" TabOrder="10" Top="32" Width="86"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="390" Style="static" TabOrder="9" Text="주야구분" Top="37" VAlign="Middle" Width="70"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_daygu" ImeMode="none" INDEX="1" InnerDataset="ds_daygu" Left="470" ResetIndex="FIRST" TabOrder="11" Top="33" Width="90"></Combo>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_syyyymmdd" Left="286" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="34" Width="90"></Calendar>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static0" Left="208" Style="static" TabOrder="13" Text="작업일자" Top="37" VAlign="Middle" Width="70"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_procs" ImeMode="none" Left="424" MaxLength="10" TabOrder="15" Top="80" Visible="FALSE" Width="90"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="16" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="16" Top="8" Width="1032"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="value" DisplayRowCnt="3" Height="21" Id="cmb_rowgb" ImeMode="none" INDEX="0" InnerDataset="ds_ppmi001mCode" Left="656" OnChanged="cmb_rowgb_OnChanged" ResetIndex="FIRST" TabOrder="18" Top="33" Width="220"></Combo>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Combo CodeColumn="cd" DataColumn="value" Height="21" Id="cmb_interval" InnerDataset="ds_interval" Left="989" OnChanged="cmb_interval_OnChanged" TabOrder="19" Text="정지" Top="33" Width="56"></Combo>
+		<Grid AreaSelect="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_1" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="448" CellMoving="TRUE" Color="black" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="344" Id="Grid1" InputPanel="FALSE" Left="8" LineColor="#888888" OnCellDBLClick="Grid1_OnCellDblClick" OnFocus="Grid1_OnFocus" Right="512" ScrollCell="true" TabOrder="20" TabStop="true" Top="104" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="504">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="60"/>
+						<col width="77"/>
+						<col width="92"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="43"/>
+						<col width="43"/>
+						<col width="60"/>
+						<col width="60"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" InputZeroTime="true" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" InputZeroTime="true" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" InputZeroTime="true" text="공정명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" InputZeroTime="true" text="생산중&#32;차종명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" InputZeroTime="true" text="택트&#10;타임"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" InputZeroTime="true" text="생산&#10;계획"/>
+						<cell align="center" bkcolor="#dfdfdf" col="6" color="#002043" display="text" InputZeroTime="true" text="생산&#10;능력"/>
+						<cell align="center" bkcolor="#dfdfdf" col="7" color="#002043" display="text" InputZeroTime="true" text="생산&#10;실적"/>
+						<cell align="center" bkcolor="#dfdfdf" col="8" color="#002043" display="text" InputZeroTime="true" text="실적/&#10;계획%"/>
+						<cell align="center" bkcolor="#dfdfdf" col="9" color="#002043" display="text" InputZeroTime="true" text="실적/&#10;능력%"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" InputZeroTime="true" text="공정상태"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" InputZeroTime="true" text="주야구분"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="0" cursor="hand" display="text" expr="row+1" InputZeroTime="true"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="1" colid="PROCS" display="text" InputZeroTime="true" LimitDec="0"/>
+						<cell align="left" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="2" colid="PROSM" color="blue" display="normal" InputZeroTime="true"/>
+						<cell align="left" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="3" colid="MSTSM" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="4" colid="CYCTM" display="normal" InputZeroTime="true"/>
+						<cell align="right" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="5" colid="FSTQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="6" colid="ATOQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="7" colid="PRDQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="8" colid="FSTQY_RATE" color="blue" display="number" InputZeroTime="true" Mask="0.00"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="9" colid="ATOQY_RATE" color="blue" display="number" InputZeroTime="true" Mask="0.00"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="10" colid="RUNCD" combocol="Cd" combodataset="ds_runcd" combotext="CDnm" display="combo" InputZeroTime="true" LimitDec="0"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="11" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" InputZeroTime="true" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_sum_1" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="540" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="50" Id="Grid_Sum1" InputPanel="FALSE" Left="6" LineColor="#888888" MinWidth="100" Right="518" TabOrder="21" TabStop="true" Top="490" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="512">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="98"/>
+						<col width="97"/>
+						<col width="103"/>
+						<col width="84"/>
+						<col width="85"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="생산계획&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="생산능력&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="생산실적&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="실적/능력&#32;%"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="yellow" col="0" colid="sum1" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="1" colid="sum2" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="sum3" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="per1" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="per2" color="blue" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_sum_4" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="610" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="49" Id="Grid_Sum4" InputPanel="FALSE" Left="534" LineColor="#888888" MinWidth="100" Right="1046" TabOrder="22" TabStop="true" Top="561" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="512">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="98"/>
+						<col width="97"/>
+						<col width="103"/>
+						<col width="84"/>
+						<col width="85"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="생산계획&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="생산능력&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="생산실적&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="실적/능력&#32;%"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="yellow" col="0" colid="sum1" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="1" colid="sum2" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="sum3" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="per1" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="per2" color="blue" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_sum_3" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="610" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="49" Id="Grid_Sum3" InputPanel="FALSE" Left="6" LineColor="#888888" MinWidth="100" Right="518" TabOrder="23" TabStop="true" Top="561" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="512">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="98"/>
+						<col width="97"/>
+						<col width="103"/>
+						<col width="84"/>
+						<col width="85"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="생산계획&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="생산능력&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="생산실적&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="실적/능력&#32;%"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="yellow" col="0" colid="sum1" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="1" colid="sum2" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="sum3" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="per1" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="per2" color="blue" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_sum_2" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="540" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="50" Id="Grid_Sum2" InputPanel="FALSE" Left="534" LineColor="#888888" MinWidth="100" Right="1046" TabOrder="24" TabStop="true" Top="490" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="512">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="98"/>
+						<col width="97"/>
+						<col width="103"/>
+						<col width="84"/>
+						<col width="85"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="생산계획&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="생산능력&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="생산실적&#32;합계"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="실적/능력&#32;%"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="yellow" col="0" colid="sum1" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="1" colid="sum2" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="sum3" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="per1" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="per2" color="blue" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Font="Default,9,Bold" Height="15" Id="Static12" Left="10" TabOrder="29" Text="Combi&#32;Assy" Top="476" Width="110"></Static>
+		<Static Font="Default,9,Bold" Height="16" Id="Static13" Left="536" TabOrder="30" Text="A/P,&#32;SMK,&#32;HUD" Top="476" Width="110"></Static>
+		<Static Font="Default,9,Bold" Height="15" Id="Static14" Left="536" TabOrder="31" Text="성형반" Top="547" Width="110"></Static>
+		<Static Font="Default,9,Bold" Height="15" Id="Static15" Left="10" TabOrder="32" Text="전자공장" Top="547" Width="110"></Static>
+		<Grid AreaSelect="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi001m_2" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="446" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="344" Id="Grid2" InputPanel="FALSE" Left="536" LineColor="#888888" OnCellDBLClick="Grid2_OnCellDblClick" Right="1040" ScrollCell="true" TabOrder="33" TabStop="true" Top="102" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="504">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="60"/>
+						<col width="77"/>
+						<col width="92"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="43"/>
+						<col width="43"/>
+						<col width="60"/>
+						<col width="60"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" InputZeroTime="true" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" InputZeroTime="true" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" InputZeroTime="true" text="공정명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" InputZeroTime="true" text="생산중&#32;차종명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" InputZeroTime="true" text="택트&#10;타임"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" InputZeroTime="true" text="생산&#10;계획"/>
+						<cell align="center" bkcolor="#dfdfdf" col="6" color="#002043" display="text" InputZeroTime="true" text="생산&#10;능력"/>
+						<cell align="center" bkcolor="#dfdfdf" col="7" color="#002043" display="text" InputZeroTime="true" text="생산&#10;실적"/>
+						<cell align="center" bkcolor="#dfdfdf" col="8" color="#002043" display="text" InputZeroTime="true" text="실적/&#10;계획%"/>
+						<cell align="center" bkcolor="#dfdfdf" col="9" color="#002043" display="text" InputZeroTime="true" text="실적/&#10;능력%"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" InputZeroTime="true" text="공정상태"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" InputZeroTime="true" text="주야구분"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="0" cursor="hand" display="text" expr="row+1" InputZeroTime="true"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="1" colid="PROCS" display="text" InputZeroTime="true" LimitDec="0"/>
+						<cell align="left" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="2" colid="PROSM" color="blue" display="normal" InputZeroTime="true"/>
+						<cell align="left" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="3" colid="MSTSM" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="4" colid="CYCTM" display="normal" InputZeroTime="true"/>
+						<cell align="right" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="5" colid="FSTQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="6" colid="ATOQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="7" colid="PRDQY" color="red" display="normal" InputZeroTime="true"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="8" colid="FSTQY_RATE" color="blue" display="number" InputZeroTime="true" Mask="0.00"/>
+						<cell align="right" autosizing="none" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="9" colid="ATOQY_RATE" color="blue" display="number" InputZeroTime="true" Mask="0.00"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="10" colid="RUNCD" combocol="Cd" combodataset="ds_runcd" combotext="CDnm" display="combo" InputZeroTime="true" LimitDec="0"/>
+						<cell align="center" bkcolor='expr:decode(RUNCD,&#32;&apos;P&apos;,&#32;&apos;LIGHTGREY&apos;,&#32;&#32;DECODE(RUNCD,&#32;&apos;S&apos;,&#32;&apos;GREEN&apos;,&#32;&#32;iif(tonumber(ATOQY_RATE)&#32;&gt;&#32;90,&#32;&quot;yellow&quot;,&#32;&quot;white&quot;)&#32;&#32;)&#32;&#32;)' col="11" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" InputZeroTime="true" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Right" Height="17" Id="st_last_update_time" Left="744" TabOrder="34" Top="64" Width="300"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE01.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-09-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	fn_Search();
+	setTimer(1, 9999999999999999999999);
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-09-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+	
+	ds_ppmi001mCode.InsertRow(0);
+	ds_ppmi001mCode.SetColumn(0,"ROWGB","");
+	ds_ppmi001mCode.SetColumn(0,"ROWNM","[전체]");
+	//cmb_rowgb.index = 0;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-09-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE01(){
+	if (cmb_rowgb.Index = 1){
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_1=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=1";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+		
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_2=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=2";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+	} else if (cmb_rowgb.Index = 2) {		
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_1=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=2";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+				
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_2=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=3";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");		
+	} else if (cmb_rowgb.Index = 3) {		
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_1=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=3";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+				
+		var sKind		= "getOBSE01";						
+		var sMethodName = "service::psogmlib/selectOBSE01.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_ppmi001m_2=ds_ppmi001m";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += " COMPS=" + quote(cb_comp.Value);
+		sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+		sArgument += " PROCS=" + quote(ed_procs.Value);
+		sArgument += " DAYGU=" + quote(cd_daygu.Value);
+		sArgument += " ROWGB=4";// + quote(cmb_rowgb.Value);	
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");		
+	} 	 	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	var sKind		= "getOBSE01_sum";						
+	var sMethodName = "service::psogmlib/selectOBSE01_Sum.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi001m_sum_1=ds_ppmi001m_sum";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	//sArgument += " LIB=" + quote(Lib);
+	sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+	sArgument += " ROWGB=1";// + quote(cmb_rowgb.Value);	
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+		
+	var sKind		= "getOBSE01_sum";						
+	var sMethodName = "service::psogmlib/selectOBSE01_Sum.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi001m_sum_2=ds_ppmi001m_sum";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	//sArgument += " LIB=" + quote(Lib);
+	sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+	sArgument += " ROWGB=2";// + quote(cmb_rowgb.Value);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+			
+	var sKind		= "getOBSE01_sum";						
+	var sMethodName = "service::psogmlib/selectOBSE01_Sum.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi001m_sum_3=ds_ppmi001m_sum";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	//sArgument += " LIB=" + quote(Lib);
+	sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+	sArgument += " ROWGB=3";// + quote(cmb_rowgb.Value);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+				
+	var sKind		= "getOBSE01_sum";						
+	var sMethodName = "service::psogmlib/selectOBSE01_Sum.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi001m_sum_4=ds_ppmi001m_sum";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	//sArgument += " LIB=" + quote(Lib);
+	sArgument += " ORDAT=" + quote(ed_syyyymmdd.Value);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+	sArgument += " ROWGB=4";// + quote(cmb_rowgb.Value);
+
+	//alert(sArgument);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");					
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = ed_syyyymmdd.Value + "-전광판 생산현황";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "Grid1|전광판 생산현황";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-09-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	}else {
+		ds_ppmi001m_1.rowposition = -1;
+		ds_ppmi001m_2.rowposition = -1;
+		ds_ppmi001m_3.rowposition = -1;
+		ds_ppmi001m_4.rowposition = -1;
+		ds_ppmi001m_sum_1.rowposition = -1;
+		ds_ppmi001m_sum_2.rowposition = -1;
+		ds_ppmi001m_sum_3.rowposition = -1;
+		ds_ppmi001m_sum_4.rowposition = -1;
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBSE01();
+	st_last_update_time.Text = "갱신시간 : " + ToString(getDate() + (Timem() - toFloat(Time()+"000")),"@@@@년 @@월 @@일 @@시 @@분 @@초");
+}
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function UserList_OnTimer(obj,nEventID)
+{	
+	fn_Search();
+}
+
+function cmb_interval_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if (nNewIndex = 0) {
+		//alert("10");
+		setTimer(1, 10*1000);
+	} else if (nNewIndex = 1) {
+		//alert("20");
+		setTimer(1, 20*1000);
+	} else if (nNewIndex = 2) {
+		//alert("30");
+		setTimer(1, 30*1000);
+	} else if (nNewIndex = 3) {
+		//alert("40");
+		setTimer(1, 40*1000);
+	} else if (nNewIndex = 4) {
+		//alert("50");
+		setTimer(1, 50*1000);
+	} else if (nNewIndex = 5) {
+		//alert("60");
+		setTimer(1, 60*1000);
+	} else if (nNewIndex = 6) {
+		//alert("stop");
+		setTimer(1, 9999999999999999999999999999999);
+	}		
+}
+
+function cmb_rowgb_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+/*
+	if (nNewIndex = 1) {
+		st_1.Text = "2공장2층";
+		st_2.Text = "3공장2층 외";
+	} else if (nNewIndex = 2) {
+		st_1.Text = "3공장2층 외";
+		st_2.Text = "전자공장";
+	} else if (nNewIndex = 3) {
+		st_1.Text = "전자공장";
+		st_2.Text = "성형반";
+	}
+*/
+//2015.07.31수
+	if (nNewIndex = 1) {
+		st_1.Text = "Combi Assy";
+		st_2.Text = "A/P, SMK, HUD";
+	} else if (nNewIndex = 2) {
+		st_1.Text = "A/P, SMK, HUD";
+		st_2.Text = "전자공장";
+	} else if (nNewIndex = 3) {
+		st_1.Text = "전자공장";
+		st_2.Text = "성형반";
+	}	
+	fn_Search();
+}
+
+function Grid1_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{	
+	//alert(ds_ppmi001m_1.GetColumn(nrow, "DAYGU"));
+	dialog("psogmlib::OBSE02.xml","PROCS='"+Grid1.GetCellText('Body',nRow,1)+"'"+" ORDAT='"+ed_syyyymmdd.Value+"'"+" DAYGU='"+ds_ppmi001m_1.GetColumn(nrow, "DAYGU")+"'",1062,592);
+}
+
+function Grid2_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//alert(ds_ppmi001m_2.GetColumn(nrow, "DAYGU"));
+	dialog("psogmlib::OBSE02.xml","PROCS='"+Grid2.GetCellText('Body',nRow,1)+"'"+" ORDAT='"+ed_syyyymmdd.Value+"'"+" DAYGU='"+ds_ppmi001m_2.GetColumn(nrow, "DAYGU")+"'",1062,592);	
+}
+
+function Button0_OnClick(obj)
+{
+	//alert(GetSession());
+	trace(ds_ppmi001m_1.SaveXML());
+}
+
+
+function UserList_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+}
+]]></Script>
+</Window>

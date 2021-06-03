@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.HolidayAppointedDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="holidayAppointed" type="HolidayAppointedDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="refrn" column="REFRN" />
+		<result property="pblcDate" column="PBLC_DATE" />
+		<result property="oldPblcDate" column="OLD_PBLC_DATE" />
+                
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        
+        <result property="oldOrder" column="OLD_ORDER" />
+
+                              
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="holidayAppointed" parameterType="HolidayAppointedDomain">
+		SELECT TRIM(A.CLS_CODE) AS CLS_CODE
+		     , (SUBSTR(A.PBLC_DATE,1,4) || '-' || SUBSTR(A.PBLC_DATE,5,2) || '-' || SUBSTR(A.PBLC_DATE,7,2)) AS PBLC_DATE
+		     , TRIM(A.REFRN) AS REFRN
+		     , (SUBSTR(A.PBLC_DATE,1,4) || '-' || SUBSTR(A.PBLC_DATE,5,2) || '-' || SUBSTR(A.PBLC_DATE,7,2)) AS OLD_PBLC_DATE
+		FROM PSZDBLIB.FHP140PF A
+		WHERE 1=1
+		AND A.CLS_CODE = #{clsCode}
+		AND SUBSTR(A.PBLC_DATE, 1, 4) = #{pblcDate}
+		ORDER BY A.PBLC_DATE
+		
+    </select>
+    
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount3" resultType="java.lang.Integer" parameterType="HolidayAppointedDomain">
+    	SELECT COUNT(1) AS CNT
+		FROM PSZDBLIB.FHP140PF A
+		WHERE 1=1
+		AND A.PBLC_DATE = #{pblcDate}
+		AND A.CLS_CODE = #{clsCode}  
+        
+    </select>
+    
+    <select id="searchCount4" resultType="java.lang.Integer" parameterType="HolidayAppointedDomain">
+    	SELECT COUNT(1) AS CNT
+		FROM PSZDBLIB.FHP052PF A
+		WHERE 1=1
+		AND A.ORDER = #{order} 
+		AND A.RCRN = #{rcRn} 
+        AND A.WORK_STLE = #{workStle}
+        AND A.GROUP = #{group}
+        AND A.CLS_CODE = #{clsCode}
+    </select>
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="HolidayAppointedDomain">
+		INSERT INTO  PSZDBLIB.FHP140PF (
+				 PBLC_DATE
+				,CLS_CODE
+				,REFRN				
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{pblcDate}
+               ,#{clsCode}
+               ,#{refrn}
+               ,#{regUser}
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="HolidayAppointedDomain">
+    	UPDATE PSZDBLIB.FHP140PF
+		SET PBLC_DATE = #{pblcDate}
+		    , REFRN = #{refrn}
+		    , MOD_USER = #{modUser}
+		    , MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE PBLC_DATE = #{oldPblcDate}
+		AND CLS_CODE = #{clsCode}
+  
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="HolidayAppointedDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP140PF
+        WHERE PBLC_DATE = #{oldPblcDate}  
+		AND CLS_CODE = #{clsCode}
+    </delete>
+    
+    
+
+</mapper>

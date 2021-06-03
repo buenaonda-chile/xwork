@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalAnlysViewDao">
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="SalAnlysView" type="SalAnlysViewDomain">
+       	<result property="comps" column="COMPS" />
+       	<result property="pltcd" column="PLTCD" />
+       	<result property="pyvnd1" column="PYVND1" />
+       	<result property="pyvnd2" column="PYVND2" />
+       	<result property="prdcd" column="PRDCD" />
+        <result property="prdcd1" column="PRDCD1" />
+        <result property="prdcd2" column="PRDCD2" />
+        <result property="prdnm" column="PRDNM" />
+        <result property="plngb" column="PLNGB" />
+		<result property="plnym" column="PLNYM" />
+		<result property="paygub" column="PAYGUB" />
+		<result property="endccd" column="ENDCCD" />
+		<result property="pyvnd" column="pyvnd" />
+		<result property="pyPrdnm" column="PY_PRDNM" />
+        <result property="pQtyY" column="P_QTY_Y" />
+		<result property="pQtyM" column="P_QTY_M" />
+		<result property="pQtyS" column="P_QTY_S" />
+		<result property="pQtyYgp" column="P_QTY_Y_GP" />
+		<result property="pQtyYflat" column="P_QTY_Y_FLAT" />
+		<result property="pQtyMgp" column="P_QTY_M_GP" />
+		<result property="pQtyMflat" column="P_QTY_M_FLAT" />
+		<result property="pspno" column="PSPNO" />
+		
+		<result property="pCostY" column="P_COST_Y" />
+        <result property="pCostM" column="P_COST_M" />
+        <result property="pCostS" column="P_COST_S" />
+        <result property="pCostYgp" column="P_COST_Y_GP" />
+        <result property="pCostYflat" column="P_COST_Y_FLAT" />
+        <result property="pCostMgp" column="P_COST_M_GP" />
+        <result property="pCostMflat" column="P_COST_M_FLAT" />
+        
+        <result property="carcd" column="CARCD" />
+        <result property="carnm" column="CARNM" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+    </resultMap>
+    
+  <sql id="salAnlysView">
+	SELECT
+		A.COMPS, A.PLNYM, A.PLNGB, A.PYVND, A.PSPNO, MAX(COALESCE(TRIM(B.PRDCD),'')) AS PRDCD, MAX(COALESCE(TRIM(B.CARCD), '')) AS CARCD,
+		SUM(A.QTY_Y) AS P_QTY_Y, SUM(A.PCOST_Y) AS P_COST_Y,
+		SUM(A.QTY_M) AS P_QTY_M, SUM(A.PCOST_M) AS P_COST_M,
+		SUM(A.QTY_S) AS P_QTY_S,  SUM(A.PCOST_S) AS P_COST_S
+	FROM (
+		<!-- 년 판매계획 -->
+		SELECT 
+			A.COMPS, A.PLNYM, A.PLNGB, A.PYVND, A.PSPNO, A.CARCD, '' AS CARNM,
+			A.MONQY AS QTY_Y, A.MONQY *A.YESCS AS PCOST_Y,
+			0 AS QTY_M, 0 AS PCOST_M,
+			0 AS QTY_S, 0 AS PCOST_S
+		FROM 
+		${lib2}.SPY200PF A
+		WHERE
+			A.PLNYM = ${plnym} <!-- 계획년월 -->
+			AND A.PLNGB = #{plngb} <!-- 계획구분  1 : 계획, 2:수정 -->
+			<if test='!pltcd.equals("ALL")'>
+			AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+			</if>
+			<!-- 업체 -->
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+			AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+	 		<!-- 납입구분 거점간거래 미포함 -->	
+			<if test='paygub != null and !paygub.equals("")'>
+			AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+		<!-- 월 판매계획 -->
+		UNION ALL
+		SELECT 
+		A.COMPS, A.PLNYM, '${plngb}' AS PLNGB, A.PYVND, A.PSPNO, '' AS CARCD,'' AS CARNM,
+		0 AS QTY_Y, 0 AS PCOST_Y,
+		CASE WHEN '1'='${plngb}' THEN A.SM0QY ELSE A.SL0QY END QTY_M, 
+		CASE WHEN '1'='${plngb}' THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END PCOST_M,
+		0 AS QTY_S, 0 AS PCOST_S
+		FROM 
+		${lib2}.SPM110PF A
+		WHERE
+			A.PLNYM = ${plnym} <!-- 계획년월 -->
+			<if test='!pltcd.equals("ALL")'>
+			AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+			</if>
+			<!-- 업체 -->
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+			AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+	 		<!-- 납입구분 거점간거래 미포함 -->	
+			<if test='paygub != null and !paygub.equals("")'>
+			AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+		<!-- 실적 -->
+		UNION ALL
+		SELECT 
+			A. COMPS,  SUBSTR(A.JPSDT, 1,6)  AS PLNYM, '${plngb}' AS PLNGB, A.PYVND, A.PSPNO, '' AS CARCD,'' AS CARNM, 
+			0 AS QTY_Y, 0 AS PCOST_Y,
+			0 AS QTY_M, 0 AS PCOST_M,
+			A.JPSQY AS QTY_S, A.JPSAM AS PCOST_S
+		FROM 
+			${lib2}.SMD110PF A
+		WHERE
+			A.JPSDT BETWEEN ${startDate} AND ${endDate} <!-- 출하일자 -->
+			<if test='!pltcd.equals("ALL")'>
+			AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+			</if>
+			<!-- 업체 -->
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+			AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+	 		<!-- 납입구분 거점간거래 미포함 -->	
+			<if test='paygub != null and !paygub.equals("")'>
+			AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+		) A
+		LEFT OUTER JOIN ${lib2}.MST100PF B ON A.COMPS=B.COMPS AND A.PSPNO=B.PRTNO
+		<!-- 구KE는 MST100PF에서 제품코드관리를 안함. -->
+		<!-- 
+		<if test='comps.equals("PS")'>
+		LEFT OUTER JOIN ${lib2}.MST100PF B ON A.COMPS=B.COMPS AND A.PSPNO=B.PRTNO
+		</if>
+		<if test='comps.equals("PE")'>
+		LEFT OUTER JOIN (SELECT ITNBR AS PRTNO, SUBSTR(ITCLS,1,1) AS PRDCD FROM ${lib1}.BM008PR) B ON A.PSPNO=B.PRTNO
+		</if>
+		 -->
+		LEFT OUTER JOIN PSZDBLIB.SPZ110PF C ON A.PYVND=C.PYVND AND C.COMPS= #{comps}
+	WHERE 
+		'SqlMap-SalAnlysViewDomain.SalAnlysView' = 'SqlMap-SalAnlysViewDomain.SalAnlysView' 
+		<!-- 제품코드 -->
+		<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+		AND B.PRDCD <![CDATA[>=]]> #{prdcd1} AND B.PRDCD <![CDATA[<=]]> #{prdcd2} 
+		</if>
+		 <!-- 최종고객구분 -->
+		<if test='endccd != null and !endccd.equals("")'>
+		AND C.ENDCCD = #{endccd}
+		</if>
+	GROUP BY A.COMPS, A.PLNYM, A.PLNGB, A.PYVND, A.PSPNO, A.CARCD
+  </sql>
+  
+	<!-- IT수정 : SQL 통합  -->
+<select id="searchByAnlysView" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+	SELECT 
+			CASE WHEN '${comps}'='PE'THEN '구KE' else '구KA' END AS COMPS,
+			<!-- 1.제품별 -->
+			<if test='selectgub.equals("1")'> A.PRDCD, A.PRDNM, </if>
+			<!-- 2.득의선별 -->
+			<if test='selectgub.equals("2")'> A.PYVND, A.PRDNM,</if>
+			<!-- 3.제품별/득의선 -->
+			<if test='selectgub.equals("3")'> A.PRDCD, A.PRDNM, A.PYVND, A.PY_PRDNM, </if>
+			<!-- 4.득의선/제품별 -->
+			<if test='selectgub.equals("4")'> A.PRDCD, A.PRDNM, A.PYVND, A.PY_PRDNM,</if>
+			<!-- 5.차종별 -->
+			<if test='selectgub.equals("5")'> A.CARCD, A.CARNM, </if>
+			<!-- 수량 : 년계, 단계, 실적  -->
+			A.P_QTY_Y,  A.P_QTY_M,	A.P_QTY_S, 
+			A.P_QTY_S - A.P_QTY_Y AS P_QTY_Y_GP, <!-- 수량 년계 차이 -->
+			/*'SqlMap-SalAnlysView.searchByAnlysView' = 'SqlMap-SalAnlysView.searchByAnlysView'*/
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END  AS P_QTY_Y_FLAT, <!-- 수량 년계 달성률 -->
+			A.P_QTY_S - A.P_QTY_M AS P_QTY_M_GP, <!-- 수량 단계 차이 -->
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_M AS FLOAT))  *  100, 2)  END 				
+			END AS P_QTY_M_FLAT, <!-- 수량 단계 달성률 -->
+			<!-- 금액 : 년계, 단계, 실적  -->
+			A.P_COST_Y, A.P_COST_M,	A.P_COST_S, 
+			A.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, <!-- 금액 년계 차이 -->
+			CASE A.P_COST_S  WHEN 0 THEN 0 
+			ELSE 	
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2)  END 							 
+			END AS P_COST_Y_FLAT,  <!-- 금액 년계 달성률 -->
+			A.P_COST_S - A.P_COST_M AS P_COST_M_GP, <!-- 금액 단계 차이 -->
+			CASE A.P_COST_S  WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_M AS FLOAT))  *  100, 2)   END 								
+			END AS P_COST_M_FLAT <!-- 금액 단계 달성률 -->
+		FROM
+			(
+				SELECT 
+				<!-- 1.제품별 -->
+				<if test='selectgub.equals("1")'> Y.PRDCD, MAX(Y.PRDNM) AS PRDNM, </if>
+				<!-- 2.득의선별 -->
+				<if test='selectgub.equals("2")'> Y.PYVND, MAX(Y.PRDNM) AS PRDNM,</if>
+				<!-- 3.제품별/득의선 -->
+				<if test='selectgub.equals("3")'> Y.PRDCD, Y.PYVND, MAX(Y.PRDNM) AS PRDNM, MAX(Y.PY_PRDNM) AS PY_PRDNM, </if>
+				<!-- 4.득의선/제품별 -->
+				<if test='selectgub.equals("4")'> Y.PRDCD, Y.PYVND, MAX(Y.PRDNM) AS PRDNM, MAX(Y.PY_PRDNM) AS PY_PRDNM, </if>
+				<!-- 5.차종별 -->
+				<if test='selectgub.equals("5")'> Y.CARCD, MAX(Y.CARNM) AS CARNM, </if>
+				SUM(Y.P_QTY_Y) AS P_QTY_Y, SUM(Y.P_COST_Y) AS P_COST_Y,
+				SUM(Y.P_QTY_M) AS P_QTY_M, SUM(Y.P_COST_M) AS P_COST_M,
+				SUM(Y.P_QTY_S) AS P_QTY_S, SUM(Y.P_COST_S) AS P_COST_S
+				FROM(
+					SELECT 
+					Z.COMPS, 
+					<!-- 1.제품별 -->
+					<if test='selectgub.equals("1")'> Z.PRDCD, MAX(TRIM(B.MSTRM)) AS PRDNM, </if>
+					<!-- 2.득의선별 -->
+					<if test='selectgub.equals("2")'> Z.PYVND, MAX(TRIM(C.CUSNM)) AS PRDNM,</if>
+					<!-- 3.제품별/득의선 -->
+					<if test='selectgub.equals("3")'> Z.PRDCD, Z.PYVND, MAX(TRIM(B.MSTRM)) AS PRDNM, MAX(TRIM(C.CUSNM)) AS PY_PRDNM, </if>
+					<!-- 4.득의선/제품별 -->
+					<if test='selectgub.equals("4")'> Z.PRDCD, Z.PYVND, MAX(TRIM(B.MSTRM)) AS PRDNM, MAX(TRIM(C.CUSNM)) AS PY_PRDNM,</if>
+					<!-- 5.차종별 -->
+					<if test='selectgub.equals("5")'> Z.CARCD, MAX(TRIM(B.MSTSM)) AS CARNM, </if>
+					SUM(Z.P_QTY_Y) AS P_QTY_Y, SUM(Z.P_COST_Y) AS P_COST_Y,
+					SUM(Z.P_QTY_M) AS P_QTY_M, SUM(Z.P_COST_M) AS P_COST_M,
+					SUM(Z.P_QTY_S) AS P_QTY_S, SUM(Z.P_COST_S) AS P_COST_S
+					FROM(
+						<include refid="salAnlysView"></include>
+					) Z
+					<!-- 1.제품별 -->
+					<if test='selectgub.equals("1")'>
+					LEFT OUTER JOIN ${lib2}.MST050PF B ON Z.COMPS=B.COMPS AND Z.PRDCD=B.MSTCD AND B.GRPCD='PRD'
+					GROUP BY Z.COMPS, Z.PRDCD
+					</if>
+					<!-- 2.득의선별 -->
+					<if test='selectgub.equals("2")'>
+					LEFT OUTER JOIN ${lib1}.CUSMAS C ON Z.PYVND=C.CUSNO
+					GROUP BY Z.COMPS, Z.PYVND</if>
+					<!-- 3.제품별/득의선 -->
+					<if test='selectgub.equals("3")'>
+					LEFT OUTER JOIN ${lib2}.MST050PF B ON Z.COMPS=B.COMPS AND Z.PRDCD=B.MSTCD AND B.GRPCD='PRD'
+					LEFT OUTER JOIN ${lib1}.CUSMAS C ON Z.PYVND=C.CUSNO
+					GROUP BY Z.COMPS, Z.PRDCD, Z.PYVND
+					</if>
+					<!-- 4.득의선/제품별 -->
+					<if test='selectgub.equals("4")'>
+					LEFT OUTER JOIN ${lib2}.MST050PF B ON Z.COMPS=B.COMPS AND Z.PRDCD=B.MSTCD AND B.GRPCD='PRD'
+					LEFT OUTER JOIN ${lib1}.CUSMAS C ON Z.PYVND=C.CUSNO
+					GROUP BY Z.COMPS, Z.PRDCD, Z.PYVND
+					</if>
+					<!-- 5.득의선/제품별 -->
+					<if test='selectgub.equals("5")'>
+					LEFT OUTER JOIN ${lib2}.MST050PF B ON Z.COMPS=B.COMPS AND Z.CARCD=B.MSTCD AND B.GRPCD='CAR'
+					GROUP BY Z.COMPS, Z.CARCD
+					</if>
+				) Y
+			<!-- 1.제품별 -->
+			<if test='selectgub.equals("1")'> GROUP BY Y.PRDCD</if>
+			<!-- 2.득의선별 -->
+			<if test='selectgub.equals("2")'> GROUP BY Y.PYVND</if>
+			<!-- 3.제품별/득의선 -->
+			<if test='selectgub.equals("3")'> GROUP BY Y.PRDCD, Y.PYVND</if>
+			<!-- 4.득의선/제품별 -->
+			<if test='selectgub.equals("4")'> GROUP BY Y.PRDCD, Y.PYVND</if>
+			<!-- 5.차종별 -->
+			<if test='selectgub.equals("5")'> GROUP BY Y.CARCD</if>
+			) A
+			
+		<!-- 1.제품별 -->
+		<if test='selectgub.equals("1")'> ORDER BY COMPS, A.PRDCD</if>
+		<!-- 2.득의선별 -->
+		<if test='selectgub.equals("2")'> ORDER BY COMPS, A.PYVND</if>
+		<!-- 3.제품별/득의선 -->
+		<if test='selectgub.equals("3")'> ORDER BY COMPS, A.PRDCD, A.PYVND</if>
+		<!-- 4.득의선/제품별 -->
+		<if test='selectgub.equals("4")'> ORDER BY COMPS, A.PYVND, A.PRDCD</if>
+		<!-- 5.득의선/제품별 -->
+		<if test='selectgub.equals("5")'> ORDER BY COMPS, A.CARCD</if>
+  </select>
+  
+	<!-- 1.제품별 -->
+<select id="searchByProduct" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+	SELECT 
+			A.COMPS,
+			A.PRDCD,
+			TRIM(B.MSTRM)AS PRDNM,
+			A.P_QTY_Y, -- 수량 년계 
+			A.P_QTY_M, -- 수량 단계
+			A.P_QTY_S, -- 수량 실적
+			(A.P_QTY_S - A.P_QTY_Y) AS P_QTY_Y_GP, -- 수량 년계 차이			
+			/*'SqlMap-SalAnlysViewDomain.searchByProduct' = 'SqlMap-SalAnlysViewDomain.searchByProduct' */
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END AS P_QTY_Y_FLAT, -- 수량 년계 달성률
+					
+			(A.P_QTY_S - A.P_QTY_M) AS P_QTY_M_GP, -- 수량 단계 차이
+			
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_M AS FLOAT))  *  100, 2) END 
+			END AS P_QTY_M_FLAT, -- 수량 단계 달성률
+											
+			A.P_COST_Y, -- 금액 년계
+			A.P_COST_M, -- 금액 단계
+			A.P_COST_S, -- 금액 실적
+			(A.P_COST_S - A.P_COST_Y) AS P_COST_Y_GP, -- 금액 년계 차이
+			
+			CASE A.P_COST_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2) END 
+			END AS P_COST_Y_FLAT, -- 금액 년계 달성률
+						
+			(A.P_COST_S - A.P_COST_M) AS P_COST_M_GP, -- 금액 단계 차이		
+			
+			CASE A.P_COST_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_M AS FLOAT))  *  100, 2) END 
+			END AS P_COST_M_FLAT -- 금액 단계 달성률
+						
+		FROM
+			(
+				SELECT 
+				Z.COMPS, Z.PRDCD,
+				SUM(Z.P_QTY_Y) AS P_QTY_Y, SUM(Z.P_COST_Y) AS P_COST_Y,
+				SUM(Z.P_QTY_M) AS P_QTY_M, SUM(Z.P_COST_M) AS P_COST_M,
+				SUM(Z.P_QTY_S) AS P_QTY_S, SUM(Z.P_COST_S) AS P_COST_S
+				FROM(
+					<include refid="salAnlysView"></include>
+				) Z
+				GROUP BY Z.COMPS, Z.PRDCD
+			) A
+			LEFT OUTER JOIN ${lib2}.MST050PF B ON A.COMPS=B.COMPS AND A.PRDCD=B.MSTCD AND B.GRPCD='PRD'
+		ORDER BY A.COMPS, A.PRDCD
+</select>
+  
+  	<!--2.득의선별-->
+ <select id="searchByIntrsSelec" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			A.COMPS,
+			A.PYVND,
+			TRIM(C.CUSNM) AS PRDNM,
+			A.P_QTY_Y,
+			A.P_QTY_M,
+			A.P_QTY_S,
+			A.P_QTY_S - A.P_QTY_Y AS P_QTY_Y_GP, 
+			/*'SqlMap-SalAnlysViewDomain.searchByIntrsSelec' = 'SqlMap-SalAnlysViewDomain.searchByIntrsSelec' */
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END  AS P_QTY_Y_FLAT, 
+			A.P_QTY_S - A.P_QTY_M AS P_QTY_M_GP ,
+			CASE A.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_QTY_S AS FLOAT) / CAST(A.P_QTY_M AS FLOAT))  *  100, 2)  END 				
+			END AS P_QTY_M_FLAT, 
+			A.P_COST_Y, 
+			A.P_COST_M, 
+			A.P_COST_S,
+			A.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, 
+			CASE A.P_COST_S  WHEN 0 THEN 0 
+			ELSE 	
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2)  END 							 
+			END AS P_COST_Y_FLAT, 
+			A.P_COST_S - A.P_COST_M AS P_COST_M_GP, 
+			CASE A.P_COST_S  WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(A.P_COST_S AS FLOAT) / CAST(A.P_COST_M AS FLOAT))  *  100, 2)   END 								
+			END AS P_COST_M_FLAT 
+		FROM
+			(
+				SELECT 
+				Z.COMPS, Z.PYVND,
+				SUM(Z.P_QTY_Y) AS P_QTY_Y, SUM(Z.P_COST_Y) AS P_COST_Y,
+				SUM(Z.P_QTY_M) AS P_QTY_M, SUM(Z.P_COST_M) AS P_COST_M,
+				SUM(Z.P_QTY_S) AS P_QTY_S, SUM(Z.P_COST_S) AS P_COST_S
+				FROM(
+					<include refid="salAnlysView"></include>
+				) Z
+				GROUP BY Z.COMPS, Z.PYVND
+			) A
+			LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.PYVND=C.CUSNO
+		ORDER BY A.COMPS, A.PYVND
+
+  </select>
+  
+  <!-- 원본 -->
+ <select id="searchByProduct_ORG" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			A.COMPS,
+			A.PRDCD,
+			(select Z.mstrm from ${lib2}.mst050pf Z where trim(Z.grpcd) = 'PRD' and Z.mstcd = A.PRDCD fetch first 1 row only) AS PRDNM,
+			A.P_QTY_Y, -- 수량 년계 
+			B.P_QTY_M, -- 수량 단계
+			C.P_QTY_S, -- 수량 실적
+			C.P_QTY_S - A.P_QTY_Y AS P_QTY_Y_GP, -- 수량 년계 차이
+			ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) AS P_QTY_Y_FLAT, -- 수량 년계 달성률
+			C.P_QTY_S - B.P_QTY_M AS P_QTY_M_GP, -- 수량 단계 차이
+			ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(B.P_QTY_M AS FLOAT))  *  100, 2) AS P_QTY_M_FLAT, -- 수량 단계 달성률
+			A.P_COST_Y, -- 금액 년계
+			B.P_COST_M, -- 금액 단계
+			C.P_COST_S, -- 금액 실적
+			C.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, -- 금액 년계 차이
+			ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2) AS P_COST_Y_FLAT, -- 금액 년계 달성률
+			C.P_COST_S - B.P_COST_M AS P_COST_M_GP, -- 금액 단계 차이
+			ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(B.P_COST_M AS FLOAT))  *  100, 2) AS P_COST_M_FLAT-- 금액 단계 달성률
+		FROM
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD,
+			SUM(A.MONQY) AS P_QTY_Y,
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y
+			FROM ${lib2}.SPY200PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 
+			WHERE
+			A.PLNGB = #{plngb} --계획구분  1 : 계획, 2:수정
+			AND A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>			
+									 
+			GROUP BY A.COMPS, A.PRDCD) A,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD,  
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M,
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+			FROM ${lib2}.SPM110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD  
+			WHERE
+			A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+			AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>			
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>												
+			
+			GROUP BY A.COMPS, A.PRDCD) B
+			,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+			AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>			
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>						
+			
+			GROUP BY A.COMPS, A.PRDCD) C
+			where
+			'SqlMap-SalAnlysView.searchByProduct_ORG' = 'SqlMap-SalAnlysView.searchByProduct_ORG'
+			AND A.COMPS = B.COMPS
+			AND A.PRDCD = B.PRDCD
+			AND B.COMPS = C.COMPS
+			AND B.PRDCD = C.PRDCD
+
+			ORDER BY PRDCD ASC
+  </select>
+  
+	<!-- intrsSelec -->
+ <select id="searchByIntrsSelec_ORG" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			A.COMPS,
+			A.PYVND,
+			(select Z.mstrm from ${lib2}.mst050pf Z where trim(Z.grpcd) = 'PRD' and Z.mstcd = A.PRDCD fetch first 1 row only) AS PRDNM,
+			A.P_QTY_Y,
+			B.P_QTY_M,
+			C.P_QTY_S,
+			C.P_QTY_S - A.P_QTY_Y AS P_QTY_Y_GP, 
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END  AS P_QTY_Y_FLAT, 
+			C.P_QTY_S - B.P_QTY_M AS P_QTY_M_GP ,
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(B.P_QTY_M AS FLOAT))  *  100, 2)  END 				
+			END AS P_QTY_M_FLAT, 
+			A.P_COST_Y, 
+			B.P_COST_M, 
+			C.P_COST_S,
+			C.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 	
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2)  END 							 
+			END AS P_COST_Y_FLAT, 
+			C.P_COST_S - B.P_COST_M AS P_COST_M_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(B.P_COST_M AS FLOAT))  *  100, 2)   END 								
+			END AS P_COST_M_FLAT 
+		FROM
+			(SELECT
+			A.COMPS AS COMPS,  A.PYVND,
+			SUM(A.MONQY) AS P_QTY_Y,
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y
+			FROM ${lib2}.SPY200PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE
+			A.PLNGB = #{plngb}
+			AND A.PLNYM = #{plnym}
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+			  
+			GROUP BY A.COMPS, A.PYVND) A,
+			(SELECT
+			A.COMPS AS COMPS,  A.PYVND,  
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M,
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+			FROM ${lib2}.SPM110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			 
+			WHERE
+			A.PLNYM = #{plnym}
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+			
+			GROUP BY A.COMPS, A.PYVND) B,
+			(SELECT
+			A.COMPS AS COMPS,  A.PYVND,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{plnym}
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND) C
+			where
+			'SqlMap-SalAnlysView.searchByIntrsSelec_ORG' = 'SqlMap-SalAnlysView.searchByIntrsSelec_ORG'
+			AND A.COMPS = B.COMPS
+			AND A.PYVND = B.PYVND
+			AND B.COMPS = C.COMPS
+			AND B.PYVND = C.PYVND
+			
+			ORDER BY A.PYVND ASC
+
+  </select>
+  
+  	<!-- product/intrsSelec -->
+ <select id="searchByPrdIntrsSelec_ORG" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			A.COMPS,
+			A.PRDCD,
+			(select Z.mstrm from ${lib2}.mst050pf Z where trim(Z.grpcd) = 'PRD' and Z.mstcd = A.PRDCD fetch first 1 row only) AS PRDNM,
+			A.PYVND,
+			A.PYVND AS PY_PRDNM,
+			A.P_QTY_Y, -- 수량 년계 
+			B.P_QTY_M, -- 수량 단계
+			C.P_QTY_S, -- 수량 실적
+			(C.P_QTY_S - A.P_QTY_Y) AS P_QTY_Y_GP, -- 수량 년계 차이
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END  AS P_QTY_Y_FLAT, 
+			C.P_QTY_S - B.P_QTY_M AS P_QTY_M_GP ,
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(B.P_QTY_M AS FLOAT))  *  100, 2)  END 				
+			END AS P_QTY_M_FLAT, 
+			A.P_COST_Y, 
+			B.P_COST_M, 
+			C.P_COST_S,
+			C.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 	
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2)  END 							 
+			END AS P_COST_Y_FLAT, 
+			C.P_COST_S - B.P_COST_M AS P_COST_M_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(B.P_COST_M AS FLOAT))  *  100, 2)   END 								
+			END AS P_COST_M_FLAT 
+		FROM
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,
+			SUM(A.MONQY) AS P_QTY_Y,
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y
+			FROM ${lib2}.SPY200PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE			
+			A.PLNGB = #{plngb} --계획구분) 1 : 계획, 2:수정
+			AND A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) A,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,  
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M,
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+			FROM ${lib2}.SPM110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			 
+			WHERE
+			A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+ 
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) B,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) C
+			where
+			'SqlMap-SalAnlysView.searchByPrdIntrsSelec_ORG' = 'SqlMap-SalAnlysView.searchByPrdIntrsSelec_ORG'
+			AND A.COMPS = B.COMPS
+			AND A.PRDCD = B.PRDCD
+			AND A.PYVND = B.PYVND
+			AND B.COMPS = C.COMPS
+			AND B.PRDCD = C.PRDCD
+			AND B.PYVND = C.PYVND
+
+			ORDER BY A.PYVND, A.PRDCD ASC
+
+
+  </select>
+  	<!-- product/intrsSelec -->
+ <select id="searchByIntrsSelecPrd_ORG" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			A.COMPS,
+			A.PYVND,
+			A.PYVND AS PY_PRDNM,
+			A.PRDCD,
+			(select Z.mstrm from ${lib2}.mst050pf Z where trim(Z.grpcd) = 'PRD' and Z.mstcd = A.PRDCD fetch first 1 row only) AS PRDNM,
+			A.P_QTY_Y, -- 수량 년계 
+			B.P_QTY_M, -- 수량 단계
+			C.P_QTY_S, -- 수량 실적
+			C.P_QTY_S - A.P_QTY_Y AS P_QTY_Y_GP, -- 수량 년계 차이
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE A.P_QTY_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(A.P_QTY_Y AS FLOAT))  *  100, 2) END 
+			END  AS P_QTY_Y_FLAT, 
+			C.P_QTY_S - B.P_QTY_M AS P_QTY_M_GP ,
+			CASE C.P_QTY_S WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_QTY_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_QTY_S AS FLOAT) / CAST(B.P_QTY_M AS FLOAT))  *  100, 2)  END 				
+			END AS P_QTY_M_FLAT, 
+			A.P_COST_Y, 
+			B.P_COST_M, 
+			C.P_COST_S,
+			C.P_COST_S - A.P_COST_Y AS P_COST_Y_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 	
+				CASE A.P_COST_Y WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(A.P_COST_Y AS FLOAT))  *  100, 2)  END 							 
+			END AS P_COST_Y_FLAT, 
+			C.P_COST_S - B.P_COST_M AS P_COST_M_GP, 
+			CASE C.P_COST_S  WHEN 0 THEN 0 
+			ELSE 
+				CASE B.P_COST_M WHEN 0 THEN 0 ELSE ROUND((CAST(C.P_COST_S AS FLOAT) / CAST(B.P_COST_M AS FLOAT))  *  100, 2)   END 								
+			END AS P_COST_M_FLAT 
+		FROM
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,
+			SUM(A.MONQY) AS P_QTY_Y,
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y
+			FROM ${lib2}.SPY200PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE			
+			A.PLNGB = #{plngb} --계획구분) 1 : 계획, 2:수정
+			AND A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) A,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,  
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M,
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+			FROM ${lib2}.SPM110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+ 
+			WHERE
+			A.PLNYM = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) B,
+			(SELECT
+			A.COMPS AS COMPS,  A.PRDCD, A.PYVND,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A
+			LEFT OUTER JOIN PSZDBLIB.SPZ110PF B ON A.PYVND= B.PYVND 
+			LEFT OUTER JOIN PSZDBLIB.SPZ100PF C ON B.ENDCCD = C.ENDCCD 			
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{plnym} --계획년월
+			<if test='!pltcd.equals("ALL")'>
+				AND A.COMPS IN (#{pltcd}) --C1:창원, S1:화성, H1:홍성
+			</if>
+			--업체
+			<if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+			</if>
+ 			--제품코드
+			<if test='prdcd1 != null and !prdcd1.equals("")'>	 			
+				AND A.PRDCD <![CDATA[>=]]> #{prdcd1} AND A.PRDCD <![CDATA[<=]]> #{prdcd2} 
+			</if>
+ 			--최종고객구분
+			<if test='endccd != null and !endccd.equals("")'>
+				AND C.endccd = #{endccd}
+			</if>
+ 			--납입구분 거점간거래 미포함 (사업부)			
+			<if test='paygub != null and !comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+			</if>
+ 			--납입구분 거점간거래 미포함 (전체)			
+			<if test='paygub != null and comps.equals("ALL")'>
+				AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF)  
+			</if>
+
+			GROUP BY A.COMPS, A.PYVND, A.PRDCD) C
+			where
+			'SqlMap-SalAnlysView.searchByIntrsSelecPrd_ORG' = 'SqlMap-SalAnlysView.searchByIntrsSelecPrd_ORG' 
+			AND A.COMPS = B.COMPS
+			AND A.PRDCD = B.PRDCD
+			AND A.PYVND = B.PYVND
+			AND B.COMPS = C.COMPS
+			AND B.PRDCD = C.PRDCD
+			AND B.PYVND = C.PYVND
+
+			ORDER BY A.PYVND, A.PRDCD ASC
+  </select>
+  
+  <select id="searchByDetail" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+  	<!-- 구현해야함. -->
+	select B.PSPNO,
+       B.P_QTY_Y,
+       B.P_QTY_M,
+       B.P_QTY_S,
+       B.P_QTY_S - B.P_QTY_Y   AS P_QTY_Y_GP,
+       CASE B.P_QTY_S
+           WHEN 0 THEN 0
+           ELSE
+               CASE B.P_QTY_Y
+                   WHEN 0 THEN 0
+                   ELSE ROUND((CAST(B.P_QTY_S AS FLOAT) / CAST(B.P_QTY_Y AS FLOAT)) * 100, 2) END
+           END                 AS P_QTY_Y_FLAT,
+       B.P_QTY_S - B.P_QTY_M   AS P_QTY_M_GP,
+       CASE B.P_QTY_S
+           WHEN 0 THEN 0
+           ELSE
+               CASE B.P_QTY_M
+                   WHEN 0 THEN 0
+                   ELSE ROUND((CAST(B.P_QTY_S AS FLOAT) / CAST(B.P_QTY_M AS FLOAT)) * 100, 2) END
+           END                 AS P_QTY_M_FLAT,
+       B.P_COST_Y,
+       B.P_COST_M,
+       B.P_COST_S,
+       B.P_COST_S - B.P_COST_Y AS P_COST_Y_GP,
+       CASE B.P_COST_S
+           WHEN 0 THEN 0
+           ELSE
+               CASE B.P_COST_Y
+                   WHEN 0 THEN 0
+                   ELSE ROUND((CAST(B.P_COST_S AS FLOAT) / CAST(B.P_COST_Y AS FLOAT)) * 100, 2) END
+           END                 AS P_COST_Y_FLAT,
+       B.P_COST_S - B.P_COST_M AS P_COST_M_GP,
+       CASE B.P_COST_S
+           WHEN 0 THEN 0
+           ELSE
+               CASE B.P_COST_M
+                   WHEN 0 THEN 0
+                   ELSE ROUND((CAST(B.P_COST_S AS FLOAT) / CAST(B.P_COST_M AS FLOAT)) * 100, 2) END
+           END                 AS P_COST_M_FLAT
+FROM (
+         SELECT A.PSPNO,A.PRDCD,
+                SUM(A.QTY_Y)   AS P_QTY_Y,
+                SUM(A.PCOST_Y) AS P_COST_Y,
+                SUM(A.QTY_M)   AS P_QTY_M,
+                SUM(A.PCOST_M) AS P_COST_M,
+                SUM(A.QTY_S)   AS P_QTY_S,
+                SUM(A.PCOST_S) AS P_COST_S
+         FROM (
+         		 <if test='comps.equals("구KA")'>
+                  SELECT A.PSPNO,A.PRDCD,
+                         A.MONQY           AS QTY_Y,
+                         A.MONQY * A.YESCS AS PCOST_Y,
+                         0                 AS QTY_M,
+                         0                 AS PCOST_M,
+                         0                 AS QTY_S,
+                         0                 AS PCOST_S
+                  FROM PSCDBLIB.SPY200PF A
+                  WHERE A.PLNYM = ${plnym}
+                    AND A.PLNGB = #{plngb}
+                  <if test='!pltcd.equals("ALL")'>
+					AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+				  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+	 			  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+                  UNION ALL
+                  SELECT A.PSPNO,A.PRDCD,
+                         0                                                                 AS QTY_Y,
+                         0                                                                 AS PCOST_Y,
+                         CASE WHEN 1 = 1 THEN A.SM0QY ELSE A.SL0QY END                     AS QTY_M,
+                         CASE WHEN 1 = 1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END AS PCOST_M,
+                         0                                                                 AS QTY_S,
+                         0                                                                 AS PCOST_S
+                  FROM PSCDBLIB.SPM110PF A
+                  WHERE A.PLNYM = ${plnym}
+                  <if test='!pltcd.equals("ALL")'>
+				  AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+				  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+		 		  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+				  </if>
+
+                  <if test='comps.equals("구KE")'>
+                  SELECT A.PSPNO,A.PRDCD,
+                         0       AS QTY_Y,
+                         0       AS PCOST_Y,
+                         0       AS QTY_M,
+                         0       AS PCOST_M,
+                         A.JPSQY AS QTY_S,
+                         A.JPSAM AS PCOST_S
+                  FROM PSCDBLIB.SMD110PF A
+                  WHERE
+                  A.JPSDT BETWEEN ${startDate} AND ${endDate} <!-- 출하일자 -->
+                  <if test='!pltcd.equals("ALL")'>
+				  AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+			  	  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+		 		  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+				  UNION ALL
+				  SELECT A.PSPNO,A.PRDCD,
+                         A.MONQY           AS QTY_Y,
+                         A.MONQY * A.YESCS AS PCOST_Y,
+                         0                 AS QTY_M,
+                         0                 AS PCOST_M,
+                         0                 AS QTY_S,
+                         0                 AS PCOST_S
+                  FROM PSEDBLIB.SPY200PF A
+                  WHERE A.PLNYM = ${plnym}
+                    AND A.PLNGB = #{plngb}
+                  <if test='!pltcd.equals("ALL")'>
+					AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+				  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+	 			  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+				  UNION ALL
+				  SELECT A.PSPNO,A.PRDCD,
+                         0                                                                 AS QTY_Y,
+                         0                                                                 AS PCOST_Y,
+                         CASE WHEN 1 = 1 THEN A.SM0QY ELSE A.SL0QY END                     AS QTY_M,
+                         CASE WHEN 1 = 1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END AS PCOST_M,
+                         0                                                                 AS QTY_S,
+                         0                                                                 AS PCOST_S
+                  FROM PSEDBLIB.SPM110PF A
+                  WHERE A.PLNYM = ${plnym}
+                  <if test='!pltcd.equals("ALL")'>
+				  AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+				  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+		 		  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+                  UNION ALL
+                  SELECT A.PSPNO,A.PRDCD,
+                         0       AS QTY_Y,
+                         0       AS PCOST_Y,
+                         0       AS QTY_M,
+                         0       AS PCOST_M,
+                         A.JPSQY AS QTY_S,
+                         A.JPSAM AS PCOST_S
+                  FROM PSEDBLIB.SMD110PF A
+                  WHERE
+                  A.JPSDT BETWEEN ${startDate} AND ${endDate} <!-- 출하일자 -->
+                  <if test='!pltcd.equals("ALL")'>
+				  AND A.COMPS IN (#{pltcd}) <!-- C1:창원, S1:화성, H1:홍성 -->
+				  </if>
+				  <!-- 업체 -->
+			  	  <if test='pyvnd1 != null and !pyvnd1.equals("")'>			 
+				  AND A.PYVND <![CDATA[>=]]> #{pyvnd1} AND A.PYVND <![CDATA[<=]]> #{pyvnd2} 
+				  </if>
+		 		  <!-- 납입구분 거점간거래 미포함 -->	
+				  <if test='paygub != null and !paygub.equals("")'>
+				  AND A.pyvnd NOT IN (select pyvnd from PSZDBLIB.SPZ120PF where comps = #{comps}) 
+				  </if>
+				  </if>
+              ) A
+         WHERE
+         'SqlMap-SalAnlysView.searchByDetail' = 'SqlMap-SalAnlysView.searchByDetail' 
+         AND A.PRDCD = #{prdcd}
+         GROUP BY A.PSPNO, A.PRDCD
+     )B
+
+  </select>
+  
+</mapper>

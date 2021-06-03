@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.RelationClsDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="RelationDb2" type="RelationDb2Domain">
+        <result property="dpcomp" column="DPCOMP" />
+        <result property="dpcode" column="DPCODE" />
+        <result property="dpconm" column="DPCONM" />
+        <result property="dpdpcode" column="DPDPCODE" />
+        <result property="dpdpnm" column="DPDPNM" />
+        <result property="cdnm" column="CDNM" />
+        <result property="prtcd" column="PRTCD" />
+        <result property="prtnm" column="PRTNM" />
+        <result property="comps" column="COMPS" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+    
+    <!-- 사업부 조회 -->
+    <select id="selectOGMgauge_Mst650pf" resultMap="RelationDb2" parameterType="RelationDb2Domain">
+    	select 
+			  trim(A.DPCODE) as DPCODE, trim(A.DPDPNM) as DPDPNM, A.DPCODE || ' | ' || A.DPDPNM as CDNM
+		from 
+			  ${lib2}.mst650pf as A
+		where 
+			  A.DPCOMP = #{dpcomp}
+    </select> 
+    
+    <!-- 파트조회psogmlib_sqlMap.selectOgm200_pop1 -->
+    <select id="searchByConditionForPart" resultMap="RelationDb2" parameterType="RelationDb2Domain">
+	    select 
+			PRTCD, PRTCD ||'  '|| trim(PRTNM) as PRTNM
+		from 
+			${lib2}.obc270pf
+		where 
+			COMPS = #{comps}
+			and PRTCD &lt; '99'
+		order by PRTCD
+    </select>
+    
+    <!-- 라인조회psogmlib_sqlMap.selectOgm200_pop2 -->
+    <select  id="searchByConditionForLine" resultMap="RelationDb2" parameterType="RelationDb2Domain">
+    	select 
+			LINCD, LINCD ||'  '|| trim(LINNM) as LINNM
+		from 
+			${lib2}.obc030pf
+		where 
+				'SqlMap-RelationDb2.searchByConditionForLine' = 'SqlMap-RelationDb2.searchByConditionForLine'
+			and COMPS = #{comps}
+		<if test="prtcd != null and prtcd != ''">
+			and PRTCD = #{prtcd}
+		</if>
+			and MLINE = '1'
+		order by LINCD
+    </select>
+</mapper>

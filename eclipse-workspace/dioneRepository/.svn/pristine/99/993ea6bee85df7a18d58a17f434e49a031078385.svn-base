@@ -1,0 +1,981 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="기부금신고파일생성" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_uploadFile">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ207UC_A">
+				<Contents>
+					<colinfo id="SABUN" size="256" summ="default" type="INT"/>
+					<colinfo id="C6" size="256" summ="default" type="STRING"/>
+					<colinfo id="C7" size="256" summ="default" type="STRING"/>
+					<colinfo id="C8" size="256" summ="default" type="STRING"/>
+					<colinfo id="C9" size="256" summ="default" type="STRING"/>
+					<colinfo id="C10" size="256" summ="default" type="STRING"/>
+					<colinfo id="C11" size="256" summ="default" type="STRING"/>
+					<colinfo id="C12" size="256" summ="default" type="STRING"/>
+					<colinfo id="C13" size="256" summ="default" type="STRING"/>
+					<colinfo id="C14" size="256" summ="default" type="STRING"/>
+					<colinfo id="C15" size="256" summ="default" type="STRING"/>
+					<colinfo id="C16" size="256" summ="default" type="STRING"/>
+					<colinfo id="C17" size="256" summ="default" type="STRING"/>
+					<colinfo id="C18" size="256" summ="default" type="STRING"/>
+					<colinfo id="C19" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ207UC_B">
+				<Contents>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="D6" size="256" summ="default" type="STRING"/>
+					<colinfo id="D7" size="256" summ="default" type="STRING"/>
+					<colinfo id="D8" size="256" summ="default" type="STRING"/>
+					<colinfo id="D9" size="256" summ="default" type="STRING"/>
+					<colinfo id="D10" size="256" summ="default" type="STRING"/>
+					<colinfo id="D11" size="256" summ="default" type="STRING"/>
+					<colinfo id="D12" size="256" summ="default" type="STRING"/>
+					<colinfo id="D13" size="256" summ="default" type="STRING"/>
+					<colinfo id="D14" size="256" summ="default" type="STRING"/>
+					<colinfo id="D15" size="256" summ="default" type="STRING"/>
+					<colinfo id="D16" size="256" summ="default" type="STRING"/>
+					<colinfo id="D17" size="256" summ="default" type="STRING"/>
+					<colinfo id="D18" size="256" summ="default" type="STRING"/>
+					<colinfo id="D19" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ207UC_C">
+				<Contents>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="D6" size="256" summ="default" type="STRING"/>
+					<colinfo id="D7" size="256" summ="default" type="STRING"/>
+					<colinfo id="D8" size="256" summ="default" type="STRING"/>
+					<colinfo id="D9" size="256" summ="default" type="STRING"/>
+					<colinfo id="D10" size="256" summ="default" type="STRING"/>
+					<colinfo id="D11" size="256" summ="default" type="STRING"/>
+					<colinfo id="D12" size="256" summ="default" type="STRING"/>
+					<colinfo id="D13" size="256" summ="default" type="STRING"/>
+					<colinfo id="D14" size="256" summ="default" type="STRING"/>
+					<colinfo id="D15" size="256" summ="default" type="STRING"/>
+					<colinfo id="D16" size="256" summ="default" type="STRING"/>
+					<colinfo id="D17" size="256" summ="default" type="STRING"/>
+					<colinfo id="D18" size="256" summ="default" type="STRING"/>
+					<colinfo id="D19" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="3" Text="생&#32;성&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="white" Border="Flat" BorderColor="#b4b4b4" Font="Default,14,Bold" Height="60" Id="searchBar" TabOrder="4" Top="32" VAlign="Middle" Width="1060"></Static>
+		<File Bottom="24" Height="24" Id="ProFile" Left="872" Right="896" TabOrder="7" Width="24"></File>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="944" Right="968" TabOrder="8" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="976" Right="1000" TabOrder="7" Width="24"></File>
+		<CyHttpFile Height="24" Id="CyHttpFile0" Left="904" Width="24"></CyHttpFile>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="6" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="124" Style="static" TabOrder="5" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="128" OnChanged="common_OnChanged" TabOrder="5" Top="37" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static28" Left="867" TabOrder="11" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static31" Left="751" TabOrder="10" Text="제&#32;출&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_SUBMISSION" Left="872" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="9" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="341" TabOrder="14" Top="34" VAlign="Middle" Width="195"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="225" TabOrder="13" Text="기&#32;준&#32;년&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_FR" Left="346" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_TO" Left="450" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="15" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Static Align="Center" Height="11" Id="Static154" Left="430" TabOrder="16" Text="~" Top="42" VAlign="Middle" Width="15"></Static>
+		<Button Height="26" Id="btn_write" ImageID="sum_생성" Left="975" OnClick="btn_write_OnClick" TabOrder="17" Text="File&#32;생성" Top="35" Width="70"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="541" TabOrder="18" Text="연&#32;말&#32;정&#32;산" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="657" TabOrder="20" Top="34" VAlign="Middle" Width="88"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmb_PTJYM" Left="662" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="19" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Button Height="25" Id="btnUpload" ImageID="btn2_search2" Left="880" OnClick="Div1_btn_FINDFILE_OnClick" TabOrder="21" Text="조회" Top="65" Width="75"></Button>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="122" Style="static" TabOrder="22" Top="64" VAlign="Middle" Width="750"></Static>
+		<Edit Border="Default" BorderColor="SCROLLBAR" Enable="FALSE" Height="20" Id="ed_path" ImeMode="none" Left="126" MaxLength="15" TabOrder="23" TabStop="FALSE" Top="67" UpperOnly="TRUE" Width="738"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="4" TabOrder="24" Text="파&#32;일&#32;찿&#32;기" Top="64" VAlign="Middle" Width="116"></Static>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_HAYZ207UC_A" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="400" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="168" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" Right="1056" SelColor="black" TabOrder="24" TabStop="true" Top="232" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="33"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="50"/>
+						<col width="70"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="105"/>
+						<col width="80"/>
+						<col width="95"/>
+						<col width="95"/>
+						<col width="95"/>
+						<col width="40"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="주민등록번호"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" expr='&quot;내외국인\n구분&quot;' text="내외국인구분"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="성명"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="유형코드"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="기부연도"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="기부금액"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" expr='&quot;전년까지\n공제된&#32;금액&quot;' text="전년까지&#32;공제된&#32;금액"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" expr='&quot;공제대상\n금액&quot;' text="공제대상금액"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" expr='&quot;해당년도\n공제금액&#32;필요경비&quot;' text="해당년도공제금액&#32;필요경비"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" expr='&quot;해당년도\n공제금액&quot;' text="해당년도&#32;공제금액"/>
+						<cell bkcolor="#dfdfdf" col="12" display="text" expr='&quot;해당년도&#32;미공제\n소멸금액&quot;' text="해당년도에&#32;공제받지못한금액_소멸금액"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text" expr='&quot;해당년도&#32;미공제\n이월금액&quot;' text="해당년도에&#32;공제받지못한금액_이월금액"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text" expr='&quot;기부금조정명세\n일련번호&quot;' text="기부금조정명세&#32;일련번호"/>
+						<cell bkcolor="#dfdfdf" col="15" display="text" text="공란"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1"/>
+						<cell align="center" checklength="Byte" col="1" colid="SABUN" display="normal"/>
+						<cell align="center" checklength="Byte" col="2" colid="C6" display="normal"/>
+						<cell align="center" checklength="Byte" col="3" colid="C7" display="normal"/>
+						<cell align="center" checklength="Byte" col="4" colid="C8" display="normal"/>
+						<cell align="center" checklength="Byte" col="5" colid="C9" display="normal"/>
+						<cell align="center" checklength="Byte" col="6" colid="C10" display="normal"/>
+						<cell align="right" checklength="Byte" col="7" colid="C11" display="number"/>
+						<cell align="right" checklength="Byte" col="8" colid="C12" display="number"/>
+						<cell align="right" checklength="Byte" col="9" colid="C13" display="number"/>
+						<cell align="right" checklength="Byte" col="10" colid="C14" display="number"/>
+						<cell align="right" checklength="Byte" col="11" colid="C15" display="number"/>
+						<cell align="right" checklength="Byte" col="12" colid="C16" display="number"/>
+						<cell align="right" checklength="Byte" col="13" colid="C17" display="number"/>
+						<cell align="right" checklength="Byte" col="14" colid="C18" display="normal"/>
+						<cell align="center" checklength="Byte" col="15" colid="C19" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<TextArea CheckLength="Byte" Height="48" HScroll="TRUE" Id="ta_RESULT" TabOrder="26" Top="568" VScroll="TRUE" Width="1056"></TextArea>
+		<File Bottom="26" Height="24" Id="File0" Left="835" Right="859" TabOrder="26" Top="2" Width="24"></File>
+		<Static Height="16" Id="Static25" Left="568" TabOrder="27" Text="**&#32;소득자&#32;건수(중복제외)&#32;:" Top="200" Width="176"></Static>
+		<Static Height="15" Id="Static26" Left="814" TabOrder="28" Text="**&#32;해당년도&#32;기부명세건수&#32;:" Top="201" Width="162"></Static>
+		<Static Align="Right" Border="SunkenEdge" Height="19" Id="st_REC_C" Left="729" TabOrder="29" Top="199" Width="49"></Static>
+		<Static Align="Right" Border="SunkenEdge" Height="19" Id="st_REC_D" Left="975" TabOrder="30" Top="197" Width="49"></Static>
+		<Static Height="13" Id="Static29" Left="782" TabOrder="31" Text="건" Top="203" Width="10"></Static>
+		<Static Height="15" Id="Static30" Left="1028" TabOrder="32" Text="건" Top="201" Width="12"></Static>
+		<Static Border="SunkenEdge" Font="Default,12,Bold" Height="96" Id="Static0" Left="568" TabOrder="50" Text="**&#32;B&#32;레코드&#32;(원천징수&#32;의무자별&#32;집계)" Top="96" Width="476"></Static>
+		<Static Border="SunkenEdge" Font="Default,12,Bold" Height="120" Id="Static3" Left="4" TabOrder="49" Text="**&#32;A&#32;레코드&#32;(제출자&#32;대리인)" Top="96" Width="556"></Static>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_gijunym" Left="88" TabOrder="33" Top="120" Width="87"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_saupjano" Left="400" TabOrder="34" Top="117" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_sajang" Left="88" TabOrder="35" Top="168" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_brandname" Left="88" TabOrder="36" Top="144" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_postcode" Left="400" TabOrder="37" Top="165" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_bubinno" Left="400" TabOrder="38" Top="141" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_address" Left="88" TabOrder="39" Top="192" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_telno" Left="400" TabOrder="40" Top="189" Width="144"></Edit>
+		<Static Font="Default,10" Height="20" Id="Static5" Left="16" TabOrder="41" Text="기&#32;준&#32;년&#32;월" Top="120" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static9" Left="16" TabOrder="42" Text="업&#32;&#32;체&#32;&#32;명" Top="144" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static10" Left="16" TabOrder="43" Text="대&#32;표&#32;자&#32;명" Top="168" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static12" Left="16" TabOrder="44" Text="주&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;소" Top="192" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static13" Left="312" TabOrder="45" Text="사업자등록번호" Top="120" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static14" Left="312" TabOrder="46" Text="법인등록번호" Top="144" Width="80"></Static>
+		<Static Font="Default,10" Height="20" Id="Static17" Left="312" TabOrder="47" Text="우&#32;편&#32;번&#32;호" Top="168" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static18" Left="312" TabOrder="48" Text="전&#32;화&#32;번&#32;호" Top="192" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static21" Left="584" TabOrder="52" Text="기부금액&#32;총계" Top="166" Width="80"></Static>
+		<Static Font="Default,10" Height="20" Id="Static22" Left="584" TabOrder="51" Text="해당년도&#32;건수" Top="136" Width="88"></Static>
+		<Static Font="Default,10" Height="20" Id="Static27" Left="798" TabOrder="54" Text="공제대상금액&#32;총계" Top="166" Width="118"></Static>
+		<Static Font="Default,10" Height="20" Id="Static32" Left="799" TabOrder="53" Text="조정명세&#32;건수" Top="136" Width="104"></Static>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_CCOUNT" Left="672" TabOrder="55" Top="131" Value="0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_KIBU" Left="672" TabOrder="56" Top="163" Value="0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_DCOUNT" Left="912" TabOrder="57" Top="131" Value="0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_KIBU_EXC" Left="912" TabOrder="58" Top="163" Value="0" Width="120"></MaskEdit>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_HAYZ207UC_B" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="562" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="144" Id="MainGrid2" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" Right="1056" SelColor="black" TabOrder="59" TabStop="true" Top="418" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="33"/>
+						<col width="80"/>
+						<col width="95"/>
+						<col width="50"/>
+						<col width="95"/>
+						<col width="120"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="70"/>
+						<col width="95"/>
+						<col width="50"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="70"/>
+						<col width="40"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" expr='&quot;소득자\n주민등록번호&quot;' text="소득자주민등록번호"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" expr='&quot;유형\n코드&quot;' text="유형코드"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" expr='&quot;사업자\n등록번호&quot;' text="사업자등록번호"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="상호(법인명)"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" expr='&quot;관계\n코드&quot;' text="관계코드"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" expr='&quot;내외국인\n구분&quot;' text="내외국인구분"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="성명"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="주민등록번호"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" text="건수"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" expr='&quot;기부금\n합계금액&quot;' text="기부금합계금액"/>
+						<cell bkcolor="#dfdfdf" col="12" display="text" expr='&quot;공제대상\n기부금액&quot;' text="공제대상기부금액"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text" expr='&quot;기부장려금\n신청금액&quot;' text="기부장려금신청금액"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text" expr='&quot;해당년도\n기부명세&#32;일련&quot;' text="해당연도&#32;기부명세&#32;일련"/>
+						<cell bkcolor="#dfdfdf" col="15" display="text" text="공란"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1"/>
+						<cell align="center" checklength="Byte" col="1" colid="SABUN" display="normal"/>
+						<cell align="center" checklength="Byte" col="2" colid="D6" display="normal"/>
+						<cell align="center" checklength="Byte" col="3" colid="D7" display="normal"/>
+						<cell align="center" checklength="Byte" col="4" colid="D8" display="normal"/>
+						<cell align="left" checklength="Byte" col="5" colid="D9" display="normal"/>
+						<cell align="center" checklength="Byte" col="6" colid="D10" display="normal"/>
+						<cell align="center" checklength="Byte" col="7" colid="D11" display="normal"/>
+						<cell align="center" checklength="Byte" col="8" colid="D12" display="normal"/>
+						<cell align="right" checklength="Byte" col="9" colid="D13" display="normal"/>
+						<cell align="right" checklength="Byte" col="10" colid="D14" display="number"/>
+						<cell align="right" checklength="Byte" col="11" colid="D15" display="number"/>
+						<cell align="right" checklength="Byte" col="12" colid="D16" display="number"/>
+						<cell align="right" checklength="Byte" col="13" colid="D17" display="number"/>
+						<cell align="right" checklength="Byte" col="14" colid="D18" display="number"/>
+						<cell align="center" checklength="Byte" col="15" colid="D19" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Font="Default,10" Height="20" Id="Static19" Left="8" TabOrder="60" Text="기부금조정명세" Top="216" VAlign="Middle" Width="96"></Static>
+		<Static Font="Default,10" Height="20" Id="Static20" Left="8" TabOrder="61" Text="해당연도기부명세" Top="400" VAlign="Middle" Width="112"></Static>
+		<Div Height="232" Id="Div2" Left="320" TabOrder="8" Text="Div2" Top="224" Visible="FALSE" Width="374">
+			<Contents>
+				<Static Align="Center" BKColor="lime" Border="Flat" Height="210" Id="Static0" Left="12" TabOrder="1" Text="DATA&#32;Check중입니다............" Top="2" VAlign="Middle" Width="351"></Static>
+			</Contents>
+		</Div>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : JAE.H.B
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAYZ207UC.xml
+ * ● PROGRAM DESCRIPTION  : 연말정산 의료비 신고파일생성
+ * ● DATE WRITTEN         : 2017.01.02
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+#include "script::spare_common.js";
+#include "script::fileupdown.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var Lib3 = G_ds_user.GetColumn(0,"LIB3");    //인사급여 LIBRARY(PSEDBLIB           PSCDBLIB.PSHDBLIB.PSSDBLIB)
+//var	Lib3 = "PSDIOLIB";    //인사급여 LIBRARY(PSEDBLIB           PSCDBLIB.PSHDBLIB.PSSDBLIB)
+
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var file_name;
+var result, SsId, BsId, Part, DName, TaxId, FileName, brandname;
+var FrDate, ToDate;
+
+//var gImgPath = ""; //연말정산 엑셀파일저장경로
+//var imgVpath=G_baseURL+"DIONE_UPDOWN_FILE";//서버파일주소경로
+var imgUPDOWNpath="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/";
+//서버파일주소경로
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	setYYMM();//기준년월
+}
+/********************************************************************** 
+ * 내용설명 : 사업부 선택 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value = comps;
+	ComboBoxPlant.Enable = false; 	
+	http.Sync = false;
+}
+function getDesign(){
+
+		
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	//MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.UserData = MainGrid.Height;
+
+	
+	MainGrid2.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid2.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid2.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid2.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid2.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid2.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid2.UserData = MainGrid2.Height;
+
+	//MainGrid2.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	//searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+
+	var result = true;
+	cmd_PTJYM_FR.BKColor="white";
+	cmd_PTJYM_TO.BKColor="white";
+	cmb_SUBMISSION.BKColor="white";
+
+	if(cmd_PTJYM_FR.Value == ""){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_TO.Value == ""){
+		cmd_PTJYM_TO.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_TO.SetFocus();
+		result = false;
+	}else if(cmb_SUBMISSION.Value == ""){
+		cmb_SUBMISSION.BKColor="paleturquoise";
+		alert("[확인] 제출일자를 확인하세요.");	
+		cmb_SUBMISSION.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_FR.Value > cmd_PTJYM_TO.Value){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}
+	return result;
+}
+ 
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}	
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_HAYZ207UC_A.ClearData();
+	ds_HAYZ207UC_B.ClearData();
+	ds_HAYZ207UC_C.ClearData();
+}
+//기준년월셋팅
+function setYYMM(){
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))-1+"0101";
+	}else{
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))+"0101";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}else{
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))+"1231";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		//alert(parseInt(substr(today(),0,4))-1);
+		cmb_PTJYM.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}
+}
+
+function rightb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, lengthb(strText) - nSize, nSize);
+	return tmp;
+}
+
+function leftb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, 0, nSize);
+	return tmp;
+}
+
+function btn_write_OnClick(obj)
+{
+	setHAYZ207UC();
+}
+
+function fn_write(obj)
+{
+	FileDialog0.Type = "SAVE";	
+
+	FileDialog0.Filter = "ALL File(*.*)|*.*";	
+	FileDialog0.FileName = FileName;
+	FileDialog0.Open("C:\\");	
+	File0.FileName = FileDialog0.FilePath + "\\" + FileName;	
+	File0.Open ( "w+" );
+	var len = File0.Write(result, 10000000000000);	
+	//alert("len= "+len);
+	File0.Close();
+	
+	if(!file_Upload()){
+		//ds_uploadFile.DeleteAll();
+		ds_uploadFile.ClearData();
+		FileDialog0.FileName= "";
+		alert("[알림]파일업로드중 오류가 발생하였습니다. 다시 시도해주시기 바랍니다.");
+		return false;
+	}
+	else {
+		FileDialog0.FileName= "";
+	}
+}
+
+function Div1_btn_FINDFILE_OnClick(obj)
+{
+	//FileDialog0.Filter = "ALL File(.xls)|*.xls";
+	FileDialog0.Filter = "ALL File(.xls;.xlsx)|*.xls;*.xlsx";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	//  파일 선택 창을 여는데 실패하였습니다.
+		return;
+	} 
+
+	ds_HAYZ207UC_A.ClearData();
+	ds_HAYZ207UC_B.ClearData();
+	ds_HAYZ207UC_C.ClearData();
+	
+	Div2.Visible = true;
+	
+	file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	setMessageDirect(path);	
+	ed_path.Text = path;
+	
+	ext_ExcelImportByIndex(path,3,"ds_HAYZ207UC_A",1,1,0,2);//upload4
+	ext_ExcelImportByIndex(path,4,"ds_HAYZ207UC_B",1,1,0,2);//upload4
+	//trace(ds_HAYZ207UC.SaveXML());
+	if (ds_HAYZ207UC_A.rowcount < 1){
+		alert("[경고] 생성할 data가 없습니다. 확인바랍니다."); 
+		return;	
+	}
+	//파일업로드관련 DATASET 및 파일명 생성
+	var imgName = "기부금명세서_"+comboBoxPlant.Text+"_"+substr(cmb_PTJYM.Value,0,4)+".xls";
+	//데이터셋에 로우 추가
+	ds_uploadFile.addRow();
+	//다이얼로그에서 선택한 파일의 경로명(파일명포함)을 데이터셋에 저장
+	ds_uploadFile.SetColumn(ds_uploadFile.row,"fullname", path);
+	//다이얼로그에서 선택한 파일명을 데이터셋에 저장
+	ds_uploadFile.SetColumn(ds_uploadFile.row,"filename", imgName);	
+	//END
+	
+	//DATA유효성검증
+	chkExcelData_A();
+	chkExcelData_B();
+	
+	Div2.Visible = false;
+}
+
+//파일업로드
+function file_Upload(obj)
+{
+	//연말정산파일저장경로는 년도별폴더/사업부 폴더에 저장한다.
+	var gImgPath =substr(cmb_PTJYM.Value,0,4)+"Year/";
+
+	if(ComboBoxPlant.Value =="E1"){
+		 gImgPath = gImgPath + "KE/";
+	}else if(ComboBoxPlant.Value =="C1"){
+		 gImgPath = gImgPath + "KAC/";
+	}else if(ComboBoxPlant.Value =="H1"){
+		 gImgPath = gImgPath + "KAH/";
+	}else if(ComboBoxPlant.Value =="S1"){
+		 gImgPath = gImgPath + "KAS/";
+	}
+	
+	var ret;
+	//파일선택 버튼을 이용해서 선택된 파일이 없는 경우 처리 생략
+	if(ds_uploadFile.rowcount != 0){
+		//데이터셋 로우 수 만큼 루프
+		for ( var i = 0 ; i < ds_uploadFile.rowcount ; i++ )
+		{
+			// 풀경로 취득
+			var file_url = ds_uploadFile.getColumn(i,"fullname");		
+			//로컬에서 선택한 파일명을 취득하여 변수에 설정
+			var str_param = ds_uploadFile.getColumn(i,"filename");
+			//업로드 할 서버 경로와 파일명
+			//var str_param_server = imgUPDOWNpath + str_param;
+			var str_param_server = imgUPDOWNpath + gImgPath + str_param;
+			//스크립트 파일의 함수 호출 
+			ret = gfn_FileWrite(CyHttpFile0, file_url, str_param_server, i, "prog_bar", CyHttpFile0);									
+			//호출함수 리턴값 처리
+			if ( ret[0] == "FAIL" )
+			{
+				alert(ret[1]);
+				break;
+			}
+		}
+	}
+	return true;	
+}
+
+function setHAYZ207UC()
+{
+	if(!validationChk()){
+		return;
+	}
+	ta_RESULT.Text="";
+	errcnt=0;
+	FrDate = substr(cmd_PTJYM_FR.Value,0,6); //기준년월(시작)
+	ToDate = substr(cmd_PTJYM_TO.Value,0,6); //기준년월(종료)
+	TotCnt=0;
+	Recode_Cnt=0;
+
+	ed_gijunym.Text = substr(cmd_PTJYM_TO.Value,0,6);						//기준년월
+	if (ComboBoxPlant.Value = "E1") {										//PE
+		ed_saupjano.Text = "609-81-01877";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아일렉트로닉스주식회사";  				//법인명(40)
+		ed_bubinno.Text = "194211-0000141";  								//법인번호
+		//ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_sajang.Text = "야규 히로시";  										//대표자명(30)
+		ed_postcode.Text = "641-020";  										//우편번호
+		ed_address.Text = "경남 창원시 마산합포구 첨단산업로3"; 			//소재지
+		ed_telno.Text = "055-220-9082";  									//담당전화번호
+		SsId = "6098101877"; 												//사업자등록번호
+		BsId = "1942110000141";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "박하정";  													//담당자(30)
+		TaxId = "DNPE538";  												//홈택스ID
+		FileName = "H6098101.877";
+		Lib1 ="PERESLIB";//cigma library
+		Lib2 ="PSEDBLIB";//회사 library
+		Lib3 ="PSEDBLIB";//사업부 library
+	}else if (ComboBoxPlant.Value = "C1") {									//KA창원
+		ed_saupjano.Text = "206-81-28245";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아오토모티브주식회사";  				//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text = "641-315";  										//우편번호
+		ed_address.Text = "경남 창원시 성산구 웅남로630";  					//소재지
+		ed_telno.Text = "055-600-9522"; 									//담당전화번호(15)
+		SsId = "2068128245";  												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "오성훈";  													//담당자(30)
+		TaxId = "DNPS200";  												//홈택스ID
+		FileName = "H2068128.245";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSCDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "H1") {									//PS홍성
+		ed_saupjano.Text = "310-85-09579";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text= "350-881"; 										//우편번호
+		ed_address.Text = "충남 홍성군 은하면 구성남로386";  				//소재지
+		ed_telno.Text = "041-630-2714";  									//담당전화번호
+		SsId = "3108509579"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "김태근";	  												//담당자(30)
+		TaxId = "DNPSHS";  													//홈택스ID
+		FileName = "H3108509.579";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSHDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "S1") {  								//PS화성
+		ed_saupjano.Text = "124-85-61218";  								//사업자등록번호      
+		ed_brandname.Text = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)      
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text = "445-944";            							//우편번호      
+		ed_address.Text = "경기도 화성시 장안면 장안공단5길9";  			//소재지
+		ed_telno.Text = "031-8059-9010"; 									//담당전화번호      
+		SsId = "1248561218"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "김상중"; 													//담당자(30)
+		TaxId = "";  														//홈택스ID      
+		FileName = "H1248561.218";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSSDBLIB";//사업부 library		
+	}
+
+	ed_CCOUNT.Text=ds_HAYZ207UC_A.rowcount;	//C레코드건수=해당년도건수
+	st_REC_D.Text=ds_HAYZ207UC_B.Sum("D14");	//해당년도 기부명세건수-D레코드 해당년도 기부명세 건수의 합
+	ed_DCOUNT.Text=ds_HAYZ207UC_B.rowcount;	//D레코드건수=조정명세건수
+	
+	ed_KIBU.Text=ds_HAYZ207UC_A.Sum("C11");	//C레코드 기부총금액
+	ed_KIBU_EXC.Text=ds_HAYZ207UC_A.Sum("C13");	//C레코드 공제대상총금액
+	
+	var result_A="";
+	/********************************************************************** 
+	 * 내용설명 : A 레코드(제출자(대리인) 레코드)
+	 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.제출연월일9(8), 5.제출자 구분9(1), 
+				  6.세무대리인or관리번호X(6), 7.홈택스 IDX(20), 8.세무프로그램코드X(4), 9.사업자등록번호X(10),
+				 10.법인명(상호)X(40), 11.담당자 부서X(30), 12.담당자 성명X(30), 13.담당자 전화번호X(15), 
+				 14.신고의무자수9(5), 15.사용한글코드9(3), 16.공란X(1342) 
+	**********************************************************************/ 
+	//  1.레코드구분 + 2.자료구분 + 3.세무서코드+ 4.제출일자 
+	result_A = "A" + "27" + "609" + cmb_SUBMISSION.Value;
+	// [제출자] 
+	//  5.제출자구분 6. 세무대리인 관리번호X(6)+ 7.홈테스ID X(20) + 8.세무프로그램코드X(4)
+	result_A += "2" + space(6)+ leftb(TaxId + space(20), 20) + "9000";
+	//  9.사업자등록번호X(10) +  10.상호X(40)
+	result_A += leftb(SsId + space(10), 10) + leftb(brandname + space(40), 40);
+	
+	// 11.담당자부서, 12.담당자성명, 13.담당자전화번호
+	//result_A += leftb(Part + space(30), 30) + leftb(DName + space(30), 30) + leftb(trim(ed_telno.Text) + space(15), 15);
+	result_A += leftb(Part + space(30), 30) + leftb(DName + space(30), 30) + leftb(replace(trim(ed_telno.Text),"-","") + space(15), 15);
+	// 14.신고의무자수(B 레코드수)
+	result_A += "00001";  	
+	// 15.사용한글코드, 16.공란 
+	result_A += "101" + space(12);
+	
+	if(lengthb(result_A) !=190 ) {
+		trace("result_A길이 error"+lengthb(result_A));
+		errcnt += 1;
+		return;
+	}
+	result += result_A;
+
+TotCnt += 1;//총 row계산
+
+	var result_B="";
+	/********************************************************************** 
+	 * 내용설명 : B 레코드(원천징수의무자별 집계레코드)
+	 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.일련번호9(6), 5.③사업자등록번호X(10),
+				  6.①법인명(상호)X(40), 7.기부금조정명세레코드수(C레코드)수9(7),
+				  8.해당연도 기부명세레코드수(D레코드)수9(7), 9.기부금 총계9(13), 10.공제대상금액총계9(13),
+				 11.제출대상기간 코드9(1), 12.공란X(87)
+	**********************************************************************/ 
+	// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호, 6.법인명(상호)
+	result_B += "B" + "27" + "609" + "000001" + leftb(SsId + space(10), 10) + leftb(ed_brandname.Text + space(40), 40);
+	// 7.기부금조정명세레코드(C레코드)건수, 8.해당연도 기부명세레코드(D레코드)건수
+	result_B += rightb("0000000" + ed_CCOUNT.Value, 7) + rightb("0000000" + ed_DCOUNT.Value, 7);
+	// 9.기부금 총계, 10.공제대상금액 총계
+	result_B += rightb("0000000000000" + ed_KIBU.Value, 13) + rightb("0000000000000" + ed_KIBU_EXC.Value, 13);
+	// 11.제출대상기간코드(1-연간합산제출), 12.공란
+	result_B +=  "1" + space(87);
+					
+	if(lengthb(result_B) !=190 ) {
+		trace("result_B길이 error"+lengthb(result_B));
+		errcnt += 1;
+		//return;
+	}
+						
+	result += "\r\n";
+	result += result_B;
+	
+TotCnt += 1;//총 row계산
+
+	var result_C="";
+	/********************************************************************** 
+	 * 내용설명 : C 레코드(기부금조정명세 레코드) -ds_HAYZ207UC_A
+	 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.일련번호9(6), 5.③사업자등록번호X(10),
+				  6.주민등록번호X(13), 7.내외국인구분9(1),
+				  8.성명X(30), 9.유형코드X(2), 10.기부연도9(4),
+				 11.기부금액9(13), 12.전년까지 공제된금액9(13), 13.공제대상금액9(13),
+				 14.해당년도공제금액필요경비9(13), 15. 해당년도공제금액 세액(소득)공제 9(13),
+				 16.해당년도에 공제받디못한금액_소멸금액9(13), 17.해당년도에 공제받디못한금액_이월금액9(13),
+				 18.기부금조정명세일련번호9(5), 19.공란X(22)
+	**********************************************************************/ 
+	var cur_SABUN, aft_SABUN;
+	var sabun_SEQ=1;//소득자별 일련번호(4번항목)
+	var C_REC_SEQ=1;//C레코드 사용자별일련번호
+	for(i=0; i<ds_HAYZ207UC_A.rowcount; i++){
+		result_C="";	//초기화
+		// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+		//result_C += "C" + "27" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+		result_C += "C" + "27" + "609" + rightb("000000" + sabun_SEQ, 6) + leftb(SsId + space(10), 10);
+		// 6.주민등록번호
+		result_C += leftb(trim(ds_HAYZ207UC_A.GetColumn(i,"C6")) + space(13), 13);
+		// 7.내외국인구분
+		result_C += rightb("0" +  ds_HAYZ207UC_A.GetColumn(i,"C7"), 1);
+		// 8.성명
+		result_C += leftb(trim(ds_HAYZ207UC_A.GetColumn(i,"C8")) + space(30), 30);
+		// 9.유형코드
+		result_C += leftb(trim(ds_HAYZ207UC_A.GetColumn(i,"C9")) + space(2), 2);
+		// 10.기부연도
+		result_C += rightb("0000" +  ds_HAYZ207UC_A.GetColumn(i,"C10"), 4);
+		// 11.기부금액
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C11"), 13);
+		// 12.전년까지 공제된금액
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C12"), 13);
+		// 13.공제대상금액
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C13"), 13);
+		// 14.해당년도공제금액필요경비(반드시'0000000000000'입력)
+		//result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C14"), 13);
+		result_C += "0000000000000";
+		// 15.해당년도공제금액 세액(소득)공제
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C15"), 13);
+		// 16.해당년도에 공제받디못한금액_소멸금액
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C16"), 13);
+		// 17.해당년도에 공제받디못한금액_이월금액
+		result_C += rightb("0000000000000" +  ds_HAYZ207UC_A.GetColumn(i,"C17"), 13);
+		// 18.기부금조정명세일련번호
+		//result_C += rightb("00000" +  ds_HAYZ207UC_A.GetColumn(i,"C18"), 5);
+		result_C += rightb("00000" + (C_REC_SEQ), 5);
+		// 19.공란
+		result_C += space(22);
+						
+		if(lengthb(result_C) !=190 ) {
+		
+			trace("result_C내용 error "+result_C);
+			trace("result_C길이 error "+i+"줄"+lengthb(result_C));
+			errcnt += 1;
+			return;
+		}
+		result += "\r\n";
+		result += result_C;
+TotCnt += 1;//총 row계산
+
+		
+		C_REC_SEQ +=1;	//C레코드-기부금조정명세일련번호 자동증가
+
+		//현재조회중인 사번
+		cur_SABUN=ds_HAYZ207UC_A.GetColumn(i,"SABUN");
+		//사번이 변경되면 D레코드를 조회한다.!!!!
+		aft_SABUN=ds_HAYZ207UC_A.GetColumn(i+1,"SABUN");
+
+		//D레코드 추가
+		if(cur_SABUN!=aft_SABUN){
+			C_REC_SEQ =1;	//C레코드-기부금조정명세일련번호 초기화
+			var result_D="";
+			ds_HAYZ207UC_C.Filter("SABUN=='" + cur_SABUN + "'");
+			//trace(cur_SABUN+"==="+ds_HAYZ207UC_C.rowcount);
+			for(j=0; j<ds_HAYZ207UC_C.rowcount; j++){
+				//trace(aft_SABUN+"==="+ds_HAYZ207UC_C.GetColumn(j,"SABUN"));
+				result_D="";	//초기화
+				/********************************************************************** 
+				 * 내용설명 : D 레코드(해당년도 기부명세 레코드) -ds_HAYZ207UC_B
+				 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.일련번호9(6), 5.③사업자등록번호X(10),
+							  6.주민등록번호X(13), 7.유형코드X(2),
+							  8.사업자(주민)등록번호X(13), 9.상호(법인명)X(30), 10.관계코드X(1),
+							 11.내외국인구분9(1), 12.성명X(20), 13.주민등록번호X(13),
+							 14.건수9(5), 15.기부금합계금액9(13), 16.공제대상기부금액9(13), 17.기부장려금신청금액9(13),
+							 18.해당년도 기부명세 일련번호9(5), 19.공란X(26)
+				**********************************************************************/ 
+				// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호,
+				//result_D += "D" + "27" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+				result_D += "D" + "27" + "609" + rightb("000000" + sabun_SEQ, 6) + leftb(SsId + space(10), 10);
+				//일련번호 확인필요!!1
+				// 6.주민등록번호
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D6")) + space(13), 13);
+				// 7.유형코드
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D7")) + space(2), 2);
+				// 8.사업자(주민)등록번호
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D8")) + space(13), 13);
+				// 9.상호(법인명)
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D9")) + space(30), 30);
+				// 10.관계코드
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D10")) + space(1), 1);
+				// 11.내외국인구분
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D11")) + space(1), 1);
+				// 12.성명
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D12")) + space(20), 20);
+				// 13.주민등록번호
+				result_D += leftb(trim(ds_HAYZ207UC_C.GetColumn(j,"D13")) + space(13), 13);
+				// 14.건수
+				result_D += rightb("00000" +  ds_HAYZ207UC_C.GetColumn(j,"D14"), 5);
+				// 15.기부금합계금액
+				result_D += rightb("0000000000000" +  ds_HAYZ207UC_C.GetColumn(j,"D15"), 13);
+				// 16.공제대상기부금액
+				result_D += rightb("0000000000000" +  ds_HAYZ207UC_C.GetColumn(j,"D16"), 13);
+				// 17.기부장려금신청금액
+				result_D += rightb("0000000000000" +  ds_HAYZ207UC_C.GetColumn(j,"D17"), 13);
+				// 18.해당년도 기부명세 일련번호
+				//확인필요 2017.01.04
+				//result_D += rightb("00000" +  ds_HAYZ207UC_C.GetColumn(j,"D18"), 5);//전체일련번호
+				result_D += rightb("00000" + (j+1), 5);//소득자별 일련번호			
+				// 19.공란
+				result_D += space(26);
+			
+				if(lengthb(result_D) !=190 ) {
+					trace("result_D길이 error"+lengthb(result_D));
+					errcnt += 1;
+					return;
+				}
+				result += "\r\n";
+				result += result_D;
+TotCnt += 1;//총 row계산
+			}
+			sabun_SEQ +=1;
+			ds_HAYZ207UC_C.UnFilter();
+		}
+	}
+
+	st_REC_C.Text=(sabun_SEQ-1);	//기부금조정명세 소득자건수 -'소득자 건수'는 중복을 제거한 기부금 조정명세 소득자 수
+	
+	ta_RESULT.Text = result;
+		
+	if(length(trim(result))!=0){
+		trace("총 Row = " +TotCnt);
+		fn_write();
+	}else{
+		alert("[알림]생성할 DATA가 없습니다.");
+	}
+}
+
+function chkExcelData_A(){
+	//주민번호가 없는 DATA는 삭제
+	for(i=ds_HAYZ207UC_A.rowcount; i>=0; i--){
+		if(trim(ds_HAYZ207UC_A.GetColumn(i,"SABUN"))==0){
+			ds_HAYZ207UC_A.DeleteRow(i);
+		}
+	}
+	for(i=0; i<ds_HAYZ207UC_A.rowcount; i++){
+		var p_C7=trim(ds_HAYZ207UC_A.GetColumn(i,"C7"));//소득자 내외국인 구분
+		var p_C9=trim(ds_HAYZ207UC_A.GetColumn(i,"C9"));//유형코드
+		if(p_C7 !=1 && p_C7 !=9){
+			alert("[알림] 기부조정명세 레코드 "+(i+1)+"번째줄의 소득자 내외국인 구분코드를 확인하세요");
+			return;
+		}
+		if(p_C9 !=10 && p_C9 !=20 && p_C9 !=40 && p_C9 !=41 && p_C9 !=42){
+			alert("[알림] 기부조정명세 레코드 "+(i+1)+"번째줄의 유형코드를 확인하세요");
+			return;
+		}
+	}
+	ds_HAYZ207UC_A.Sort("SABUN");
+
+	
+}
+function chkExcelData_B(){
+	//주민번호가 없는 DATA는 삭제
+	for(i=ds_HAYZ207UC_B.rowcount; i>=0; i--){
+		if(trim(ds_HAYZ207UC_B.GetColumn(i,"SABUN"))==0){
+			ds_HAYZ207UC_B.DeleteRow(i);
+		}
+	}
+	
+	for(i=0; i<ds_HAYZ207UC_B.rowcount; i++){
+		var p_D7=trim(ds_HAYZ207UC_B.GetColumn(i,"D7"));//유형코드
+		var p_D10=trim(ds_HAYZ207UC_B.GetColumn(i,"D10"));//관계코드
+		var p_D11=trim(ds_HAYZ207UC_B.GetColumn(i,"D11"));//소득자 내외국인 구분
+		
+		if(p_D7 !=10 && p_D7 !=20 && p_D7 !=40 && p_D7 !=41 && p_D7 !=42){
+			alert("[알림] 기부명세 레코드 "+(i+1)+"번째줄의 유형코드를 확인하세요");
+			return;
+		}
+		if(p_D10 !=1 && p_D10 !=2 && p_D10 !=3 && p_D10 !=4 && p_D10 !=5 && p_D10 !=6){
+			alert("[알림] 기부명세 레코드 "+(i+1)+"번째줄의 관계코드를 확인하세요");
+			return;
+		}
+		if(p_D11 !=1 && p_D11 !=9){
+			alert("[알림] 기부명세 레코드 "+(i+1)+"번째줄의 소득자 내외국인 구분코드를 확인하세요");
+			return;
+		}
+	}
+	
+	ds_HAYZ207UC_C.Copy(ds_HAYZ207UC_B);
+}]]></Script>
+</Window>

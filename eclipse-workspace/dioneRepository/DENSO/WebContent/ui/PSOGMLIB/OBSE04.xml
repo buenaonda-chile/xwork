@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="OBSE04" Left="8" OnFocus="OBSE04_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;생산작업지시&amp;불량처리관리" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04Group"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi003m"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_vppmi001mCode"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="DS_OBSE04Group" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="615" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="552" Id="etcGrid" InputPanel="FALSE" Left="3" LineColor="#888888" MinWidth="100" OnCellClick="etcGrid_OnCellClick" Right="201" TabOrder="3" TabStop="true" Top="63" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="198">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="56"/>
+						<col width="78"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="공정명"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="PROCS" display="text" LimitDec="0"/>
+						<cell align="left" col="2" colid="PRSNM" display="text" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="21" Width="24"></File>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="22" Type="Save" Width="24"></FileDialog>
+		<Tab Height="550" Id="Tab0" Left="205" PreLoad="TRUE" TabOrder="4" Top="63" Width="851">
+			<Contents>
+				<TabPage Height="527" Id="tab1" Left="2" TabOrder="24" Text="생산작업지시" Top="21" Url="psogmlib::OBSE04_TAB1.xml" Width="847"></TabPage>
+				<TabPage Height="527" Id="tab2" Left="2" TabOrder="24" Text="일일&#32;작업&#32;일보" Top="21" Url="psogmlib::OBSE04_TAB4.xml" Width="847"></TabPage>
+				<TabPage Height="527" Id="tab3" Left="2" TabOrder="24" Text="일별&#32;이상발생&#32;시간" Top="21" Url="psogmlib::OBSE04_TAB3.xml" Width="847"></TabPage>
+				<TabPage Height="527" Id="tab4" Left="2" TabOrder="24" Text="불량처리" Top="21" Url="psogmlib::OBSE04_TAB2.xml" Width="847"></TabPage>
+			</Contents>
+		</Tab>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="5" Top="30" Width="1057"></Static>
+		<Static BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="4" TabOrder="7" Top="32" Width="100"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="10" Style="static" TabOrder="6" Text="사&#32;업&#32;부" Top="37" VAlign="Middle" Width="90"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="105" ResetIndex="FIRST" TabOrder="8" Top="33" Width="90"></Combo>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static14" Left="200" TabOrder="9" Top="32" Width="100"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static13" Left="205" Style="static" TabOrder="11" Text="작업일자" Top="37" VAlign="Middle" Width="90"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_syyyymmdd" Left="302" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="10" Top="34" Width="90"></Calendar>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI001.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 공정정보 조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("1");	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 그룹 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE04Group(){
+	var sKind		= "getOBSE04Group";						
+	var sMethodName = "service::psogmlib/selectOBSE04Group.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             					// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE04Group=DS_OBSE04Group";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(cb_comp.Value);			
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");		
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "전광판 공정정보 조회";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "Grid0|전광판 공정정보 조회";
+	
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getOBSE04Group"){				
+		// 조회건수가 없을경우
+		if(DS_OBSE04Group.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {			
+			//DS_OBSE04Group.rowposition = -1;
+			//alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBSE04Group();		
+	
+	if(tab0.TabIndex == 0){			
+	} else if(tab0.TabIndex == 1){
+		//tab0.tab2.getOBSE04Tab4();					
+	} else if(tab0.TabIndex == 2){
+		tab0.tab3.procs = DS_OBSE04Group.GetColumn(DS_OBSE04Group.row,"PROCS");				
+		tab0.tab3.ordat = ed_syyyymmdd.Value;
+		tab0.tab3.fn_Search();				
+	} else if(tab0.TabIndex == 3){
+		//tab0.tab4.procs = DS_OBSE04Group.GetColumn(DS_OBSE04Group.row,"PROCS");				
+		tab0.tab4.ordat = ed_syyyymmdd.Value;		
+		tab0.tab4.getOBSE04Tab2();	
+	}	
+}
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+}
+
+function fn_Excel()
+{
+}
+
+function fn_Help()
+{
+}
+
+function etcGrid_OnCellClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	if(tab0.TabIndex == 0){
+		//tab0.tab1.DS_OBSE04_Tab1Sub.DeleteAll();
+		tab0.tab1.procs = DS_OBSE04Group.GetColumn(nRow,"PROCS");
+		tab0.tab1.ordat = ed_syyyymmdd.Value;
+		tab0.tab1.getOBSE04Tab1();	
+		
+	} else if(tab0.TabIndex == 1){
+		tab0.tab2.procs = DS_OBSE04Group.GetColumn(nRow,"PROCS");
+		tab0.tab2.ordat = ed_syyyymmdd.Value;
+		tab0.tab2.getOBSE04Tab4();			
+		
+	} else if(tab0.TabIndex == 2){		
+	} else if(tab0.TabIndex == 3){		
+	}	
+}
+
+function OBSE04_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1");
+}
+]]></Script>
+</Window>

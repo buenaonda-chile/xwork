@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="488" Id="form_1" Left="8" PidAttrib="7" Title="New&#32;Form" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="736" WorkArea="true">
+		<Button Height="21" Id="Button0" Left="496" OnClick="Button0_OnClick" TabOrder="1" Text="페이지&#32;연결" Top="456" Width="104"></Button>
+		<Edit Height="24" Id="Edit0" Left="8" TabOrder="2" Text="http://naver.com" Top="456" Width="482"></Edit>
+		<MSIE Bottom="450" Height="442" Id="IE0" Left="8" NewWindow2="IE0_NewWindow2" Right="729" Top="8" Width="721"></MSIE>
+	</Form>
+	<Script><![CDATA[
+function Button0_OnClick(obj)
+{
+	var strAddress = Edit0.text;
+	IE0.Navigate(strAddress);
+}
+
+function IE0_NewWindow2(obj,ppDisp,Cancel)
+{
+	var cnt = Global.Windows.Count;
+	var formname = "nf" + cnt++;
+	//alert(formname);
+	var xx  = '<?xml version="1.0" encoding="utf-8"?>\n';
+	xx += '<Window>\n';
+	xx += '<Form BKColor="" Height="768" Id="';
+	xx += formname;
+	xx += '" PidAttrib="7" OnInit="form_OnInit" Title="New&#32;Form" Ver="1.0" Width="1024" WorkArea="true">\n';
+	xx += '<MSIE Bottom="768" Height="767" Id="IE0" Left="1" RegisterAsBrowser="true" Right="800" Top="1" Width="1023">\n</MSIE>\n';
+	xx += '</Form><Script><![CDA';
+	xx += 'TA[\n';
+// script code
+	xx += 'function form_OnInit(obj,nInitWidth,nInitHeight)\n';
+	xx += '{\n';		
+	xx += '}\n';	
+	xx += ']]';
+	xx += '></Script></Window>';
+
+	Open( xx, "", -1,-1, "CloseFlag=true Resize=true",-1, -1);    
+
+	ppDisp = Global.Windows(cnt-1).IE0.Application;
+}  ]]></Script>
+</Window>

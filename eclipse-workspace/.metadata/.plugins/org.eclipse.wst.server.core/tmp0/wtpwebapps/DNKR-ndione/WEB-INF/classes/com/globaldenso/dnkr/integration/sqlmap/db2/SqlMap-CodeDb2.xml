@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CodeDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CodeDb2" type="CodeDb2Domain">
+        <result property="db2class" column="CLASS" />
+        <result property="code1" column="CODE1" />
+        <result property="code2" column="CODE2" />
+        <result property="code_name" column="CODE_NAME" />
+    </resultMap>
+  
+     <resultMap id="CodeDb2Mst050" type="CodeDb2Domain">
+        <result property="grpcd" column="GRPCD" />
+        <result property="mstcd" column="MSTCD" />
+        <result property="mstsm" column="MSTSM" />
+        <result property="mstrm" column="MSTRM" />
+    </resultMap>
+    
+    <resultMap id="CodeDb2F0901" type="CodeDb2Domain">
+        <result property="gmobj" column="GMOBJ" />
+        <result property="gmdl01" column="GMDL01" />
+        <result property="gmobjName" column="GMOBJNAME" />
+    </resultMap>
+    
+    <resultMap id="CodeDb2F0006LB" type="CodeDb2Domain">
+        <result property="mcmcu" column="MCMCU" />
+        <result property="mcdc" column="MCDC" />
+        <result property="mcName" column="MCNAME" />
+    </resultMap>
+    
+     <resultMap id="CodeDb2Mst650" type="CodeDb2Domain">
+        <result property="dpCode" column="DPCODE" />
+        <result property="dpDpnm" column="DPDPNM" />
+        <result property="dpCoDpnm" column="DPCODPNM" />
+    </resultMap>
+      
+     <!--  -->
+    <select id="comCode" resultMap="CodeDb2" parameterType="CodeDb2Domain">
+        SELECT
+				TRIM(CLASS) CLASS,
+				TRIM(CODE1) CODE1,
+				TRIM(CODE2) CODE2,
+				TRIM(CODE_NAME) CODE_NAME
+		FROM
+				PSZDBLIB.M_COM_CDE
+		WHERE
+					USER_YN ='1'
+			<if test="db2class != null and db2class != ''">
+				and CLASS = #{db2class}
+			</if>
+			<if test="code1 != null and code1 != ''">
+				and CODE1 = #{code1}
+			</if>
+    </select>
+    
+    <select id="comCodeMst050" resultMap="CodeDb2Mst050" parameterType="CodeDb2Domain">
+		SELECT
+			TRIM(GRPCD) GRPCD,
+			TRIM(MSTCD) MSTCD,
+			TRIM(MSTSM) MSTSM,
+			TRIM(MSTCD) || '  ' || TRIM(MSTRM)  MSTRM
+		FROM
+ 			${lib2}.MST050PF
+		WHERE
+		'SqlMap-CodeDb2.comCodeMST050'='SqlMap-CodeDb2.comCodeMST050'
+			<if test="comps != null and comps != ''">
+				AND COMPS = #{comps}
+			</if>
+			<if test="grpcd != null and grpcd != ''">
+				AND GRPCD = #{grpcd}
+			</if>
+			<if test="mstcd != null and mstcd != ''">
+				AND MSTCD = #{mstcd}
+			</if>
+			<if test="mstgu != null and mstgu != ''">
+				AND MSTCD != #{mstgu}
+			</if>
+		ORDER BY GRPCD
+    </select>
+    <!-- JDE 계정코드 조회 -->
+    <select id="comCodeJdeF0901" resultMap="CodeDb2F0901" parameterType="CodeDb2Domain">
+		SELECT
+			TRIM(GMOBJ) AS GMOBJ, MAX(GMDL01) AS GMDL01, TRIM(GMOBJ) ||':'||MAX(GMDL01) AS GMOBJNAME 
+			<!-- '${lib4}'||TRIM(GMOBJ) ||':'||MAX(GMDL01) AS GMOBJNAME  -->
+		FROM
+			${lib4}.F0901
+		WHERE
+			'SqlMap-CodeDb2.comCodeJdeF0901'='SqlMap-CodeDb2.comCodeJdeF0901'
+			AND trim(GMSUB)=''
+		GROUP BY GMOBJ
+		ORDER BY GMOBJ
+    </select>
+     <!-- JDE 계정코드 조회 -->
+    <select id="comCodeJdeF0006LB" resultMap="CodeDb2F0006LB" parameterType="CodeDb2Domain">
+		SELECT
+			TRIM(MCMCU) AS MCMCU, TRIM(MCDC) AS MCDC, TRIM(MCMCU) ||':'|| TRIM(MCDC) AS MCNAME
+		FROM
+			${lib4}.F0006LB
+		WHERE
+			'SqlMap-CodeDb2.comCodeJdeF0006LB'='SqlMap-CodeDb2.comCodeJdeF0006LB'
+			AND trim(MCRP12) != ''
+			<if test="mcstyl != null and mcstyl != ''">
+				AND trim(MCSTYL)=#{mcstyl}
+			</if>
+			<if test="mcrp11 != null and mcrp11 != ''">
+				AND trim(MCRP11)=#{mcrp11}
+			</if>
+		ORDER BY MCMCU
+    </select>
+    
+     <select id="comCodeMst650PF" resultMap="CodeDb2Mst650" parameterType="CodeDb2Domain">    
+SELECT
+DPCOMP, DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+DPCOMP ||':'|| DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+FROM PSEDBLIB.MST650PF
+WHERE DPCOMP='E1'
+AND TRIM(DPCONM) != '.' AND TRIM(DPCONM) != '' AND DPSYDT !=0
+
+UNION ALL
+SELECT
+DPCOMP, DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+DPCOMP ||':'|| DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+FROM PSCDBLIB.MST650PF
+WHERE DPCOMP IN ('C1','S1') AND DPEDSW='T'
+AND DPPAT0=1
+     
+<!-- 
+SELECT
+DPCOMP, DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+FROM PSEDBLIB.MST650PF
+WHERE DPCOMP='E1'
+AND TRIM(DPCONM) != '.' AND TRIM(DPCONM) != '' AND DPSYDT !=0
+ORDER BY DPCOMP, DPCODE
+
+SELECT
+DPCOMP, DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+FROM PSCDBLIB.MST650PF
+WHERE DPCOMP='C1' AND DPEDSW='T'
+AND DPPAT0=1
+ORDER BY DPCOMP, DPCODE
+ -->
+    </select>
+    
+    
+</mapper>

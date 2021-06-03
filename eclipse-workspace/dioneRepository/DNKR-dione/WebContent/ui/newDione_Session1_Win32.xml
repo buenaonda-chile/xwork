@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConnectGroup BkColor="white" Border="false" CodePage="utf-8" device="Win32&#32;(800x600)" Font="Default,0" height="600" OnBeforeExit="gFcOnBeforeExit" OnCommunication="gFcOnCommunication" OnLoadCompleted="gFcOnLoadCompleted" Statusbar="false" Title="DENSO" titlebar="true" version="1.0" width="800" work_height="1080" work_width="1920">
+	<container Version="1000"></container>
+	<protocols version="1000">
+		<protocol id="file" name="cyHttpAdp" version="1000"/>
+		<protocol id="http" name="cyHttpAdp" version="1000"/>
+		<protocol id="https" name="cyHttpAdp" version="1000"/>
+	</protocols>
+	<AppGroups>
+		<AppGroup CodePage="utf-8" Language="1042" Prefix="script" Type="js" Version="1000">
+			<Script Baseurl="./script/" Ext="js"/>
+		</AppGroup>
+		<AppGroup CodePage="utf-8" Language="1042" Prefix="Image" Type="file" Version="1000">
+			<Script Baseurl="../image/"/>
+		</AppGroup>
+		<AppGroup CodePage="utf-8" Language="1042" Prefix="Group1" Type="form" Version="1000">
+			<Script Baseurl="./Group1/" ScriptUrl="./Group1/"/>
+		</AppGroup>
+		<AppGroup CodePage="utf-8" Language="1042" Prefix="Max5250" Type="form" Version="1000">
+			<Script Baseurl="./Max5250/" ScriptUrl="./Max5250/"/>
+		</AppGroup>
+		<DataGroup Baseurl="http://10.73.254.21/" CacheLevel="none" CodePage="utf-8" Ext="do" Language="1042" Prefix="service" Streamver="4000" TrMethod="normal" Type="JSP" Version="1000"/>
+	</AppGroups>
+	<Script><![CDATA[var sessionId;
+
+function gFcOnLoadCompleted(obj, url) {
+
+	G_ds_passwordStatus.SetColumn(0,"STATUS", "N");
+
+	G_sysId = obj.ID;
+
+	var Glob = Split(GetReg("GlobalVal"),"::");
+	
+	sessionId = Glob[0];
+	var userId = Glob[1];
+	var userName = Glob[2];
+	var company = Glob[3];
+	var plantCd = Glob[4];
+	var password = Glob[5];
+	var lib1 = Glob[6];
+	var lib2 = Glob[7];	
+	var lib3 = Glob[8];	
+	var menuPw = Glob[9];	
+	G_ds_user.AddRow();
+
+	if(length(trim(userId))>0) {
+	//alert(userId);
+	//alert(company);
+	//alert(plantCd);
+
+		SetReg("GlobalVal", "");
+		JSESSIONID=sessionId;
+		G_ds_user.SetColumn(0,"USER_ID", userId);
+		G_ds_user.SetColumn(0,"USER_NAME", userName);
+		G_ds_user.SetColumn(0,"COMPANY", company);
+		G_ds_user.SetColumn(0,"PLANT_CD", plantCd);
+		G_ds_user.SetColumn(0,"PASSWORD", password);
+		G_ds_user.SetColumn(0,"LIB1", lib1);
+		G_ds_user.SetColumn(0,"LIB2", lib2);
+		G_ds_user.SetColumn(0,"LIB3", lib3);
+		G_ds_user.SetColumn(0,"MENU_PW", menuPw);
+
+	}	
+}
+
+
+function gFcOnCommunication(obj, bStatus) {
+
+	if(G_transactionFlag) {
+
+		if(!bStatus) {
+
+			G_transactionFlag = 0;
+		}
+	}
+}
+]]></Script>
+	<DataObjects></DataObjects>
+	<ServiceObjects></ServiceObjects>
+	<Datasets>
+		<Dataset DataSetType="Dataset" Id="G_ds_user">
+			<Contents>
+				<colinfo id="USER_ID" size="256" summ="default" type="STRING"/>
+				<colinfo id="USER_NAME" size="256" summ="default" type="STRING"/>
+				<colinfo id="COMPANY" size="256" summ="default" type="STRING"/>
+				<colinfo id="PLANT_CD" size="256" summ="default" type="STRING"/>
+				<colinfo id="PASSWORD" size="256" summ="default" type="STRING"/>
+				<colinfo id="DEPT_NAME" size="256" summ="default" type="STRING"/>
+				<colinfo id="LIB1" size="256" summ="default" type="STRING"/>
+				<colinfo id="LIB2" size="256" summ="default" type="STRING"/>
+				<colinfo id="LIB3" size="256" summ="default" type="STRING"/>
+				<colinfo id="MENU_PW" size="256" summ="default" type="STRING"/>
+				<record>
+					<COMPANY></COMPANY>
+					<DEPT_NAME></DEPT_NAME>
+					<LIB1></LIB1>
+					<LIB2></LIB2>
+					<LIB3></LIB3>
+					<MENU_PW></MENU_PW>
+					<PASSWORD></PASSWORD>
+					<PLANT_CD></PLANT_CD>
+					<USER_ID></USER_ID>
+					<USER_NAME></USER_NAME>
+				</record>
+			</Contents>
+		</Dataset>
+	</Datasets>
+	<Resource Ext="res" Url="./image/img.res" Version="1000"/>
+	<MDIInfo Scroll="false" Status="false">
+		<Forms>
+			<Form AutoStart="true" Height="630" ID="MDIForm0" initURL="Group1::NewSESSION1.xml" Left="0" OpenStyle="Max" Session="true" Top="0" Width="822"/>
+		</Forms>
+		<Shortcuts color="default" font="tahoma,9" HeaderTitle="Title:Description:Status"></Shortcuts>
+	</MDIInfo>
+	<GlobalStyle>
+		<style DisableColor="WINDOWFRAME" ID="DisableComb"/>
+		<style BorderColor="#818181" DisablebkColor="#ece9d8" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormItemCalendar" TextColor="#0336a5"/>
+		<style BorderColor="#cfdcfd" Font="굴림,9,Bold" Formcolor="#cfdcfd" ID="styFormItemCap" TextColor="#505050"/>
+		<style BorderColor="#cfdcfd" Font="굴림,9,Bold" Formcolor="#cfdcfd" ID="styFormItemCapBE" TextColor="#fd3803"/>
+		<style BorderColor="#818181" DisablebkColor="#ece9d8" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormItemChk" TextColor="#0336a5"/>
+		<style BorderColor="#818181" DisablebkColor="#ece9d8" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormItemRdo" TextColor="#0336a5"/>
+		<style BorderColor="#818181" DisablebkColor="#ededed" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormItemText" TextColor="#0336a5"/>
+		<style BorderColor="#818181" Font="굴림,9,Bold" Formcolor="moccasin" ID="styFormItemTitle" TextColor="darkorchid"/>
+		<style Font="돋움,9" ID="styFormLocation" TextColor="black"/>
+		<style BorderColor="#ebf1ff" Font="굴림,9,Bold" Formcolor="#ebf1ff" ID="styFormSearchCap" TextColor="#505050"/>
+		<style BorderColor="#ebf1ff" Font="굴림,9,Bold" Formcolor="#ebf1ff" ID="styFormSearchCapBE" TextColor="#fd3803"/>
+		<style BorderColor="#b6b6b6" DisablebkColor="#ededed" DisableColor="black" Font="굴림,9" Formcolor="#ebf1ff" ID="styFormSearchChk" TextColor="black"/>
+		<style BorderColor="#b6b6b6" DisablebkColor="#ededed" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormSearchItem" TextColor="black"/>
+		<style BorderColor="#b6b6b6" DisablebkColor="#ededed" DisableColor="black" EditColor="white" Font="굴림,9" ID="styFormSearchItemCalendar" TextColor="black"/>
+		<style BorderColor="#b6b6b6" DisablebkColor="#ededed" DisableColor="black" EditColor="#ebf1ff" Font="굴림,9" Formcolor="#ebf1ff" ID="styFormSearchRdo" TextColor="black"/>
+		<style Font="돋움,11,Bold" ID="styFormTitle" TextColor="black"/>
+		<style DkshadowColor="#a5a5a2" Face3dColor="#cfdcfd" Font="굴림,9" Hilight3dColor="#a5a5a2" HilightColor="#ebf1ff" HilightTextColor="#505050" ID="styGrid01" Light3dColor="#a5a5a2" TextColor="#505050" WindowColor="white"/>
+		<style DkshadowColor="#a5a5a2" Face3dColor="#cfdcfd" Hilight3dColor="#a5a5a2" HilightColor="#ebf1ff" HilightTextColor="red" ID="styGrid02" Light3dColor="#a5a5a2" TextColor="#505050" WindowColor="white"/>
+		<style BorderColor="silver" Font="굴림,9,Bold" ID="styTabControl" TextColor="saddlebrown"/>
+	</GlobalStyle>
+	<Variables>
+		<Var Id="G_actHandle" Type="Global"/>
+		<Var Comment="Document&#32;Root&#32;URL" Id="G_baseURL" Type="Global" Value="http://10.73.254.21/"/>
+		<Var Id="G_bottomFrameOnLoad" Type="Global"/>
+		<Var Comment="부서" Id="G_dept" Type="Global"/>
+		<Var Comment="서버&#32;DateTime" Id="G_sysDate" Type="Global"/>
+		<Var Comment="Transaction&#32;Flag" Id="G_transactionFlag" Type="Global" Value="0"/>
+		<Var Comment="유저아이디" Id="G_UserId" Type="Global"/>
+		<Var Comment="조회화면" Id="GBL_PROGRESSCHK" Type="Global" Value="false"/>
+		<Var Id="JSESSIONID" Type="Share"/>
+	</Variables>
+	<UserColor/>
+	<EXTAPIS>
+		<EXTAPI Name="ExtCommonApi" Version="1000"/>
+	</EXTAPIS>
+	<ActiveX Version="1000">
+		<Component Height="600" Id="MAX5250" Image="36" Progid="WTC_IBM5555.WTC_IBM5555Ctrl.1" Title="MAX5250" Version="1000" Width="800"/>
+		<Component Id="Windows" Image="23" Progid="WMPlayer.OCX" Title="Windows" Version="1000"/>
+		<Component Height="10" Id="WTA_RemoteCall" Image="0" Progid="WTA_RemoteCall.WT_RemoteCall.1" Title="WTA_RemoteCall" Version="1000" Width="10"/>
+		<Component Height="1024" Id="MSIE" Image="29" Progid="Shell.Explorer" Title="MSIE" Version="1000" Width="768"/>
+	</ActiveX>
+</ConnectGroup>

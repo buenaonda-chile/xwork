@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.BatchHistDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="BatchHist" type="BatchHistDomain">
+    	<!-- 검색항목 -->
+    	
+        <!-- 출력항목 -->
+		<result property="seq" column="SEQ" />
+        <result property="batchcd" column="BATCHCD" />
+        <result property="batchnm" column="BATCHNM" />
+        <result property="rstdata" column="RSTDATA" />
+        <result property="regdt" column="REGDT" />
+        <result property="updt" column="UPDT" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="BatchHist" parameterType="BatchHistDomain">
+		SELECT SEQ, BATCH_CD as BATCHCD, BATCH_NM as BATCHNM,
+				RST, RST_DATA as RSTDATA, REG_DT as REGDT, UP_DT as UPDT 
+		FROM DNKR_BATCH_HIST
+    </select>
+
+</mapper>

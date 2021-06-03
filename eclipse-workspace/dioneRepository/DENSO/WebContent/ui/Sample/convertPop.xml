@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="152" Id="screenPop" Left="8" PidAttrib="7" Title="screenPop" Top="8" Ver="1.0" Width="320" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="column0" size="256" type="STRING"/>
+					<colinfo id="column1" size="256" type="STRING"/>
+					<record>
+						<column0>1</column0>
+						<column1>표준</column1>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>서브파일</column1>
+					</record>
+					<record>
+						<column0>3</column0>
+						<column1>팝업</column1>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static23" Left="40" TabOrder="5" Top="48" Width="244"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="40" TabOrder="4" Top="48" Width="106"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="40" TabOrder="9" Top="72" Width="244"></Static>
+		<Shape BKColor="#888888" Bottom="63" Height="5" Id="Shape12" Left="52" LineColor="#dceaf7" Right="57" TabOrder="2" Top="58" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="62" Style="static" TabOrder="3" Text="스크린구분" Top="53" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="40" TabOrder="8" Top="72" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="87" Height="5" Id="Shape0" Left="52" LineColor="#dceaf7" Right="57" TabOrder="6" Top="82" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="62" Style="static" TabOrder="7" Text="스크린명" Top="77" VAlign="Middle" Width="77"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="edt_screen" Left="148" MaxLength="10" TabOrder="12" Top="74" Width="133"></Edit>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="column0" Color="#333333" DataColumn="column1" Height="21" Id="cb_type" ImeMode="none" INDEX="0" InnerDataset="Dataset0" Left="147" ResetIndex="FIRST" TabOrder="1" Top="49" Width="98"></Combo>
+		<Static Font="Default,9,Bold" Height="16" Id="Static2" Left="59" TabOrder="10" Text="다음을&#32;선택하시오" Top="26" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="40" TabOrder="11" Top="24" Width="17"></Image>
+		<Button ButtonStyle="TRUE" Height="21" Id="Button0" ImageID="btn_pop_txt_02" Left="235" OnClick="Button0_OnClick" TabOrder="13" Text="확인" Top="104" Width="48"></Button>
+	</Form>
+	<Script><![CDATA[
+function Button0_OnClick(obj)
+{
+	var sKind		= "GETSCREEN";						
+		var sMethodName = "service::max5250/getScreenAttr.do";     // 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             // 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_screen=ds_screen";    // 조회 후 돌려 받을 DataSet 명칭
+		var arg			= " SCREEN_ID=" + quote(edt_screen.Text);
+			arg		    += " SCREEN_TYPE=" +quote(cb_type.Value);
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack");
+}
+
+
+function fnc_callBack(svcId, errCode, errMsg)
+{
+	close("1");
+}]]></Script>
+</Window>

@@ -1,0 +1,117 @@
+package $package$;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.globaldenso.ai.core.exception.ApplicationException;
+import com.globaldenso.dnkr.domain.$name$Domain;
+
+/**
+ * 
+ *
+ * @author $Author$
+ * @version $Revision$
+ */
+@Repository("$lName$Dao")
+public class $name$DaoImpl implements $name$Dao {
+
+    /**
+     * [EN] Namespace of SQLMap.<br>
+     * [JP] SQLMapの名前空間。<br>
+     */
+    private static final String NAMESPACE = "com.globaldenso.dnkr.integration.dao.$name$Dao";
+    
+    /**
+     * [EN] SqlSessionTemplate.<br>
+     * [JP] DBにアクセスするためのSqlSessionTemplate。<br>
+     */
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate = null;
+    
+    /**
+     * [EN] SqlSessionTemplate4.<br>
+     * [JP] DBにアクセスするためのSqlSessionTemplate。<br>
+     */
+    @Autowired
+    @Resource(name = "sqlSessionTemplate4")
+    private SqlSessionTemplate sqlSessionTemplate4 = null;
+   
+    /**
+     * [EN] Default constructor.<br>
+     * [JP] デフォルトコンストラクタ。<br>
+     */
+    public $name$DaoImpl() {
+        //no process
+    }
+
+    
+    /**
+     * [EN] It is a setter method of sqlSessionTemplate.<br>
+     * [JP] sqlSessionTemplate のセッターメソッドです。<br>
+     * 
+     * @param sqlSessionTemplate sqlSessionTemplate に設定する
+     */
+    public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+        this.sqlSessionTemplate = sqlSessionTemplate;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.integration.dao.$name$Dao#searchByKey($name$Domain)
+     */
+    public $name$Domain searchByKey($name$Domain domain) throws ApplicationException {
+        return sqlSessionTemplate4.selectOne(NAMESPACE + ".searchByKey", domain);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * * @see com.globaldenso.dnkr.integration.dao.$name$Dao#searchByCondition($name$Domain)
+     */
+    public List<$name$Domain> searchByCondition($name$Domain domain) throws ApplicationException {    	
+	    return sqlSessionTemplate4.selectList(NAMESPACE + ".searchByCondition", domain);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * * @see com.globaldenso.dnkr.integration.dao.$name$Dao#searchCount($name$Domain)
+     */
+    public List<$name$Domain> searchByConditionForPaging($name$Domain domain) throws ApplicationException {    	
+        return sqlSessionTemplate4.selectList(NAMESPACE + ".searchByConditionForPaging", domain);
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.integration.dao.$name$Dao#create($name$Domain)
+     */
+    public void create($name$Domain domain) throws ApplicationException {
+    	sqlSessionTemplate4.insert(NAMESPACE + ".create", domain);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.integration.dao.$name$Dao#update($name$Domain)
+     */
+    public int update($name$Domain domain) throws ApplicationException {
+    	return sqlSessionTemplate4.update(NAMESPACE + ".update", domain);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.integration.dao.$name$Dao#update($name$Domain)
+     */
+    public int delete($name$Domain domain) throws ApplicationException {
+        return sqlSessionTemplate4.delete(NAMESPACE + ".delete", domain);
+    }
+}

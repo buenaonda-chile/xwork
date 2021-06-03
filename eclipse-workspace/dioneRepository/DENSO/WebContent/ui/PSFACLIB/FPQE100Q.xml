@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="사용안함-DNKE&#32;사내용&#32;작업지시&#32;TAG&#32;발행" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>0</code>
+						<code_name>전체</code_name>
+					</record>
+					<record>
+						<code>A</code>
+						<code_name>(A)최초발행</code_name>
+					</record>
+					<record>
+						<code>B</code>
+						<code_name>(B)재발행</code_name>
+					</record>
+					<record>
+						<code>C</code>
+						<code_name>(C)이동발행</code_name>
+					</record>
+					<record>
+						<code>D</code>
+						<code_name>(D)단수발행</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FPQC100Q_1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FPQE100Q_4"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FPQE100Q_5">
+				<Contents>
+					<colinfo id="CUSNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPLITT" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEQNOT" size="256" summ="default" type="STRING"/>
+					<colinfo id="SERNOT" size="256" summ="default" type="STRING"/>
+					<colinfo id="CARNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRGGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="REP01" size="256" summ="default" type="STRING"/>
+					<colinfo id="USNCD" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="64" Id="searchBar" TabOrder="6" Top="32" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="3" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="952" OnClick="fn_Search" TabOrder="3" TabStop="FALSE" Text="조회" Top="35" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="3" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="232" TabOrder="7" Text="생산&#32;지시일" Top="34" VAlign="Middle" Width="116"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FPQE100Q_4" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="512" Id="grd_main" InputPanel="FALSE" Left="96" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="1048" TabOrder="9" TabStop="true" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="952">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="61"/>
+						<col width="52"/>
+						<col width="131"/>
+						<col width="74"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="90"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="업체"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="공정"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="지시수량"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="작업"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="지시"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="차종명"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="발행"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="회수"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="유상"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="CUSNO" display="normal"/>
+						<cell align="left" col="1" colid="PROCS" display="normal"/>
+						<cell align="left" col="2" colid="PRTNO" display="normal"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="PRCQY" display="number"/>
+						<cell align="center" col="4" colid="SPLITT" display="normal"/>
+						<cell align="center" col="5" colid="SEQNOT" display="normal"/>
+						<cell align="center" col="6" colid="SERNOT" display="normal"/>
+						<cell align="left" col="7" colid="CARNM" display="normal"/>
+						<cell align="center" col="8" colid="PRGGU" display="normal"/>
+						<cell align="center" col="9" colid="REP01" display="normal"/>
+						<cell align="center" col="10" colid="USNCD" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="348" TabOrder="10" Top="34" VAlign="Middle" Width="96"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cal_YMD" Left="352" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="11" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FPQC100Q_1" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="512" Id="grd_left" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnCellDBLClick="getFPQE100Q_234" Right="64" TabOrder="12" TabStop="true" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="64">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="62"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="공&#32;정"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' checklength="Byte" col="0" colid="PROCS" display="normal" limit="1" suppress="1" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="13" Text="발&#32;행&#32;구&#32;분" Top="65" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="120" TabOrder="14" Top="65" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code" DataColumn="code_name" Enable="FALSE" Height="18" Id="cmb_PRGGU" INDEX="0" InnerDataset="ds_Class" Left="124" OnChanged="common_OnChanged_4" TabOrder="15" Top="69" Width="88"></Combo>
+		<Button Height="21" Id="Button0" Left="890" OnClick="fn_print" TabOrder="16" Text="인쇄" Top="42" Width="50"></Button>
+		<Button Height="68" Id="Button1" Left="65" OnClick="getFPQE100Q_234" TabOrder="17" Text="▶" Top="156" Width="28" WordWrap="TRUE"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FPQE100Q.xml
+ * ● PROGRAM DESCRIPTION  : DNKE 사내용 작업지시 TAG 발행
+ * ● DATE WRITTEN         : 2014.06.01
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var tableSelect = "FPW740PF";  //향후 협력업체용으로 사용할 수 있어서 변수사용
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1.4"); //조회,발행 
+	getComCode(); //공장구분 선택
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	grd_left.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	grd_left.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	grd_left.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	grd_left.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	grd_left.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	grd_left.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	grd_main.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	grd_main.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	grd_main.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	grd_main.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	grd_main.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	grd_main.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getFPQC100Q_1(){   //DNKA사내용TAG발행과 같이 사용
+	if(length(trim(cal_YMD.Value)) < 8){
+		alert(setPopMessage("2528"));  //[[확인] 마감년월을 확인바랍니다.
+		setMessage("2528");	
+		cal_YMD.SetFocus();
+		return;
+	}
+	
+	var sKind		= "getFPQC100Q_1";						
+	var sMethodName = "service::psfaclib/selectFPQC100Q_1.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var	sOutDataSet = "ds_FPQC100Q_1=ds_FPQC100Q_1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PNYMD=" + quote(cal_YMD.Value); //
+		sArgument += " TABLE=" + quote(tableSelect);
+	//var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+function getFPQE100Q_234(){
+	if(ds_FPQC100Q_1.rowcount <= 0 || ds_FPQC100Q_1.GetRowType(ds_FPQC100Q_1.row) != 'normal') return ;
+	var cnt = 0;
+	var st_PROCS="(";
+	var in_PROCS="";
+	var ed_PROCS=")";
+	var arrValuePROCS = array(); 
+
+	for(var i=0; i<ds_FPQC100Q_1.RowCount(); i++){
+		if(ds_FPQC100Q_1.GetSelect(i) == true){
+			arrValuePROCS[cnt] = trim(ds_FPQC100Q_1.GetColumn(i,"PROCS"));
+			cnt++;	
+		}
+	}
+	
+	if(cnt == 0 ) return ;
+	for(var j=0; j<cnt; j++){
+		if(j==0){
+			in_PROCS="'"+arrValuePROCS[j]+"'";
+		}else{
+			in_PROCS=in_PROCS+",'"+arrValuePROCS[j]+"'";
+		}
+	}
+	in_PROCS=st_PROCS+in_PROCS+ed_PROCS;
+	var sKind		= "getFPQE100Q_234";						
+	var sMethodName = "service::psfaclib/selectFPQE100Q_4.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var	sOutDataSet = "ds_FPQE100Q_4=ds_FPQE100Q_4";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PNYMD=" + quote(cal_YMD.Value); //년월일
+		sArgument += " PROCS=" + quote(in_PROCS); //공정코드 multi select
+		sArgument += " TABLE=" + quote(tableSelect);
+		sArgument += " PRGGU=" + quote(cmb_PRGGU.Value);
+	//var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getFPQC100Q_1"){
+		// 조회건수가 없을경우
+		if(ds_FPQC100Q_1.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		}else{
+			cmb_PRGGU.Enable = true;
+		}
+	}else if(svcId=="getFPQE100Q_234"){
+		// 조회건수가 없을경우
+		if(ds_FPQE100Q_4.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		}else{
+			cmb_PRGGU.Enable = false;
+		}
+	}
+}
+
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/  
+function validationChk(){
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FPQC100Q_1.ClearData();
+	ds_FPQE100Q_4.ClearData();
+	cmb_PRGGU.Enable = false;
+}
+
+function common_OnChanged_1(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FPQC100Q_1.ClearData();
+}
+
+function common_OnChanged_4(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FPQE100Q_4.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	ds_FPQC100Q_1.ClearData();
+	ds_FPQE100Q_4.ClearData();
+	getFPQC100Q_1();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	if(confirm("선택된 제품작업지시TAG 인쇄합니까? ") == false) return;
+	
+	if(ds_FPQE100Q_4.rowcount <= 0 || ds_FPQE100Q_4.GetRowType(ds_FPQE100Q_4.row) != 'normal') return ;
+	
+	ds_FPQE100Q_5.ClearData();
+	for (var row = 0 ; row < ds_FPQE100Q_4.RowCount ; row++ ){
+		if(ds_FPQE100Q_4.GetSelect(row) == true){
+			ds_FPQE100Q_5.addRow();
+			ds_FPQE100Q_5.copyrow(ds_FPQE100Q_5.row,"ds_FPQE100Q_4",row);
+		}
+	}
+	
+	if(ds_FPQE100Q_5.rowcount <= 0) return ;
+
+	var str = dialog("PSFACLIB::FPQE100QR.xml",
+					" TABLE=" + quote(tableSelect) +
+					" COMPS=" + quote(ComboBoxPlant.Value) +
+					" PNYMD=" + quote(cal_YMD.Value) +
+					" ds_SEL="+ quote(ds_FPQE100Q_5.SaveXML()),1100,600);		
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.4"); //상단 버튼 활성화 여부 (1.4: 조회,발행)
+}
+
+
+
+]]></Script>
+</Window>

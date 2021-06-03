@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="용차사용&#32;박스단가&#32;등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1056" WorkArea="true">
+		<Datasets>
+			<Dataset CanColumnChange="ds_SLTZ010_CanColumnChange" DataSetType="Dataset" Id="ds_SLTZ010" OnColumnChanged="ds_SLTZ010_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYVND" size="256" summ="default" type="STRING"/>
+					<colinfo id="CUSNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SHPTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="INOUT" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKLOC" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSTRM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXCT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_INOUT">
+				<Contents>
+					<colinfo id="code" size="1" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="30" summ="default" type="STRING"/>
+					<record>
+						<code>1</code>
+						<code_name>하행</code_name>
+					</record>
+					<record>
+						<code>2</code>
+						<code_name>상행</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST050PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ010_CHECK" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="5" Top="32" Width="1048"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="4" TabOrder="6" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="266" TabOrder="7" Text="입&#32;출&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static13" Left="384" Style="static" TabOrder="8" Top="34" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="528" TabOrder="9" Text="업&#32;체&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="646" Style="static" TabOrder="10" Top="34" VAlign="Middle" Width="398"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" Style="static" TabOrder="11" Top="34" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="cb_searchCodeName1" InnerDataset="ds_ComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="1" Top="37" Width="130"></Combo>
+		<Edit Height="20" Id="ed_pyvnd" ImeMode="none" Left="650" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_pyvnd_OnCharChanged" OnKillFocus="ed_pyvnd_OnKillFocus" TabOrder="3" Top="37" Width="130"></Edit>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="786" TabOrder="12" Top="54" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgMaker" ImageID="ic_search" Left="1017" OnClick="imgMaker_OnClick" Static="FALSE" TabOrder="5" TabStop="FALSE" Top="38" Width="20"></Image>
+		<Static Height="14" Id="st_pyvnd" Left="789" TabOrder="14" Top="39" Width="225"></Static>
+		<Combo CodeColumn="code" DataColumn="code_name" Height="19" Id="ca_INOUT" InnerDataset="ds_INOUT" Left="387" OnChanged="common_OnChanged" TabOrder="2" Top="37" Width="130"></Combo>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SLTZ010" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="552" Id="MainGrid_etc" InputPanel="FALSE" Left="264" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="784" TabOrder="6" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="520">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="52"/>
+						<col width="104"/>
+						<col width="257"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="납품장소"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="납품장소명"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="박스단가"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="text" expr="currow+1"/>
+						<cell align="center" col="1" colid="MKLOC" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="left" col="2" colid="MSTRM" display="text"/>
+						<cell col="3" colid="BOXCT" display="number" edit="number" limit="7"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SLTZ010.xml
+ * ● PROGRAM DESCRIPTION  : 용차사용 박스단가 등록
+ * ● DATE WRITTEN         : 2012.06.12
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+/*
+var Lib1 = 'PERESLIB';
+var Lib2 = 'PSEDBLIB';
+var company = 'PE';
+var comps = 'E1';
+*/
+var nowDate = today();
+var MKLOC_NM;
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 
+	ca_INOUT.Index = 1;
+	MainGrid_etc.UserData = MainGrid_etc.Height;
+	ed_pyvnd.SetFocus();
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	MainGrid_etc.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid_etc.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid_etc.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid_etc.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid_etc.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid_etc.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid_etc.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid_etc.Top = G_ds_design.GetColumn(0,"Top");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");		
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	//ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+
+	//cb_searchCodeName1.index = 0;
+	cb_searchCodeName1.Value = comps;
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSLTZ010(){
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+
+	//조회
+	var sKind		= "getSLTZ010";						
+	var sMethodName = "service::pssallib/selectSLTZ010.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SLTZ010=ds_SLTZ010";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += "@PYVND=" + quote(ed_pyvnd.Text);
+	sArgument += "@INOUT=" + quote(ca_INOUT.Value);
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+ function setSLTZ010(){
+
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+	
+ 	http.Sync = true;
+	var sKind		= "SAVE_SLTZ010";						
+	var sMethodName = "service::pssallib/insertSLTZ010.do";
+	var sInDataSet  = "ds_SLTZ010=ds_SLTZ010:U";
+	var sOutDataSet = "ds_SLTZ010_CHECK=ds_SLTZ010_CHECK";
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+ }
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "용차사용박스단가등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|용차사용박스단가등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_SLTZ010_CHECK.GetRowCount() > 0){			
+		for(var i=0;i<ds_SLTZ010_CHECK.GetRowCount();i++){		
+			alert(ds_SLTZ010_CHECK.GetColumn(i,"MKLOC") + "=" + ds_SLTZ010_CHECK.GetColumn(i,"RTMSG"));	
+		}		
+		getSLTZ010();        //error항목이 존재시에는 재조회		
+		return;		
+	}	
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSLTZ010();
+}
+
+function fn_Input()
+{
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}
+	if(checkInsertCount("ds_SLTZ010")== false) return;
+	if(ds_SLTZ010.rowcount < 1) fn_Search();
+	ds_SLTZ010.FireEvent=false;  //데이터셋의 이벤트가 발생하지 않도록 셋팅
+	ds_SLTZ010.AddRow();
+	ds_SLTZ010.SetColumn(ds_SLTZ010.Row, "COMPS", cb_searchCodeName1.Value); // default값 설정
+	ds_SLTZ010.SetColumn(ds_SLTZ010.Row, "PYVND", ed_pyvnd.Text); // default값 설정
+	ds_SLTZ010.SetColumn(ds_SLTZ010.Row, "SHPTO", "0"); // default값 설정
+	ds_SLTZ010.SetColumn(ds_SLTZ010.Row, "INOUT", ca_INOUT.Value); // default값 설정
+	ds_SLTZ010.FireEvent=true;
+}
+
+function fn_Delete()
+{
+	ds_SLTZ010.DeleteRow(ds_SLTZ010.currow);
+	alert(setPopMessage("1011"));     //[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.
+	setMessage("1011");	
+}
+
+function fn_Save()
+{
+	setSLTZ010();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SLTZ010.ClearData();
+}
+
+function imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pyvnd.Text);
+	if (length(trim(ed_pyvnd.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pyvnd.Text = rtn[0];
+		st_pyvnd.Text = rtn[1];
+	}
+}
+
+function ed_pyvnd_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_pyvnd.Text = "";
+}
+
+function ed_pyvnd_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("1202")); //[확인] 거래처코드 확인바랍니다.
+		setMessage("1202");	
+		ed_pyvnd.SetFocus();
+		return;
+	}
+	st_pyvnd.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;
+}
+
+
+function ds_SLTZ010_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	http.usewaitcursor = false;
+	if (strColumnID == "MKLOC"){
+		//중복Check
+		if(ds_SLTZ010.FindRow("MKLOC", trim(varNewValue)) >= 0){
+			alert(setPopMessage("1520"));  //[경고] 이미 등록된 자료입니다.
+			setMessage("1520");	
+			return false;
+		}
+		//납품장소check
+		http.Sync = true;
+		var sKind		= "getmst050pf";		
+		var sMethodName = "service::pscomlib/selectMST050PF.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_MST050PF=ds_MST050PF";
+		var sArgument   = "";
+			sArgument  += " LIB2=" + quote(Lib2);
+			sArgument  += " COMPS=" + quote(cb_searchCodeName1.Value);
+			sArgument  += " GRPCD=" + quote("LOC");
+			sArgument  += " MSTCD=" + quote(varNewValue);
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync = false;
+		if (ds_MST050PF.GetRowCount() < 1){
+			alert(setPopMessage("4008")); //[확인] 납품장소를 확인바랍니다.
+			setMessage("4008");	
+			return false;
+		}
+		MKLOC_NM=ds_MST050PF.GetColumn(0,"MSTRM");
+	}
+	http.usewaitcursor = true;
+}
+
+function ds_SLTZ010_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	http.usewaitcursor = false;
+	if (strColumnID == "MKLOC"){
+		ds_SLTZ010.SetColumn(nRow, "MSTRM", MKLOC_NM); // 거래처명 설정
+	}
+	http.usewaitcursor = true;
+}
+
+
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * spring-config.xml
+ *
+ * [JP] AI-J3(Spring MVC) の 設定ファイルです。
+ * [EN] This is the configuration file of AI-J3(Spring MVC).
+ *
+ * $ spring-config.xml 4294 2013-12-26 12:30:57Z koji_maeyama@denso.co.jp $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop ="http://www.springframework.org/schema/aop"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+
+    <!-- Configures the scan paths of the @Controller classes -->
+    <context:component-scan base-package="com.globaldenso.ai.sample.presentation.controller,com.globaldenso.dnkr.presentation.controller" />	
+	
+    <!-- Configures the message sources -->
+    <!-- <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+        p:basenames="MessageResources,LabelResources,ValidationMessages,BindingResources,MiyabiConstants" /> -->
+        <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        	<property name="basenames">
+				<list>
+               		<value>MessageResources</value>
+               		<value>LabelResources</value>
+               		<value>ValidationMessages</value>
+               		<value>BindingResources</value>
+               		<value>MiyabiConstants</value>
+             	</list>
+			</property>
+			<property name="defaultEncoding" value="UTF-8" />
+        </bean>
+
+    <!-- Configures the custom formats for custom PropertyEditors -->
+    <bean id="dateFormat" class="java.text.SimpleDateFormat" >
+        <constructor-arg value="yyyy-MM-dd" />
+    </bean>
+	
+    <bean id="timestampFormat" class="java.text.SimpleDateFormat" >
+        <constructor-arg value="yyyy-MM-dd HH:mm:ss.SSS" />
+    </bean>
+    
+    <!-- Configures the interceptors to invoke methods before and after HandlerMethod execution -->
+    <mvc:interceptors>
+        <!-- This interceptor to evacuate and restore the BindingException from forward or redirect -->
+        <bean class="com.globaldenso.ai.miyabi.errorback.ErrorBackInterceptor" />
+        <!-- This interceptor to check the token paramter and the token session attribute and to save the token in the session -->
+        <bean class="com.globaldenso.ai.miyabi.token.TransactionTokenInterceptor" />
+        <!-- This interceptor to insert the view id of ViewId annotation to model -->
+        <bean class="com.globaldenso.ai.miyabi.viewid.ViewIdInterceptor" />
+        <!-- This interceptor to change the locale with the locale parameter -->
+        <!-- <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="locale" /> -->
+        <bean class="com.globaldenso.ai.miyabi.locale.DensoContextLocaleApplyInterceptor" />
+        <!-- This interceptor to store MessageContext in request for message area -->
+        <bean class="com.globaldenso.ai.miyabi.message.MessageContextInterceptor" p:sorted="true" />
+        <!-- This interceptor to store the attributes for WarningDialog in request -->
+        <bean class="com.globaldenso.ai.miyabi.exception.WarningExceptionMessageInterceptor" />
+        <mvc:interceptor>
+           <mvc:mapping path="/WAN001MiPlatform/*"/>	<!-- 마이플렛폼 -->
+           <!-- 여러개 컨트롤러 추가 가능 -->
+           <!--
+                <mvc:mapping path="/admin_write"/>
+                <mvc:mapping path="/admin_update"/>
+                <mvc:mapping path="/admin_delete"/>
+                .
+                .
+                .
+           -->
+           <!-- 로그인체크 인터셉터 클래스 -->
+           <bean class="com.globaldenso.dnkr.Interceptor"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
+
+    <!-- Configures the ExceptionResolvers  -->
+    <!-- The DispatchServlet searches the beans implementing HandlerExceptionResolver, and registers these.
+         To decide execution order, PriorityOrdered should be implemented in classes implementing HandlerExceptionResolver -->
+    <bean id="bindExceptionResolver" class="com.globaldenso.ai.miyabi.errorback.ValidationBindExceptionResolver" />
+    <bean id="tokenExceptionResolver" class="com.globaldenso.ai.miyabi.token.TransactionTokenExceptionResolver" >
+        <property name="viewName" value=".tiles.page.TokenError" />
+    </bean>
+    <bean id="systemExceptionResolver" class="com.globaldenso.ai.miyabi.exception.SystemExceptionResolver" >
+        <property name="viewName" value="error" />
+    </bean>
+    
+    <!-- 파일 업로드 Resolver 설정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <!-- Configures the custom PropertyEditors -->
+    <bean id="byteEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Byte)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Byte.message" />
+    </bean>
+
+    <bean id="shortEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Short)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Short.message" />
+    </bean>
+
+    <bean id="integerEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Integer)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Integer.message" />
+    </bean>
+
+    <bean id="longEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Long)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Long.message" />
+    </bean>
+
+    <bean id="floatEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Float)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Float.message" />
+    </bean>    
+	
+    <bean id="doubleEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.lang.Double)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.Double.message" />
+    </bean>
+
+    <bean id="bigIntegerEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.math.BigInteger)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.BigInteger.message" />
+    </bean>
+
+    <bean id="bigDecimalEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor">
+        <constructor-arg value="#{T(java.math.BigDecimal)}" />
+        <property name="defaultMessage" value="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomNumberEditor.BigDecimal.message" />
+    </bean>
+
+    <bean id="booleanEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomBooleanEditor">
+    </bean>
+
+    <bean id="dateEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomDateEditor">
+        <constructor-arg ref="dateFormat" />
+    </bean>
+
+    <bean id="timestampEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.CustomTimestampEditor">
+        <constructor-arg ref="timestampFormat" />
+    </bean>
+
+    <bean id="localeEditor" class="com.globaldenso.ai.miyabi.bind.propertyeditor.LocaleEditor" />
+
+    <!-- Registers the custom PropertyEditors used by default to PropertyEditorRegistrar -->
+    <bean id="defaultPropertyEditorRegistrar" class="com.globaldenso.ai.miyabi.bind.CustomPropertyEditorRegistrar">
+        <property name="customEditors">
+            <map key-type="java.lang.Class" value-type="java.beans.PropertyEditorSupport" >
+                <entry key="#{T(java.lang.Byte)}" value-ref="byteEditor"/>
+                <entry key="#{T(java.lang.Short)}" value-ref="shortEditor"/>
+                <entry key="#{T(java.lang.Integer)}" value-ref="integerEditor"/>
+                <entry key="#{T(java.lang.Long)}" value-ref="longEditor"/>
+                <entry key="#{T(java.lang.Float)}" value-ref="floatEditor"/>
+                <entry key="#{T(java.lang.Double)}" value-ref="doubleEditor"/>
+                <entry key="#{T(java.math.BigInteger)}" value-ref="bigIntegerEditor"/>
+                <entry key="#{T(java.math.BigDecimal)}" value-ref="bigDecimalEditor"/>
+                <entry key="#{T(java.lang.Boolean)}" value-ref="booleanEditor"/>
+                <entry key="#{T(java.util.Date)}" value-ref="dateEditor"/>
+                <entry key="#{T(java.sql.Timestamp)}" value-ref="timestampEditor"/>
+                <entry key="#{T(java.util.Locale)}" value-ref="localeEditor"/>
+            </map>
+        </property>
+    </bean>
+    
+    <!-- Configures the RequestMappingHandlerAdapter -->
+    <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" >
+        <!-- If controller execution should be synchronized on the session, -->
+        <!-- the synchronizeOnSession is set true to serialize parallel invocations from the same client. -->
+        <property name="synchronizeOnSession" value="true" />
+
+        <!-- A custom SessionAttributeStore class is able to be configured to the sessionAttributeStore property -->
+        <property name="webBindingInitializer" ref="configurableWebBindingInitializer" />
+        
+        <!-- The constructor of RequestMappingHandlerAdapter initializes four HttpMessageConverters, -->
+        <!-- ByteArrayHttpMessageConverter, StringHttpMessageConverter, SourceHttpMessageConverter, -->
+        <!-- and AllEncompassingFormHttpMessageConverter, without a messageConverters configuration. -->
+        <!-- If your application need other HttpMessageConverters, you uncomment the following configuration. -->
+        <!--property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="writeAcceptCharset" value="false" />
+                </bean>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+            </list>
+        </property-->
+        <!-- 2019.11.05 제환복추가 Json DATA 받기 TEST용 -->
+        <property name="messageConverters">
+	    <list>    
+	        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	            <property name="supportedMediaTypes">
+	                <list>
+	                    <value>text/html;charset=UTF-8</value>
+	                    <value>application/json;charset=UTF-8</value>
+	                </list>
+	            </property>
+	        </bean>
+	    </list>
+	    </property>
+    </bean>
+
+
+
+    <!-- ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+    <!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
+    <!-- If you don't have enough knowledge for the Spring MVC, the following configuration should not be reconfigured.  -->
+
+
+
+    <!-- Configures the ConfigurableWebBindingInitializer -->
+    <bean id="configurableWebBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="validator" ref="validator" />
+        <property name="conversionService" ref="conversionService" />
+        <property name="bindingErrorProcessor" ref="bindingErrorProcessor" />
+        <property name="propertyEditorRegistrars" ref="defaultPropertyEditorRegistrar" />
+    </bean>
+
+    <!-- Configures the internationalization -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+    
+
+    <!-- Enables the MVC Annotations -->
+    <!-- The mvc:annotation-driven has some default settings. -->
+    <!-- For custom property editors, the default RequestMappingHandlerAdapter of mvc:annotation-driven must be disabled. -->
+    <!-- So You must not move this mvc:annotation-driven above. -->
+    <mvc:annotation-driven />
+    
+    <mvc:default-servlet-handler />
+
+    <!-- Configures the Tiles3 -->
+    <mvc:tiles-configurer>
+        <mvc:definitions location="/WEB-INF/tiles-defs.xml"/>
+    </mvc:tiles-configurer>
+
+    <!-- Configures the views -->
+    <mvc:view-resolvers>
+        <mvc:tiles />
+        <mvc:jsp prefix="/WEB-INF/jsp/" suffix=".jsp" />
+    </mvc:view-resolvers>
+
+    <!-- Configures the point cut and the advisors for the HandlerMethods -->
+    <aop:config>
+        <aop:pointcut id="handlerMethodAop"
+            expression="execution(@org.springframework.web.bind.annotation.RequestMapping * *(..))" />
+
+        <aop:advisor pointcut-ref="handlerMethodAop"
+            advice-ref="handlerMethodAdvice" />
+        <aop:advisor pointcut-ref="handlerMethodAop"
+            advice-ref="handlerMethodThrowsAdvice" />
+        <aop:advisor pointcut-ref="handlerMethodAop"
+            advice-ref="warningThrowsAdvice" />
+    </aop:config>
+
+    <bean id="handlerMethodAdvice"
+        class="com.globaldenso.ai.miyabi.errorback.HandlerMethodInterceptor" />
+    <bean id="handlerMethodThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.ApplicationExceptionThrowsAdvice" />
+    <bean id="warningThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.WarningExceptionThrowsAdvice" />
+
+    <!-- Enables the BeanValidation -->
+    <bean id="validator" class="com.globaldenso.ai.miyabi.beanvalidation.ArrayFieldLocalValidatorFactoryBean"/>
+    
+    <!-- Configures the ConversionService -->
+    <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService" />
+
+    <!-- Enables the messages of the custom PropertyEditors in properties files -->
+    <bean id="bindingErrorProcessor" class="com.globaldenso.ai.miyabi.bind.PropertyEditorExceptionProcessor" />
+
+    <!-- Configures the RequestDataValueProcessors for extended output of Spring Tag -->
+    <bean id="requestDataValueProcessor" class="com.globaldenso.ai.miyabi.support.RequestDataValueProcessorComposite">
+        <property name="requestDataValueProcessors">
+            <list>
+                <!-- This RequestDataValueProcessor that the tag of form:form outputs the transaction token information to  -->
+                <bean class="com.globaldenso.ai.miyabi.token.TokenRequestDataValueProcessor" />
+            </list>
+        </property>
+    </bean>
+	
+</beans>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.ResultSubDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.ResultSubDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="manageNo" column="MANAGE_NO" javaType="java.lang.String" />
+		<result property="serviceDegree" column="SERVICE_DEGREE" javaType="java.lang.Long" />
+		<result property="resultDegree" column="RESULT_DEGREE" javaType="java.lang.Long" />
+		<result property="actionType" column="ACTION_TYPE" javaType="java.lang.String" />
+		<result property="callCenterApproval" column="CALL_CENTER_APPROVAL" javaType="java.lang.Long" />
+		<result property="repairDate" column="REPAIR_DATE" javaType="java.sql.Date" />
+		<result property="roNo" column="RO_NO" javaType="java.lang.String" />
+		<result property="roConfirmDate" column="RO_CONFIRM_DATE" javaType="java.sql.Date" />
+		<result property="roSpecialFeature" column="RO_SPECIAL_FEATURE" javaType="java.lang.String" />
+		<result property="lotNo" column="LOT_NO" javaType="java.lang.String" />
+		<result property="hmcPartNo" column="HMC_PART_NO" javaType="java.lang.String" />
+		<result property="replacePartNo" column="REPLACE_PART_NO" javaType="java.lang.String" />
+		<result property="replacePartNm" column="REPLACE_PART_NM" javaType="java.lang.String" />
+		<result property="replacePartCnt" column="REPLACE_PART_CNT" javaType="java.lang.Long" />
+		<result property="usage" column="USAGE" javaType="java.lang.String" />
+		<result property="recallType" column="RECALL_TYPE" javaType="java.lang.String" />
+		<result property="recallReqDate" column="RECALL_REQ_DATE" javaType="java.sql.Date" />
+		<result property="receiveDate" column="RECEIVE_DATE" javaType="java.sql.Date" />
+		<result property="qirIssueYn" column="QIR_ISSUE_YN" javaType="java.lang.Long" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="reprYn" column="REPR_YN" javaType="java.lang.String" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,RESULT_DEGREE
+		,ACTION_TYPE
+		,CALL_CENTER_APPROVAL
+		,REPAIR_DATE
+		,RO_NO
+		,RO_CONFIRM_DATE
+		,RO_SPECIAL_FEATURE
+		,LOT_NO
+		,HMC_PART_NO
+		,REPLACE_PART_NO
+		,REPLACE_PART_NM
+		,REPLACE_PART_CNT
+		,USAGE
+		,RECALL_TYPE
+		,RECALL_REQ_DATE
+		,RECEIVE_DATE
+		,QIR_ISSUE_YN
+		,AUTOINSERT
+		,REPR_YN
+
+    FROM TB_DC_RESULT_SUB
+
+  </sql>
+
+  <sql id="where_01">
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.ResultSubDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.ResultSubDomain">
+
+    INSERT INTO TB_DC_RESULT_SUB (
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,RESULT_DEGREE
+		,ACTION_TYPE
+		,CALL_CENTER_APPROVAL
+		,REPAIR_DATE
+		,RO_NO
+		,RO_CONFIRM_DATE
+		,RO_SPECIAL_FEATURE
+		,LOT_NO
+		,HMC_PART_NO
+		,REPLACE_PART_NO
+		,REPLACE_PART_NM
+		,REPLACE_PART_CNT
+		,USAGE
+		,RECALL_TYPE
+		,RECALL_REQ_DATE
+		,RECEIVE_DATE
+		,QIR_ISSUE_YN
+		,AUTOINSERT
+		,REPR_YN
+
+    ) VALUES (
+		#{id}
+		,UPPER(#{vinno})
+		,#{manageNo}
+		,#{serviceDegree}
+		,#{resultDegree}
+		,#{actionType}
+		,#{callCenterApproval}
+		,#{repairDate}
+		,UPPER(#{roNo})
+		,#{roConfirmDate}
+		,#{roSpecialFeature}
+		,#{lotNo}
+		,#{hmcPartNo}
+		,#{replacePartNo}
+		,#{replacePartNm}
+		,#{replacePartCnt}
+		,#{usage}
+		,#{recallType}
+		,#{recallReqDate}
+		,#{receiveDate}
+		,#{qirIssueYn}
+		,#{autoinsert}
+		,#{reprYn}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_RESULT_SUB.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.ResultSubDomain">
+
+    UPDATE TB_DC_RESULT_SUB SET
+		VINNO = UPPER(#{vinno})
+		,MANAGE_NO = #{manageNo}
+		,SERVICE_DEGREE = #{serviceDegree}
+		,RESULT_DEGREE = #{resultDegree}
+		,ACTION_TYPE = #{actionType}
+		,CALL_CENTER_APPROVAL = #{callCenterApproval}
+		,REPAIR_DATE = #{repairDate}
+		,RO_NO = UPPER(#{roNo})
+		,RO_CONFIRM_DATE = #{roConfirmDate}
+		,RO_SPECIAL_FEATURE = #{roSpecialFeature}
+		,LOT_NO = #{lotNo}
+		,HMC_PART_NO = #{hmcPartNo}
+		,REPLACE_PART_NO = #{replacePartNo}
+		,REPLACE_PART_NM = #{replacePartNm}
+		,REPLACE_PART_CNT = #{replacePartCnt}
+		,USAGE = #{usage}
+		,RECALL_TYPE = #{recallType}
+		,RECALL_REQ_DATE = #{recallReqDate}
+		,RECEIVE_DATE = #{receiveDate}
+		,QIR_ISSUE_YN = #{qirIssueYn}
+		,AUTOINSERT = #{autoinsert}
+		,REPR_YN = #{reprYn}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.ResultSubDomain">
+
+    DELETE FROM TB_DC_RESULT_SUB
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

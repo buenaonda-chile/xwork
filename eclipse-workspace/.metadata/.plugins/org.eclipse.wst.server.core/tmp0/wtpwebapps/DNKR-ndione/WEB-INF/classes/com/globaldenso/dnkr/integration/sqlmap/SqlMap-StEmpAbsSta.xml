@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.StEmpAbsStaDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="stEmpAbsStaDomain" type="StEmpAbsStaDomain">
+        <result property="opertDe" column="OPERT_DE" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />  
+        <result property="empno" column="EMPNO" />
+        <result property="posType" column="POS_TYPE" />
+        <result property="logiType" column="LOGI_TYPE" />
+        <result property="strLogiType" column="STR_LOGI_TYPE" />      
+        <result property="shiftwork" column="SHIFTWORK" />
+        <result property="workCode" column="WORK_CODE" />                     
+        <result property="lrlyTime" column="LRLY_TIME" />        
+        <result property="latenTime" column="LATEN_TIME" />                
+        <result property="gnotTime" column="GNOT_TIME" />
+        <result property="arqstTime" column="ARQST_TIME" /> 
+        <result property="workPsbTime" column="WORK_PSB_TIME" />  
+        <result property="closSe" column="CLOS_SE" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+        <result property="overtimeM" column="OVERTIME_M" />
+        <result property="rcvsupTm" column="RCVSUP_TM" />        
+        <result property="minusSum" column="MINUS_SUM" />  
+        <result property="sumWorkTime" column="SUM_WORK_TIME" />       
+        <result property="lgstTm" column="LGST_TM" />     
+        <result property="rsnsOvrt" column="RSNS_OVRT" />    
+  
+        <result property="rownum" column="ROWNUM" />     
+  
+        <result property="rcrn" column="RCRN" />               
+        <result property="startDate" column="START_DATE" />             
+        <result property="order" column="ORDER" />    
+        <result property="workStle" column="WORK_STLE" />    
+        <result property="group" column="GROUP" />         
+        
+        <result property="workCode1" column="WORK_CODE1" />
+		<result property="workCode2" column="WORK_CODE2" />        
+        
+        <result property="mailAdr" column="MAIL_ADR" />                    
+
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT Replace(CHAR(DATE('${opertDe}'), iso), '-', '') AS OPERT_DE,
+		       AA.cls_code,
+		       AA.loc_code,
+		       TRIM(AA.empno) AS EMPNO,
+		       TRIM(AA.pos_type) AS POS_TYPE,
+		       AA.logi_type AS STR_LOGI_TYPE,
+		       TRIM(AA.work_code1) AS SHIFTWORK,
+		       TRIM(AA.work_code2) AS WORK_CODE,
+		       AA.lrly_time,
+		       AA.laten_time,
+		       AA.gnot_time,
+		       AA.arqst_time,
+		       AA.clos_se,
+		       BB.WORK_PSB_TIME,
+		       (SELECT ( Sum(lrly_time) + Sum(laten_time)
+		                 + Sum(gnot_time) )
+		        FROM   pszdblib.fhp080pf
+		        WHERE  cls_code = '${clsCode}'
+		               AND loc_code IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = '${partCode}')
+		               AND empno = AA.empno
+		               AND opert_de BETWEEN '${beforeDate}' AND '${toDate}') AS MINUS_SUM,
+		       AA.reg_user,
+		       AA.reg_date,
+		       AA.mod_user,
+		       AA.mod_date,
+		       TRIM(AA.rsns_ovrt) AS RSNS_OVRT,
+		       '' AS ROWNUM
+		FROM   pszdblib.fhp080pf AA
+		LEFT JOIN
+		(
+		SELECT AAA.EMPNO, Sum(AAA.OVERTIME_M) AS WORK_PSB_TIME
+		        FROM   (SELECT EMPNO, CASE
+		                         WHEN code <![CDATA[<]]> '20' THEN A.overtime_m + 480
+		                         ELSE A.overtime_m
+		                       END AS OVERTIME_M
+		                FROM   pszdblib.fhp020pf A
+		                       INNER JOIN pszdblib.fhp080pf B
+		                               ON A.code = B.work_code2
+		                                  AND A.cls_code = '${clsCode}'
+		                                  AND A.se = 'A'
+		                                  AND B.cls_code = '${clsCode}'		                                   
+		                WHERE B.opert_de BETWEEN '${beforeDate}' AND '${toDate}' 
+		                AND B.loc_code IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = '${partCode}') ) AAA
+		
+		GROUP BY AAA.EMPNO
+		) BB
+		ON AA.EMPNO = BB.EMPNO
+		WHERE  AA.opert_de = Replace(CHAR(DATE('${opertDe}'), iso), '-', '')
+		       AND AA.cls_code = '${clsCode}'
+		       AND AA.loc_code IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = '${partCode}')
+		       AND AA.work_code2 between '10' AND '30'
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByOverTimeSumOld" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT SUM(A.OVERTIME_M) AS OVERTIME_M
+		FROM PSZDBLIB.FHP020PF A
+		INNER JOIN PSZDBLIB.FHP080PF B
+		ON A.CODE = B.WORK_CODE2
+		AND A.CLS_CODE = '${clsCode}'
+		AND A.SE = 'A'
+		AND B.CLS_CODE = '${clsCode}'
+		AND B.LOC_CODE = '${locCode}'	
+		WHERE B.EMPNO = '${empno}'
+		AND B.OPERT_DE BETWEEN '${beforeDate}' AND '${toDate}'
+
+    </select>  
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByOverTimeSum" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+     SELECT TRIM(AA.EMPNO) AS EMPNO, SUM(AA.OVERTIME_M) AS OVERTIME_M 
+     FROM (
+		SELECT TRIM(B.EMPNO) AS EMPNO, A.OVERTIME_M 
+		FROM PSZDBLIB.FHP020PF A
+		INNER JOIN PSZDBLIB.FHP080PF B
+		ON A.CODE = B.WORK_CODE2
+		AND A.CLS_CODE = '${clsCode}'
+		AND A.SE = 'A'
+		AND B.CLS_CODE = '${clsCode}'
+		AND B.LOC_CODE = '${locCode}'	
+		AND B.OPERT_DE BETWEEN '${beforeDate}' AND '${toDate}'
+	) AA
+	GROUP BY AA.EMPNO		
+
+    </select>      
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByDayWorkTimeSum" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT ((AA.OVERTIME_M + AA.SRCVSUP_TM) -  AA.MINUS_TIME ) AS SUM_WORK_TIME  FROM ( 
+		SELECT CASE WHEN MAX(C.RCVSUP_TM) IS NULL THEN 0 ELSE  MAX(C.RCVSUP_TM) END AS SRCVSUP_TM
+        ,CASE WHEN SUM(A.OVERTIME_M)  IS NULL THEN 0 ELSE SUM(A.OVERTIME_M)  END AS OVERTIME_M
+        ,(SUM(LRLY_TIME) + SUM(LATEN_TIME) + SUM(GNOT_TIME) + SUM(ARQST_TIME)) AS MINUS_TIME
+		 FROM PSZDBLIB.FHP020PF A
+		 INNER JOIN PSZDBLIB.FHP080PF B
+		 ON A.CODE = B.WORK_CODE2
+ 		 AND A.SE = 'A'
+		 LEFT JOIN PSZDBLIB.FHP090PF C
+		 ON B.OPERT_DE = C.OPERT_DE
+		 AND B.CLS_CODE = C.CLS_CODE
+ 		 AND B.LOC_CODE = C.LOC_CODE		 
+		 WHERE A.CLS_CODE = '${clsCode}'
+		 AND A.SE = 'A'
+		 AND B.CLS_CODE = '${clsCode}'
+		 AND B.LOC_CODE = '${locCode}'	
+		 AND B.OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+        <if test="logiType != null and logiType != ''">		 
+		 AND B.LOGI_TYPE <![CDATA[<>]]> 'Y' 		 
+		 </if>
+		) AA
+
+    </select>       
+    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByMinusSumOld" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT (SUM(LRLY_TIME) + SUM(LATEN_TIME) + SUM(GNOT_TIME)) AS MINUS_SUM 
+		FROM PSZDBLIB.FHP080PF
+		WHERE  CLS_CODE = '${clsCode}'
+		AND LOC_CODE = '${locCode}' 
+		AND EMPNO = '${empno}'		
+		AND OPERT_DE BETWEEN '${beforeDate}' AND '${toDate}' 
+
+    </select>    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByMinusSum" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT TRIM(EMPNO) AS EMPNO , (SUM(LRLY_TIME) + SUM(LATEN_TIME) + SUM(GNOT_TIME)) AS MINUS_SUM 
+		FROM PSZDBLIB.FHP080PF
+		WHERE  CLS_CODE = '${clsCode}'
+		AND LOC_CODE = '${locCode}' 		
+		AND OPERT_DE BETWEEN '${beforeDate}' AND '${toDate}' 
+		GROUP BY EMPNO
+    </select>             
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchLgstCount" resultType="java.lang.Integer" parameterType="StEmpAbsStaDomain">
+		SELECT VALUE(SUM(A.OVERTIME_M),0) AS SUM_WORK_TIME 
+		FROM PSZDBLIB.FHP020PF A
+		INNER JOIN PSZDBLIB.FHP080PF B
+		ON A.CODE = B.WORK_CODE2
+		WHERE A.CLS_CODE = '${clsCode}'
+		AND A.SE = 'A'
+		AND B.CLS_CODE = '${clsCode}'
+		AND B.LOC_CODE = '${locCode}'	
+		AND B.OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+		AND B.LOGI_TYPE = 'Y' 
+
+
+    </select>        
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchLgstTm" resultMap="stEmpAbsStaDomain"  parameterType="StEmpAbsStaDomain">
+		SELECT CASE WHEN LGST_TM IS NULL THEN 0 ELSE LGST_TM END AS LGST_TM
+		FROM PSZDBLIB.FHP090PF 
+		WHERE CLS_CODE = '${clsCode}'
+		AND LOC_CODE = '${locCode}'	
+		AND OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+
+
+    </select>   
+        
+    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition1" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT
+			 REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','') AS OPERT_DE
+			,CLS_CODE
+			,LOC_CODE
+			,TRIM(EMPNO) AS EMPNO
+			,POS_TYPE
+			,(CASE WHEN LOGI_TYPE = 'Y' THEN 'true' ELSE 'false' END) AS LOGI_TYPE			
+			,WORK_CODE1 AS SHIFTWORK
+			,WORK_CODE2 AS WORK_CODE
+			,LRLY_TIME
+			,LATEN_TIME			
+			,GNOT_TIME
+			,ARQST_TIME	
+			,CLOS_SE
+			,'3120' AS WORK_PSB_TIME
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(RSNS_OVRT) AS RSNS_OVRT 
+		FROM PSZDBLIB.FHP080PF AA
+		WHERE OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+    </select>    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionSt" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT
+			 RCVSUP_TM
+		FROM PSZDBLIB.FHP090PF
+		WHERE OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+    </select>      
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="StEmpAbsStaDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP080PF
+        WHERE OPERT_DE = #{opertDe}
+        AND   CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}                 
+        AND   EMPNO = #{empno}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountSt" resultType="java.lang.Integer" parameterType="StEmpAbsStaDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP090PF
+        WHERE OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+        AND   CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}                 
+    </select>
+    
+    <select id="searchOvrtmRqstngItms" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+    	SELECT TRIM(A.EMPNO) AS EMPNO,TRIM(C.CODE_NM) AS WORK_CODE1, TRIM(B.CODE_NM) AS WORK_CODE2, TRIM(A.RSNS_OVRT) AS RSNS_OVRT
+		FROM PSZDBLIB.FHP080PF A
+		LEFT JOIN PSZDBLIB.FHP020PF B
+		    ON A.CLS_CODE = B.CLS_CODE
+		    AND A.WORK_CODE2 = B.CODE
+		    AND B.SE = 'A'
+		LEFT JOIN PSZDBLIB.FHP020PF C
+		    ON A.CLS_CODE = C.CLS_CODE
+		    AND A.WORK_CODE1 = C.CODE
+		    AND C.SE = 'G'
+		WHERE A.CLS_CODE = #{clsCode}
+		    AND A.LOC_CODE = #{locCode}
+		    AND A.OPERT_DE = substr(${opertDe},1,8)
+		    <![CDATA[ 
+		    AND B.CODE < 20
+			]]>
+			
+    </select>
+    
+    <select id="searchMailList" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+    	WITH SET_PRE_A AS
+		(
+			SELECT
+				MAIL_ADR1,
+				MAIL_ADR2,
+				MAIL_ADR3,
+				MAIL_ADR4,
+				MAIL_ADR5
+			FROM PSZDBLIB.FHP160PF
+			WHERE CLS_CODE = #{clsCode}
+				AND LOC_CODE = #{locCode}
+		),
+		SET_A AS
+		(
+			SELECT TRIM(MAIL_ADR1) AS MAIL_ADR FROM SET_PRE_A
+			UNION ALL
+			SELECT TRIM(MAIL_ADR2) AS MAIL_ADR FROM SET_PRE_A
+			UNION ALL
+			SELECT TRIM(MAIL_ADR3) AS MAIL_ADR FROM SET_PRE_A
+			UNION ALL
+			SELECT TRIM(MAIL_ADR4) AS MAIL_ADR FROM SET_PRE_A
+			UNION ALL
+			SELECT TRIM(MAIL_ADR5) AS MAIL_ADR FROM SET_PRE_A
+		)
+		SELECT * FROM SET_A
+		WHERE 1=1
+			AND MAIL_ADR IS NOT NULL
+		    AND TRIM(MAIL_ADR) != ''
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="StEmpAbsStaDomain">
+        INSERT INTO  PSZDBLIB.FHP080PF (
+				 OPERT_DE 
+				,CLS_CODE
+				,LOC_CODE
+				,EMPNO
+				,POS_TYPE
+				,WORK_CODE1			
+				,WORK_CODE2
+				,LOGI_TYPE
+				,LRLY_TIME
+				,LATEN_TIME		
+				,GNOT_TIME
+				,ARQST_TIME	
+				,CLOS_SE
+				,REG_USER
+				,REG_DATE
+				,RSNS_OVRT
+        ) values (
+        		#{opertDe}
+               ,#{clsCode}
+               ,#{locCode}
+               ,#{empno}
+               ,'01'  
+               ,#{shiftwork}                 
+               ,#{workCode} 
+               ,#{strLogiType} 
+               ,#{lrlyTime}
+               ,#{latenTime}
+               ,#{gnotTime}
+               ,#{arqstTime}
+               ,#{closSe}
+               ,#{regUser}         
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+               ,#{rsnsOvrt}
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createSt" parameterType ="StEmpAbsStaDomain">
+        INSERT INTO  PSZDBLIB.FHP090PF (
+				 OPERT_DE 
+				,CLS_CODE
+				,LOC_CODE
+				,RCVSUP_TM
+				,REG_USER
+				,REG_DATE
+        ) values (
+        		REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+               ,#{clsCode}
+               ,#{locCode}
+               ,#{rcvsupTm}
+               ,#{regUser}         
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>    
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createLgstTm" parameterType ="StEmpAbsStaDomain">
+        INSERT INTO  PSZDBLIB.FHP090PF (
+				 OPERT_DE 
+				,CLS_CODE
+				,LOC_CODE
+				,LGST_TM
+				,REG_USER
+				,REG_DATE
+        ) values (
+        		REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+               ,#{clsCode}
+               ,#{locCode}
+               ,#{lgstTm}
+               ,#{regUser}         
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>        
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update1" parameterType="StEmpAbsStaDomain">
+        UPDATE 
+               PSZDBLIB.FHP080PF
+        SET
+			  POS_TYPE = '01'
+			 ,LOGI_TYPE = #{strLogiType}	
+			 ,WORK_CODE1 = #{shiftwork}			 		
+			 ,WORK_CODE2 = #{workCode}
+			 ,LRLY_TIME = #{lrlyTime}
+			 ,LATEN_TIME = #{latenTime}			
+			 ,GNOT_TIME = #{gnotTime}
+			 ,ARQST_TIME = #{arqstTime}	  
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+             ,RSNS_OVRT = #{rsnsOvrt}	
+        WHERE OPERT_DE = #{opertDe}
+        AND	  CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMPNO = #{empno}
+        AND   POS_TYPE = '01'
+    </update>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="StEmpAbsStaDomain">
+        UPDATE 
+               PSZDBLIB.FHP080PF
+        SET
+			  POS_TYPE = '01'
+			 ,LOGI_TYPE = '${strLogiType}'	
+			 ,WORK_CODE1 = '${shiftwork}'			 		
+			 ,WORK_CODE2 = '${workCode}'
+			 ,LRLY_TIME = '${lrlyTime}'
+			 ,LATEN_TIME = '${latenTime}'			
+			 ,GNOT_TIME = '${gnotTime}'
+			 ,ARQST_TIME = '${arqstTime}'	  
+         	 ,MOD_USER = '${modUser}'
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+             ,RSNS_OVRT = '${rsnsOvrt}'	             
+        WHERE OPERT_DE = '${opertDe}'
+        AND	  CLS_CODE = '${clsCode}'
+        AND   LOC_CODE = '${locCode}'       
+        AND   EMPNO = '${empno}'
+        AND   POS_TYPE = '01'
+    </update>    
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateSt" parameterType="StEmpAbsStaDomain">
+        UPDATE 
+               PSZDBLIB.FHP090PF
+        SET
+			  RCVSUP_TM = #{rcvsupTm}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+        AND	  CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+    </update>    
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateLgstTm" parameterType="StEmpAbsStaDomain">
+        UPDATE 
+               PSZDBLIB.FHP090PF
+        SET
+			  LGST_TM = #{lgstTm}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+        AND	  CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+    </update>    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="StEmpAbsStaDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP080PF
+        WHERE OPERT_DE = #{opertDe}
+        AND	  CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMPNO = #{empno}
+        AND   POS_TYPE = '01'
+    </delete>
+    
+        <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByWorkCodeCondition" resultMap="stEmpAbsStaDomain" parameterType="StEmpAbsStaDomain">
+		SELECT 
+			TRIM(A.CLS_CODE) AS CLS_CODE
+			,TRIM(A.LOC_CODE) AS LOC_CODE
+			,TRIM(A.EMPNO) AS EMPNO
+			,A.START_DATE
+			,B.RCRN			
+			,B.ORDER
+			,TRIM(B.WORK_STLE) AS WORK_STLE
+			,TRIM(B.GROUP) AS GROUP						
+		FROM PSZDBLIB.FHP053PF A
+		INNER JOIN PSZDBLIB.FHP052PF B
+		ON A.RCRN = B.RCRN
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if>
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+			AND LOC_CODE = #{locCode}
+		</if>		
+		ORDER BY A.EMPNO,B.ORDER		
+    </select>  
+
+</mapper>

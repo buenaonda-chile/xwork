@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="600" Id="upload" Left="8" PidAttrib="7" Title="New&#32;Form" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Button ButtonStyle="TRUE" Height="24" Id="Button0" ImageID="5_btn" Left="619" OnClick="Button0_OnClick" TabOrder="1" Text="파일찾기" Top="32" Width="88"></Button>
+		<Button ButtonStyle="TRUE" Height="24" Id="Button1" ImageID="5_btn" Left="708" OnClick="Button1_OnClick" TabOrder="2" Text="업로드" Top="32" Width="88"></Button>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Height="23" Id="stx_market" ImeMode="none" Left="-1" MaxLength="15" TabOrder="3" Top="32" UpperOnly="TRUE" Width="619"></Edit>
+		<FileDialog Bottom="241" Height="24" Id="FileDialog0" Left="792" Right="816" TabOrder="7" Top="217" Width="24"></FileDialog>
+		<File Bottom="305" Height="24" Id="File0" Left="784" Right="808" TabOrder="7" Top="281" Width="24"></File>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="552" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="494" Id="MainGrid" InputPanel="FALSE" LineColor="#b4b4b4" MinWidth="100" Right="795" TabOrder="4" TabStop="true" Top="58" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="795">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="188"/>
+						<col width="149"/>
+						<col width="123"/>
+						<col width="167"/>
+						<col width="167"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="Column1"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="Column2"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="Column3"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="Column4"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="Column5"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="col1" display="normal"/>
+						<cell align="left" autosizing="none" col="1" colid="col2" display="normal" edit="normal"/>
+						<cell align="center" autosizing="none" col="2" colid="col3" display="date"/>
+						<cell align="right" autosizing="none" col="3" colid="col4" display="number" Mask="###.00"/>
+						<cell align="right" autosizing="none" col="4" colid="col5" display="number" Mask="#.00"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Progressbar Height="20" Id="Progressbar0" Left="69" Max="100" Origin="Horizontal" Pos="50" Step="20" TabOrder="5" Top="557" Width="720"></Progressbar>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="13" Style="static" TabOrder="7" Text="진행률&#32;:" Top="559" VAlign="Middle" Width="45"></Static>
+		<Shape BKColor="#94c1ea" Bottom="569" Height="5" Id="Shape0" Left="3" LineColor="#dceaf7" Right="8" TabOrder="6" Top="564" Type="Ellipse" Width="5"></Shape>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="10" Width="800"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="Static0" Left="37" TabOrder="8" Text="통합MRP&#32;&gt;&#32;메뉴10&#32;&gt;&#32;HKMC&#32;D2&#32;주간소요량&#32;UP" Top="8" Width="294"></Static>
+		<Image Height="28" Id="Image0" ImageID="main_tit_icon" Left="1" TabOrder="9" Width="29"></Image>
+		<WTA_RemoteCall Bottom="147" Height="10" Id="WTA_RemoteCall0" Left="819" Right="829" Top="137" Width="10"></WTA_RemoteCall>
+	</Form>
+	<Script><![CDATA[
+function Button0_OnClick(obj)
+{
+	if(FileDialog0.Open()){
+	}
+}
+
+function Button1_OnClick(obj)
+{
+	var param = cb_buso.Value + Calendar0.Value;
+	// 연결 (접속아이피 , 아이디, 비밀번호)
+	var rtn = WTA_RemoteCall0.RC_Connect("58.227.62.109","QSECOFR","SECOFR");
+	if(rtn != 0){   //접속성공시 
+	
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		//var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall("PSEOBJLIB","BHZZ100#M",param,103);
+		/*
+		1. CALL PGM(SVHE304U) : 377 길이의　레코드를　읽어들여，해당필드로　나누어생성 		
+		2. CALL PGM(SVHE304UA) : 주간소요량 TX 삭제		
+		3. CALL PGM(SVHE304UB)  : 주간소요량 TX 생성 풍성품번　변환작업　및　 ERROR FILE 생성		
+		*/
+		Var val1 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304U)");
+		Var val2 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UA)");
+		Var val3 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UB)");
+		if(rtn2 != 0){ //정상적으로 수행했을 시
+			//리턴 파라메타 값을 출력한다.
+			alert(WTA_RemoteCall0.RC_GetReturnParm(1));
+			
+		}else{
+			//오류 코드 경고창
+			alert(WTA_RemoteCall0.ulErrorCode);
+		}
+	}else{
+		//오류 코드 경고창
+		alert(WTA_RemoteCall0.ulErrorCode);
+	}
+	WTA_RemoteCall0.RC_Disconnect();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" OnLoadCompleted="form_OnLoadCompleted" Id="form" Left="8" PidAttrib="7" Title="autoConvert" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Static Height="20" Id="ID01002" Left="20" TabOrder="0" Text="MSTZ100FM" Top="21" Width="90"></Static>
+		<Static Height="20" Id="ID01024" Left="240" TabOrder="1" Text=" 【　품목　정보　마스타　】 " Top="21" Width="280"></Static>
+		<Static Height="20" Id="ID01070" Left="700" TabOrder="2" Text="2010/10/29" Top="21" Width="100"></Static>
+		<Static Height="20" Id="ID02072" Left="720" TabOrder="3" Text="15:36:32" Top="42" Width="80"></Static>
+		<Static Height="20" Id="ID03002" Left="20" TabOrder="4" Text=" 사업부 :" Top="63" Width="90"></Static>
+		<Static Height="20" Id="ID03021" Left="210" TabOrder="5" Text=" 품번 :" Top="63" Width="70"></Static>
+		<Static Height="20" Id="ID03049" Left="490" TabOrder="6" Text=" 활동 CD:" Top="63" Width="90"></Static>
+		<Static Height="20" Id="ID03061" Left="610" TabOrder="7" Text="(A/C/D/Q)" Top="63" Width="90"></Static>
+		<Static Height="20" Id="ID24045" Left="450" TabOrder="8" Text="PF03: 작업종료 " Top="504" Width="150"></Static>
+		<Static Height="20" Id="ID24065" Left="650" TabOrder="9" Text="PF12: 작업취소 " Top="504" Width="150"></Static>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20"  Id="ID03012" Left="120" TabOrder="10" Text="" Top="63" Width="20"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20"  Id="ID03029" Left="290" TabOrder="11" Text="" Top="63" Width="150"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20"  Id="ID03059" Left="590" TabOrder="12" Text="" Top="63" Width="10"></Edit>
+	<Datasets>	<Dataset DataSetType="Dataset" Id="ds_main"></Dataset></Datasets>	</Form>
+	<script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+}
+function sendField(){
+	MAX5250.SendToField("ID03012",ID03012.Text );
+	MAX5250.SendToField("ID03029",ID03029.Text );
+	MAX5250.SendToField("ID03059",ID03059.Text );
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+		ID01002.Text=ds_main.getColumn(0,"ID01002");
+		ID01024.Text=ds_main.getColumn(0,"ID01024");
+		ID01070.Text=ds_main.getColumn(0,"ID01070");
+		ID02072.Text=ds_main.getColumn(0,"ID02072");
+		ID03002.Text=ds_main.getColumn(0,"ID03002");
+		ID03021.Text=ds_main.getColumn(0,"ID03021");
+		ID03049.Text=ds_main.getColumn(0,"ID03049");
+		ID03061.Text=ds_main.getColumn(0,"ID03061");
+		ID24045.Text=ds_main.getColumn(0,"ID24045");
+		ID24065.Text=ds_main.getColumn(0,"ID24065");
+		ID03012.Text=ds_main.getColumn(0,"ID03012");
+		ID03029.Text=ds_main.getColumn(0,"ID03029");
+		ID03059.Text=ds_main.getColumn(0,"ID03059");
+	}
+}
+]]>	</script>
+</Window>

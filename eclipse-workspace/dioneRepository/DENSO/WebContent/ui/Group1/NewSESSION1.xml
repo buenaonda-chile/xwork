@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnSize="form_OnSize" OnTimer="form_OnTimer" PidAttrib="7" scroll="false" Title="SESSION1" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_loginYn"></Dataset>
+		</Datasets>
+		<MAX5250 Bottom="535" Fire_Focus="MAX5250_Fire_Focus" Fire_Reset="MAX5250_Fire_Reset" Height="535" Id="MAX5250" Right="800" Visible="FALSE" Width="800"></MAX5250>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : NewSESSION.xml
+ * ● PROGRAM DESCRIPTION  : 뉴디오네 Session연동
+ * ● DATE WRITTEN         : 2018.04.04
+ ----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function form_OnLoadCompleted(obj)
+{
+
+	//G_ds_user.SetColumn(0,"COMPANY", "PE");
+	//G_ds_user.SetColumn(0,"PLANT_CD", "E1");
+	//comps = G_ds_user.GetColumn(0,"PLANT_CD");	
+//alert(G_ds_user.GetColumn(0,"USER_Id"));
+//alert(G_ds_user.GetColumn(0,"COMPANY"));
+//alert(G_ds_user.GetColumn(0,"PLANT_CD"));
+
+    getTitle();
+	//gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	
+	if(comps = "E1")		
+		max5250.SystemName = "cigma_e1.dnke.kr";  //10.72.209.2					
+	else if(comps = "C1")
+		max5250.SystemName = "cigma_c1.dnka.kr";	//10.72.209.3
+	else if(comps = "H1")
+		max5250.SystemName = "cigma_h1.dnka.kr"; //10.72.209.4	
+	else if(comps = "S1")
+		max5250.SystemName = "cigma_s1.dnka.kr"; //10.72.209.5	
+	// MDI인 경우 AutoSizing을 위하여 추가
+    if(parent == "Group1::NewSESSION1.xml")
+    {
+    alert("mdi");
+		Max5250.top = 0;
+		Max5250.left = 0;
+		if(parent.height < GetTopWindow().div_content.Height)
+			div_content.Max5250.height = parent.height;
+		else	
+			div_content.Max5250.height = GetTopWindow().div_content.Height;
+		if(parent.width < GetTopWindow().div_content.Width)
+			div_content.Max5250.width =  parent.width;
+		else
+			div_content.Max5250.width =  GetTopWindow().div_content.Width;
+	}
+
+	getUser(); //사용자 정보 조회
+	
+}
+
+
+//사용자 정보 조회
+function getUser()
+{
+	 var sKind = "getSsoAccount";      
+	 var sMethodName = "service::user/selectSsoAccount.do";
+	 var sInDataSet  = "";
+	 var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";
+	 var sArgument   = "";
+	
+	 sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_Id"));
+	 sArgument += " INOUT_GUBN=" + quote("I");
+	 sArgument += " COMPANY=" + quote(G_ds_user.GetColumn(0,"COMPANY"));
+	 sArgument += " SYSTEM_SEQ=" + quote(4);
+	 
+	 Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "fnc_callBack");
+}
+
+function Button0_OnClick(obj)
+{
+	max5250.SendKeys("MELITA_DL[FLDEXT]MELITA_DL[FLDEXT][ENTER]");
+}
+
+function MAX5250_Fire_Update(obj)
+{
+	trace("1");
+}
+
+function MAX5250_Fire_Reset(obj)
+{
+	trace("==리셋 이벤트");
+	Max5250.Visible = TRUE;
+}
+
+//로그인 처리
+function setLogin()
+{
+		MAX5250.SendToField("FD06053",ds_ssoaccount.GetColumn(0,"SYSTEM_ID"));
+		MAX5250.SendToField("FD07053",ds_ssoaccount.GetColumn(0,"SYSTEM_PW"));
+		MAX5250.SendKeys("[Enter]");		
+}
+
+//콜백 이벤트
+function fnc_callBack(svcId, errCode, errMsg)
+{
+
+	if(svcId = "getSsoAccount")
+	{
+		trace("=== getuser complete");
+		max5250.DeviceName = ds_ssoaccount.GetColumn(0,"SYSTEM_GRU"); //디바이스
+		max5250.ConfigName = "Session1";
+		var rtn = max5250.Connect();
+		
+		if(rtn != 0) {
+			max5250.SetKeyHook("VK_TAB");
+			//로그인처리
+			trace("login : "+getAutoLogin());
+			if(getAutoLogin(4) ) //auto login 
+			{
+			//	alert("auto login");
+				setTimer(1,1000);
+			}
+			else
+				max5250.Visible = true;
+			
+			MAX5250.SetFocus();
+		}
+		else
+			alert("connect fail!!");
+		
+		
+	}
+	
+}
+
+//타이머
+function form_OnTimer(obj,nEventID)
+{
+	if(nEventID == 1) 
+	{
+		killTimer(1);
+		setLogin();
+	}
+}
+
+function form_OnSize(obj,nCx,nCy,nState)
+{
+	fn_SetScreenSize(nCx, nCy);
+}
+
+function MAX5250_Fire_Focus(obj)
+{
+    if(parent == "Group1::NewSESSION1.xml")
+    {
+        parent.SetFocus();
+        MAX5250.SetFocus();
+	}
+	//gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+}
+]]></Script>
+</Window>

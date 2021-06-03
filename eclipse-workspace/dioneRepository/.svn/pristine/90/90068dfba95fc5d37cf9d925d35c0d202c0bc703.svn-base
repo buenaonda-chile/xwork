@@ -1,0 +1,1866 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="psmstlib">
+<select id="selectMSTZ058" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	select
+		GRPCD,
+		TRIM(MSTCD) MSTCD,
+		TRIM(MSTSM) MSTSM,
+		TRIM(MSTRM) MSTRM,
+		INPDT,INPMN,
+		CHGDT,CHGMN
+	from
+		$LIB2$.mst050pf
+	<dynamic prepend="where">
+	<isNotEmpty prepend="AND" property="COMPS">
+		comps = #COMPS#
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="GRPCD">
+		grpcd = #GRPCD#
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="MSTCD">
+		MSTCD = #MSTCD#
+	</isNotEmpty>
+	</dynamic>
+	order by
+		GRPCD,MSTCD
+</select>
+
+<insert id="insertMSTZ058" parameterClass="java.util.HashMap">
+	insert into $LIB2$.MST050PF 
+		(
+			COMPS,
+			GRPCD,
+			MSTCD,
+			MSTSM,
+			MSTRM,
+			INPDT,
+			INPMN
+		)values(
+			#COMPS#,
+			#GRPCD#,
+			#MSTCD#,
+			#MSTSM#,
+			#MSTRM#,
+			substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+			$ADUSR$
+		)			
+</insert>
+
+<update id="updateMSTZ058" parameterClass="java.util.HashMap">
+	update $LIB2$.MST050PF set
+		MSTSM = #MSTSM#,
+		MSTRM = #MSTRM#,
+		CHGDT = substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+		CHGMN = $ADUSR$
+	where 
+		COMPS = #COMPS#
+		and	GRPCD = #GRPCD#
+		and MSTCD = #MSTCD#			
+</update>
+
+<delete id="deleteMSTZ058" parameterClass="java.util.HashMap">
+	delete from $LIB2$.MST050PF 
+	where 
+		COMPS = #COMPS#
+		and	GRPCD = #GRPCD#
+		and MSTCD = #MSTCD#	
+</delete>
+	<select id="selectMSTZ302Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT										
+		X.CUSNO,TRIM(R.CUSNM) AS CUSNM, TRIM(X.ITNBR) AS ITNBR, TRIM(X.MKITM) AS MKITM,
+		TRIM(X.ITNBR8) AS ITNBR8, TRIM(X.CPRTN) AS CPRTN,									
+		X.EDATM, X.LDUPD, TRIM(Z.MSTRM) AS MSTRM, TRIM(X.ITDSC) AS ITDSC									
+	FROM										
+		(									
+		SELECT									
+			A.ITNBR,A.MKITM,B.*								
+		FROM									
+			$LIB2$.MST300PF A,								
+			(								
+			SELECT 								
+				X.*,Y.ITNBR ITNBR8,Y.ITDSC,Y.ITTYP,Y.ITCLS							
+			FROM 								
+				(SELECT * FROM $LIB1$.EM000LR2 WHERE CUSNO BETWEEN '$SPYV$' AND '$EPYV$' AND EDATM <![CDATA[>]]> $SDATE$) X, 							
+				(SELECT * FROM $LIB1$.BM008PR WHERE PACKC='A1' AND ITTYP='1' AND SUBSTR(ITCLS,2,1)='1') Y 							
+			WHERE 								
+				X.PRTNO=Y.ITNBR							
+			) B								
+		WHERE									
+			A.ITNBR = REPLACE(B.PRTNO,RIGHT(TRIM(PRTNO),2),' ')								
+		) X									
+		LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST100PF WHERE COMPS=#COMPS#) Y ON X.PRTNO=Y.PRTNO									
+		LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST050PF WHERE COMPS=#COMPS# AND GRPCD = 'CAR') Z ON Y.CARCD=Z.MSTCD									
+		LEFT OUTER JOIN $LIB1$.CUSMAS R ON X.CUSNO=R.CUSNO									
+	WHERE										
+		X.MKITM NOT IN X.CPRTN
+	    <isNotEmpty prepend="AND" property="CARCD">
+	 			   Y.CARCD = #CARCD#
+	 	</isNotEmpty>
+	    <isNotEmpty prepend="AND" property="PCHK">
+	 		<isEqual property="PCHK" compareValue="1">
+ 				 Y.QYEXT = 'Y'
+			</isEqual>
+	 		<isEqual property="PCHK" compareValue="2">
+ 				(Y.ROLCD = '4MM' OR Y.ROLCD='8MM')
+			</isEqual>
+	 		<isEqual property="PCHK" compareValue="3">
+ 				(Y.ROLCD = '4WT' OR Y.ROLCD='8WT')
+			</isEqual>			
+	 	</isNotEmpty>
+<!-- 										
+	//	AND Y.CARCD = ## //차종선택일 경우									
+	//	AND Y.QYEXT = 'Y' //출력구분1일때 사용  1:M, 2-M/M, 3:CLOCK
+	//	AND (Y.ROLCD = '4MM' OR Y.ROLCD='8MM')  //출력구분2일때 사용  1:M, 2-M/M, 3:CLOCK
+	//	AND (Y.ROLCD = '4WT' OR Y.ROLCD='8WT')  //출력구분3일때 사용  1:M, 2-M/M, 3:CLOCK
+ --> 	
+	ORDER BY	
+		X.CUSNO,X.ITNBR
+	</select>
+<select id="selectMSTE100" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+<!--
+	SELECT 
+		
+		D.SHPCD, D.RGNCD, D.MKALC, D.MKLOC,  D.COLOR, D.ECCID, D.HMCCD, D.PGSCD, D.BXLCD, D.DKD04
+	FROM 
+		PSEDBLIB.SVM100PF A
+		LEFT OUTER JOIN PERESLIB.BM008PR B ON A.PSPNO=B.ITNBR
+		LEFT OUTER JOIN PSEDBLIB.MST100PF C ON A.COMPS=C.COMPS AND A.PSPNO=C.PRTNO
+		LEFT OUTER JOIN PSEDBLIB.MST200PF D ON A.COMPS=D.COMPS AND A.PSPNO=D.PSPNO
+	WHERE 
+	A.PSPNO=#PSPNO#
+-->
+<!--
+	SELECT
+		A.COMPS, TRIM(A.PRTNO) AS PRTNO,
+		TRIM(C.ITDSC) AS ITDSC, TRIM(C.ITTYP) AS ITTYP, TRIM(C.ITCLS) AS ITCLS,
+		TRIM(C.PLANN) AS PLANN, 
+		TRIM(A.CARCD) AS CARCD, TRIM(A.BDYCD) AS BDYCD, TRIM(A.ROLCD) AS ROLCD,
+		TRIM(A.QYEXT) AS QYEXT,
+		TRIM(B.SHPCD) AS SHPCD, TRIM(B.RGNCD) AS RGNCD, TRIM(B.MKALC) AS MKALC,
+		TRIM(B.MKLOC) AS MKLOC, TRIM(B.COLOR) AS COLOR,
+		TRIM(B.ECCID) AS ECCID, TRIM(B.HMCCD) AS HMCCD, TRIM(B.PGSCD) AS PGSCD,
+		TRIM(B.LBRCD) AS LBRCD, TRIM(B.BXLCD) AS BXLCD, TRIM(B.REP01) AS REP01,
+		TRIM(B.MKPNM) AS MKPNM, TRIM(B.MKFAC) AS MKFAC, TRIM(B.MKCRC) AS MKCRC,
+		TRIM(B.EXPDP) AS EXPDP, TRIM(B.MKWHH) AS MKWHH, TRIM(B.MKADD) AS MKADD,
+		TRIM(B.MKPRS) AS MKPRS, TRIM(B.DKD01) AS DKD01, 
+		TRIM(B.DKD02) AS DKD02, TRIM(B.DKD03) AS DKD03, TRIM(B.DKD04) AS DKD04
+	FROM 
+		$LIB2$.MST100PF A
+		LEFT OUTER JOIN $LIB2$.MST200PF B ON A.COMPS=B.COMPS AND A.PRTNO=B.PSPNO
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PRTNO=C.ITNBR
+	WHERE
+		A.COMPS= #COMPS#
+		AND A.PRTNO=#PSPNO#
+-->
+	SELECT
+		A.COMPS, TRIM(A.PRTNO) AS PRTNO,
+		TRIM(C.ITDSC) AS ITDSC, TRIM(C.ITTYP) AS ITTYP, TRIM(C.ITCLS) AS ITCLS,
+		TRIM(C.PLANN) AS PLANN, 
+		TRIM(A.CARCD) AS CARCD, TRIM(A.BDYCD) AS BDYCD, TRIM(A.ROLCD) AS ROLCD,
+		TRIM(A.QYEXT) AS QYEXT,
+		TRIM(B.SHPCD) AS SHPCD, TRIM(B.RGNCD) AS RGNCD, TRIM(B.MKALC) AS MKALC,
+		TRIM(B.MKLOC) AS MKLOC, TRIM(B.COLOR) AS COLOR,
+		TRIM(B.ECCID) AS ECCID, TRIM(B.HMCCD) AS HMCCD, TRIM(B.PGSCD) AS PGSCD,
+		TRIM(B.LBRCD) AS LBRCD, TRIM(B.BXLCD) AS BXLCD, TRIM(B.REP01) AS REP01,
+		TRIM(B.MKPNM) AS MKPNM, TRIM(B.MKFAC) AS MKFAC, TRIM(B.MKCRC) AS MKCRC,
+		TRIM(B.EXPDP) AS EXPDP, TRIM(B.MKWHH) AS MKWHH, TRIM(B.MKADD) AS MKADD,
+		TRIM(B.MKPRS) AS MKPRS, TRIM(B.DKD01) AS DKD01, 
+		TRIM(B.DKD02) AS DKD02, TRIM(B.DKD03) AS DKD03, TRIM(B.DKD04) AS DKD04
+	FROM 
+		$LIB2$.MST100PF A
+		LEFT OUTER JOIN $LIB2$.MST200PF B ON A.COMPS=B.COMPS AND A.PRTNO=B.PSPNO
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PRTNO=C.ITNBR
+	WHERE
+		A.COMPS= #COMPS#
+		AND A.PRTNO=#PSPNO#
+
+</select>
+	
+	
+<select id="selectSVM100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+	SELECT * 
+	FROM
+		$LIB2$.SVM100PF
+	WHERE 
+		COMPS = #COMPS#
+		AND PSPNO = #PSPNO#
+		AND SEQCD =#MKALC#
+
+</select>
+<select id="selectMSTE100_Check1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST100PF
+	WHERE 
+		COMPS = #COMPS#
+		AND PRTNO = #PRTNO#
+
+</select>
+<select id="selectMSTE100_Check2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST200PF
+	WHERE 
+		COMPS = #COMPS#
+		AND PSPNO = #PRTNO#
+
+</select>
+<insert id="insertMSTE100_MST100PF" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST100PF
+		(COMPS, PRTNO, PRDCD, CARCD, BDYCD, ROLCD, MGMCD, QYEXT, INPDT, INPMN, CHGDT, CHGMN)
+	VALUES
+		(#COMPS#, #PRTNO#, '', #CARCD#, #BDYCD#, #ROLCD#, '', #QYEXT#, SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2), #SUSER#)
+	
+</insert>
+		
+<update id="updateMSTE100_MST100PF" parameterClass="java.util.HashMap">
+		UPDATE 
+			$LIB2$.MST100PF
+		SET 
+			CARCD = #CARCD#,
+			BDYCD = #BDYCD#,
+			ROLCD = #ROLCD#,
+			QYEXT = #QYEXT#,
+			CHGDT = SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2),
+			CHGMN = #SUSER#
+		WHERE
+			COMPS = #COMPS#
+			AND PRTNO = #PRTNO#		
+</update>
+
+<delete id="deleteMSTE100_MST100PF" parameterClass="java.util.HashMap">
+		DELETE FROM  
+			$LIB2$.MST100PF
+		WHERE
+			COMPS = #COMPS#
+			AND PRTNO = #PRTNO#		
+</delete>	
+<insert id="insertMSTE100_MST200PF" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST200PF
+		(COMPS, PSPNO, SHPCD, RGNCD, MKALC, MKLOC, COLOR, ECCID, HMCCD, PGSCD, LBRCD, BXLCD, REP01,
+		MKPNM, MKFAC, MKCRC, EXPDP, MKWHH, MKADD, MKPRS, DKD01, DKD02, DKD03, DKD04)
+	VALUES
+		(#COMPS#, #PRTNO#, #SHPCD#, #RGNCD#, #MKALC#, #MKLOC#, #COLOR#, #ECCID#, #HMCCD#, #PGSCD#, #LBRCD#, #BXLCD#, #REP01#,
+		#MKPNM#, #MKFAC#, #MKCRC#, #EXPDP#, #MKWHH#, #MKADD#, #MKPRS#, #DKD01#, #DKD02#, #DKD03#, #DKD04#)	
+</insert>
+		
+<update id="updateMSTE100_MST200PF" parameterClass="java.util.HashMap">
+		UPDATE 
+			$LIB2$.MST200PF
+		SET 
+			SHPCD = #SHPCD#, RGNCD = #RGNCD#, MKALC= #MKALC#, MKLOC= #MKLOC#, 
+			COLOR = #COLOR#, ECCID = #ECCID#, HMCCD = #HMCCD#, PGSCD= #PGSCD#,
+			LBRCD = #LBRCD#, BXLCD = #BXLCD#, REP01 = #REP01#, MKPNM = #MKPNM#, 
+			MKFAC = #MKFAC#, MKCRC = #MKCRC#, EXPDP = #EXPDP#, MKWHH = #MKWHH#,
+			MKADD = #MKADD#, MKPRS = #MKPRS#, DKD01 = #DKD01#, DKD02 = #DKD02#,
+			DKD03 = #DKD03#, DKD04 = #DKD04#
+		WHERE
+			COMPS = #COMPS#		
+			AND PSPNO = #PRTNO#		
+</update>
+
+<delete id="deleteMSTE100_MST200PF" parameterClass="java.util.HashMap">
+		DELETE FROM  
+			$LIB2$.MST200PF
+		WHERE
+			COMPS = #COMPS#
+			AND PSPNO = #PRTNO#		
+</delete>	
+
+	<select id="selectMSTZ053" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COMPS, GRPCD, TRIM(MSTCD) AS MSTCD, TRIM(MSTSM) AS MSTSM, TRIM(MSTRM) AS MSTRM,
+		INPDT, INPMN, CHGDT, CHGMN
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD='CAR'
+	    <isNotEmpty prepend="AND" property="CARCD">
+	 	MSTCD <![CDATA[>=]]> #CARCD#
+	 	</isNotEmpty>		
+	</select>
+
+	<select id="selectMSTZ053_Check1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+	    AND MSTCD =#MSTCD#	
+	</select>
+	<select id="selectMSTZ053_Check2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+	    AND MSTCD =#OLD_MSTCD#	
+	</select>	
+	<insert id="insertMSTZ053" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB2$.MST050PF 
+			(COMPS, GRPCD, MSTCD, MSTSM, MSTRM, INPDT, INPMN, CHGDT, CHGMN)
+		VALUES
+			(#COMPS#, #GRPCD# , #MSTCD#, #MSTSM#, #MSTRM#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#)
+	</insert>
+		
+	<update id="updateMSTZ053" parameterClass="java.util.HashMap">
+		UPDATE 
+			$LIB2$.MST050PF
+		SET 
+			MSTCD = #MSTCD#,
+			MSTSM = #MSTSM#,
+			MSTRM = #MSTRM#,
+			CHGDT = SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4),
+			CHGMN = #SUSER#
+		WHERE 
+			COMPS = #COMPS#
+			AND GRPCD=#GRPCD#
+		    AND MSTCD =#OLD_MSTCD#
+	</update>
+	
+	<delete id="deleteMSTZ053" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB2$.MST050PF 
+		WHERE 
+			COMPS = #COMPS#
+			AND GRPCD=#GRPCD#
+		    AND MSTCD =#MSTCD#
+			<!--
+			AND MAKDT = $SMAKDT$ || REPEAT('0', 2-length(trim(char($MAKDT$)))) || INTEGER($MAKDT$) 
+			 --> 
+	</delete>
+	<select id="selectMST050PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			COMPS, GRPCD, TRIM(MSTCD) MSTCD, TRIM(MSTSM) MSTSM, TRIM(MSTRM) MSTRM
+		FROM
+			$LIB2$.MST050PF
+		<dynamic prepend="WHERE">
+		<isNotEmpty prepend="AND" property="COMPS">
+			COMPS = #COMPS#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="GRPCD">
+			GRPCD = #GRPCD#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="MSTCD">
+			MSTCD = #MSTCD#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="MSTRM">
+			MSTRM LIKE '%' || '$MSTRM$' || '%' 
+		</isNotEmpty>
+		</dynamic>
+		ORDER BY GRPCD,MSTCD
+	</select>	
+<select id="selectMSTC410Q_12" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		'$STEP_TXT$' STEP_TXT
+		, '$PINBR$' PINBR
+		, right('000' || TRIM(CHAR((
+			SELECT 
+				COUNT(1)
+			FROM 
+				$LIB2$.MST300PF AA,
+				(
+				SELECT CINBR, QTYPR FROM $LIB2$.MST400PF WHERE PINBR = '$PINBR$'
+				) BB
+			WHERE 
+				BB.CINBR = AA.ITNBR
+				AND AA.ITNBR <![CDATA[<=]]> A.ITNBR 
+		   ))),3) ROWNUMBER
+		, A.ITNBR
+		, coalesce(B.QTYPR,0) * $QTY$ AS QTYPR
+		, A.UNMSR
+		, A.ITTYP
+		, B.MDATE
+		, A.ITDSC
+		, A.RGNCD
+		, B.USRSQ
+		, A.ENGNO
+		, SUBSTR(A.PURCD,1,3) TLCCD
+		, A.ALTPC
+		, B.EDATM
+		, B.EDATO
+		, A.MOVDP
+	FROM 
+		$LIB2$.MST300PF A,
+		(
+		SELECT CINBR, QTYPR,MDATE,USRSQ,EDATM,EDATO FROM $LIB2$.MST400PF WHERE PINBR = '$PINBR$'
+		) B
+	WHERE
+		B.CINBR = A.ITNBR
+	ORDER BY B.CINBR
+</select>
+<select id="selectMSTC410QSub_12" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		'$STEP_TXT$' STEP_TXT
+		, '$PINBR$' PINBR
+		, '$STEP$' || right('000' ||TRIM(CHAR((
+			SELECT 
+				COUNT(1)
+			FROM 
+				$LIB2$.MST300PF AA,
+				(
+				SELECT CINBR, QTYPR FROM $LIB2$.MST400PF WHERE PINBR = '$PINBR$'
+				) BB
+			WHERE 
+				BB.CINBR = AA.ITNBR
+				AND AA.ITNBR <![CDATA[<=]]> A.ITNBR 
+		   ))),3) ROWNUMBER
+		, A.ITNBR
+		, coalesce(B.QTYPR,0) * $QTY$ AS QTYPR
+		, A.UNMSR
+		, A.ITTYP
+		, B.MDATE
+		, A.ITDSC
+		, A.RGNCD
+		, B.USRSQ
+		, A.ENGNO
+		, SUBSTR(A.PURCD,1,3) TLCCD
+		, A.ALTPC
+		, B.EDATM
+		, B.EDATO
+		, A.MOVDP
+	FROM 
+		$LIB2$.MST300PF A,
+		(
+		SELECT CINBR, QTYPR,MDATE,USRSQ,EDATM,EDATO FROM $LIB2$.MST400PF WHERE PINBR = '$PINBR$'
+		) B
+	WHERE
+		B.CINBR = A.ITNBR
+</select>
+<select id="selectMSTC410Q_34" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		'$STEP$' STEP_TXT
+		, A.ITNBR
+		, coalesce(B.QTYPR,0) * $QTY$ AS QTYPR
+		, A.UNMSR
+		, A.ITTYP
+		, B.MDATE
+		, A.ITDSC
+		, A.RGNCD
+		, B.USRSQ
+		, A.ENGNO
+		, SUBSTR(A.PURCD,1,3) TLCCD
+		, A.ALTPC
+		, B.EDATM
+		, B.EDATO
+		, A.MOVDP
+	FROM 
+		$LIB2$.MST300PF A,
+		(
+		SELECT PINBR, QTYPR,MDATE,USRSQ,EDATM,EDATO FROM $LIB2$.MST400PF WHERE CINBR = '$CINBR$'
+		) B
+	WHERE
+		B.PINBR = A.ITNBR
+	ORDER BY B.PINBR
+</select>
+<select id="selectMSTC410QSub_34" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		'$STEP$' STEP_TXT
+		, A.ITNBR
+		, coalesce(B.QTYPR,0) * $QTY$ AS QTYPR
+		, A.UNMSR
+		, A.ITTYP
+		, B.MDATE
+		, A.ITDSC
+		, A.RGNCD
+		, B.USRSQ
+		, A.ENGNO
+		, SUBSTR(A.PURCD,1,3) TLCCD
+		, A.ALTPC
+		, B.EDATM
+		, B.EDATO
+		, A.MOVDP
+	FROM 
+		$LIB2$.MST300PF A,
+		(
+		SELECT PINBR, QTYPR,MDATE,USRSQ,EDATM,EDATO FROM $LIB2$.MST400PF WHERE  CINBR = '$CINBR$'
+		) B
+	WHERE
+		B.PINBR = A.ITNBR
+</select>
+<select id="selectMST300PF_ITNBR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		*
+	FROM
+		$LIB2$.MST300PF
+	WHERE
+		ITNBR = #ITNBR#
+</select>
+
+<select id="selectMSTC302Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		*
+	FROM 
+		$LIB2$.MST300PF
+	WHERE
+		ITNBR BETWEEN '$FPSPNO$' AND '$TPSPNO$'
+		AND ALTPC BETWEEN '$FALTPC$' AND '$TALTPC$'
+		AND ITTYP BETWEEN '$FITTYP$' AND '$TITTYP$'
+		AND ITCLS BETWEEN '$FITCLS$' AND '$TITCLS$'
+	ORDER BY
+		<isEqual property="GUB" compareValue="1">
+		ITNBR
+		</isEqual>
+		<isEqual property="GUB" compareValue="2">
+		ALTPC,ITNBR
+		</isEqual>
+		<isEqual property="GUB" compareValue="3">
+		ITTYP,ITNBR
+		</isEqual>
+		<isEqual property="GUB" compareValue="4">
+		ITCLS,ITNBR
+		</isEqual>
+</select>
+<select id="selectMSTZ042Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.COMPS, A.MAJC2, A.MAJC3, A.MJCHR, A.MAJMK 
+FROM 
+	$LIB2$.MST041LF A
+WHERE
+	A.COMPS = #COMPS#
+	<isNotEmpty prepend="AND" property="MAJC2">
+	A.MAJC2 <![CDATA[>=]]>  #MAJC2#
+	</isNotEmpty>
+</select>
+<select id="selectMSTZ043" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.MAJC2, TRIM(A.MAJC3) AS MAJC3, TRIM(A.MJCHR) AS MJCHR,
+	TRIM(A.MAJMK) AS MAJMK, A.COMPS, SUBSTR(A.MAJCD,1,7) AS MAJCD, A.MJINT, A.MAJTM, A.MAJDT 
+FROM 
+	$LIB2$.MST045LF A
+WHERE
+	A.COMPS = #COMPS#
+	AND A.MAJC2 = #MAJC2#
+</select>
+
+<select id="selectMSTZ043_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		count(*) CNT
+	FROM
+		$LIB2$.MST045LF A
+	WHERE
+		A.COMPS=#COMPS#
+		AND A.MAJC2=#MAJC2#
+		AND A.MAJC3 = #MAJC3#
+<!-- 	AND A.MJCHR = #MJCHR#	 -->
+</select>
+
+<select id="selectMSTZ043_Check2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		count(*) CNT
+	FROM
+		$LIB2$.MST045LF A
+	WHERE
+		A.COMPS=#COMPS#
+		AND A.MAJC2=#MAJC2#
+		AND A.MAJC3 = #OLD_MAJC3#
+		AND A.MJCHR = #OLD_MJCHR#
+</select>
+
+<insert id="insertMSTZ043" parameterClass="java.util.HashMap">
+	INSERT INTO 
+		$LIB2$.MST045LF
+		(COMPS, MAJCD, MAJC2, MAJC3, MJINT, MJCHR, MAJTM, MAJDT, MAJMK)
+	VALUES
+		(#COMPS#,#IMAJCD#,#MAJC2#,#MAJC3#,0,#MJCHR#,0,0,#MAJMK#)
+</insert>
+	
+<update id="updateMSTZ043" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST045LF
+	SET 
+		MAJCD=#IMAJCD#,
+		MAJC3=#MAJC3#,
+		MJCHR=#MJCHR#,
+		MAJMK=#MAJMK#
+	WHERE 
+		COMPS=#COMPS#
+		AND MAJC2=#MAJC2#
+		AND MAJC3=#OLD_MAJC3#
+</update>
+
+<delete id="deleteMSTZ043" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST045LF 
+	WHERE 
+		COMPS=#COMPS#
+		AND MAJC2=#MAJC2#
+		AND MAJC3=#MAJC3#
+</delete>
+
+<select id="selectMSTZ054" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, A.GRPCD, TRIM(A.MSTCD) AS MSTCD, TRIM(A.MSTSM) AS MSTSM, TRIM(A.MSTRM) AS MSTRM,
+		A.INPDT, A.INPMN, A.CHGDT, A.CHGMN
+	FROM 
+		$LIB2$.MST050PF A
+	WHERE
+		A.GRPCD ='ROL'
+		AND A.COMPS=#COMPS#
+		<isNotEmpty prepend="AND" property="MSTCD">
+		 	MSTCD <![CDATA[>=]]> #MSTCD#
+		</isNotEmpty>	
+	ORDER BY A.COMPS, A.GRPCD, A.MSTCD, A.GRPCD
+</select>
+<select id="selectMSTZ054_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#	
+</select>	
+<insert id="insertMSTZ054" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST050PF
+		(COMPS, GRPCD, MSTCD, MSTSM, MSTRM, INPDT, INPMN, CHGDT, CHGMN)
+	VALUES
+		(#COMPS#, #GRPCD# , #MSTCD#, #MSTSM#, #MSTRM#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#)
+</insert>
+		
+<update id="updateMSTZ054" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST050PF
+	SET 
+		MSTSM = #MSTSM#,
+		MSTRM = #MSTRM#,
+		CHGDT = SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4),
+		CHGMN = #SUSER#
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</update>
+	
+<delete id="deleteMSTZ054" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</delete>
+<select id="selectMSTZ056" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, A.GRPCD, TRIM(A.MSTCD) AS MSTCD, TRIM(A.MSTSM) AS MSTSM, TRIM(A.MSTRM) AS MSTRM,
+		A.INPDT, A.INPMN, A.CHGDT, A.CHGMN
+	FROM 
+		$LIB2$.MST050PF A
+	WHERE
+		A.GRPCD ='REG'
+		AND A.COMPS=#COMPS#
+	ORDER BY A.COMPS, A.GRPCD, A.MSTCD, A.GRPCD
+</select>
+<select id="selectMSTZ056_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#	
+</select>	
+<insert id="insertMSTZ056" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST050PF
+		(COMPS, GRPCD, MSTCD, MSTSM, MSTRM, INPDT, INPMN, CHGDT, CHGMN)
+	VALUES
+		(#COMPS#, #GRPCD# , #MSTCD#, #MSTSM#, #MSTRM#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#)
+</insert>
+		
+<update id="updateMSTZ056" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST050PF
+	SET 
+		MSTSM = #MSTSM#,
+		MSTRM = #MSTRM#,
+		CHGDT = SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4),
+		CHGMN = #SUSER#
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</update>
+	
+<delete id="deleteMSTZ056" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</delete>
+<select id="selectMSTZ057" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, A.GRPCD, TRIM(A.MSTCD) AS MSTCD, TRIM(A.MSTSM) AS MSTSM, TRIM(A.MSTRM) AS MSTRM,
+		A.INPDT, A.INPMN, A.CHGDT, A.CHGMN
+	FROM 
+		$LIB2$.MST050PF A
+	WHERE
+		A.GRPCD ='COL'
+		AND A.COMPS=#COMPS#
+	ORDER BY A.COMPS, A.GRPCD, A.MSTCD, A.GRPCD
+</select>
+<select id="selectMSTZ057_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#	
+</select>	
+<insert id="insertMSTZ057" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST050PF
+		(COMPS, GRPCD, MSTCD, MSTSM, MSTRM, INPDT, INPMN, CHGDT, CHGMN)
+	VALUES
+		(#COMPS#, #GRPCD# , #MSTCD#, #MSTSM#, #MSTRM#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#)
+</insert>
+		
+<update id="updateMSTZ057" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST050PF
+	SET 
+		MSTSM = #MSTSM#,
+		MSTRM = #MSTRM#,
+		CHGDT = SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4),
+		CHGMN = #SUSER#
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</update>
+	
+<delete id="deleteMSTZ057" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</delete>
+<select id="selectMSTZ0567" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, A.GRPCD, TRIM(A.MSTCD) AS MSTCD, TRIM(A.MSTSM) AS MSTSM, TRIM(A.MSTRM) AS MSTRM,
+		A.INPDT, A.INPMN, A.CHGDT, A.CHGMN
+	FROM 
+		$LIB2$.MST050PF A
+	WHERE
+		A.GRPCD = #GRPCD#
+		AND A.COMPS=#COMPS#
+	ORDER BY A.COMPS, A.GRPCD, A.MSTCD, A.GRPCD
+</select>
+<select id="selectMSTZ0567_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS=#COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#	
+</select>	
+<insert id="insertMSTZ0567" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST050PF
+		(COMPS, GRPCD, MSTCD, MSTSM, MSTRM, INPDT, INPMN, CHGDT, CHGMN)
+	VALUES
+		(#COMPS#, #GRPCD# , #MSTCD#, #MSTSM#, #MSTRM#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4), #SUSER#)
+</insert>
+		
+<update id="updateMSTZ0567" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST050PF
+	SET 
+		MSTSM = #MSTSM#,
+		MSTRM = #MSTRM#,
+		CHGDT = SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) || SUBSTR(trim(char(date(current date), ISO)),1,4),
+		CHGMN = #SUSER#
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</update>
+	
+<delete id="deleteMSTZ0567" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST050PF
+	WHERE 
+		COMPS = #COMPS#
+		AND GRPCD=#GRPCD#
+		AND MSTCD =#MSTCD#
+</delete>
+<select id="selectMSTZ052Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		ROW_NUMBER() OVER() AS ROWNUM,
+		A.COMPS, A.GRPCD, TRIM(A.MSTCD) AS MSTCD, TRIM(A.MSTSM) AS MSTSM, TRIM(A.MSTRM) AS MSTRM
+	FROM 
+		$LIB2$.MST050PF A
+	WHERE
+		A.COMPS=#COMPS#
+		AND	A.GRPCD BETWEEN #GRPCD1# AND #GRPCD2#
+	ORDER BY A.COMPS, A.GRPCD
+</select>
+<select id="selectMSTZ060" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, TRIM(A.PROCS) AS PROCS, TRIM(A.PROGR) AS PROGR, TRIM(A.PROSM) AS PROSM, TRIM(A.PRONM) AS PRONM,
+		TRIM(A.HDEPT) AS HDEPT, A.HDCPA, A.HWMCT, A.HRRAT, A.HSCPA, A.HMCNT
+	FROM 
+		$LIB2$.MST060PF A
+	WHERE
+		A.COMPS=#COMPS#
+		AND A.PROCS=#PROCS#
+</select>
+<select id="selectMSTZ060_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST060PF A
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PROCS=#PROCS#
+</select>
+<insert id="insertMSTZ060" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST060PF
+		(COMPS, PROCS, PROGR, PROSM, PRONM, HDEPT, HDCPA, HWMCT, HRRAT, HSCPA, HMCNT)
+	VALUES
+		(#COMPS#, #PROCS#, #PROGR#, #PROSM#, #PRONM#, #HDEPT#, $HDCPA$, $HWMCT$, $HRRAT$, $HSCPA$, $HMCNT$)
+</insert>
+<update id="updateMSTZ060" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST060PF
+	SET 
+		PROGR = #PROGR#,
+		PROSM = #PROSM#,
+		PRONM = #PRONM#,
+		HDEPT = #HDEPT#,
+		HDCPA = $HDCPA$,
+		HWMCT = $HWMCT$,
+		HRRAT = $HRRAT$,
+		HSCPA = $HSCPA$,
+		HMCNT = $HMCNT$
+	WHERE 
+		COMPS=#COMPS#
+		AND PROCS=#PROCS#
+</update>
+	
+<delete id="deleteMSTZ060" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST060PF
+	WHERE 
+		COMPS=#COMPS#
+		AND PROCS=#PROCS#
+</delete>
+<select id="selectMSTZ061Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.COMPS, A.PROCS, A.PROGR, A.PROSM, A.PRONM, A.HDEPT, A.HDCPA, A.HWMCT, A.HRRAT, A.HSCPA, A.HMCNT
+	FROM 
+		$LIB2$.MST060PF A
+	WHERE
+		A.COMPS=#COMPS#
+		AND A.PROCS BETWEEN #PROCS1# AND #PROCS2#
+	ORDER BY A.COMPS, A.PROCS
+</select>
+
+<!-- lee sang keon 자재관리 작업  Start  ************************************************************* -->
+<select id="selectMSTZ111Q_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">		 	 		       
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		C.WEGHT,A.PLANN,C.PACKC,
+		E.FRQTY,E.MULQY,E.LOTSZ,
+		F.PLPAT,F.ILPTN,
+		G.CARCD,
+		F.PILSZ,F.PACMT,
+		H.HOUSE,H.WHSLC,
+		B.PROCS,B.MANHR,
+		I.PMCPCD,I.PMFIXD,I.PMLMSD,I.PMSFSR,I.PMLTIM
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN (SELECT PRTNO,PROCS,MANHR FROM $LIB1$.BM002PR) B ON A.ITNBR=B.PRTNO AND A.PROCS=B.PROCS
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT PRTNO,CARCD FROM $LIB2$.MST100PF WHERE COMPS='$COMPS$') G ON A.ITNBR=G.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+		LEFT OUTER JOIN (SELECT PMPART,PMCPCD,PMFIXD,PMLMSD,PMSFSR,PMLTIM FROM $LIB1$.BM016PR) I ON A.ITNBR=I.PMPART
+	ORDER BY
+		A.PLANN,A.ITNBR
+</select>
+<select id="selectMSTZ111Q_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,
+		E.MULQY,E.LOTSZ,
+		F.PICCD,F.STCHK,F.PRMET,
+		H.LTMAN,H.LTADM,
+		A.UMGUM,
+		H.HOUSE,H.WHSLC,
+		B.PROCS,B.MANHR,
+		I.PMCPCD,I.PMFIXD,I.PMLMSD
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN (SELECT PRTNO,PROCS,MANHR FROM $LIB1$.BM002PR) B ON A.ITNBR=B.PRTNO AND A.PROCS=B.PROCS
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+		LEFT OUTER JOIN (SELECT PMPART,PMCPCD,PMFIXD,PMLMSD,PMSFSR,PMLTIM FROM $LIB1$.BM016PR) I ON A.ITNBR=I.PMPART
+</select>
+<select id="selectMSTZ111Q_3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		C.WEGHT,A.PLANN,C.PACKC,
+		E.FRQTY,E.MULQY,E.MAXLN,E.LOTSZ,
+		H.HOUSE,H.WHSLC
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+</select>
+<select id="selectMSTZ111Q_4" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		C.WEGHT,A.PLANN,C.PACKC,C.ORDPC,
+		E.FRQTY,E.MULQY,E.LOTSZ,
+		A.UMGUM,
+		F.PPLTQ,
+		H.HOUSE,H.WHSLC,
+		J.DPG1S1,J.DPG1S2,J.DPG1S3
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+		LEFT OUTER JOIN (SELECT DPPRTN,DPG1S1,DPG1S2,DPG1S3 FROM $LIB1$.BM400PR) J ON A.ITNBR=J.DPPRTN 
+</select>
+<select id="selectMSTZ111Q_5" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,
+		E.MULQY,E.MAXLN,E.LOTSZ,
+		F.PICCD,F.STCHK,
+		A.UMGUM,
+		H.HOUSE,H.WHSLC
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+</select>
+<select id="selectMSTZ111Q_6" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,C.ORDPC,
+		E.MULQY,E.LOTSZ,
+		F.PICCD,F.STCHK,
+		A.UMGUM,
+		H.HOUSE,H.WHSLC,
+		J.DPG1S1,J.DPG1S2,J.DPG1S3
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+		LEFT OUTER JOIN (SELECT DPPRTN,DPG1S1,DPG1S2,DPG1S3 FROM $LIB1$.BM400PR) J ON A.ITNBR=J.DPPRTN 
+</select>
+<select id="selectMSTZ111Q_7" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,C.PINTV,
+		E.MULQY,E.MAXLN,E.LOTSZ,
+		F.PICCD,F.STCHK,
+		A.UMGUM,
+		H.HOUSE,H.WHSLC
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+</select>
+<select id="selectMSTZ111Q_8" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,C.PINTV,
+		E.MULQY,E.LOTSZ,
+		F.PICCD,F.STCHK,
+		A.UMGUM,
+		H.HOUSE,H.WHSLC	
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+</select>
+<select id="selectMSTZ111Q_9" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,E.LOTSZ,
+		H.LTPUR,
+		F.CSAF2,
+		H.HOUSE,H.WHSLC
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+		LEFT OUTER JOIN (SELECT PRTNO,PLPAT,PILSZ,PACMT,ILPTN,CSAF2,PICCD,STCHK,PPLTQ,PRMET FROM $LIB1$.BM000PR) F ON A.ITNBR=F.PRTNO
+		LEFT OUTER JOIN (SELECT ITNBR,HOUSE,WHSLC,LTMAN,LTADM,LTPUR FROM $LIB1$.HM000PR WHERE HOUSE='1') H ON A.ITNBR=H.ITNBR
+</select>
+<select id="selectMSTZ111Q_0" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR,C.ITDSC,C.UNMSR,A.ITTYP,A.ITCLS,
+		A.PLANN,C.PACKC,
+		E.MULQY,E.LOTSZ
+	FROM
+		$LIB2$.MST111PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.ITNBR=C.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR,FRQTY,MULQY,LOTSZ,MAXLN FROM $LIB1$.BM009PR) E ON A.ITNBR=E.ITNBR
+</select>
+
+<select id="selectMSTZ603Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.ABAN8,A.ABALPH,A.ABAT1,A.ABTAX,A.ABALKY,B.ALADD1,B.ALADD2
+FROM 
+	$LIB4$.F0101 A 
+	LEFT OUTER JOIN $LIB4$.F0116 B ON A.ABAN8 =B.ALAN8
+WHERE 
+	A.ABALPH LIKE '%' || '$NAME$' || '%' 
+</select>
+
+<select id="selectACCZ901Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.VNDOR,B.ABALPH,B.ABTAX,
+	C.ACCHR AS ACCHR1,D.ACCHR AS ACCHR2,E.ACCHR AS ACCHR3
+FROM 
+	$LIB2$.ACC900PF A
+	LEFT OUTER JOIN $LIB4$.F0101 B ON A.VNDOR=B.ABAN8
+	LEFT OUTER JOIN (SELECT * FROM $LIB2$.ACC040PF) C ON A.COMPS=C.COMPS AND 'YGCD'||A.PYGCD = C.ACCOD
+	LEFT OUTER JOIN (SELECT * FROM $LIB2$.ACC040PF) D ON A.COMPS=D.COMPS AND 'YTCD'||A.PYTCD = D.ACCOD
+	LEFT OUTER JOIN (SELECT * FROM $LIB2$.ACC040PF) E ON A.COMPS=E.COMPS AND 'YCCD'||A.PYCCD = E.ACCOD
+WHERE
+	A.VNDOR >= $VNDOR$
+	AND A.COMPS=#COMPS#
+</select>
+<select id="selectACCZ901QD" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	F.WWSLNM,B.ABALPH,G.ALADD1,G.ALADD2,B.ABTAX,
+	A.BANCD,I.ABALPH AS ABALPHI,
+	A.BANBH,A.IDNNO,A.IDNN1,
+	A.ELSCD,A.ELBAN,J.ABALPH AS ABALPHJ,
+	A.MAIL1,H.CASHR
+FROM 
+	$LIB2$.ACC900PF A
+	LEFT OUTER JOIN $LIB4$.F0101 B ON A.VNDOR=B.ABAN8
+	LEFT OUTER JOIN $LIB4$.F0111 F ON A.VNDOR=F.WWAN8
+	LEFT OUTER JOIN $LIB4$.F0116 G ON A.VNDOR=G.ALAN8
+	LEFT OUTER JOIN $LIB2$.ACC910PF H ON A.COMPS=H.COMPS AND A.VNDOR=H.VNDOR
+	<!--  
+	LEFT OUTER JOIN CLTDTAS.F0101 I ON A.BANCD=I.ABAN8
+	LEFT OUTER JOIN CLTDTAS.F0101 J ON A.ELBAN=J.ABAN8
+	-->
+	LEFT OUTER JOIN $LIB4$.F0101 I ON A.BANCD=I.ABAN8
+	LEFT OUTER JOIN $LIB4$.F0101 J ON A.ELBAN=J.ABAN8	
+WHERE
+	A.VNDOR = $VNDOR$
+	AND A.COMPS=#COMPS#
+</select>
+
+<!-- lee sang keon 자재관리 작업  End ************************************************************* -->
+<select id="selectMSTE044Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.COMPS, A.MAJCD, REPEAT('0', 7-length(trim(char(A.MJINT)))) || char(A.MJINT) AS MJINT, A.MAJTM, A.MAJDT, A.MAJMK,
+	TRIM(B.CUSNM) AS CUSNM 
+FROM 
+	$LIB2$.MST040PF A
+	LEFT OUTER JOIN $LIB1$.CUSMAS B ON SUBSTR(REPEAT('0', 7-length(trim(char(A.MJINT)))) || char(A.MJINT),1,4)=B.CUSNO
+WHERE
+	A.COMPS = #COMPS#
+    <isNotEmpty prepend="AND" property="MAJCD">
+	A.MAJCD >= #MAJCD#
+ 	</isNotEmpty>	
+	AND SUBSTR(A.MAJCD,1,6) = 'SPD159'
+</select>
+
+<select id="selectMSTZ100" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.COMPS, A.PRTNO, TRIM(B.ITDSC) AS ITDSC, B.ITTYP, B.ITCLS, B.PLANN,
+	C.CPRTN, C.CPDSC, TRIM(A.PRDCD) AS PRDCD, TRIM(D.MSTRM) AS PRDNM, TRIM(A.CARCD) AS CARCD, TRIM(E.MSTSM) AS CARNM, 
+	TRIM(A.BDYCD) AS BDYCD, TRIM(F.MSTSM) AS BDYNM, TRIM(A.ROLCD) AS ROLCD, TRIM(G.MSTSM) AS ROLNM,  A.QYEXT,
+	CASE WHEN A.QYEXT ='Y' THEN '계산함' ELSE '계산안함' END QYENM, TRIM(A.MGMCD) AS MGMCD, TRIM(H.MSTRM) AS MGMNM,
+	TRIM(I.COLOR) AS COLOR, TRIM(J.MSTRM) AS COLNM, TRIM(I.REGCD) AS REGCD, TRIM(K.MSTRM) AS REGNM, TRIM(I.WKARE) AS WKARE, 
+	TRIM(I.MKFAC) AS MKFAC, TRIM(I.MKLOC) AS MKLOC, TRIM(I.MKCAR) AS MKCAR, TRIM(I.CTNNO) AS CTNNO, TRIM(I.FRERMA) AS FRERMA, 
+	TRIM(I.FRERMB) AS FRERMB, TRIM(I.FRERMC) AS FRERMC, TRIM(I.FRERMD) AS FRERMD, TRIM(I.FRERME) AS FRERME, TRIM(I.FRERMF) AS FRERMF,
+	TRIM(I.FRERMG) AS FRERMG, TRIM(I.FRERMH) AS FRERMH, TRIM(I.FRERMI) AS FRERMI, TRIM(I.FRERMJ) AS FRERMJ
+FROM 
+	$LIB2$.MST100PF A
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PRTNO=B.ITNBR
+	LEFT OUTER JOIN
+		(SELECT Y.*
+		FROM $LIB1$.EM000PR Y
+		WHERE Y.EDATM = (SELECT MAX(X.EDATM)
+		FROM $LIB1$.EM000PR X
+		<!-- 2015.05.28수정		
+		WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)) 		
+ 		-->
+		WHERE Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)) 		
+			) C ON A.PRTNO=C.PRTNO
+	LEFT OUTER JOIN $LIB2$.MST050PF D ON A.COMPS=D.COMPS AND A.PRDCD=D.MSTCD AND D.GRPCD='PRD'
+	LEFT OUTER JOIN $LIB2$.MST050PF E ON A.COMPS=E.COMPS AND A.CARCD=E.MSTCD AND E.GRPCD='CAR'
+	LEFT OUTER JOIN $LIB2$.MST050PF F ON A.COMPS=F.COMPS AND A.BDYCD=F.MSTCD AND F.GRPCD='BDY'
+	LEFT OUTER JOIN $LIB2$.MST050PF G ON A.COMPS=G.COMPS AND A.ROLCD=G.MSTCD AND G.GRPCD='ROL'
+	LEFT OUTER JOIN $LIB2$.MST050PF H ON A.COMPS=H.COMPS AND A.MGMCD=H.MSTCD AND H.GRPCD='MGM'
+	LEFT OUTER JOIN $LIB2$.MST250PF I ON A.COMPS=I.COMPS AND A.PRTNO=I.PRTNO
+	LEFT OUTER JOIN $LIB2$.MST050PF J ON A.COMPS=J.COMPS AND I.COLOR=J.MSTCD AND J.GRPCD='COL'
+	LEFT OUTER JOIN $LIB2$.MST050PF K ON A.COMPS=K.COMPS AND I.REGCD=K.MSTCD AND K.GRPCD='REG'
+
+WHERE
+	A.COMPS=#COMPS#
+	AND A.PRTNO=#PSPNO#
+</select>
+<select id="selectMSTZ100_NEW" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	TRIM(B.ITDSC) AS ITDSC, B.ITTYP, B.ITCLS, B.PLANN,
+	C.CPRTN, C.CPDSC
+FROM 
+	$LIB1$.BM008PR B
+	LEFT OUTER JOIN
+		(SELECT Y.*
+		FROM $LIB1$.EM000PR Y
+		WHERE Y.EDATM = (SELECT MAX(X.EDATM)
+		FROM $LIB1$.EM000PR X			
+		<!-- 2015.05.28수정		
+		WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)) 		
+		-->
+		WHERE Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2))
+			) C ON B.ITNBR=C.PRTNO
+WHERE
+	B.ITNBR=#PSPNO#
+</select>
+<select id="selectMSTZ100_Check1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	COUNT(*) CNT 
+FROM
+	$LIB2$.MST100PF
+WHERE 
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#
+</select>
+<select id="selectMSTZ100_Check2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	COUNT(*) CNT 
+FROM
+	$LIB2$.MST250PF
+WHERE 
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#
+</select>
+<insert id="insertMSTZ100_MST100PF" parameterClass="java.util.HashMap">
+INSERT INTO $LIB2$.MST100PF
+	(COMPS, PRTNO, PRDCD, CARCD, BDYCD, ROLCD, MGMCD, QYEXT, INPDT, INPMN, CHGDT, CHGMN)
+VALUES
+	(#COMPS#, #PRTNO#, #PRDCD#, #CARCD#, #BDYCD#, #ROLCD#, #MGMCD#, #QYEXT#, SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2), #SUSER#, SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2), #SUSER#)
+</insert>		
+<update id="updateMSTZ100_MST100PF" parameterClass="java.util.HashMap">
+UPDATE 
+	$LIB2$.MST100PF
+SET 
+	PRDCD = #PRDCD#,
+	CARCD = #CARCD#,
+	BDYCD = #BDYCD#,
+	ROLCD = #ROLCD#,
+	MGMCD = #MGMCD#,
+	QYEXT = #QYEXT#,
+	CHGDT = SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2),
+	CHGMN = #SUSER#
+WHERE
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#		
+</update>
+<delete id="deleteMSTZ100_MST100PF" parameterClass="java.util.HashMap">
+DELETE FROM  
+	$LIB2$.MST100PF
+WHERE
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#		
+</delete>	
+<insert id="insertMSTZ100_MST250PF" parameterClass="java.util.HashMap">
+INSERT INTO $LIB2$.MST250PF
+	(PRTNO, COLOR, REGCD, WKARE, MKFAC, MKLOC, MKCAR, CTNNO, FRERMA, FRERMB, FRERMC, FRERMD, FRERME, FRERMF, FRERMG, FRERMH, FRERMI, FRERMJ, COMPS)
+VALUES
+	(#PRTNO#, #COLOR#, #REGCD#, #WKARE#, #MKFAC#, #MKLOC#, #MKCAR#, #CTNNO#, #FRERMA#, #FRERMB#, #FRERMC#, #FRERMD#, #FRERME#, #FRERMF#, #FRERMG#, #FRERMH#, #FRERMI#, #FRERMJ#, #COMPS#)
+
+</insert>
+<update id="updateMSTZ100_MST250PF" parameterClass="java.util.HashMap">
+UPDATE 
+	$LIB2$.MST250PF
+SET 
+	COLOR = #COLOR#,
+	REGCD = #REGCD#,
+	WKARE = #WKARE#,
+	MKFAC = #MKFAC#,
+	MKLOC = #MKLOC#,
+	MKCAR = #MKCAR#,
+	CTNNO = #CTNNO#,
+	FRERMA = #FRERMA#,
+	FRERMB = #FRERMB#,
+	FRERMC = #FRERMC#,
+	FRERMD = #FRERMD#,
+	FRERME = #FRERME#,
+	FRERMF = #FRERMF#,
+	FRERMG = #FRERMG#,
+	FRERMH = #FRERMH#,
+	FRERMI = #FRERMI#,
+	FRERMJ = #FRERMJ#
+WHERE
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#	
+</update>
+<delete id="deleteMSTZ100_MST250PF" parameterClass="java.util.HashMap">
+DELETE FROM  
+	$LIB2$.MST250PF
+WHERE
+	COMPS = #COMPS#
+	AND PRTNO = #PRTNO#		
+</delete>
+<select id="selectMSTE101Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	'$COMPS$' AS COMPS,
+	TRIM(A.ITNBR) AS ITNBR, A.ITDSC, TRIM(C.MSTRM) AS CARNM, B.CARCD, B.BDYCD, B.ROLCD, A.ITCLS, B.QYEXT,
+	CASE WHEN A.ITTYP='1' AND SUBSTR(A.ITCLS,2,1)='1' THEN D.PROCS 
+		ELSE CASE WHEN E.DPPRTN IS NOT NULL THEN E.DPG1S1 ELSE F.PSSUPL END END AS PPROCS,
+	D.PROCS, E.DPG1S1, F.PSSUPL
+FROM 
+	$LIB1$.BM008PR A, $LIB2$.MST100PF B
+	LEFT OUTER JOIN $LIB2$.MST050PF C ON B.COMPS=C.COMPS AND B.CARCD=C.MSTCD AND C.GRPCD='CAR'
+	LEFT OUTER JOIN $LIB1$.BM002PR D ON A.ITNBR=D.PRTNO AND A.ITTYP='1' AND SUBSTR(A.ITCLS,2,1)='1'
+	LEFT OUTER JOIN $LIB1$.BM400PR E ON A.ITNBR=E.DPPRTN
+	LEFT OUTER JOIN $LIB1$.BM012PR F ON A.ITNBR=F.PSPART
+WHERE
+	A.ITTYP = $ITTYP$
+	AND A.PACKC=#PACKC#
+	AND A.PLANN BETWEEN $PLANN1$ AND $PLANN2$
+	AND A.ITNBR=B.PRTNO
+	AND B.COMPS=#COMPS#
+	AND SUBSTR(B.ROLCD,1,1)=#OEM#
+ORDER BY A.ITNBR
+</select>
+
+<select id="selectMSTZ100Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+		A.PRTNO, C.ITDSC, A.CARCD, B.RGNCD, D.CPDAT,
+        (SELECT COUNT(*) FROM $LIB2$.FZM200PF WHERE PRTNO = A.PRTNO AND CPCAR = A.CARCD AND CPRNG = B.RGNCD AND CPSEQ = 1) AS NUMBER,
+        (SELECT TRIM(MSTRM) FROM $LIB2$.MST050PF WHERE GRPCD = 'CAR' AND MSTCD = A.CARCD) AS CARNM,
+		(SELECT TRIM(MSTRM) FROM $LIB2$.MST050PF WHERE GRPCD = 'REG' AND MSTCD = B.RGNCD) AS CPRNM
+FROM 
+		$LIB2$.MST100PF A INNER JOIN $LIB2$.MST200PF B ON A.PRTNO = B.PSPNO
+						  LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PRTNO = C.ITNBR
+						  LEFT OUTER JOIN $LIB2$.FZM200PF D ON A.PRTNO = D.PRTNO
+WHERE 
+		B.RGNCD <![CDATA[<>]]> ''
+		<isNotEmpty prepend="AND" property="CARCD">
+				A.CARCD=#CARCD#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="RGNCD">
+				B.RGNCD=#RGNCD#
+		</isNotEmpty>		
+		<isNotEmpty prepend="AND" property="CPGUB2">
+				(SELECT COUNT(*) FROM PSEDBLIB.FZM200PF WHERE PRTNO = A.PRTNO AND CPCAR = A.CARCD AND CPRNG = B.RGNCD AND CPSEQ = 1)<![CDATA[>]]> 0
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="CPGUB3">
+				(SELECT COUNT(*) FROM PSEDBLIB.FZM200PF WHERE PRTNO = A.PRTNO AND CPCAR = A.CARCD AND CPRNG = B.RGNCD  AND CPSEQ = 1)=0
+		</isNotEmpty>
+ORDER BY NUMBER, D.CPDAT
+</select>
+
+<insert id="insertMSTZ100" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.FZM200PF
+	SELECT 
+			A.PRTNO, '1', 1, $CPDAT$,  A.CARCD, B.RGNCD, 'N', '', '',  0, 0, 0, 0, 0
+	FROM 
+			$LIB2$.MST100PF A INNER JOIN $LIB2$.MST200PF B ON A.PRTNO = B.PSPNO
+	WHERE 
+			B.RGNCD <![CDATA[<>]]> '' 
+			AND A.CARCD = #CARCD# 
+			AND  B.RGNCD = #RGNCD#
+        	AND (SELECT COUNT(*) FROM $LIB2$.FZM200PF WHERE PRTNO = A.PRTNO AND CPCAR = A.CARCD AND CPRNG = B.RGNCD) = 0
+</insert>
+<select id="selectMSTZ090" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+<!--  
+SELECT
+	A.COMPS, A.PRCDD, A.DAYMK, A.PRCMK, A.PAYMK, A.ACCMK, A.BRDCD, A.PRCDT, A.PRCYM
+FROM
+	$LIB2$.MST091LF A
+WHERE
+	A.COMPS=#COMPS#
+	AND A.PRCYM=$PRCYM$
+-->
+SELECT
+	A.COMPS, SUBSTR(A.PRCDT,7,2) AS PRCDD, A.DAYMK, A.PRCMK, A.PAYMK, A.ACCMK, A.BRDCD, A.PRCDT,
+	SUBSTR(A.PRCDT,1,6) AS PRCYM
+FROM
+	$LIB2$.MST090PF A
+WHERE
+	A.COMPS=#COMPS#
+	AND SUBSTR(A.PRCDT,1,6)=$PRCYM$
+</select>
+<select id="selectMSTZ090_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM
+		$LIB2$.MST090PF
+	WHERE 
+		COMPS=#COMPS#
+		AND PRCDT=$PRCDT$		
+</select>	
+<insert id="insertMSTZ090" parameterClass="java.util.HashMap">
+	INSERT INTO $LIB2$.MST090PF
+		(COMPS, PRCDT, PRCMK, PAYMK, ACCMK, DAYMK, BRDCD)
+	VALUES
+		(#COMPS#, $PRCDT$, #PRCMK#, #PAYMK#, #ACCMK#, #DAYMK#, #BRDCD#)
+</insert>
+<update id="updateMSTZ090" parameterClass="java.util.HashMap">
+	UPDATE 
+		$LIB2$.MST090PF
+	SET 
+		PRCMK = #PRCMK#
+	WHERE 
+		COMPS=#COMPS#
+		AND PRCDT=$PRCDT$
+</update>
+<delete id="deleteMSTZ090" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		$LIB2$.MST090PF
+	WHERE 
+		COMPS=#COMPS#
+		AND PRCDT=$PRCDT$
+</delete>
+
+<!-- out of memory 발생으로 최대 25000건만 보여줌 -->
+<select id="selectMSTC301Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ITNBR, A.ITDSC, A.UNMSR, A.ITTYP, A.ITCLS, A.BDYLD, A.RGNCD,
+		A.PSROL, A.ALTPA, A.MKITM, A.REFNM, A.ALTPC, A.PURCD, A.ENGNO, A.ENGCD,
+		A.ALTPB, A.MOVDP, A.INPDT, A.MDATE, A.APPNM
+	FROM
+		$LIB2$.MST300PF A
+		<dynamic prepend="where">
+		<isNotEmpty prepend="AND" property="ITNBR">
+			A.ITNBR >= #ITNBR#
+		</isNotEmpty>
+		</dynamic>
+	FETCH FIRST 25000 ROWS ONLY
+</select>
+
+<select id="selectOCAZ200C_tab1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	SUM(COUNT1) C1,SUM(COUNT2) C2,SUM(COUNT3) C3
+FROM
+	(
+	SELECT
+		count(cuvnd) count1,0 count2,0 count3
+	FROM
+		$LIB2$.JHS140PF  <!-- 사입마감작업 조회data있음 -->
+	WHERE
+		USMYM=#JOBYM#
+		AND USMCD='B'
+	union all
+	SELECT
+		0 count1,count(*) count2,0 count3
+	FROM
+		$LIB2$.JHS140PF  <!-- 유상사급마감작업 조회data 있음 -->
+	WHERE
+		SFTYM=#JOBYM#
+		AND SHIFT='B'
+	union all
+	SELECT
+		0 count1,0 count2,count(*) count3
+	FROM
+		$LIB2$.SMD110PF  <!-- 가매상완료 조회data없음 -->
+	WHERE
+		JPSDT<![CDATA[<=]]>#JOBYMD#
+		AND JDEDT=0
+	) Z
+</select>
+<select id="selectOCAZ200C_tab1_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		count(cuvnd) C1
+	FROM
+		$LIB2$.JHS140PF  <!-- 사입마감작업 조회data있음 -->
+	WHERE
+		USMYM=#JOBYM#
+		AND USMCD='B'
+</select>
+<select id="selectOCAZ200C_tab1_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		count(*) C2
+	FROM
+		$LIB2$.JHS140PF  <!-- 유상사급마감작업 조회data 있음 -->
+	WHERE
+		SFTYM=#JOBYM#
+		AND SHIFT='B'
+</select>
+<select id="selectOCAZ200C_tab1_3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		count(*) C3
+	FROM
+		$LIB2$.SMD110PF  <!-- 가매상완료 조회data없음 -->
+	WHERE
+		JPSDT<![CDATA[<=]]>#JOBYMD#
+		AND JDEDT=0
+</select>
+<select id="selectOCAZ200C_tab4" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	sum(CHK_AM1_1) C1,sum(CHK_AM1_2) C2,sum(CHK_AM1_1)-sum(CHK_AM1_2) C3,   <!-- 외상매입금액 차이발생 -->
+	sum(CHK_AM2_1) C4,sum(CHK_AM2_2) C5,sum(CHK_AM2_1)-sum(CHK_AM2_2) C6,   <!-- 유상사급금액 차이발생 -->
+	sum(CHK_AM3_1) C7,sum(CHK_AM3_2) C8,sum(CHK_AM3_1)-sum(CHK_AM3_2) C9    <!-- 가매상금액 차이발생 -->
+FROM
+	(
+	SELECT
+		SUM(QUANT*PRICE) AS CHK_AM1_1,0 CHK_AM1_2,0 CHK_AM2_1,0 CHK_AM2_2,0 CHK_AM3_1,0 CHK_AM3_2
+	FROM
+		$LIB4$.G00101R
+	WHERE
+		LOIMC='1'
+	union all
+	SELECT
+		0 CHK_AM1_1,SUM(PCDER) AS CHK_AM1_2,0 CHK_AM2_1,0 CHK_AM2_2,0 CHK_AM3_1,0 CHK_AM3_2
+	FROM
+		$LIB2$.AFO100PF
+	WHERE
+		PCSYM=#JOBYM#
+		AND PJPCD='A'
+	union all
+	SELECT
+		0 CHK_AM1_1,0 CHK_AM1_2,SUM(QUANT*PRICE) AS CHK_AM2_1,0 CHK_AM2_2,0 CHK_AM3_1,0 CHK_AM3_2
+	FROM
+		$LIB4$.G00121R
+	union all
+	SELECT
+		0 CHK_AM1_1,0 CHK_AM1_2,0 CHK_AM2_1,SUM(WOCER + BUCER) AS CHK_AM2_2,0 CHK_AM3_1,0 CHK_AM3_2
+	FROM
+		$LIB2$.AFO700PF
+	WHERE
+		PCSYM = #JOBYM#
+	union all
+	SELECT
+		0 CHK_AM1_1,0 CHK_AM1_2,0 CHK_AM2_1,0 CHK_AM2_2,SUM(QUANT*PRICE) AS CHK_AM3_1,0 CHK_AM3_2
+	FROM
+		$LIB4$.G00106R
+	union all
+	SELECT
+		0 CHK_AM1_1,0 CHK_AM1_2,0 CHK_AM2_1,0 CHK_AM2_2,0 CHK_AM3_1,SUM(JPSAM) AS CHK_AM3_2
+	FROM
+		$LIB2$.SMD110PF
+	WHERE
+		JDEDT BETWEEN #JOBYMD_F# AND #JOBYMD_T#
+	) Z
+</select>
+<select id="selectOCAZ200C_tab4_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select 
+	A.COMPS,SUBSTR(A.CUVND,1,6) CUVND,A.PRTNOB,A.QTYTR,A.TRNDTB,A.TRCST,A.TRAMT,
+	CASE WHEN B.EDAT3 != 99999999 THEN B.EDAT3
+		  WHEN B.EDAT2 != 99999999 THEN B.EDAT2
+		  WHEN B.EDAT1 != 99999999 THEN B.EDAT1
+	END AS EDAT,
+	CASE WHEN B.EDAT3 != 99999999 THEN B.PRCE3
+		  WHEN B.EDAT2 != 99999999 THEN B.PRCE2
+		  WHEN B.EDAT1 != 99999999 THEN B.PRCE1
+	END AS PRCE
+from 
+	$LIB2$.jhs140pf a left outer join $LIB1$.cm001pr b on A.PRTNOB = B.PRTNO and A.CUVND=B.SPCOD
+where 
+	A.SFTYM=#JOBYM#
+	AND A.CUVND in (select x.CREAX 
+	                from	(SELECT CREAX,SUM(QUANT*PRICE) X_AMT FROM $LIB4$.G00101R WHERE LOIMC='1' group by creax) X
+								LEFT OUTER JOIN
+	                     (SELECT B.AA,SUM(A.PCDER) Y_AMT FROM $LIB2$.AFO100PF A	left outer join (select ABALKY,SUBSTR(ABALKY,1,3) AA,SUBSTR(ABALKY,4,2) BB,ABAN8 from $LIB5$.F0101 WHERE SUBSTR(ABALKY,1,3) != '000' AND SUBSTR(ABALKY,4,2)!='  ') B on A.PVNCD=B.ABAN8
+								WHERE A.PCSYM=#JOBYM#	AND A.PJPCD='A' AND B.AA!=' '	group by B.AA) Y ON X.CREAX=Y.AA
+						 where X_AMT-Y_AMT != 0)
+	and case when b.edat3>#JOBYMD_T# then (case when b.edat2>#JOBYMD_T# then a.trcst-b.prce1 else a.trcst-b.prce2 end) else a.trcst-b.prce3 end != 0
+</select>
+<select id="selectOCAZ200C_tab4_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	X.*,
+	Y.PRTNOB,Y.TRAMT,Y.QTYTR,Y.TRFOT,Y.TRCST,Y.CURCY,Y.TRNDTB,Y.TCODEB,Y.TRNNOB,Y.PDTZ6B,Y.PRCT6B	
+FROM
+	(SELECT
+		A.*
+	FROM
+		(select PRTNO,TRDAT,SUM(QUANT*PRICE) AMT from $LIB4$.G00121R GROUP BY PRTNO,TRDAT order by PRTNO,TRDAT) A
+		LEFT OUTER JOIN 
+		(SELECT PRTNOB,TRNDTB,SUM(TRAMT) AMTB FROM $LIB2$.JHS140PF WHERE USMYM = #JOBYM# GROUP BY PRTNOB,TRNDTB) B
+		ON A.PRTNO=B.PRTNOB AND A.TRDAT=B.TRNDTB
+	WHERE
+		A.AMT!=B.AMTB) X
+	LEFT OUTER JOIN	
+	$LIB2$.JHS140PF Y ON X.PRTNO=Y.PRTNOB AND X.TRDAT=Y.TRNDTB
+</select>
+<select id="selectOCAZ200C_tab4_3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select 
+	pspno,pyvnd,jpsam,jpsdt
+from 
+	$LIB2$.smd110pf 
+where 
+	jpsdt <![CDATA[>]]> #JOBYMD_F#
+	and satyp='51' 
+	and (jpsam <![CDATA[<=]]> -1000000000 or jpsam <![CDATA[>=]]> 1000000000)
+</select>
+
+<select id="selectOCAZ200C_tab6_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select 
+	*
+from 
+	$LIB2$.$DBF$
+</select>
+
+<select id="selectOCAZ400C_tab2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	<!-- PPPCOD 01PPPCOD,	PPPART 02PPPART,	PPALTR 03PPALTR,	PPQTY1 04PPQTY1,
+	PPQTY2 05PPQTY2,	PPQTY3 06PPQTY3,	PPQTY4 07PPQTY4,	PPQTY5 08PPQTY5,
+	PPQTY6 09PPQTY6,	PPQTTH 10PPQTTH,	PPQTNH 11PPQTNH,	PPQTNY 12PPQTNY,
+	PPDESC 13PPDESC,	PPMRK1 14PPMRK1,	PPMRK2 15PPMRK2 -->
+	*
+FROM
+	$LIB5$.$TOFILE$
+</select>
+<select id="selectOCAZ400C_tab3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	X.PPRTN,B.ITDSC P_ITDSC,B.ITTYP P_ITTYP,B.ITCLS P_ITCLS,
+	X.SPRTN,C.ITDSC S_ITDSC,C.ITTYP S_ITTYP,C.ITCLS S_ITCLS,
+	MAX(CASE WHEN X.SEQ1=1 THEN X.SPCOD ELSE '' END) SPCOD1,
+	SUM(CASE WHEN X.SEQ1=1 THEN X.QTYPR ELSE 0 END) QTYPR1,
+	SUM(CASE WHEN X.SEQ1=1 THEN X.EDATM ELSE 0 END) EDATM1,
+	SUM(CASE WHEN X.SEQ1=1 THEN X.EDATO ELSE 0 END) EDATO1,
+
+	MAX(CASE WHEN X.SEQ1=2 THEN X.SPCOD ELSE '' END) SPCOD2,
+	SUM(CASE WHEN X.SEQ1=2 THEN X.QTYPR ELSE 0 END) QTYPR2,
+	SUM(CASE WHEN X.SEQ1=2 THEN X.EDATM ELSE 0 END) EDATM2,
+	SUM(CASE WHEN X.SEQ1=2 THEN X.EDATO ELSE 0 END) EDATO2,
+
+	MAX(CASE WHEN X.SEQ1=3 THEN X.SPCOD ELSE '' END) SPCOD3,
+	SUM(CASE WHEN X.SEQ1=3 THEN X.QTYPR ELSE 0 END) QTYPR3,
+	SUM(CASE WHEN X.SEQ1=3 THEN X.EDATM ELSE 0 END) EDATM3,
+	SUM(CASE WHEN X.SEQ1=3 THEN X.EDATO ELSE 0 END) EDATO3,
+
+	MAX(CASE WHEN X.SEQ1=4 THEN X.SPCOD ELSE '' END) SPCOD4,
+	SUM(CASE WHEN X.SEQ1=4 THEN X.QTYPR ELSE 0 END) QTYPR4,
+	SUM(CASE WHEN X.SEQ1=4 THEN X.EDATM ELSE 0 END) EDATM4,
+	SUM(CASE WHEN X.SEQ1=4 THEN X.EDATO ELSE 0 END) EDATO4
+FROM
+	(
+	SELECT 
+		a.pprtn,	a.sprtn, a.qtypr, a.spcod, a.edatm, a.edato,
+		ROW_NUMBER() OVER( partition by a.pprtn,a.sprtn order by a.pprtn,a.sprtn) seq1
+	FROM 
+		$LIB1$.bm030pr a 
+		INNER JOIN ( select DISTINCT pprtn from $LIB1$.bm030pr WHERE reccl = 1 GROUP BY pprtn, sprtn HAVING count(*) > 1) z ON a.pprtn = z.pprtn
+	WHERE 
+		a.reccl= 1
+	order by a.pprtn, a.sprtn) X
+	LEFT OUTER JOIN $LIB1$.bm008pr b ON X.pprtn = b.itnbr	
+	LEFT OUTER JOIN $LIB1$.bm008pr c ON X.sprtn = c.itnbr	
+GROUP BY
+		X.PPRTN,B.ITDSC,B.ITTYP,B.ITCLS,	X.SPRTN,C.ITDSC,C.ITTYP,C.ITCLS
+ORDER BY
+	X.PPRTN,X.SPRTN
+</select>
+
+<select id="selectOCAZ400C_tab4" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.F01,A.F02,B.ITDSC,B.ITTYP,B.ITCLS,A.F03,A.F04,A.F05,A.F06,A.F07,A.F08,A.F09,A.F10
+FROM 
+	$LIB2$.$TOFILE$ A <!-- F#2202UPF   -->
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F02=B.ITNBR
+</select>
+<select id="selectOCAZ400C_tab5" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.F02,B.ITDSC,B.ITTYP,B.ITCLS,A.F03,A.F04,A.F05,A.F06,A.F07,A.F08,A.F09,A.F10,
+	A.F11,A.F12,A.F13,A.F14,A.F15
+FROM 
+	$LIB2$.$TOFILE$ A <!-- F#2233UPPF   -->
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F02=B.ITNBR
+</select>
+<select id="selectOCAZ400C_tab6" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.F01,A.F02,B.ITDSC,B.ITTYP,B.ITCLS,
+	A.F03,A.F04,A.F05,C.ITDSC ITDSC1,C.ITTYP ITTYP1,C.ITCLS ITCLS1,
+	A.F06,A.F07,A.F08,A.F09
+FROM 
+	$LIB2$.$TOFILE$ A <!-- F#2235UPPF   -->
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F02=B.ITNBR
+	LEFT OUTER JOIN $LIB1$.BM008PR C ON A.F05=C.ITNBR
+</select>
+<select id="selectOCAZ400C_tab7" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.F01,A.F02,B.ITDSC,B.ITTYP,B.ITCLS,A.F03,A.F04,A.F05,A.F06,A.F07,A.F08,A.F09,A.F10,
+	A.F11,A.F12
+FROM 
+	$LIB2$.$TOFILE$ A <!-- F#2405UPF   -->
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F02=B.ITNBR
+</select>
+<select id="selectOCAZ400C_tab8cnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select count(*) CNT from $LIB2$.$TOFILE$ 
+</select>
+<select id="selectOCAZ400C_tab8" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.*,B.F10CD,B.F15CD,C.ITDSC,SUBSTR(C.ITCLS,1,1) ITCLS,D.VNAME
+FROM
+	(
+	SELECT
+		X.*,X.ROWNUM+1 ROWNUM_NEXT
+	FROM
+		(SELECT ROWNUMBER() OVER() AS ROWNUM,ZZ.*	FROM $LIB2$.$TOFILE$ ZZ) X <!-- F#2272UPPF   -->
+	WHERE
+		LEFT(X.F01,1) != ''
+	) A LEFT OUTER JOIN
+	(
+	SELECT
+		X.ROWNUM AS ROW_CRGCD,X.F10 AS F10CD,X.F15 AS F15CD
+	FROM
+		(SELECT ROWNUMBER() OVER() AS ROWNUM,F01,F10,F15	FROM $LIB2$.$TOFILE$) X <!-- F#2272UPPF   -->
+	WHERE
+		LEFT(X.F01,1) = ''
+	) B ON A.ROWNUM_NEXT = B.ROW_CRGCD
+	LEFT OUTER JOIN $LIB1$.BM008PR C ON A.F01=C.ITNBR
+	LEFT OUTER JOIN $LIB1$.VENNAM D ON A.F06=D.VNDNR
+	
+WHERE
+	A.F01 != 'PART NO.        '
+	AND A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+<!-- 
+SELECT
+	A.*
+FROM
+	(select 
+		ROWNUMBER() OVER() AS ROWNUM,
+		a.f01,substr(b.itcls,1,1) itcls,b.itdsc,a.f02,a.f03,a.f04,a.f05,
+		a.f06,c.VNAME,a.f07,a.f08,a.f09,a.f10,a.f11,a.f12,a.f13,a.f14,a.f15
+	from 
+		$LIB2$.$TOFILE$ A  
+		left outer join $LIB1$.bm008pr b on a.f01=b.itnbr
+		left outer join $LIB1$.VENNAM c on a.f06=c.vndnr
+	where 
+		left(f01,1)!='') A
+WHERE
+	A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+		-->
+</select>
+
+<select id="selectOCAE400C_tab8" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.*,B.F10CD,B.F15CD,C.ITDSC,SUBSTR(C.ITCLS,1,1) ITCLS,D.VNAME,E.PYVND,E.BGRAT
+FROM
+	(
+	SELECT
+		X.*,X.ROWNUM+1 ROWNUM_NEXT
+	FROM
+		(SELECT ROWNUMBER() OVER() AS ROWNUM,ZZ.*	FROM $LIB2$.$TOFILE$ ZZ) X <!-- F#2272UPPF   -->
+	WHERE
+		LEFT(X.F01,1) != ''
+	) A LEFT OUTER JOIN
+	(
+	SELECT
+		X.ROWNUM AS ROW_CRGCD,X.F10 AS F10CD,X.F15 AS F15CD
+	FROM
+		(SELECT ROWNUMBER() OVER() AS ROWNUM,F01,F10,F15	FROM $LIB2$.$TOFILE$) X <!-- F#2272UPPF   -->
+	WHERE
+		LEFT(X.F01,1) = ''
+	) B ON A.ROWNUM_NEXT = B.ROW_CRGCD
+	LEFT OUTER JOIN $LIB1$.BM008PR C ON A.F01=C.ITNBR
+	LEFT OUTER JOIN $LIB1$.VENNAM D ON A.F06=D.VNDNR
+	LEFT OUTER JOIN $LIB2$.BUY500PF E ON A.F01=E.PSPNO
+WHERE
+	A.F01 != 'PART NO.        '
+	AND A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+</select>
+<select id="selectOCAZ400C_tab9cnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select count(*) CNT from $LIB2$.$TOFILE$
+</select>
+<select id="selectOCAZ400C_tab9" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.*
+FROM
+	(
+	SELECT 
+		ROWNUMBER() OVER() AS ROWNUM,
+		A.F1,B.ITDSC,B.ITTYP,B.ITCLS,
+		A.F2,A.F3,A.F4,A.F5,A.F6,A.F7,A.F8,A.F9,A.F10,A.F11,A.F12,A.F13
+	FROM 
+		$LIB2$.$TOFILE$ A <!-- F#2282UPPF   --> 
+		LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F1=B.ITNBR) A
+WHERE
+	A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+</select>
+<select id="selectOCAZ400C_tab11" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.F1,A.F2,A.F3,A.F4,B.ITDSC,B.ITTYP,B.ITCLS,A.F5,A.F6,A.F7,A.F8,A.F9,A.F10
+FROM
+	$LIB9$.$TOFILE$ A
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.F4=B.ITNBR
+</select>
+
+<delete id="deleteOCAZ400C_tab12" parameterClass="java.util.HashMap">
+	DELETE FROM $LIB2$.$D2030PF$ 
+</delete>
+
+<insert id="insertOCAZ400C_tab12" parameterClass="java.util.HashMap">
+INSERT INTO $LIB2$.$D2030PF$ 	
+	SELECT a.procd, a.prtno, b.itdsc, b.ittyp, b.itcls, 	
+              a.mnfcs,
+              a.rmatl oldrmatl, c.rmatl newrmatl,  a.rmati oldrmati, c.rmati newrmati, a.rmimc oldrmimc, c.rmimc newrmimc, 	
+              a.purcl oldpurcl, c.purcl newpurcl, a.purci oldpurci, c.purci newpurci, a.ppimc oldppimc, c.ppimc newppimc, 	
+              a.labcs oldlabcs, c.labcs newlabcs, a.depcs olddepcs, c.depcs newdepcs, a.mfexp oldmfexp, c.mfexp newmfexp, 	
+              a.diecs olddiecs, c.diecs newdiecs, a.mohcs oldmotcs, c.mohcs newmothcs, 	
+              c.rcomp
+ 	FROM $LIB1$.$D30PR$ a 
+ 	LEFT OUTER JOIN $LIB1$.bm008pr b ON a.prtno = b.itnbr	
+    INNER JOIN $LIB1$.$D20PR$ c ON a.prtno = c.prtno	
+</insert>
+<select id="selectOCAZ400C_tab12cnt" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+select count(*) CNT from $LIB1$.$TOFILE$
+</select>
+<select id="selectOCAZ400C_tab12_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	'NEW' GUB, A.PROCD, A.PRTNO, B.ITDSC, B.ITTYP, B.ITCLS, A.MNFCS, A.DIRCS,
+	A.MCOST, A.RMATC, A.RMATL, A.RMATI,  A.RMIMC, 
+	A.PURCS, A.PURCL, A.PURCI, A.PPIMC, 
+	A.PRCST, A.LABCS, A.DEPCS, A.MFEXP, A.DIECS, A.MOHCS, A.RCOMP             
+FROM 
+	$LIB1$.$D20PR$ A 
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PRTNO = B.ITNBR
+	LEFT OUTER JOIN $LIB1$.$D30PR$ C ON A.PRTNO = C.PRTNO 
+WHERE 
+	C.PRTNO IS NULL
+</select>
+<select id="selectOCAZ400C_tab12_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.*
+FROM
+	(SELECT 
+		ROWNUMBER() OVER() AS ROWNUM,
+		'OLD' GUB, A.PROCD, A.PRTNO, B.ITDSC, B.ITTYP, B.ITCLS, A.MNFCS, A.DIRCS,
+		A.MCOST, A.RMATC, A.RMATL, A.RMATI,  A.RMIMC, 
+		A.PURCS, A.PURCL, A.PURCI, A.PPIMC, 
+		A.PRCST, A.LABCS, A.DEPCS, A.MFEXP, A.DIECS, A.MOHCS, A.RCOMP             
+	FROM 
+		$LIB1$.$D30PR$ A 
+		LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PRTNO = B.ITNBR
+		LEFT OUTER JOIN $LIB1$.$D20PR$ C ON A.PRTNO = C.PRTNO 
+	WHERE 
+		C.PRTNO IS NULL
+	) A
+WHERE
+	A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$ 
+</select>
+<select id="selectOCAZ400C_tab12_3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	A.* 
+FROM
+	(SELECT ROWNUMBER() OVER() AS ROWNUM, B.* FROM $LIB2$.$D2030PF$ B)  AS A
+WHERE
+	A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$ 
+</select>
+<select id="selectOCAZ400C_tab13" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT 
+	* 
+FROM 
+	(select 
+		ROWNUMBER() OVER() AS ROWNUM, 
+		a.*, b.itdsc, b.ittyp, b.itcls, c.vname 
+	FROM 
+		$LIB9$.$TOFILE$ a <!-- F#4501R -->
+		LEFT OUTER JOIN $LIB1$.bm008pr b ON a.prtno = b.itnbr 
+		LEFT OUTER JOIN $LIB1$.VENNAM c ON a.spcod = c.vndnr )  AS A 
+WHERE
+	A.ROWNUM BETWEEN $F_ROWNUM$ AND $T_ROWNUM$
+</select>
+<select id="selectOCAE400C_tab2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT  
+	A.PRTNO, A.QTYN1, A.QTYN2, A.QTYN3, A.QTYN3, A.QTYN4, A.QTYN5, A.QTYN6, D.CUSNO, D.EDATM,D.PRICE, B.UNMSR,B.ITTYP, B.ITDSC, 
+	C.MNFCS, C.DIRCS, C.MCOST, C.RMATC, C.RMATL, C.RMATI, C.RMIMC, C.PURCS, C.PURCL, C.PURCI, C.PPIMC, C.PRCST, C.LABCS, C.DEPCS, C.MFEXP, C.DIECS, C.MOHCS, C.FIXDT
+FROM
+	$LIB1$.$D01PR$ A  
+	LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PRTNO = B.ITNBR
+	LEFT OUTER JOIN $LIB1$.$D30PR$ C ON A.PRTNO=C.PRTNO
+	LEFT OUTER JOIN (SELECT A.PRTNO,A.CUSNO,A.EDATM,A.PRICE 
+					FROM $LIB1$.EM001PR A 
+					WHERE EDATM = (SELECT MAX(EDATM) FROM $LIB1$.EM001PR B WHERE A.CUSNO=B.CUSNO AND A.PRTNO=B.PRTNO)) D ON A.PRTNO=D.PRTNO   
+WHERE
+	A.FIXDT=' '
+ORDER BY 1,2,3,4
+</select>
+
+<select id="selectMSTZ119Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.PRTNO,A.COMPS,C.ITCLS,C.ITTYP,C.ITDSC,
+	A.FRERMJ,B.CUSNO,B.CPRTN,B.EDATM
+FROM
+	(SELECT COMPS,PRTNO,FRERMJ FROM $LIB2$.MST250PF WHERE FRERMJ != '') A
+	LEFT OUTER JOIN
+	(SELECT * FROM $LIB1$.EM000PR) B ON A.PRTNO=B.PRTNO
+	LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PRTNO=C.ITNBR
+WHERE
+	COMPS = #COMPS#
+	<isNotEmpty prepend="AND" property="PRTNO1">
+	A.PRTNO <![CDATA[>=]]> #PRTNO1#	 	
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="PRTNO2">
+	A.PRTNO <![CDATA[<=]]> #PRTNO2#	 	
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="PRDCD">
+	SUBSTR(C.ITCLS,1,1)= #PRDCD#	 	
+	</isNotEmpty>
+ORDER BY
+	A.PRTNO,B.CUSNO
+</select>
+
+<select id="selectMST600" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT CAPNM FROM $LIB2$.MST600PF WHERE VNDOR=#VNDOR#
+</select>
+
+<select id="selectMSTZ650Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		DPCOMP, DPCODE, DPDPDT, TRIM(DPCONM) AS DPCONM, DPSQNO, DPDPCD, TRIM(DPDPNM) AS DPDPNM, DPEDSW, DPSYDT,
+		DPPAT0, DPPAT1, DPPAT2, DPPAT3, TRIM(DPACCD) AS DPACCD, TRIM(DPACD1) AS DPACD1, TRIM(DPWOCD) AS DPWOCD, TRIM(DPACD2) AS DPACD2, JOGIC,
+		RAT02, RAT04, RATFP, RATET, RATBL, BLNML, DPBUCD
+	FROM
+		<!-- $LIB2$.MST650PF  -->
+		$LIB2$.$TABLE$
+	WHERE
+		1 = 1
+	<isNotEqual prepend="AND" property="COMPS" compareValue="PS">
+		DPCOMP = #COMPS#
+	</isNotEqual>	
+	<isEqual property="COMPS" compareValue="E1">
+	ORDER BY DPCOMP, DPCODE
+	</isEqual>
+	<isNotEqual property="COMPS" compareValue="E1">
+		<isNotEmpty prepend="AND" property="DPEDSW">
+		DPEDSW = #DPEDSW#
+		</isNotEmpty>
+	ORDER BY DPCOMP, DPSQNO, DPCODE
+	</isNotEqual>
+</select>
+
+</sqlMap>

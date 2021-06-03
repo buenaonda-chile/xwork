@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="392" Id="ogm206" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="첨부자료등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="728" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_obj206pf_List" OnColumnChanged="ds_obj230pf_OnColumnChanged"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_uploadFile">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="730"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="6" Top="8" Width="688"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="648" Right="672" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="680" Right="704" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="361" Id="searchBar" TabOrder="7" Top="31" Width="728"></Static>
+		<Button Height="26" Id="btnfile_close" ImageID="closeBtn" Left="640" OnClick="btnfile_close_OnClick" TabOrder="3" Text="닫기" Top="48" Width="75"></Button>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="40" Id="Static10" Left="272" TabOrder="9" Top="40" Width="264"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="280" TabOrder="8" Text="지시&#32;&#32;&#32;No" Top="48" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" Font="굴림,28,Bold" Height="37" Id="Static9" Left="8" TabOrder="9" Text="첨부자료등록" Top="42" Width="232"></Static>
+		<Edit Enable="FALSE" Height="20" Id="txtjisno2" Left="384" MaxLength="15" TabOrder="5" TabStop="FALSE" Top="48" UpperOnly="TRUE" Width="141"></Edit>
+		<Button Height="26" Id="brd6btninsert" ImageID="btn2_new2" Left="554" OnClick="brd6btninsert_OnClick" TabOrder="2" Text="신규" Top="48" Width="75"></Button>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_obj206pf_List" BKColor="white" BkColor2="white" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="376" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="lightgrey" HeadBorder="Flat" HeadHeight="22" Height="272" Id="Grid_flist" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnCellDBLClick="grid_flist_OnCellDblClick" Right="728" TabOrder="4" TabStop="FALSE" Top="104" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="728">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="577"/>
+						<col width="101"/>
+						<col width="48"/>
+					</columns>
+					<head>
+						<cell autosizing="keep" bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="자료타이틀"/>
+						<cell autosizing="keep" bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="화일타입"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="삭제"/>
+					</head>
+					<body>
+						<cell align="center" autosizing="keep" bkcolor2="LIGHT3D" col="0" colid="SIRYO" display="normal"/>
+						<cell align="center" autosizing="keep" bkcolor2="LIGHT3D" col="1" colid="FTYPE" display="normal"/>
+						<cell autosizing="keep" bkcolor2="LIGHT3D" col="2" colid="delchk" display="checkbox" edit="checkbox"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<CyHttpFile Height="24" Id="CyHttpFile0" Left="608" Width="24"></CyHttpFile>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm206.xml
+ * ● PROGRAM DESCRIPTION  : 이력편집_파일첨부
+ * ● DATE WRITTEN         : 2011.08.25
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+#include "script::fileupdown.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var imgUPDOWNpath="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/bojen/images/";
+
+function on_LoadCompleted(obj){
+	txtjisno2.Text=txtjisno.Text;
+	getOgm206_fFile();
+}
+
+/********************************************************************** 
+ * 내용설명 : 첨부파일이 있는지 검색
+ **********************************************************************/ 
+function getOgm206_fFile(){
+	var sKind		= "getOgm206_fFile";						
+	var sMethodName = "service::psogmlib/selectOgm219_obj230pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_obj206pf_List=ds_obj230pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " JISNO=" + quote(txtjisno2.Text); //사업부
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+
+/********************************************************************** 
+ * 내용설명 : 첨부파일삭제
+ **********************************************************************/ 
+
+function setogm206_del(compval, seqval){
+	
+	var sKind		= "setogm206_del";						
+	var sMethodName = "service::psogmlib/delOGM206.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(compval); //사업부
+		sArgument += " SEQNO=" + quote(seqval); //코드
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync = false;
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	//삭제
+	}else if(svcId=="setogm206_del"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 파일삭제
+ **********************************************************************/ 
+
+function file_del(fname){
+
+	var sKind		= "file_del";						
+	//var sMethodName = "http://10.72.209.23/psogmlib/fileDel.do"; 
+	var sMethodName = G_baseURL+"psogmlib/fileDel.do"; 
+	var sInDataSet  = ""; //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";
+	var sArgument   = "";
+	var sArgument   = "";
+	var sArgument   = "";
+		sArgument += " FNAME=" + quote(fname);
+		sArgument += " FDIR=" + quote(imgUPDOWNpath);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+}
+
+function brd6btninsert_OnClick(obj)
+{
+	var str = dialog("psogmlib::ogm206_ADD.xml","첨부파일선택",300,300,"TitleBar=false");
+}
+
+function btnfile_close_OnClick(obj)
+{
+	close();
+}
+
+function ds_obj230pf_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if (strColumnID == "DELCHK"){
+		if (varNewValue == "1"){
+			if(Confirm(setPopMessage("3054"))){
+				setogm206_del(ComboBoxPlant.Value, ds_obj206pf_List.GetColumn(nRow,"SEQNO"));
+				var filedel=substr(trim(ds_obj206pf_List.GetColumn(ds_obj206pf_List.currow,"FILNM")),14);
+				file_del(filedel);
+				getOgm206_fFile();
+				}
+				else{
+					return false;
+				}
+				
+
+		}	
+	}
+}
+
+function Grid_flist_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//다운로드 받을 파일명을 취득하여 변수에 설정(클릭한 로우의 파일)
+	var str_param = substr(trim(ds_obj206pf_List.GetColumn(ds_obj206pf_List.currow,"FILNM")),14);
+	//다운로드 받을 파일이 저장되어있는 서버 경로와 파일명
+	var str_param_server = imgUPDOWNpath + str_param;
+				
+	trace("str_param:" + str_param);
+	trace("str_param_server:" + str_param_server);
+	
+	//-----------  다이얼로그창  설정------------------
+    //다이얼로그창에 다운받을 파일명 설정
+	FileDialog0.FileName= str_param;
+    //다이얼로그창에 다운받을 기본경로 설정
+	FileDialog0.FilePath= "C:\\";
+	//다이얼로그창 버튼 SAVE로 설정
+	FileDialog0.Type = "SAVE";
+	//확장자가 없을 때 기본 확장자 설정
+	FileDialog0.AppendExtDefault = "TRUE";
+	
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 처리 계속
+	if(FileDialog0.Open()){
+	
+		//다운로드 받을 경로(로컬)
+		//var str_param_full = "C:/download/" + Dataset1.getColumn(nRow,"filename"); //다이얼로그창 미사용시(고정폴더)
+		var str_param_full = FileDialog0.FilePath + "\\" + FileDialog0.FileName;
+		
+		
+		trace("파일명:" + str_param);
+		trace("경로(파일명):" + str_param_full);
+		
+		//스크립트 파일의 함수 호출 
+		var file_size = CyHttpFile0.GetFileSizeLocal(str_param_server);
+		trace("파일사이즈:" + file_size);
+		var ret = gfn_FileRead(CyHttpFile0, str_param_full,str_param_server, file_size, nRow, "prog_bar", grid_flist);
+		
+		//호출함수 리턴값 처리
+		if ( ret[0] == "FAIL" )
+		{
+			alert(ret[1]);
+		}	
+
+	}
+
+}
+
+]]></Script>
+</Window>

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdPrfrmRgsDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="prdPrfrmRgs" type="PrdPrfrmRgsDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="productNo" column="PRODUCT_NO" />
+        <result property="productNm" column="PRODUCT_NM" />        
+        <result property="intType" column="INT_TYPE" />        
+        <result property="qy" column="QY" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+        
+        <result property="oldLineCode" column="OLD_LINE_CODE" />
+        <result property="oldProductNo" column="OLD_PRODUCT_NO" /> 
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="tempId" column="tempId" />
+                               
+                               
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="prdPrfrmRgs" parameterType="PrdPrfrmRgsDomain">
+		SELECT A.CLS_CODE
+		,A.LOC_CODE
+		,A.OPERT_DE
+		,TRIM(A.LINE_CODE) AS LINE_CODE
+		,TRIM(B.LINE_NM) AS LINE_NM
+		,TRIM(A.PRODUCT_NO) AS PRODUCT_NO
+		,TRIM(C.ITDSC) AS PRODUCT_NM 
+		,TRIM(A.LINE_CODE) AS OLD_LINE_CODE 		
+		,TRIM(A.PRODUCT_NO) AS OLD_PRODUCT_NO 
+		,A.QY	
+		,A.INT_TYPE	
+		FROM PSZDBLIB.FHP100PF A
+		LEFT JOIN PSZDBLIB.FHP010PF B
+		ON A.CLS_CODE= B.CLS_CODE
+		AND A.LINE_CODE = B.LINE_CODE
+		LEFT JOIN ${lib1}.BM008PR C
+		ON A.PRODUCT_NO = C.ITNBR
+		WHERE A.CLS_CODE = #{clsCode}
+		AND A.LOC_CODE = #{locCode}
+		AND A.OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+		AND A.INT_TYPE = 'M'
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchItemLoad" resultMap="prdPrfrmRgs" parameterType="PrdPrfrmRgsDomain">
+		SELECT AA.CLS_CODE,AA.LOC_CODE,AA.LINE_CODE,MAX(AA.LINE_NM) AS LINE_NM,AA.PRODUCT_NO,MAX(AA.PRODUCT_NM) AS 
+		PRODUCT_NM, LINE_CODE AS OLD_LINE_CODE, PRODUCT_NO AS OLD_PRODUCT_NO, 0 AS QY, 'M' AS INT_TYPE, MAX(AA.OPERT_DE) AS OPERT_DE
+		FROM (
+				SELECT A.CLS_CODE
+				,A.LOC_CODE
+				,REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','') AS OPERT_DE
+				,TRIM(A.LINE_CODE) AS LINE_CODE
+				,TRIM(B.LINE_NM) AS LINE_NM
+				,TRIM(A.PRODUCT_NO) AS PRODUCT_NO
+				,TRIM(C.ITDSC) AS PRODUCT_NM 
+				,TRIM(A.LINE_CODE) AS OLD_LINE_CODE 		
+				,TRIM(A.PRODUCT_NO) AS OLD_PRODUCT_NO 
+				,A.QY	
+				,A.INT_TYPE	
+				FROM PSZDBLIB.FHP100PF A
+				LEFT JOIN PSZDBLIB.FHP010PF B
+				ON A.CLS_CODE= B.CLS_CODE
+				AND A.LINE_CODE = B.LINE_CODE
+				LEFT JOIN ${lib1}.BM008PR C
+				ON A.PRODUCT_NO = C.ITNBR
+				WHERE A.CLS_CODE = #{clsCode}
+				AND A.LOC_CODE = #{locCode}
+				AND A.INT_TYPE = 'M'
+				AND A.OPERT_DE BETWEEN '${fromDate}' AND '${toDate}'
+		) AA
+		GROUP BY AA.CLS_CODE,AA.LOC_CODE,AA.LINE_CODE,AA.PRODUCT_NO
+    </select>    
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="PrdPrfrmRgsDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+        	PSZDBLIB.FHP100PF
+		WHERE CLS_CODE = #{clsCode}
+		AND OPERT_DE = '${opertDe}'				
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{lineCode}		
+		AND PRODUCT_NO = #{productNo}
+		AND INT_TYPE = #{intType}		
+					
+    </select>
+    
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="PrdPrfrmRgsDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+        	PSZDBLIB.FHP100PF
+		WHERE CLS_CODE = #{clsCode}
+		AND OPERT_DE = '${opertDe}'				
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{oldLineCode}		
+		AND PRODUCT_NO = #{oldProductNo}
+		AND INT_TYPE = '${intType}'					
+    </select>    
+
+    <!-- 登録 SQL文 -->
+    <insert id="createOld" parameterType ="PrdPrfrmRgsDomain">
+        INSERT INTO  PSZDBLIB.FHP100PF (
+				 OPERT_DE
+				,CLS_CODE
+				,LOC_CODE
+				,LINE_CODE
+				,PRODUCT_NO	
+				,INT_TYPE
+				,QY			
+				,REG_USER
+				,REG_DATE
+        ) values (
+               '${opertDe}'
+               ,#{clsCode}
+               ,#{locCode}
+               ,#{lineCode}
+               ,#{productNo}
+               ,#{intType}
+               ,#{qy}
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="PrdPrfrmRgsDomain">
+        INSERT INTO  PSZDBLIB.FHP100PF (
+				 OPERT_DE
+				,CLS_CODE
+				,LOC_CODE
+				,LINE_CODE
+				,PRODUCT_NO	
+				,INT_TYPE
+				,QY			
+				,REG_USER
+				,REG_DATE
+        ) values (
+                '${opertDe}'	
+               ,'${clsCode}'
+               ,'${locCode}'
+               ,'${lineCode}'
+               ,'${productNo}'
+               ,'${intType}'
+               ,'${qy}'
+               ,'${regUser}'               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>    
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateOld" parameterType="PrdPrfrmRgsDomain">
+        UPDATE 
+               PSZDBLIB.FHP100PF
+        SET
+			   QY = #{qy} 
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE CLS_CODE = #{clsCode}
+		AND OPERT_DE = #{opertDe}
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{oldLineCode}	
+		AND PRODUCT_NO = #{oldProductNo}	
+		AND INT_TYPE = #{intType}				
+    </update>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="PrdPrfrmRgsDomain">
+        UPDATE 
+              PSZDBLIB.FHP100PF
+        SET
+			  QY = '${qy}' 
+         	 ,MOD_USER = '${modUser}'
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE CLS_CODE = '${clsCode}'
+		AND OPERT_DE = '${opertDe}'
+		AND LOC_CODE = '${locCode}'
+		AND LINE_CODE = '${oldLineCode}'	
+		AND PRODUCT_NO = '${oldProductNo}'	
+		AND INT_TYPE = '${intType}'				
+    </update>   
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="ifUpdate" parameterType="PrdPrfrmRgsDomain">
+        UPDATE 
+              PSZDBLIB.FHP100PF
+        SET
+			  QY = '${qy}' 
+         	 ,MOD_USER = '${modUser}'
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE CLS_CODE = '${clsCode}'
+		AND OPERT_DE = '${opertDe}'
+		AND LOC_CODE = '${locCode}'
+		AND LINE_CODE = '${lineCode}'	
+		AND PRODUCT_NO = '${productNo}'	
+		AND INT_TYPE = '${intType}'				
+    </update>        
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="PrdPrfrmRgsDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP100PF
+		WHERE CLS_CODE = #{clsCode}
+		AND OPERT_DE = #{opertDe}
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{lineCode}		
+		AND PRODUCT_NO = #{productNo}
+		AND INT_TYPE = #{intType}			
+    </delete>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionQr" resultMap="prdPrfrmRgs" parameterType="PrdPrfrmRgsDomain">
+		SELECT 
+		      AA.CLS_CODE
+        	, AA.LOC_CODE
+        	, AA.LINE_CODE
+        	, AA.LINE_NM
+        	, AA.PRODUCT_NO
+        	, AA.PRODUCT_NM
+        	, 'I' AS INT_TYPE
+        	, AA.QY FROM (     
+			SELECT 
+	        	  B.CLS_CODE
+	        	, B.LOC_CODE
+	        	, B.LINE_CODE
+	        	, B.LINE_NM
+	        	, A.PSPNO AS PRODUCT_NO
+	        	, A.ITDSC AS PRODUCT_NM 
+				<if test="day != null and day =='01' ">        	
+				, A.PTQY01 AS QY			
+				</if>
+				<if test="day != null and day =='02' ">        	
+				, A.PTQY02 AS QY			
+				</if>
+				<if test="day != null and day =='03' ">        	
+				, A.PTQY03 AS QY			
+				</if>
+				<if test="day != null and day =='04' ">        	
+				, A.PTQY04 AS QY			
+				</if>
+				<if test="day != null and day =='05' ">        	
+				, A.PTQY05 AS QY			
+				</if>
+				<if test="day != null and day =='06' ">        	
+				, A.PTQY06 AS QY			
+				</if>
+				<if test="day != null and day =='07' ">        	
+				, A.PTQY07 AS QY			
+				</if>
+				<if test="day != null and day =='08' ">        	
+				, A.PTQY08 AS QY			
+				</if>
+				<if test="day != null and day =='09' ">        	
+				, A.PTQY09 AS QY			
+				</if>
+				<if test="day != null and day =='10' ">        	
+				, A.PTQY10 AS QY			
+				</if>
+				<if test="day != null and day =='11' ">        	
+				, A.PTQY11 AS QY			
+				</if>
+				<if test="day != null and day =='12' ">        	
+				, A.PTQY12 AS QY			
+				</if>
+				<if test="day != null and day =='13' ">        	
+				, A.PTQY13 AS QY			
+				</if>
+				<if test="day != null and day =='14' ">        	
+				, A.PTQY14 AS QY			
+				</if>
+				<if test="day != null and day =='15' ">        	
+				, A.PTQY15 AS QY			
+				</if>
+				<if test="day != null and day =='16' ">        	
+				, A.PTQY16 AS QY			
+				</if>
+				<if test="day != null and day =='17' ">        	
+				, A.PTQY17 AS QY			
+				</if>
+				<if test="day != null and day =='18' ">        	
+				, A.PTQY18 AS QY			
+				</if>
+				<if test="day != null and day =='19' ">        	
+				, A.PTQY19 AS QY			
+				</if>
+				<if test="day != null and day =='20' ">        	
+				, A.PTQY20 AS QY			
+				</if>
+				<if test="day != null and day =='21' ">        	
+				, A.PTQY21 AS QY			
+				</if>
+				<if test="day != null and day =='22' ">        	
+				, A.PTQY22 AS QY			
+				</if>
+				<if test="day != null and day =='23' ">        	
+				, A.PTQY23 AS QY			
+				</if>
+				<if test="day != null and day =='24' ">        	
+				, A.PTQY24 AS QY			
+				</if>
+				<if test="day != null and day =='25' ">        	
+				, A.PTQY25 AS QY			
+				</if>
+				<if test="day != null and day =='26' ">        	
+				, A.PTQY26 AS QY			
+				</if>
+				<if test="day != null and day =='27' ">        	
+				, A.PTQY27 AS QY			
+				</if>
+				<if test="day != null and day =='28' ">        	
+				, A.PTQY28 AS QY			
+				</if>
+				<if test="day != null and day =='29' ">        	
+				, A.PTQY29 AS QY			
+				</if>
+				<if test="day != null and day =='30' ">        	
+				, A.PTQY30 AS QY			
+				</if>	
+				<if test="day != null and day =='31' ">        	
+				, A.PTQY31 AS QY			
+				</if>		
+				, B.IF_TYPE																																					
+				FROM 
+		        (
+				   SELECT
+					  AA.COMPS
+					 ,AA.TRNYM
+					 ,AA.DEVID
+					 ,AA.PSPNO
+					,MAX(AA.ITDSC) AS ITDSC
+					,SUM(AA.PTQY01) AS PTQY01
+					,SUM(AA.PTQY02) AS PTQY02
+					,SUM(AA.PTQY03) AS PTQY03
+					,SUM(AA.PTQY04) AS PTQY04
+					,SUM(AA.PTQY05) AS PTQY05
+					,SUM(AA.PTQY06) AS PTQY06
+					,SUM(AA.PTQY07) AS PTQY07
+					,SUM(AA.PTQY08) AS PTQY08
+					,SUM(AA.PTQY09) AS PTQY09
+					,SUM(AA.PTQY10) AS PTQY10
+					,SUM(AA.PTQY11) AS PTQY11
+					,SUM(AA.PTQY12) AS PTQY12
+					,SUM(AA.PTQY13) AS PTQY13
+					,SUM(AA.PTQY14) AS PTQY14						
+					,SUM(AA.PTQY15) AS PTQY15						
+					,SUM(AA.PTQY16) AS PTQY16						
+					,SUM(AA.PTQY17) AS PTQY17						
+					,SUM(AA.PTQY18) AS PTQY18						
+					,SUM(AA.PTQY19) AS PTQY19						
+					,SUM(AA.PTQY20) AS PTQY20
+					,SUM(AA.PTQY21) AS PTQY21
+					,SUM(AA.PTQY22) AS PTQY22
+					,SUM(AA.PTQY23) AS PTQY23
+					,SUM(AA.PTQY24) AS PTQY24						
+					,SUM(AA.PTQY25) AS PTQY25						
+					,SUM(AA.PTQY26) AS PTQY26						
+					,SUM(AA.PTQY27) AS PTQY27						
+					,SUM(AA.PTQY28) AS PTQY28						
+					,SUM(AA.PTQY29) AS PTQY29						
+					,SUM(AA.PTQY30) AS PTQY30												
+					,SUM(AA.PTQY31) AS PTQY31																																																													
+					FROM (
+					         SELECT *
+					         FROM ${lib2}.FGP500PF
+					         UNION ALL
+					         SELECT *
+					         FROM ${lib2}.FGP540PF
+					     ) AA
+					WHERE LENGTH(TRIM(AA.DEVID)) > 0
+					GROUP BY AA.COMPS,AA.TRNYM,AA.DEVID,AA.PSPNO		        
+		        ) A
+		        INNER JOIN PSZDBLIB.FHP010PF B
+		        ON A.DEVID = B.IF_CODE
+		        AND A.COMPS = B.CLS_CODE        
+				WHERE A.COMPS = '${clsCode}'
+				AND A.TRNYM = '${opertDeMon}'
+<if test="locCode != null and locCode != ''">	      	 				
+				AND B.LOC_CODE = '${locCode}'
+</if>				
+				AND B.CLS_CODE = '${clsCode}'				
+				AND LENGTH(TRIM(B.IF_CODE)) > 0
+			) AA
+			WHERE AA.QY > 0
+			AND AA.IF_TYPE = 'Q'
+    </select>  
+
+    <!-- 登録 SQL文 -->
+    <insert id="createTemp" parameterType ="PrdPrfrmRgsDomain">
+        INSERT INTO  PSZDBLIB.FHP101PF (
+				 ID
+				,OPERT_DE
+				,CLS_CODE
+				,LOC_CODE
+				,LINE_CODE
+				,PRODUCT_NO	
+				,QY			
+				,REG_USER
+				,REG_DATE
+        ) values (
+                '${tempId}'	        
+               ,'${opertDe}'	
+               ,'${clsCode}'
+               ,'${locCode}'
+               ,'${lineCode}'
+               ,'${productNo}'
+               ,'${qy}'
+               ,'${regUser}'               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteTemp" parameterType="PrdPrfrmRgsDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP101PF
+		WHERE CLS_CODE = #{clsCode}
+		AND INT_TYPE = 'I'			
+    </delete>
+</mapper>

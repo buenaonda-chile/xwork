@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdPrfByItmNmbDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdPrfByItmNmb" type="PrdPrfByItmNmbDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRDT_NO" />  
+        <result property="prdtNm" column="PRDT_NM" />         
+        <result property="locCode" column="LOC_CODE" /> 
+        <result property="drctHdcn" column="DRCT_HDCN" /> 
+        <result property="indrHdcn" column="INDR_HDCN" /> 
+        <result property="jmLabor" column="JM_LABOR" />                                 
+        <result property="prfrTime" column="PRFR_TIME" /> 
+        <result property="excTmRt" column="EXC_TM_RT" /> 
+        <result property="indTmRt" column="IND_TM_RT" /> 
+        <result property="excIndRt" column="EXC_IND_RT" /> 
+        <result property="mrgFct" column="MRG_FCT" />                  
+        <result property="sgmRgsArb" column="SGM_RGS_ARB" />                          
+        <result property="stdrLabor" column="STDR_LABOR" />
+        <result property="cycleTime" column="CYCLE_TIME" />
+        <result property="uph" column="UPH" />        
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+
+        <result property="oldLineCode" column="OLD_LINE_CODE" />       
+        <result property="oldPrdtNo" column="OLD_PRDT_NO" /> 
+        
+        <result property="year" column="YEAR" />         
+        <result property="fsHalf" column="FS_HALF" />         
+        <result property="oldYear" column="OLD_YEAR" />         
+        <result property="oldFsHalf" column="OLD_FS_HALF" />  
+                       
+        <result property="resultManHour" column="RESULT_MAN_HOUR" />
+        <result property="totalQY" column="TOTAL_QY" />
+        <result property="jmBaseTime" column="JM_BASE_TIME" />
+        <result property="indexPlan" column="INDEX_PLAN" />
+        <result property="indexResult" column="INDEX_RESULT" />
+        <result property="prodIndex" column="PROD_INDEX" />
+
+    </resultMap>
+
+	<!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="PrdPrfByItmNmb" parameterType="PrdPrfByItmNmbDomain">
+    
+    WITH SET_PRE AS(
+
+	    SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE, U.LOC_CODE, U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+	     FROM ( SELECT A.OPERT_DE , B.CLS_CODE , B.LOC_CODE , B.LINE_CODE , A.PSPNO AS PRODUCT_NO , QY
+	            FROM ( SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	             UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	
+	            ) A
+	                             INNER JOIN PSZDBLIB.FHP010PF B ON A.DEVID = B.IF_CODE AND A.COMPS = B.CLS_CODE
+	                WHERE B.CLS_CODE = #{clsCode} 
+	                	AND A.TRNYM = SUBSTR('${repym}', 1, 6) 
+	                	<if test="locCode != null and locCode != ''">
+	                	AND B.LOC_CODE = #{locCode}  
+	                	</if>
+	                	AND LENGTH(TRIM(B.IF_CODE)) > 0 AND B.IF_TYPE = 'Q'
+	                UNION ALL SELECT OPERT_DE , CLS_CODE , LOC_CODE , LINE_CODE , PRODUCT_NO , QY 
+	                FROM PSZDBLIB.FHP100PF 
+	                WHERE CLS_CODE = #{clsCode} 
+	                	<if test="locCode != null and locCode != ''">
+	                	AND LOC_CODE = #{locCode} 
+	                	</if>
+	                	AND SUBSTR(OPERT_DE, 1, 6) = '${repym}' ) U
+	        GROUP BY OPERT_DE, CLS_CODE, LOC_CODE, LINE_CODE, PRODUCT_NO
+	)
+	, /*기준정보*/
+	     SET_PRE3 AS (select CLS_CODE, /*공수관리*/
+	                LINE_CODE,
+	                PRDT_NO,
+	                CYCLE_TIME, /*CYCLE TIME*/
+	                M.ITDSC AS PRDT_NM,
+	                JM_LABOR, /*정미공수*/
+	                STDR_LABOR /*기준공수*/
+	         from PSZDBLIB.FHP030PF /*공수관리*/
+	         join ${lib1}.BM008PR M  ON PRDT_NO = M.ITNBR /* 제품이름 */
+	         where YEAR = (case substr('${repym}', 5, 6)
+	                           when '01' then INT(substr('${repym}', 1, 4)) - 1
+	                           when '02' then INT(INT(substr('${repym}', 1, 4)) - 1)
+	                           when '03' then INT(substr('${repym}', 1, 4)) - 1
+	                           else INT(substr('${repym}', 1, 4)) end)
+	           and FS_HALF = (case substr('${repym}', 5, 6)
+	                              when '04' then 'F'
+	                              when '05' then 'F'
+	                              when '06' then 'F'
+	                              when '07' then 'F'
+	                              when '08' then 'F'
+	                              when '09' then 'F'
+	                              else 'S' end)
+	            and CLS_CODE = #{clsCode}
+	    )
+	,   /*작업생산투입시간*/
+	     SET_PRE4 AS(
+	        select A.line_code,
+	               MAX(TRIM(D.LINE_NM))                                                                              AS LINE_NM,
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '01' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY1",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '02' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY2",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '03' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY3",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '04' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY4",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '05' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY5",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '06' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY6",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '07' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY7",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '08' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY8",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '09' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY9",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '10' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY10",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '11' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY11",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '12' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY12",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '13' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY13",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '14' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY14",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '15' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY15",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '16' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY16",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '17' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY17",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '18' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY18",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '19' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY19",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '20' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY20",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '21' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY21",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '22' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY22",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '23' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY23",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '24' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY24",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '25' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY25",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '26' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY26",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '27' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY27",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '28' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY28",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '29' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY29",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '30' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY30",
+	               DEC(SUM(case when substr(A.opert_de, 7, 8) = '31' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY31",
+	               DEC(SUM((COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0))),15,2) AS TTL
+	        from ((select AA.cls_code,
+	                      AA.loc_code,
+	                      AA.line_code,
+	                      AA.opert_de,
+	                      (SUM(AA.prsnl1) * SUM(AA.hr_mnt1)) + (SUM(AA.prsnl2) * SUM(AA.hr_mnt2)) +
+	                      (SUM(AA.prsnl3) * SUM(AA.hr_mnt3)) + (SUM(AA.prsnl4) * SUM(AA.hr_mnt4)) +
+	                      (SUM(AA.prsnl5) * SUM(AA.hr_mnt5)) + (SUM(AA.prsnl6) * SUM(AA.hr_mnt6)) +
+	                      (SUM(AA.prsnl7) * SUM(AA.hr_mnt7)) + (SUM(AA.prsnl8) * SUM(AA.hr_mnt8)) + SUM(AA.LGST_TIME) AS line_hr_mnt
+	               from pszdblib.FHP109PF AS AA 
+	               where substr(AA.opert_de, 1, 6) = '${repym}' and AA.cls_code = '${clsCode}'
+	               		<if test="locCode != null and locCode != ''"> 
+	               		and AA.loc_code = '${locCode}'
+	               		</if>
+	               group by AA.opert_de, AA.cls_code, AA.loc_code, AA.line_code) AS A
+	                 LEFT OUTER JOIN PSZDBLIB.FHP010PF D ON A.LINE_CODE = D.LINE_CODE
+	                 left outer join (select BB.opert_de, BB.cls_code, BB.loc_code, BB.line_code, sum(BB.hr_mnt) AS lose_hr_mnt
+	                                  from pszdblib.FHP130PF AS BB 
+	                                  where substr(BB.opert_de, 1, 6) = '${repym}'
+	                                    and BB.cls_code = '${clsCode}'
+	                                    <if test="locCode != null and locCode != ''">
+	                                    and BB.loc_code = '${locCode}'
+	                                    </if>
+	                                    and BB.SE IN ('C','B')
+	                                  group by BB.opert_de, BB.cls_code, BB.loc_code, BB.line_code
+	                                  ORDER BY OPERT_DE) AS B
+	                                 on A.cls_code = B.cls_code and A.loc_code = B.loc_code and A.line_code = B.line_code and
+	                                    A.opert_de = B.opert_de )
+	        group by A.line_code)
+	,SET_A AS( select
+	    A.LINE_CODE,                    /*라인코드*/
+	    A.LINE_NM,                      /*라인명*/
+	    B.PRDT_NO product_no,           /*제품코드*/
+	    B.PRDT_NM,                      /*제품명*/
+	    B.CYCLE_TIME AS CYCLE_TIME,     /*사이클타임*/
+	    B.JM_LABOR AS JM_LABOR,         /*정미공수*/
+	    B.STDR_LABOR AS STDR_LABOR      /*기준공수*/
+	from
+	    PSZDBLIB.FHP010PF AS A /*라인코드*/
+	    left outer join
+	     (
+	         select * from SET_PRE3
+	     ) AS B on A.CLS_CODE = B.CLS_CODE and A.LINE_CODE = B.LINE_CODE /* B 기준 */)
+	,SET_B AS (select A.loc_code, A.line_code, /*생산실적*/
+	       A.product_no,
+	       SUM(A.qy) AS TTL
+	from (
+	        SELECT * FROM SET_PRE
+	     ) AS A
+	group by A.loc_code, A.line_code, A.product_no)
+	, SET_C AS (select A.line_code, /*기준시간*/
+	       A.product_no
+	       , DEC(SUM(A.qy * B.stdr_labor / DEC(3600)),15,2) AS TTL
+	from
+	(
+	    (
+	        SELECT * FROM SET_PRE
+	    ) AS A
+	    LEFT OUTER JOIN PSZDBLIB.FHP010PF D
+	                    ON A.LINE_CODE = D.LINE_CODE
+	    left outer join
+	    (
+	        select * from SET_PRE3
+	    ) AS B on A.cls_code = B.cls_code and A.line_code = B.line_code and A.product_no = B.prdt_no
+	)
+	group by  A.line_code, A.product_no
+	)
+	SELECT B.LOC_CODE, B.LINE_CODE, N.LINE_NM, B.product_no PRDT_NO, M.ITDSC PRDT_NM, CYCLE_TIME, JM_LABOR, STDR_LABOR,
+	       B.TTL TOTAL_QY, C.TTL JM_BASE_TIME
+	FROM SET_A A
+	    RIGHT OUTER JOIN SET_B B ON A.line_code = B.line_code AND A.product_no = B.product_no
+	    LEFT OUTER JOIN ${lib1}.BM008PR AS M ON B.PRODUCT_NO = M.ITNBR
+	    LEFT OUTER JOIN pszdblib.FHP010PF AS N ON B.LINE_CODE = N.LINE_CODE
+	    LEFT OUTER JOIN SET_C C ON B.line_code = C.line_code AND B.product_no = C.product_no
+	WHERE (B.TTL IS NOT NULL)
+	order by B.LOC_CODE, B.LINE_CODE, B.PRODUCT_NO
+    
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition2" resultMap="PrdPrfByItmNmb" parameterType="PrdPrfByItmNmbDomain">
+		
+		select
+		 	A.line_code,
+		 	A.line_nm,
+			B.PRDT_NO,
+            TRIM(M.ITDSC) AS PRDT_NM,
+			B.CYCLE_TIME,	/* CYCLE TIME */
+			B.JM_LABOR,	/* 정미공수 */
+			B.STDR_LABOR,	 /* 기준공수 */
+			/* 실적공수(초) */
+			C.qy as TOTAL_QY, /* 생산실적 */
+			B.JM_LABOR * C.QY as TOTAL_QY, /* 정미공수기준시간 */
+			B.STDR_LABOR * C.qy /3600 as JM_BASE_TIME, /* 기준시간(HR/품번단위생산량실적) */
+			D.time_sum - E.m_time as RESULT_MAN_HOUR, /*  실적시간 */
+			DEC(CAST(D.time_sum - E.m_time as float) / (B.STDR_LABOR * C.qy /3600) * 100,15,2) as INDEX_RESULT, /*  공수저감지수_실적 */
+ 			X.INDEX_PLAN, /* 공수저감지수_목표 */
+			F.PROD_INDEX /* 설총율 */
+		from
+			PSZDBLIB.FHP010PF A,    /*  라인코드 */
+			PSZDBLIB.FHP030PF B     /*  공수관리 */
+		    left outer join ${lib1}.BM008PR M /* 제품이름 */
+		                    ON B.PRDT_NO = M.ITNBR
+		    left outer join
+            (
+		        select H.cls_code, H.loc_code, H.line_code, /* H.mar */
+		               case substr(${repym},5,6)
+		                   when '04' then H.apr
+		                   when '05' then H.may
+		                   when '06' then H.jun
+		                   when '07' then H.july
+		                   when '08' then H.aug
+		                   when '09' then H.sep
+		                   when '10' then H.oct
+		                   when '11' then H.nov
+		                   when '12' then H.dec
+		                   when '01' then H.jan
+		                   when '02' then H.feb
+		                   when '03' then H.mar
+		               END INDEX_PLAN
+		        from PSZDBLIB.FHP120PF H /* 생산지수년계획등록 */
+		        where
+		        H.iem = '4'
+		        group by H.cls_code, H.loc_code, H.line_code,
+		                 case substr(${repym},5,6)
+		                   when '04' then H.apr
+		                   when '05' then H.may
+		                   when '06' then H.jun
+		                   when '07' then H.july 
+		                   when '08' then H.aug
+		                   when '09' then H.sep
+		                   when '10' then H.oct
+		                   when '11' then H.nov
+		                   when '12' then H.dec
+		                   when '01' then H.jan
+		                   when '02' then H.feb
+		                   when '03' then H.mar
+		               END
+            ) X ON X.LINE_CODE = B.LINE_CODE
+		    ,
+            ( select
+			loc_code, line_code, product_no, sum(qy) as qy
+			from PSZDBLIB.FHP100PF  /* 생산실적등록 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by loc_code, line_code, product_no ) C
+			left outer join
+			(select
+			LINE_CODE,
+			substr(opert_de,1,6),
+			SUM((PRSNL1*HR_MNT1) + (PRSNL2*HR_MNT2) + (PRSNL3*HR_MNT3) + (PRSNL4*HR_MNT4) +
+			(PRSNL5*HR_MNT5) + (PRSNL6*HR_MNT6) + (PRSNL7*HR_MNT7) + (PRSNL8*HR_MNT8)) as time_sum
+			from PSZDBLIB.FHP109PF  /* 라인인원투입시간관리 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by LINE_CODE, substr(opert_de,1,6)) D on C.LINE_CODE = D.LINE_CODE
+			left outer join
+			(
+			select
+			line_code,
+			substr(opert_de,1,6)
+			,
+			sum(hr_mnt) m_time
+			from PSZDBLIB.FHP130PF  /* 손실/v제외/간접시간 등록 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by line_code, substr(opert_de,1,6) ) E on D.LINE_CODE = E.LINE_CODE
+			,
+            (
+                select
+                    A.line_code,
+                    MAX(N.line_nm) AS line_nm,
+                    SUM(COALESCE(DEC(A.qy * B.jm_labor / C.line_hr_mnt,15,2),0)) AS PROD_INDEX
+                from
+                (
+                    (
+                        select
+                            cls_code, loc_code, line_code, opert_de, sum(qy) AS qy
+                        from PSZDBLIB.FHP100PF AS A  /*생산실적등록*/
+                        where 1=1
+                            and substr(opert_de,1,6) = #{repym}
+                            <if test="locCode != null and locCode != ''">
+                            and loc_code = #{locCode}
+                            </if>
+                            and cls_code = #{clsCode}
+                        group by cls_code, loc_code, line_code, opert_de
+                    ) A
+                    left outer join PSZDBLIB.FHP010PF AS N on A.line_code = N.line_code
+                    left outer join
+                    (
+                        select cls_code, line_code, sum(jm_labor) as jm_labor
+                        from PSZDBLIB.FHP030PF AS B /*공수관리 FHP030PF*/
+                        group by cls_code, line_code
+                    ) B on A.cls_code = B.cls_code and A.line_code = B.line_code
+                    left outer join
+                    (
+                        select AA.cls_code,
+                            AA.loc_code,
+                            AA.line_code,
+                            AA.opert_de,
+                            (AA.prsnl1 * AA.hr_mnt1) +
+                            (AA.prsnl2 * AA.hr_mnt2) +
+                            (AA.prsnl3 * AA.hr_mnt3) +
+                            (AA.prsnl4 * AA.hr_mnt4) +
+                            (AA.prsnl5 * AA.hr_mnt5) +
+                            (AA.prsnl6 * AA.hr_mnt6) +
+                            (AA.prsnl7 * AA.hr_mnt7) +
+                            (AA.prsnl8 * AA.hr_mnt8) AS line_hr_mnt
+                        from pszdblib.FHP109PF AS AA /*라인인원투입시간등록*/
+                        where substr(AA.opert_de, 1, 6) = #{repym}
+                            and AA.cls_code = #{clsCode}
+                            <if test="locCode != null and locCode != ''">
+                            and AA.loc_code = #{locCode}
+                            </if>
+                    ) C on A.cls_code = C.cls_code and A.line_code = C.line_code and A.opert_de = C.opert_de
+                )
+                group by A.line_code
+            ) F
+		where
+		A.CLS_CODE = A.CLS_CODE
+		AND A.LINE_CODE = B.LINE_CODE
+		AND A.LOC_CODE = C.LOC_CODE
+		AND A.LINE_CODE = C.LINE_CODE
+		AND B.PRDT_NO = C.product_no
+		and C.line_code = F.line_code
+/*  		AND A.LINE_CODE = X.LINE_CODE */
+/*       AND B.LINE_CODE = X.LINE_CODE */
+		and A.CLS_CODE = #{clsCode}
+		<if test="locCode != null and locCode != ''">
+		and A.LOC_CODE = #{locCode}
+		</if>
+		
+    </select>      
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition3" resultMap="PrdPrfByItmNmb" parameterType="PrdPrfByItmNmbDomain">
+		select
+
+		 	A.line_code,
+		 	A.line_nm,
+			B.PRDT_NO,
+            TRIM(M.ITDSC) AS PRDT_NM,
+			B.CYCLE_TIME,	/* CYCLE TIME */
+			B.JM_LABOR,	/* 정미공수 */
+			B.STDR_LABOR,	 /* 기준공수 */
+			/* 실적공수(초) */
+			C.qy as TOTAL_QY, /* 생산실적 */
+			/* B.JM_LABOR * C.QY as TOTAL_QY, /* 정미공수기준시간 */
+			B.STDR_LABOR * C.qy /3600 as JM_BASE_TIME, /* 기준시간(HR/품번단위생산량실적) */
+			D.time_sum - E.m_time as RESULT_MAN_HOUR, /*  실적시간 */
+			CAST(D.time_sum - E.m_time as float) / (B.STDR_LABOR * C.qy /3600) * 100 as INDEX_RESULT, /*  공수저감지수_실적 */
+ 			X.INDEX_PLAN, /* 공수저감지수_목표 */
+			'0' as PROD_INDEX /* 설총율 */
+		from
+			PSZDBLIB.FHP010PF A,    /*  라인코드 */
+			PSZDBLIB.FHP030PF B     /*  공수관리 */
+		    left outer join ${lib1}.BM008PR M /* 제품이름 */
+		                    ON B.PRDT_NO = M.ITNBR
+		    left outer join
+            (
+		        select H.cls_code, H.loc_code, H.line_code, /* H.mar */
+		               case substr(${repym},5,6)
+		                   when '04' then H.apr
+		                   when '05' then H.may
+		                   when '06' then H.jun
+		                   when '07' then H.july
+		                   when '08' then H.aug
+		                   when '09' then H.sep
+		                   when '10' then H.oct
+		                   when '11' then H.nov
+		                   when '12' then H.dec
+		                   when '01' then H.jan
+		                   when '02' then H.feb
+		                   when '03' then H.mar
+		               END INDEX_PLAN
+		        from PSZDBLIB.FHP120PF H /* 생산지수년계획등록 */
+		        where
+		        H.iem = '4'
+		        group by H.cls_code, H.loc_code, H.line_code,
+		                 case substr(${repym},5,6)
+		                   when '04' then H.apr
+		                   when '05' then H.may
+		                   when '06' then H.jun
+		                   when '07' then H.july 
+		                   when '08' then H.aug
+		                   when '09' then H.sep
+		                   when '10' then H.oct
+		                   when '11' then H.nov
+		                   when '12' then H.dec
+		                   when '01' then H.jan
+		                   when '02' then H.feb
+		                   when '03' then H.mar
+		               END
+            ) X ON X.LINE_CODE = B.LINE_CODE
+		    ,
+            ( select
+			loc_code, line_code, product_no, sum(qy) as qy
+			from PSZDBLIB.FHP100PF  /* 생산실적등록 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by loc_code, line_code, product_no ) C
+			left outer join
+			(select
+			LINE_CODE,
+			substr(opert_de,1,6),
+			SUM((PRSNL1*HR_MNT1) + (PRSNL2*HR_MNT2) + (PRSNL3*HR_MNT3) + (PRSNL4*HR_MNT4) +
+			(PRSNL5*HR_MNT5) + (PRSNL6*HR_MNT6) + (PRSNL7*HR_MNT7) + (PRSNL8*HR_MNT8)) as time_sum
+			from PSZDBLIB.FHP109PF  /* 라인인원투입시간관리 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by LINE_CODE, substr(opert_de,1,6)) D on C.LINE_CODE = D.LINE_CODE
+			left outer join
+			(
+			select
+			line_code,
+			substr(opert_de,1,6)
+			,
+			sum(hr_mnt) m_time
+			from PSZDBLIB.FHP130PF  /* 손실/v제외/간접시간 등록 */
+			where
+			substr(opert_de,1,6) = #{repym}
+			group by line_code, substr(opert_de,1,6) ) E on D.LINE_CODE = E.LINE_CODE
+		where
+		A.CLS_CODE = A.CLS_CODE
+		AND A.LINE_CODE = B.LINE_CODE
+		AND A.LOC_CODE = C.LOC_CODE
+		AND A.LINE_CODE = C.LINE_CODE
+		AND B.PRDT_NO = C.product_no
+/*  		AND A.LINE_CODE = X.LINE_CODE */
+/*       AND B.LINE_CODE = X.LINE_CODE */
+		and A.CLS_CODE = #{clsCode}
+		and A.LOC_CODE = #{locCode}
+		
+    </select>      
+    
+
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="PrdPrfByItmNmbDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}        
+		AND   LINE_CODE = '${lineCode}'
+		AND   PRDT_NO = '${prdtNo}'	        
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="PrdPrfByItmNmbDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}         
+		AND   LINE_CODE = '${oldLineCode}'
+		AND   PRDT_NO = '${oldPrdtNo}'		      
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="PrdPrfByItmNmbDomain">
+        INSERT INTO  PSZDBLIB.FHP030PF (
+				 CLS_CODE
+				,LINE_CODE
+				,YEAR
+				,FS_HALF
+				,PRDT_NO
+				,LOC_CODE
+				,JM_LABOR
+				,STDR_LABOR
+				,CYCLE_TIME			
+				,DRCT_HDCN
+				,INDR_HDCN
+				,PRFR_TIME
+				,EXC_TM_RT
+				,IND_TM_RT
+				,EXC_IND_RT		
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{lineCode}
+               ,#{year}
+               ,#{fsHalf}                              
+               ,#{prdtNo}
+               ,#{locCode}               
+               ,#{jmLabor} 
+               ,#{stdrLabor}                
+               ,#{cycleTime}                               
+               ,#{drctHdcn}                 
+               ,#{indrHdcn}   
+               ,#{prfrTime}                   
+               ,#{excTmRt}                 
+               ,#{indTmRt} 
+               ,#{excIndRt}                                                                      
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="PrdPrfByItmNmbDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = #{lineCode}
+        	,PRDT_NO = #{prdtNo}        	
+			,JM_LABOR = #{jmLabor}
+			,STDR_LABOR = #{stdrLabor}
+			,CYCLE_TIME = #{cycleTime}
+	 		,DRCT_HDCN = #{drctHdcn}
+			,INDR_HDCN = #{indrHdcn}
+			,PRFR_TIME = #{prfrTime}
+			,EXC_TM_RT = #{excTmRt}
+			,IND_TM_RT = #{indTmRt}
+			,EXC_IND_RT = #{excIndRt}
+        	,MOD_USER = #{modUser}
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}          
+        AND   LINE_CODE = #{oldLineCode}
+        AND   PRDT_NO = #{oldPrdtNo}        
+    </update>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateTest" parameterType="PrdPrfByItmNmbDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = '${lineCode}'
+        	,PRDT_NO = '${prdtNo}'        	
+			,JM_LABOR = '${jmLabor}'
+			,STDR_LABOR = '${stdrLabor}'
+			,CYCLE_TIME = '${cycleTime}'
+	 		,DRCT_HDCN = '${drctHdcn}'
+			,INDR_HDCN = '${indrHdcn}'
+			,PRFR_TIME = '${prfrTime}'
+			,EXC_TM_RT = '${excTmRt}'
+			,IND_TM_RT = '${indTmRt}'
+			,EXC_IND_RT = '${excIndRt}'
+        	,MOD_USER = '${modUser}'
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = '${oldYear}'        
+		AND   FS_HALF = '${oldFsHalf}'          
+        AND   LINE_CODE = '${oldLineCode}'
+        AND   PRDT_NO = '${oldPrdtNo}'        
+    </update>    
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="PrdPrfByItmNmbDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}          
+        AND   LINE_CODE = #{lineCode}
+        AND   PRDT_NO = #{prdtNo}   
+    </delete>
+    
+    
+
+</mapper>

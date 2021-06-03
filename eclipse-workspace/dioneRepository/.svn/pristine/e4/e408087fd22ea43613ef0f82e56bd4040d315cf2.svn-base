@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.RelationLocDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="RelationLoc" type="RelationLocDomain">
+        <result property="relationCode" column="LOC_CODE" />
+        <result property="useYn" column="LOC_USE" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="relationCode" column="REL_CODE" />
+        <result property="rltnCode" column="RLTN_CODE" />
+        <result property="relationName" column="REL_NAME" />
+    </resultMap>
+
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="RelationLoc" parameterType="RelationLocDomain">
+        select 
+                A.LOC_CODE
+              , A.RLTN_CODE
+              , A.LOC_USE
+              , A.CLS_CODE
+              , B.REL_NAME
+        from 
+                DNKR_RELATION_LOCATION A
+              , DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationLoc.searchByKey' = 'SqlMap-RelationLoc.searchByKey'
+            and A.LOC_CODE = B.REL_CODE
+            and A.LOC_CODE = #{relationCode}
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="cmcLangCode == null or cmcLangCode == ''">
+            and B.CMC_CODE = 'en'
+       	</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="RelationLoc" parameterType="RelationLocDomain">
+        select 
+                A.LOC_CODE
+              , A.RLTN_CODE  
+              , A.LOC_USE
+              , A.CLS_CODE
+              , B.REL_NAME
+        from 
+                DNKR_RELATION_LOCATION A
+              , DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationLoc.searchByCondition' = 'SqlMap-RelationLoc.searchByCondition'
+            and A.LOC_CODE = B.REL_CODE
+        <if test="relationCode != null and relationCode != ''">
+            and A.LOC_CODE = #{relationCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.LOC_USE = #{useYn}
+        </if>
+        <if test="relationName != null and relationName != ''">
+            and B.REL_NAME Like '%' || #{relationName} || '%'
+        </if>
+        order by 
+                A.LOC_CODE asc
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="RelationLoc" parameterType="RelationLocDomain">
+        select 
+                A.LOC_CODE
+              , A.RLTN_CODE  
+              , A.LOC_USE
+              , A.CLS_CODE
+              , B.REL_NAME
+        from (
+            select 
+	                A.LOC_CODE
+	              , A.RLTN_CODE  
+	              , A.LOC_USE
+	              , A.CLS_CODE
+	              , B.REL_NAME
+	        from 
+	                DNKR_RELATION_LOCATION A
+	              , DNKR_RELATION_NM B
+	        where 
+                    'SqlMap-RelationLoc.searchByConditionForPaging' = 'SqlMap-RelationLoc.searchByConditionForPaging'
+                and A.LOC_CODE = B.REL_CODE
+        <if test="relationCode != null and relationCode != ''">
+            and A.LOC_CODE = #{relationCode}
+        </if>
+        <if test="cmclangCode != null and cmclangCode != ''">
+            and B.CMC_CODE = #{cmclangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.LOC_USE = #{useYn}
+        </if>
+        <if test="relationName != null and relationName != ''">
+            and B.REL_NAME = #{relationName}
+        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="RelationLocDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_RELATION_LOCATION A,
+                DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationLoc.searchCount' = 'SqlMap-RelationLoc.searchCount'
+            and A.LOC_CODE = B.REL_CODE
+        <if test="relationCode != null and relationCode != ''">
+            and A.LOC_CODE = #{relationCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.LOC_USE = #{useYn}
+        </if>
+        <if test="relationName != null and relationName != ''">
+            and B.REL_NAME = #{relationName}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchLocCount" resultType="java.lang.Integer" parameterType="RelationLocDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_RELATION_LOCATION
+        where 
+                'SqlMap-RelationLoc.searchLocCount' = 'SqlMap-RelationLoc.searchLocCount'
+         <if test="relationCode != null and relationCode != ''">
+            and LOC_CODE = #{relationCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and CLS_CODE = #{clsCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and CMC_CODE = #{cmcLangCode}
+        </if>
+    </select>
+
+	<!-- 登録 SQL文 -->
+    <insert id="createCode" parameterType ="RelationClsDomain">
+        insert into DNKR_RELATION_LOCATION (
+                /* SqlMap-RelationLoc.createCode */
+            <if test="useYn != null">
+                LOC_USE,
+            </if>
+            <if test="clsCode != null">
+                CLS_CODE,
+            </if>
+            <if test="rltnCode != null">
+                RLTN_CODE,
+            </if>
+            <if test="relationCode != null">
+                LOC_CODE
+            </if>
+        ) values (
+            <if test="useYn != null">
+                #{useYn},
+            </if>
+            <if test="clsCode != null">
+                #{clsCode},
+            </if>
+            <if test="rltnCode != null">
+                #{rltnCode},
+            </if>
+            <if test="relationCode != null">
+                'LOC' || lpad(DNKR_RELATION_LOCATION_SEQ.NEXTVAL, 6, '0')
+            </if>
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createName" parameterType ="RelationClsDomain">
+        insert into DNKR_RELATION_NM (
+                /* SqlMap-RelationLoc.createName */
+            <if test="cmcLangCode != null">
+                CMC_CODE,
+            </if>
+            <if test="relationName != null">
+                REL_NAME,
+            </if>
+            <if test="relationCode != null">
+                REL_CODE
+            </if>
+        ) values (
+            <if test="cmcLangCode != null">
+                #{cmcLangCode},
+            </if>
+            <if test="relationName != null">
+                #{relationName},
+            </if>
+             <if test="relationCode != null">
+                'LOC' || lpad(DNKR_RELATION_LOCATION_SEQ.CURRVAL, 6, '0')
+            </if>
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateCode" parameterType="RelationClsDomain">
+        update 
+                DNKR_RELATION_LOCATION
+        set
+            <if test="useYn != null">
+                LOC_USE = #{useYn}
+            </if>
+        where 
+                'SqlMap-RelationLoc.updateCode' = 'SqlMap-RelationLoc.updateCode'
+            and LOC_CODE = #{relationCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateName" parameterType="RelationClsDomain">
+        update 
+                DNKR_RELATION_NM 
+        set
+            <if test="relationName != null">
+                REL_NAME = #{relationName}
+            </if>
+        where 
+                'SqlMap-RelationLoc.updateName' = 'SqlMap-RelationLoc.updateName'
+            and REL_CODE = #{relationCode}
+            and CMC_CODE = #{cmcLangCode}
+    </update>
+
+	 <!--  -->
+    <delete id="deleteCode" parameterType="RelationClsDomain">
+        delete from 
+                DNKR_RELATION_LOCATION
+        where 
+                'SqlMap-RelationCls.deleteCode' = 'SqlMap-RelationCls.deleteCode'
+            and LOC_CODE = #{relationCode}
+    </delete>
+    
+    <!--  -->
+    <delete id="deleteName" parameterType="RelationClsDomain">
+        delete from 
+                DNKR_RELATION_NM
+        where 
+                'SqlMap-RelationCls.deleteName' = 'SqlMap-RelationCls.deleteName'
+        <if test="relationCode != null and relationCode != ''">
+            and REL_CODE = #{relationCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and CMC_CODE = #{cmcLangCode}
+        </if>
+    </delete>
+
+
+</mapper>

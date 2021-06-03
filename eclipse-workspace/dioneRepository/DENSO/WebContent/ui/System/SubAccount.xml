@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="메뉴별&#32;계정관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_userList" OnRowPosChanged="On_RowPosChange"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userList_dummy">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnm>사용</cdnm>
+					</record>
+					<record>
+						<cd>0</cd>
+						<cdnm>미사용</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuth"></Dataset>
+		</Datasets>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_userList" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="331" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="299" Id="MainGrid" InputPanel="FALSE" Left="2" LineColor="#888888" MinWidth="100" Right="1056" TabOrder="0" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1054">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="105"/>
+						<col width="107"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="165"/>
+						<col width="165"/>
+						<col width="203"/>
+						<col width="70"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="아이디"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="이름"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="사업장"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="휴대폰"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="일반전화"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="이메일"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="normal" text="사용유무"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="USER_ID" display="normal"/>
+						<cell align="center" col="2" colid="USER_NAME" display="normal"/>
+						<cell align="center" col="3" colid="COMPANY" color="#333333" combocol="code1" combodataset="ds_VComCode_COMP" combotext="code_name" display="combo"/>
+						<cell align="center" col="4" colid="PLANT_CD" color="#333333" combocol="code2" combodataset="ds_VComCode_PLNT" combotext="code_name" display="combo"/>
+						<cell align="center" autosizing="none" col="5" colid="TEL_NO1" display="normal"/>
+						<cell align="center" col="6" colid="TEL_NO2" display="normal"/>
+						<cell align="center" col="7" colid="EMAIL_ID" color="#333333" display="text"/>
+						<cell align="center" col="8" colid="STATUS" combocol="cd" combodataset="ds_status" combotext="cdnm" display="combo"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_menuAuth" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="587" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="253" Id="menuGrd2" InputPanel="FALSE" Left="2" LineColor="#888888" MinWidth="100" Right="1054" TabOrder="1" TabStop="true" Top="334" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1052">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="141"/>
+						<col width="136"/>
+						<col width="139"/>
+						<col width="125"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="대메뉴"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="중메뉴"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="소메뉴"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="비밀번호"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="STEP1_NAME" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="STEP2_NAME" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="2" colid="STEP3_NAME" display="normal"/>
+						<cell align="left" autosizing="none" bkcolor="lightcoral" col="3" colid="SUB_PW" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SubAccount.xml
+ * ● PROGRAM DESCRIPTION  : 메뉴별 계정 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+
+}
+
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	ds_VComCode_COMP.Copy("ds_ComCode_COMP");
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+}
+
+
+function On_RowPosChange(obj,nOldRow,nRow)
+{
+	http.Sync 	= true;
+	var sKind		= "getUserAuth";		
+	var sMethodName = "service::user/subMenuAuth.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_menuAuth=ds_menuAuth";
+	var sArgument   = "";
+		sArgument   += " USER_ID=" + quote(ds_userList.GetColumn(ds_userList.row,"USER_ID"));
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	setMessage("1000000003");
+}
+
+
+function setSubMenuAuth(){
+	var sKind		= "setSubMenuAuth";						
+	var sMethodName = "service::user/subMenuAuthSave.do";
+	var sInDataSet  = "ds_menuAuth=ds_menuAuth:U";
+	var sOutDataSet = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "");
+
+}
+
+
+function getUserList(){
+	var sKind		= "getUserList";						
+	var sMethodName = "service::user/userList.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             		// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_userList=ds_userList";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " CHK_STATUS='1'";	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+// 아래 함수는 콩통함수 이므로 모든 화면에 필요
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getUserList();
+}
+
+function fn_Input()
+{
+
+}
+
+function fn_Delete()
+{
+
+}
+
+function fn_Save()
+{
+	setSubMenuAuth();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	alert("fn_Excel");
+}
+
+function fn_Help()
+{
+	alert("fn_Help");
+}
+
+]]></Script>
+</Window>

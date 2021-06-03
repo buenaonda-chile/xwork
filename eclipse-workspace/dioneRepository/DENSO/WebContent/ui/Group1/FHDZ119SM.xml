@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="656" Id="FHDZ119SMT" Left="8" OnLoadCompleted="onLoadCompleted" PidAttrib="7" Title="FHDZ119SM" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+		</Datasets>
+		<Image Height="620" Id="Image3" ImageID="pgm_img" TabOrder="14" Top="32" Width="1050"></Image>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="72" TabOrder="11" Top="136" Width="220"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static23" Left="72" TabOrder="7" Top="112" Width="220"></Static>
+		<Static Font="Default,9,Bold" Height="16" Id="Static0" Left="91" TabOrder="1" Text="다음을&#32;선택하시오" Top="82" Width="128"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_buso" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="179" ResetIndex="FIRST" TabOrder="2" Top="113" Width="112"></Combo>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="72" TabOrder="3" Top="80" Width="17"></Image>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="72" TabOrder="6" Top="112" Width="106"></Static>
+		<Shape BKColor="#b4b4b4" Bottom="127" Height="5" Id="Shape12" Left="84" LineColor="#dceaf7" Right="89" TabOrder="4" Top="122" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="94" Style="static" TabOrder="5" Text="사업장" Top="117" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="72" TabOrder="10" Top="136" Width="106"></Static>
+		<Shape BKColor="#b4b4b4" Bottom="151" Height="5" Id="Shape0" Left="84" LineColor="#dceaf7" Right="89" TabOrder="8" Top="146" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="94" Style="static" TabOrder="9" Text="년월" Top="141" VAlign="Middle" Width="77"></Static>
+		<Button ButtonStyle="TRUE" Height="23" Id="Button0" ImageID="2_btn" Left="240" OnClick="Button0_OnClick" TabOrder="12" Text="실행" Top="192" Width="52"></Button>
+		<WTA_RemoteCall Bottom="634" Height="10" Id="WTA_RemoteCall0" Right="10" Top="624" Width="10"></WTA_RemoteCall>
+		<MaskEdit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="ed_yyyymmdd" Left="180" Mask="####-##-##" MaxLength="6" TabOrder="15" Top="138" Type="STRING" Width="109"></MaskEdit>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="72" TabOrder="19" Top="160" Width="220"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="72" TabOrder="18" Top="160" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="175" Height="5" Id="Shape1" Left="84" LineColor="#dceaf7" Right="89" TabOrder="16" Top="170" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static9" Left="94" Style="static" TabOrder="17" Text="작업반" Top="165" VAlign="Middle" Width="77"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="ed_class" Left="180" MaxLength="4" TabOrder="20" Top="162" Width="109"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="21" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="21" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FHDZ119SM.xml
+ * ● PROGRAM DESCRIPTION  : FHDZ119SM
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+
+var isAuth = false;
+var nowDate = today();
+var pgmLib = "*LIBL";
+var pgmName = "FHDZ119S#";
+var param = "";
+var exeTime = 1200;
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function onLoadCompleted(obj)
+{
+	getTitle();
+
+	if(!isAuth){
+	
+		http.Sync 	= true;
+		var sKind		= "getComCode";						
+		var sMethodName = "service::login/selectComCode.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+		var sArgument   = "";
+			sArgument   += " CLASS='PLNT'";
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+
+		ds_ComCode_PLNT.Filter("CODE2=='" + G_ds_user.GetColumn(0,"PLANT_CD") + "'");		
+	
+	}	
+	
+	ed_yyyymmdd.text = nowDate;
+	
+	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 실행
+ * 주요변수 : 
+ **********************************************************************/ 
+function Button0_OnClick(obj)
+{
+
+	if(cb_buso.Value == ""){
+		alert(setPopMessage("2041"));	// 20110103l-koowgnojeel, 2041 == 사업부를 선택하세요.	
+		cb_buso.SetFocus();
+		return;
+	}
+
+	var rVal = isDate(ed_yyyymmdd.Value);
+	if(rVal == false){
+		alert(setPopMessage("2008"));	// 20110103l-koowgnojeel, 2008 == 날짜 형식이 아닙니다.
+		return;
+	}
+
+	http.Sync = true;
+	param = "";	
+	param = cb_buso.Value + ed_yyyymmdd.Value + ed_class.value;
+	//param = "QA" + ed_yyyymmdd.Value + ed_class.value;
+	
+	for(i=length(param)+1;i<=90;i++){
+		param += " ";
+	}
+	param += callUser;	
+
+	for(j=1;j<=10-length(callUser);j++){
+		param += " ";
+	}
+
+	// 화면 잠그기
+	var runLock = true;
+	
+	if(runLock == true) {
+		var str = dialog("Group1::PGMPOPUP.xml","",400,190,"TitleBar=false");
+		return ;
+	}
+
+	
+	
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",exeTime);
+	
+	// 연결 (접속아이피 , 아이디, 비밀번호)	
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(pgmLib,pgmName,param,pgmSize);
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			//리턴 파라메타 값을 출력한다.
+			alert("성공=======>" + WTA_RemoteCall0.RC_GetReturnParm(1));
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	//연결종료
+	WTA_RemoteCall0.RC_Disconnect();
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function add_class(obj)
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+
+}
+
+
+]]></Script>
+</Window>

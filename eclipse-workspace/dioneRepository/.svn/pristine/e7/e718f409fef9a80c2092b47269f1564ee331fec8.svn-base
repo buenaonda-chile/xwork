@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.BatchCheckDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="batchDomain" type="BatchDomain">
+        <result property="comps" 	column="COMPS" />
+        <result property="bchst" 	column="BCHST" />
+        <result property="job02s" 	column="JOB02S" />
+        <result property="job15e" 	column="JOB15E" />
+        <result property="job01c" 	column="JOB01C" />
+        <result property="job02c" 	column="JOB02C" />
+        <result property="job03c" 	column="JOB03C" />
+        <result property="job04c" 	column="JOB04C" />
+        <result property="job05c" 	column="JOB05C" />
+        <result property="job06c" 	column="JOB06C" />
+        <result property="job07c" 	column="JOB07C" />
+        <result property="job08c" 	column="JOB08C" />
+        <result property="job09c" 	column="JOB09C" />
+        <result property="job10c" 	column="JOB10C" />
+        <result property="job11c" 	column="JOB11C" />
+        <result property="job12c" 	column="JOB12C" />
+        <result property="job13c" 	column="JOB13C" />
+        <result property="job14c" 	column="JOB14C" />
+        <result property="job15c" 	column="JOB15C" />
+        
+    </resultMap>
+    
+    <select id="selectBatchInfo" resultMap="batchDomain" parameterType="String">
+	      SELECT
+	             COMPS 
+	           , BCHST
+	           , JOB02S
+	           , JOB15E
+	           , JOB01C
+	           , JOB02C
+	           , JOB03C
+	           , JOB04C
+	           , JOB05C
+	           , JOB06C
+	           , JOB07C
+	           , JOB08C
+	           , JOB09C
+	           , JOB10C
+	           , JOB11C
+	           , JOB12C
+	           , JOB13C
+	           , JOB14C
+	           , JOB15C
+	 	 FROM PEJOBLIB.BCH000PF
+    </select>
+    
+    <select id="searchBatchCheckError" resultType="java.lang.Integer" parameterType="BatchDomain">
+    	SELECT count(*) cnt
+    	FROM ${lib}.NS006PR 
+    	WHERE COMPL1='E' 
+    	OR COMPL2='E'
+    </select>
+    
+    <select id="searchBatchCheckMassage" resultType="java.lang.Integer">
+    	SELECT count(*) cnt
+    	FROM PSMONLIB.MON210PF 
+    	WHERE MASTAT = 'MSGW'
+    </select>
+    
+    <!-- SMS 전송 by MS-SQL -->
+    <insert id="insertSmsSendData" parameterType="java.util.Map">
+	    INSERT INTO dbo.em_tran
+			 ( 
+			   tran_phone
+			 , tran_callback
+			 , tran_status
+			 , tran_date
+			 , tran_msg
+			 , tran_type
+			 )
+		VALUES (#{receiver}, #{sender}, '1', getdate(), #{content}, '4')
+    </insert>
+    
+     <resultMap id="smsListDomain" type="BatchDomain">
+        <result property="name" 		column="NAME" />
+        <result property="phone" 	column="PHONE" />
+        <result property="sendDate" 	column="SEND_DATE" />
+        <result property="sendCnt" 	column="SEND_CNT" />
+    </resultMap>
+    <!-- SMS 전송 대상자 -->
+    <select id="searchSMSuserList" resultMap="smsListDomain" parameterType="java.lang.String">
+    	SELECT NAME
+    	     , PHONE
+    	     , SEND_DATE
+    	     , SEND_CNT 
+        FROM TB_SMS_LIST
+    </select>
+    
+	<!-- SMS 전송 리스트 -->
+    <update id="updateSMSsendCount" parameterType="java.lang.String">
+    	UPDATE TB_SMS_LIST 
+    		  SEND_DATE = SYSDATE
+    		, SEND_CNT = #{send_cnt}    	
+    </update>    
+</mapper>

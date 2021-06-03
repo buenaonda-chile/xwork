@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.globaldenso.dnkr.integration.dao.RelationTeamDao">
+
+  <resultMap id="MaDept" type="MaDeptDomain">
+	  	<result property="cdDept" column="CD_DEPT" />
+	    <result property="cdCompany" column="CD_COMPANY" />
+	    <result property="nmDept" column="NM_DEPT" />
+	    <result property="cdBizarea" column="CD_BIZAREA" />
+	    <result property="cdCc" column="CD_CC" />
+	    <result property="hDept" column="H_DEPT" />
+   </resultMap>
+   
+  <!-- 더존 회사코드변경시 수정필요 --> 
+  <select id="searchMaDeptList"  resultMap="MaDept">
+       select 
+            CD_DEPT
+            <!-- 더존 사업부코드변경 : 2019.04.15 (DENSO) --> 
+            <!--, CD_COMPANY -->
+          , CASE WHEN CD_BIZAREA='1000' THEN '2000'
+                  WHEN CD_BIZAREA='2000' THEN '1000'
+                  WHEN CD_BIZAREA='3000' THEN '1000'
+                  WHEN CD_BIZAREA='5000' THEN '1000'
+                  WHEN CD_BIZAREA='4000' THEN '3000'
+                  ELSE ''
+             END AS CD_COMPANY
+          , NM_DEPT
+          , CD_BIZAREA
+          , CD_CC
+          , H_DEPT
+       from 
+               NEOE.MA_DEPT
+       where 
+           'SqlMap-Dzone-Dept.searchMaDeptList' = 'SqlMap-Dzone-Dept.searchMaDeptList'
+           AND CD_COMPANY != 'TEST'
+           AND TRIM(DT_END) is null
+           AND  CD_COMPANY = 'DENSO'
+           <!-- 
+           AND ((CD_COMPANY = '1000' AND CD_BIZAREA IN ('1001', '2001', '3001')) OR (CD_COMPANY = '2000' AND CD_BIZAREA IN ('1000')))
+           AND  CD_COMPANY = 'DENSO'
+            -->
+       order by CD_COMPANY, CD_BIZAREA, CD_DEPT
+  </select>
+
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.FinlCustTypeBaseDao">
+
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="FinlCustTypeBase" type="FinlCustTypeBaseDomain">
+    	<result property="comps" column="comps" />    
+    	<result property="pyvnd" column="pyvnd" />
+    	<result property="endccd" column="endccd" />
+    	<result property="endcnm" column="endcnm" />
+    	<result property="brnnm" column="brnnm" />
+    	<result property="desc" column="desc" />
+    	<result property="regu" column="regu" />
+    	<result property="regd" column="regd" />
+    	<result property="modu" column="modu" />
+    	<result property="modd" column="modd" />
+    	
+    	<result property="oldComps" column="old_comps" />
+    	<result property="oldPyvnd" column="old_pyvnd" />
+    	<result property="oldEndccd" column="old_endccd" />
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="FinlCustTypeBase" parameterType="FinlCustTypeBaseDomain">
+    	select TRIM(a.endccd) AS endccd
+    			,TRIM(a.endcnm) AS endcnm
+    			,trim(b.comps) as comps
+    			,trim(b.pyvnd) as pyvnd
+    			,trim(b.brnnm) as brnnm
+    			,trim(b.desc) as desc
+    			,b.regu
+    			,b.regd
+    			,b.modu
+    			,b.modd
+    			, TRIM(b.comps) AS old_comps
+             	, TRIM(b.pyvnd) AS old_pyvnd
+             	, TRIM(a.endccd) AS old_endccd
+		from PSZDBLIB.SPZ100PF a,PSZDBLIB.SPZ110PF b
+		where
+			'SqlMap-FinlCustTypeBase.searchByCondition' = 'SqlMap-FinlCustTypeBase.searchByCondition'
+			AND a.endccd = b.endccd
+    	<if test='endccd != null and !endccd.equalsIgnoreCase("")'>
+			AND a.endccd = #{endccd}
+		</if>
+		<if test='endcnm != null and !endcnm.equalsIgnoreCase("")'>
+			AND a.endcnm like '%' || '${endcnm}' || '%'
+		</if>
+		order by a.endccd, comps, pyvnd
+    	
+		
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="FinlCustTypeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ110PF
+        WHERE
+        	'SqlMap-FinlCustTypeBase.searchCount' = 'SqlMap-FinlCustTypeBase.searchCount'
+        AND endccd = #{endccd} 
+        AND comps = #{comps} 
+        AND pyvnd = #{pyvnd} 
+    </select>
+    
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="FinlCustTypeBaseDomain">
+    	insert into PSZDBLIB.SPZ110PF(
+    		/*'SqlMap-FinlCustTypeBase.create' = 'SqlMap-FinlCustTypeBase.create'*/
+    		comps,endccd,pyvnd,brnnm,desc,regu,regd
+    	) values(
+    		#{comps}
+    		,#{endccd}
+    		<!-- , 'M' || REPEAT('0', 3-LENGTH(TRIM(CHAR(NEXTVAL FOR PSZDBLIB.SAL_FINLCUSTTYPE_SEQ))))  || CHAR(NEXTVAL FOR PSZDBLIB.SAL_FINLCUSTTYPE_SEQ) --> 
+    		,#{pyvnd}
+    		,#{brnnm}
+    		,#{desc}
+    		,#{regu}
+    		,INTEGER(VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD'))
+    		
+    	)
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="FinlCustTypeBaseDomain">
+    	update
+    		PSZDBLIB.SPZ110PF
+    	set
+    		comps = #{comps}
+    		,pyvnd = #{pyvnd}
+    		,endccd = #{endccd}
+    		,brnnm = #{brnnm}
+    		,desc = #{desc}
+    		,modu = #{modu}
+    		,modd = INTEGER(VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD'))
+    	where
+    	  'SqlMap-FinlCustTypeBase.update' = 'SqlMap-FinlCustTypeBase.update'
+    	  and endccd = #{oldEndccd}
+    	  and comps = #{oldComps}
+    	  and pyvnd = #{oldPyvnd}
+    
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="FinlCustTypeBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SPZ110PF
+        WHERE
+        	'SqlMap-FinlCustTypeBase.delete' = 'SqlMap-FinlCustTypeBase.delete'
+          and endccd = #{endccd}
+          and comps = #{comps}
+    	  and pyvnd = #{pyvnd}
+        
+    </delete>
+     <select id="searchCount2" resultType="java.lang.Integer" parameterType="FinlCustTypeBaseDomain">
+       SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ110PF
+        WHERE
+        	'SqlMap-FinlCustTypeBase.searchCount2' = 'SqlMap-FinlCustTypeBase.searchCount2'
+        AND endccd = #{oldEndccd} 
+        AND comps = #{oldComps} 
+        AND pyvnd = #{oldPyvnd} 
+    </select> 
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByEndcnm" resultMap="FinlCustTypeBase" parameterType="FinlCustTypeBaseDomain">
+    	select
+			a.endccd AS endccd, MAX(TRIM(a.endcnm)) AS endcnm
+    		,b.comps AS comps
+		from 
+			PSZDBLIB.SPZ100PF a, PSZDBLIB.SPZ110PF b
+		where
+		'SqlMap-FinlCustTypeBase.searchByEndcnm' = 'SqlMap-FinlCustTypeBase.searchByEndcnm'
+		AND	a.endccd = b.endccd
+		AND b.comps = #{comps}
+		group by a.endccd, comps
+		order by a.endccd, comps
+    </select>
+
+</mapper>

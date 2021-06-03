@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="인원현황조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMP100">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Code1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Code2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VCode2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VCode1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Code3">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE>M</CODE>
+						<NAME>남자</NAME>
+					</record>
+					<record>
+						<CODE>F</CODE>
+						<NAME>여자</NAME>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="84" Id="Static34" Left="5" TabOrder="19" Top="525" Width="1044"></Static>
+		<Static BKColor="ghostwhite" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="1" Top="30" Width="1057"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="ComboBoxPlant" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="130" ResetIndex="FIRST" TabOrder="2" Top="34" Width="90"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<Calendar Dateformat="yyyy-MM" Height="22" Id="cmb_KDYYM" Left="329" LeftMargin="10" MonthPopupBorder="NONE" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="34" Value="TODAY" Width="88"></Calendar>
+		<Button Height="21" Id="Button0" Left="776" OnClick="fn_Search" TabOrder="6" Text="조회" Top="32" Width="104"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="11" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="32" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static7" Left="225" TabOrder="9" Text="조회년월" Top="32" VAlign="Middle" Width="101"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static8" Left="327" Style="static" TabOrder="10" Top="32" VAlign="Middle" Width="92"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_HMP100" Border="Flat" Column="SABUN" Enable="FALSE" Height="23" Id="Edit7" Left="120" Readonly="TRUE" TabOrder="11" Top="528" Width="145"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static29" Left="528" TabOrder="12" Text="ㆍ직위" Top="527" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static26" Left="268" TabOrder="13" Text="ㆍ성별" Top="527" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static25" Left="8" TabOrder="14" Text="ㆍ사번" Top="527" VAlign="Middle" Width="110"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static0" Left="422" TabOrder="15" Text="사&#32;번" Top="32" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" AutoSkip="TRUE" Border="Flat" BorderColor="#888888" Height="20" Id="ed_tel_no1" Left="541" MaxLength="7" OnChanged="common_OnChanged" TabOrder="16" Top="34" UpperOnly="TRUE" UseIME="FALSE" Width="94"></Edit>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="539" Style="static" TabOrder="17" Top="31" VAlign="Middle" Width="99"></Static>
+		<Image Cursor="HAND" Height="17" Id="selsabun" ImageID="ic_search" Left="644" OnClick="selsabun_OnClick" Static="FALSE" TabOrder="18" Top="36" Width="15"></Image>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static9" Left="788" TabOrder="20" Text="ㆍ직책" Top="527" VAlign="Middle" Width="110"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_HMP100" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="520" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="464" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1058" TabOrder="21" TabStop="true" Top="56" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="76"/>
+						<col width="77"/>
+						<col width="77"/>
+						<col width="72"/>
+						<col width="77"/>
+						<col width="84"/>
+						<col width="76"/>
+						<col width="76"/>
+						<col width="76"/>
+						<col width="76"/>
+						<col width="77"/>
+						<col width="77"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="성명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="성별"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="직위"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="직책"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="휴직"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="예산"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="종합직"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="일반"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="해외출향"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="역출향"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="계약직"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="SABUN" color="#333333" display="normal"/>
+						<cell align="center" col="2" colid="KORNM" display="normal"/>
+						<cell align="center" col="3" colid="SEXCDN" display="normal" expr="iif(SEXCDN=&apos;M&apos;,&apos;남자&apos;,&apos;여자&apos;)"/>
+						<cell align="center" col="4" colid="GRADEN" combocol="PCODE" combodataset="ds_Code1" combotext="PCONT" display="combo"/>
+						<cell align="center" col="5" colid="JICCDN" combocol="PCODE" combodataset="ds_Code2" combotext="PCONT" display="combo"/>
+						<cell align="center" col="6" colid="HUJIC" display="normal"/>
+						<cell align="center" col="7" colid="BUDGET" color="#333333" display="normal"/>
+						<cell align="center" col="8" colid="PY1CDN" color="#333333" display="normal"/>
+						<cell align="center" col="9" colid="PY2CDN" color="#333333" display="normal"/>
+						<cell align="center" col="10" colid="FOKCDN" color="#333333" display="normal"/>
+						<cell align="center" col="11" colid="PYTCDN" color="#333333" combocol="CD" combotext="CD" display="normal"/>
+						<cell align="center" col="12" colid="PY3CDN" color="#333333" combocol="CD" combotext="CD" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Combo BindDataset="ds_HMP100" Border="Flat" BorderColor="#888888" CodeColumn="PCODE" Color="#333333" Column="GRADEN" DataColumn="PCONT" Height="23" Id="cb_grade" INDEX="0" InnerDataset="ds_Code1" Left="638" OnChanged="cb_grade_OnChanged" ResetIndex="FIRST" TabOrder="22" Top="527" Width="147"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="128" Style="static" TabOrder="8" Top="32" VAlign="Middle" Width="95"></Static>
+		<Combo BindDataset="ds_HMP100" Border="Flat" BorderColor="#888888" CodeColumn="PCODE" Color="#333333" Column="JICCDN" DataColumn="PCONT" Height="23" Id="Combo0" INDEX="0" InnerDataset="ds_Code2" Left="898" OnChanged="on_compChange" ResetIndex="FIRST" TabOrder="23" Top="527" Width="147"></Combo>
+		<Combo BindDataset="ds_HMP100" Border="Flat" BorderColor="#888888" CodeColumn="CODE" Color="#333333" Column="SEXCDN" DataColumn="NAME" Height="23" Id="Combo1" INDEX="0" InnerDataset="ds_Code3" Left="378" ResetIndex="FIRST" TabOrder="24" Top="527" Width="147"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static2" Left="8" TabOrder="25" Text="ㆍ휴직" Top="553" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static5" Left="268" TabOrder="26" Text="ㆍ예산" Top="551" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static6" Left="528" TabOrder="27" Text="ㆍ종합직" Top="551" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static10" Left="788" TabOrder="28" Text="ㆍ일반" Top="553" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static11" Left="8" TabOrder="29" Text="ㆍ해외출향" Top="579" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static12" Left="268" TabOrder="30" Text="ㆍ역출향" Top="577" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static13" Left="528" TabOrder="31" Text="ㆍ계약직" Top="577" VAlign="Middle" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Font="굴림,9,Bold" Height="27" Id="Static14" Left="788" TabOrder="32" Text="ㆍ비고" Top="579" VAlign="Middle" Width="110"></Static>
+		<Button Height="21" Id="Button1" Left="896" OnClick="fn_Search" TabOrder="33" Text="수정" Top="32" Width="104"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 민명규
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HMP100.xml
+ * ● PROGRAM DESCRIPTION  : 인원현황 조회 및 등록
+ * ● DATE WRITTEN         : 2014.04.01
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); //공장구분 선택
+	getCode(); //코드 선택
+	//MainGrid.UserData = MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+}
+
+function getCode(){
+	var sKind		= "getCode1";
+	var sMethodName = "service::pshumlib/selectCode1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_Code1=ds_Code1";
+	var sArgument   = "";
+	
+	http.Sync=true;			
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	
+	sKind		= "getCode2";						
+	sMethodName = "service::pshumlib/selectCode2.do"; 
+	sInDataSet  = "";
+	sOutDataSet = "ds_Code2=ds_Code2";
+	sArgument   = "";
+				
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	
+	http.Sync=false;
+}
+
+function getDesign(){
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+}
+
+function getHMP100(){
+
+	var sKind		= "getHMP100";						
+	var sMethodName = "service::pshumlib/selectHMP100.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HMP100=ds_HMP100";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " KDYYM=" + quote(substr(cmb_KDYYM.Value,0,6)); //년월
+	
+	var str = dialog("Common::PGMLOAD_IMM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+
+	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+	var result = true;
+	var sdVal = "";
+	var edVal = "";
+	
+	if (sdVal == "" || edVal == "")
+	{
+		alert(setPopMessage("3048"));
+		result = false;
+	}
+	else if(sdVal > edVal)
+	{
+		alert(setPopMessage("3049"));
+		result =false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_HMS000Q.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "인원관리 현황";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|인원관리 현황";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getHMP100();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function selsabun_OnClick(obj,nX,nY)
+{	
+	if(ds_userList.rowcount <= 0){
+		return;
+	}
+	var str = dialog("System::UserList_pop.xml","사용자조회",300,300,"TitleBar=false");	
+}
+
+
+
+function cb_grade_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+   
+}
+]]></Script>
+</Window>

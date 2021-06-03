@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="년판매계획대&#32;실적집계조회&#32;업체&#32;상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" GroupKey="PRDCD" Id="ds_SPYC908QD" UseClientLayout="1">
+				<Contents>
+					<colinfo id="PRDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="V" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="D01" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D02" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D03" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D04" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D05" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D06" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D07" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="D08" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_house">
+				<Contents>
+					<colinfo id="housecd" size="256" summ="default" type="STRING"/>
+					<colinfo id="housenm" size="256" summ="default" type="STRING"/>
+					<record>
+						<housecd>1</housecd>
+						<housenm>1</housenm>
+					</record>
+					<record>
+						<housecd>V</housecd>
+						<housenm>V</housenm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SPYC908QD" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="620" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="588" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1058" TabOrder="1" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="100"/>
+						<col width="200"/>
+						<col width="100"/>
+						<col width="120"/>
+						<col width="100"/>
+						<col width="120"/>
+						<col width="100"/>
+						<col width="120"/>
+						<col width="100"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="코드"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="계획내역&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="계획내역&#32;금액"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="실적내역&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="실적내역&#32;금액"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="차기내역&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="차기내역&#32;금액"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="차이내역&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="차이내역&#32;금액"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="PRDCD" display="normal" suppress="1"/>
+						<cell align="left" col="1" colid="V" display="normal"/>
+						<cell align="left" col="2" colid="ITDSC" display="normal"/>
+						<cell align="right" col="3" colid="D01" display="number" Mask="#,##0"/>
+						<cell align="right" col="4" colid="D02" display="number" Mask="#,##0"/>
+						<cell align="right" col="5" colid="D03" display="number" Mask="#,##0"/>
+						<cell align="right" col="6" colid="D04" display="number" Mask="#,##0"/>
+						<cell align="right" col="7" colid="D05" display="number" Mask="#,##0"/>
+						<cell align="right" col="8" colid="D06" display="number" Mask="#,##0"/>
+						<cell align="right" col="9" colid="D07" display="number" Mask="#,##0"/>
+						<cell align="right" col="10" colid="D08" display="number" Mask="#,##0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="3" display="text" text="TOTAL"/>
+						<cell align="right" col="3" display="number" expr='SUM(&quot;D01&quot;)' Mask="#,##0"/>
+						<cell align="right" col="4" display="number" expr='SUM(&quot;D02&quot;)' Mask="#,##0"/>
+						<cell align="right" col="5" display="number" expr='SUM(&quot;D03&quot;)' Mask="#,##0"/>
+						<cell align="right" col="6" display="number" expr='SUM(&quot;D04&quot;)' Mask="#,##0"/>
+						<cell align="right" col="7" display="number" expr='SUM(&quot;D05&quot;)' Mask="#,##0"/>
+						<cell align="right" col="8" display="number" expr='SUM(&quot;D06&quot;)' Mask="#,##0"/>
+						<cell align="right" col="9" display="number" expr='SUM(&quot;D07&quot;)' Mask="#,##0"/>
+						<cell align="right" col="10" display="number" expr='SUM(&quot;D08&quot;)' Mask="#,##0"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Button Cursor="HAND" Height="20" Id="Button5" ImageID="comBtn_excel" Left="997" OnClick="setExcel" TabOrder="4" Text="검색" Top="4" Width="59"></Button>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="5" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="4" Width="24"></File>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : 황규철
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI001.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){	
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	getSPYC908QD();		
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSPYC908QD(){
+	var sKind		= "getSPYC908QD";						
+	var sMethodName = "service::pssallib/selectSPYC908QD.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SPYC908QD=ds_SPYC908QD";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += "@PLTCD=" + quote(cb_searchCodeName2.Value);
+	sArgument += "@PLNGB=" + quote("1");
+	sArgument += "@PLNYM1=" + quote(SubStr(Calendar0.Value,0,6));
+	sArgument += "@PLNYM2=" + quote(SubStr(AddMonth(Calendar0.Value,11),0,6));	
+	sArgument += "@PLNYM3=" + quote(SubStr(Calendar1.Value,0,6));
+	sArgument += "@PLNYM4=" + quote(SubStr(AddMonth(Calendar1.Value,11),0,6));	
+	sArgument += "@JPSDT1=" + quote(SubStr(Calendar2.Value,0,6));
+	sArgument += "@JPSDT2=" + quote(SubStr(AddMonth(Calendar2.Value,11),0,6));
+	sArgument += "@PYVND=" + quote(PYVND);	
+
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "년판매계획대 실적집계조회 업체 상세";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|년판매계획대 실적집계조회 업체 상세";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getSPYC908QD"){
+		// 조회건수가 없을경우
+		if(ds_SPYC908QD.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+  
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSPYC908QD();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE></TITLE>
+<meta http-equiv="Content-Type" content="text/html">
+
+<SCRIPT LANGUAGE="JavaScript" src="../resources/static/js/miInstall.js"></SCRIPT>
+<script language="vbscript">
+
+	Function  Check_Module
+	  
+	  	On Error Resume Next
+	  	
+	   	Err.number = 0
+	   	chkMsg= document.MiInstaller.Version
+		'msgbox checkMsg
+	  	if  Err.number = 438 Then	
+			Check_Module = "false"
+	  	Else
+	        Check_Module = "true"
+	  	End If
+	End Function 
+</script>
+
+<SCRIPT LANGUAGE="JavaScript">
+	var TotalVersionFileCnt;
+	var TotalItemCnt;
+	var progressColor = "red";	// set to progress bar color
+	var pg_cell_At = 0,pg1_cell_At = 0; 
+	var IsError = false;
+	var proMsg, procMsg;
+	
+	function fn_OnLoad()
+	{
+		MiInstaller.Key = "DENSO_SHIPMENT2";
+		MiInstaller.Launch = true;	
+		//MiInstaller.Width  = 1920;
+		//MiInstaller.Height	= 1080;
+		MiInstaller.Width  = 1920;//단말해상도
+		MiInstaller.Height	= 1024;//단말해상도
+		//MiInstaller.Height	= 600;
+		MiInstaller.Retry = 1;
+		MiInstaller.Timeout = 300;
+		//MiInstaller.GlobalVal = "";
+		MiInstaller.GlobalVal = "";
+		//alert(MiInstaller.GlobalVal);
+		MiInstaller.OnlyOne = true;
+		//MiInstaller.StartXml  = "http://10.74.139.50/ui/denso_m_ci_main2_Win32_Truck.xml";
+		MiInstaller.StartXml  = "http://10.73.254.36/ui/denso_m_ci_main2_Win32_Truck.xml";
+		//MiInstaller.StartXml  = "${serverAddr}${cp}/ui/denso_ci_main_Win32.xml";
+		MiInstaller.InitUrl = "SHIPMENT::FSAZ160Q_P.xml";
+		MiInstaller.Resource = "";	
+		MiInstaller.StartImage  = "";
+
+		fn_run();
+
+	}
+
+	function page_link()
+	{
+	
+		// 단축 아이콘 만들기
+		// UBKImage : 250 * 300
+		
+		//BYTE가 256을 넘으면 안됨..
+		// 256을 넘을 경우 MiInstaller의 property를 이용할것
+
+		var strCommand = '-V 3.2 -D Win32U -R FALSE -K Education -L TRUE -LE TRUE -BI "" ';
+		alert(strCommand);        
+		MiInstaller.MakeShortCut("%system%MiUpdater320.exe",strCommand,"Education","","");
+		
+		// MakeShortCut 바로가기를 만드는 함수
+		// strExeName: 바로가기를 만들 실행 파일 이름
+		// strCommand: 바로가기를 만들 때 필요한 Command 정보
+		// strShortcutName: 바로가기 파일 이름
+		// strIConPath: 변경하려는 Icon 경로를 %alias%형태로 입력할 수 있습니다.
+		// strPos: Startmenu-시작 / Desktop-바탕화면(Default)
+	
+		// Alias 참고
+		// %MiPlatform%
+		// %Component%
+		// %system%
+		// %Window%
+		// %ProgramFiles%
+	
+	} 
+
+	function fn_run()
+	{
+		//단축 아이콘 생성
+		//page_link();
+		MiInstaller.run();
+		opener = self;  
+		CloseWnd(); // 익스플로어 7 이상 종료 함수
+
+	}
+
+	function CloseWnd()
+	{
+	  window.opener = 'nothing';
+	  window.open('','_parent','');
+	  window.close();
+	}
+
+</SCRIPT>
+
+
+</HEAD>
+
+<BODY leftmargin="0" topmargin="0" onload="fn_OnLoad()">
+<br>1234<br>
+
+
+<SCRIPT LANGUAGE="JavaScript">
+	CreateMiInstlr("MiInstaller","Win32U","3.2","denso");
+</SCRIPT>
+</BODY>
+</HTML>

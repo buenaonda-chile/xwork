@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-AMC.xml (編集不可)
+ * 
+ * AI-JM(Spring) AijmMainController の AOP 設定ファイルです。
+ * AI-JM(Spring) AijmMainController の JDBC 設定ファイルです。
+ * 
+ * 以下の DB 接続情報を定義しています。
+ * 
+ *  ・トランザクションマネージャーの設定
+ *  ・データソースの設定
+ *  ・jdbc.properties の指定
+ *  ・MyBatis の設定
+ * 
+ * $ applicationContext-AMC.xml 1765 2015-07-03 10:27:54Z 815372040074 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+
+    <!-- AOP設定 =========================================================== -->
+    <aop:config>
+        <aop:pointcut id="serviceAop"
+            expression="execution(* *..*Service.*(..))" />
+        <aop:pointcut id="daoAop"
+            expression="execution(* *..*Dao.*(..))" />
+
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="transactionInterceptor" />
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="serviceLoggingAdvice" />
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="daoLoggingAdvice" />
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="integrationLayerThrowsAdvice" />
+
+    </aop:config>
+
+    <!-- トランザクション設定 ============================================== -->
+    <tx:advice id="transactionInterceptor"
+        transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- 既存トランザクションを使用する設定 (REQUIRED) -->
+            <tx:method name="create*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="update*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="delete*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="search*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="true"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="transact*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+
+            <!-- 新規トランザクションを使用する設定 (REQUIRES_NEW) -->
+            <tx:method name="autonomousCreate*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousUpdate*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousDelete*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousSearch*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="true"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousTransact*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- Bean 定義 ========================================================= -->
+    <!-- Serviceログ出力 -->
+    <bean id="serviceLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.ServiceLoggingInterceptor" />
+
+    <!-- Daoログ出力 -->
+    <bean id="daoLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.DaoLoggingInterceptor" />
+
+    <!-- Integrationレイヤの例外ハンドラ  -->
+    <bean id="integrationLayerThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.IntegrationLayerThrowsAdvice" />
+    <!-- AOP設定 =========================================================== -->
+
+
+    <!-- JDBC設定 ======================================================== -->
+    <!-- トランザクション管理 ============================================== -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- データソース ====================================================== -->
+    <bean id="dataSource"
+        class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="initialSize" value="3" />
+        <property name="maxTotal" value="10" />
+        <property name="maxIdle" value="3" />
+        <property name="maxWaitMillis" value="10000" />
+        <property name="minIdle" value="3" />
+        <property name="removeAbandonedOnBorrow" value="true" />
+        <property name="removeAbandonedOnMaintenance" value="true" />
+        <property name="removeAbandonedTimeout" value="300" />
+        <property name="logAbandoned" value="false" />
+        <property name="accessToUnderlyingConnectionAllowed"
+            value="true" />
+    </bean>
+
+    <!-- JDBCプロパティファイル ============================================ -->
+    <bean id="jdbcConnectionConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="jdbc-akatsuki.properties" />
+    </bean>
+
+    <!-- MyBATIS 設定 ======================================================= -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+    
+    <bean id="sqlSessionFactory"
+        class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation">
+            <value>classpath:mybatis-config-AMC.xml</value>
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+     </bean>
+
+
+    <!-- JDBC設定 ======================================================== -->
+
+
+    <!-- キュー実行準備及び実行のためのサービスです。 -->
+    <bean id="queueExecute"
+        class="com.globaldenso.ai.akatsuki.aijm.QueueExecutePrepare">
+        <property name="queueService" ref="queueService" />
+        <property name="jobManageService" ref="jobManageService" />
+        <property name="queueWatchFacadeService" ref="queueWatchFacadeService" />
+    </bean>
+
+
+    <!-- Service実装 -->
+    <!-- キューに関するサービスクラス DI用の設定です -->
+    <bean id="queueService"
+        class="com.globaldenso.ai.akatsuki.business.service.QueueServiceImpl">
+        <property name="queueInfDao" ref="queueInfDao" />
+        <property name="jobManageDao" ref="jobManageDao" />
+        <property name="queueExecuteHistoryService" ref="queueExecuteHistoryService" />
+    </bean>
+
+    <!-- ジョブに関するサービスクラス DI用の設定です -->
+    <bean id="jobManageService"
+        class="com.globaldenso.ai.akatsuki.business.service.JobManageServiceImpl">
+        <property name="jobManageDao" ref="jobManageDao" />
+    </bean>
+
+    <!-- 常駐プロセス起動時に自身のキューを作成するサービスクラス DI用の設定です -->
+    <!-- QueueExecuteSchduleが生成したcontextよりgetbeanして実行しています -->
+    <bean id="residensWakeUpService"
+        class="com.globaldenso.ai.akatsuki.aijm.business.service.ResidensWakeUpServiceImpl">
+        <property name="queueService" ref="queueService" />
+        <property name="jobManageService" ref="jobManageService" />
+        <property name="jobYmdCalculation" ref="jobYmdCalculation" />
+    </bean>
+
+    <!-- QueueExecuteProcMainが呼び出すFacadeクラスです。 -->
+    <bean id="queueExecuteProcMainFacadeService"
+        class="com.globaldenso.ai.akatsuki.aijm.business.service.QueueExecuteProcMainFacadeServiceImpl">
+        <property name="queueService" ref="queueService" />
+        <property name="jobManageService" ref="jobManageService" />
+    </bean>
+
+    <!-- キュー監視に関するFacadeクラスです。 -->
+    <bean id="queueWatchFacadeService"
+        class="com.globaldenso.ai.akatsuki.aijm.business.service.QueueWatchFacadeServiceImpl">
+        <property name="queueService" ref="queueService" />
+    </bean>
+
+    <!-- QUEUE_EXECUTE_HISTORY操作用のService -->
+    <bean id="queueExecuteHistoryService"
+        class="com.globaldenso.ai.akatsuki.business.service.QueueExecuteHistoryServiceImpl">
+        <property name="queueExecuteHistoryInfDao"
+            ref="queueExecuteHistoryInfDao" />
+        <property name="queueService" ref="queueService" />
+    </bean>
+
+    <!-- System Master Service -->
+    <bean id="aijbSysManageService" class="com.globaldenso.ai.akatsuki.auto.business.service.AijbSysManageServiceImpl">
+        <property name="aijbSysManageDao" ref="aijbSysManageDao" />
+    </bean>
+
+    <!-- DAO実装 -->
+    <!-- ======================================================================================== -->
+    <bean id="queueInfDao"
+        class="com.globaldenso.ai.akatsuki.integration.QueueInfDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <bean id="jobManageDao"
+        class="com.globaldenso.ai.akatsuki.integration.JobManageDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+    
+    <bean id="queueExecuteHistoryInfDao"
+        class="com.globaldenso.ai.akatsuki.integration.QueueExecuteHistoryInfDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <!-- System Master DAO -->
+    <bean id="aijbSysManageDao" class="com.globaldenso.ai.akatsuki.auto.integration.dao.AijbSysManageDaoImpl">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+    </bean>
+
+    <!-- Utility実装 -->
+    <!-- ======================================================================================== -->
+    <!-- JobYmdCalculation -->
+    <bean id="jobYmdCalculation" class="com.globaldenso.ai.akatsuki.util.JobYmdCalculationImpl">
+        <property name="aijbSysManageService" ref="aijbSysManageService" />
+    </bean>
+
+</beans>

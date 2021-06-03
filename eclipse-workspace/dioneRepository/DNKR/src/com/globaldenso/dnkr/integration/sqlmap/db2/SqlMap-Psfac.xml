@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PsfacDao">
+    
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Psfac" type="PsfacDb2Domain">
+        <result property="comps" column="COMPS" />
+        <result property="itmno" column="ITMNO" />
+        <result property="itmnm" column="ITMNM" />
+        <result property="wrknm" column="WRKNM" />
+        <result property="gubcd" column="GUBCD" />
+        <result property="wrktms" column="WRKTMS" />
+        <result property="wrktmp" column="WRKTMP" />
+        <result property="pwkdth" column="PWKDTH" />
+        <result property="inttx" column="INTTX" />
+        <result property="wrktm" column="WRKTM" />
+        <result property="pwktmh" column="PWKTMH" />
+        <result property="smgdth" column="SMGDTH" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+   
+    <!-- 설비번호에 따른 정보 조회 -->
+	<select id="selectFEP200PF" resultMap="Psfac" parameterType="PsfacDb2Domain">
+		SELECT 
+				  A.COMPS
+				, TRIM(A.ITMNO) AS ITMNO
+				, TRIM(B.ITMNM) AS ITMNM
+				, A.YANNO || '-'  || A.SPECD || '-'  || A.GUBCD || '-'  || A.PHINO AS WRKNM
+				, CASE 
+					WHEN A.GUBCD='1' THEN '개발' 
+					WHEN A.GUBCD='2' THEN '양산설비'
+					WHEN A.GUBCD='3' THEN '수리'
+					WHEN A.GUBCD='4' THEN '노후신작' 
+					ELSE '' 
+				  END AS GUBCD
+			    , CASE 
+			    	WHEN (D.WRKTM IS NULL OR C.PWKTMH IS NULL) OR (D.WRKTM=0 OR C.PWKTMH=0) 
+			    		THEN 0 
+		    		ELSE ROUND(DOUBLE(D.WRKTM)/DOUBLE(C.PWKTMH)*100,2)  
+	    		  END AS WRKTMS
+	    		, CASE 
+	    			WHEN (E.PWKTMH IS NULL OR C.PWKTMH IS NULL) 
+	    				OR (E.PWKTMH=0 OR C.PWKTMH=0) THEN 0 
+    				ELSE ROUND(DOUBLE(E.PWKTMH)/DOUBLE(C.PWKTMH)*100,2)  
+   				  END AS WRKTMP
+			<!-- 
+				,	CASE WHEN (D.WRKTM IS NULL OR E.PWKTMH IS NULL) OR (D.WRKTM=0 OR E.PWKTMH=0) THEN 0 ELSE ROUND(DOUBLE(D.WRKTM)/DOUBLE(E.PWKTMH)*100,2)  END AS WRKTMS
+			 -->
+			 	, COALESCE(C.PWKDTH,0) AS PWKDTH
+			 	, TRIM(A.INTTX) AS INTTX
+			 	, D.WRKTM
+			 	, C.PWKTMH
+			 	, C.SMGDTH  
+		FROM	PSCDBLIB.FEH100PF A
+		LEFT OUTER JOIN PSCDBLIB.FEE100PF B 
+			ON A.COMPS=B.COMPS AND A.ITMNO=B.ITMNO AND A.YANNO=B.YANNO AND A.SPECD=B.SPECD
+		LEFT OUTER JOIN (
+			SELECT 
+					A.COMPS
+				  , A.ITMNO
+				  , A.YANNO
+				  , A.SPECD
+				  , A.GUBCD
+				  , A.PHINO
+				  , SUM(A.PWKTMH) AS PWKTMH
+				  , SUM(A.PMCTMH) AS PMCTMH
+				  , MAX(A.PWKDTH) AS PWKDTH
+				  , MAX(A.SMGDTH) AS SMGDTH
+			FROM 
+				PSCDBLIB.FEP200PF A
+			GROUP BY A.COMPS, A.ITMNO, A.YANNO, A.SPECD, A.GUBCD, A.PHINO
+			) C 
+			ON A.COMPS=C.COMPS AND A.ITMNO=C.ITMNO AND A.YANNO=C.YANNO 
+				AND A.SPECD=C.SPECD AND A.GUBCD=C.GUBCD AND A.PHINO=C.PHINO
+		LEFT OUTER JOIN (
+			SELECT 
+					A.COMPS
+				  , A.ITMNO
+				  , A.YANNO
+				  , A.SPECD
+				  , A.GUBCD
+				  , A.PHINO
+				  , SUM(A.WRKTM) AS WRKTM
+				  , SUM(A.MCHTM) AS MCHTM
+			FROM 
+				PSCDBLIB.FEW100PF A
+			GROUP BY  A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO
+		) D 
+			ON A.COMPS=D.COMPS AND A.ITMNO=D.ITMNO AND A.YANNO=D.YANNO 
+				AND A.SPECD=D.SPECD AND A.GUBCD=D.GUBCD AND A.PHINO=D.PHINO
+		LEFT OUTER JOIN (
+			SELECT 
+					  A.COMPS
+					, A.ITMNO
+					, A.YANNO
+					, A.SPECD
+					, A.GUBCD
+					, A.PHINO
+					, SUM(A.PWKTMH) AS PWKTMH
+					, SUM(A.PMCTMH) AS PMCTMH
+					, MAX(A.PWKDTH) AS PWKDTH
+					, MAX(A.SMGDTH) AS SMGDTH
+			FROM 
+					PSCDBLIB.FEP200PF A
+			WHERE
+			 		A.PWKDTH <![CDATA[<]]>	substr(trim(char(date(current date), ISO)),1,4) 
+			 			|| substr(trim(char(date(current date), ISO)),6,2) 
+			 			|| substr(trim(char(date(current date), ISO)),9,2)
+			GROUP BY A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO
+		) E 
+			ON A.COMPS=E.COMPS AND A.ITMNO=E.ITMNO AND A.YANNO=E.YANNO 
+				AND A.SPECD=E.SPECD AND A.GUBCD=E.GUBCD AND A.PHINO=E.PHINO	
+		WHERE
+					A.COMPS=#{comps}
+				AND A.CHEGB ='9'
+				AND A.GUBCD != '3'
+		<if test="itmno != null and itmno != ''">
+				and A.ITMNO =#{itmno}
+		</if>
+		<if test="smgdth != null and smgdth != ''">
+			<choose>
+				<when test="smgdth == 1">
+					and C.SMGDTH != 0
+				</when>
+				<when test="smgdth == 0">
+					and (C.SMGDTH =0 OR C.SMGDTH IS NULL)
+				</when>	
+			</choose>					
+		</if>		
+	</select>
+    
+</mapper>

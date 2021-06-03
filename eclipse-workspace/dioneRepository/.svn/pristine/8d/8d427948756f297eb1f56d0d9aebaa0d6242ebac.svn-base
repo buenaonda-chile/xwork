@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="528" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;생산잔업지시" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="850" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04_Tab3">
+				<Contents>
+					<colinfo id="dptgu" size="256" summ="default" type="STRING"/>
+					<colinfo id="procs" size="256" summ="default" type="STRING"/>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADLG_NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADMD_NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADSM_NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="sprnm" size="256" summ="default" type="STRING"/>
+					<colinfo id="bstps" size="256" summ="default" type="INT"/>
+					<colinfo id="bstfm" size="256" summ="default" type="INT"/>
+					<colinfo id="bstto" size="256" summ="default" type="INT"/>
+					<colinfo id="bsmin" size="256" summ="default" type="INT"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04_Tab3Sub">
+				<Contents>
+					<colinfo id="daygu" size="256" summ="default" type="STRING"/>
+					<colinfo id="man" size="256" summ="default" type="INT"/>
+					<colinfo id="time" size="256" summ="default" type="INT"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_DAYGUBUN">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CD>D</CD>
+						<NAME>주간</NAME>
+					</record>
+					<record>
+						<CD>N</CD>
+						<NAME>야간</NAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE05_TAB1_TOP">
+				<Contents>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRMAN" size="256" summ="default" type="INT"/>
+					<colinfo id="QCMAN" size="256" summ="default" type="INT"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE05_TAB1_MID">
+				<Contents>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="STPSQ" size="256" summ="default" type="INT"/>
+					<colinfo id="STRTM" size="256" summ="default" type="INT"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="INT"/>
+					<colinfo id="SPRNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_DEPT">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="data" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>PR</cd>
+						<data>제조</data>
+					</record>
+					<record>
+						<cd>QC</cd>
+						<data>검사</data>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE05_TAB1_BOTTOM" OnLoadCompleted="DS_OBSE05_TAB1_BOTTOM_OnLoadCompleted" OnRowPosChanged="DS_OBSE05_TAB1_BOTTOM_OnRowPosChanged">
+				<Contents>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSLG" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSSM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSTPS" size="256" summ="default" type="INT"/>
+					<colinfo id="BSTFM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSTTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSMIN" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPRNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="205" Id="st_top" Left="1" TabOrder="25" Text="이상발생&#32;시간" Top="320" Width="845"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="59" Id="Static18" Left="8" TabOrder="49" Top="360" Width="830"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="200" Id="st_bottom" Left="1" TabOrder="26" Text="비가동&#32;시간" Top="112" Width="845"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="136" Id="Static10" Left="504" TabOrder="40" Top="168" Width="335"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="96" Id="Static0" Left="1" TabOrder="27" Text="작업&#32;인원" Top="8" Width="845"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="40" Id="Static1" Left="248" TabOrder="28" Top="56" Width="590"></Static>
+		<Edit Align="RIGHT" BindDataset="DS_OBSE05_TAB1_TOP" CheckLength="Byte" Column="prman" Height="20" Id="ed_prman" Left="552" MaxLength="2" TabOrder="6" Text="&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;" Top="67" Width="64"></Edit>
+		<Edit Align="RIGHT" BindDataset="DS_OBSE05_TAB1_TOP" CheckLength="Byte" Column="qcman" Height="20" Id="ed_qcman" Left="768" MaxLength="2" TabOrder="7" Text="&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;" Top="67" Width="64"></Edit>
+		<Combo BindDataset="DS_OBSE05_TAB1_TOP" CodeColumn="CD" Column="daygu" DataColumn="NAME" Height="20" Id="cmb_gubun_top" ImeMode="none" InnerDataset="DS_DAYGUBUN" Left="328" TabOrder="5" Top="66" Width="64"></Combo>
+		<Static Height="12" Id="Static2" Left="275" TabOrder="29" Text="주야구분" Top="71" Width="46"></Static>
+		<Static Height="12" Id="Static3" Left="499" TabOrder="30" Text="제조인원" Top="71" Width="46"></Static>
+		<Static Height="12" Id="Static4" Left="715" TabOrder="31" Text="검사인원" Top="71" Width="46"></Static>
+		<Button Height="22" Id="btn_top_save" ImageID="comBtn_save" Left="712" OnClick="btn_top_save_OnClick" TabOrder="3" Text="저장" Top="24" Width="53"></Button>
+		<Button Height="22" Id="btn_top_del" ImageID="comBtn_del" Left="776" OnClick="btn_top_del_OnClick" TabOrder="4" Text="삭제" Top="24" Width="53"></Button>
+		<Grid BindDataset="DS_OBSE05_TAB1_TOP" BkColor2="default" BoldHead="true" Bottom="99" Enable="true" EndLineColor="default" HeadHeight="25" Height="67" Id="Grid0" InputPanel="FALSE" Left="8" LineColor="default" Right="237" TabOrder="32" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="229">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="62"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="제조인원"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="검사인원"/>
+					</head>
+					<body>
+						<cell col="0" colid="daygu" combocol="CD" combodataset="DS_DAYGUBUN" combotext="NAME" display="combo"/>
+						<cell col="1" colid="prman" display="number"/>
+						<cell col="2" colid="qcman" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="22" Id="btn_top_insert" ImageID="comBtn_add" Left="648" OnClick="btn_top_insert_OnClick" TabOrder="2" Text="추가" Top="24" Width="53"></Button>
+		<Button Height="22" Id="btn_mid_insert" ImageID="comBtn_add" Left="648" OnClick="btn_mid_insert_OnClick" TabOrder="8" Text="추가" Top="136" Width="53"></Button>
+		<Button Height="22" Id="btn_mid_save" ImageID="comBtn_save" Left="712" OnClick="btn_mid_save_OnClick" TabOrder="9" Text="저장" Top="136" Width="53"></Button>
+		<Button Height="22" Id="btn_mid_del" ImageID="comBtn_del" Left="776" OnClick="btn_mid_del_OnClick" TabOrder="10" Text="삭제" Top="136" Width="53"></Button>
+		<Button Height="22" Id="btn_bottom_insert" ImageID="comBtn_add" Left="648" OnClick="btn_bottom_insert_OnClick" TabOrder="15" Text="추가" Top="331" Width="53"></Button>
+		<Button Height="22" Id="btn_bottom_save" ImageID="comBtn_save" Left="712" OnClick="btn_bottom_save_OnClick" TabOrder="16" Text="저장" Top="331" Width="53"></Button>
+		<Button Height="22" Id="btn_bottom_del" ImageID="comBtn_del" Left="776" OnClick="btn_bottom_del_OnClick" TabOrder="17" Text="삭제" Top="331" Width="53"></Button>
+		<Grid BindDataset="DS_OBSE05_TAB1_MID" BkColor2="default" BoldHead="true" Bottom="304" Enable="true" EndLineColor="default" HeadHeight="25" Height="168" Id="Grid1" InputPanel="FALSE" Left="8" LineColor="default" Right="500" TabOrder="33" TabStop="true" Top="136" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="492">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="54"/>
+						<col width="48"/>
+						<col width="66"/>
+						<col width="66"/>
+						<col width="250"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="비가동&#32;원인"/>
+					</head>
+					<body>
+						<cell col="0" colid="daygu" combocol="CD" combodataset="DS_DAYGUBUN" combotext="NAME" display="combo"/>
+						<cell col="1" colid="stpsq" display="number"/>
+						<cell col="2" colid="strtm" display="text" Mask="@@:@@:@@"/>
+						<cell col="3" colid="endtm" display="text" Mask="@@:@@:@@"/>
+						<cell col="4" colid="sprnm" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Edit Align="RIGHT" BindDataset="DS_OBSE05_TAB1_MID" Column="stpsq" Enable="FALSE" Height="19" Id="Edit0" Left="745" Readonly="TRUE" TabOrder="34" Top="189" Width="85"></Edit>
+		<Edit BindDataset="DS_OBSE05_TAB1_MID" Column="sprnm" Height="19" Id="ed_sprnm" Left="591" TabOrder="14" Top="264" Width="241"></Edit>
+		<Combo BindDataset="DS_OBSE05_TAB1_MID" CodeColumn="CD" Column="daygu" DataColumn="NAME" Height="19" Id="cmb_gubun_mid" InnerDataset="DS_DAYGUBUN" Left="585" TabOrder="11" Top="189" Width="81"></Combo>
+		<Static Height="11" Id="Static5" Left="513" TabOrder="35" Text="주야구분&#32;:" Top="193" Width="56"></Static>
+		<Static Height="11" Id="Static6" Left="686" TabOrder="36" Text="SEQ&#32;:" Top="193" Width="56"></Static>
+		<Static Height="11" Id="Static7" Left="686" TabOrder="37" Text="종료시간&#32;:" Top="232" Width="56"></Static>
+		<Static Height="11" Id="Static8" Left="513" TabOrder="38" Text="시작시간&#32;:" Top="232" Width="56"></Static>
+		<Static Height="11" Id="Static9" Left="509" TabOrder="39" Text="비가동&#32;원인&#32;:" Top="267" Width="75"></Static>
+		<Static Height="11" Id="Static11" Left="16" TabOrder="41" Text="주야구분&#32;:" Top="376" Width="56"></Static>
+		<Static Height="11" Id="Static12" Left="16" TabOrder="42" Text="시작시간&#32;:" Top="400" Width="56"></Static>
+		<Static Height="11" Id="Static13" Left="168" TabOrder="43" Text="종료시간&#32;:" Top="400" Width="56"></Static>
+		<Static Height="11" Id="Static14" Left="322" TabOrder="44" Text="이상발생원인&#32;:" Top="400" Width="80"></Static>
+		<Static Height="11" Id="Static15" Left="168" TabOrder="45" Text="부서구분&#32;:" Top="376" Width="56"></Static>
+		<Static Height="11" Id="Static16" Left="322" TabOrder="46" Text="대/중/소&#32;코드&#32;:" Top="376" Width="85"></Static>
+		<Static Height="11" Id="Static17" Left="728" TabOrder="47" Text="인원&#32;:" Top="376" Width="35"></Static>
+		<Combo BindDataset="DS_OBSE05_TAB1_BOTTOM" CodeColumn="CD" Column="daygu" DataColumn="NAME" Height="19" Id="cmb_gubun_bottom" InnerDataset="DS_DAYGUBUN" Left="76" TabOrder="18" Top="372" Width="81"></Combo>
+		<Grid BindDataset="DS_OBSE05_TAB1_BOTTOM" BkColor2="default" BoldHead="true" Bottom="520" Enable="true" EndLineColor="default" HeadHeight="25" Height="96" Id="Grid2" InputPanel="FALSE" Left="8" LineColor="default" Right="838" TabOrder="48" TabStop="true" Top="424" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="830">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="40"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="234"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="부서"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="소분류"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="이상&#32;발생&#32;원인"/>
+					</head>
+					<body>
+						<cell col="0" colid="daygu" combocol="CD" combodataset="DS_DAYGUBUN" combotext="NAME" display="combo"/>
+						<cell col="1" colid="dptgu" combocol="cd" combodataset="DS_DEPT" combotext="data" display="combo"/>
+						<cell col="2" colid="CLGNM" display="text"/>
+						<cell col="3" colid="CMDNM" display="text"/>
+						<cell col="4" colid="CSMNM" display="text"/>
+						<cell align="right" col="5" colid="bstps" display="text"/>
+						<cell col="6" colid="bstfm" display="text" Mask="@@:@@:@@"/>
+						<cell col="7" colid="bstto" display="text" Mask="@@:@@:@@"/>
+						<cell col="8" colid="sprnm" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Combo BindDataset="DS_OBSE05_TAB1_BOTTOM" CodeColumn="cd" Column="dptgu" DataColumn="data" Height="19" Id="cmb_dept" InnerDataset="DS_DEPT" Left="229" TabOrder="19" Top="372" Width="56"></Combo>
+		<Image Cursor="HAND" Height="18" Id="img_cd" ImageID="ic_search" Left="696" OnClick="img_cd_OnClick" Static="FALSE" TabOrder="20" Top="374" Width="20"></Image>
+		<Edit Enable="FALSE" Height="20" Id="ed_cd" Left="411" TabOrder="0" Top="372" Width="277"></Edit>
+		<Edit Align="RIGHT" BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="bstps" Height="19" Id="ed_persons" Left="768" MaxLength="2" TabOrder="21" Top="372" Width="66"></Edit>
+		<Edit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="sprnm" Height="19" Id="ed_reason" Left="412" TabOrder="24" Top="397" Width="423"></Edit>
+		<MaskEdit BindDataset="DS_OBSE05_TAB1_MID" Column="strtm" Height="19" Id="MaskEd_strtm" Left="585" Mask="@@:@@:@@" TabOrder="12" Top="228" Type="STRING" Width="85"></MaskEdit>
+		<MaskEdit BindDataset="DS_OBSE05_TAB1_MID" Column="endtm" Height="19" Id="MaskEd_endtm" Left="745" Mask="@@:@@:@@" TabOrder="13" Top="228" Type="STRING" Width="85"></MaskEdit>
+		<MaskEdit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="bstfm" Height="19" Id="MaskEd_bstfm" Left="76" Mask="@@:@@:@@" TabOrder="22" Top="396" Type="STRING" Width="85"></MaskEdit>
+		<MaskEdit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="bstto" Height="19" Id="MaskEd_bstto" Left="229" Mask="@@:@@:@@" TabOrder="23" Top="396" Type="STRING" Width="85"></MaskEdit>
+		<Edit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="CLSLG" Height="15" Id="ed_lg" Left="422" TabOrder="50" Top="360" Visible="FALSE" Width="41"></Edit>
+		<Edit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="clsmd" Height="15" Id="ed_md" Left="472" TabOrder="51" Top="360" Visible="FALSE" Width="41"></Edit>
+		<Edit BindDataset="DS_OBSE05_TAB1_BOTTOM" Column="clssm" Height="15" Id="ed_sm" Left="520" TabOrder="52" Top="360" Visible="FALSE" Width="41"></Edit>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE05_1.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+var procs = "" ;
+var ordat = "" ;
+var bottom_CLSLG = "";
+var bottom_CLSMD = "";
+var bottom_CLSSM = "";
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	//getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-08
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE05Tab1(){
+	
+	var sKind		= "getOBSE05Tab1Top";						
+	var sMethodName = "service::psogmlib/selectOBSE05_Tab1_Top.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE05_TAB1_TOP=DS_OBSE05_TAB1_TOP";    			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);	
+	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	//검색시 그 결과값이 없을 때 추가ㅣ버튼을 누르면 로우가 추가되지 않기에 강제추가
+	if(DS_OBSE05_TAB1_TOP.GetRowCount() < 1){	
+		DS_OBSE05_TAB1_TOP.AddColumn("DAYGU");
+		DS_OBSE05_TAB1_TOP.AddColumn("PRMAN");
+		DS_OBSE05_TAB1_TOP.AddColumn("QCMAN");
+	}
+     
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////      
+	
+	var sKind		= "getOBSE05Tab1Mid";						
+	var sMethodName = "service::psogmlib/selectOBSE05_Tab1_Mid.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE05_TAB1_MID=DS_OBSE05_TAB1_MID";    			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);		
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+
+	//검색시 그 결과값이 없을 때 추가ㅣ버튼을 누르면 로우가 추가되지 않기에 강제추가
+	if(DS_OBSE05_TAB1_MID.GetRowCount() < 1){	
+		DS_OBSE05_TAB1_MID.AddColumn("DAYGU");
+		DS_OBSE05_TAB1_MID.AddColumn("STPSQ");
+		DS_OBSE05_TAB1_MID.AddColumn("STRTM");
+		DS_OBSE05_TAB1_MID.AddColumn("ENDTM");
+		DS_OBSE05_TAB1_MID.AddColumn("SPRNM");
+	}
+		
+	////////////////////////////////////////////////////////////////////////////////////////////////////////	
+		
+	var sKind		= "getOBSE05Tab1Bottom";						
+	var sMethodName = "service::psogmlib/selectOBSE05_Tab1_Bottom.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             							// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE05_TAB1_Bottom=DS_OBSE05_TAB1_Bottom";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);	
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	//검색시 그 결과값이 없을 때 추가ㅣ버튼을 누르면 로우가 추가되지 않기에 강제추가
+	if(DS_OBSE05_TAB1_Bottom.GetRowCount() < 1){	
+		DS_OBSE05_TAB1_Bottom.AddColumn("DAYGU");
+		DS_OBSE05_TAB1_Bottom.AddColumn("DPTGU");
+		DS_OBSE05_TAB1_Bottom.AddColumn("CLSLG");
+		DS_OBSE05_TAB1_Bottom.AddColumn("CLSMD");
+		DS_OBSE05_TAB1_Bottom.AddColumn("CLSSM");
+		DS_OBSE05_TAB1_Bottom.AddColumn("BSTPS");
+		DS_OBSE05_TAB1_Bottom.AddColumn("BSTFM");
+		DS_OBSE05_TAB1_Bottom.AddColumn("BSTTO");
+		DS_OBSE05_TAB1_Bottom.AddColumn("BSMIN");
+		DS_OBSE05_TAB1_Bottom.AddColumn("SPRNM");
+	}	
+	
+	http.Sync=false;
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	} else {			
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 공통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBSE05Tab1();	
+}
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{	
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+
+function btn_top_save_OnClick(obj)
+{
+	if(length(trim(cmb_gubun_top.Value)) > 0 and length(trim(ed_prman.Text)) > 0 and length(trim(ed_qcman.Text)) > 0) {	
+
+		var sKind		= "saveOBSE05_Tab1_Top";						
+		var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Top.do";     	// 서버에서 호출 될 Method 명
+		var sInDataSet  = "DS_OBSE05_TAB1_TOP=DS_OBSE05_TAB1_TOP:U";        // 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "";    							     			// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+	
+		var idnum = substr(G_ds_user.GetColumn(0,"USER_ID"),1,7);  			//유저아이디
+		sArgument += " PROCS=" + quote(procs);
+		sArgument += " ORDAT=" + quote(ordat);	
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+		http.Sync=false;	
+		
+		// 주간 야간이 있으면 걍 두고 업으면 insert row
+		getOBSE05Tab1();
+	
+	} else {
+		alert("주야구분, 제조인원, 검사인원을 바르게 입력해 주세요!");
+	}
+}
+
+function btn_top_del_OnClick(obj)
+{
+	DS_OBSE05_TAB1_TOP.DeleteRow(DS_OBSE05_TAB1_TOP.currow);
+	
+	var sKind		= "saveOBSE05_TAB1_TOP";						
+	var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Top.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "DS_OBSE05_TAB1_TOP=DS_OBSE05_TAB1_TOP:U";        // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							     			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+
+	var idnum = substr(G_ds_user.GetColumn(0,"USER_ID"),1,7);  //유저아이디
+	sArgument += " PROCS=" + quote(procs);
+	sArgument += " ORDAT=" + quote(ordat);	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+	
+	// 주간 야간이 있으면 걍 두고 업으면 insert row
+	//DS_OBSE05_TAB1_TOP.AddRow();
+	getOBSE05Tab1();
+}
+
+function btn_top_insert_OnClick(obj)
+{
+	if (DS_OBSE05_TAB1_TOP.rowcount < 2) {
+		DS_OBSE05_TAB1_TOP.AddRow();
+	} else {
+		alert("주간, 야간 각각 하나만 입력 가능합니다.");
+	}	
+}
+
+function btn_mid_insert_OnClick(obj)
+{
+	DS_OBSE05_TAB1_MID.AddRow();
+}
+
+function btn_mid_save_OnClick(obj)
+{
+	if(length(trim(ed_sprnm.Text)) > 0 and length(trim(cmb_gubun_mid.Value)) > 0 and length(trim(MaskEd_strtm.Value)) > 0 and length(trim(MaskEd_endtm.Value)) > 0) {	
+	
+		var sKind		= "saveOBSE05_Tab1_Mid";						
+		var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Mid.do";   // 서버에서 호출 될 Method 명
+		var sInDataSet  = "DS_OBSE05_TAB1_MID=DS_OBSE05_TAB1_MID:U";    //자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "";    							     		// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+	
+		sArgument += " PROCS=" + quote(procs);
+		sArgument += " ORDAT=" + quote(ordat);		
+		sArgument += " STMIN=" + quote(round((datetime(ordat + MaskEd_endtm.Value) - datetime(ordat + MaskEd_strtm.Value)) / 0.0000115741 / 60));
+			
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+		http.Sync=false;	
+		
+		getOBSE05Tab1();
+	
+	} else {
+		alert("입력항목을 바르게 입력해 주세요!");
+	}
+}
+
+function btn_mid_del_OnClick(obj)
+{
+	DS_OBSE05_TAB1_MID.DeleteRow(DS_OBSE05_TAB1_MID.currow);
+	
+	var sKind		= "saveOBSE05_TAB1_Mid";						
+	var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Mid.do";   // 서버에서 호출 될 Method 명
+	var sInDataSet  = "DS_OBSE05_TAB1_MID=DS_OBSE05_TAB1_MID:U";    //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							     		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+
+	sArgument += " PROCS=" + quote(procs);
+	sArgument += " ORDAT=" + quote(ordat);	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;	
+	
+	getOBSE05Tab1();
+}
+
+function img_cd_OnClick(obj,nX,nY)
+{
+	var rtn = dialog("psogmlib::OBSE05_FIND.xml","TAB=1",584,528);
+	
+	if (length(rtn) != 0){							
+		ed_lg.Text = rtn[0];
+		ed_md.Text = rtn[1];
+		ed_sm.Text = rtn[2];			
+		ed_cd.Text = rtn[3];
+	}	
+}
+
+function DS_OBSE05_TAB1_BOTTOM_OnRowPosChanged(obj,nOldRow,nRow)
+{	
+	if (DS_OBSE05_TAB1_Bottom.rowcount > 0) {
+		ed_cd.Text = DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CLGNM") + " / " + DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CMDNM") + " / " + DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CSMNM");
+	} else {
+		ed_cd.Text = "";
+	}		
+}
+
+function DS_OBSE05_TAB1_BOTTOM_OnLoadCompleted(obj,nErrorCode,strErrorMsg,nReason)
+{
+	if (DS_OBSE05_TAB1_Bottom.rowcount > 0) {
+		ed_cd.Text = DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CLGNM") + " / " + DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CMDNM") + " / " + DS_OBSE05_TAB1_Bottom.GetColumn(DS_OBSE05_TAB1_Bottom.currow,"CSMNM");
+	} else {
+		ed_cd.Text = "";
+	}	
+}
+
+function btn_bottom_insert_OnClick(obj)
+{
+	DS_OBSE05_TAB1_BOTTOM.AddRow();
+}
+
+function btn_bottom_save_OnClick(obj)
+{
+	if(length(trim(ed_reason.Text)) > 0 and length(trim(ed_cd.Text)) > 0 and length(trim(ed_persons.Text)) > 0 and length(trim(cmb_gubun_bottom.Value)) > 0 and length(trim(cmb_dept.Value)) > 0 and length(trim(MaskEd_bstfm.Value)) > 0 and length(trim(MaskEd_bstto.Value)) > 0) {	
+
+		var sKind		= "saveOBSE05_Tab1_Bottom";						
+		var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Bottom.do";     // 서버에서 호출 될 Method 명
+		var sInDataSet  = "DS_OBSE05_TAB1_BOTTOM=DS_OBSE05_TAB1_BOTTOM:U";  //자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "";    							     			// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+	
+		sArgument += " PROCS=" + quote(procs);
+		sArgument += " ORDAT=" + quote(ordat);		
+		sArgument += " BSMIN=" + quote(round((datetime(ordat + MaskEd_bstto.Value) - datetime(ordat + MaskEd_bstfm.Value)) / 0.0000115741 / 60));
+		
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+		http.Sync=false;	
+		
+		getOBSE05Tab1();
+	
+	} else {
+		alert("입력항목을 바르게 입력해 주세요!");
+	}
+}
+
+function btn_bottom_del_OnClick(obj)
+{
+	DS_OBSE05_TAB1_BOTTOM.DeleteRow(DS_OBSE05_TAB1_BOTTOM.currow);
+	
+	var sKind		= "saveOBSE05_Tab1_Bottom";						
+	var sMethodName = "service::psogmlib/saveOBSE05_Tab1_Bottom.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "DS_OBSE05_TAB1_BOTTOM=DS_OBSE05_TAB1_BOTTOM:U";   //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							     			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+
+	sArgument += " PROCS=" + quote(procs);
+	sArgument += " ORDAT=" + quote(ordat);		
+	sArgument += " STMIN=" + quote(round((datetime(ordat + MaskEd_bstto.Value) - datetime(ordat + MaskEd_bstfm.Value)) / 0.0000115741 / 60));
+	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+	
+	getOBSE05Tab1();			
+}
+]]></Script>
+</Window>

@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="ogm420" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="교정등록" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mst650pf"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_sortcd">
+				<Contents>
+					<colinfo id="grcd" size="256" summ="default" type="STRING"/>
+					<colinfo id="grnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<grcd>a.mngno</grcd>
+						<grnm>관리번호순</grnm>
+					</record>
+					<record>
+						<grcd>a.group,a.mngno</grcd>
+						<grnm>교정분야순</grnm>
+					</record>
+					<record>
+						<grcd>a.yedat,a.mngno</grcd>
+						<grnm>예정일순</grnm>
+					</record>
+					<record>
+						<grcd>b.dptcd,a.mngno</grcd>
+						<grnm>부서순</grnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420_sel2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420_sel1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_msg">
+				<Contents>
+					<colinfo id="CHKMSG" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_getSeqNo"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="559" Id="Static23" TabOrder="39" Top="65" Width="1058"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="3" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="4" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="3" Top="32" Width="1058"></Static>
+		<Button Cursor="HAND" Height="25" Id="brd1brnprint" ImageID="btn2_report2" Left="944" OnClick="brd1brnprint_OnClick" TabOrder="3" Text="통보서발행" Top="37" Width="85"></Button>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="294" TabOrder="7" Text="정렬순서" Top="387" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="grcd" DataColumn="grnm" Height="25" Id="cmbgrbsort2" INDEX="0" InnerDataset="ds_sortcd" Left="387" TabOrder="6" Top="387" Width="101"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="491" TabOrder="5" Text="사용부서" Top="387" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="code" DataColumn="cdnm" Editable="TRUE" Height="25" Id="cmbdptcd2" InnerDataset="ds_mst650pf" Left="584" Search="FILTERED" TabOrder="4" Top="387" Width="223"></Combo>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="813" TabOrder="8" Text="교정일자" Top="387" VAlign="Middle" Width="92"></Static>
+		<Calendar Dateformat="yyyy년MM월dd일" Height="26" Id="txtrpdat" Left="906" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="9" Top="387" Width="116"></Calendar>
+		<Button Cursor="HAND" Height="25" Id="btnsel2" ImageID="btn2_search2" Left="647" OnClick="btnsel2_OnClick" TabOrder="11" Text="조회" Top="360" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnselall2" ImageID="btn2_sele2" Left="947" OnClick="btnselall2_OnClick" TabOrder="12" Text="전체선택" Top="360" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnsave2" ImageID="sum_save" Left="875" OnClick="btnsave2_OnClick" TabOrder="13" Text="저&#32;&#32;&#32;&#32;&#32;&#32;장" Top="360" Width="70"></Button>
+		<Button Cursor="HAND" Height="25" Id="btndel2" ImageID="btn2_cancel2" Left="799" OnClick="btndel2_OnClick" TabOrder="14" Text="삭&#32;&#32;&#32;&#32;&#32;&#32;제" Top="360" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnconduct" ImageID="btn2_corr2" Left="723" OnClick="btnconduct_OnClick" TabOrder="14" Text="교정처리" Top="360" Width="75"></Button>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="295" TabOrder="18" Text="정렬순서" Top="106" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="grcd" DataColumn="grnm" Height="25" Id="cmbgrbsort1" INDEX="0" InnerDataset="ds_sortcd" Left="388" TabOrder="17" Top="105" Width="100"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="491" TabOrder="16" Text="사용부서" Top="105" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="code" DataColumn="cdnm" Editable="TRUE" Height="25" Id="cmbdptcd1" InnerDataset="ds_mst650pf" Left="584" Search="FILTERED" TabOrder="15" Top="104" Width="223"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="813" TabOrder="19" Text="예정년월" Top="105" VAlign="Middle" Width="92"></Static>
+		<Calendar Dateformat="yyyy년MM월" Height="26" Id="txtyedat" Left="906" LeftMargin="15" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="20" Top="106" Width="116"></Calendar>
+		<Button Cursor="HAND" Height="25" Id="btnaccept" ImageID="btn2_corrsub2" Left="796" OnClick="btnaccept_OnClick" TabOrder="25" Text="교정접수" Top="78" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnsel1" ImageID="btn2_search2" Left="719" OnClick="btnsel1_OnClick" TabOrder="22" Text="조회" Top="78" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnsave1" ImageID="sum_save" Left="873" OnClick="btnsave1_OnClick" TabOrder="24" Text="저&#32;&#32;&#32;&#32;&#32;&#32;장" Top="78" Width="70"></Button>
+		<Button Cursor="HAND" Height="25" Id="btnselall1" ImageID="btn2_sele2" Left="945" OnClick="btnselall1_OnClick" TabOrder="23" Text="전체선택" Top="78" Width="75"></Button>
+		<Grid AutoFit="TRUE" BindDataset="ds_ogm420_sel1" BkColor2="default" BoldHead="true" Bottom="336" Editable="TRUE" Enable="true" EndLineColor="default" Height="200" Id="Grid1" InputPanel="FALSE" Left="32" LineColor="default" MinWidth="100" OnHeadClick="Grid1_OnHeadClick" Right="1024" TabOrder="26" TabStop="true" Top="136" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="992">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="25"/>
+						<col width="70"/>
+						<col width="160"/>
+						<col width="75"/>
+						<col width="125"/>
+						<col width="75"/>
+						<col width="70"/>
+						<col width="75"/>
+						<col width="70"/>
+						<col width="150"/>
+						<col width="45"/>
+						<col width="30"/>
+						<col width="0"/>
+						<col width="0"/>
+						<col width="0"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="관리번호"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="장비명"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="제조회사"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="형식"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="장비번호"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="최종교정일"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="교정번호"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="예정일자"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="사용부서"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" text="처리"/>
+						<cell col="12" display="text"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text"/>
+					</head>
+					<body>
+						<cell align="right" col="0" colid="ROWNUM" display="text"/>
+						<cell col="1" colid="MNGNO" display="text" TrimType="Both"/>
+						<cell col="2" colid="MNAME" display="text"/>
+						<cell col="3" colid="MAKER" display="text"/>
+						<cell col="4" colid="MTYPE" display="text"/>
+						<cell col="5" colid="JNBNO" display="text"/>
+						<cell align="center" checklength="Byte" col="6" colid="RPDAT" display="date" edit="date"/>
+						<cell col="7" colid="REPNO" display="text" edit="normal" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="8" colid="YEDAT" display="date" edit="date"/>
+						<cell col="9" colid="DPDPNM" display="text"/>
+						<cell align="center" col="10" colid="G_GUB" display="text"/>
+						<cell col="11" colid="CHKFLAG" display="checkbox" edit="checkbox"/>
+						<cell col="12" colid="GROUP" display="text"/>
+						<cell col="13" colid="RCYCL" display="text"/>
+						<cell col="14" colid="PEDAT" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="35" TabOrder="30" Text="교정분야" Top="106" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="32" TabOrder="34" Text="교정분야" Top="387" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="grboption1" Left="129" TabOrder="35" Top="106" Width="164"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="grboption2" Left="125" TabOrder="36" Top="387" Width="165"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="128" TabOrder="37" Top="36" Width="120"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static10" TabOrder="37" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="120"></Static>
+		<Checkbox Height="20" Id="chk_group3" Left="247" TabOrder="29" Text="설비" Top="109" Value="FALSE" Width="42"></Checkbox>
+		<Checkbox Height="20" Id="chk_group2" Left="189" TabOrder="28" Text="검사구" Top="109" Value="FALSE" Width="59"></Checkbox>
+		<Checkbox Height="20" Id="chk_group1" Left="132" TabOrder="27" Text="측정기" Top="109" Value="FALSE" Width="57"></Checkbox>
+		<Checkbox Height="20" Id="chk_group33" Left="244" TabOrder="33" Text="설비" Top="392" Value="FALSE" Width="41"></Checkbox>
+		<Checkbox Height="20" Id="chk_group22" Left="186" TabOrder="32" Text="검사구" Top="391" Value="FALSE" Width="57"></Checkbox>
+		<Checkbox Height="20" Id="chk_group11" Left="129" TabOrder="31" Text="측정기" Top="391" Value="FALSE" Width="57"></Checkbox>
+		<Grid AutoFit="TRUE" BindDataset="ds_ogm420_sel2" BkColor2="default" BoldHead="true" Bottom="616" Editable="TRUE" Enable="true" EndLineColor="default" Height="200" Id="Grid2" InputPanel="FALSE" Left="32" LineColor="default" MinWidth="100" OnHeadClick="Grid2_OnHeadClick" Right="1024" TabOrder="40" TabStop="true" Top="416" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="992">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="25"/>
+						<col width="70"/>
+						<col width="160"/>
+						<col width="80"/>
+						<col width="125"/>
+						<col width="75"/>
+						<col width="70"/>
+						<col width="75"/>
+						<col width="70"/>
+						<col width="145"/>
+						<col width="44"/>
+						<col width="30"/>
+						<col width="0"/>
+						<col width="0"/>
+						<col width="0"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="관리번호"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="장비명"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="제조회사"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="형식"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="장비번호"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="최종교정일"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="교정번호"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="예정일자"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="사용부서"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" text="처리"/>
+						<cell col="12" display="text"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text"/>
+					</head>
+					<body>
+						<cell align="right" col="0" colid="ROWNUM" display="text"/>
+						<cell col="1" colid="MNGNO" display="text" TrimType="Both"/>
+						<cell col="2" colid="MNAME" display="text"/>
+						<cell col="3" colid="MAKER" display="text"/>
+						<cell col="4" colid="MTYPE" display="text"/>
+						<cell col="5" colid="JNBNO" display="text"/>
+						<cell align="center" checklength="Byte" col="6" colid="RPDAT" display="date" edit="date"/>
+						<cell col="7" colid="REPNO" display="text" edit="normal" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="8" colid="YEDAT" display="date" edit="date" expandsize="0" limit="8"/>
+						<cell col="9" colid="DPDPNM" display="text"/>
+						<cell align="center" col="10" colid="G_GUB" display="text"/>
+						<cell col="11" colid="CHKFLAG" display="checkbox" edit="checkbox"/>
+						<cell col="12" colid="GROUP" display="text"/>
+						<cell col="13" colid="RCYCL" display="text"/>
+						<cell col="14" colid="PEDAT" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Cursor="HAND" Height="25" Id="btndel1" ImageID="btn2_delete2" Left="569" OnClick="btndel1_OnClick" TabOrder="41" Text="삭&#32;&#32;&#32;&#32;&#32;&#32;제" Top="78" Visible="FALSE" Width="75"></Button>
+		<Edit Height="21" Id="lblpscg_seqno" Left="320" TabOrder="42" Top="72" Visible="FALSE" Width="57"></Edit>
+		<Edit Height="21" Id="lblpscm_seqno" Left="384" TabOrder="43" Top="72" Visible="FALSE" Width="57"></Edit>
+		<Button Height="25" Id="btnexcel" ImageID="sum_excel" Left="646" OnClick="btnexcel_OnClick" TabOrder="44" Text="엑셀출력" Top="78" Width="72"></Button>
+		<Edit Height="21" Id="conductFlag" Left="530" TabOrder="45" Top="361" Visible="FALSE" Width="46"></Edit>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static6" Left="121" TabOrder="46" Top="34" Width="140"></Static>
+		<Shape Bottom="350" Height="6" Id="Shape0" Left="10" LineColor="red" LineWidth="3" Right="1040" TabOrder="47" Top="344" Width="1030"></Shape>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm420.xml
+ * ● PROGRAM DESCRIPTION  : 교정등록
+ * ● DATE WRITTEN         : 2012.02.01
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today(); //날짜
+var saveQuery ="F";
+var mngno="";
+var chktrFalg="";
+
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+var userNm = G_ds_user.GetColumn(0,"USER_NAME");
+
+var nowTime = GetDate(); //시간
+var h=substr(nowTime,8,4); //시
+//var adusr =substr(userId,1,7);	// 2020.07.21 : CGI-AD로 로직변경
+var adusr =userId;
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+
+	//MainGrid.UserData = MainGrid.Height;
+
+	getogmGauge_mst650(); // 부서리스트취득
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053"); //상세화면 메시지
+	//MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	//MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	//MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	//MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	//MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	//MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	Static23.Width = G_ds_design.GetColumn(0,"Width");
+}
+
+/********************************************************************** 
+ * 내용설명 : 조회
+ **********************************************************************/ 
+function getOgm420(sel_group1, sel_group2, sel_group3, selflag, dptcd, cmbsort)
+{
+
+	var CheckedCount1 = parseInt(sel_group1)+parseInt(sel_group2)+parseInt(sel_group3);
+	var rvalue;
+	if (CheckedCount1 == 0){
+		rvalue = "('1','2','3')";
+	}else{		
+		rvalue = " (";
+		var checking = 0;
+		if (sel_group1 == 1){
+			checking = checking+1;
+			rvalue = rvalue+"'"+"1"+"'";
+		}
+		if (sel_group2 == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"2"+"'";
+		}
+		if (sel_group3 == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"3"+"'";
+		}
+		rvalue = rvalue+")";
+	}
+
+	var yedat = substr(txtyedat.Value,0,6);
+	var selds="";	
+	if (selflag=="sel1"){
+		selds = "ds_ogm420_sel1=ds_ogm420_sel";
+	}
+	else if (selflag=="sel2"){
+		selds = "ds_ogm420_sel2=ds_ogm420_sel";
+	}
+	//SQL_tme100pf_02 & SQL_tme101pf_01
+	var sKind		= "getOgm420";						
+	var sMethodName = "service::psogmlib/selectOgm420.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = selds;
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@PGROUP=" + quote(rvalue); //교정분야
+		sArgument += "@DPTCD=" + quote(dptcd);	 //부서
+		sArgument += "@SELORDERBY=" + quote(cmbsort);	 //정렬순서
+		sArgument += "@YEDAT=" + quote(yedat); //예정년월 조회1사용
+		sArgument += "@RPDAT=" + quote(txtrpdat.Value); //교정년월//조회2사용
+		sArgument += "@SELFLAG=" + quote(selflag); //조회구분
+		
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	/*
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	*/		
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+function setogm420_1(trflag){
+	
+	chktrFalg = trflag;
+ 	var sKind		= "setogm420_1";						
+	var sMethodName = "service::psogmlib/OGM420Save_accept.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ogm420_sel1=ds_ogm420_sel1:U";     //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_msg=CHKMSG";    							     // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);	
+		sArgument += " CHUSR=" + quote(adusr);
+		sArgument += " TRFLAG=" + quote(trflag);
+	http.Sync=true;
+	var rtnVal = Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+	chktrFalg = "";
+		//btnsel1_OnClick();
+		//btnsel2_OnClick();
+}
+
+function setogm420_2(trflag){
+	
+ 	var sKind		= "setogm420_2";						
+	var sMethodName = "service::psogmlib/OGM420Save_conduct.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ogm420_sel2=ds_ogm420_sel2:U";     //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_msg=CHKMSG";    							     // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);	
+		sArgument += " CHUSR=" + quote(adusr);
+		sArgument += " TRFLAG=" + quote(trflag);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		//alert(rtnCd);
+	// tran 성공
+	}else if(svcId=="setogm420_1"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+		if (chktrFalg =="insert"){
+			btnsel1_OnClick();		
+			btnsel2_OnClick();	
+		}
+		else {
+			btnsel1_OnClick();		
+		}
+	}else if(svcId=="setogm420_2"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+		conductFlag.Text="";	
+		txtrpdat.Text="";
+		btnsel2_OnClick();
+		btnsel1_OnClick();
+		
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	//saveQuery="F";
+	getOgm420();
+}
+
+function fn_Input()
+{
+	//if(checkInsertCount("ds_ogm420")== false) return;
+}
+
+function fn_Delete()
+{
+
+}
+function fn_Save()
+{
+	setogm420();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "교정등록(교정예정내역)";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "Grid1|교정등록(교정예정내역)";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid1_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid2_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 이벤트처리
+ **********************************************************************/ 
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 소속조회
+ **********************************************************************/ 
+function getogmGauge_mst650()
+{
+	var sKind		= "getMst650pf";						
+	var sMethodName = "service::psogmlib/selectOGMgauge_Mst650pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_mst650pf=ds_mst650pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+function btnsel1_OnClick(obj)
+{
+	if(txtyedat.Value == "")
+	{
+		alert(setPopMessage("2562"));
+		return false;
+	}
+	var sel1_group1 = chk_group1.Value; 
+	var sel1_group2 = chk_group2.Value; 
+	var sel1_group3 = chk_group3.Value;
+ 	var flag ="sel1";
+ 	var dptcd = cmbdptcd1.Value;
+ 	var cmbs = cmbgrbsort1.Value;
+	getOgm420(sel1_group1, sel1_group2, sel1_group3, flag, dptcd, cmbs);
+}
+
+function btnsel2_OnClick(obj)
+{
+	var sel1_group1 = chk_group11.Value; 
+	var sel1_group2 = chk_group22.Value; 
+	var sel1_group3 = chk_group33.Value; 
+	var flag ="sel2";
+ 	var dptcd = cmbdptcd2.Value;
+ 	var cmbs = cmbgrbsort2.Value;
+	getOgm420(sel1_group1, sel1_group2, sel1_group3, flag, dptcd, cmbs);
+	conductFlag.Text="";
+}
+
+function btnselall1_OnClick(obj)
+{
+	var rowcnt =ds_ogm420_sel1.GetRowCount();
+
+	if(rowcnt != 0)
+	{
+		for(var i = 0 ; i < rowcnt; i++)
+		{
+			if(ds_ogm420_sel1.GetColumn(i,"CHKFLAG")==0){
+				ds_ogm420_sel1.SetColumn(i,"CHKFLAG",1);
+			}else{
+				ds_ogm420_sel1.SetColumn(i,"CHKFLAG",0);
+			}
+		}
+	}
+}
+
+
+function btnselall2_OnClick(obj)
+{
+	var rowcnt =ds_ogm420_sel2.GetRowCount();
+
+	if(rowcnt != 0)
+	{
+		for(var i = 0 ; i < rowcnt; i++)
+		{
+			if(ds_ogm420_sel2.GetColumn(i,"CHKFLAG")==0){
+				ds_ogm420_sel2.SetColumn(i,"CHKFLAG",1);
+			}else{
+				ds_ogm420_sel2.SetColumn(i,"CHKFLAG",0);
+			}
+		}
+	}	
+}
+
+//사용안함. 사용가능하나 visible시킴.
+function btndel1_OnClick(obj)
+{
+	if (ds_ogm420_sel1.GetRowCount()!=0){
+		alert(setPopMessage("1011"));
+		setMessage("1011");
+		for(var i=ds_ogm420_sel1.GetRowCount();i>=0;i--)
+		{
+			if(ds_ogm420_sel1.GetColumn(i,"CHKFLAG")==1){
+				ds_ogm420_sel1.DeleteRow(i);
+			}
+		}
+	}
+	else{
+		//alert("삭제할 내역이 없습니다.");
+		alert(setPopMessage("2563"));
+	}
+}
+	
+function btnsave1_OnClick(obj)
+{
+	var tr="update";
+	operation1(tr);
+}
+
+function btnaccept_OnClick(obj)
+{
+	var tr="insert";
+	operation1(tr);
+	//btnsel1_OnClick();
+	//btnsel2_OnClick();
+	}	
+}
+
+
+function operation1(tr){
+	var msg ="";
+	if(tr=="insert"){
+		msg ="교정처리를 하시겠습니까?. 처리하려면 '확인'을, 취소하려면 '취소'를 클릭하세요.";
+	}
+	else if(tr=="update"){
+		msg ="수정처리를 하시겠습니까?. 처리하려면 '확인'을, 취소하려면 '취소'를 클릭하세요.";
+	}
+	var rowcnt=ds_ogm420_sel1.GetRowCount();
+	if (rowcnt==0){
+		//alert("처리할 내역이 없습니다.");
+		alert(setPopMessage("2564"));
+		return false;
+	}
+	else {
+		if(confirm(msg)){
+			var chkupdate=0;
+			for(var i = 0 ; i < rowcnt; i++)
+			{
+				if(ds_ogm420_sel1.GetColumn(i,"CHKFLAG") ==1){
+					if(ds_ogm420_sel1.GetColumn(i,"RPDAT")=="" || ds_ogm420_sel1.GetColumn(i,"YEDAT")==""){
+						//alert("최종교정일, 교정예정일을 정확히 입력하세요.");
+						alert(setPopMessage("2565"));
+					//if(ds_ogm420_sel1.GetColumn(i,"RPDAT")=="" || length(trim(ds_ogm420_sel1.GetColumn(i,"REPNO"))) == 0 || ds_ogm420_sel1.GetColumn(i,"YEDAT")==""){
+						//alert("최종교정일, 교정번호, 교정예정일을 정확히 입력하세요.");
+						return;
+					}
+					var repno = trim(ds_ogm420_sel1.GetColumn(i,"REPNO"));
+					var group = trim(ds_ogm420_sel1.GetColumn(i,"GROUP"));
+					if(length(repno) != 0)
+					{
+						if(group == "3")
+						{
+							ds_ogm420_sel1.SetColumn(i,"REPNO",repno); //repno
+						}
+						else
+						{
+							var arr = array();
+							arr = split(repno,"-");
+							var irepno = arr[0]+trim(arr[1]); //repno
+							var irepno = arr[0]+trim(arr[1]); //repno
+							ds_ogm420_sel1.SetColumn(i,"REPNO",irepno); //repno
+						}
+					}	
+					else
+					{
+						ds_ogm420_sel1.SetColumn(i,"REPNO",repno); //repno
+					}
+					chkupdate++;
+				}
+			}
+			if( chkupdate >0 ){
+				//var tr="insert";
+				setogm420_1(tr);			
+			}
+			else{
+				//alert("처리란에 체크해야 정상수행됩니다.");
+				alert(setPopMessage("2566"));
+			}
+		}
+		else{
+			return false;
+		}
+	}
+}
+
+function btndel2_OnClick(obj)
+{
+	var msg ="취소를 하시겠습니까?. 처리하려면 '확인'을, 취소하려면 '취소'를 클릭하세요.";
+	var rowcnt=ds_ogm420_sel2.GetRowCount();
+	if (rowcnt==0){
+		//alert("처리할 내역이 없습니다.");
+		alert(setPopMessage("2564"));
+		return false;
+	}
+	else {
+		if(confirm(msg)){
+			var chkupdate=0;
+			for(var i = 0 ; i < rowcnt; i++)
+			{
+				if(Grid2.GetCellValue(i,11)==1){
+					chkupdate++;
+				}
+			}
+			if( chkupdate >0 ){
+			 if (conductFlag.Text="OK"){
+				//alert("교정일처리 후 취소되지 않습니다. 재조회 후 취소해주세요.");
+				alert(setPopMessage("2567"));
+				return false;
+			 }	
+				var tr="delete";
+				setogm420_2(tr);
+				//conductFlag.Text="";	
+				//txtrpdat.Text="";
+				//btnsel2_OnClick();
+			}
+			else{
+				//alert("처리란에 체크해야 정상수행됩니다.");
+				alert(setPopMessage("2566"));
+			}
+		}
+		else{
+			return false;
+		}
+	}	
+}
+
+function btnsave2_OnClick(obj)
+{
+	var msg ="변경내역을 저장하시겠습니까?. 처리하려면 '확인'을, 취소하려면 '취소'를 클릭하세요.";
+	var rowcnt=ds_ogm420_sel2.GetRowCount();
+	if (rowcnt==0){
+		//alert("처리할 내역이 없습니다.");
+		alert(setPopMessage("2564"));
+		return false;
+	}
+	else {
+		if(confirm(msg)){
+			var chkupdate=0;
+			if(conductFlag.Text !="OK"){
+				alert("교정처리 후 저장하세요");
+				return false;
+			}
+			for(var i = 0 ; i < rowcnt; i++)
+			{
+				if(ds_ogm420_sel2.GetColumn(i,"CHKFLAG") ==1){
+					if(ds_ogm420_sel2.GetColumn(i,"RPDAT")=="" || ds_ogm420_sel2.GetColumn(i,"YEDAT")==""){
+						//alert("최종교정일, 교정예정일을 정확히 입력하세요.");
+						alert(setPopMessage("2565"));
+					//if(ds_ogm420_sel2.GetColumn(i,"RPDAT")=="" || length(trim(ds_ogm420_sel2.GetColumn(i,"REPNO"))) == 0 || ds_ogm420_sel2.GetColumn(i,"YEDAT")==""){
+						//alert("최종교정일, 교정번호, 교정예정일을 정확히 입력하세요.");
+						return;
+					}
+					var repno = trim(ds_ogm420_sel2.GetColumn(i,"REPNO"));
+					var group = trim(ds_ogm420_sel2.GetColumn(i,"GROUP"));
+					if(length(repno) != 0)
+					{
+						if(group == "3")
+						{
+							ds_ogm420_sel2.SetColumn(i,"REPNO",repno); //repno
+						}
+						else
+						{
+							//var arr = new Array();
+							var arr = array();
+							arr = split(repno,"-");
+							var irepno = arr[0]+trim(arr[1]); //repno
+					
+							ds_ogm420_sel2.SetColumn(i,"REPNO",irepno); //repno
+							}
+					}	
+					else
+					{
+						ds_ogm420_sel2.SetColumn(i,"REPNO",repno); //repno
+					}
+				chkupdate++;					
+				}
+			}
+			if( chkupdate >0 ){
+				var tr="update";
+				setogm420_2(tr);
+				//conductFlag.Text="";			
+			}
+			else{
+				//alert("처리란에 체크해야 정상수행됩니다.");
+				alert(setPopMessage("2566"));
+			}
+		}
+		else{
+			return false;
+		}
+	}		
+}
+//교정처리일자에 따라 교정번호와 다음 교정예정일자를 일괄으로 자동으로 생성한다.
+//예정일자 수정처리 (주기를 감안해서 계산 예정일자 = 교정일자 * 주기)
+//최종교정일은 교정일자의 내용입력, 예정일자는 교정주기로 계산하여 입력, 교정번호는 교정번호 계산함수 사용.
+
+function btnconduct_OnClick(obj)
+{
+	lblpscm_seqno.Value = "0"; //측정기
+	lblpscg_seqno.Value = "0"; //검사구
+
+	if(txtrpdat.Value == "")
+	{
+		//alert("교정일자를 입력해 주세요");
+		alert(setPopMessage("2568"));
+		return;
+	}
+	var rowcnt=ds_ogm420_sel2.GetRowCount();
+	if (rowcnt==0){
+		//alert("처리할 내역이 없습니다.");
+		alert(setPopMessage("2564"));
+		return false;
+	}
+	var chkupdate=0;
+	for(var i = 0 ; i < rowcnt; i++){
+		if(ds_ogm420_sel2.GetColumn(i,"CHKFLAG") ==1){
+			ds_ogm420_sel2.SetColumn(i,"RPDAT",txtrpdat.Value);
+			var yedat= addMonth(txtrpdat.Value,"+"+parseInt(ds_ogm420_sel2.GetColumn(i,"RCYCL"))); //(최종교정일+주기)로 가상의 최종교정일을 구한다.
+			ds_ogm420_sel2.SetColumn(i,"YEDAT",yedat);
+			var sgroup = ds_ogm420_sel2.GetColumn(i,"GROUP");
+			var srpdat = ds_ogm420_sel2.GetColumn(i,"RPDAT");
+			var srepno = ds_ogm420_sel2.GetColumn(i,"REPNO");
+			var sg_gub = ds_ogm420_sel2.GetColumn(i,"G_GUB");
+			
+			if(trim(sgroup) == "3") //설비
+			{
+				if(trim(sg_gub) == "사내"){ //사내교정인 경우
+					var new_repno = getNewRepNo(sgroup,srpdat,srepno);
+					ds_ogm420_sel2.SetColumn(i,"REPNO",new_repno);
+				}	
+				else {//사내교정이외의 경우
+					var new_repno = srepno;
+					ds_ogm420_sel2.SetColumn(i,"REPNO",new_repno);
+				}
+			}		
+			else //측정기,검사구
+			{
+				var new_repno = getNewRepNo(sgroup,srpdat,srepno);
+				ds_ogm420_sel2.SetColumn(i,"REPNO", new_repno);
+			}
+			chkupdate++;					
+		}
+	}
+	if( chkupdate ==0 ){
+		//alert("처리란에 체크해야 정상수행됩니다.");
+		alert(setPopMessage("2566"));
+		return false;
+	}
+	conductFlag.Text="OK";	
+}		
+		
+
+//교정번호를 만드는 함수
+function getNewRepNo(group,rpdat,repno)
+{
+	var sq = "";
+	var yy = substr(rpdat,2,2); //최종교정일의 년도 끝2자리
+	var mm = substr(rpdat,4,2); //최종교정일의 월2자리
+	if(length(trim(repno)) != 0) //신규장비의 교정등록이 아닌경우
+	{
+		if(group == "3") //설비
+		{
+			sq = substr(repno, 6,9);
+		}
+	}
+	else //신규장비의 교정등록인 경우 repno = ""임
+	{
+		sq = "";
+	}
+	switch(group)
+	{
+		case "1": //측정기
+			var keyword = "PSCM"+yy;
+				lblpscm_seqno.Value = toString(parseInt(lblpscm_seqno.Value)+1);
+			var pscm_seqno="";
+			if(getSeqNo(keyword) != -1){
+				pscm_seqno = "" + (getSeqNo(keyword) + parseInt(lblpscm_seqno.Value));
+			}else{
+				return "";
+			}	
+			var len = 4 - length(pscm_seqno);
+			for(var i = 0 ; i < len ; i++){
+				pscm_seqno = "0"+pscm_seqno;
+			}	
+			return keyword+"-"+pscm_seqno;
+		
+		case "2":
+			var keyword = "PSCG"+yy;
+			lblpscg_seqno.Value = toString(parseInt(lblpscg_seqno.Value)+1);
+			var pscg_seqno="";
+			if(getSeqNo(keyword) != -1){
+				pscg_seqno = ""+(getSeqNo(keyword) + parseInt(lblpscg_seqno.Value));
+			}else{
+				return "";
+			}
+			var len = 4 - length(pscg_seqno);
+			for(var i = 0 ; i < len ; i++){
+				pscg_seqno = "0"+pscg_seqno;
+			}
+			return keyword+"-"+pscg_seqno;
+		case "3":
+			var keyword = "CE"+yy+mm;
+			return keyword+sq;
+	}
+}
+
+//측정기,검사구의 교정번호의 seqno자동채번함수SQL_tme100pf_09
+function getSeqNo(Keyword)
+{
+	
+	var sKind		= "getSeqNo";						
+	var sMethodName = "service::psogmlib/selectOgm420_getSeqNo.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_getSeqNo=ds_getSeqNo";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " KEYVAL=" + quote(keyword); //사업부
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+		
+	if(ds_getSeqNo.GetRowCount()!=0){
+		var seqno = ds_getSeqNo.GetColumn(0,"KEYNM");
+//alert(ds_getSeqNo.GetColumn(0,"KEYNM"));		
+		return seqno;
+	}
+	else {
+		Trace("SQL_tme100pf_09 fail");
+		return -1;
+	}
+}
+
+function btnexcel_OnClick(obj)
+{
+	setExcel();
+}
+
+function brd1brnprint_OnClick(obj)
+{
+	var str = dialog("psogmlib::ogm420_POP.xml","팝업",300,300,"TitleBar=false");
+}
+]]></Script>
+</Window>

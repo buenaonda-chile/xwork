@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EmpDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="Emp" type="EmpDomain">
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="clsName" column="CLS_NAME" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="teamCd" column="TEAM_CODE" />
+        <result property="teamCode" column="H_TEAM_CODE" />
+        <result property="teamName" column="TEAM_NAME" />
+        <result property="authCode" column="AUTH_CODE" />
+        <result property="empName" column="EMP_NAME" />
+        <result property="empEmail" column="EMP_EMAIL" />
+        <result property="empId" column="EMP_ID" />
+        <result property="empUse" column="EMP_USE" />
+        <result property="empSyncDate" column="EMP_SYNC_DATE" />
+        <result property="empPwd" column="EMP_PWD" />
+        <result property="empPrivateAuth" column="EMP_PRIVATE_AUTH" />
+        <result property="inOutType" column="IN_OUT_TYPE" />
+        <!-- <result property="workCode" column="WORK_TYPE_CODE" /> -->
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="relName" column="REL_NAME" />
+        <result property="rowNum" column="ROW_NUM" />
+        <!-- JHB추가 2018.09.07-->
+	     <result property="relationCopLoc" column="RELATION_COP_LOC" />
+	     <result property="relationCopLocName" column="RELATION_COP_LOC_NAME" />
+	     <result property="relationCopNo" column="RELATION_COP_NO" />
+    </resultMap>
+
+	<resultMap id="LoginEmp" type="EmpDomain">
+	        <result property="empNumber" column="EMP_NUMBER" />
+	        <result property="clsCode" column="CLS_CODE" />
+	        <result property="teamCode" column="H_TEAM_CODE" />
+	        <result property="authCode" column="AUTH_CODE" />
+	        <result property="empName" column="EMP_NAME" />
+	        <result property="empId" column="EMP_ID" />
+	        <result property="empUse" column="EMP_USE" />
+	        <result property="empPrivateAuth" column="EMP_PRIVATE_AUTH" />
+	        <result property="inOutType" column="IN_OUT_TYPE" />
+	        <!-- JHB추가 2018.08.10-->
+	        <result property="relationCopLoc" column="RELATION_COP_LOC" />
+	        <result property="relationCopNo" column="RELATION_COP_NO" />
+	        <!-- 김용균 추가 2018.12.11-->
+	        <result property="clsCode" column="CLS_CODE" />
+	        <result property="locCode" column="LOC_CODE" />
+	        
+	</resultMap>
+	    
+	<select id="searchById" resultMap="LoginEmp" parameterType="EmpDomain">
+        select 
+                A.EMP_NUMBER
+              , A.CLS_CODE
+              , A.H_TEAM_CODE
+              , A.AUTH_CODE
+              , A.EMP_NAME
+              , A.EMP_ID
+              , A.EMP_USE
+              , A.EMP_PRIVATE_AUTH
+              , A.IN_OUT_TYPE
+              , A.RELATION_COP_LOC
+              , A.RELATION_COP_NO
+              , A.CLS_CODE
+              , A.LOC_CODE
+        from 
+                DNKR_EMP A
+        where 
+            'SqlMap-Emp.searchById' = 'SqlMap-Emp.searchById'
+ 			and A.EMP_USE 	  = 'Y'
+ 			<if test="empId != 'ADMIN'">
+            and A.IN_OUT_TYPE = #{inOutType}
+            </if>
+            <!--  GCI AD 전환시 원복할 것 -->
+            <!--  
+            <if test='inOutType.equals("I") and empId != "ADMIN"'>
+            and upper(A.EMP_ID)  	  = #{empId}
+            </if>
+            -->
+             <!-- GCI AD 병행운영용 20.07.10 Start -->
+            <if test='inOutType.equals("I") and empId != "ADMIN"'>
+             and upper(A.EMP_NUMBER) = #{empNumber}
+            </if>
+             <!-- GCI AD 병행운영용 20.07.10 End-->
+            <if test='(inOutType.equals("O") and empId == "ADMIN") or (inOutType.equals("I") and empId == "ADMIN")'>
+            and upper(A.EMP_ID)  	  = #{empId}
+            and A.EMP_PWD  	  = #{empPwd}
+            </if>
+            <if test='inOutType.equals("O") and  empId != "ADMIN"'>
+            and A.EMP_ID  	  = #{empId}
+            and A.EMP_PWD  	  = #{empPwd}
+            </if>
+    </select>
+    	    
+	<select id="getTeamName" resultMap="Emp" parameterType="EmpDomain">
+        select 
+                D.REL_NAME
+        from 
+                DNKR_RELATION_NM D
+        where 
+ 			D.REL_CODE 	  = #{teamCode}
+ 			and D.CMC_CODE = 'kr'
+    </select>
+    
+<!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Emp" parameterType="EmpDomain">
+        select 
+                A.EMP_NUMBER
+              , A.CLS_CODE
+              , B.REL_NAME CLS_NAME
+              , A.LOC_CODE
+              , C.REL_NAME LOC_NAME
+              , A.H_TEAM_CODE
+              , D.REL_NAME TEAM_NAME
+              , A.AUTH_CODE
+              , A.EMP_NAME
+              , A.EMP_EMAIL
+              , A.EMP_ID
+              , A.EMP_USE
+              , A.EMP_SYNC_DATE
+              , A.EMP_PWD
+              , A.EMP_PRIVATE_AUTH
+              , A.IN_OUT_TYPE
+              , A.RELATION_COP_LOC
+              , E.REL_NAME RELATION_COP_LOC_NAME
+              , A.RELATION_COP_NO
+        from 
+                DNKR_EMP A
+        left join
+         		DNKR_RELATION_NM B
+        on    A.CLS_CODE = B.REL_CODE
+          and B.CMC_CODE = #{cmcLangCode}	
+        left join 
+                DNKR_RELATION_NM C
+        on 	  A.LOC_CODE = C.REL_CODE
+          and C.CMC_CODE = #{cmcLangCode}
+        left join     
+                DNKR_RELATION_NM D
+        on 	  A.H_TEAM_CODE = D.REL_CODE
+          and D.CMC_CODE = #{cmcLangCode}
+        left join     
+                DNKR_RELATION_NM E
+        on 	  A.RELATION_COP_LOC = E.REL_CODE
+          and E.CMC_CODE = #{cmcLangCode}
+          
+        where 
+                'SqlMap-Emp.searchByKey' = 'SqlMap-Emp.searchByKey'
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = B.REL_CODE
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = C.REL_CODE
+        </if>
+        <if test="teamCode != null and teamCode != ''">
+            and A.H_TEAM_CODE = D.REL_CODE    
+        </if>
+        <if test="inOutType != null and inOutType != ''">
+            and A.IN_OUT_TYPE = #{inOutType}  
+        </if>
+        <if test="empUse != null and empUse != ''">
+            and A.EMP_USE = #{empUse}  
+        </if>
+            and A.EMP_NUMBER = #{empNumber}
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Emp"
+        parameterType="EmpDomain">
+        select 
+        		DISTINCT
+                A.EMP_NUMBER
+              , A.CLS_CODE
+              , B.REL_NAME CLS_NAME
+              , A.LOC_CODE
+              , C.REL_NAME LOC_NAME
+              , A.H_TEAM_CODE
+              , D.REL_NAME TEAM_NAME
+              , A.AUTH_CODE
+              , A.EMP_NAME
+              , A.EMP_EMAIL
+              , A.EMP_ID
+              , A.EMP_USE
+              , A.EMP_SYNC_DATE
+              , A.EMP_PWD
+              , A.EMP_PRIVATE_AUTH
+              , A.RELATION_COP_LOC
+              , E.REL_NAME RELATION_COP_LOC_NAME
+              , A.RELATION_COP_NO
+              , ROWNUM
+              <!-- , row_number() over (order by A.EMP_NUMBER desc) ROW_NUM -->
+        from 
+                DNKR_EMP A
+        left join
+         		DNKR_RELATION_NM B
+        on    A.CLS_CODE = B.REL_CODE
+          and B.CMC_CODE = #{cmcLangCode}	
+        left join 
+                DNKR_RELATION_NM C
+        on 	  A.LOC_CODE = C.REL_CODE
+          and C.CMC_CODE = #{cmcLangCode}
+        left join     
+                DNKR_RELATION_NM D
+        on 	  A.H_TEAM_CODE = D.REL_CODE
+          and D.CMC_CODE = #{cmcLangCode}
+         left join     
+                DNKR_RELATION_NM E
+        on 	  A.RELATION_COP_LOC = E.REL_CODE
+          and E.CMC_CODE = #{cmcLangCode}
+        where 
+                'SqlMap-Emp.searchByCondition' = 'SqlMap-Emp.searchByCondition'
+        <if test="empNumber != null and empNumber != ''">
+            and A.EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = #{locCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <!-- <if test="teamCode != null and teamCode != ''">
+            and A.TEAM_CODE = #{teamCode}
+        </if> -->
+        <if test="teamCode != null and teamCode != ''">
+            and A.H_TEAM_CODE = #{teamCode}
+        </if>
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <!-- <if test="empName != null and empName != ''">
+            and A.EMP_NAME = #{empName}
+        </if> -->
+        <if test="empName != null and empName != ''">
+            and A.EMP_NAME like '%' || #{empName} || '%'
+        </if>
+        <if test="empEmail != null and empEmail != ''">
+            and A.EMP_EMAIL = #{empEmail}
+        </if>
+        <if test="empId != null and empId != ''">
+            and A.EMP_ID = #{empId}
+        </if>
+        <if test="empUse != null and empUse != ''">
+            and A.EMP_USE = #{empUse}
+        </if>
+        <if test="empSyncDate != null">
+            and A.EMP_SYNC_DATE = #{empSyncDate}
+        </if>
+        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+            and A.EMP_PRIVATE_AUTH = #{empPrivateAuth}
+        </if>
+        <if test="inOutType != null and inOutType != ''">
+            and A.IN_OUT_TYPE = #{inOutType}
+        </if>
+        <!-- JHB :2018.11.15 추가  -->
+		<if test='"T".equals(externalAccount)'>
+	        and A.EMP_ID Not like 'Admin%'
+	    </if>
+       order by 
+                A.EMP_NUMBER desc
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="Emp"
+        parameterType="EmpDomain">
+        select 
+                EMP_NUMBER
+              , LOC_CODE
+              , CLS_CODE
+              , H_TEAM_CODE
+              , LOC_NAME
+              , CLS_NAME
+              , TEAM_NAME
+              , AUTH_CODE
+              , EMP_NAME
+              , EMP_EMAIL
+              , EMP_ID
+              , EMP_USE
+              , EMP_SYNC_DATE
+              , EMP_PWD
+              , EMP_PRIVATE_AUTH
+              , IN_OUT_TYPE
+              , RELATION_COP_LOC
+              , RELATION_COP_LOC_NAME
+              , RELATION_COP_NO
+              , ROW_NUM
+        from (
+        	 select 
+        	 			EMP_NUMBER
+		              , CLS_CODE
+		              , CLS_NAME
+		              , LOC_CODE
+		              , LOC_NAME
+		              , H_TEAM_CODE
+		              , TEAM_NAME
+		              , AUTH_CODE
+		              , EMP_NAME
+		              , EMP_EMAIL
+		              , EMP_ID
+		              , EMP_USE
+		              , EMP_SYNC_DATE
+		              , EMP_PWD
+		              , EMP_PRIVATE_AUTH
+		              , IN_OUT_TYPE
+		              , RELATION_COP_LOC
+		              , RELATION_COP_LOC_NAME
+          			  , RELATION_COP_NO
+	                  , row_number() over (order by EMP_NUMBER desc) ROW_NUM
+		      from
+		       ( select 
+		        		DISTINCT
+		                A.EMP_NUMBER
+		              , A.CLS_CODE
+		              , B.REL_NAME CLS_NAME
+		              , A.LOC_CODE
+		              , C.REL_NAME LOC_NAME
+		              , A.H_TEAM_CODE
+		              , D.REL_NAME TEAM_NAME
+		              , A.AUTH_CODE
+		              , A.EMP_NAME
+		              , A.EMP_EMAIL
+		              , A.EMP_ID
+		              , A.EMP_USE
+		              , A.EMP_SYNC_DATE
+		              , A.EMP_PWD
+		              , A.EMP_PRIVATE_AUTH
+		              , A.IN_OUT_TYPE
+		              , A.RELATION_COP_LOC
+		              , E.REL_NAME RELATION_COP_LOC_NAME
+          			  , A.RELATION_COP_NO
+	            from 
+	                DNKR_EMP A
+		        left join
+		         		DNKR_RELATION_NM B
+		        on    A.CLS_CODE = B.REL_CODE
+		          and B.CMC_CODE = #{cmcLangCode}	
+		        left join 
+		                DNKR_RELATION_NM C
+		        on 	  A.LOC_CODE = C.REL_CODE
+		          and C.CMC_CODE = #{cmcLangCode}
+		        left join     
+		                DNKR_RELATION_NM D
+		        on 	  A.H_TEAM_CODE = D.REL_CODE
+		          and D.CMC_CODE = #{cmcLangCode}
+		        left join     
+		                DNKR_RELATION_NM E
+		        on 	  A.RELATION_COP_LOC = E.REL_CODE
+		          and E.CMC_CODE = #{cmcLangCode}
+		        where 
+	                    'SqlMap-Emp.searchByConditionForPaging' = 'SqlMap-Emp.searchByConditionForPaging'
+	        <if test="empNumber != null and empNumber != ''">
+	            and A.EMP_NUMBER = #{empNumber}
+	        </if>
+	        <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+	        <if test="teamCode != null and teamCode != ''">
+	            and A.H_TEAM_CODE = #{teamCode}
+	        </if>
+	        <if test="authCode != null and authCode != ''">
+	            and A.AUTH_CODE = #{authCode}
+	        </if>
+	        <!-- <if test="empName != null and empName != ''">
+	            and A.EMP_NAME = #{empName}
+	        </if> -->
+	        <if test="empName != null and empName != ''">
+	            and A.EMP_NAME like '%' || #{empName} || '%'
+	        </if>
+	        <if test="empEmail != null and empEmail != ''">
+	            and A.EMP_EMAIL = #{empEmail}
+	        </if>
+	        <!-- <if test="empId != null and empId != ''">
+	            and A.EMP_ID = #{empId}
+	        </if> -->
+	         <if test="empId != null and empId != ''">
+	            and A.EMP_ID like '%' || #{empId} || '%'
+	        </if>
+	        <if test="empUse != null and empUse != ''">
+	            and A.EMP_USE = #{empUse}
+	        </if>
+	        <if test="empSyncDate != null">
+	            and A.EMP_SYNC_DATE = #{empSyncDate}
+	        </if>
+	        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+	            and A.EMP_PRIVATE_AUTH = #{empPrivateAuth}
+	        </if>
+	        <if test="inOutType != null and inOutType != ''">
+	            and A.IN_OUT_TYPE = #{inOutType}
+	        </if>
+	        <!-- JHB :2018.11.15 추가  -->
+	         <if test='"T".equals(externalAccount)'>
+	            and A.EMP_ID Not like 'Admin%'
+	        </if>
+	        )
+	        
+         )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForTeam" resultMap="Emp"
+        parameterType="EmpDomain">
+        select 
+               DISTINCT( A.TEAM_CODE)
+              , A.LOC_CODE
+              , A.AUTH_CODE
+              , A.CLS_CODE
+              , B.REL_NAME AS TEAM_NAME
+              , C.REL_NAME AS CLS_NAME
+              , D.REL_NAME AS LOC_NAME
+        from 
+               VIEW_RELATION_H_TEAM A
+              inner join DNKR_RELATION_NM B ON A.TEAM_CODE = B.REL_CODE
+              inner join DNKR_RELATION_NM C ON A.CLS_CODE = C.REL_CODE
+              inner join DNKR_RELATION_NM D ON A.LOC_CODE = D.REL_CODE
+        where 
+			'SqlMap-Emp.searchByConditionForTeam' = 'SqlMap-Emp.searchByConditionForTeam'
+            and B.CMC_CODE = #{cmcLangCode}
+            and A.TEAM_USE = 'Y'
+             <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+	         <if test="teamCode != null and teamCode != ''">
+	            and A.TEAM_CODE = #{teamCode}
+	        </if>
+    </select>
+   
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="EmpDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_EMP
+        where 
+                'SqlMap-Emp.searchCount' = 'SqlMap-Emp.searchCount'
+         <if test="empNumber != null and empNumber != ''">
+            and EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and LOC_CODE = #{locCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and CLS_CODE = #{clsCode}
+        </if>
+        <if test="teamCode != null and teamCode != ''">
+            and H_TEAM_CODE = #{teamCode}
+        </if>
+        <if test="authCode != null and authCode != ''">
+            and AUTH_CODE = #{authCode}
+        </if>
+        <!-- <if test="empName != null and empName != ''">
+            and EMP_NAME = #{empName}
+        </if> -->
+         <if test="empName != null and empName != ''">
+            and EMP_NAME like '%' || #{empName} || '%'
+        </if>
+        <if test="empEmail != null and empEmail != ''">
+            and EMP_EMAIL = #{empEmail}
+        </if>
+        <if test="empId != null and empId != ''">
+            and EMP_ID like '%' || #{empId} || '%'
+        </if>
+        <if test="empUse != null and empUse != ''">
+            and EMP_USE = #{empUse}
+        </if>
+        <if test="empSyncDate != null">
+            and EMP_SYNC_DATE = #{empSyncDate}
+        </if>
+        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+            and EMP_PRIVATE_AUTH = #{empPrivateAuth}
+        </if>
+        <if test="inOutType != null and inOutType != ''">
+            and IN_OUT_TYPE = #{inOutType}
+        </if>
+        <!-- JHB :2018.11.15 추가  -->
+	    <if test='"T".equals(externalAccount)'>
+	        and EMP_ID Not like 'Admin%'
+	    </if>
+    </select>
+    
+     <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchMaxEmpNumber" resultType="java.lang.String" parameterType="CodeDomain">
+        select 
+                max(EMP_NUMBER)
+        from 
+                DNKR_EMP
+        where 
+                'SqlMap-Code.searchMaxEmpNumber' = 'SqlMap-Code.searchMaxEmpNumber'
+           and EMP_NUMBER LIKE 'O%'   
+           and length(EMP_NUMBER) = 10           	
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="EmpDomain">
+        insert into DNKR_EMP (
+                /* SqlMap-Emp.create */
+            <if test="empNumber != null">
+                EMP_NUMBER,
+            </if>
+            <if test="locCode != null">
+            	LOC_CODE,
+	        </if>
+	        <if test="clsCode != null">
+	            CLS_CODE,
+	        </if>
+	        <if test="teamCode != null">
+	            TEAM_CODE,
+	        </if>
+	        <if test="teamCode != null">
+	            H_TEAM_CODE,
+	        </if>
+	        <if test="authCode != null">
+	            AUTH_CODE,
+	        </if>
+	        <if test="empName != null">
+	            EMP_NAME,
+	        </if>
+	        <if test="empEmail != null">
+	            EMP_EMAIL,
+	        </if>
+	        <if test="empId != null">
+	            EMP_ID,
+	        </if>
+	        <if test="empUse != null">
+	            EMP_USE,
+	        </if>
+	        <if test="empPwd != null">
+	            EMP_PWD,
+	        </if>
+	        <if test="empPrivateAuth != null">
+	            EMP_PRIVATE_AUTH,
+	        </if>
+	        <if test="inOutType != null">
+            	IN_OUT_TYPE,
+        	</if>
+        	<if test="relationCopLoc != null">
+            	RELATION_COP_LOC,
+        	</if>
+        	<if test="relationCopNo != null">
+            	RELATION_COP_NO,
+        	</if>
+	        <if test="_parameter != null">
+	            EMP_SYNC_DATE
+	        </if>
+        ) values (
+            <if test="empNumber != null">
+                #{empNumber},
+            </if>
+            <if test="locCode != null">
+            	#{locCode},
+	        </if>
+	        <if test="clsCode != null">
+	            #{clsCode},
+	        </if>
+	        <if test="teamCode != null">
+	            #{teamCode},
+	        </if>
+	         <if test="teamCode != null">
+	            #{teamCode},
+	        </if>
+	        <if test="authCode != null">
+	            #{authCode},
+	        </if>
+	        <if test="empName != null">
+	            #{empName},
+	        </if>
+	        <if test="empEmail != null">
+	            #{empEmail},
+	        </if>
+	        <if test="empId != null">
+	            #{empId},
+	        </if>
+	        <if test="empUse != null">
+	            #{empUse},
+	        </if>
+	         <if test="empPwd != null">
+	            #{empPwd},
+	        </if>
+	        <if test="empPrivateAuth != null">
+	            #{empPrivateAuth},
+	        </if>
+	        <if test="inOutType != null">
+            	#{inOutType},
+        	</if>
+        	<if test="relationCopLoc != null">
+            	#{relationCopLoc},
+        	</if>
+        	<if test="relationCopNo != null">
+            	#{relationCopNo},
+        	</if>
+	        <if test="_parameter != null">
+	            SYSTIMESTAMP
+	        </if>
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="EmpDomain">
+        update 
+                DNKR_EMP 
+        set
+            <if test="locCode != null">
+            	LOC_CODE = #{locCode},
+	        </if>
+	        <if test="clsCode != null">
+	            CLS_CODE = #{clsCode},
+	        </if>
+	        <if test="teamCode != null">
+	            TEAM_CODE = #{teamCode},
+	        </if>
+	        <if test="teamCode != null">
+	            H_TEAM_CODE = #{teamCode},
+	        </if>
+	        <if test="teamCode != null and authCode == null">
+	            AUTH_CODE = null,
+	        </if>
+	        <if test="authCode != null">
+	            AUTH_CODE = #{authCode},
+	        </if>
+	        <if test="empName != null">
+	            EMP_NAME = #{empName},
+	        </if>
+	        <if test="empEmail != null">
+	            EMP_EMAIL = #{empEmail},
+	        </if>
+	        <if test="empId != null">
+	            EMP_ID = #{empId},
+	        </if>
+	         <if test="empPwd != null and empPwd != ''">
+	            EMP_PWD = #{empPwd},
+	        </if>
+	        <if test="empUse != null">
+	            EMP_USE = #{empUse},
+	        </if>
+	        <if test="empPrivateAuth != null">
+	            EMP_PRIVATE_AUTH = #{empPrivateAuth},
+	        </if>
+	        <if test="inOutType != null">
+	            IN_OUT_TYPE = #{inOutType},
+	        </if>
+	        <if test="relationCopLoc != null">
+	            RELATION_COP_LOC =  #{relationCopLoc},
+	        </if>
+	         <if test="relationCopNo != null">
+	            RELATION_COP_NO =  #{relationCopNo},
+	        </if>
+	            EMP_SYNC_DATE = EMP_SYNC_DATE
+        where 
+                'SqlMap-Emp.update' = 'SqlMap-Emp.update'
+            and EMP_NUMBER = #{empNumber}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="EmpDomain">
+        delete from 
+                DNKR_EMP
+        where 
+                'SqlMap-Emp.delete' = 'SqlMap-Emp.delete'
+            and EMP_NUMBER = #{empNumber}
+    </delete>
+    
+   <delete id="deleteDnkrEmpTmp">
+    	<!-- TRUNCATE TABLE DNKR_EMP_TMP -->
+    	DELETE FROM DNKR_EMP_TMP WHERE 'SqlMap-Emp.delete' = 'SqlMap-Emp.delete'
+    </delete>
+    <!-- 더존 회사코드변경시 수정필요 -->
+    <insert id="insertMaEmpToDnkrEmpTmp"  parameterType="maEmpDomain">
+		INSERT INTO DNKR_EMP_TMP ( 
+				 EMP_NUMBER
+			   , CLS_CODE
+			   , LOC_CODE
+			   , TEAM_CODE
+			   , AUTH_CODE
+			   , EMP_NAME
+			   , EMP_EMAIL
+			   , EMP_ID
+			   , EMP_SYNC_DATE
+			   , EMP_USE
+			   , EMP_PWD
+			   , EMP_PRIVATE_AUTH
+			   , IN_OUT_TYPE
+			   , EMP_INCOME
+			   , EMP_TYPE
+			   , EMP_INCOME_NM
+               , EMP_TYPE_NM
+               , EMP_STEP
+               , EMP_STEP_NM
+               , EMP_NATION
+               , EMP_NATION_NM
+			  ) VALUES
+			  (
+			  	#{noEmp}
+			   , NVL((SELECT CLS_CODE  FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{cdCompany}), NULL)
+			   , NVL((SELECT LOC_CODE  FROM DNKR_RELATION_LOCATION WHERE RLTN_CODE=#{cdBizarea} AND CLS_CODE = (SELECT CLS_CODE FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{cdCompany})), NULL)
+			   , NVL((SELECT DISTINCT TEAM_CODE FROM DNKR_RELATION_TEAM WHERE RLTN_CODE=#{cdDept} AND CLS_CODE = (SELECT CLS_CODE FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{cdCompany})), NULL)
+			   , NULL
+			   , #{nmKor}
+			   , #{noEmail}
+			   , FNC_GET_EMP_ID(#{noEmp}, #{cdCompany}, #{cdBizarea})
+			   , SYSDATE
+			   , 'Y'
+			   , NULL
+			   , 'N'
+			   , 'I'
+			   ,#{cdIncom}
+			   ,#{tpEmp}
+			   ,#{cdIncomNm}
+			   ,#{tpEmpNm}
+			   ,#{cdDutyStep}
+			   ,#{cdDutyStepNm}
+			   ,#{cdNation}
+			   ,#{cdNationNm}
+			   )
+    </insert>
+    
+    <select id="procMergeEmp" parameterType="HashMap" statementType="CALLABLE">
+        {CALL PROC_MERGE_EMP
+        	(
+                #{rtnCd, mode=OUT, jdbcType=INTEGER, javaType=int},
+                #{rtnMsg, mode=OUT, jdbcType=VARCHAR, javaType=string}
+            )
+        }
+    </select>
+    
+    <select id="procDisableEmp" parameterType="HashMap" statementType="CALLABLE">
+        {CALL PROC_DISABLE_EMP
+        	(
+                #{rtnCd, mode=OUT, jdbcType=INTEGER, javaType=int},
+                #{rtnMsg, mode=OUT, jdbcType=VARCHAR, javaType=string}
+            )
+        }
+    </select>
+    
+    <!-- <insert id="insertMaEmpToDnkrEmpTmp"  parameterType="java.util.List">
+    	INSERT ALL
+    		<foreach collection="list" item="item" index="index" separator=""> 
+			INTO DNKR_EMP_TMP ( 
+					 EMP_NUMBER
+				   , CLS_CODE
+				   , LOC_CODE
+				   , TEAM_CODE
+				   , AUTH_CODE
+				   , EMP_NAME
+				   , EMP_EMAIL
+				   , EMP_ID
+				   , EMP_SYNC_DATE
+				   , EMP_USE
+				   , EMP_PWD
+				   , EMP_PRIVATE_AUTH
+				   , IN_OUT_TYPE
+				  ) VALUES
+				  (
+				  	#{item.noEmp}
+				   , NVL((SELECT CLS_CODE  FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{item.cdCompany}), NULL)
+				   , NVL((SELECT LOC_CODE  FROM DNKR_RELATION_LOCATION WHERE RLTN_CODE=#{item.cdBizarea} AND CLS_CODE = (SELECT CLS_CODE FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{item.cdCompany})), NULL)
+				   , NVL((SELECT TEAM_CODE FROM DNKR_RELATION_TEAM WHERE RLTN_CODE=#{item.cdDept} AND CLS_CODE = (SELECT CLS_CODE FROM DNKR_RELATION_CLASS WHERE RLTN_CODE=#{item.cdCompany})), NULL)
+				   , NULL
+				   , #{item.nmKor}
+				   , NULL
+				   , NULL
+				   , SYSDATE
+				   , 'Y'
+				   , NULL
+				   , 'N'
+				   , 'I') 
+			</foreach>
+			SELECT * FROM DUAL
+    </insert> -->
+    
+    <!-- 사업부이동자를 위한 Ldap 임시용 -->
+    <select id="searchByIdLdap" resultMap="LoginEmp" parameterType="EmpDomain">
+        select 
+                A.EMP_NUMBER
+              , A.CLS_CODE
+              , A.H_TEAM_CODE
+              , A.AUTH_CODE
+              , A.EMP_NAME
+              , A.EMP_ID
+              , A.EMP_USE
+              , A.EMP_PRIVATE_AUTH
+              , A.IN_OUT_TYPE
+              , A.RELATION_COP_LOC
+              , A.RELATION_COP_NO
+              , A.CLS_CODE
+              , A.LOC_CODE
+        from 
+                DNKR_EMP A
+        where 
+            'SqlMap-Emp.searchById' = 'SqlMap-Emp.searchById'
+ 			and A.EMP_USE 	  = 'Y'
+ 			<if test="empId != 'ADMIN'">
+            and A.IN_OUT_TYPE = #{inOutType}
+            </if>
+            <if test='inOutType.equals("I") and empId != "ADMIN"'>
+            and upper(A.EMP_NUMBER)  	  = #{empNumber}
+            </if>
+            
+    </select>
+</mapper>

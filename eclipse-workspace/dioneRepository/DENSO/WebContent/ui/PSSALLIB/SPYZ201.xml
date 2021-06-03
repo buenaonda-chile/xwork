@@ -1,0 +1,986 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="년판매계획등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_SPYZ201" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_plngb">
+				<Contents>
+					<colinfo id="code" size="1" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="30" summ="default" type="STRING"/>
+					<record>
+						<code>1</code>
+						<code_name>기본계획</code_name>
+					</record>
+					<record>
+						<code>2</code>
+						<code_name>수정계획</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_yyyy">
+				<Contents>
+					<colinfo id="yyyy" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM008PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SPYZ201insert" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLNYM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLNGB" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYVND" size="8" summ="default" type="INT"/>
+					<colinfo id="SHPTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="PSPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLTCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPTEX" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXDSP" size="256" summ="default" type="STRING"/>
+					<colinfo id="CARCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="BDYCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="YERQY" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="YESCS" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="MRATE" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="MONQY" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_EM001PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="Dataset0"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST100PF"></Dataset>
+		</Datasets>
+		<Static Border="Flat" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="122" Style="static" TabOrder="9" Top="37" VAlign="Middle" Width="136"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="5" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="5" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="65" Id="searchBar" TabOrder="7" Top="31" Width="1048"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="4" TabOrder="8" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="37" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="266" TabOrder="10" Text="기준계획년도" Top="37" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static13" Left="384" Style="static" TabOrder="11" Top="37" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static14" Left="528" TabOrder="12" Text="계&#32;획&#32;구&#32;분" Top="37" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static17" Left="646" Style="static" TabOrder="13" Top="37" VAlign="Middle" Width="136"></Static>
+		<Combo BorderColor="SCROLLBAR" CodeColumn="code" Color="#333333" DataColumn="code_name" Height="20" Id="cb_plngb" ImeMode="none" INDEX="0" InnerDataset="ds_plngb" Left="649" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="2" Top="40" Width="130"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="4" TabOrder="14" Text="업&#32;체&#32;코&#32;드" Top="66" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="122" Style="static" TabOrder="15" Top="66" VAlign="Middle" Width="398"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" Style="static" TabOrder="16" Top="37" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="cb_searchCodeName1" InnerDataset="ds_VComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="1" Top="40" Width="130"></Combo>
+		<Edit Height="20" Id="ed_pyvnd" ImeMode="none" Left="126" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_pyvnd_OnCharChanged" OnKillFocus="ed_pyvnd_OnKillFocus" TabOrder="3" Top="69" Width="130"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static0" Left="528" TabOrder="17" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="65" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="646" Style="static" TabOrder="18" Top="65" VAlign="Middle" Width="394"></Static>
+		<Edit Height="20" Id="ed_pspno" Left="650" MaxLength="15" OnChanged="common_OnChanged" OnCharChanged="ed_pspno_OnCharChanged" OnKillFocus="ed_pspno_OnKillFocus" TabOrder="4" Top="68" UpperOnly="TRUE" UseIME="FALSE" Width="130"></Edit>
+		<Combo CodeColumn="yyyy" DataColumn="yyyy" Height="19" Id="cmb_yyyy" InnerDataset="ds_yyyy" Left="388" OnChanged="cmb_yyyy_OnChanged" TabOrder="19" Top="40" Width="130"></Combo>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="261" TabOrder="20" Top="87" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgMaker" ImageID="ic_search" Left="492" OnClick="imgMaker_OnClick" Static="FALSE" TabOrder="21" Top="71" Width="20"></Image>
+		<Static Height="14" Id="st_pyvnd" Left="264" TabOrder="22" Top="72" Width="225"></Static>
+		<Static Height="14" Id="st_pspno" Left="783" TabOrder="25" Top="72" Width="225"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static5" Left="781" TabOrder="23" Top="87" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgPspno" ImageID="ic_search" Left="1012" OnClick="imgPspno_OnClick" Static="FALSE" TabOrder="24" Top="71" Width="20"></Image>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static9" Left="84" TabOrder="26" Text="4월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static54" Left="156" TabOrder="27" Text="5월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static56" Left="228" TabOrder="28" Text="6월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="81" Id="st_yyyy1" TabOrder="29" Text="2012년" Top="176" VAlign="Middle" Width="1048"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="81" Id="st_yyyy2" TabOrder="30" Text="2013년" Top="264" VAlign="Middle" Width="1048"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="81" Id="st_yyyy3" TabOrder="31" Text="2014년" Top="352" VAlign="Middle" Width="1048"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="81" Id="st_yyyy4" TabOrder="32" Text="2015년" Top="440" VAlign="Middle" Width="1048"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="81" Id="st_yyyy5" TabOrder="33" Text="2016년" Top="528" VAlign="Middle" Width="1048"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static21" Left="48" TabOrder="34" Text="수량" Top="176" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static22" Left="48" TabOrder="35" Text="단가" Top="203" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static23" Left="48" TabOrder="36" Text="금액" Top="230" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static8" Left="48" TabOrder="37" Text="수량" Top="264" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static24" Left="48" TabOrder="38" Text="단가" Top="291" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static25" Left="48" TabOrder="39" Text="금액" Top="318" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static26" Left="48" TabOrder="40" Text="수량" Top="352" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static27" Left="48" TabOrder="41" Text="단가" Top="379" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static28" Left="48" TabOrder="42" Text="금액" Top="406" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static29" Left="48" TabOrder="43" Text="수량" Top="440" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static30" Left="48" TabOrder="44" Text="단가" Top="467" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static31" Left="48" TabOrder="45" Text="금액" Top="494" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static32" Left="48" TabOrder="46" Text="수량" Top="528" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static33" Left="48" TabOrder="47" Text="단가" Top="555" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="27" Id="Static34" Left="48" TabOrder="48" Text="금액" Top="582" VAlign="Middle" Width="36"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static35" Left="300" TabOrder="49" Text="7월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static36" Left="372" TabOrder="50" Text="8월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static37" Left="444" TabOrder="51" Text="9월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static38" Left="516" TabOrder="52" Text="10월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static39" Left="588" TabOrder="53" Text="11월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static40" Left="660" TabOrder="54" Text="12월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static41" Left="732" TabOrder="55" Text="1월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static42" Left="804" TabOrder="56" Text="2월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static43" Left="876" TabOrder="57" Text="3월" Top="128" VAlign="Middle" Width="72"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static44" Left="948" TabOrder="58" Text="TOTAL" Top="128" VAlign="Middle" Width="100"></Static>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_04" Left="88" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="59" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_04" Left="88" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="60" Top="206" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_05" Left="160" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="61" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_05" Left="160" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="62" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_06" Left="232" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="63" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_06" Left="232" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="64" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_07" Left="304" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="65" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_07" Left="304" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="66" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_08" Left="376" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="67" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_08" Left="376" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="68" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_09" Left="448" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="69" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_09" Left="448" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="70" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_10" Left="520" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="71" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_10" Left="520" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="72" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_11" Left="592" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="73" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_11" Left="592" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="74" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_12" Left="664" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="75" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_12" Left="664" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="76" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_01" Left="736" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="77" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_01" Left="736" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="78" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_02" Left="808" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="79" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_02" Left="808" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="80" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q1_03" Left="880" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="81" Top="181" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P1_03" Left="880" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="82" Top="205" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_Q1_99" Left="952" TabOrder="83" Top="181" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_P1_99" Left="952" MaxLength="11" TabOrder="84" Top="205" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_04" Left="88" NullValue="0" TabOrder="85" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_05" Left="160" NullValue="0" TabOrder="86" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_06" Left="232" NullValue="0" TabOrder="87" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_07" Left="304" NullValue="0" TabOrder="88" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_08" Left="376" NullValue="0" TabOrder="89" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_09" Left="448" NullValue="0" TabOrder="90" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_10" Left="520" NullValue="0" TabOrder="91" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_11" Left="592" NullValue="0" TabOrder="92" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_12" Left="664" NullValue="0" TabOrder="93" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_01" Left="736" NullValue="0" TabOrder="94" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_02" Left="808" NullValue="0" TabOrder="95" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_03" Left="880" NullValue="0" TabOrder="96" Top="233" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A1_99" Left="952" TabOrder="97" Top="233" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_04" Left="88" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="98" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_04" Left="88" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="99" Top="294" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_05" Left="160" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="100" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_05" Left="160" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="101" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_06" Left="232" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="102" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_06" Left="232" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="103" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_07" Left="304" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="104" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_07" Left="304" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="105" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_08" Left="376" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="106" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_08" Left="376" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="107" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_09" Left="448" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="108" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_09" Left="448" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="109" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_10" Left="520" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="110" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_10" Left="520" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="111" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_11" Left="592" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="112" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_11" Left="592" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="113" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_12" Left="664" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="114" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_12" Left="664" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="115" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_01" Left="736" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="116" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_01" Left="736" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="117" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_02" Left="808" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="118" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_02" Left="808" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="119" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q2_03" Left="880" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="120" Top="269" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P2_03" Left="880" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="121" Top="293" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_Q2_99" Left="952" TabOrder="122" Top="269" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_P2_99" Left="952" MaxLength="11" TabOrder="123" Top="293" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_04" Left="88" NullValue="0" TabOrder="124" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_05" Left="160" NullValue="0" TabOrder="125" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_06" Left="232" NullValue="0" TabOrder="126" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_07" Left="304" NullValue="0" TabOrder="127" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_08" Left="376" NullValue="0" TabOrder="128" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_09" Left="448" NullValue="0" TabOrder="129" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_10" Left="520" NullValue="0" TabOrder="130" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_11" Left="592" NullValue="0" TabOrder="131" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_12" Left="664" NullValue="0" TabOrder="132" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_01" Left="736" NullValue="0" TabOrder="133" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_02" Left="808" NullValue="0" TabOrder="134" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_03" Left="880" NullValue="0" TabOrder="135" Top="321" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A2_99" Left="952" TabOrder="136" Top="321" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_04" Left="88" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="137" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_04" Left="88" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="138" Top="382" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_05" Left="160" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="139" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_05" Left="160" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="140" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_06" Left="232" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="141" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_06" Left="232" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="142" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_07" Left="304" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="143" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_07" Left="304" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="144" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_08" Left="376" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="145" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_08" Left="376" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="146" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_09" Left="448" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="147" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_09" Left="448" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="148" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_10" Left="520" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="149" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_10" Left="520" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="150" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_11" Left="592" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="151" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_11" Left="592" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="152" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_12" Left="664" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="153" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_12" Left="664" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="154" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_01" Left="736" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="155" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_01" Left="736" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="156" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_02" Left="808" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="157" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_02" Left="808" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="158" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q3_03" Left="880" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="159" Top="357" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P3_03" Left="880" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="160" Top="381" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_Q3_99" Left="952" TabOrder="161" Top="357" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_P3_99" Left="952" MaxLength="11" TabOrder="162" Top="381" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_04" Left="88" NullValue="0" TabOrder="163" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_05" Left="160" NullValue="0" TabOrder="164" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_06" Left="232" NullValue="0" TabOrder="165" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_07" Left="304" NullValue="0" TabOrder="166" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_08" Left="376" NullValue="0" TabOrder="167" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_09" Left="448" NullValue="0" TabOrder="168" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_10" Left="520" NullValue="0" TabOrder="169" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_11" Left="592" NullValue="0" TabOrder="170" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_12" Left="664" NullValue="0" TabOrder="171" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_01" Left="736" NullValue="0" TabOrder="172" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_02" Left="808" NullValue="0" TabOrder="173" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_03" Left="880" NullValue="0" TabOrder="174" Top="409" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A3_99" Left="952" TabOrder="175" Top="409" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_04" Left="88" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="176" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_04" Left="88" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="177" Top="470" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_05" Left="160" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="178" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_05" Left="160" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="179" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_06" Left="232" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="180" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_06" Left="232" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="181" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_07" Left="304" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="182" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_07" Left="304" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="183" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_08" Left="376" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="184" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_08" Left="376" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="185" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_09" Left="448" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="186" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_09" Left="448" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="187" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_10" Left="520" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="188" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_10" Left="520" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="189" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_11" Left="592" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="190" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_11" Left="592" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="191" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_12" Left="664" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="192" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_12" Left="664" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="193" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_01" Left="736" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="194" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_01" Left="736" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="195" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_02" Left="808" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="196" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_02" Left="808" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="197" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q4_03" Left="880" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="198" Top="445" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P4_03" Left="880" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="199" Top="469" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_Q4_99" Left="952" TabOrder="200" Top="445" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_P4_99" Left="952" MaxLength="11" TabOrder="201" Top="469" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_04" Left="88" NullValue="0" TabOrder="202" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_05" Left="160" NullValue="0" TabOrder="203" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_06" Left="232" NullValue="0" TabOrder="204" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_07" Left="304" NullValue="0" TabOrder="205" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_08" Left="376" NullValue="0" TabOrder="206" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_09" Left="448" NullValue="0" TabOrder="207" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_10" Left="520" NullValue="0" TabOrder="208" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_11" Left="592" NullValue="0" TabOrder="209" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_12" Left="664" NullValue="0" TabOrder="210" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_01" Left="736" NullValue="0" TabOrder="211" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_02" Left="808" NullValue="0" TabOrder="212" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_03" Left="880" NullValue="0" TabOrder="213" Top="497" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A4_99" Left="952" TabOrder="214" Top="497" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_04" Left="88" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="215" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_04" Left="88" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="216" Top="558" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_05" Left="160" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="217" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_05" Left="160" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="218" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_06" Left="232" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="219" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_06" Left="232" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="220" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_07" Left="304" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="221" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_07" Left="304" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="222" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_08" Left="376" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="223" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_08" Left="376" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="224" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_09" Left="448" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="225" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_09" Left="448" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="226" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_10" Left="520" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="227" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_10" Left="520" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="228" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_11" Left="592" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="229" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_11" Left="592" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="230" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_12" Left="664" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="231" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_12" Left="664" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="232" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_01" Left="736" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="233" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_01" Left="736" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="234" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_02" Left="808" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="235" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_02" Left="808" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="236" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_Q5_03" Left="880" MaxLength="7" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="237" Top="533" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit DecimalLen="0" Height="20" Id="med_P5_03" Left="880" MaxLength="11" NullValue="0" OnCharChanged="med_OnCharChanged" TabOrder="238" Top="557" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_Q5_99" Left="952" TabOrder="239" Top="533" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_P5_99" Left="952" MaxLength="11" TabOrder="240" Top="557" Value="MaskEdit0" Width="88"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_04" Left="88" TabOrder="241" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_05" Left="160" TabOrder="242" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_06" Left="232" TabOrder="243" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_07" Left="304" TabOrder="244" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_08" Left="376" TabOrder="245" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_09" Left="448" TabOrder="246" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_10" Left="520" TabOrder="247" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_11" Left="592" TabOrder="248" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_12" Left="664" TabOrder="249" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_01" Left="736" TabOrder="250" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_02" Left="808" TabOrder="251" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_03" Left="880" TabOrder="252" Top="585" Value="MaskEdit0" Width="68"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_A5_99" Left="952" TabOrder="253" Top="585" Value="MaskEdit0" Width="88"></MaskEdit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="40" Id="Static45" Left="-4" TabOrder="254" Top="128" VAlign="Middle" Width="88"></Static>
+		<Static Height="18" Id="Static46" Left="7" TabOrder="255" Text="Cigma단가&#32;:&#32;" Top="102" VAlign="Middle" Width="81"></Static>
+		<MaskEdit Enable="FALSE" Height="20" Id="med_PRICE" Left="80" TabOrder="256" Top="101" Value="MaskEdit0" Width="88"></MaskEdit>
+		<Static Height="18" Id="Static2" Left="191" TabOrder="257" Text="공장코드&#32;:&#32;" Top="102" VAlign="Middle" Width="57"></Static>
+		<Static Height="18" Id="Static4" Left="359" TabOrder="258" Text="제품코드&#32;:&#32;" Top="102" VAlign="Middle" Width="57"></Static>
+		<Static Height="18" Id="Static7" Left="527" TabOrder="259" Text="차종코드&#32;:&#32;" Top="102" VAlign="Middle" Width="57"></Static>
+		<Static Height="18" Id="Static10" Left="695" TabOrder="260" Text="규격코드&#32;:&#32;" Top="102" VAlign="Middle" Width="57"></Static>
+		<Static Height="18" Id="Static18" Left="863" TabOrder="261" Text="내수구분&#32;:&#32;" Top="102" VAlign="Middle" Width="57"></Static>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_PLTCD" Left="252" TabOrder="262" Top="102" Width="88"></Edit>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_PRDCD" Left="420" TabOrder="263" Top="102" Width="88"></Edit>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_CARCD" Left="588" TabOrder="264" Top="102" Width="88"></Edit>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_BDYCD" Left="756" TabOrder="265" Top="102" Width="88"></Edit>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_EXDSP" Left="924" TabOrder="266" Top="102" Width="88"></Edit>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SPYZ201.xml
+ * ● PROGRAM DESCRIPTION  : 년판매계획조회 PS용
+ * ● DATE WRITTEN         : 2012.06.02
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+
+var nowDate = today();
+
+var arrMM = Split("04,05,06,07,08,09,10,11,12,01,02,03",",");
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();	
+	//MainGrid.ToolTipText = setPopMessage("2053");	
+	getComCode();
+	gFcOnTopButtonColor("2.6"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 
+	SetYYYY13(substr(nowDate,0,4),ds_yyyy);
+	cmb_yyyy.Value = substr(nowDate,0,4);
+	clearEditObject();
+	disabledEditObject();
+	st_yyyy1.Text = cmb_yyyy.Value +'년';
+	st_yyyy2.Text = toNumber(cmb_yyyy.Value)+1 +'년';
+	st_yyyy3.Text = toNumber(cmb_yyyy.Value)+2 +'년';
+	st_yyyy4.Text = toNumber(cmb_yyyy.Value)+3 +'년';
+	st_yyyy5.Text = toNumber(cmb_yyyy.Value)+4 +'년';
+	ed_pyvnd.SetFocus();
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+//	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+//	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");		
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+
+	cb_searchCodeName1.index = 0;
+	//cb_searchCodeName2.index = 0;	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSPYZ201(){
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+	if(length(trim(st_pspno.Text)) < 1){
+		alert(setPopMessage("1501"));  //[확인] 품번 확인바랍니다.
+		setMessage("1501");	
+		ed_pspno.SetFocus();
+		return;
+	}
+	//조회
+	clearEditObject();  //초기화
+	var yyyy1 = cmb_yyyy.Value;
+	var yyyy2 = toNumber(cmb_yyyy.Value) + 1;
+	var yyyy3 = toNumber(cmb_yyyy.Value) + 2;
+	var yyyy4 = toNumber(cmb_yyyy.Value) + 3;
+	var yyyy5 = toNumber(cmb_yyyy.Value) + 4;
+	var yyyy6 = toNumber(cmb_yyyy.Value) + 5;
+	var sKind		= "getSPYZ201";						
+	var sMethodName = "service::pssallib/selectSPYZ201.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SPYZ201=ds_SPYZ201";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += "@PLNGB=" + quote(cb_plngb.Value);
+	sArgument += "@PYVND=" + quote(ed_pyvnd.Text);
+	sArgument += "@PSPNO=" + quote(ed_pspno.Text);
+	sArgument += "@PLM104=" + quote(yyyy1+'04');
+	sArgument += "@PLM503=" + quote(yyyy6+'03');
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1013"));  //[알림] 신규입력입니다.
+		setMessage("1013");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	if(ds_SPYZ201.GetRowCount()<1){
+		selectDesc();		
+	}else{
+		med_PRICE.Text = ds_SPYZ201.GetColumn(0,"PRICE");
+		ed_PLTCD.Text = ds_SPYZ201.GetColumn(0,"PLTCD");
+		ed_PRDCD.Text = ds_SPYZ201.GetColumn(0,"PRDCD");
+		ed_CARCD.Text = ds_SPYZ201.GetColumn(0,"CARCD");
+		ed_BDYCD.Text = ds_SPYZ201.GetColumn(0,"BDYCD");
+		ed_EXDSP.Text = ds_SPYZ201.GetColumn(0,"EXDSP");
+	}
+	
+	for (var i=0 ;i < ds_SPYZ201.GetRowCount();i++){
+		var z = 0;
+		for (var j=toNumber(cmb_yyyy.Value); j<toNumber(cmb_yyyy.Value)+5; j++){
+			z=z+1;
+			var medQtemp = 'med_Q'+ toString(z);
+			var medPtemp = 'med_P'+ toString(z);
+			switch (ds_SPYZ201.GetColumn(i,"PLNYM")){
+				case j+'04' :
+					Object(medQtemp+'_04').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_04').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_04'));
+					break;
+				case j+'05' : 
+					Object(medQtemp+'_05').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_05').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_05'));
+					break;
+				case j+'06' : 
+					Object(medQtemp+'_06').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_06').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_06'));
+					break;
+				case j+'07' : 
+					Object(medQtemp+'_07').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_07').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_07'));
+					break;
+				case j+'08' : 
+					Object(medQtemp+'_08').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_08').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_08'));
+					break;
+				case j+'09' : 
+					Object(medQtemp+'_09').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_09').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_09'));
+					break;
+				case j+'10' : 
+					Object(medQtemp+'_10').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_10').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_10'));
+					break;
+				case j+'11' : 
+					Object(medQtemp+'_11').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_11').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_11'));
+					break;
+				case j+'12' : 
+					Object(medQtemp+'_12').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_12').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_12'));
+					break;
+				case (j+1)+'01' : 
+					Object(medQtemp+'_01').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_01').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_01'));
+					break;
+				case (j+1)+'02' : 
+					Object(medQtemp+'_02').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_02').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_02'));
+					break;
+				case (j+1)+'03' : 
+					Object(medQtemp+'_03').Text = ds_SPYZ201.GetColumn(i,"MONQY");
+					Object(medPtemp+'_03').Text = ds_SPYZ201.GetColumn(i,"YESCS");
+					med_OnCharChanged(Object(medQtemp+'_03'));
+					break;
+			}  //end switch
+		}  //end for
+	}   //end for
+
+	enabledEditObject();
+	med_Q1_04.SetFocus();
+}
+
+/********************************************************************** 
+ * 내용설명 : 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+ function setSPYZ201(){
+	if(med_Q1_04.Enable==0){
+		alert(setPopMessage("1012"));  //[경고] 조회후 실행바랍니다.
+		setMessage("1012");	
+		return;
+	}
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+	if(length(trim(st_pspno.Text)) < 1){
+		alert(setPopMessage("1501"));  //[확인] 품번 확인바랍니다.
+		setMessage("1501");	
+		ed_pspno.SetFocus();
+		return;
+	}
+ 	var yyyy1 = cmb_yyyy.Value;
+	var yyyy2 = toNumber(cmb_yyyy.Value) + 1;
+	var yyyy3 = toNumber(cmb_yyyy.Value) + 2;
+	var yyyy4 = toNumber(cmb_yyyy.Value) + 3;
+	var yyyy5 = toNumber(cmb_yyyy.Value) + 4;
+	var yyyy6 = toNumber(cmb_yyyy.Value) + 5;
+	
+	//EDIT값들을 배열에 저장하여 dataset으로 저장
+	var arrValueM = array();   //년월저장
+	var arrValueQ = array();   //월수량저장
+	var arrValueP = array();   //월단가저장
+	var arrValueT = array();   //년Total수량
+	var arrValueR = array();   //월배율
+	var yyyyMMdd = yyyy1+arrMM[0]+'01';
+	for (var m=0;m<60;m++){
+		arrValueM[m] = substr(AddMonth(yyyyMMdd,m),0,6);
+	}
+	var y=0;
+	var y1Q = 0;  //yyyy년 Total수량
+	var y2Q = 0;  //yyyy년+1 Total수량
+	var y3Q = 0;  //yyyy년+2 Total수량
+	var y4Q = 0;  //yyyy년+3 Total수량
+	var y5Q = 0;  //yyyy년+4 Total수량
+	for (var z=1;z<6;z++){   //월수량및단가 배열에 넣기 , 년total수량 구하기
+		for( var x=0;x<arrMM.length();x++){
+			arrValueQ[y]=Object('med_Q'+toString(z)+'_'+arrMM[x]).Value;
+			arrValueP[y]=Object('med_P'+toString(z)+'_'+arrMM[x]).Value;
+			if(z==1) y1Q=y1Q+toNumber(arrValueQ[y]);
+			if(z==2) y2Q=y2Q+toNumber(arrValueQ[y]);
+			if(z==3) y3Q=y3Q+toNumber(arrValueQ[y]);
+			if(z==4) y4Q=y4Q+toNumber(arrValueQ[y]);
+			if(z==5) y5Q=y5Q+toNumber(arrValueQ[y]);
+			y=y+1;
+		}
+	}
+	for (var a=0;a<60;a++){  //년total수량 배열에 넣기  ,월배율 배열에 넣기
+		if (a<12) {
+			arrValueT[a] = y1Q; arrValueR[a] = iif(y1Q != 0, round(toNumber(arrValueQ[a])/y1Q*100,2),0); 
+		}else if(a<24){
+			arrValueT[a] = y2Q; arrValueR[a] = iif(y2Q != 0, round(toNumber(arrValueQ[a])/y2Q*100,2),0); 
+		}else if(a<36){
+			arrValueT[a] = y3Q; arrValueR[a] = iif(y3Q != 0, round(toNumber(arrValueQ[a])/y3Q*100,2),0); 
+		}else if(a<48){
+			arrValueT[a] = y4Q; arrValueR[a] = iif(y4Q != 0, round(toNumber(arrValueQ[a])/y4Q*100,2),0); 
+		}else if(a<60){
+			arrValueT[a] = y5Q; arrValueR[a] = iif(y5Q != 0, round(toNumber(arrValueQ[a])/y5Q*100,2),0); 
+		}
+	}
+	ds_SPYZ201insert.ClearData();
+	var i=0;
+	for (var j=0;j<60;j++){
+		if(toNumber(arrValueQ[j])*toNumber(arrValueP[j]) != 0){
+			ds_SPYZ201insert.InsertRow(i);
+			ds_SPYZ201insert.SetColumn(i,"COMPS",cb_searchCodeName1.Value);
+			ds_SPYZ201insert.SetColumn(i,"PLNYM",arrValueM[j]);
+			ds_SPYZ201insert.SetColumn(i,"PLNGB",cb_plngb.Value);
+			ds_SPYZ201insert.SetColumn(i,"PYVND",ed_pyvnd.Text);
+			ds_SPYZ201insert.SetColumn(i,"SHPTO","0");
+			ds_SPYZ201insert.SetColumn(i,"PSPNO",ed_pspno.Text);
+			ds_SPYZ201insert.SetColumn(i,"PLTCD",ed_PLTCD.Text);
+			ds_SPYZ201insert.SetColumn(i,"PRDCD",ed_PRDCD.Text);
+			ds_SPYZ201insert.SetColumn(i,"SPTEX","" );
+			ds_SPYZ201insert.SetColumn(i,"EXDSP",ed_EXDSP.Text);
+			ds_SPYZ201insert.SetColumn(i,"CARCD",ed_CARCD.Text);
+			ds_SPYZ201insert.SetColumn(i,"BDYCD",ed_BDYCD.Text);
+			ds_SPYZ201insert.SetColumn(i,"YERQY",arrValueT[j]);
+			ds_SPYZ201insert.SetColumn(i,"YESCS",arrValueP[j]);
+			ds_SPYZ201insert.SetColumn(i,"MRATE",arrValueR[j]);
+			ds_SPYZ201insert.SetColumn(i,"MONQY",arrValueQ[j]);
+			i=i+1;
+		}
+	}
+	
+ 	http.Sync = true;
+	var sKind		= "SAVE_SPYZ201";						
+	var sMethodName = "service::pssallib/insertSPYZ201.do";
+	var sInDataSet  = "ds_SPYZ201insert=ds_SPYZ201insert:U";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(cb_searchCodeName1.Value);
+		sArgument += " PLNGB=" + quote(cb_plngb.Value);
+		sArgument += " PYVND=" + quote(ed_pyvnd.Text);
+		sArgument += " PSPNO=" + quote(ed_pspno.Text);
+		sArgument += " PLM104=" + quote(yyyy1+'04');
+		sArgument += " PLM503=" + quote(yyyy6+'03');
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	
+	disabledEditObject();
+	ed_pspno.SetFocus();
+ }
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "년판매계획등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|년판매계획등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSPYZ201();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	if(med_Q1_04.Enable==0){
+		alert(setPopMessage("1012"));  //[경고] 조회후 실행바랍니다.
+		setMessage("1012");	
+		return;
+	}
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+	if(length(trim(st_pspno.Text)) < 1){
+		alert(setPopMessage("1501"));  //[확인] 품번 확인바랍니다.
+		setMessage("1501");	
+		ed_pspno.SetFocus();
+		return;
+	}
+	clearEditObject();
+	alert(setPopMessage("1011"));     //[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.
+	setMessage("1011");	
+}
+
+function fn_Save()
+{
+	setSPYZ201();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.6"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SPYZ201.ClearData();
+	clearEditObject();
+	disabledEditObject();
+}
+
+function cmb_yyyy_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SPYZ201.ClearData();
+	clearEditObject();
+	disabledEditObject();
+	st_yyyy1.Text = cmb_yyyy.Value +'년';
+	st_yyyy2.Text = toNumber(cmb_yyyy.Value)+1 +'년';
+	st_yyyy3.Text = toNumber(cmb_yyyy.Value)+2 +'년';
+	st_yyyy4.Text = toNumber(cmb_yyyy.Value)+3 +'년';
+	st_yyyy5.Text = toNumber(cmb_yyyy.Value)+4 +'년';
+}
+
+function imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pyvnd.Text);
+	if (length(trim(ed_pyvnd.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pyvnd.Text = rtn[0];
+		st_pyvnd.Text = rtn[1];
+	}
+}
+
+function ed_pyvnd_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_pyvnd.Text = "";
+}
+
+function ed_pyvnd_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("1502"));
+		setMessage("1502");	
+		http.usewaitcursor = true;
+		ed_pyvnd.SetFocus();
+		return;
+	}
+	st_pyvnd.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;
+}
+
+function imgPspno_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pspno.Text);
+	if (length(trim(ed_pspno.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "A1";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pspno.Text = rtn[0];
+		st_pspno.Text = rtn[1];
+	}
+}
+
+function ed_pspno_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_pspno.Text = "";
+}
+
+function ed_pspno_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//품번Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectBM008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM008PR=ds_BM008PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " ITNBR=" + quote(ed_pspno.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_BM008PR.GetRowCount() < 1){
+		alert(setPopMessage("1501"));
+		setMessage("1501");
+		http.usewaitcursor = true;
+		ed_pspno.SetFocus();
+		return;
+	}
+	st_pspno.Text=ds_BM008PR.GetColumn(0,"ITDSC");
+	http.usewaitcursor = true;
+}
+
+function selectDesc()
+{
+	//단가 조회
+	http.Sync 	= true;
+	var sKind		= "getSalePrice";		
+	var sMethodName = "service::pscomlib/selectEM001PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_EM001PR=ds_EM001PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_pyvnd.Text);
+		sArgument  += " PRTNO=" + quote(ed_pspno.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	med_PRICE.Text = ds_EM001PR.GetColumn(0,"PRICE");
+	
+	//차종,규격 CODE 조회
+	http.Sync 	= true;
+	var sKind		= "getCar";		
+	var sMethodName = "service::pscomlib/selectMST100PF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST100PF=ds_MST100PF";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(cb_searchCodeName1.Value);
+		sArgument  += " PRTNO=" + quote(ed_pspno.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ed_CARCD.Text = ds_MST100PF.GetColumn(0,"CARCD");
+	ed_BDYCD.Text = ds_MST100PF.GetColumn(0,"BDYCD");
+	
+	//공장코드,제품코드 조회
+	ed_PLTCD.Text = ds_BM008PR.GetColumn(0,"PACKC");
+	ed_PRDCD.Text = substr(ds_BM008PR.GetColumn(0,"ITCLS"),0,1);
+
+	//내수,수출 구분
+	ed_EXDSP.Text = 'D';
+}
+
+function med_OnCharChanged(obj,strPreText,strPostText)
+{
+	var temp_mm = substr(obj.ID,5,4);
+	var temp_99 = substr(obj.ID,5,1);
+	Object('med_A'+temp_mm).Value = toNumber(Object('med_Q'+temp_mm).Value) * toNumber(Object('med_P'+temp_mm).Value);
+	Object('med_Q'+temp_99+'_99').Value = 
+	toNumber(Object('med_Q'+temp_99+'_04').Value)+toNumber(Object('med_Q'+temp_99+'_05').Value)+toNumber(Object('med_Q'+temp_99+'_06').Value)+
+	toNumber(Object('med_Q'+temp_99+'_07').Value)+toNumber(Object('med_Q'+temp_99+'_08').Value)+toNumber(Object('med_Q'+temp_99+'_09').Value)+
+	toNumber(Object('med_Q'+temp_99+'_10').Value)+toNumber(Object('med_Q'+temp_99+'_11').Value)+toNumber(Object('med_Q'+temp_99+'_12').Value)+
+	toNumber(Object('med_Q'+temp_99+'_01').Value)+toNumber(Object('med_Q'+temp_99+'_02').Value)+toNumber(Object('med_Q'+temp_99+'_03').Value);
+	/*
+	Object('med_P'+temp_99+'_99').Value = 
+	toNumber(Object('med_P'+temp_99+'_04').Value)+toNumber(Object('med_P'+temp_99+'_05').Value)+toNumber(Object('med_P'+temp_99+'_06').Value)+
+	toNumber(Object('med_P'+temp_99+'_07').Value)+toNumber(Object('med_P'+temp_99+'_08').Value)+toNumber(Object('med_P'+temp_99+'_09').Value)+
+	toNumber(Object('med_P'+temp_99+'_10').Value)+toNumber(Object('med_P'+temp_99+'_11').Value)+toNumber(Object('med_P'+temp_99+'_12').Value)+
+	toNumber(Object('med_P'+temp_99+'_01').Value)+toNumber(Object('med_P'+temp_99+'_02').Value)+toNumber(Object('med_P'+temp_99+'_03').Value);
+	*/
+	Object('med_A'+temp_99+'_99').Value = 
+	toNumber(Object('med_A'+temp_99+'_04').Value)+toNumber(Object('med_A'+temp_99+'_05').Value)+toNumber(Object('med_A'+temp_99+'_06').Value)+
+	toNumber(Object('med_A'+temp_99+'_07').Value)+toNumber(Object('med_A'+temp_99+'_08').Value)+toNumber(Object('med_A'+temp_99+'_09').Value)+
+	toNumber(Object('med_A'+temp_99+'_10').Value)+toNumber(Object('med_A'+temp_99+'_11').Value)+toNumber(Object('med_A'+temp_99+'_12').Value)+
+	toNumber(Object('med_A'+temp_99+'_01').Value)+toNumber(Object('med_A'+temp_99+'_02').Value)+toNumber(Object('med_A'+temp_99+'_03').Value);
+	Object('med_P'+temp_99+'_99').Value = round(toNumber(Object('med_A'+temp_99+'_99').Value) / toNumber(Object('med_Q'+temp_99+'_99').Value));
+	
+	//Object('med_A'+temp_mm).Text = (Object('med_Q'+temp_mm).Value)*(Object('med_P'+temp_mm).Value);
+}
+
+function clearEditObject()
+{
+	for (var z=1;z<6;z++){
+		for( var x=0;x<arrMM.length();x++){
+			Object('med_Q'+toString(z)+'_'+arrMM[x]) = 0;
+			Object('med_P'+toString(z)+'_'+arrMM[x]) = 0;
+			Object('med_A'+toString(z)+'_'+arrMM[x]) = 0;
+		}
+		Object('med_Q'+toString(z)+'_'+'99') = 0;
+		Object('med_P'+toString(z)+'_'+'99') = 0;
+		Object('med_A'+toString(z)+'_'+'99') = 0;
+	}
+	med_PRICE.Text = '';
+	ed_PLTCD.Text = '';
+	ed_PRDCD.Text = '';
+	ed_CARCD.Text = '';
+	ed_BDYCD.Text = '';
+	ed_EXDSP.Text = '';
+}
+
+function enabledEditObject()
+{
+	for (var z=1;z<6;z++){
+		for( var x=0;x<arrMM.length();x++){
+			Object('med_Q'+toString(z)+'_'+arrMM[x]).Enable = 1;
+			Object('med_P'+toString(z)+'_'+arrMM[x]).Enable = 1;
+		}
+	}
+}
+
+function disabledEditObject()
+{
+	for (var z=1;z<6;z++){
+		for( var x=0;x<arrMM.length();x++){
+			Object('med_Q'+toString(z)+'_'+arrMM[x]).Enable = 0;
+			Object('med_P'+toString(z)+'_'+arrMM[x]).Enable = 0;
+		}
+	}
+}
+
+]]></Script>
+</Window>

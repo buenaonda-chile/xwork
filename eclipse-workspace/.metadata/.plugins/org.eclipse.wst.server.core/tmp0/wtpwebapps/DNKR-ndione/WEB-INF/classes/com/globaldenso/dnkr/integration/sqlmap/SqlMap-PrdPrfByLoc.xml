@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdPrfByLocDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdPrfByLoc" type="PrdPrfByLocDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRDT_NO" />  
+        <result property="prdtNm" column="PRDT_NM" />         
+        <result property="locCode" column="LOC_CODE" />
+        <result property="year" column="YEAR" />
+        <result property="fsHalf" column="FS_HALF" />         
+        <result property="pMonth" column="P_MONTH" />
+        <result property="tMonth" column="T_MONTH" />
+        <result property="stTiYct" column="ST_TI_YCT" />
+        <result property="reCnt" column="RE_CNT" />
+        <result property="frRa" column="FR_RA" />
+        <result property="stTiPr" column="ST_TI_PR" />
+        <result property="obTi" column="OB_TI" />
+        <result property="hrMntDe" column="HR_MNT_DE" />
+        <result property="pmonPrf" column="PMON_PRF" />
+        <result property="wsReIn" column="WS_RE_IN" />
+        <result property="prdObEffAmo" column="PRD_OB_EFF_AMO" />
+        <result property="totHrMnt" column="TOT_HR_MNT" />
+        <result property="exTiOb" column="EX_TI_OB" />
+        <result property="exTiPrf" column="EX_TI_PRF" />
+        <result property="exUseRa" column="EX_USE_RA" />
+        <result property="indTiOb" column="IND_TI_OB" />
+        <result property="indTiPrf" column="IND_TI_PRF" />
+        <result property="indUseRa" column="IND_USE_RA" />
+        <result property="exIndTiOb" column="EX_IND_TI_OB" />
+        <result property="exIndTiPrf" column="EX_IND_TI_PRF" />
+        <result property="exIndUseRa" column="EX_IND_USE_RA" />
+        <result property="partCode" column="PART_CODE" />
+        
+    </resultMap>
+
+	
+    <select id="searchByCondition2" resultMap="PrdPrfByLoc" parameterType="PrdPrfByLocDomain">
+    select (SELECT MAX(TT.PART_CODE) AS PART_CODE FROM PSZDBLIB.FHP010PF TT
+            	WHERE TT.CLS_CODE='E1' AND TT.LOC_CODE=BB.LOC_CODE GROUP BY TT.LOC_CODE) AS PART_CODE
+        , BB.loc_code
+        , 2 AS ST_TI_YCT /*기준시간*/
+        , 2 AS RE_CNT /*여유계수*/
+        , 2 AS FR_RA /*임율*/
+        , 2 AS ST_TI_PR /*기준시간 실적*/
+        , 2 AS OB_TI /*목표시간*/
+        , 2 AS HR_MNT_DE /*직접생산시간*/
+        , 2 AS PMON_PRF /*전월실적*/
+        , 2 AS WS_RE_IN /*목표지수 공수저감지수*/
+        , 2 AS PRD_OB_EFF_AMO /*생산성 목표금액(효과금액)*/
+        , 2 AS TOT_HR_MNT /*총투입시간실적*/
+        , 2 AS EX_TI_OB /*제외시간목표*/
+        , 2 AS EX_TI_PRF /*제외시간실적 제외소계*/
+        , 2 AS EX_USE_RA /*제외사용률*/
+        , 2 AS IND_TI_OB /*간접시간목표*/
+        , 2 AS IND_TI_PRF /*간접시간실적 간접소계*/
+        , 2 AS IND_USE_RA /*간접사용률*/
+        , 2 AS EX_IND_TI_OB /*제외 간접 시간목표*/
+        , 2 AS EX_IND_TI_PRF /*제외간접 시간 실적 제외 간접 소계*/
+        , 2 AS EX_IND_USE_RA /*제외간접사용률*/
+from PSZDBLIB.FHP010PF BB
+where BB.cls_CODE ='E1'
+and bb.loc_code in('4707','4702','4701','4712','4713')
+group by bb.loc_code
+union all
+select '4717', '4718', 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+FROM SYSIBM.SYSDUMMY1
+union all
+select '4717', '4719', 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+FROM SYSIBM.SYSDUMMY1
+union all
+select '4717', '4720', 1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1
+FROM SYSIBM.SYSDUMMY1
+union all
+select '4714', '4715', 42,5,3,4,5,7,2,3,3,2,3,4,6,5,6,7,9,0,3
+FROM SYSIBM.SYSDUMMY1
+union all
+select '4714', '4716', 1,0,3,5,9,0,4,2,6,9,4,2,3,5,7,8,9,4,5
+FROM SYSIBM.SYSDUMMY1
+
+    </select>
+    <!-- 총투입시간 및 직접생산시간 -->
+    <select id="searchByCondition" resultMap="PrdPrfByLoc" parameterType="PrdPrfByLocDomain">
+    	/*반별생산성실적 */ 
+    	WITH M AS (
+    		SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+            UNION ALL
+            SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE
+            FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+    	)
+    	, U AS (
+    		SELECT
+                      M.OPERT_DE
+                   , B.CLS_CODE
+                   , B.LOC_CODE
+                   , B.LINE_CODE
+                   , M.PSPNO AS     PRODUCT_NO
+                   , QY
+            FROM M
+                      INNER JOIN PSZDBLIB.FHP010PF B
+                      ON M.DEVID = B.IF_CODE
+                      AND M.COMPS = B.CLS_CODE
+                      WHERE M.COMPS = #{clsCode}
+                      AND M.TRNYM = #{repym}
+                      <if test="partCode != null and partCode != ''">
+						AND B.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+						</if>
+                      AND B.CLS_CODE = #{clsCode}
+                      AND LENGTH(TRIM(B.IF_CODE)) > 0
+                      AND B.IF_TYPE = 'Q'
+            UNION ALL
+            SELECT OPERT_DE
+                  ,  CLS_CODE
+                  , LOC_CODE
+                  , LINE_CODE
+                  , PRODUCT_NO
+                  , QY
+            FROM PSZDBLIB.FHP100PF
+            WHERE CLS_CODE = #{clsCode}
+            <if test="partCode != null and partCode != ''">
+			AND LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+			</if> 
+            AND INT_TYPE IN ( 'M', 'I')
+            AND SUBSTR(OPERT_DE,1,6) = #{repym}
+    	)
+    	
+		SELECT BB.LOC_CODE AS LOC_CODE /*부서반이름은 페이지에서 처리*/
+				, (SELECT MAX(TT.PART_CODE) AS PART_CODE FROM PSZDBLIB.FHP010PF TT
+            		WHERE TT.CLS_CODE=#{clsCode} AND TT.LOC_CODE=BB.LOC_CODE GROUP BY TT.LOC_CODE) AS PART_CODE
+		        , DOUBLE(MAX(BB.ST_TI)) AS ST_TI_YCT /*기준시간*/
+		        , DOUBLE(MAX(BB.RE_CNT)) AS RE_CNT /*여유계수*/
+		        , DOUBLE(MAX(BB.FR_RA)) AS FR_RA /*임율*/
+		        , DOUBLE(COALESCE(MAX(DD.ST),0)) AS ST_TI_PR /*기준시간 실적*/
+		        , DOUBLE(DEC(COALESCE(MAX(DD.ST),0) * COALESCE(MAX(BB.WS_RE_IN),0) / 100,15,2)) AS OB_TI /*목표시간*/
+		        , DOUBLE(COALESCE(MAX(EE.HR_MNT_DE),0)) AS HR_MNT_DE /*직접생산시간*/
+		        , DOUBLE(COALESCE(MAX(RR.PMON_PRF),0)) AS PMON_PRF /*전월실적*/
+		        , DOUBLE(COALESCE(MAX(BB.WS_RE_IN),0)) AS WS_RE_IN /*목표지수 공수저감지수*/
+		        , DOUBLE(COALESCE(MAX(BB.EFF_AMO),0)) AS PRD_OB_EFF_AMO /*생산성 목표금액(효과금액)*/
+		        , DOUBLE(COALESCE(MAX(EE.TOT_HR_MNT),0)) AS TOT_HR_MNT /*총투입시간실적*/
+		        , DOUBLE(COALESCE(MAX(BB.EX_TI_OB),0)) AS EX_TI_OB /*제외시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.EX_TI_PRF),0)) AS EX_TI_PRF /*제외시간실적 제외소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.EX_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) *100) AS EX_USE_RA /*제외사용률*/
+		        , DOUBLE(COALESCE(MAX(BB.IND_TI_OB),0)) AS IND_TI_OB /*간접시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.IND_TI_PRF),0)) AS IND_TI_PRF /*간접시간실적 간접소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.IND_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) *100) AS IND_USE_RA /*간접사용률*/
+		        , DOUBLE(COALESCE(MAX(BB.EX_TI_OB),0) + COALESCE(MAX(BB.IND_TI_OB),0)) AS EX_IND_TI_OB /*제외 간접 시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.EX_IND_TI_PRF),0)) AS EX_IND_TI_PRF /*제외간접 시간 실적 제외 간접 소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.EX_TI_PRF)+MAX(EE.IND_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) * 100) AS EX_IND_USE_RA /*제외간접사용률*/
+		FROM (
+		         SELECT AA.LOC_CODE
+		                , (CASE AA.IEM WHEN '1' THEN AA.CV ELSE '0' END) AS ST_TI /*기준시간*/
+		                , (CASE AA.IEM WHEN '2' THEN AA.CV ELSE '0' END) AS RE_CNT /*여유계수*/
+		                , (CASE AA.IEM WHEN '3' THEN AA.CV ELSE '0' END) AS FR_RA /*임율*/
+		                , (CASE AA.IEM WHEN '4' THEN AA.CV ELSE '0' END) AS WS_RE_IN /*목표지수 공수저감지수*/
+		                , (CASE AA.IEM WHEN '5' THEN AA.CV ELSE '0' END) AS EFF_AMO /*생산성목표금액 효과금액*/
+		                , (CASE AA.IEM WHEN '6' THEN AA.CV ELSE '0' END) AS EX_TI_OB /*제외시간목표*/
+		                , (CASE AA.IEM WHEN '7' THEN AA.CV ELSE '0' END) AS IND_TI_OB /*간접시간목표*/
+		         FROM (
+		                  SELECT MAX(A.CLS_CODE)   AS CLS_CODE
+		                       , A.LOC_CODE        AS LOC_CODE
+		                       , A.IEM             AS IEM
+		                       , (CASE #{tMonth} WHEN '04' THEN SUM(A.APR) WHEN '05' THEN SUM(A.MAY) WHEN '06' THEN SUM(A.JUN)
+		                              WHEN '07' THEN SUM(A.JULY) WHEN '08' THEN SUM(A.AUG) WHEN '09' THEN SUM(A.SEP) WHEN '10' THEN SUM(A.OCT)
+		                              WHEN '11' THEN SUM(A.NOV) WHEN '12' THEN SUM(A.DEC) WHEN '01' THEN SUM(A.JAN) WHEN '02' THEN SUM(A.FEB)
+		                              WHEN '03' THEN SUM(A.MAR) ELSE '' END) AS CV
+		                       , MAX(B.PART_CODE)  AS PART_CODE
+		                  FROM PSZDBLIB.FHP120PF A,
+		                       PSZDBLIB.FHP010PF B
+		                  WHERE 1 = 1
+		                    AND A.CLS_CODE = #{clsCode}
+		                    AND A.CLS_CODE = B.CLS_CODE
+		                    AND A.LINE_CODE = B.LINE_CODE		                    
+		                    AND A.LOC_CODE = B.LOC_CODE
+		                    AND A.YEAR = #{year}
+		                    <if test="partCode != null and partCode != ''">
+		                    AND A.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                    </if>
+		                  GROUP BY A.LOC_CODE, A.IEM
+		              ) AA
+		
+		     )BB LEFT OUTER JOIN (
+		            SELECT SUM(C.ST) AS ST
+		                    , C.LOC_CODE
+		            FROM (
+		                     SELECT COALESCE(TRUNC(SUM(A.QY) * MAX(B.STDR_LABOR) / DEC(3600),2),0) AS ST
+		                            , MAX(A.LOC_CODE) AS LOC_CODE
+		                            , A.PRODUCT_NO
+		                     FROM (
+		                              SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE,U.LOC_CODE,U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+		                                FROM U /*생산성실적*/
+		                                GROUP BY OPERT_DE,CLS_CODE,LOC_CODE,LINE_CODE,PRODUCT_NO
+		                           ) A
+                           		  LEFT OUTER JOIN PSZDBLIB.FHP030PF B /*공수관리*/ 
+                           		  									ON B.YEAR = #{stlaYear}
+                                                                    AND B.FS_HALF = #{fsHalf} 
+                                                                    AND B.CLS_CODE = #{clsCode}
+                                                                    AND B.LINE_CODE = A.LINE_CODE
+                                                                    AND B.CLS_CODE = A.CLS_CODE
+                                                                    AND B.PRDT_NO = A.PRODUCT_NO
+		                          
+		                     WHERE 1 = 1
+		                       AND SUBSTR(A.OPERT_DE, 1, 6) = #{repym}		                       
+		                       <if test="partCode != null and partCode != ''">
+		                       AND A.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                       </if>
+		                     GROUP BY A.PRODUCT_NO ,A.LINE_CODE
+		                 ) C
+		            group by C.LOC_CODE
+		
+		     ) DD on BB.LOC_CODE = DD.LOC_CODE
+		     LEFT OUTER JOIN (
+		        SELECT QQ.LOC_CODE AS LOC_CODE
+		                , SUM(QQ.HR_MNT_DE) AS HR_MNT_DE /*직접생산시간 손실포함*/
+		                , SUM(QQ.EX_TI_PRF) AS EX_TI_PRF /*제외소계*/
+		                , SUM(QQ.IND_TI_PRF) AS IND_TI_PRF /*간접소계*/
+		                , SUM(QQ.EX_IND_TI_PRF) AS EX_IND_TI_PRF /*제외 간접 소계*/
+		                , SUM(QQ.TOT_HR_MNT) AS TOT_HR_MNT /*총투입시간*/
+		        FROM(
+		                SELECT MAX(FF.LOC_CODE) AS LOC_CODE
+		                        , MAX(FF.EX_TI_PRF) AS EX_TI_PRF /*제외소계*/
+		                        , MAX(FF.IND_TI_PRF) AS IND_TI_PRF /*간접소계*/
+		                        , MAX(FF.EX_TI_PRF)+ MAX(FF.IND_TI_PRF) AS EX_IND_TI_PRF /*제외 간접 소계*/
+		                        , MAX(FF.HR_MNT1 + FF.HR_MNT2 + FF.HR_MNT3 + FF.HR_MNT4 + FF.HR_MNT5
+		                            + FF.HR_MNT6 + FF.HR_MNT7 + FF.HR_MNT8 + FF.LGST_TIME) AS TOT_HR_MNT
+		                        , MAX(FF.HR_MNT1 + FF.HR_MNT2 + FF.HR_MNT3 + FF.HR_MNT4 + FF.HR_MNT5
+		                            + FF.HR_MNT6 + FF.HR_MNT7 + FF.HR_MNT8 + FF.LGST_TIME) - MAX(FF.EX_TI_PRF) - MAX(FF.IND_TI_PRF) AS HR_MNT_DE
+		                FROM(
+		
+		                        SELECT B.LINE_CODE AS LINE_CODE, B.LOC_CODE AS LOC_CODE, B.OPERT_DE AS OPERT_DE
+		                                , CASE A.SE WHEN 'B' THEN COALESCE(A.HR_MNT, 0) ELSE 0 END AS EX_TI_PRF
+		                                , CASE A.SE WHEN 'C' THEN COALESCE(A.HR_MNT, 0) ELSE 0 END AS IND_TI_PRF
+		                                , A.SE AS SE
+		                                , B.HR_MNT1, B.HR_MNT2, B.HR_MNT3, B.HR_MNT4, B.HR_MNT5, B.HR_MNT6, B.HR_MNT7, B.HR_MNT8, B.LGST_TIME
+		                                , B.HR_MNT1 + B.HR_MNT2 + B.HR_MNT3 + B.HR_MNT4
+		                                + B.HR_MNT5 + B.HR_MNT6 + B.HR_MNT7 + B.HR_MNT8 + B.LGST_TIME - COALESCE(A.HR_MNT, 0) AS HR_MNT_DE
+		                        FROM PSZDBLIB.FHP109PF B LEFT OUTER JOIN PSZDBLIB.FHP130PF A
+		                                                              ON A.CLS_CODE = B.CLS_CODE
+		                                                             AND A.LOC_CODE = B.LOC_CODE
+		                                                             AND A.LINE_CODE = B.LINE_CODE
+		                                                             AND A.OPERT_DE = B.OPERT_DE
+		                                                             AND A.SE IN( 'B', 'C') /*제외(B), 간접(C)*/
+		                        WHERE 1 = 1
+		                        AND SUBSTR(B.OPERT_DE, 1, 6) = #{repym}
+		                        AND B.CLS_CODE = #{clsCode}
+		                        <if test="partCode != null and partCode != ''">
+		                        AND B.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                        </if>
+		                ) FF
+		                GROUP BY FF.OPERT_DE, FF.LINE_CODE
+		            ) QQ
+		        GROUP BY QQ.LOC_CODE
+		     )EE on BB.LOC_CODE = EE.LOC_CODE
+		     LEFT OUTER JOIN (
+		            SELECT MAX(N.LOC_CODE) AS LOC_CODE,
+		                   COALESCE(SUM(N.QY),0) AS PMON_PRF
+		            FROM (
+                              SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE,U.LOC_CODE,U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+                                FROM  U /*생산성실적*/
+                                GROUP BY OPERT_DE,CLS_CODE,LOC_CODE,LINE_CODE,PRODUCT_NO
+                           ) N /*생산성실적*/
+		            WHERE N.CLS_CODE = #{clsCode}
+		            <if test="partCode != null and partCode != ''">
+		            AND N.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		            </if>
+		              AND SUBSTR(N.OPERT_DE, 1, 6) = #{pMonth} /*전월로들어감*/
+		            GROUP BY N.LOC_CODE
+		     )RR on BB.LOC_CODE = RR.LOC_CODE
+		GROUP BY BB.LOC_CODE
+		ORDER BY BB.LOC_CODE
+    </select>
+    
+    <select id="searchByCondition3" resultMap="PrdPrfByLoc" parameterType="PrdPrfByLocDomain">
+		/*반별생산성실적 */ 
+		SELECT BB.LOC_CODE AS LOC_CODE /*부서반이름은 페이지에서 처리*/
+				, (SELECT MAX(TT.PART_CODE) AS PART_CODE FROM PSZDBLIB.FHP010PF TT
+            		WHERE TT.CLS_CODE=#{clsCode} AND TT.LOC_CODE=BB.LOC_CODE GROUP BY TT.LOC_CODE) AS PART_CODE
+		        , DOUBLE(MAX(BB.ST_TI)) AS ST_TI_YCT /*기준시간*/
+		        , DOUBLE(MAX(BB.RE_CNT)) AS RE_CNT /*여유계수*/
+		        , DOUBLE(MAX(BB.FR_RA)) AS FR_RA /*임율*/
+		        , DOUBLE(COALESCE(MAX(DD.ST),0)) AS ST_TI_PR /*기준시간 실적*/
+		        , DOUBLE(DEC(COALESCE(MAX(DD.ST),0) * COALESCE(MAX(BB.WS_RE_IN),0) / 100,15,2)) AS OB_TI /*목표시간*/
+		        , DOUBLE(COALESCE(MAX(EE.HR_MNT_DE),0)) AS HR_MNT_DE /*직접생산시간*/
+		        , DOUBLE(COALESCE(MAX(RR.PMON_PRF),0)) AS PMON_PRF /*전월실적*/
+		        , DOUBLE(COALESCE(MAX(BB.WS_RE_IN),0)) AS WS_RE_IN /*목표지수 공수저감지수*/
+		        , DOUBLE(COALESCE(MAX(BB.EFF_AMO),0)) AS PRD_OB_EFF_AMO /*생산성 목표금액(효과금액)*/
+		        , DOUBLE(COALESCE(MAX(EE.TOT_HR_MNT),0)) AS TOT_HR_MNT /*총투입시간실적*/
+		        , DOUBLE(COALESCE(MAX(BB.EX_TI_OB),0)) AS EX_TI_OB /*제외시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.EX_TI_PRF),0)) AS EX_TI_PRF /*제외시간실적 제외소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.EX_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) *100) AS EX_USE_RA /*제외사용률*/
+		        , DOUBLE(COALESCE(MAX(BB.IND_TI_OB),0)) AS IND_TI_OB /*간접시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.IND_TI_PRF),0)) AS IND_TI_PRF /*간접시간실적 간접소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.IND_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) *100) AS IND_USE_RA /*간접사용률*/
+		        , DOUBLE(COALESCE(MAX(BB.EX_TI_OB),0) + COALESCE(MAX(BB.IND_TI_OB),0)) AS EX_IND_TI_OB /*제외 간접 시간목표*/
+		        , DOUBLE(COALESCE(MAX(EE.EX_IND_TI_PRF),0)) AS EX_IND_TI_PRF /*제외간접 시간 실적 제외 간접 소계*/
+		        , DOUBLE(COALESCE(ROUND(DEC(MAX(EE.EX_TI_PRF)+MAX(EE.IND_TI_PRF),15,2) / COALESCE(MAX(EE.TOT_HR_MNT),0),4),0) * 100) AS EX_IND_USE_RA /*제외간접사용률*/
+		FROM (
+		         SELECT AA.LOC_CODE
+		                , (CASE AA.IEM WHEN '1' THEN AA.CV ELSE '0' END) AS ST_TI /*기준시간*/
+		                , (CASE AA.IEM WHEN '2' THEN AA.CV ELSE '0' END) AS RE_CNT /*여유계수*/
+		                , (CASE AA.IEM WHEN '3' THEN AA.CV ELSE '0' END) AS FR_RA /*임율*/
+		                , (CASE AA.IEM WHEN '4' THEN AA.CV ELSE '0' END) AS WS_RE_IN /*목표지수 공수저감지수*/
+		                , (CASE AA.IEM WHEN '5' THEN AA.CV ELSE '0' END) AS EFF_AMO /*생산성목표금액 효과금액*/
+		                , (CASE AA.IEM WHEN '6' THEN AA.CV ELSE '0' END) AS EX_TI_OB /*제외시간목표*/
+		                , (CASE AA.IEM WHEN '7' THEN AA.CV ELSE '0' END) AS IND_TI_OB /*간접시간목표*/
+		         FROM (
+		                  SELECT MAX(A.CLS_CODE)   AS CLS_CODE
+		                       , A.LOC_CODE        AS LOC_CODE
+		                       , A.IEM             AS IEM
+		                       , (CASE '03' WHEN '04' THEN SUM(A.APR) WHEN '05' THEN SUM(A.MAY) WHEN '06' THEN SUM(A.JUN)
+		                              WHEN '07' THEN SUM(A.JULY) WHEN '08' THEN SUM(A.AUG) WHEN '09' THEN SUM(A.SEP) WHEN '10' THEN SUM(A.OCT)
+		                              WHEN '11' THEN SUM(A.NOV) WHEN '12' THEN SUM(A.DEC) WHEN '01' THEN SUM(A.JAN) WHEN '02' THEN SUM(A.FEB)
+		                              WHEN '03' THEN SUM(A.MAR) ELSE '' END) AS CV
+		                       , MAX(B.PART_CODE)  AS PART_CODE
+		                  FROM PSZDBLIB.FHP120PF A,
+		                       PSZDBLIB.FHP010PF B
+		                  WHERE 1 = 1
+		                    AND A.CLS_CODE = #{clsCode}
+		                    AND A.CLS_CODE = B.CLS_CODE
+		                    AND A.LINE_CODE = B.LINE_CODE		                    
+		                    AND A.LOC_CODE = B.LOC_CODE
+		                    AND A.YEAR = #{year}
+		                    <if test="partCode != null and partCode != ''">
+		                    AND A.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                    </if>
+		                  GROUP BY A.LOC_CODE, A.IEM
+		              ) AA
+		
+		     )BB LEFT OUTER JOIN (
+		            SELECT SUM(C.ST) AS ST
+		                    , C.LOC_CODE
+		            FROM (
+		                     SELECT SUM(A.QY) * MAX(B.STDR_LABOR) / DEC(3600) AS ST
+		                            , MAX(A.LOC_CODE) AS LOC_CODE
+		                            , B.PRDT_NO
+		                     FROM PSZDBLIB.FHP030PF B /*공수관리*/
+		                          ,(
+		                              SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE,U.LOC_CODE,U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+		                                FROM (
+		                                        SELECT
+		                                                 M.OPERT_DE
+		                                               , B.CLS_CODE
+		                                               , B.LOC_CODE
+		                                               , B.LINE_CODE
+		                                               , M.PSPNO AS     PRODUCT_NO
+		                                               , QY
+		                                        FROM (
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                                  UNION ALL
+		                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE
+		                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+		                                              ) M
+		                                                  INNER JOIN PSZDBLIB.FHP010PF B
+		                                                  ON M.DEVID = B.IF_CODE
+		                                                  AND M.COMPS = B.CLS_CODE
+		                                                  WHERE M.COMPS = #{clsCode}
+		                                                  AND M.TRNYM = #{repym}
+		                                                  <if test="partCode != null and partCode != ''">
+												          AND B.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+												          </if>
+		                                                  AND B.CLS_CODE = #{clsCode}
+		                                                  AND LENGTH(TRIM(B.IF_CODE)) > 0
+		                                                  AND B.IF_TYPE = 'Q'
+		                                        UNION ALL
+		                                        SELECT OPERT_DE
+		                                              ,  CLS_CODE
+		                                              , LOC_CODE
+		                                              , LINE_CODE
+		                                              , PRODUCT_NO
+		                                              , QY
+		                                        FROM PSZDBLIB.FHP100PF
+		                                        WHERE CLS_CODE = #{clsCode}
+		                                        <if test="partCode != null and partCode != ''">
+									            AND LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+									            </if> 
+		                                        AND INT_TYPE IN ( 'M', 'I')
+		                                        AND SUBSTR(OPERT_DE,1,6) = #{repym}
+		                                ) U
+		                                GROUP BY OPERT_DE,CLS_CODE,LOC_CODE,LINE_CODE,PRODUCT_NO
+		                           ) A /*생산성실적*/
+		                     WHERE 1 = 1
+		                       AND B.YEAR = #{stlaYear}
+		                       AND B.FS_HALF = #{fsHalf} 
+		                       AND B.CLS_CODE = #{clsCode}
+		                       AND SUBSTR(A.OPERT_DE, 1, 6) = #{repym}
+		                       AND B.LINE_CODE = A.LINE_CODE
+		                       AND B.CLS_CODE = A.CLS_CODE
+		                       AND B.PRDT_NO = A.PRODUCT_NO
+		                       <if test="partCode != null and partCode != ''">
+		                       AND A.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                       </if>
+		                     GROUP BY B.PRDT_NO 
+		                 ) C
+		            group by C.LOC_CODE
+		
+		     ) DD on BB.LOC_CODE = DD.LOC_CODE
+		     LEFT OUTER JOIN (
+		        SELECT QQ.LOC_CODE AS LOC_CODE
+		                , SUM(QQ.HR_MNT_DE) AS HR_MNT_DE /*직접생산시간 손실포함*/
+		                , SUM(QQ.EX_TI_PRF) AS EX_TI_PRF /*제외소계*/
+		                , SUM(QQ.IND_TI_PRF) AS IND_TI_PRF /*간접소계*/
+		                , SUM(QQ.EX_IND_TI_PRF) AS EX_IND_TI_PRF /*제외 간접 소계*/
+		                , SUM(QQ.TOT_HR_MNT) AS TOT_HR_MNT /*총투입시간*/
+		        FROM(
+		                SELECT MAX(FF.LOC_CODE) AS LOC_CODE
+		                        , MAX(FF.EX_TI_PRF) AS EX_TI_PRF /*제외소계*/
+		                        , MAX(FF.IND_TI_PRF) AS IND_TI_PRF /*간접소계*/
+		                        , MAX(FF.EX_TI_PRF)+ MAX(FF.IND_TI_PRF) AS EX_IND_TI_PRF /*제외 간접 소계*/
+		                        , MAX(FF.HR_MNT1 + FF.HR_MNT2 + FF.HR_MNT3 + FF.HR_MNT4 + FF.HR_MNT5
+		                            + FF.HR_MNT6 + FF.HR_MNT7 + FF.HR_MNT8 + FF.LGST_TIME) AS TOT_HR_MNT
+		                        , MAX(FF.HR_MNT1 + FF.HR_MNT2 + FF.HR_MNT3 + FF.HR_MNT4 + FF.HR_MNT5
+		                            + FF.HR_MNT6 + FF.HR_MNT7 + FF.HR_MNT8 + FF.LGST_TIME) - MAX(FF.EX_TI_PRF) - MAX(FF.IND_TI_PRF) AS HR_MNT_DE
+		                FROM(
+		
+		                        SELECT B.LINE_CODE AS LINE_CODE, B.LOC_CODE AS LOC_CODE, B.OPERT_DE AS OPERT_DE
+		                                , CASE A.SE WHEN 'B' THEN COALESCE(A.HR_MNT, 0) ELSE 0 END AS EX_TI_PRF
+		                                , CASE A.SE WHEN 'C' THEN COALESCE(A.HR_MNT, 0) ELSE 0 END AS IND_TI_PRF
+		                                , A.SE AS SE
+		                                , B.HR_MNT1, B.HR_MNT2, B.HR_MNT3, B.HR_MNT4, B.HR_MNT5, B.HR_MNT6, B.HR_MNT7, B.HR_MNT8, B.LGST_TIME
+		                                , B.HR_MNT1 + B.HR_MNT2 + B.HR_MNT3 + B.HR_MNT4
+		                                + B.HR_MNT5 + B.HR_MNT6 + B.HR_MNT7 + B.HR_MNT8 + B.LGST_TIME - COALESCE(A.HR_MNT, 0) AS HR_MNT_DE
+		                        FROM PSZDBLIB.FHP109PF B LEFT OUTER JOIN PSZDBLIB.FHP130PF A
+		                                                              ON A.CLS_CODE = B.CLS_CODE
+		                                                             AND A.LOC_CODE = B.LOC_CODE
+		                                                             AND A.LINE_CODE = B.LINE_CODE
+		                                                             AND A.OPERT_DE = B.OPERT_DE
+		                                                             AND A.SE IN( 'B', 'C') /*제외(B), 간접(C)*/
+		                        WHERE 1 = 1
+		                        AND SUBSTR(B.OPERT_DE, 1, 6) = #{repym}
+		                        AND B.CLS_CODE = #{clsCode}
+		                        <if test="partCode != null and partCode != ''">
+		                        AND B.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		                        </if>
+		                ) FF
+		                GROUP BY FF.OPERT_DE, FF.LINE_CODE
+		            ) QQ
+		        GROUP BY QQ.LOC_CODE
+		     )EE on BB.LOC_CODE = EE.LOC_CODE
+		     LEFT OUTER JOIN (
+		            SELECT MAX(N.LOC_CODE) AS LOC_CODE,
+		                   COALESCE(SUM(N.QY),0) AS PMON_PRF
+		            FROM (
+                              SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE,U.LOC_CODE,U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+                                FROM (
+                                        SELECT
+                                                 M.OPERT_DE
+                                               , B.CLS_CODE
+                                               , B.LOC_CODE
+                                               , B.LINE_CODE
+                                               , M.PSPNO AS     PRODUCT_NO
+                                               , QY
+                                        FROM (
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                                  UNION ALL
+                                                  SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE
+                                                  FROM ${lib2}.FGP500PF  WHERE COMPS = #{clsCode} AND TRNYM = #{repym}
+                                              ) M
+                                                  INNER JOIN PSZDBLIB.FHP010PF B
+                                                  ON M.DEVID = B.IF_CODE
+                                                  AND M.COMPS = B.CLS_CODE
+                                                  WHERE M.COMPS = #{clsCode}
+                                                  AND M.TRNYM = #{repym}
+                                                  <if test="partCode != null and partCode != ''">
+										            AND B.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+										          </if>
+                                                  AND B.CLS_CODE = #{clsCode}
+                                                  AND LENGTH(TRIM(B.IF_CODE)) > 0
+                                                  AND B.IF_TYPE = 'Q'
+                                        UNION ALL
+                                        SELECT OPERT_DE
+                                              ,  CLS_CODE
+                                              , LOC_CODE
+                                              , LINE_CODE
+                                              , PRODUCT_NO
+                                              , QY
+                                        FROM PSZDBLIB.FHP100PF
+                                        WHERE CLS_CODE = #{clsCode}
+                                        <if test="partCode != null and partCode != ''">
+							            AND LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+							            </if> 
+                                        AND INT_TYPE IN ( 'M', 'I')
+                                        AND SUBSTR(OPERT_DE,1,6) = #{repym}
+                                ) U
+                                GROUP BY OPERT_DE,CLS_CODE,LOC_CODE,LINE_CODE,PRODUCT_NO
+                           ) N /*생산성실적*/
+		            WHERE N.CLS_CODE = #{clsCode}
+		            <if test="partCode != null and partCode != ''">
+		            AND N.LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})
+		            </if>
+		              AND SUBSTR(N.OPERT_DE, 1, 6) = #{pMonth} /*전월로들어감*/
+		            GROUP BY N.LOC_CODE
+		     )RR on BB.LOC_CODE = RR.LOC_CODE
+		GROUP BY BB.LOC_CODE
+		ORDER BY BB.LOC_CODE
+    </select>      
+
+    
+    
+    
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="New&#32;Form" TooltipFont=",0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_subfile">
+				<Contents>
+					<colinfo id="COLUMN_1" size="256" type="STRING"/>
+					<colinfo id="COLUMN_2" size="256" type="STRING"/>
+					<colinfo id="COLUMN_3" size="256" type="STRING"/>
+					<colinfo id="COLUMN_4" size="256" type="STRING"/>
+					<colinfo id="COLUMN_5" size="256" type="STRING"/>
+					<colinfo id="COLUMN_6" size="256" type="STRING"/>
+					<colinfo id="COLUMN_7" size="256" type="STRING"/>
+					<colinfo id="COLUMN_8" size="256" type="STRING"/>
+					<colinfo id="COLUMN_9" size="256" type="STRING"/>
+					<colinfo id="COLUMN_10" size="256" type="STRING"/>
+					<record>
+						<COLUMN_1>1</COLUMN_1>
+						<COLUMN_10>0</COLUMN_10>
+						<COLUMN_2>2</COLUMN_2>
+						<COLUMN_3>3</COLUMN_3>
+						<COLUMN_4>4</COLUMN_4>
+						<COLUMN_5>5</COLUMN_5>
+						<COLUMN_6>6</COLUMN_6>
+						<COLUMN_7>7</COLUMN_7>
+						<COLUMN_8>8</COLUMN_8>
+						<COLUMN_9>9</COLUMN_9>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_screen">
+				<Contents>
+					<colinfo id="column0" size="256" type="STRING"/>
+					<colinfo id="column1" size="256" type="STRING"/>
+					<record>
+						<column0>1</column0>
+						<column1>4</column1>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>3</column1>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_head"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_column">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menu">
+				<Contents>
+					<colinfo id="scrName" size="256" type="STRING"/>
+					<colinfo id="url" size="256" type="STRING"/>
+					<record>
+						<scrName>Job</scrName>
+						<url>Sample::convert.xml</url>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<MAX5250 Bottom="464" Fire_Reset="MAX5250_Fire_Reset" Fire_Update="MAX5250_Fire_Update" Height="456" Id="MAX5250" Right="776" Top="8" Width="776"></MAX5250>
+		<Div Height="530" Id="Div5250" TabOrder="6" Text="Div0" Visible="FALSE" Width="800">
+			<Contents></Contents>
+		</Div>
+		<Button Height="21" Id="Button0" Left="668" OnClick="Button0_OnClick" TabOrder="2" Text="로그인테스트" Top="496" Width="104"></Button>
+		<Button Height="21" Id="Button1" Left="560" OnClick="Button1_OnClick" TabOrder="3" Text="변환" Top="496" Width="104"></Button>
+		<Button Height="21" Id="Button2" Left="456" OnClick="common_OnClick" TabOrder="4" Text="서브파일&#32;등록" Top="496" Width="104"></Button>
+		<Button Height="21" Id="Button3" Left="344" OnClick="Button3_OnClick" TabOrder="5" Text="데이타&#32;변환" Top="496" Width="104"></Button>
+		<Button Height="21" Id="Button4" Left="240" OnClick="Button4_OnClick" TabOrder="7" Text="스크린ID" Top="496" Width="104"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function MAX52500_Fire_Message(obj)
+{
+	
+}
+
+function form_OnLoadCompleted(obj)
+{
+	max5250.DeviceName = "DSP99";
+	max5250.SystemName = "10.72.209.8";
+	var rtn = max5250.Connect();
+	
+	if(rtn != 0) {
+		
+	}
+	G_max5250Url = "111";
+trace("ddd"+G_max5250Url);
+}
+
+function Button0_OnClick(obj)
+{
+	
+	MAX5250.SendToField("ID06053","qsecofr" );
+	MAX5250.SendToField("ID07053","secofr");
+	MAX5250.SendKeys("[Enter]");
+	
+}
+
+function MAX5250_Fire_Update(obj)
+{
+	//trace("1");
+}
+
+function MAX5250_Fire_Reset(obj)
+{
+		
+		var screenName = trim(max5250.GetString(5,50,5));
+		trace("ddd"+G_max5250Url);
+		fnc_goUrl(screenName); //green 터미널 화면 전환 
+		
+		
+		
+		var sKind		= "GETSCREEN";						
+		var sMethodName = "service::max5250/getScreenAttr.do";     // 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             // 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_screen=ds_screen";    // 조회 후 돌려 받을 DataSet 명칭
+		var arg			= " SCREEN_ID=" + quote(screenName);
+			arg		    += " SCREEN_TYPE=" +quote("1");
+	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack");
+}
+
+/*#########################################################
+#########	xml변환								##########
+#########	초기 화면 아이디 로딩..				##########
+#########################################################*/
+function Button1_OnClick(obj)
+{
+	
+//	Dialog("Sample::convertPop.xml" ,152,320);
+	var subStr = "";
+	var sKind		= "CONVERTXML";						
+	var sMethodName = "service::max5250/convertxml.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_head=ds_head ds_screen=ds_screen";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    // 조회 후 돌려 받을 DataSet 명칭
+	var mainStr = max5250.GetScreenData(1,24);
+	trace(mainStr);
+	if(ds_screen.rowcount == 1) {
+		mainStr = max5250.GetScreenData(1,0);
+		trace(mainStr);
+		max5250.SubfileRange(0,0,10,1,8,11,8);
+		subStr = max5250.GetSelectData();
+	}
+	var arg			= " str=" + quote(mainStr);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");
+}
+
+function setField(){
+}
+
+function fnc_callBack(svcId, errCode, errMsg)
+{
+	if(ds_screen.rowcount > 0) {
+	//	max5250.SubfileRange(0,0,11,1,8,12,8);
+	//	var data = max5250.GetSelectData();
+	//	fnc_DataXmlConvert(data,"ds_subfile",8);
+		max5250.SubfileRange(0,0,11,1,8,12,8);
+		var data = max5250.GetSelectData();
+		fnc_DataXmlConvert(data,"ds_subfile",8);
+	}
+	if(svcId = ""){
+		
+		
+	}
+}
+
+
+
+function common_OnClick(obj)
+{
+	
+	dialog("Sample::SubFileSave.xml" ,450, 580);
+//	Div5250.sendColumn();
+}
+
+function Button3_OnClick(obj)
+{
+	var subStr = "";
+	var sKind		= "CONVERTXML";						
+	var sMethodName = "service::max5250/convertxmlData.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_main=ds_main";    // 조회 후 돌려 받을 DataSet 명칭
+	var mainStr = max5250.GetScreenData(1,24);
+	
+		var arg			= " str=" + quote(mainStr);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");
+}
+
+function Button4_OnClick(obj)
+{
+	alert(max5250.GetString(5,50,5));
+}
+]]></Script>
+</Window>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="576" Id="BHZZ100SM" Left="8" OnLoadCompleted="OnLoadCompleted" PidAttrib="7" Title="BHZZ100SM" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="cd" size="256" type="STRING"/>
+					<colinfo id="cdnm" size="256" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>선택</cdnm>
+					</record>
+					<record>
+						<cd>C1</cd>
+						<cdnm>C1</cdnm>
+					</record>
+					<record>
+						<cd>E1</cd>
+						<cdnm>E1</cdnm>
+					</record>
+					<record>
+						<cd>H1</cd>
+						<cdnm>H1</cdnm>
+					</record>
+					<record>
+						<cd>S1</cd>
+						<cdnm>S1</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_buso">
+				<Contents>
+					<colinfo id="cd" size="256" type="STRING"/>
+					<colinfo id="cdnm" size="256" type="STRING"/>
+					<record>
+						<cd>3012</cd>
+						<cdnm>施設班</cdnm>
+					</record>
+					<record>
+						<cd>3023</cd>
+						<cdnm>營業班</cdnm>
+					</record>
+					<record>
+						<cd>3031</cd>
+						<cdnm>改善班</cdnm>
+					</record>
+					<record>
+						<cd>3033</cd>
+						<cdnm>工場內物洗班</cdnm>
+					</record>
+					<record>
+						<cd>3036</cd>
+						<cdnm>ST&#32;組立班</cdnm>
+					</record>
+					<record>
+						<cd>3038</cd>
+						<cdnm>ST&#32;組立&#32;2&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3049</cd>
+						<cdnm>AL&#32;組立班</cdnm>
+					</record>
+					<record>
+						<cd>3040</cd>
+						<cdnm>AL&#32;SUB&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3041</cd>
+						<cdnm>WM&#32;工作班</cdnm>
+					</record>
+					<record>
+						<cd>3042</cd>
+						<cdnm>PW&#32;AR2&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3045</cd>
+						<cdnm>WM&#32;組立&#32;1&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3046</cd>
+						<cdnm>RWM&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3047</cd>
+						<cdnm>WM&#32;AR&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3049</cd>
+						<cdnm>PWM&#32;組立&#32;1&#32;班</cdnm>
+					</record>
+					<record>
+						<cd>3051</cd>
+						<cdnm>PW&#32;AR&#32;班</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Ubi Bottom="568" Height="536" Id="ubi0" Left="8" Right="792" Top="32" Width="784">
+			<_PersistData>&#13;&#10;/6xqpcNN/wAAAQAHUQAAd2Y3APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="801"></Image>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="3" Text="특근신청서" Top="8" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[
+
+
+function OnLoadCompleted(obj){
+	ubi0.setJrfFileDir(G_baseURL+"/ui/Group2/report/");
+	ubi0.setJrfFileName("rep1.jrf");
+	ubi0.SetDataset("ds_report", "ds_report");	
+	ubi0.SetArgument("DHCODE", search_dhcode.Text+"("+search_dhcode.Value+")");
+	ubi0.SetArgument("WRKDT", parent.search_wrkdt.Text);	
+	ubi0.SetArgument("CURRENT_TIME", substr(Getdate(),8,2)+":"+substr(Getdate(),10,2)+":"+substr(Getdate(),12,2));
+	
+	ubi0.Retrieve();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EmpDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="SsoAccountDb2" type="SsoAccountDb2Domain">
+        <result property="systemId" column="SYSTEM_ID" />
+        <result property="systemPw" column="SYSTEM_PW" />
+        <result property="systemGru" column="SYSTEM_GRU" />
+        <result property="systemUrl" column="SYS_URL" />
+        <result property="systemUrl2" column="SYS_URL2" />
+        <result property="loginYn" column="LOGIN_YN" />
+        <result property="userId" column="USER_ID" />
+        <result property="company" column="COMPANY" />
+        <result property="systemSeq" column="SYSTEM_SEQ" />
+    </resultMap>
+    
+     <resultMap id="EmpPrtSession" type="SsoAccountDb2Domain">
+        <result property="device1" column="DEV1" />
+        <result property="device2" column="DEV2" />
+        <result property="deviceCnt" column="CNT" />
+    </resultMap>  
+    
+    <resultMap id="DioneAccountCnt" type="SsoAccountDb2Domain">
+        <result property="userId" column="USER_ID" />
+        <result property="plantCd" column="PLANT_CD" />
+        <result property="dioneCnt" column="DIONE_CNT" />
+        <!-- 
+        <result property="empNo" column="EMP_NO" />
+        <result property="empName" column="EMP_NAME" />
+        <result property="company" column="COMPANY" />
+        <result property="status" column="STATUS" />
+         -->
+    </resultMap>
+      
+    <!--  --> 
+    <select id="ssoAccounts" resultMap="SsoAccountDb2" parameterType="SsoAccountDb2Domain">
+		SELECT 
+			TRIM(B.SYSTEM_ID) SYSTEM_ID
+			, TRIM(B.SYSTEM_PW) SYSTEM_PW
+			, TRIM(B.SYSTEM_GRU) SYSTEM_GRU
+			, TRIM(C.SYS_URL) SYS_URL
+			, TRIM(C.SYS_URL2) SYS_URL2
+			, C.LOGIN_YN LOGIN_YN
+		FROM 
+			PSZDBLIB.M_USR_TID A
+		INNER JOIN PSZDBLIB.M_SSO_INF B
+			ON B.USER_ID = A.USER_ID
+		LEFT OUTER JOIN PSZDBLIB.M_OUT_SYS C
+			ON C.SYSTEM_SEQ = B.SYSTEM_SEQ
+			AND C.COMPANY = A.COMPANY
+		WHERE 
+			A.USER_ID = #{userId}
+			AND C.SYSTEM_SEQ = #{systemSeq}
+	</select>
+	
+	<!--  --> 
+	<select id="ssoAccounts_OrderProd" resultMap="SsoAccountDb2" parameterType="SsoAccountDb2Domain">
+		SELECT 
+			'' AS SYSTEM_ID
+			, '' AS SYSTEM_PW
+			, '' AS SYSTEM_GRU
+			, TRIM(SYS_URL) SYS_URL
+			, TRIM(SYS_URL2) SYS_URL2
+			, LOGIN_YN
+		FROM 
+			PSZDBLIB.M_OUT_SYS
+			
+		WHERE 
+			COMPANY = #{company}
+			AND SYSTEM_SEQ = #{systemSeq}
+	</select>
+	
+	<!-- IT.T 추가 -->
+	<!-- DipSession 사용여부 확인 -->
+    <select id="searchSsoDspSessionAccount" resultType="java.lang.Integer" parameterType="EmpDb2Domain">
+    <!-- DIONE 계정, SESSION메뉴 권한 체크 
+		SELECT 
+			A.USER_ID, B.MENU_ID, B.USER_YN 
+			COUNT( B.MENU_ID) AS CNT
+		FROM PSZDBLIB.M_USR_TID A
+		INNER JOIN PSZDBLIB.M_MNU_AUT B ON A.USER_ID=B.USER_ID AND B.MENU_ID IN ('35', '36', '37', '51') AND B.USER_YN='1'
+		WHERE
+			A.STATUS IN ('1','2')
+			AND A.USER_ID =#{userId}
+	 -->
+	  <!-- 내부SSO 계정등록여부 체크 -->
+		SELECT 
+			COUNT(*) AS CNT 
+		FROM PSZDBLIB.M_SSO_INF
+		WHERE
+			SYSTEM_SEQ IN ('4','5', '6', '8')
+			AND SYSTEM_ID != ''
+			AND USER_ID =#{userId}
+    </select>
+    
+ 	<!-- PrinterSession 사용여부 확인 -->
+    <select id="searchSsoPrtSessionAccount" resultMap="EmpPrtSession" parameterType="SsoAccountDb2Domain">
+      <!-- DIONE 계정, SESSION메뉴 권한 체크 
+		SELECT 
+			 A.USER_ID, trim(C.SYSTEM_GRU) AS DEV1, trim(COALESCE(D.SYSTEM_GRU,'')) AS DEV2,
+			CASE WHEN  D.SYSTEM_GRU IS NOT NULL THEN  2 ELSE 1 END AS CNT
+		FROM PSZDBLIB.M_USR_TID A
+			INNER JOIN PSZDBLIB.M_MNU_AUT B ON A.USER_ID=B.USER_ID AND B.MENU_ID IN ('38', '10057') AND B.USER_YN='1'
+			LEFT OUTER JOIN PSZDBLIB.M_SSO_INF  C ON A.USER_ID=C.USER_ID AND C.SYSTEM_SEQ IN ('7')
+			LEFT OUTER JOIN PSZDBLIB.M_SSO_INF  D ON A.USER_ID=D.USER_ID AND D.SYSTEM_SEQ IN ('9')
+		WHERE
+			A.STATUS IN ('1','2')
+			AND A.USER_ID =#{userId}
+			GROUP BY   A.USER_ID, C.SYSTEM_GRU, D.SYSTEM_GRU
+		 -->
+		SELECT 
+			USER_ID, 
+			MAX(CASE WHEN SYSTEM_SEQ='7' THEN TRIM(SYSTEM_GRU) ELSE '' END) AS DEV1,
+			MAX(CASE WHEN SYSTEM_SEQ='9' THEN TRIM(SYSTEM_GRU) ELSE '' END) AS DEV2,
+			MAX(CASE WHEN SYSTEM_SEQ='9' AND SYSTEM_GRU IS NOT NULL THEN  2 ELSE 1 END) AS CNT
+		FROM PSZDBLIB.M_SSO_INF
+		WHERE
+			SYSTEM_SEQ IN ('7','9')
+			AND USER_ID =#{userId}
+		GROUP BY USER_ID 
+    </select>
+    
+    
+    
+   	<!-- Dione 계정 카운트 -->
+    <select id="searchDioneAccountCnt" resultMap="DioneAccountCnt" parameterType="SsoAccountDb2Domain">
+    <!-- 
+	SELECT
+		TRIM(A.USER_ID) AS USER_ID, TRIM(A.TEL_NO1)AS EMP_NO, TRIM(A.USER_NAME) AS EMP_NAME, A.COMPANY, A.PLANT_CD, A.STATUS
+	FROM
+		PSZDBLIB.M_USR_TID A
+		
+	WHERE
+		A.STATUS='1'
+		AND TRIM(SUBSTR(A.USER_ID, 2))= '110290'
+	 -->	
+	SELECT
+		TRIM(A.USER_ID) AS USER_ID, TRIM(A.TEL_NO1)AS EMP_NO, TRIM(A.USER_NAME) AS EMP_NAME,
+		A.COMPANY, A.PLANT_CD, A.STATUS, B.DIONE_CNT
+	FROM
+		PSZDBLIB.M_USR_TID A
+		LEFT OUTER JOIN (
+			SELECT Z.USER_ID, COUNT(Z.SYSTEM_SEQ) AS DIONE_CNT
+			FROM PSZDBLIB.M_SSO_INF Z
+			WHERE
+				Z.SYSTEM_SEQ IN ('4','5','6','8') <!-- 디바이스 System Seq -->
+				AND Z.SYSTEM_ID != ''
+				AND TRIM(SUBSTR(Z.USER_ID, 2)) = #{userId}
+			GROUP BY Z.USER_ID
+	) B ON A.USER_ID=B.USER_ID
+	WHERE
+		A.STATUS='1'
+		AND PLANT_CD != 'H1' <!-- 홍성공장계정이 아닌 것만 -->
+		AND TRIM(SUBSTR(A.USER_ID, 2)) = #{userId}
+		AND B.DIONE_CNT >=0
+    </select>
+    
+</mapper>

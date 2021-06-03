@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="line_layout" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="공장레이아웃설정" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ180" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="OBJID" size="256" summ="default" type="STRING"/>
+					<colinfo id="OTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="OSEQ" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORSEQ" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="OTEXT" size="256" summ="default" type="STRING"/>
+					<colinfo id="FSIZE" size="256" summ="default" type="STRING"/>
+					<colinfo id="OWIDTH" size="256" summ="default" type="STRING"/>
+					<colinfo id="OHEIGHT" size="256" summ="default" type="STRING"/>
+					<colinfo id="POS_X" size="256" summ="default" type="STRING"/>
+					<colinfo id="POS_Y" size="256" summ="default" type="STRING"/>
+					<colinfo id="TMPOS" size="256" summ="default" type="STRING"/>
+					<colinfo id="BIGO1" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ180_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SEQ" UseClientLayout="1">
+				<Contents>
+					<colinfo id="SEQ" size="256" summ="default" type="INT"/>
+					<record>
+						<SEQ>0</SEQ>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FLAT">
+				<Contents>
+					<colinfo id="dummy&#32;" size="256" summ="default" type="STRING"/>
+					<record>
+						<dummy/>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_LINCD">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="MENU" Border="None" BorderColor="#b4b4b4" Height="272" Id="Static0" TabOrder="22" Top="336" Width="136"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="3" Top="30" Width="1060"></Static>
+		<Div Border="Flat" Height="532" Id="Div_LAYOUT" Left="136" OnMouseDown="Div_LAYOUT_OnMouseDown" OnMouseUp="Div_LAYOUT_OnMouseUp" TabOrder="3" Text="Div0" Top="63" Width="911">
+			<Contents>
+				<Shape Bottom="266" Height="8" Id="Shape0" Left="-2" Right="910" TabOrder="1" Top="258" Width="912"></Shape>
+				<Shape Bottom="531" Height="532" Id="Shape1" Left="450" LineKind="Vertical" Right="458" TabOrder="2" Top="-1" Width="8"></Shape>
+			</Contents>
+		</Div>
+		<Div BKColor="MENU" Height="273" Id="Div1" Left="2" TabOrder="3" Text="Div1" Top="63" Width="134">
+			<Contents>
+				<Radio Height="126" Id="rdoggub_TYPE" INDEX="0" Left="4" OnChanged="Div1_rdoggub_TYPE_OnChanged" TabOrder="1" Top="11" Width="106">
+					<Contents>
+						<Layout code="M" height="15" left="10" text="이동" top="5" width="80"/>
+						<Layout code="S" height="15" left="10" text="수정" top="25" width="80"/>
+						<Layout code="T" height="15" left="10" text="텍스트" top="45" width="80"/>
+						<Layout code="L" height="15" left="10" text="생산라인" top="65" width="80"/>
+						<Layout code="I" height="15" left="10" text="설총률날씨" top="85" width="80"/>
+						<Layout code="D" height="15" left="10" text="삭제" top="105" width="80"/>
+					</Contents>
+				</Radio>
+				<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="3" TabOrder="3" Top="220" VAlign="Middle" Visible="FALSE" Width="118"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="3" TabOrder="2" Text="생산라인명" Top="195" VAlign="Middle" Visible="FALSE" Width="118"></Static>
+				<Edit AutoSelect="TRUE" AutoSkip="TRUE" CheckLength="Byte" Height="20" Id="ed_LINENM" ImeMode="none" Left="7" MaxLength="20" TabOrder="4" Text="라인명입력" Top="223" Visible="FALSE" Width="110"></Edit>
+				<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="5" Top="306" VAlign="Middle" Visible="FALSE" Width="118"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="4" TabOrder="5" Text="선택라인명" Top="281" VAlign="Middle" Visible="FALSE" Width="118"></Static>
+				<Edit AutoSelect="TRUE" AutoSkip="TRUE" CheckLength="Byte" DisableBKColor="white" Enable="FALSE" Height="20" Id="ed_SELBTN" ImeMode="none" Left="8" MaxLength="20" TabOrder="5" Top="309" Visible="FALSE" Width="110"></Edit>
+				<Button DragMode="TRUE" DropMode="TRUE" Height="24" Id="btn_RENAME" Left="6" OnClick="btn_RENAME_OnClick" TabOrder="8" Text="라인명변경" Top="249" Visible="FALSE" Width="120"></Button>
+			</Contents>
+		</Div>
+		<SplitJoint BKColor="ACTIVECAPTION" Border="RaisedEdge" Height="56" Id="SplitJoint4" Left="16" MoveOnDrag="TRUE" Top="552" UserData="ㅈㄷㅈㅂㄷ" Visible="FALSE" Width="104"></SplitJoint>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="8" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="7" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="9" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Button DragMode="TRUE" DropMode="TRUE" Height="27" Id="btn_Clear" ImageID="BTN2_INDI2" Left="224" OnClick="btn_Clear_OnClick" TabOrder="10" Text="Clear" Top="34" Width="85"></Button>
+		<Button BKColor="#ff9900" Height="28" Id="Button1" Left="848" OnClick="Button1_OnClick" TabOrder="10" Text="Create&#32;Button" Top="32" UserData="Button" Visible="FALSE" Width="104"></Button>
+		<Button Height="27" Id="Button2" ImageID="sum_save" Left="960" OnClick="fn_Save" TabOrder="12" TabStop="FALSE" Text="Button2" Top="34" Visible="FALSE" Width="72"></Button>
+		<Split BKColor="antiquewhite" Border="None" Height="24" Id="Split0" Left="5" MaxPos="13" MinPos="5" Top="416" Visible="FALSE" Width="8">
+			<Contents>
+				<LeftOrTop></LeftOrTop>
+				<RightOrBottom>
+					<Bind BindType="Resize" CompID="btn_SIZE"/>
+				</RightOrBottom>
+			</Contents>
+		</Split>
+		<Split BKColor="antiquewhite" Border="None" Height="24" Id="Split3" Left="117" MaxPos="300" MinPos="50" Top="416" Visible="FALSE" Width="8">
+			<Contents>
+				<LeftOrTop>
+					<Bind BindType="Resize" CompID="btn_SIZE"/>
+				</LeftOrTop>
+				<RightOrBottom></RightOrBottom>
+			</Contents>
+		</Split>
+		<Split BKColor="antiquewhite" Border="None" Direct="VERT" Height="8" Id="Split2" Left="13" MaxPos="312" MinPos="312" Top="408" Visible="FALSE" Width="104">
+			<Contents>
+				<LeftOrTop></LeftOrTop>
+				<RightOrBottom>
+					<Bind BindType="Resize" CompID="btn_SIZE"/>
+				</RightOrBottom>
+			</Contents>
+		</Split>
+		<Split BKColor="antiquewhite" Border="None" Direct="VERT" Height="8" Id="Split1" Left="13" MaxPos="600" MinPos="340" Top="440" Visible="FALSE" Width="104">
+			<Contents>
+				<LeftOrTop>
+					<Bind BindType="Resize" CompID="btn_SIZE"/>
+				</LeftOrTop>
+				<RightOrBottom></RightOrBottom>
+			</Contents>
+		</Split>
+		<SplitJoint BKColor="antiquewhite" Border="None" Height="8" Id="SplitJoint0" JointBottom="Split3" JointLeft="Split2" Left="117" Top="408" Visible="FALSE" Width="8"></SplitJoint>
+		<SplitJoint BKColor="antiquewhite" Border="None" Height="8" Id="SplitJoint3" JointLeft="Split1" JointTop="Split3" Left="117" Top="440" Visible="FALSE" Width="8"></SplitJoint>
+		<Button DragMode="TRUE" DropMode="TRUE" Height="24" Id="btn_SIZE" Left="14" OnClick="btn_SIZE_OnClick" TabOrder="14" Text="사이즈조절" Top="416" Visible="FALSE" Width="102"></Button>
+		<SplitJoint BKColor="antiquewhite" Border="None" Height="8" Id="SplitJoint1" JointBottom="Split0" JointRight="Split2" Left="5" Top="408" Visible="FALSE" Width="8"></SplitJoint>
+		<SplitJoint BKColor="antiquewhite" Border="None" Height="8" Id="SplitJoint2" JointRight="Split1" JointTop="Split0" Left="5" Top="440" Visible="FALSE" Width="8"></SplitJoint>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBMZ180.xml
+ * ● PROGRAM DESCRIPTION  : 전라인가동현황-공장레이아웃설정
+ * ● DATE WRITTEN         : 2016.12.28
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var p_SEQ=0;	//버튼ID SEQ
+var objObject; //버튼의 obj를 저장 삭제 2017.04.19
+
+//좌표
+var pos_x_pre=0;
+var pos_y_pre=0;
+var pos_x_aft=0;
+var pos_y_aft=0;
+//font
+//var p_Font="Default,13,Bold";
+var p_Font1="Default,";
+var p_Font2=",Bold";
+
+var preChk="F";
+var preObj="";
+var preBkColor="";
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();	
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	getLINCD();	//팝업 라인코드 조회용
+	getOBMZ180();
+
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+function getDesign(){
+
+	//Div_LAYOUT.Width = parseInt(G_ds_design.GetColumn(0,"Width"))-136;            //1048
+	Div_LAYOUT.Top = G_ds_design.GetColumn(0,"Top");                //64
+	Div_LAYOUT.UserData = Div_LAYOUT.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 라인코드 조회
+ **********************************************************************/ 
+function getLINCD(){
+	var sKind		= "getLINCD";						
+	var sMethodName = "service::psogmlib/selectMSTCODE.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_LINCD=ds_MSTCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //코드
+		sArgument += " SQLID=" + "selectMSTLINCD";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getOBMZ180(){
+
+	//화면 재생성위한 임시방편
+	//현재버전에서 버튼인 경우 Reload시클릭이벤트 오류발생
+	if(ds_OBMZ180.rowcount>0){
+		for(i=0; i<ds_OBMZ180.rowcount; i++){
+			//object("Div_LAYOUT").DestroyObject(trim(ds_OBMZ180.GetColumn(i,"OBJID")));		
+			Div_LAYOUT.Destroy(trim(ds_OBMZ180.GetColumn(i,"OBJID")));
+		}
+	}
+	var sKind		= "getOBMZ180";						
+	var sMethodName = "service::psogmlib/selectOBMZ180.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ180=ds_OBMZ180";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		//sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@LIB3=" + quote(Lib3);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+	var str = dialog("Common::PGMLOAD_OPG.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	http.Sync = false;
+	
+	//Div_LAYOUT.Reload(); //버전업 해야만 가능함.
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+		//trace("OK");
+		//Layout 그려주기
+		var p_obj, p_name, p_pos_x, p_pos_y, p_width, p_height, p_Color, p_font;
+		var	str;
+		for(i=0; i<ds_OBMZ180.rowcount; i++){
+			p_obj=ds_OBMZ180.GetColumn(i,"OBJID");	//오브젝트 ID
+			p_name=ds_OBMZ180.GetColumn(i,"OTEXT");	//라인명
+			p_pos_x=ds_OBMZ180.GetColumn(i,"POS_X");	//X좌표
+			p_pos_y=ds_OBMZ180.GetColumn(i,"POS_Y");	//Y좌표
+			p_width=ds_OBMZ180.GetColumn(i,"OWIDTH");	//WIDTH
+			p_height=ds_OBMZ180.GetColumn(i,"OHEIGHT");	//HEIGHT
+			p_font=ds_OBMZ180.GetColumn(i,"FSIZE");	//폰트사이즈
+			
+			//기본색상
+			if(ds_OBMZ180.GetColumn(i,"OTYPE")=="T"){
+				p_Color = "white";
+			}else if(ds_OBMZ180.GetColumn(i,"OTYPE")=="L"){
+				p_Color = "lawngreen";
+			}else if(ds_OBMZ180.GetColumn(i,"OTYPE")=="I"){
+				p_Color = "lemonchiffon";
+			}
+			
+			str	= "left='"+p_pos_x+"' top='"+p_pos_y+"' width='"+p_width+"' height='"+p_height+"' WordWrap=true"+" text='"+p_name+"' BKColor='"+p_Color+"' Font='"+p_Font1+p_font+p_Font2+"' Appearance=Flat onclick='btnClick'";
+			object("Div_LAYOUT").Create("Button",p_obj , str);
+		}
+		//trace(substr(ds_OBMZ180.GetColumn(ds_OBMZ180.lastrow,"OBJID"),4));
+		p_SEQ=parseInt(substr(ds_OBMZ180.GetColumn(ds_OBMZ180.lastrow,"OBJID"),4));
+		ds_SEQ.SetColumn(0,"SEQ",p_SEQ+1);
+		
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+function setOBMZ180(){
+	
+	var sKind		= "setOBMZ180";						
+	var sMethodName = "service::psogmlib/saveOBMZ180.do";
+	var sInDataSet  = "ds_OBMZ180=ds_OBMZ180:U";
+	var sOutDataSet = "ds_OBMZ180_CHECK=ds_OBMZ180_CHECK";
+	var sArgument   = "";
+		//sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		//sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+	var result = true;
+	
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "공장레이아웃설정";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|공장레이아웃설정";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_OBMZ180.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBMZ180();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setOBMZ180();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+//미사용
+/*
+function Div0_OnClick(obj,nX,nY)
+{
+
+	var p_Color="";
+	if(Div1.rdoggub_TYPE.Value !="S"){	
+		if(Div1.rdoggub_TYPE.Value =="T"){
+			p_Color = "white";
+		}else if(Div1.rdoggub_TYPE.Value =="L"){
+			p_Color = "lawngreen";
+		}
+		else{
+			return;
+		}
+		var pos_x = nX;
+		var pos_y = nY;
+			//p_SEQ=ds_SEQ.GetColumn(ds_SEQ.lastrow,"SEQ");
+			p_SEQ=ds_SEQ.GetColumn(0,"SEQ");
+		//var p_LINE = object("Div_LAYOUT").Components["Button"];	
+		
+		var str	= "left='"+pos_x+"' top='"+pos_y+"' width='100' height='25' text='"+Div1.ed_LINENM.Text+"' BKColor='"+p_Color+"' Font='"+p_Font+"' onclick='btnClick'";
+	
+		object("Div_LAYOUT").Create("Button", "button_"+p_SEQ , str);
+		
+
+		ds_OBMZ180.AddRow();
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTYPE",Div1.rdoggub_TYPE.Value);
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"TEXT",Div1.ed_LINENM.Text);
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FNAME",p_SEQ);
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FSIZE","");
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Z",pos_x);
+		ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Y",pos_y);
+		trace(ds_OBMZ180.SaveXML());
+		
+		ds_SEQ.AddRow();
+		//ds_SEQ.SetColumn(ds_SEQ.currow,"SEQ",p_SEQ+1);
+		ds_SEQ.SetColumn(0,"SEQ",p_SEQ+1);
+	}
+}
+//미사용
+function Button1_OnClick(obj)
+{
+	var pos_x = 20;
+	var comps 	= object("Div_LAYOUT").Components["Button"];	
+	var cnt 	;
+	if(comps==null){
+		cnt 	= pos_x;
+	}else{
+		cnt 	= toString(pos_x*(comps.count()+1));
+	}
+
+	var str 	= "left='"+cnt+"' top='"+cnt+"' width='100' height='25' text='Image_"+toString(cnt)+"' onclick='btnClick'";
+
+	object("Div_LAYOUT").Create("Button", "button_"+toString(cnt) , str );
+}
+*/
+
+
+
+
+function Div1_rdoggub_TYPE_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(Div1.rdoggub_TYPE.Value !="M"){
+		if(preChk != "F"){
+			preObj.BKColor =preBkColor;
+			preObj="";	//초기화
+			preChk="F";	//초기화
+			for(i=0; i<ds_OBMZ180.rowcount; i++){
+				var disableObj = Div_LAYOUT.object(ds_OBMZ180.GetColumn(i,"OBJID"));
+				disableObj.Enable=true;
+			}
+		}
+	}
+	// 2019.10.23 추가
+	//T:텍스트, L:라인, I:설총률
+	if(Div1.rdoggub_TYPE.Value ="T" || Div1.rdoggub_TYPE.Value ="L" || Div1.rdoggub_TYPE.Value ="I"){
+		for(i=0; i<ds_OBMZ180.rowcount; i++){
+			var disableObj = Div_LAYOUT.object(ds_OBMZ180.GetColumn(i,"OBJID"));
+			disableObj.Enable=false;
+		}
+	}else {
+		for(i=0; i<ds_OBMZ180.rowcount; i++){
+			var disableObj = Div_LAYOUT.object(ds_OBMZ180.GetColumn(i,"OBJID"));
+			disableObj.Enable=true;
+		}
+	}
+}
+
+
+//버튼 Obj 획득
+function btnClick(obj)
+{	
+	//삭제처리
+	if(Div1.rdoggub_TYPE.Value =="D"){
+		//trace(obj.id);
+		//DATASET 삭제처리
+		var getRow=ds_OBMZ180.FindRow("OBJID",obj.id);
+		ds_OBMZ180.DeleteRow(getRow);
+		//trace(getRow);
+		//trace(ds_OBMZ180.SaveXML());
+		
+		//화면에서 삭제
+		Div_LAYOUT.Destroy(obj.id);
+	}
+	//미사용
+	/*
+	if(Div1.rdoggub_TYPE.Value =="S"){
+		Div1.ed_SELBTN.Text=obj.text;
+		Div1.ed_LINENM.Text=obj.text;
+		objObject = obj;
+		//trace(objObject);
+		
+		//선택된 오브젝트사이즈로 split변경-2016.12.29
+		Split3.left=abs((Split0.Right+obj.Width));
+		Split3.Bottom=abs((Split0.Bottom+obj.Height));
+		//아래쪽 split 초기화
+		Split1.left=13;
+		Split1.top=abs((Split2.Bottom+obj.Height));	
+	}*/
+	//수정처리
+	if(Div1.rdoggub_TYPE.Value =="S"){
+		var objChk = obj;
+		var p_OBJID=obj.id;
+		var p_Row=ds_OBMZ180.FindRow("OBJID",p_OBJID);
+		//alert(p_OBJID+p_Row);
+		var rtn = dialog("psogmlib::OBMZ180_POP1.xml","doAction= mod "+ "p_OBJID="+p_OBJID+" "+ "p_Row="+p_Row+" ",300,300,"TitleBar=false");
+		if (length(rtn) != 0){
+			//trace("update");
+			objChk.Text=rtn[1];	//라인명
+			//objChk.DisplayFontSize=rtn[2];	//폰트사이즈
+			objChk.Width=rtn[3];	//Width
+			objChk.Height=rtn[4];	//height
+			objChk.Left=rtn[5];	//X좌표
+			objChk.Top=rtn[6];	//Y좌표
+			objChk.Font=p_Font1+rtn[2]+p_Font2;	//폰트사이즈
+						
+			ds_OBMZ180.SetColumn(p_Row,"LINCD",rtn[0]);	//라인코드
+			ds_OBMZ180.SetColumn(p_Row,"OTEXT",rtn[1]);	//라인명
+			ds_OBMZ180.SetColumn(p_Row,"FSIZE",rtn[2]);	//폰트사이즈
+			ds_OBMZ180.SetColumn(p_Row,"OWIDTH",rtn[3]);	//Width
+			ds_OBMZ180.SetColumn(p_Row,"OHEIGHT",rtn[4]);	//height
+			ds_OBMZ180.SetColumn(p_Row,"POS_X",rtn[5]);	//X좌표
+			ds_OBMZ180.SetColumn(p_Row,"POS_Y",rtn[6]);	//Y좌표
+			ds_OBMZ180.SetColumn(p_Row,"TMPOS",rtn[7]);	//시간위치(가로:H, 세로:V)	
+			ds_OBMZ180.SetColumn(p_Row,"BIGO1",rtn[8]);	//설총률
+
+			//trace(ds_OBMZ180.SaveXML());
+
+		}
+	}
+	//이동처리
+	if(Div1.rdoggub_TYPE.Value =="M"){
+		//오리지날 DATA SEt
+		if(preChk != "F"){
+			preObj.BKColor =preBkColor;
+			preObj="";	//초기화
+			preChk="F";	//초기화
+			trace("!F");
+			for(i=0; i<ds_OBMZ180.rowcount; i++){
+				var disableObj = Div_LAYOUT.object(ds_OBMZ180.GetColumn(i,"OBJID"));
+				disableObj.Enable=true;
+			}
+		}else{
+			preObj=obj;	//OBJECT 저장
+			preBkColor=obj.BKColor;	//OBJECT Color저장
+			obj.BKColor ="yellow";	//선택 Object Color 변경
+			preChk="T"; //변경여부 Flag
+			trace("F==objId=="+obj.id);
+			for(i=0; i<ds_OBMZ180.rowcount; i++){
+				var disableObj = Div_LAYOUT.object(ds_OBMZ180.GetColumn(i,"OBJID"));
+				if(disableObj.id != obj.id){
+					disableObj.Enable=false;
+				}
+			}
+		}
+	}
+}
+
+function btn_Clear_OnClick(obj)
+{
+	//line_layout.Reload();
+	for(i=0; i<ds_OBMZ180.rowcount; i++){
+		Div_LAYOUT.Destroy(ds_OBMZ180.GetColumn(i,"OBJID"));
+	}
+	ds_OBMZ180.DeleteAll();
+	p_SEQ=0;
+}
+
+
+//PopupDiv의 영역에서 마우스의 Button이 눌러 졌을 때 발생하는 Event 입니다. 
+//첫번째좌표확인
+function Div_LAYOUT_OnMouseDown(obj,nButton,nX,nY)
+{	//S:수정, D:삭제, M:이동
+	if(Div1.rdoggub_TYPE.Value !="S" && Div1.rdoggub_TYPE.Value !="D"  && Div1.rdoggub_TYPE.Value !="M" ){
+		if(nButton=0){
+			pos_x_pre = nX;
+			pos_y_pre = nY;
+			//trace("First position : "+pos_x_pre+"=="+pos_y_pre);
+		}
+	}
+	//이동-test용
+	if(Div1.rdoggub_TYPE.Value ="M" ){
+		//trace("이동");
+		if(nButton=0){
+			if(isValidObject(preObj)){
+				preObj.Left =nX;
+				preObj.Top = nY;
+				var p_Row=ds_OBMZ180.FindRow("OBJID",preObj.id);
+				//trace(p_Row);
+				ds_OBMZ180.SetColumn(p_Row,"POS_X",nX);	//X좌표
+				ds_OBMZ180.SetColumn(p_Row,"POS_Y",nY);	//Y좌표
+			//trace(ds_OBMZ180.SaveXML());
+			}
+		}
+	}
+	//설총률 이미지생성
+	if(Div1.rdoggub_TYPE.Value ="I" ){
+		if(nButton=0){
+			var BTN_ID="BTN_";	//버튼ID NAMING
+			p_SEQ=ds_SEQ.GetColumn(ds_SEQ.lastrow,"SEQ");
+			//버튼 동적생성
+			var p_FSIZE = "0";	//폰트사이즈
+			var p_POSX = nX;	//X좌표
+			var p_POSY = nY;	//Y좌표
+			var p_WIDTH =20;	//Width
+			var p_HEIGHT = 20; //height
+			var p_TMPOS = "H";	//폰트사이즈(가로:H, 세로:V)
+			var p_Color = "lemonchiffon"; //버튼색상 결정
+			var p_BIGO1= 85; //설총률 디폴트값 
+			//var p_OTYPE = Div1.rdoggub_TYPE.Value; //오브젝트 타입
+			trace("I position : "+p_POSX+"=="+p_POSY);
+			/*
+			var rtn = dialog("psogmlib::OBMZ180_POP1.xml","doAction= new "+ "p_FSIZE="+p_FSIZE+" "+ "p_POSX="+p_POSX+" "+ "p_POSY="+p_POSY+" "+
+								"p_WIDTH="+p_WIDTH+" "+ "p_HEIGHT="+p_HEIGHT+" "+ "p_TMPOS="+p_TMPOS+" " ,300,300,"TitleBar=false");
+			*/
+			var rtn = dialog("psogmlib::OBMZ180_POP1.xml","doAction= new "+ "p_FSIZE="+p_FSIZE+" "+ "p_POSX="+p_POSX+" "+ "p_POSY="+p_POSY+" "+
+								"p_WIDTH="+p_WIDTH+" "+ "p_HEIGHT="+p_HEIGHT+" "+ "p_TMPOS="+p_TMPOS+" "+ "p_BIGO1="+p_BIGO1+" ",300,300,"TitleBar=false");
+
+			//선택한 경우만 갱신
+			if (length(rtn) != 0){
+				var str	= "left='"+rtn[5]+"' top='"+rtn[6]+"' width='"+rtn[3]+"' height='"+rtn[4]+"' WordWrap=true"+" text='"+rtn[1]+"' BKColor='"+p_Color+"' Font='"+p_Font1+rtn[2]+p_Font2+"' Appearance=Flat onclick='btnClick'";
+					object("Div_LAYOUT").Create("Button", BTN_ID+p_SEQ , str);
+			
+				//DATASET에 버튼정보저장
+				ds_OBMZ180.AddRow();
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"COMPS",ComboBoxPlant.Value);	//사업부
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OBJID",BTN_ID+p_SEQ);	//오브젝트id
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTYPE",Div1.rdoggub_TYPE.Value);	//종류
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OSEQ",p_SEQ);	//순서
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"LINCD",rtn[0]);	//라인코드
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTEXT",rtn[1]);	//라인명
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FSIZE",rtn[2]);	//폰트사이즈
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OWIDTH",rtn[3]);	//Width
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OHEIGHT",rtn[4]);	//height
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_X",rtn[5]);	//X좌표
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Y",rtn[6]);	//Y좌표
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"TMPOS",rtn[7]);	//시간위치(가로:H, 세로:V)
+				ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"BIGO1",rtn[8]);	//설총률
+				
+				//trace(ds_OBMZ180.SaveXML());
+					//버튼ID SEQ 생성
+				ds_SEQ.AddRow();
+				ds_SEQ.SetColumn(ds_SEQ.currow,"SEQ",p_SEQ+1);
+			}
+		}
+	}	
+}
+//PopupDiv의 영역에서 마우스의 Button이 놓여졌을 때 발생하는 Event 입니다.
+//두번째좌표확인
+function Div_LAYOUT_OnMouseUp(obj,nButton,nX,nY)
+{	//S:수정, D:삭제, M:이동
+	if(Div1.rdoggub_TYPE.Value !="S" && Div1.rdoggub_TYPE.Value !="D"  && Div1.rdoggub_TYPE.Value !="M" ){
+		if(nButton=0){
+			pos_x_aft = nX;
+			pos_y_aft = nY;
+			trace("Last position : "+pos_x_aft+"=="+pos_y_aft);
+			
+			//버튼색상 결정
+			var p_Color="";
+			if(Div1.rdoggub_TYPE.Value !="S"){
+				if(Div1.rdoggub_TYPE.Value =="T"){
+					p_Color = "white";
+				}else if(Div1.rdoggub_TYPE.Value =="L"){
+					p_Color = "lawngreen";
+				}
+			}
+			else{
+				return;
+			}
+			
+			//시작좌표
+			var pos_x = pos_x_pre;
+			var pos_y = pos_y_pre;
+				p_SEQ=ds_SEQ.GetColumn(ds_SEQ.lastrow,"SEQ");
+			
+			//크기계산
+			var p_width =  abs(parseInt(pos_x_aft)-parseInt(pos_x_pre));
+			var p_height = abs(parseInt(pos_y_aft)-parseInt(pos_y_pre));
+			trace("크기 : " + p_width+" 높이 :" + p_height);
+			
+			//버튼 동적생성
+			//크기가 0이 아닌경우만 발생
+			var BTN_ID="BTN_";	//버튼ID NAMING
+			if(p_width !=0 && p_height !=0 ){
+				//var str	= "left='"+pos_x+"' top='"+pos_y+"' width='"+p_width+"' height='"+p_height+"' text='"+Div1.ed_LINENM.Text+"' BKColor='"+p_Color+"' onclick='btnClick'";
+				//선택일경우로 처리이동
+				//var str	= "left='"+pos_x+"' top='"+pos_y+"' width='"+p_width+"' height='"+p_height+"' WordWrap=true"+" text='"+Div1.ed_LINENM.Text+"' BKColor='"+p_Color+"' Font='"+p_Font+"' onclick='btnClick'";
+				
+				//var p_COMPS = ComboBoxPlant.Value;	//사업부
+				//var p_OBJID = BTN_ID+p_SEQ;	//오브젝트id
+				//var p_OTYPE = Div1.rdoggub_TYPE.Value;	//종류
+				//var p_SEQV = p_SEQ;	//순서
+				var p_FSIZE = "10";	//폰트사이즈
+				var p_POSX = pos_x;	//X좌표
+				var p_POSY = pos_y;	//Y좌표
+				var p_WIDTH = p_width;	//Width
+				var p_HEIGHT = p_height; //height
+				var p_TMPOS = "H";	//폰트사이즈(가로:H, 세로:V)
+				var p_BIGO1= ""; //설총률 디폴트값 
+
+				//var p_OTYPE = Div1.rdoggub_TYPE.Value; //오브젝트 타입
+				
+				var rtn = dialog("psogmlib::OBMZ180_POP1.xml","doAction= new "+ "p_FSIZE="+p_FSIZE+" "+ "p_POSX="+p_POSX+" "+ "p_POSY="+p_POSY+" "+
+									"p_WIDTH="+p_WIDTH+" "+ "p_HEIGHT="+p_HEIGHT+" "+ "p_TMPOS="+p_TMPOS+" "+ "p_BIGO1="+p_BIGO1+" " ,300,300,"TitleBar=false");
+				//선택한 경우만 갱신
+				if (length(rtn) != 0){
+					var str	= "left='"+rtn[5]+"' top='"+rtn[6]+"' width='"+rtn[3]+"' height='"+rtn[4]+"' WordWrap=true"+" text='"+rtn[1]+"' BKColor='"+p_Color+"' Font='"+p_Font1+rtn[2]+p_Font2+"' Appearance=Flat onclick='btnClick'";
+						object("Div_LAYOUT").Create("Button", BTN_ID+p_SEQ , str);
+				
+					//DATASET에 버튼정보저장
+					ds_OBMZ180.AddRow();
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"COMPS",ComboBoxPlant.Value);	//사업부
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OBJID",BTN_ID+p_SEQ);	//오브젝트id
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTYPE",Div1.rdoggub_TYPE.Value);	//종류
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OSEQ",p_SEQ);	//순서
+					/*
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"LINCD","CD063");	//라인코드
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTEXT",Div1.ed_LINENM.Text);	//라인명
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FSIZE","10");	//폰트사이즈
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OWIDTH",p_width);	//Width
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OHEIGHT",p_height);	//height
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_X",pos_x);	//X좌표
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Y",pos_y);	//Y좌표
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"TMPOS","H");	//시간위치(가로:H, 세로:V)
+					*/
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"LINCD",rtn[0]);	//라인코드
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTEXT",rtn[1]);	//라인명
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FSIZE",rtn[2]);	//폰트사이즈
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OWIDTH",rtn[3]);	//Width
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OHEIGHT",rtn[4]);	//height
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_X",rtn[5]);	//X좌표
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Y",rtn[6]);	//Y좌표
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"TMPOS",rtn[7]);	//시간위치(가로:H, 세로:V)
+					ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"BIGO1",rtn[8]);	//설총률
+
+					
+					//trace(ds_OBMZ180.SaveXML());
+
+					//버튼ID SEQ 생성
+					ds_SEQ.AddRow();
+					ds_SEQ.SetColumn(ds_SEQ.currow,"SEQ",p_SEQ+1);
+				}			
+				
+				//초기화
+				pos_x_pre=0;
+				pos_y_pre=0;
+				pos_x_aft=0;
+				pos_y_aft=0;
+
+			}
+		}
+	}
+}
+//미사용삭제 2017.04.19
+/*
+function btn_RENAME_OnClick(obj)
+{
+	if(Div1.rdoggub_TYPE.Value =="S"){
+		//trace("선택버튼 Obj : " + objObject.id);
+		if(isValidObject(objObject)){
+			Div_LAYOUT.objObject.Text=Div1.ed_LINENM.Text;
+			//변경된 라인명 DATASET에 저장
+			var getRow=ds_OBMZ180.FindRow("OBJID",objObject.id);
+			ds_OBMZ180.SetColumn(getRow,"OTEXT",Div1.ed_LINENM.Text);
+			//trace(ds_OBMZ180.SaveXML());
+		
+			//Div_LAYOUT.objObject.WordWrap=true;
+		}
+		else{
+			alert("[알림]라인을 선택해주세요");
+		}
+	}else{
+		alert("[알림]작업선택을 '선택'으로 변경해주세요.");
+	}
+}
+*/
+
+//SIze변경 Split
+////미사용삭제 2017.04.19
+/*
+function GetSplitPos(obj)
+{
+	var pos = 0;
+	if( obj.Direct == "HORZ")
+		pos = ( obj.right + obj.left ) / 2;
+	else
+		pos = ( obj.bottom + obj.top ) / 2;
+	return pos;
+}
+*/
+//SIze변경적용
+////미사용삭제 2017.04.19
+function btn_SIZE_OnClick(obj)
+{
+	if(Div1.rdoggub_TYPE.Value =="S"){
+		trace("선택버튼 Obj : " + objObject.id);
+		if(isValidObject( objObject)){
+			Div_LAYOUT.objObject.Width=btn_SIZE.Width;
+			Div_LAYOUT.objObject.Height=btn_SIZE.Height;
+			
+			//변경된 사이즈 DATASET에 저장
+			var getRow=ds_OBMZ180.FindRow("OBJID",objObject.id);
+			ds_OBMZ180.SetColumn(getRow,"OWIDTH",btn_SIZE.Width);
+			ds_OBMZ180.SetColumn(getRow,"OHEIGHT",btn_SIZE.Height);
+			//trace(ds_OBMZ180.SaveXML());
+			
+			//Div_LAYOUT.objObject.WordWrap=true;
+/*			
+			//사용시재적용
+			//오른쪽 split 초기화
+			Split3.left=117;
+			Split3.Bottom=344;
+			//아래쪽 split 초기화
+			Split1.left=13;
+			Split1.top=344;
+*/
+		}
+		else{
+			alert("[알림]라인을 선택해주세요");
+		}
+	}else{
+		alert("[알림]작업선택을 '선택'으로 변경해주세요.");
+	}
+}
+//그리드 참고
+//그리드 삭제로 미사용 -2017.04.19
+/*
+function Div_LAYOUT_GRID_FLAT_OnLButtonDown(obj,nPosX,nPosY,nRow,nCell,nPivotIndex)
+{
+	if(Div1.rdoggub_TYPE.Value !="S" && Div1.rdoggub_TYPE.Value !="D" ){
+		pos_x_pre = nPosX;
+		pos_y_pre = nPosY;
+		trace("First position : "+pos_x_pre+"=="+pos_y_pre);
+	}
+}
+
+function Div_LAYOUT_GRID_FLAT_OnLButtonUp(obj,nPosX,nPosY,nRow,nCell,nPivotIndex)
+{
+	if(Div1.rdoggub_TYPE.Value !="S" && Div1.rdoggub_TYPE.Value !="D" ){
+		pos_x_aft = nPosX;
+		pos_y_aft = nPosY;
+		trace("Last position : "+pos_x_aft+"=="+pos_y_aft);
+		
+		//버튼색상 결정
+		var p_Color="";
+		if(Div1.rdoggub_TYPE.Value !="S"){
+			if(Div1.rdoggub_TYPE.Value =="T"){
+				p_Color = "white";
+			}else if(Div1.rdoggub_TYPE.Value =="L"){
+				p_Color = "lawngreen";
+			}
+		}
+		else{
+			return;
+		}
+			
+		//시작좌표
+		var pos_x = pos_x_pre;
+		var pos_y = pos_y_pre;
+			p_SEQ=ds_SEQ.GetColumn(ds_SEQ.lastrow,"SEQ");
+		
+		//크기계산
+		var p_width =  abs(parseInt(pos_x_aft)-parseInt(pos_x_pre));
+		var p_height = abs(parseInt(pos_y_aft)-parseInt(pos_y_pre));
+		trace("크기 : " + p_width+" 높이 :" + p_height);
+		
+		//버튼 동적생성
+		//크기가 0이 아닌경우만 발생
+		var BTN_ID="BTN_";	//버튼ID NAMING
+		if(p_width !=0 && p_height !=0 ){
+			//var str	= "left='"+pos_x+"' top='"+pos_y+"' width='"+p_width+"' height='"+p_height+"' text='"+Div1.ed_LINENM.Text+"' BKColor='"+p_Color+"' onclick='btnClick'";
+			var str	= "left='"+pos_x+"' top='"+pos_y+"' width='"+p_width+"' height='"+p_height+"' WordWrap=true"+" text='"+Div1.ed_LINENM.Text+"' BKColor='"+p_Color+"' Font='"+p_Font+"' onclick='btnClick'";
+			object("Div_LAYOUT").Create("Button", BTN_ID+p_SEQ , str);
+		
+			//DATASET에 버튼정보저장
+			ds_OBMZ180.AddRow();
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"COMPS",ComboBoxPlant.Value);	//사업부
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OBJID",BTN_ID+p_SEQ);	//오브젝트id
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTYPE",Div1.rdoggub_TYPE.Value);	//종류
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OSEQ",p_SEQ);	//순서
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"LINCD","TEST");	//라인코드
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OTEXT",Div1.ed_LINENM.Text);	//라인명
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"FSIZE","10");	//폰트사이즈
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OWIDTH",p_width);	//Width
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"OHEIGHT",p_height);	//height
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_X",pos_x);	//X좌표
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"POS_Y",pos_y);	//Y좌표
+			ds_OBMZ180.SetColumn(ds_OBMZ180.currow,"TMPOS","H");	//폰트사이즈(가로:H, 세로:V)
+				
+			trace(ds_OBMZ180.SaveXML());
+			
+			//버튼ID SEQ 생성
+			ds_SEQ.AddRow();
+			ds_SEQ.SetColumn(ds_SEQ.currow,"SEQ",p_SEQ+1);
+			
+			//초기화
+			pos_x_pre=0;
+			pos_y_pre=0;
+			pos_x_aft=0;
+			pos_y_aft=0;
+		}
+	}
+}
+*/]]></Script>
+</Window>

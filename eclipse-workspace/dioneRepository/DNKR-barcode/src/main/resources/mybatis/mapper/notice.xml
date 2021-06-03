@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.denso.mapper.NoticeMapper">
+	<sql id="tblBoardBaseSql">
+		SELECT 
+		    SEQ seq,
+			TITLE title,
+			WRITER writer,
+			BOARD_DATE boardDate,
+			DISPLAY_YN displayYn,
+			CONTENT content,
+			TYPE type,
+			FAQ_PRODUCT_TYPE faqProductType,
+			FAQ_CLASS faqClass,
+			FAQ_QUESTION faqQuestion,
+			FAQ_REPLY faqReply,
+			FAQ_ENCODING faqEncoding,
+		    (SELECT GROUP_CODE FROM TBL_COMMON WHERE CODE = FAQ_CLASS) AS groupCode,
+		    (SELECT CODE_NAME FROM TBL_COMMON WHERE CODE = FAQ_CLASS) AS faqClassName,
+		    (SELECT NAME FROM TBL_PRODUCT WHERE CODE = FAQ_PRODUCT_TYPE) AS faqProductTypeName
+		FROM TBL_BOARD
+	</sql>
+	
+	<sql id="tblBoardConditionSql">
+		<where>
+			AND TYPE = #{type}
+			<if test="!@org.springframework.util.StringUtils@isEmpty(displayCondition)">
+				AND DISPLAY_YN = #{displayCondition}
+			</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqProductTypeCondition)">
+				AND FAQ_PRODUCT_TYPE = #{faqProductTypeCondition}
+			</if>
+			<choose>
+				<when test='statusCondition =="title"'>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(statusText)">
+						AND TITLE LIKE '%' || #{statusText} || '%'
+					</if>
+				</when>
+				<when test='statusCondition =="writer"'>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(statusText)">
+						AND WRITER LIKE '%' || #{statusText} || '%'
+					</if>
+				</when>
+				<when test='statusCondition =="question"'>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(statusText)">
+						AND FAQ_QUESTION LIKE '%' || #{statusText} || '%'
+					</if>
+				</when>
+				<when test='statusCondition =="reply"'>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(statusText)">
+						AND FAQ_REPLY LIKE '%' || #{statusText} || '%'
+					</if>
+				</when>
+			</choose>
+		</where>
+	</sql>
+	
+	<select id="count" resultType="long">
+		select count(*) from (
+			<include refid="tblBoardBaseSql"/>
+			<include refid="tblBoardConditionSql"/>
+		)
+	</select>
+	
+	<select id="findOne" parameterType="string" resultType="tblBoard">
+		<include refid="tblBoardBaseSql"/>
+			WHERE SEQ = #{seq}
+	</select>
+
+	<select id="findAllToPage" parameterType="map" resultType="tblBoard">
+		<![CDATA[
+			SELECT * FROM (SELECT /*+ FIRST_ROWS */ g.*, ROWNUM rnum  FROM (	
+		]]>
+			<include refid="tblBoardBaseSql"/>
+			<include refid="tblBoardConditionSql"/>
+			<choose>
+				<when test="_sort != null">
+					<foreach item="item" index="index" collection="_sort.orders" open="ORDER BY " separator="," >
+						${item.column} ${item.direction}
+					</foreach>
+				</when>
+				<otherwise>
+					ORDER BY BOARD_DATE DESC, TITLE DESC
+				</otherwise>
+			</choose>
+		<![CDATA[
+			) g WHERE ROWNUM <= #{_endRow}) WHERE rnum > #{_startRow}
+		]]>
+	</select>
+
+	<insert id="save" parameterType="tblBoard" >
+		INSERT INTO TBL_BOARD 
+			(
+			 SEQ,
+			 TITLE,
+		     WRITER,
+			 BOARD_DATE,
+			 DISPLAY_YN,
+			 CONTENT,
+			 TYPE,
+			 FAQ_PRODUCT_TYPE,
+			 FAQ_CLASS,
+			 FAQ_QUESTION,
+			 FAQ_REPLY,
+			 FAQ_ENCODING
+			 )
+		VALUES(
+			 notice_seq.nextval,
+			 #{title, jdbcType=VARCHAR}, 
+			 #{writer, jdbcType=VARCHAR},
+			 sysdate,
+			 #{displayYn, jdbcType=VARCHAR},
+			 #{content, jdbcType=VARCHAR},
+			 #{type, jdbcType=VARCHAR},
+			 #{faqProductType, jdbcType=VARCHAR},
+			 #{faqClass, jdbcType=VARCHAR},
+			 #{faqQuestion, jdbcType=VARCHAR},
+			 #{faqReply, jdbcType=VARCHAR},
+			 #{faqEncoding, jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<update id="update" parameterType="tblBoard" >
+		UPDATE TBL_BOARD
+		<set>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(title)">TITLE=#{title},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(writer)">WRITER=#{writer},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(displayYn)">DISPLAY_YN=#{displayYn},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(content)">CONTENT=#{content},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqProductType)">FAQ_PRODUCT_TYPE=#{faqProductType},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqClass)">FAQ_CLASS=#{faqClass},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqQuestion)">FAQ_QUESTION=#{faqQuestion},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqReply)">FAQ_REPLY=#{faqReply},</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(faqEncoding)">FAQ_ENCODING=#{faqEncoding},</if>
+			BOARD_DATE = sysdate
+		</set>
+		WHERE
+			SEQ=#{seq}
+	</update>
+	
+	<delete id="delete" parameterType="String" >
+		DELETE TBL_BOARD WHERE SEQ=#{seq}
+	</delete>
+
+</mapper>

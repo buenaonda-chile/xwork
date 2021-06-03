@@ -1,0 +1,1041 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" OnTimer="userList_OnTimer" PidAttrib="7" Title="라인현황입력" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ190" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU" size="256" summ="default" type="STRING"/>
+					<colinfo id="ERRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU1" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU2" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU3" size="256" summ="default" type="STRING"/>
+					<colinfo id="P_JOB" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ERRTM_M" size="256" summ="default" type="STRING"/>
+					<colinfo id="M_STATU" size="256" summ="default" type="STRING"/>
+					<colinfo id="FNYMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="FNTIM" size="256" summ="default" type="STRING"/>
+					<colinfo id="QAYMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="QATIM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ERYMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="ERSEQ" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ190_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_PRDCD">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ190_MCheck"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="8" Top="30" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="5" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="671" OnClick="fn_Search" TabOrder="3" Text="조회" Top="3" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="754" OnClick="fn_Input" TabOrder="4" Text="추가" Top="3" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="835" OnClick="fn_Save" TabOrder="5" TabStop="FALSE" Text="Button2" Top="3" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="910" OnClick="fn_Delete" TabOrder="6" Text="Button1" Top="3" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="224" TabOrder="12" Text="제품명" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static9" Left="340" TabOrder="13" Top="35" VAlign="Middle" Width="148"></Static>
+		<Combo CodeColumn="CD" DataColumn="CDNM" Height="19" Id="cmb_PRDCD" ImeMode="none" INDEX="0" InnerDataset="ds_PRDCD" Left="344" OnChanged="common_OnChanged" Search="FILTERED" TabOrder="11" Top="39" Width="140"></Combo>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" TabOrder="14" Text="라인" Top="64" VAlign="Middle" Width="252"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="253" TabOrder="15" Text="라인현황" Top="64" VAlign="Middle" Width="795"></Static>
+		<Div BKColor="ACTIVECAPTION" DragMode="TRUE" DropMode="TRUE" Height="520" Id="Div_LAYOUT" SyncContents="true" TabOrder="17" Text="Div0" Top="96" Width="1048">
+			<Contents>
+				<Div BKColor="aquamarine" DragMode="TRUE" DropMode="TRUE" Height="520" Id="Div_LAYOUT_SUB" TabOrder="1" Text="Div0" Width="1030">
+					<Contents></Contents>
+				</Div>
+			</Contents>
+		</Div>
+		<Static Color="red" Font="Default,9,Bold" Height="24" Id="Static3" Left="641" TabOrder="18" Text="※&#32;라인상태&#32;변경시&#32;조회후&#32;변경하시기&#32;바랍니다." Top="36" VAlign="Middle" Visible="FALSE" Width="320"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="496" TabOrder="19" Text="제품기억" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="612" TabOrder="21" Top="35" VAlign="Middle" Width="30"></Static>
+		<Checkbox Height="20" Id="chk_PRDCD" Left="618" LeftMargin="4" OnClick="chk_PRDCD_OnClick" TabOrder="20" Top="38" Value="FALSE" Width="22"></Checkbox>
+		<Edit Height="21" Id="st_LINCD" Left="672" Readonly="TRUE" TabOrder="16" TabStop="FALSE" Top="35" Visible="FALSE" Width="121"></Edit>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBMZ190.xml
+ * ● PROGRAM DESCRIPTION  : 전라인가동현황-라인현황입력
+ * ● DATE WRITTEN         : 2017.02.02
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+//var Lib2 = "PSDIOLIB"; // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+
+var setObject;
+ 
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	getPRDCD();	//제품명조회
+	cmb_PRDCD.Value="A";
+	read_PRDCD();	//기억된 제품읽기
+	//Defaut Value
+	setTimer(1, 60*1000); //60초 리프레쉬	
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+function getDesign(){
+/*
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+*/	
+	Div_LAYOUT.UserData = Div_LAYOUT.Height;
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 제품코드 조회
+ **********************************************************************/ 
+function getPRDCD(){
+	var sKind		= "getPRDCD";						
+	var sMethodName = "service::psogmlib/selectMSTCODE.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_PRDCD=ds_MSTCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //코드
+		sArgument += " SQLID=" + "selectMSTCD";	//알람/전라인의 마스터 코드로 사용
+		sArgument += " GRPCD=" +  quote("PRD");	//제품코드
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	/*
+	ds_PRDCD.InsertRow(0);
+	ds_PRDCD.SetColumn(0,"CD","");
+	ds_PRDCD.SetColumn(0,"CDNM","전체");
+	ds_PRDCD.SetColumn(0,"CDNM2","전체");
+	*/
+	cmb_PRDCD.Index=0;
+	
+}
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getOBMZ190(){
+
+	chk_PRDCD_OnClick();
+	//화면 재생성위한 임시방편
+	//현재버전에서 버튼인 경우 Reload시클릭이벤트 오류발생
+	if(ds_OBMZ190.rowcount>0){
+		clearLayout();
+	}	
+/* 수정 : 2018.04.03
+	var sKind		= "getOBMZ190";						
+	var sMethodName = "service::psogmlib/selectOBMZ190.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ190=ds_OBMZ190";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@LIB3=" + quote(Lib3);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += "@PRDCD=" + quote(cmb_PRDCD.Value);
+		//sArgument += "@ERYMD=" + quote(today());
+	var str = dialog("Common::PGMLOAD_OPG.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	http.Sync = false;
+
+//	if (str == 'T'){  //정상조회
+//		alert(setPopMessage("1004"));
+//		setMessage("1004");
+//		drawingLayout();
+//	}else if (str == 'B'){   //data값이 없을때
+//		alert(setPopMessage("1003"));
+//		setMessage("1003");	
+//	}else if (str == 'E'){   //error발생시
+//		alert(setPopMessage("1002"));
+//		setMessage("1002");	
+//	}
+
+	if (str == 'T'){  //정상조회
+		drawingLayout();
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+*/	
+	var sKind		= "getOBMZ190";						
+	var sMethodName = "service::psogmlib/selectOBMZ190.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ190=ds_OBMZ190";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " PRDCD=" + quote(cmb_PRDCD.Value);
+		//sArgument += "@ERYMD=" + quote(today());
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+	http.Sync = false;
+}
+
+function setOBMZ190(p_JOB){
+
+	var sKind		= "setOBMZ190";						
+	var sMethodName = "service::psogmlib/saveOBMZ190.do";
+	var sInDataSet  = "ds_OBMZ190=ds_OBMZ190:U";
+	var sOutDataSet = "ds_OBMZ190_CHECK=ds_OBMZ190_CHECK";
+	var sArgument   = "";
+		//sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " P_JOB=" + quote(p_JOB);
+		sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+}
+
+/********************************************************************** 
+ * 내용설명 :  설비플래그 변경여부 확인(추가 2018.03.19)
+ **********************************************************************/ 
+function getOBMZ190_MStatus(chk_Row){
+
+	var	c_COMPS=ds_OBMZ190.GetColumn(chk_Row,"COMPS");
+	var	c_LINCD=ds_OBMZ190.GetColumn(chk_Row,"LINCD");
+	var	c_MSHNO=ds_OBMZ190.GetColumn(chk_Row,"MSHNO");
+
+	var sKind		= "getOBMZ190_MStatus";						
+	var sMethodName = "service::psogmlib/selectOBMZ190_MStatus.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ190_MCheck=ds_OBMZ190_MCheck";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " COMPS=" + quote(c_COMPS);
+		sArgument += " LINCD=" + quote(c_LINCD);
+		sArgument += " MSHNO=" + quote(c_MSHNO);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	
+	return ds_OBMZ190_MCheck.GetColumn(0,"STATU");
+}
+
+//설비장애 코드 갱신-추가 수정할것 2017.5.22
+function setMStatus(chkLStatus, chkMStatus){
+
+	var sKind		= "setMStatus";						
+	var sMethodName = "service::psogmlib/saveOBMZ200_MStatus.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " M_STATU=" + quote("0");
+		sArgument += " LINCD=" + quote(chkLStatus);
+		sArgument += " MSHNO=" + quote(chkMStatus);
+		sArgument += " ERRTM_M=" + quote("");
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+/*
+* function명 : 라인의 상태변경
+* function 주요값 : 라인의 상태(정상: '0', 대기 : 'D' OR 'R', 장애 : 'E')
+*/
+//라인상태
+function setLStatus(chkLStatus){
+
+	var sKind		= "setLStatus";						
+	var sMethodName = "service::psogmlib/saveOBMZ200_LStatus.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " STATU=" + quote("0");
+		sArgument += " LINCD=" + quote(chkLStatus);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(svcId=="setOBMZ190"){
+	// tran 실패
+		if (ds_OBMZ190_CHECK.GetRowCount() > 0){			
+			for(var i=0;i<ds_OBMZ190_CHECK.GetRowCount();i++){		
+				alert("라인코드 : " +ds_OBMZ190_CHECK.GetColumn(i,"LINCD") + " = " + ds_OBMZ190_CHECK.GetColumn(i,"RTMSG"));
+			}
+			getOBMZ190();        //error항목이 존재시에는 재조회		
+			return;		
+		}// tran 실패
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		}else{
+			//alert(setPopMessage("1001"));
+			setMessage("1001");	
+		}
+	}
+	if(svcId=="getOBMZ190"){
+			// tran 실패
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		}else {
+			drawingLayout();
+			setMessage("1004");	
+		} 
+	}
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+	var result = true;
+	
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "라인현황입력";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|라인현황입력";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	clearLayout();
+	ds_OBMZ190.ClearData();
+	//Div_LAYOUT.Div_LAYOUT_SUB.Reload();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBMZ190();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}/*
+function MainGrid_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//trace(nCell);
+	if(nCell=2 || nCell=3 || nCell=4){
+		var p_sts = "";
+		if(nCell=2){	//정상
+			p_sts=chk_status("STATU");
+			if(p_sts=="0") return;	//현재 cell click시 이벤트 발생안함.
+			if(p_sts=="E"){		//설비이상인경우 제외처리
+				alert("[알림]정상가동처리를 설비에서 정상으로 처리해 주십시오.");
+				return;
+			}
+			if(confirm("[알림]상태변경 작업을 처리하시겠습니까?")==true){
+				ds_OBMZ190.SetColumn(nRow,"STATU","0");
+				setOBMZ190("0");
+				trace("OK");
+			}
+		}
+		if(nCell=3){	//대기/준비개량
+			p_sts=chk_status("STATU");
+			if(p_sts=="R") return;	//현재 cell click시 이벤트 발생안함.
+			if(p_Err=="E"){		//설비이상인경우 제외처리
+				alert("[알림]정상가동일때만 대기로 바꿀 수 있습니다.");
+				return;
+			}
+			if(confirm("[알림]상태변경 작업을 처리하시겠습니까?")==true){
+				ds_OBMZ190.SetColumn(nRow,"STATU","R");
+				setOBMZ190("R");
+				trace("OK");
+			}
+		}
+		if(nCell=4){	//설비이상
+			p_sts=chk_status("STATU");
+			if(p_sts=="E") return;	//현재 cell click시 이벤트 발생안함.
+			if(confirm("[알림]설비이상을 추가하시겠습니까?")==true){
+				//설비이상인 경우 설비선택 팝업			
+				var rtn = dialog("psogmlib::OBMZ190_POP1.xml","에러설비선택",300,300,"TitleBar=false");				
+				if (length(rtn) != 0){
+					trace(rtn[0]);
+					ds_OBMZ190.SetColumn(nRow,"MSHNO",rtn[0]);	//변수로 변경필요
+					ds_OBMZ190.SetColumn(nRow,"STATU","E");
+					ds_OBMZ190.SetColumn(nRow,"M_STATU","E");	//설비상태(이상)
+					ds_OBMZ190.SetColumn(nRow,"ERRTM_M",substr(getDate(),8,4));
+					setOBMZ190("E");
+					trace("OK");
+				}
+			}
+		}
+	}
+	
+}
+*/
+function chk_status(p_StVal){
+	return ds_OBMZ190.GetColumn(ds_OBMZ190.currow, p_StVal);
+}
+function drawingLayout()
+{
+	var pos_x = 2;
+	//var pos_y = 20;
+	var pos_y = 1;
+	var p_width = 80;
+	var p_height = 20;
+	var p_cnt = 0;
+		p_cnt = ds_OBMZ190.rowcount;
+	
+	//25
+	//Div_LAYOUT.Div_LAYOUT_SUB_sub 사이즈 조절
+	/*
+	userList.Destroy("Div_LAYOUT");
+
+	var DivMain	= " left='0' top='96' width='1048' height='520' scroll='True' BKColor='INACTIVECAPTION' ";
+		object("userList").Create("Div","Div_LAYOUT" , DivMain);
+		
+	if(p_cnt > 25){
+		var H_SIZE=528+(parseInt(ds_OBMZ190.rowcount)-25)*21;
+		var str	= "left='0' top='100' width='1030' height='"+H_SIZE+"' BKColor='aquamarine' ";
+		object("Div_LAYOUT").Create("Div","Div_LAYOUT_SUB" , str);
+	}else{
+		var str	= "left='0' top='100' width='1030' height='300' ";
+		object("Div_LAYOUT").Create("Div","Div_LAYOUT_SUB" , str);
+	}
+	*/
+	if(p_cnt > 25){
+		Div_LAYOUT.scroll=false;
+		var H_SIZE=528+(parseInt(ds_OBMZ190.rowcount)-25)*21;
+			Div_LAYOUT.Div_LAYOUT_SUB.Height=H_SIZE;
+			Div_LAYOUT.scroll=true;
+	}else{
+		Div_LAYOUT.Div_LAYOUT_SUB.Height=528;
+		Div_LAYOUT.scroll=false;
+
+	}	
+	var p_bkCol0, p_bkCol1, p_bkCol2, p_bkCol3, p_bkCol4, p_bkCol5, p_bkCol6, p_bkCol7, p_bkCol8, p_bkCol9;	
+	var p_prop0, p_prop1, p_prop2;	
+	
+		p_prop0 =" align='center' readonly='true' autoselect ='false' onclick='commonClick'";
+		p_prop1 =" align='center' readonly='true' autoselect ='false' onclick='errClick'";
+		p_prop2;
+	
+	var s_LineNm, p_STATU, p_MSHNO, p_MSHNM;
+	for(i=0;i<p_cnt; i++){
+		//장애발생시간
+		var p_ERRTM_M=ds_OBMZ190.GetColumn(i,"ERRTM_M");
+		var errHH = substr(p_ERRTM_M,0,2);
+		var errMM = substr(p_ERRTM_M,2,4);
+		
+		s_LineNm=ds_OBMZ190.GetColumn(i,"LINNM");
+		p_STATU=ds_OBMZ190.GetColumn(i,"STATU");
+		p_MSHNO=ds_OBMZ190.GetColumn(i,"MSHNO");
+		p_MSHNM=replace(trim(ds_OBMZ190.GetColumn(i,"MSHNM")),"'","/")+"   "+errHH+":"+errMM;
+			//trace(p_STATU);
+
+		p_MSTATU=ds_OBMZ190.GetColumn(i,"M_STATU");//설비상태
+		if(p_STATU="0"){
+			p_bkCol0 = "chartreuse";
+			p_bkCol1 = "chartreuse";
+			p_bkCol2 = "white";
+			p_bkCol3 = "white";
+			p_bkCol4 = "white";
+			p_bkCol5 = "white";
+			p_bkCol6 = "white";
+			p_bkCol7 = "white";
+			p_bkCol8 = "white";
+			p_bkCol9 = "white";
+		}else if(p_STATU="R"){
+			p_bkCol0 = "yellow";
+			p_bkCol1 = "white";
+			p_bkCol2 = "yellow";
+			p_bkCol3 = "white";
+			p_bkCol4 = "white";
+			p_bkCol5 = "white";
+			p_bkCol6 = "white";
+			p_bkCol7 = "white";
+			p_bkCol8 = "white";
+			p_bkCol9 = "white";
+		}else if(p_STATU="E"){
+			p_bkCol0 = "Red";
+			p_bkCol1 = "white";
+			p_bkCol2 = "white";
+			p_bkCol3 = "Red";
+			p_bkCol4 = "white";
+			p_bkCol5 = "white";
+			p_bkCol6 = "white";
+			p_bkCol7 = "white";
+			p_bkCol8 = "white";
+			p_bkCol9 = "white";
+			if(p_MSTATU="A"){	//연락중
+				p_bkCol3 = "white";
+				p_bkCol4 = "Red";
+			}else if(p_MSTATU="P"){	//접수중(2019.10.10)
+				p_bkCol3 = "white";
+				p_bkCol4 = "Red";
+			}else if(p_MSTATU="C"){	//수리중
+				p_bkCol3 = "white";
+				p_bkCol5 = "Red";
+			}else if(p_MSTATU="B"){	//수배중
+				p_bkCol3 = "white";
+				p_bkCol6 = "Red";
+			}else if(p_MSTATU="H"){	//가동중확인
+				p_bkCol3 = "white";
+				p_bkCol7 = "Red";
+			}else if(p_MSTATU="F"){	//품질확인
+				p_bkCol3 = "white";
+				p_bkCol8 = "Red";
+			}
+		}
+		if(length(trim(p_MSHNO))=0){
+			//라인명
+			CreateTitle(pos_x, pos_y, p_width+170, p_height, p_bkCol0, s_LineNm, "' enable='false' disablecolor='black' ", "TID000_", i);
+			//정상가동
+			CreateText(pos_x+251, pos_y, p_width+14, p_height, p_bkCol1, "정상가동", p_prop0, "TID100_", i);
+			//대기/준비/개량
+			CreateText(pos_x+346, pos_y, p_width+14, p_height, p_bkCol2, "대기/준비/개량", p_prop0, "TID200_", i);
+			//설비이상			
+			CreateText(pos_x+441, pos_y, p_width+14, p_height, p_bkCol3, "설비이상", p_prop0, "TID300_", i);	
+			//설비추가버튼
+			if(p_STATU="E"){
+				CreateBtn(pos_x+536, pos_y, p_width, p_height, i);
+			}
+		}else{
+			//설비명			
+			CreateTitle(pos_x, pos_y, p_width+170, p_height, p_bkCol0, p_MSHNM, "' align='right' enable='false' disablecolor='black' ", "TID050_", i);
+			//정상가동			
+			CreateText(pos_x+251, pos_y, p_width+14, p_height, p_bkCol1, "정상가동", p_prop0, "TID100_", i);
+			//대기/준비/개량
+			//설비이상
+			CreateText(pos_x+441, pos_y, p_width+14, p_height, p_bkCol3, "설비이상", p_prop0, "TID300_", i);
+			//연락중
+			CreateText(pos_x+536, pos_y, p_width, p_height, p_bkCol4, "연락중", p_prop1, "TID400_", i);
+			//수리중
+			CreateText(pos_x+617, pos_y, p_width, p_height, p_bkCol5, "수리중", p_prop1, "TID500_", i);
+			//수배중
+			CreateText(pos_x+698, pos_y, p_width, p_height, p_bkCol6, "수배중", p_prop1, "TID600_", i);
+			//보전수리완료
+			CreateText(pos_x+779, pos_y, p_width, p_height, p_bkCol7, "가동중확인", p_prop1, "TID700_", i);
+			//품질확인완료
+			CreateText(pos_x+860, pos_y, p_width, p_height, p_bkCol8, "보전수리완료", p_prop1, "TID800_", i);
+			
+			CreateText(pos_x+941, pos_y, p_width, p_height, p_bkCol9, "품질확인완료", p_prop1, "TID900_", i);
+		}
+		pos_y = pos_y+21;
+	}
+
+}
+function CreateTitle(pos_x, pos_y, p_width, p_height, p_bkCol, p_text, p_prop, p_idseq, i){
+	var strText = "left='"+pos_x+"' top='"+pos_y+"' width='"+ p_width + "' height='" + p_height + 
+							//"' DisableBkColor='"+p_bkCol+"' text='"+ p_text+ p_prop;
+							"' DisableBkColor='"+p_bkCol+p_prop + " Border= 'Flat'";
+	object("Div_LAYOUT.Div_LAYOUT_SUB").Create("Edit", p_idseq+toString(i) , strText );
+	var strObj=p_idseq+toString(i);
+		Div_LAYOUT.Div_LAYOUT_SUB.object(strObj).Text=p_text;
+}
+function CreateText(pos_x, pos_y, p_width, p_height, p_bkCol, p_text, p_prop, p_idseq, i){
+	var strText = "left='"+pos_x+"' top='"+pos_y+"' width='"+ p_width + "' height='" + p_height + 
+							"' BkColor='"+p_bkCol+"' text='"+ p_text+ "'" + p_prop+" Border= 'Flat'";
+	object("Div_LAYOUT.Div_LAYOUT_SUB").Create("Edit", p_idseq+toString(i) , strText );
+}
+function CreateBtn(pos_x, pos_y, p_width, p_height, i){
+//버튼 Reload시 Onclick이벤트 사용불가
+/* 
+	var strBtn 	= "left='"+pos_x+"' top='"+pos_y+"' width='"+ p_width +"' height='" + p_height + 
+				"' text='추가' OnClick='errAddClick' ";
+	object("Div_LAYOUT.Div_LAYOUT_SUB").Create("Button", "BID000_"+toString(i) , strBtn);
+
+	var strBtn 	= "left='"+pos_x+"' top='"+pos_y+"' width='"+ p_width +"' height='" + p_height + 
+				"' ImageID='btn2_add_S' Static='false' OnClick='errAddClick' ";
+	object("Div_LAYOUT.Div_LAYOUT_SUB").Create("Image", "BID000_"+toString(i) , strBtn);
+*/		
+
+	var strBtn 	= "left='"+pos_x+"' top='"+pos_y+"' width='"+ p_width +"' height='" + p_height + 
+				"' text='추가' OnClick='errAddClick' ";
+	object("Div_LAYOUT.Div_LAYOUT_SUB").Create("Button", "BID000_"+toString(i) , strBtn);
+
+	//var strObj="BID000_"+toString(i);
+	//	Div_LAYOUT.Div_LAYOUT_SUB.object(strObj).OnClick="errAddClick";
+}
+
+/*
+* function명 : 라인의 상태변경
+* function 주요값 : 라인의 상태(정상: '0', 대기 : 'D' OR 'R', 장애 : 'E')
+*/
+function commonClick(obj)
+{
+	//trace(obj.id+"="+obj);
+	//trace(obj);
+	//trace(substr(obj.id,6));
+	var rlt=true;
+	
+	var p_row =substr(obj.id,7);
+	var p_sts = "";
+	if(substr(obj.id,0,6)="TID100"){	//정상가동
+		p_sts=chk_status2(p_row, "STATU");//라인상태
+		if(p_sts=="0") return;	//현재 cell click시 이벤트 발생안함.(정상)
+		if(p_sts=="E"){		//설비이상인경우 제외처리
+			alert("[알림]정상가동처리를 설비에서 정상으로 처리해 주십시오.");
+			return;
+		}
+		if(confirm("[알림]상태변경 작업을 처리하시겠습니까?")==true){
+				ds_OBMZ190.SetColumn(p_row,"STATU","0");	//라인상태(정상)
+				setOBMZ190("0");	//Transaction발생(라인상태 변경)
+				//trace("OK");
+		}else{
+			rlt=false;
+		}
+	}else if(substr(obj.id,0,6)="TID200"){	//대기/준비/개량
+		p_sts=chk_status2(p_row, "STATU");//라인상태
+		if(p_sts=="R") return;	//현재 cell click시 이벤트 발생안함.(대기)
+		if(p_sts=="E"){		//설비이상인경우 제외처리
+			alert("[알림]정상가동일때만 대기로 바꿀 수 있습니다.");
+			return;
+		}
+		if(confirm("[알림]상태변경 작업을 처리하시겠습니까?")==true){
+				ds_OBMZ190.SetColumn(p_row,"STATU","R");	//라인상태(대기)
+				setOBMZ190("R");	//Transaction발생(라인상태 변경)
+				//trace("OK");
+		}else{
+			rlt=false;
+		}
+	}else if(substr(obj.id,0,6)="TID300"){	//설비이상
+		p_sts=chk_status2(p_row, "STATU");//라인상태
+		if(p_sts=="E") return;	//현재 cell click시 이벤트 발생안함.(설비이상)
+		if(confirm("[알림]설비이상을 추가하시겠습니까?")==true){
+			//설비이상인 경우 설비선택 팝업	
+			st_LINCD.Text=ds_OBMZ190.GetColumn(p_row,"LINCD");
+			p_LINCD=ds_OBMZ190.GetColumn(p_row,"LINCD");
+			var rtn = dialog("psogmlib::OBMZ190_POP1.xml","p_LINCD="+p_LINCD+" ",300,300,"TitleBar=false");				
+			if (length(rtn) != 0){
+				//trace(rtn[0]);
+				ds_OBMZ190.SetColumn(p_row,"MSHNO",rtn[0]);	//변수로 변경필요
+				ds_OBMZ190.SetColumn(p_row,"STATU","E");	//라인상태(이상)
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","E");	//설비상태(이상)
+				ds_OBMZ190.SetColumn(p_row,"ERRTM_M",substr(getDate(),8,4));
+				setOBMZ190("E");	//Transaction발생(라인/설비상태 변경)
+				//trace("OK");
+			}
+		}else{
+			rlt=false;
+		}
+	}
+	if(rlt=true){
+//Div_LAYOUT.Div_LAYOUT_SUB.Reload(); 삭제 - 2017.04.20
+		getOBMZ190();
+	}
+}
+function chk_status2(row, p_StVal){
+	return ds_OBMZ190.GetColumn(row, p_StVal);
+}
+
+/*
+* function명 : 설비상태변경
+* function 주요값 : 설비의 상태
+*					(정상: '0', 장애: 'E', 연락중: 'A' 수리중: 'C' 수배중: 'B' 가동중확인: 'H' 품질확인: 'F')
+*/
+function errClick(obj)
+{
+//trace("err OK");
+	var rlt=false;
+	var p_row =substr(obj.id,7);
+	var p_sts = "";
+		
+st_LINCD.Text=ds_OBMZ190.GetColumn(p_row,"LINCD");
+//p_LINCD=ds_OBMZ190.GetColumn(p_row,"LINCD");
+	//설비상태 - 연락중
+	if(substr(obj.id,0,6)="TID400"){
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		if(p_sts=="A") return;	//현재 cell click시 이벤트 발생안함.
+//if(p_Err=="T"){//설비이상인경우 제외처리
+//if(p_Err=="E"){//설비이상인경우 제외처리
+		if(p_sts=="E"){//설비이상인 경우만 이벤트가 발생함.
+			if(confirm("[알림]'연락중'으로 상태변경 작업을 처리하시겠습니까?")==true){
+				var rtn = dialog("psogmlib::OBMZ200_POP.xml","p_ROW="+p_row+" "+"p_AFLAG="+"SEL"+" ",300,300,"TitleBar=false");	
+				if (rtn = "T"){
+					//trace("연락중변경"+rtn);		
+					//ds_OBMZ190.SetColumn(p_row,"STATU","0");
+					//ds_OBMZ190.SetColumn(p_row,"STATU1","T");
+					//ds_OBMZ190.SetColumn(p_row,"STATU2","F");
+					//ds_OBMZ190.SetColumn(p_row,"STATU3","F");
+					ds_OBMZ190.SetColumn(p_row,"M_STATU","A");	//설비상태
+					setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+					//trace("OK");
+					rlt=true;
+				}
+			}
+		}
+	}//설비상태 - 수리중
+	if(substr(obj.id,0,6)="TID500"){
+	/* 삭제 2019.07.29
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		if(p_sts=="C") return;	//현재 cell click시 이벤트 발생안함.
+		if(p_sts=="A" || p_sts=="B" || p_sts=="H"){//연락중, 수배중, 가동중확인 경우만 이벤트가 발생함.
+			if(confirm("[알림]'수리중'으로 상태변경 작업을 처리하시겠습니까?")==true){
+				//Start 현재설비상태조회 ckeck로직 추가 - 2018.03.19 
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","C");	//설비상태
+				setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+				trace("OK");
+			rlt=true;
+			}
+		}
+		*/
+	}//설비상태 - 수배중
+	if(substr(obj.id,0,6)="TID600"){
+		/* 삭제 2019.07.29
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		if(p_sts=="B") return;	//현재 cell click시 이벤트 발생안함.
+		if(p_sts=="C" || p_sts=="H"){//수리중, 가동중확인 경우만 이벤트가 발생함.
+			if(confirm("[알림]'수배중'으로 상태변경 작업을 처리하시겠습니까?")==true){
+				//Start 현재설비상태조회 ckeck로직 추가 - 2018.03.19 
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","B");	//설비상태
+				setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+				trace("OK");
+			rlt=true;
+			}
+		}
+		*/
+	}//설비상태 - 가동중확인
+	if(substr(obj.id,0,6)="TID700"){
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		if(p_sts=="H") return;	//현재 cell click시 이벤트 발생안함.
+		//if(p_sts=="C" || p_sts=="B"){//수리중, 수배중인 경우만 이벤트가 발생함.
+		if(p_sts=="C"){//수리중인 경우만 이벤트가 발생함. -2019.10.10
+			if(confirm("[알림]'가동중확인'으로 상태변경 작업을 처리하시겠습니까?")==true){
+				//Start 현재설비상태조회 ckeck로직 추가 - 2018.03.19 
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","H");	//설비상태
+				setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+				//trace("OK");
+			rlt=true;
+			}
+		}
+	}//설비상태 - 보전수리완료
+	if(substr(obj.id,0,6)="TID800"){
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		if(p_sts=="F") return;	//현재 cell click시 이벤트 발생안함.
+		//if(p_sts=="C" || p_sts=="B" || p_sts=="H" ){//수리중, 수배중, 가동중확인 경우만 이벤트가 발생함.
+		if(p_sts=="C" || p_sts=="H" ){//수리중, 가동중확인 경우만 이벤트가 발생함.-2019.10.10
+			if(confirm("[알림]'가동중확인'으로 상태변경 작업을 처리하시겠습니까?")==true){
+				//Start 현재설비상태조회 ckeck로직 추가 - 2018.03.19 
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","F");	//설비상태
+				ds_OBMZ190.SetColumn(p_row,"FNYMD",today());
+				ds_OBMZ190.SetColumn(p_row,"FNTIM",substr(getDate(),8,4));
+				setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+				//trace("OK");
+			rlt=true;
+			}
+		}
+		
+	}//설비상태 - 품질확인
+	if(substr(obj.id,0,6)="TID900"){
+		p_sts=chk_status2(p_row, "M_STATU");//설비상태
+		//if(p_sts=="0") return;	//현재 cell click시 이벤트 발생안함.
+		//if(p_sts=="F"){//보전수리완료 경우만 이벤트가 발생함.
+		//trace("p_sts===="+p_sts);
+		if(p_sts=="F" || p_sts=="A" || p_sts=="P" ){//보전수리완료+(연락중, 접수) 인 경우만 이벤트가 발생함. -2019-10-10
+			if(confirm("[알림]'품질확인완료'로 상태변경 작업을 처리하시겠습니까?")==true){
+				//Start 현재설비상태조회 ckeck로직 추가 - 2018.03.19 
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				var g_LINCD="";
+				var c_LINCD=ds_OBMZ190.GetColumn(p_row,"LINCD");
+				var c_cnt=0;
+				for(i=0; i<ds_OBMZ190.rowcount; i++){
+					g_LINCD= ds_OBMZ190.GetColumn(i,"LINCD");
+					if(c_LINCD=g_LINCD){
+						c_cnt++;
+					}
+				}
+				trace(c_cnt);
+				if(c_cnt=2){
+					ds_OBMZ190.SetColumn(p_row,"STATU","0");	//라인상태(이상)
+				}
+				ds_OBMZ190.SetColumn(p_row,"M_STATU","0");	//설비상태
+				ds_OBMZ190.SetColumn(p_row,"QAYMD",today());
+				ds_OBMZ190.SetColumn(p_row,"QATIM",substr(getDate(),8,4));
+				setOBMZ190("E");//Transaction발생(라인/설비상태 변경)
+				//trace("OK");
+			rlt=true;
+			}
+		}else if(p_sts=="E"){//설비이상인 경우만 이벤트가 발생함. -2019-10-10
+			if(confirm("[알림]장애발생을 취소 처리하시겠습니까?")==true){
+				var realStatus = getOBMZ190_MStatus(p_row);	//DB설비상태 조회
+				if(ds_OBMZ190.GetColumn(p_row,"M_STATU") != realStatus){
+					alert("[알림]현재 설비상태가 최신상태가 아닙니다. 재조회후 처리하세요.");
+					return;
+				}		
+				// END
+				var g_LINCD="";
+				var c_LINCD=ds_OBMZ190.GetColumn(p_row,"LINCD");
+				var c_MSHNO=ds_OBMZ190.GetColumn(p_row,"MSHNO");
+				var c_cnt=0;
+				for(i=0; i<ds_OBMZ190.rowcount; i++){
+					g_LINCD= ds_OBMZ190.GetColumn(i,"LINCD");
+					if(c_LINCD=g_LINCD){
+						c_cnt++;
+					}
+				}
+				trace(c_cnt);
+				if(c_cnt=2){
+					setLStatus(c_LINCD);
+				}
+				setMStatus(c_LINCD, c_MSHNO);
+				
+			rlt=true;
+			}
+		}
+	}
+	if(rlt=true){
+		//Div_LAYOUT.Div_LAYOUT_SUB.Reload(); //삭제- 2017.04.20
+		getOBMZ190();
+	}
+}
+/*
+* function명 : 설비이상추가
+* function 주요값 : 설비의 상태(정상: '0', 장애: 'E')
+*/
+function errAddClick(obj)
+{
+//trace("err Add OK");
+	var rlt=true;
+	if(confirm("[알림]설비이상을 추가하시겠습니까?")==true){
+		//설비이상인 경우 설비선택 팝업	
+		var p_row =substr(obj.id,7);
+st_LINCD.Text=ds_OBMZ190.GetColumn(p_row,"LINCD");
+		p_LINCD=ds_OBMZ190.GetColumn(p_row,"LINCD");
+		var rtn = dialog("psogmlib::OBMZ190_POP1.xml","p_LINCD="+p_LINCD+" ",300,300,"TitleBar=false");	
+		if (length(rtn) != 0){
+//trace(rtn[0]);
+			ds_OBMZ190.SetColumn(p_row,"MSHNO",rtn[0]);	//변수로 변경필요
+			//ds_OBMZ190.SetColumn(p_row,"STATU","E");
+			//ds_OBMZ190.SetColumn(p_row,"STATU1","F");
+			//ds_OBMZ190.SetColumn(p_row,"STATU2","F");
+			//ds_OBMZ190.SetColumn(p_row,"STATU3","T");
+			ds_OBMZ190.SetColumn(p_row,"M_STATU","E");	//설비상태(E만 사용)
+			ds_OBMZ190.SetColumn(p_row,"ERRTM_M",substr(getDate(),8,4));
+			setOBMZ190("E");
+//trace("OK");
+		}else{
+			rlt=false;
+		}
+	}else{
+			rlt=false;
+	}
+	if(rlt=true){
+		//Div_LAYOUT.Div_LAYOUT_SUB.Reload();//삭제- 2017.04.20
+		getOBMZ190();
+	}
+}
+
+function clearLayout(){
+	//Div_LAYOUT.Div_LAYOUT_SUB.Reload();
+	if(ds_OBMZ190.rowcount > 0){
+		for(i=0; i<ds_OBMZ190.rowcount; i++){
+			var strObjBID="BID000_"+i;	//설비추가버튼
+			var strObjTID00="TID000_"+i;	//라인명
+			var strObjTID05="TID050_"+i;	//설비명
+			var strObjTID10="TID100_"+i;	//정상가동
+			var strObjTID20="TID200_"+i;	//대기/준비/개량
+			var strObjTID30="TID300_"+i;	//설비이상(대기/준비/개량)
+			var strObjTID40="TID400_"+i;	//연락중
+			var strObjTID50="TID500_"+i;	//수리중
+			var strObjTID60="TID600_"+i;	//수배중
+			var strObjTID70="TID700_"+i;	//가동중확인
+			var strObjTID80="TID800_"+i;	//보전수리완료
+			var strObjTID90="TID900_"+i; 	//품질확인완료	
+			
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjBID);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID00);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID05);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID10);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID20);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID30);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID40);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID50);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID60);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID70);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID80);
+			Div_LAYOUT.Div_LAYOUT_SUB.Destroy(strObjTID90);
+		}
+	}
+}
+
+function userList_OnTimer(obj,nEventID)
+{
+	fn_Search();
+}
+
+//제품기억
+function chk_PRDCD_OnClick()
+{
+	var p_PATH = "C:\\DIONE_PRDCD.txt";
+	var p_BUFFER = "";
+	
+	file.FileName = p_PATH;//파일명은 대소문자구분안함.
+	file.Open("w");	// Option ( r:read, t:text, b:binary, w:write, a:append )
+			
+	if(chk_PRDCD.Value =="1"){
+		p_BUFFER=cmb_PRDCD.Value;
+		file.Write(p_BUFFER);
+		file.Close();
+	}else{
+		p_BUFFER="";
+		file.Write(p_BUFFER);
+		file.Close();
+	}
+}
+//제품읽기
+function read_PRDCD(){
+
+	var p_PATH = "C:\\DIONE_PRDCD.txt";
+	var p_BUFFER = "";
+
+	file.FileName = p_PATH;//파일명은 대소문자구분안함.
+	file.Open("r"); // Option ( r:read, t:text, b:binary, w:write, a:append )
+	p_BUFFER = split(file.Read(),"\n");
+	trace(p_BUFFER[0]);
+	file.Close();
+		
+	if(length(trim(p_BUFFER[0]))!=0){
+		cmb_PRDCD.Value=p_BUFFER[0];
+		chk_PRDCD.Value = "1";
+	}
+}]]></Script>
+</Window>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-miyabi-scan.xml
+ *
+ * [JP] 雅(Spring) の Scan 設定ファイルです。
+ * [EN] This is the configuration file of the Scan Miyabi(Spring).
+ *
+ * $ applicationContext-miyabi-scan.xml 1754 2015-07-03 00:30:51Z 815372040074 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+    
+    <!-- [JP] @Service/@Repository 検索パスの設定 -->
+    <!-- [EN] @Service/@Repository Scan Path Setting -->
+    <!-- [JP] Tomcat起動時に検索、Bean生成させるためspring-configと分離させました -->
+    <!-- [EN] This configuration is devided from spring-config.xml -->
+    <!-- [EN]  for scaning and bean-creating at the time of Tomcat startup -->
+    <!--<context:component-scan base-package="-->
+        <!--com.globaldenso.ai.library-->
+        <!--" />-->
+    <context:component-scan base-package="com.globaldenso.dicas">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <context:annotation-config/>
+
+    <!-- Configures the message sources -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>BindingResources</value>
+                <value>LabelResources</value>
+                <value>MessageResources</value>
+                <value>ValidationMessages</value>
+                <value>MiyabiConstants</value>
+                <value>egovframework/rte/fdl/idgnr/messages/idgnr</value>
+                <value>egovframework/rte/fdl/property/messages/properties</value>
+                <value>org.springframework.security.messages</value>
+            </list>
+        </property>
+    </bean>
+
+      <!--p:basenames="MessageResources,LabelResources,ValidationMessages,BindingResources,MiyabiConstants"/>-->
+
+    <!-- Multipart configuration for MultipartFilter with commons-fileupload -->
+    <bean id="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1000000"/>
+    </bean>
+
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+    </bean>
+
+</beans>

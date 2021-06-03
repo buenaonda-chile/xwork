@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.DataWareHouseDao">
+
+	<resultMap id="MaterialReceiving" type="DataWareHouseDomain">                               
+        <result property="seqNo" column="ROW_NUM" />                                
+        <result property="comps" column="comps" />                              
+        <result property="house" column="house" />                              
+        <result property="vndnr" column="vndnr" />                              
+        <result property="vname" column="vname" />                              
+        <result property="pspno" column="pspno" />                              
+        <result property="itdsc" column="itdsc" />                              
+        <result property="ittyp" column="ittyp" />                              
+        <result property="itcls" column="itcls" />                              
+        <result property="prdgu" column="prdgu" />                              
+        <result property="prdcd" column="prdcd" />                              
+        <result property="supgu" column="supgu" />                              
+        <result property="trcst" column="trcst" />                              
+        <result property="crcyw" column="crcyw" />                              
+        <result property="trfot" column="trfot" />                              
+        <result property="month1" column="month1" />                                
+        <result property="month2" column="month2" />                                
+        <result property="month3" column="month3" />                                
+        <result property="month4" column="month4" />                                
+        <result property="month5" column="month5" />                                
+        <result property="month6" column="month6" />                                
+        <result property="month7" column="month7" />                                
+        <result property="month8" column="_month8" />                               
+        <result property="month9" column="month9" />                                
+        <result property="month10" column="month10" />                              
+        <result property="month11" column="month11" />                              
+        <result property="month12" column="month12" />                                              
+    </resultMap>                                
+                                
+    <!-- 부품입고현황 DWHZ001Q-->                             
+    <sql id="tblBaseSqldwhz001q">                               
+        SELECT  a.comps                                 
+               ,a.house                                 
+               ,a.vndnr                                 
+               ,c.vname                             
+               ,a.pspno                             
+               ,b.itdsc                             
+               ,a.ittyp                             
+               ,a.itcls                             
+               ,a.prdgu                             
+               ,a.prdcd                             
+               ,a.supgu                             
+               ,a.trcst                             
+               ,a.crcyw                             
+               ,a.trfot                             
+               ,sum (case when int(a.trndt/100) = $YYYY$01 then trqty else 0 end) AS month1                             
+               ,sum (case when int(a.trndt/100) = $YYYY$02 then trqty else 0 end) AS month2                             
+               ,sum (case when int(a.trndt/100) = $YYYY$03 then trqty else 0 end) AS month3                             
+               ,sum (case when int(a.trndt/100) = $YYYY$04 then trqty else 0 end) AS month4                             
+               ,sum (case when int(a.trndt/100) = $YYYY$05 then trqty else 0 end) AS month5                             
+               ,sum (case when int(a.trndt/100) = $YYYY$06 then trqty else 0 end) AS month6                             
+               ,sum (case when int(a.trndt/100) = $YYYY$07 then trqty else 0 end) AS month7                             
+               ,sum (case when int(a.trndt/100) = $YYYY$08 then trqty else 0 end) AS month8                             
+               ,sum (case when int(a.trndt/100) = $YYYY$09 then trqty else 0 end) AS month9                             
+               ,sum (case when int(a.trndt/100) = $YYYY$10 then trqty else 0 end) AS month10                                
+               ,sum (case when int(a.trndt/100) = $YYYY$11 then trqty else 0 end) AS month11                                
+               ,sum (case when int(a.trndt/100) = $YYYY$12 then trqty else 0 end) AS month12                                
+         FROM   $LIB2$.bid100pf a left outer join $LIB1$.vennam c on a.vndnr = c.vndnr                              
+               ,$LIB1$.bm008pr b                                
+         WHERE a.pspno = b.itnbr                                
+         AND   a.trndt <![CDATA[>=]]> #STARTDATE#                               
+         AND   a.trndt <![CDATA[<=]]> #ENDDATE#                                 
+         AND   a.inpgu in('11', '32','41')                              
+        <!-- AND   a.vndnr in('K25', 'G50','K13', 'K48','K52') -->                              
+         GROUP by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+         ORDER by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+    </sql>   
+    
+    <resultMap id="PurchasePrice" type="DataWareHouseDomain">                               
+        <result property="seqNo" column="ROW_NUM" />                                
+        <result property="packc" column="packc" />                              
+        <result property="recid" column="recid" />                              
+        <result property="prtno" column="prtno" />                              
+        <result property="itdsc" column="itdsc" />                              
+        <result property="spcod" column="spcod" />                              
+        <result property="vname" column="vname" />                              
+        <result property="unmsr" column="unmsr" />                              
+        <result property="itcls" column="itcls" />                              
+        <result property="ittyp" column="ittyp" />                              
+        <result property="crcye" column="crcye" />                              
+        <result property="tempe" column="tempe" />                              
+        <result property="resne" column="resne" />                              
+        <result property="prcee" column="prcee" />                              
+        <result property="edate" column="edate" />                                              
+    </resultMap>                                
+                                
+    <!-- 구매단가현황 DWHZ002Q-->                             
+    <sql id="tblBaseSqldwhz002q">                               
+        SELECT    b.packc                               
+                , b.recid                               
+                , a.prtno                               
+                , b.itdsc                               
+                , a.spcod                               
+                , c.vname as vname                              
+                , b.unmsr                               
+                , b.itcls                               
+                , b.ittyp                               
+                , a.crcye                               
+                , a.tempe                               
+                , a.resne                               
+                , a.prcee                               
+                , a.edate as edate                              
+         FROM                               
+                 (SELECT  prtno                             
+                            , spcod                             
+                            , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN crcy3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN crcy2 ELSE crcy1 END AS crcye                                
+                            , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN temp3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN temp2 ELSE temp1 END AS tempe                                
+                            , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN edat3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN edat2 ELSE edat1 END AS edate                                
+                            , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN prce3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN prce2 ELSE prce1 END AS prcee                                
+                            , CASE WHEN $CONDATE$ <![CDATA[>=]]> edat3 THEN resn3 WHEN $CONDATE$ <![CDATA[>=]]> edat2 THEN resn2 ELSE resn1 END AS resne                                
+                  FROM $LIB1$.CM001PR) a,                               
+                  $LIB1$.bm008pr b,                                 
+                  $LIB1$.vennam c                               
+         WHERE a.prtno=b.itnbr AND a.spcod=c.vndnr                              
+    </sql>     
+    
+    
+    
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="MaterialCost" type="DataWareHouseDomain">
+        <result property="seqNo" column="ROW_NUM" /> 
+        <result property="pyvnd" column="PYVND" /> 
+        <result property="pspno" column="PSPNO" /> 
+        <result property="itdsc" column="ITDSC" /> 
+		<result property="carnm" column="CARNM" /> 
+		<result property="yearPcost" column="YEARPCOST" /> 
+		<result property="price" column="PRICE" /> 
+		<result property="krsur" column="KRSUR" />
+		<result property="surkr" column="SURKR" /> 
+		<result property="surus" column="SURUS" /> 
+		<result property="surjp" column="SURJP" />
+		<result property="surur" column="SURUR" /> 
+		<result property="krpur" column="KRPUR" /> 
+		<result property="krckd" column="KRCKD" /> 
+		<result property="ckdus" column="CKDUS" /> 
+		<result property="ckdjp" column="CKDJP" /> 
+		<result property="ckdur" column="CKDUR" /> 
+		<result property="ckdkr" column="CKDKR" /> 
+		<result property="qty04" column="QTY04" /> 
+		<result property="qty05" column="QTY05" /> 
+		<result property="qty06" column="QTY06" /> 
+        <result property="qty07" column="QTY07" /> 
+        <result property="qty08" column="QTY08" /> 
+        <result property="qty09" column="QTY09" /> 
+		<result property="qty10" column="QTY10" /> 
+		<result property="qty11" column="QTY11" /> 
+		<result property="qty12" column="QTY12" /> 
+		<result property="qty01" column="QTY01" />
+		<result property="qty02" column="QTY02" /> 
+		<result property="qty03" column="QTY03" />				 
+    </resultMap>
+
+    <resultMap id="SalesPerformance" type="DataWareHouseDomain">
+        <result property="seqNo" column="ROW_NUM" /> 
+        <result property="itcls" column="ITCLS" /> 
+        <result property="pspno" column="PSPNO" /> 
+        <result property="itdsc" column="ITDSC" /> 
+        <result property="pyvnd" column="PYVND" /> 
+		<result property="cusnm" column="CUSNM" /> 
+		<result property="pcost" column="PCOST" /> 
+		
+		<result property="qty01" column="QTY01" />
+		<result property="qty02" column="QTY02" /> 
+		<result property="qty03" column="QTY03" />	
+		<result property="qty04" column="QTY04" /> 
+		<result property="qty05" column="QTY05" /> 
+		<result property="qty06" column="QTY06" /> 
+        <result property="qty07" column="QTY07" /> 
+        <result property="qty08" column="QTY08" /> 
+        <result property="qty09" column="QTY09" /> 
+		<result property="qty10" column="QTY10" /> 
+		<result property="qty11" column="QTY11" /> 
+		<result property="qty12" column="QTY12" /> 
+		
+		<result property="amount01" column="AMOUNT01" />
+		<result property="amount02" column="AMOUNT02" /> 
+		<result property="amount03" column="AMOUNT03" />	
+		<result property="amount04" column="AMOUNT04" /> 
+		<result property="amount05" column="AMOUNT05" /> 
+		<result property="amount06" column="AMOUNT06" /> 
+        <result property="amount07" column="AMOUNT07" /> 
+        <result property="amount08" column="AMOUNT08" /> 
+        <result property="amount09" column="AMOUNT09" /> 
+		<result property="amount10" column="AMOUNT10" /> 
+		<result property="amount11" column="AMOUNT11" /> 
+		<result property="amount12" column="AMOUNT12" /> 			 
+    </resultMap>
+
+    <resultMap id="MaterialCostPeriod" type="DataWareHouseDomain">
+        <result property="seqNo" column="ROW_NUM" /> 
+        <result property="pyvnd" column="PYVND" /> 
+        <result property="procs" column="PSPNO" /> 
+        <result property="pspno" column="ITDSC" /> 
+		<result property="edatm" column="CARNM" /> 
+		<result property="price" column="PRICE" /> 
+		<result property="unmsr" column="PRICE" /> 
+		<result property="ittyp" column="PRICE" /> 
+		<result property="itdsc" column="KRSUR" />
+		<result property="krsur" column="SURKR" /> 
+		<result property="surkr" column="SURUS" /> 
+		<result property="surus" column="SURJP" />
+		<result property="surjp" column="SURUR" /> 
+		<result property="surur" column="KRPUR" /> 
+		<result property="krpur" column="KRCKD" /> 
+		<result property="krckd" column="CKDUS" /> 
+		<result property="ckdus" column="CKDJP" /> 
+		<result property="ckdjp" column="CKDUR" /> 
+		<result property="ckdur" column="CKDKR" /> 
+		<result property="ckdkr" column="QTY04" /> 
+		<result property="krpat" column="QTY05" /> 
+		<result property="krcot" column="QTY06" /> 
+        <result property="mchmu" column="QTY07" /> 
+        <result property="mager" column="QTY08" /> 
+        <result property="hndtm" column="QTY09" /> 
+		<result property="drman" column="QTY10" /> 
+		<result property="sbman" column="QTY11" /> 
+		<result property="drmch" column="QTY12" /> 
+		<result property="sbmch" column="QTY01" />
+		<result property="epckd" column="QTY02" /> 
+		<result property="dangu" column="QTY03" />				 
+		<result property="danst" column="QTY03" />				 
+		<result property="dandt" column="QTY03" />				 
+		<result property="crtdt" column="QTY03" />				 
+		<result property="chgdt" column="QTY03" />				 
+		<result property="prtqy" column="QTY03" />				 
+    </resultMap>
+    
+	<!-- 재료비 산출 리스트 DWHZ005Q-->
+	<sql id="selectdwhz005q">
+	SELECT
+		X.PYVND, X.PSPNO, X.ITDSC, X.CARNM, X.YESCS AS YEARPCOST, Y.PRICE,
+		Z.KRSUR, Z.SURKR, Z.SURUS, Z.SURJP, Z.SURUR, Z.KRPUR, Z.KRCKD, Z.CKDUS, Z.CKDJP, Z.CKDUR, Z.CKDKR,
+		X.QTY04, X.QTY05, X.QTY06, X.QTY07, X.QTY08, X.QTY09, X.QTY10, X.QTY11, X.QTY12, X.TQY01, X.QTY02, X.QTY03
+	FROM
+		(SELECT
+			A.*,
+			B.ITDSC, TRIM(C.MSTSM) AS CARNM
+		FROM
+			(SELECT 
+				PYVND, PSPNO, CARCD, YESCS,
+				SUM(CASE PLNYM WHEN $YEAR$04 THEN MONQY ELSE 0 END) QTY04, 
+				SUM(CASE PLNYM WHEN $YEAR$05 THEN MONQY ELSE 0 END) QTY05, 
+				SUM(CASE PLNYM WHEN $YEAR$06 THEN MONQY ELSE 0 END) QTY06, 
+				SUM(CASE PLNYM WHEN $YEAR$07 THEN MONQY ELSE 0 END) QTY07, 
+				SUM(CASE PLNYM WHEN $YEAR$08 THEN MONQY ELSE 0 END) QTY08, 
+				SUM(CASE PLNYM WHEN $YEAR$09 THEN MONQY ELSE 0 END) QTY09, 
+				SUM(CASE PLNYM WHEN $YEAR$10 THEN MONQY ELSE 0 END) QTY10, 
+				SUM(CASE PLNYM WHEN $YEAR$11 THEN MONQY ELSE 0 END) QTY11, 
+				SUM(CASE PLNYM WHEN $YEAR$12 THEN MONQY ELSE 0 END) QTY12, 
+				SUM(CASE PLNYM WHEN $YEARPLUS$01 THEN MONQY ELSE 0 END) QTY01, 
+				SUM(CASE PLNYM WHEN $YEARPLUS$02 THEN MONQY ELSE 0 END) QTY02, 
+				SUM(CASE PLNYM WHEN $YEARPLUS$03 THEN MONQY ELSE 0 END) QTY03
+			FROM PSEDBLIB.spy200pf 
+			WHERE PLNYM BETWEEN 201704 AND 201803 and plngb='2'
+			GROUP BY PYVND, PSPNO, CARCD, YESCS
+			) A
+				      
+		LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PSPNO=B.ITNBR
+		LEFT OUTER JOIN $LIB2$.MST051LF C ON A.CARCD=C.MSTCD
+		)X
+		LEFT OUTER JOIN 
+			(SELECT A.PRTNO, A.CUSNO, A.EDATM, A.PRICE 
+			FROM PERESLIB.EM001PR A 
+			WHERE EDATM = (SELECT MAX(EDATM) 
+							FROM PERESLIB.EM001PR B 
+							WHERE A.CUSNO=B.CUSNO 
+							AND A.PRTNO=B.PRTNO)) Y on X.PYVND=Y.CUSNO AND X.PSPNO=Y.PRTNO
+		LEFT OUTER JOIN PSEDBLIB.CJJ500PF Z ON X.PSPNO=Z.STPNO
+	WHERE
+	 'SqlMap-DataWareHouse.searchCountMaterialCost' = 'SqlMap-DataWareHouse.searchCountMaterialCost'
+	ORDER BY X.PYVND, X.PSPNO
+	</sql>
+    
+    <!--  SQL명 재료비산출  -->
+    <sql id="searchMaterialCost">
+		SELECT
+			X.PYVND, TRIM(X.PSPNO) AS PSPNO, TRIM(X.ITDSC) AS ITDSC, X.CARNM, X.YESCS AS YEARPCOST, Y.PRICE,
+			Z.KRSUR, Z.SURKR, Z.SURUS, Z.SURJP, Z.SURUR, Z.KRPUR, Z.KRCKD, Z.CKDUS, Z.CKDJP, Z.CKDUR, Z.CKDKR,
+			X.QTY04, X.QTY05, X.QTY06, X.QTY07, X.QTY08, X.QTY09, X.QTY10, X.QTY11, X.QTY12, X.QTY01, X.QTY02, X.QTY03
+		FROM
+			(SELECT
+				A.*,
+				B.ITDSC, TRIM(C.MSTSM) AS CARNM
+			FROM
+				(SELECT 
+					PYVND, PSPNO, CARCD, YESCS,
+					SUM(CASE PLNYM WHEN ${yearFr}04 THEN MONQY ELSE 0 END) QTY04, 
+					SUM(CASE PLNYM WHEN ${yearFr}05 THEN MONQY ELSE 0 END) QTY05, 
+					SUM(CASE PLNYM WHEN ${yearFr}06 THEN MONQY ELSE 0 END) QTY06, 
+					SUM(CASE PLNYM WHEN ${yearFr}07 THEN MONQY ELSE 0 END) QTY07, 
+					SUM(CASE PLNYM WHEN ${yearFr}08 THEN MONQY ELSE 0 END) QTY08, 
+					SUM(CASE PLNYM WHEN ${yearFr}09 THEN MONQY ELSE 0 END) QTY09, 
+					SUM(CASE PLNYM WHEN ${yearFr}10 THEN MONQY ELSE 0 END) QTY10, 
+					SUM(CASE PLNYM WHEN ${yearFr}11 THEN MONQY ELSE 0 END) QTY11, 
+					SUM(CASE PLNYM WHEN ${yearFr}12 THEN MONQY ELSE 0 END) QTY12, 
+					SUM(CASE PLNYM WHEN ${yearTo}01 THEN MONQY ELSE 0 END) QTY01, 
+					SUM(CASE PLNYM WHEN ${yearTo}02 THEN MONQY ELSE 0 END) QTY02, 
+					SUM(CASE PLNYM WHEN ${yearTo}03 THEN MONQY ELSE 0 END) QTY03
+				FROM PSEDBLIB.spy200pf 
+				WHERE PLNYM BETWEEN ${yearFr}04 AND ${yearTo}03 and plngb='2'
+				GROUP BY PYVND, PSPNO, CARCD, YESCS
+				) A
+					      
+			LEFT OUTER JOIN PERESLIB.BM008PR B ON A.PSPNO=B.ITNBR
+			<!-- 
+			LEFT OUTER JOIN PSEDBLIB.MST051LF C ON A.CARCD=C.MSTCD
+			 -->
+			LEFT OUTER JOIN PSEDBLIB.MST050PF C ON C.GRPCD='CAR' AND A.CARCD=C.MSTCD
+			)X
+			LEFT OUTER JOIN 
+				(SELECT A.PRTNO, A.CUSNO, A.EDATM, A.PRICE 
+				FROM PERESLIB.EM001PR A 
+				WHERE EDATM = (SELECT MAX(EDATM) 
+								FROM PERESLIB.EM001PR B 
+								WHERE A.CUSNO=B.CUSNO 
+								AND A.PRTNO=B.PRTNO)) Y on X.PYVND=Y.CUSNO AND X.PSPNO=Y.PRTNO
+			LEFT OUTER JOIN PSEDBLIB.CJJ500PF Z ON X.PSPNO=Z.STPNO
+		WHERE
+		 'SqlMap-DataWareHouse.searchMaterialCost' = 'SqlMap-DataWareHouse.searchMaterialCost'
+  		  ORDER BY X.PYVND, X.PSPNO 
+    </sql>
+    <!--  SQL명 재료비산출 COUNT -->
+    <select id="searchCountMaterialCost" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">
+		SELECT COUNT(X.PSPNO) rowCnt FROM (
+          <include refid="searchMaterialCost"></include>
+            ) X
+    </select>
+     <!--  SQL명 재료비산출 List -->
+    <select id="searchByConditionForPagingMaterialCost" resultMap="MaterialCost" parameterType="DataWareHouseDomain">
+		SELECT 
+			ROW_NUM, 
+			PYVND, PSPNO, ITDSC, CARNM, YEARPCOST, PRICE,
+			KRSUR, SURKR, SURUS, SURJP, SURUR, KRPUR, KRCKD, CKDUS, CKDJP, CKDUR, CKDKR,
+			QTY04, QTY05, QTY06, QTY07, QTY08, QTY09, QTY10, QTY11, QTY12, QTY01, QTY02, QTY03
+		FROM(
+			SELECT
+				ROW_NUMBER() OVER(ORDER BY X.PYVND, X.PSPNO) AS ROW_NUM, X.*
+	        FROM(
+	        	 	 <include refid="searchMaterialCost"></include>
+				) X
+			) Y
+        WHERE 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!--  SQL명 월별판매실적(납품,정산)  -->
+    <sql id="searchSalesPerformance">
+    <!-- 
+	SELECT  
+		SUBSTR(B.ITCLS,1,1) AS ITCLS, A.PSPNO, B.ITDSC, A.PYVND,E.CUSNM, A.PCOST,
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR('${startDate}'),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY01, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 1)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY02, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 2)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY03, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 3)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY04, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 4)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY05, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 5)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY06, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 6)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY07, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 7)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY08, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 8)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY09, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 9)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY10, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 10)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY11, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 11)),'-',''),1,6) AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY12, 
+		
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR('${startDate}'),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT01, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 1)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT02, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 2)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT03,
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 3)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT04, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 4)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT05, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 5)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT06,
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 6)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT07, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 7)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT08, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 8)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT09,
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 9)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT10, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 10)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT11, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 11)),'-',''),1,6) THEN a.jpsam ELSE 0 END) AS AMOUNT12
+	FROM
+		PSEDBLIB.SMD110PF A 
+		LEFT OUTER JOIN PERESLIB.BM008PR B ON A.PSPNO = B.ITNBR
+		LEFT OUTER JOIN PERESLIB.CUSMAS E ON A.PYVND = E.CUSNO
+	WHERE
+		'SqlMap-DataWareHouse.SalesPerformance' = 'SqlMap-DataWareHouse.SalesPerformance'
+		AND	A.JPSDT BETWEEN SUBSTR(REPLACE(CHAR('${startDate}'),'-',''),1,6)||'01' AND  SUBSTR(REPLACE(CHAR(ADD_MONTHS('${startDate}', 11)),'-',''),1,6)||'31'
+		AND A.SATYP  NOT  IN  ('61','71')
+		AND A.COMPS = 'E1' 
+	GROUP  BY SUBSTR(B.ITCLS,1,1), A.PSPNO, B.ITDSC, A.PYVND,E.CUSNM, A.PCOST
+	ORDER  BY ITCLS, A.PSPNO
+	 -->
+	SELECT  
+		SUBSTR(B.ITCLS,1,1) AS ITCLS, A.PSPNO, TRIM(B.ITDSC) AS ITDSC, A.PYVND, TRIM(E.CUSNM) AS CUSNM, A.PCOST,
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM0} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY01, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM1} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY02, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM2} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY03, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM3} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY04, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM4} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY05, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM5} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY06, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM6} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY07, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM7} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY08, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM8} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY09, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM9} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY10, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM10} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY11, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM11} AND a.satyp != '51' THEN a.jpsqy ELSE 0 END) AS QTY12, 
+		
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM0} THEN a.jpsam ELSE 0 END) AS AMOUNT01, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM1} THEN a.jpsam ELSE 0 END) AS AMOUNT02, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM2} THEN a.jpsam ELSE 0 END) AS AMOUNT03,
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM3} THEN a.jpsam ELSE 0 END) AS AMOUNT04, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM4} THEN a.jpsam ELSE 0 END) AS AMOUNT05, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM5} THEN a.jpsam ELSE 0 END) AS AMOUNT06,
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM6} THEN a.jpsam ELSE 0 END) AS AMOUNT07, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM7} THEN a.jpsam ELSE 0 END) AS AMOUNT08, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM8} THEN a.jpsam ELSE 0 END) AS AMOUNT09,
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM9} THEN a.jpsam ELSE 0 END) AS AMOUNT10, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM10} THEN a.jpsam ELSE 0 END) AS AMOUNT11, 
+		SUM(CASE WHEN INT(a.jpsdt/100) = ${searchDate.p_YM11} THEN a.jpsam ELSE 0 END) AS AMOUNT12
+	FROM
+		PSEDBLIB.SMD110PF A 
+		LEFT OUTER JOIN PERESLIB.BM008PR B ON A.PSPNO = B.ITNBR
+		LEFT OUTER JOIN PERESLIB.CUSMAS E ON A.PYVND = E.CUSNO
+	WHERE
+		'SqlMap-DataWareHouse.SalesPerformance' = 'SqlMap-DataWareHouse.SalesPerformance'
+		AND	A.JPSDT BETWEEN  ${searchDate.p_YM0}||01 AND ${searchDate.p_YM11}||31
+		AND A.SATYP  NOT  IN  ('61','71')
+		AND A.COMPS = 'E1' 
+		<!-- 사업부 
+		<isNotEmpty prepend="AND" property="COMPS">
+		A.COMPS = #COMPS#
+		</isNotEmpty>
+		-->
+	GROUP  BY SUBSTR(B.ITCLS,1,1), A.PSPNO, B.ITDSC, A.PYVND,E.CUSNM, A.PCOST
+	ORDER  BY ITCLS, A.PSPNO
+	</sql>
+	<!--  SQL명 월별판매실적 COUNT -->
+    <select id="searchCountSalesPerformance" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">
+		SELECT COUNT(X.PSPNO) rowCnt FROM (
+          <include refid="searchSalesPerformance"></include>
+            ) X
+    </select>
+    
+     <!--  SQL명 월별판매실적 List -->
+    <select id="searchByConditionForPagingSalesPerformance" resultMap="SalesPerformance" parameterType="DataWareHouseDomain">
+		SELECT 
+			ROW_NUM, 
+			ITCLS, PSPNO, ITDSC, PYVND, CUSNM, PCOST, 
+			QTY01, QTY02, QTY03, QTY04, QTY05, QTY06, QTY07, QTY08, QTY09, QTY10, QTY11, QTY12, 
+			AMOUNT01, AMOUNT02, AMOUNT03, AMOUNT04, AMOUNT05, AMOUNT06, AMOUNT07, AMOUNT08, AMOUNT09, AMOUNT10, AMOUNT11, AMOUNT12
+		FROM(
+			SELECT
+				ROW_NUMBER() OVER(ORDER BY X.ITCLS, X.PSPNO) AS ROW_NUM, X.*
+	        FROM(
+	        	 	 <include refid="searchSalesPerformance"></include>
+				) X
+			) Y
+        WHERE 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!--  SQL명 기간별실적대 재료비현황  -->
+    <sql id="searchMaterialCostPeriod">
+	SELECT	
+		A.PYVND, A.PROCS, A.PSPNO, D.EDATM,D.PRICE, B.UNMSR,B.ITTYP, B.ITDSC, C.KRSUR,C.SURKR,C.SURUS,C.SURJP,
+		C.SURUR,C.KRPUR,C.KRCKD,C.CKDUS,C.CKDJP,C.CKDUR,C.CKDKR,C.KRPAT,C.KRCOT,
+		C.MCHMU,C.MAGER,C.HNDTM,C.DRMAN,C.SBMAN,C.DRMCH,C.SBMCH,C.EPCKD,
+		C.DANGU,C.DANST,C.DANDT,C.CRTDT,C.CHGDT,
+		SUM(A.PRTQY) PRTQY
+	FROM	
+		PSEDBLIB.FMD100PF A  
+		LEFT OUTER JOIN PERESLIB.BM008PR B ON A.PSPNO = B.ITNBR
+		LEFT OUTER JOIN PSEDBLIB.CJJ700PF C ON A.PSPNO=C.STPNO
+		LEFT OUTER JOIN (SELECT A.PRTNO,A.CUSNO,A.EDATM,A.PRICE FROM PERESLIB.EM001PR A WHERE EDATM = (
+				SELECT MAX(EDATM) FROM PERESLIB.EM001PR B WHERE A.CUSNO=B.CUSNO AND A.PRTNO=B.PRTNO)
+		) D ON A.PYVND=D.CUSNO AND A.PSPNO=D.PRTNO
+	WHERE  	
+		A.TRNDT BETWEEN 20180304 AND 20180304
+		AND  A.INPGU IN ('11','41')
+	GROUP BY	
+		A.PYVND, A. PROCS, A.PSPNO, D.EDATM,D.PRICE, B.UNMSR,B.ITTYP, B.ITDSC, C.KRSUR,C.SURKR,C.SURUS,C.SURJP,
+		C.SURUR,C.KRPUR,C.KRCKD,C.CKDUS,C.CKDJP,C.CKDUR,C.CKDKR,C.KRPAT,C.KRCOT,
+		C.MCHMU,C.MAGER,C.HNDTM,C.DRMAN,C.SBMAN,C.DRMCH,C.SBMCH,C.EPCKD,
+		C.DANGU,C.DANST,C.DANDT,C.CRTDT,C.CHGDT
+	ORDER BY A.PYVND, A.PROCS, A.PSPNO, D.EDATM
+    </sql>
+    <!--  SQL명 기간별실적대 재료비현황 COUNT -->
+    <select id="searchCountMaterialCostPeriod" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">
+		SELECT COUNT(X.PSPNO) rowCnt FROM (
+          <include refid="searchMaterialCost"></include>
+            ) X
+    </select>
+     <!--  SQL명 기간별실적대 재료비현황 List -->
+    <select id="searchByConditionForPagingMaterialCostPeriod" resultMap="MaterialCost" parameterType="DataWareHouseDomain">
+		SELECT 
+			ROW_NUM, 
+			PYVND, PSPNO, ITDSC, CARNM, YEARPCOST, PRICE,
+			KRSUR, SURKR, SURUS, SURJP, SURUR, KRPUR, KRCKD, CKDUS, CKDJP, CKDUR, CKDKR,
+			QTY04, QTY05, QTY06, QTY07, QTY08, QTY09, QTY10, QTY11, QTY12, QTY01, QTY02, QTY03
+		FROM(
+			SELECT
+				ROW_NUMBER() OVER(ORDER BY X.PYVND, X.PSPNO) AS ROW_NUM, X.*
+	        FROM(
+	        	 	 <include refid="searchMaterialCostPeriod"></include>
+				) X
+			) Y
+        WHERE 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+                                        
+                               
+                                    
+    <!--  SQL명 부품입고현황  -->                              
+    <sql id="searchMaterialReceiving">                              
+        SELECT  a.comps                                 
+               ,a.house                                 
+               ,a.vndnr                                 
+               ,c.vname                             
+               ,a.pspno                             
+               ,b.itdsc                             
+               ,a.ittyp                             
+               ,a.itcls                             
+               ,a.prdgu                             
+               ,a.prdcd                             
+               ,a.supgu                             
+               ,a.trcst                             
+               ,a.crcyw                             
+               ,a.trfot                             
+           <!--                                 
+               ,sum (case when int(a.trndt/100) = 201701 then trqty else 0 end) AS month1                               
+               ,sum (case when int(a.trndt/100) = 201702 then trqty else 0 end) AS month2                               
+               ,sum (case when int(a.trndt/100) = 201703 then trqty else 0 end) AS month3                               
+               ,sum (case when int(a.trndt/100) = 201704 then trqty else 0 end) AS month4                               
+               ,sum (case when int(a.trndt/100) = 201705 then trqty else 0 end) AS month5                               
+               ,sum (case when int(a.trndt/100) = 201706 then trqty else 0 end) AS month6                               
+               ,sum (case when int(a.trndt/100) = 201707 then trqty else 0 end) AS month7                               
+               ,sum (case when int(a.trndt/100) = 201708 then trqty else 0 end) AS month8                               
+               ,sum (case when int(a.trndt/100) = 201709 then trqty else 0 end) AS month9                               
+               ,sum (case when int(a.trndt/100) = 201710 then trqty else 0 end) AS month10                              
+               ,sum (case when int(a.trndt/100) = 201711 then trqty else 0 end) AS month11                              
+               ,sum (case when int(a.trndt/100) = 201712 then trqty else 0 end) AS month12                              
+           -->                              
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '01') then trqty else 0 end) AS month1                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '02') then trqty else 0 end) AS month2                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '03') then trqty else 0 end) AS month3                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '04') then trqty else 0 end) AS month4                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '05') then trqty else 0 end) AS month5                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '06') then trqty else 0 end) AS month6                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '07') then trqty else 0 end) AS month7                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '08') then trqty else 0 end) AS month8                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '09') then trqty else 0 end) AS month9                               
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '10') then trqty else 0 end) AS month10                              
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '11') then trqty else 0 end) AS month11                              
+               ,sum (case when int(a.trndt/100) = INT(SUBSTRING('${startDate}',1,4) || '12') then trqty else 0 end) AS month12                              
+         FROM   PSEDBLIB.bid100pf a left outer join PERESLIB.vennam c on a.vndnr = c.vndnr                              
+               ,PERESLIB.bm008pr b                              
+         WHERE                              
+         'SqlMap-DataWareHouse.searchMaterialReceiving' = 'SqlMap-DataWareHouse.searchMaterialReceiving'                                
+         AND   a.pspno = b.itnbr                                
+         <!--                               
+         AND   a.trndt <![CDATA[>=]]> 20170101                              
+         AND   a.trndt <![CDATA[<=]]> 20171201                              
+         -->                                
+         <!--                               
+         AND   a.trndt between 20170101 and 20171201                                
+         -->                                
+         AND   a.trndt between INT(SUBSTRING('${startDate}',1,4) || '0101') and INT(SUBSTRING('${startDate}',1,4) || '1231')                                
+         AND   a.inpgu in('11', '32','41')                              
+        <!-- AND   a.vndnr in('K25', 'G50','K13', 'K48','K52') -->                              
+         GROUP by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+         ORDER by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+    </sql>                              
+    <!--  SQL명 부품입고현황 COUNT -->                             
+    <select id="searchCountMaterialReceiving" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">                               
+        SELECT COUNT(*) rowCnt FROM (                               
+          <include refid="searchMaterialReceiving"></include>                               
+            ) X                             
+         WHERE                              
+         'SqlMap-DataWareHouse.searchCountMaterialReceiving' = 'SqlMap-DataWareHouse.searchCountMaterialReceiving'                              
+    </select>                               
+     <!--  SQL명 부품입고현황 List -->                             
+    <select id="searchByConditionForPagingMaterialReceiving" resultMap="MaterialReceiving" parameterType="DataWareHouseDomain">                             
+        SELECT                              
+            ROW_NUM,                                
+            comps, house, vndnr, vname, pspno, itdsc, ittyp, itcls, prdgu, prdcd, supgu, trcst, crcyw, trfot,                               
+            month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12                               
+        FROM(                               
+            SELECT                              
+                ROW_NUMBER() OVER(ORDER BY X.comps, X.house, X.vndnr, X.vname, X.pspno, X.itdsc, X.ittyp, X.itcls, X.prdgu, X.prdcd, X.supgu, X.trcst, X.crcyw, X.trfot) AS ROW_NUM, X.*                                
+            FROM(                               
+                     <include refid="searchMaterialReceiving"></include>                                
+                ) X                             
+            ) Y                             
+        WHERE                               
+        'SqlMap-DataWareHouse.searchByConditionForPagingMaterialReceiving' = 'SqlMap-DataWareHouse.searchByConditionForPagingMaterialReceiving'                             
+        AND ROW_NUM between #{rowNumFrom} and #{rowNumTo}                               
+    </select>                               
+                                
+                             
+                                    
+    <!--  SQL명 구매단가현황  -->                              
+    <sql id="searchPurchasePrice">                              
+        SELECT    b.packc                               
+                , b.recid                               
+                , a.prtno                               
+                , b.itdsc                               
+                , a.spcod                               
+                , c.vname as vname                              
+                , b.unmsr                               
+                , b.itcls                               
+                , b.ittyp                               
+                , a.crcye                               
+                , a.tempe                               
+                , a.resne                               
+                , a.prcee                               
+                , a.edate as edate                              
+         FROM                               
+                 (SELECT  prtno                             
+                            , spcod                             
+        <!--                                
+                            , CASE WHEN 20180328 >= edat3 THEN crcy3 WHEN 20180328 >= edat2 THEN crcy2 ELSE crcy1 END AS crcye                              
+                            , CASE WHEN 20180328 >= edat3 THEN temp3 WHEN 20180328 >= edat2 THEN temp2 ELSE temp1 END AS tempe                              
+                            , CASE WHEN 20180328 >= edat3 THEN edat3 WHEN 20180328 >= edat2 THEN edat2 ELSE edat1 END AS edate                              
+                            , CASE WHEN 20180328 >= edat3 THEN prce3 WHEN 20180328 >= edat2 THEN prce2 ELSE prce1 END AS prcee                              
+                            , CASE WHEN 20180328 >= edat3 THEN resn3 WHEN 20180328 >= edat2 THEN resn2 ELSE resn1 END AS resne                              
+                            , CASE WHEN #{startDate} >= edat3 THEN crcy3 WHEN #{startDate} >= edat2 THEN crcy2 ELSE crcy1 END AS crcye                              
+                            , CASE WHEN #{startDate} >= edat3 THEN temp3 WHEN #{startDate} >= edat2 THEN temp2 ELSE temp1 END AS tempe                              
+                            , CASE WHEN #{startDate} >= edat3 THEN edat3 WHEN #{startDate} >= edat2 THEN edat2 ELSE edat1 END AS edate                              
+                            , CASE WHEN #{startDate} >= edat3 THEN prce3 WHEN #{startDate} >= edat2 THEN prce2 ELSE prce1 END AS prcee                              
+                            , CASE WHEN #{startDate} >= edat3 THEN resn3 WHEN #{startDate} >= edat2 THEN resn2 ELSE resn1 END AS resne                              
+                            , CASE WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat3 THEN crcy3 WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat2 THEN crcy2 ELSE crcy1 END AS crcye                                
+                            , CASE WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat3 THEN temp3 WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat2 THEN temp2 ELSE temp1 END AS tempe                                
+                            , CASE WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat3 THEN edat3 WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat2 THEN edat2 ELSE edat1 END AS edate                                
+                            , CASE WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat3 THEN prce3 WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat2 THEN prce2 ELSE prce1 END AS prcee                                
+                            , CASE WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat3 THEN resn3 WHEN INT(REPLACE(#{startDate},'-','')) <![CDATA[>=]]> edat2 THEN resn2 ELSE resn1 END AS resne                                
+        -->                             
+                            , CASE WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat3 THEN crcy3 WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat2 THEN crcy2 ELSE crcy1 END AS crcye                                
+                            , CASE WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat3 THEN temp3 WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat2 THEN temp2 ELSE temp1 END AS tempe                                
+                            , CASE WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat3 THEN edat3 WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat2 THEN edat2 ELSE edat1 END AS edate                                
+                            , CASE WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat3 THEN prce3 WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat2 THEN prce2 ELSE prce1 END AS prcee                                
+                            , CASE WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat3 THEN resn3 WHEN INT(REPLACE('${startDate}','-','')) <![CDATA[>=]]> edat2 THEN resn2 ELSE resn1 END AS resne                                
+                                
+                  FROM                              
+                  <if test='clsCode = "E1"'>                                
+                  PERESLIB.CM001PR) a,                              
+                  PERESLIB.bm008pr b,                               
+                  PERESLIB.vennam c                                 
+                  </if>                             
+                  <if test='clsCode != "E1"'>                               
+                  PSRESLIB.CM001PR) a,                              
+                  PSRESLIB.bm008pr b,                               
+                  PSRESLIB.vennam c                                 
+                  </if>                             
+         WHERE                              
+         'SqlMap-DataWareHouse.searchPurchasePrice' = 'SqlMap-DataWareHouse.searchPurchasePrice'                                
+         AND  a.prtno=b.itnbr AND a.spcod=c.vndnr                               
+         ORDER BY b.packc, b.recid, a.prtno, a.spcod                                
+    </sql>                              
+    <!--  SQL명 구매단가현황 COUNT -->                             
+    <select id="searchCountPurchasePrice" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">                               
+        SELECT COUNT(*) rowCnt FROM (                               
+          <include refid="searchPurchasePrice"></include>                               
+            ) X                             
+        WHERE                               
+        'SqlMap-DataWareHouse.searchCountPurchasePrice' = 'SqlMap-DataWareHouse.searchCountPurchasePrice'                               
+    </select>                               
+     <!--  SQL명 구매단가현황 List -->                             
+    <select id="searchByConditionForPagingPurchasePrice" resultMap="PurchasePrice" parameterType="DataWareHouseDomain">                             
+        SELECT                              
+            ROW_NUM,                                
+            packc, recid, prtno, itdsc, spcod, vname, unmsr, itcls, ittyp, crcye, tempe, resne, prcee, edate                                
+        FROM(                               
+            SELECT                              
+                ROW_NUMBER() OVER(ORDER BY X.packc, X.recid, X.prtno, X.spcod) AS ROW_NUM, X.*                              
+            FROM(                               
+                     <include refid="searchPurchasePrice"></include>                                
+                ) X                             
+            ) Y                             
+        WHERE                               
+        'SqlMap-DataWareHouse.searchByConditionForPagingPurchasePrice' = 'SqlMap-DataWareHouse.searchByConditionForPagingPurchasePrice'                             
+        AND ROW_NUM between #{rowNumFrom} and #{rowNumTo}                               
+    </select>                               
+                                
+    <resultMap id="StandardCost" type="DataWareHouseDomain">                                
+        <result property="seqNo" column="ROW_NUM" />                                
+        <result property="prtno" column="PRTNO" />                              
+        <result property="procd" column="PROCD" />                              
+        <result property="mnfcs" column="MNFCS" />                              
+        <result property="dircs" column="DIRCS" />                              
+        <result property="mcost" column="MCOST" />                              
+        <result property="rmatc" column="RMATC" />                              
+        <result property="rmatl" column="RMATL" />                              
+        <result property="rmati" column="RMATI" />                              
+        <result property="rmimc" column="RMIMC" />                              
+        <result property="purcs" column="PURCS" />                              
+        <result property="purcl" column="PURCL" />                              
+        <result property="purci" column="PURCI" />                              
+        <result property="ppimc" column="PPIMC" />                              
+        <result property="prcst" column="PRCST" />                                              
+        <result property="labcs" column="LABCS" />                                              
+        <result property="depcs" column="DEPCS" />                                              
+        <result property="mfexp" column="MFEXP" />                                              
+        <result property="diecs" column="DIECS" />                                              
+        <result property="mohcs" column="MOHCS" />                                              
+        <result property="fixdt" column="FIXDT" />                                              
+        <result property="rcomp" column="RCOMP" />                                              
+        <result property="brmtl" column="BRMTL" />                                              
+        <result property="brmti" column="BRMTI" />                                              
+        <result property="brmic" column="BRMIC" />                                              
+        <result property="bpurl" column="BPURL" />                                              
+        <result property="bpuri" column="BPURI" />                                              
+        <result property="bppic" column="BPPIC" />                                              
+        <result property="blabc" column="BLABC" />                                              
+        <result property="bdepc" column="BDEPC" />                                              
+        <result property="bmexp" column="BMEXP" />                                              
+        <result property="bdiec" column="BDIEC" />                                              
+        <result property="ocean" column="OCEAN" />                                              
+        <result property="insdt" column="INSDT" />                                              
+        <result property="itdsc" column="ITDSC" />                                              
+    </resultMap>                                
+                                
+    <!-- Standard Cost 이력 현황 dwh003q-->                             
+    <!--                                
+    <sql id="tblBaseSqldwhz003q">                                   
+        SELECT                              
+            AA.*,BB.ITDSC                               
+        FROM(                                   
+            SELECT                              
+                 X.PRTNO                                
+                ,X.PROCD                                
+                ,X.MNFCS                                
+                ,X.DIRCS                                
+                ,X.MCOST                                
+                ,X.RMATC                                
+                ,X.RMATL                                
+                ,X.RMATI                                
+                ,X.RMIMC                                
+                ,X.PURCS                                
+                ,X.PURCL                                
+                ,X.PURCI                                
+                ,X.PPIMC                                
+                ,X.PRCST                                
+                ,X.LABCS                                
+                ,X.DEPCS                                
+                ,X.MFEXP                                
+                ,X.DIECS                                
+                ,X.MOHCS                                
+                ,X.FIXDT                                
+                ,X.RCOMP                                
+                ,X.BRMTL                                
+                ,X.BRMTI                                
+                ,X.BRMIC                                
+                ,X.BPURL                                
+                ,X.BPURI                                
+                ,X.BPPIC                                
+                ,X.BLABC                                
+                ,X.BDEPC                                
+                ,X.BMEXP                                
+                ,X.BDIEC                                
+                ,X.OCEAN,                               
+        -->                             
+                <!-- psedblib의 이력 현황 조회 -->                             
+        <!--                                
+                <isEqual property="GUB" compareValue="A">                               
+                0 AS INSDT                              
+                FROM $LIB1$.$D30PF$ X                               
+                    <isNotEmpty property="ITCLS1">                              
+                    WHERE PROCD = #ITCLS1#                              
+                    </isNotEmpty>                                   
+                </isEqual>                              
+        -->                             
+                                                
+                <!-- psedblib의 이력 현황 조회 -->                             
+        <!--                                
+                <isEqual property="GUB" compareValue="B">                               
+                X.INSDT                             
+                FROM $LIB2$.$D30PF$ X                               
+                    WHERE D30DT = #D30DT#                               
+                    <isNotEmpty property="ITCLS1">                              
+                    AND PROCD = #ITCLS1#                                
+                    </isNotEmpty>                               
+                </isEqual>                              
+        ) AA LEFT OUTER JOIN (SELECT ITNBR,ITDSC FROM $LIB1$.BM008PR) BB ON AA.PRTNO=BB.ITNBR                               
+    </sql>                              
+    -->                             
+                                    
+    <!--  SQL명 표준원가현황  -->                              
+    <sql id="searchStandardCost">                               
+        SELECT                              
+            AA.*,BB.ITDSC                               
+        FROM(                                   
+            SELECT                              
+                 X.PRTNO                                
+                ,X.PROCD                                
+                ,X.MNFCS                                
+                ,X.DIRCS                                
+                ,X.MCOST                                
+                ,X.RMATC                                
+                ,X.RMATL                                
+                ,X.RMATI                                
+                ,X.RMIMC                                
+                ,X.PURCS                                
+                ,X.PURCL                                
+                ,X.PURCI                                
+                ,X.PPIMC                                
+                ,X.PRCST                                
+                ,X.LABCS                                
+                ,X.DEPCS                                
+                ,X.MFEXP                                
+                ,X.DIECS                                
+                ,X.MOHCS                                
+                ,X.FIXDT                                
+                ,X.RCOMP                                
+                ,X.BRMTL                                
+                ,X.BRMTI                                
+                ,X.BRMIC                                
+                ,X.BPURL                                
+                ,X.BPURI                                
+                ,X.BPPIC                                
+                ,X.BLABC                                
+                ,X.BDEPC                                
+                ,X.BMEXP                                
+                ,X.BDIEC                                
+                ,X.OCEAN,                               
+                <!-- psedblib의 이력 현황 조회 -->                             
+                                        
+        <!--                                
+                <isEqual property="GUB" compareValue="A">                               
+         -->                                
+                0 AS INSDT                              
+                FROM PERESLIB.F#D30PR X                             
+        <!--                                
+                    <isNotEmpty property="ITCLS1">                              
+                    WHERE PROCD = #ITCLS1#                              
+                    </isNotEmpty>                                   
+                </isEqual>                              
+        -->                                         
+                <!-- psedblib의 이력 현황 조회 -->                             
+        <!--                                
+                <isEqual property="GUB" compareValue="B">                               
+                X.INSDT                             
+                FROM PSEDBLIB.F#D30PRALL X                              
+                    WHERE D30DT = 20180331                              
+                    <isNotEmpty property="ITCLS1">                              
+                    AND PROCD = #ITCLS1#                                
+                    </isNotEmpty>                               
+                </isEqual>                              
+        -->                             
+        ) AA LEFT OUTER JOIN (SELECT ITNBR,ITDSC FROM PERESLIB.BM008PR) BB ON AA.PRTNO=BB.ITNBR                             
+         WHERE                              
+         'SqlMap-DataWareHouse.searchStandardCost' = 'SqlMap-DataWareHouse.searchStandardCost'                              
+    </sql>                              
+    <!--  SQL명 표준원가현황 COUNT -->                             
+    <select id="searchCountStandardCost" resultType="java.lang.Integer" parameterType="DataWareHouseDomain">                                
+        SELECT COUNT(*) rowCnt FROM (                               
+          <include refid="searchStandardCost"></include>                                
+            ) X                             
+         WHERE                              
+         'SqlMap-DataWareHouse.searchCountStandardCost' = 'SqlMap-DataWareHouse.searchCountStandardCost'                                
+    </select>                               
+     <!--  SQL명 표준원가현황 List -->                             
+    <select id="searchByConditionForPagingStandardCost" resultMap="StandardCost" parameterType="DataWareHouseDomain">                               
+        SELECT                              
+            ROW_NUM,                                
+            PRTNO, PROCD, MNFCS, DIRCS, MCOST, RMATC, RMATL, RMATI, RMIMC, PURCS, PURCL, PURCI, PPIMC, PRCST, LABCS,                                
+            DEPCS, MFEXP, DIECS, MOHCS, FIXDT, RCOMP, BRMTL, BRMTI, BRMIC, BPURL, BPURI, BPPIC, BLABC, BDEPC, BMEXP,                                
+            BDIEC, OCEAN, INSDT, ITDSC                              
+        FROM(                               
+            SELECT                              
+                ROW_NUMBER() OVER(ORDER BY X.PRTNO) AS ROW_NUM, X.*                             
+            FROM(                               
+                     <include refid="searchStandardCost"></include>                             
+                ) X                             
+            ) Y                             
+        WHERE                               
+         'SqlMap-DataWareHouse.searchByConditionForPagingStandardCost' = 'SqlMap-DataWareHouse.searchByConditionForPagingStandardCost'                              
+        AND ROW_NUM between #{rowNumFrom} and #{rowNumTo}                               
+    </select>                               
+        
+</mapper>

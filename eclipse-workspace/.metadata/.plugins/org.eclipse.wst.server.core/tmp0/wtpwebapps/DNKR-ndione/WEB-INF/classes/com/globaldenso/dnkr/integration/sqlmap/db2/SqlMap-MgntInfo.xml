@@ -1,0 +1,2172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.ManagementInformationDao">
+
+    <!-- 부품입고현황 조회 -->
+	<resultMap id="MaterialReceiving" type="MaterialReceivingDomain">                                
+        <result property="comps" column="comps" />                                              
+    </resultMap>  
+	<resultMap id="DwhCount" type="DataWarehouseFileDomain">                                
+        <result property="jyymm" column="JYYMM" />                                              
+    </resultMap>
+    <resultMap id="YearlyProductShipping" type="YearlyProductShippingDomain">                                
+        <result property="itcls" column="ITCLS" />                                              
+        <result property="pspno" column="PSPNO" />                                              
+        <result property="itdsc" column="ITDSC" />                                              
+        <result property="pyvnd" column="PYVND" />                                              
+        <result property="cusnm" column="CUSNM" />                                              
+        <result property="pcost" column="PCOST" />
+        
+        <!--   
+        <result property="jpsqy.0" column="JPSQY0" />                                              
+        <result property="jpsqy.1" column="JPSQY1" />                                              
+        <result property="jpsam.0" column="JPSAM0" />                                              
+        <result property="jpsam.1" column="JPSAM1" />                                              
+       -->        
+    </resultMap>
+
+    <select id="searchByMaterialReceiving" resultType="MaterialReceivingDomain"  parameterType="MaterialReceivingDomain">                                
+        SELECT  trim(a.comps) comps                                 
+               ,trim(a.house) house                                 
+               ,trim(a.vndnr) vndnr                             
+               ,trim(a.pspno) pspno                             
+               ,trim(b.itdsc) itdsc                             
+               ,trim(a.ittyp) ittyp                             
+               ,trim(a.itcls) itcls                             
+               ,trim(a.prdgu) prdgu                             
+               ,trim(a.prdcd) prdcd                             
+               ,trim(a.supgu) supgu                             
+               ,trim(a.trcst) trcst                             
+               ,trim(a.crcyw) crcyw                             
+               ,trim(a.trfot) trfot                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}01 then trqty else 0 end) AS month1                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}02 then trqty else 0 end) AS month2                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}03 then trqty else 0 end) AS month3                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}04 then trqty else 0 end) AS month4                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}05 then trqty else 0 end) AS month5                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}06 then trqty else 0 end) AS month6                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}07 then trqty else 0 end) AS month7                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}08 then trqty else 0 end) AS month8                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}09 then trqty else 0 end) AS month9                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}10 then trqty else 0 end) AS month10                                
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}11 then trqty else 0 end) AS month11                                
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}12 then trqty else 0 end) AS month12                                
+         FROM   ${lib2}.bid100pf a                              
+               ,${lib1}.bm008pr b                                
+         WHERE a.pspno = b.itnbr                                
+	         AND   a.trndt <![CDATA[>=]]> #{startDate}                               
+	         AND   a.trndt <![CDATA[<=]]> #{endDate}                                 
+	         AND   a.inpgu in('11', '32','41')                              
+        AND   a.vndnr in('K25', 'G50','K13', 'K48','K52')                              
+         GROUP by a.comps, a.house, a.vndnr, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+         ORDER by a.comps, a.house, a.vndnr, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                                                            
+    </select>
+    
+  <!--   <resultMap id="PurchasePrice" type="PurchasePriceDomain">                                
+        <result property="packc" column="packc" />                              
+        <result property="recid" column="recid" />                              
+        <result property="prtno" column="prtno" />                              
+        <result property="itdsc" column="itdsc" />                              
+        <result property="spcod" column="spcod" />                              
+        <result property="vname" column="vname" />                              
+        <result property="unmsr" column="unmsr" />                              
+        <result property="itcls" column="itcls" />                              
+        <result property="ittyp" column="ittyp" />                              
+        <result property="crcye" column="crcye" />                              
+        <result property="tempe" column="tempe" />                              
+        <result property="resne" column="resne" />                              
+        <result property="prcee" column="prcee" />                              
+        <result property="edate" column="edate" />                               
+    </resultMap>  -->
+    <!-- 구매단가현황 조회 -->
+   <select id="searchByPurchasePrice" resultType="PurchasePriceDomain" parameterType="PurchasePriceDomain">                                
+       SELECT      b.packc
+		         , b.recid
+		         , a.prtno
+		         , b.itdsc
+		         , a.spcod
+		         <!-- , c.vname as vname -->
+		         , b.unmsr
+		         , b.itcls
+		         , b.ittyp
+		         , a.crcye
+		         , a.tempe
+		         , a.resne
+		         , a.prcee
+		         , a.edate as edate
+		 FROM 
+		         (SELECT    prtno
+		                     , spcod
+		                     , CASE WHEN #{startDate} <![CDATA[>=]]> edat3 THEN crcy3 WHEN #{startDate} <![CDATA[>=]]> edat2 THEN crcy2 ELSE crcy1 END AS crcye
+		                     , CASE WHEN #{startDate} <![CDATA[>=]]> edat3 THEN temp3 WHEN #{startDate} <![CDATA[>=]]> edat2 THEN temp2 ELSE temp1 END AS tempe
+		                     , CASE WHEN #{startDate} <![CDATA[>=]]> edat3 THEN edat3 WHEN #{startDate} <![CDATA[>=]]> edat2 THEN edat2 ELSE edat1 END AS edate
+		                     , CASE WHEN #{startDate} <![CDATA[>=]]> edat3 THEN prce3 WHEN #{startDate} <![CDATA[>=]]> edat2 THEN prce2 ELSE prce1 END AS prcee
+		                     , CASE WHEN #{startDate} <![CDATA[>=]]> edat3 THEN resn3 WHEN #{startDate} <![CDATA[>=]]> edat2 THEN resn2 ELSE resn1 END AS resne
+		          FROM ${lib1}.CM001PR) a, 
+		          ${lib1}.bm008pr b
+		          <!-- ,${lib1}.vennam c --> 
+		 WHERE a.prtno=b.itnbr <!-- AND a.spcod=c.vndnr -->                                       
+    </select>
+    
+    <select id="searchByOceansList" resultType="OceanListDomain" parameterType="OceanListDomain">
+    	SELECT 
+		COMPS, HOUSE, PRDDV, PRDDD, PYVND, PSPNO, JPSQY, JPSAM, ADDNO, PRLI1, PRLI2, PRTNO,
+		ODATE, INVCT, PRLCD, EDATE, MNFCS, DIRCS, DIRMC, RMATL, RMATI, RMIMC, PURCL, PURCI, PPIMC, LABCS, DEPCS, MFEXP, DIECS, MOHCS
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByOceanList'='SqlMap-MgntInfo.searchByOceanList'
+	</select>
+    
+    
+    <!-- 년판매계획대재료비현황-->
+    <select id="searchBySalesPlanMaterialCost" resultType="SalesPlanMaterialCostDomain" parameterType="SalesPlanMaterialCostDomain">
+		SELECT
+			  a.pyvnd
+			, a.pspno
+			, e.itdsc
+			, f.mstsm
+			, a.yescs
+			, b.edatm
+			, b.price
+			, c.krsur
+			, c.surkr
+			, c.surus
+			, c.surjp
+			, c.surur
+			, c.krpur
+			, c.krckd
+			, c.ckdus
+			, c.ckdjp
+			, c.ckdur
+			, c.ckdkr
+		 <foreach item="item" index="index" collection="yearList" >
+			,sum(case plnym when ${item} then a.monqy else 0 end) ym${index}
+    	 </foreach>
+		FROM
+			(
+			SELECT 
+				PLNYM,PYVND,PLNGB,PSPNO,CARCD,MONQY,YESCS
+			FROM
+				${lib2}.SPY200PF
+			WHERE
+				PLNYM BETWEEN #{startDate} AND #{endDate}
+				AND MONQY != 0
+				AND PLNGB = #{division} <!-- PLNGB = 1 or 2 -->
+			) A 
+				LEFT OUTER JOIN (SELECT ITNBR,ITDSC,ITCLS FROM ${lib1}.BM008PR) E ON A.PSPNO=E.ITNBR
+				LEFT OUTER JOIN (SELECT MSTCD,MSTSM FROM ${lib2}.MST051LF where COMPS='E1') F ON A.CARCD = F.MSTCD 
+				LEFT OUTER JOIN (SELECT * FROM ${lib1}.EM001PR A WHERE EDATM = (SELECT MAX(EDATM) FROM pereslib.EM001PR B WHERE A.CUSNO=B.CUSNO AND A.PRTNO=B.PRTNO)) B ON A.PYVND=B.CUSNO AND A.PSPNO=B.PRTNO	
+				LEFT OUTER JOIN ${lib2}.CJJ500PF C ON A.PSPNO=C.STPNO
+		GROUP BY
+			A.PYVND, A.PSPNO, E.ITDSC, F.MSTSM, A.YESCS, B.EDATM, B.PRICE,	C.KRSUR, C.SURKR, C.SURUS, C.SURJP, C.SURUR, C.KRPUR, C.KRCKD, C.CKDUS, C.CKDJP, C.CKDUR, C.CKDKR
+		ORDER BY
+			A.PYVND,A.PSPNO
+	</select>
+    
+    <select id="searchByMaterialCostByPeriod_1" resultType="MaterialCostByPeriodDomain" parameterType="MaterialCostByPeriodDomain">    
+		SELECT	
+			  A.PYVND
+			, A.PROCS
+			, A.PSPNO
+			, D.EDATM
+			, D.PRICE
+			, B.UNMSR
+			, B.ITTYP
+			, B.ITDSC
+			, C.KRSUR
+			, C.SURKR
+			, C.SURUS
+			, C.SURJP
+			, C.SURUR
+			, C.KRPUR
+			, C.KRCKD
+			, C.CKDUS
+			, C.CKDJP
+			, C.CKDUR
+			, C.CKDKR
+			, C.KRPAT
+			, C.KRCOT
+			, C.MCHMU
+			, C.MAGER
+			, C.HNDTM
+			, C.DRMAN
+			, C.SBMAN
+			, C.DRMCH
+			, C.SBMCH
+			, C.EPCKD
+			, C.DANGU
+			, C.DANST
+			, C.DANDT
+			, C.CRTDT
+			, C.CHGDT
+			, SUM(A.PRTQY) PRTQY
+		FROM	
+			${lib2}.FMD100PF A  
+			LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR
+			LEFT OUTER JOIN ${lib2}.CJJ700PF C ON A.PSPNO=C.STPNO
+			LEFT OUTER JOIN (SELECT A.PRTNO,A.CUSNO,A.EDATM,A.PRICE FROM ${lib1}.EM001PR A WHERE EDATM = (SELECT MAX(EDATM) FROM ${lib1}.EM001PR B WHERE A.CUSNO=B.CUSNO AND A.PRTNO=B.PRTNO)) D ON A.PYVND=D.CUSNO AND A.PSPNO=D.PRTNO
+		WHERE  	
+			A.TRNDT BETWEEN #{startDate} AND #{endDate}
+			<!-- <if test="performanceDivision == 'A'">
+				AND  A.SATYP NOT IN ('51','61','71')
+			</if>
+			<if test="performanceDivision == 'B">
+				AND  A.INPGU IN ('11','41')
+			</if> -->
+		GROUP BY	
+			A.PYVND, A. PROCS, A.PSPNO, D.EDATM,D.PRICE, B.UNMSR,B.ITTYP, B.ITDSC, C.KRSUR,C.SURKR,C.SURUS,C.SURJP,
+			C.SURUR,C.KRPUR,C.KRCKD,C.CKDUS,C.CKDJP,C.CKDUR,C.CKDKR,C.KRPAT,C.KRCOT,
+			C.MCHMU,C.MAGER,C.HNDTM,C.DRMAN,C.SBMAN,C.DRMCH,C.SBMCH,C.EPCKD,
+			C.DANGU,C.DANST,C.DANDT,C.CRTDT,C.CHGDT
+		ORDER BY 	
+			1,2,3,4
+	</select>
+	
+	 <select id="searchByMaterialCostByPeriod_2" resultType="MaterialCostByPeriodDomain" parameterType="MaterialCostByPeriodDomain">    
+		SELECT	
+			  A.PYVND
+			, A.PROCS
+			, A.PSPNO
+			, D.EDATM
+			, D.PRICE
+			, B.UNMSR
+			, B.ITTYP
+			, B.ITDSC
+			, C.MNFCS
+			, C.DIRCS
+			, C.MCOST
+			, C.RMATC
+			, C.RMATL
+			, C.RMATI
+			, C.RMIMC
+			, C.PURCS
+			, C.PURCL
+			, C.PURCI
+			, C.PPIMC
+			, C.PRCST
+			, C.LABCS
+			, C.DEPCS
+			, C.MFEXP
+			, C.DIECS
+			, C.MOHCS
+			, C.FIXDT
+			, SUM(A.PRTQY) PRTQY
+		FROM	
+			${lib2}.FMD100PF A
+			LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR
+			LEFT OUTER JOIN ${lib1}.$D30PR$ C ON A.PSPNO=C.PRTNO
+			LEFT OUTER JOIN (SELECT A.PRTNO,A.CUSNO,A.EDATM,A.PRICE FROM ${lib1}.EM001PR A WHERE EDATM = (SELECT MAX(EDATM) FROM ${lib1}.EM001PR B WHERE A.CUSNO=B.CUSNO AND A.PRTNO=B.PRTNO)) D ON A.PYVND=D.CUSNO AND A.PSPNO=D.PRTNO
+		WHERE  	
+			A.TRNDT BETWEEN #{startDate} AND #{endDate}
+			<if test="performanceDivision == 'A'">
+				AND  A.SATYP NOT IN ('51','61','71')
+			</if>
+			<if test="performanceDivision == 'B">
+				AND  A.INPGU IN ('11','41')
+			</if>
+		GROUP BY 	
+			A.PYVND, A.PROCS, A.PSPNO, D.EDATM,D.PRICE, B.UNMSR,B.ITTYP, B.ITDSC, 
+			C.MNFCS, C.DIRCS, C.MCOST, C.RMATC, C.RMATL, C.RMATI, C.RMIMC, C.PURCS, C.PURCL, C.PURCI, C.PPIMC, C.PRCST, C.LABCS, C.DEPCS, C.MFEXP, C.DIECS, C.MOHCS, C.FIXDT
+		ORDER BY	
+			1,2,3,4
+	</select>
+	
+	<!--  Standard Cost History 조회 -->
+	 <select id="searchByStandardCostHistoryList" resultType="StandardCostHistoryDomain" parameterType="StandardCostHistoryDomain">    
+			SELECT
+				A.*,B.ITDSC
+			FROM
+				(
+				SELECT					
+					 X.PRTNO
+					,X.PROCD
+					,X.MNFCS
+					,X.DIRCS
+					,X.MCOST
+					,X.RMATC
+					,X.RMATL
+					,X.RMATI
+					,X.RMIMC
+					,X.PURCS
+					,X.PURCL
+					,X.PURCI
+					,X.PPIMC
+					,X.PRCST
+					,X.LABCS
+					,X.DEPCS
+					,X.MFEXP
+					,X.DIECS
+					,X.MOHCS
+					,X.FIXDT
+					,X.RCOMP
+					,X.BRMTL
+					,X.BRMTI
+					,X.BRMIC
+					,X.BPURL
+					,X.BPURI
+					,X.BPPIC
+					,X.BLABC
+					,X.BDEPC
+					,X.BMEXP
+					,X.BDIEC
+					,X.OCEAN,
+					<if test="division == ''A'">
+						0 AS INSDT
+					</if>
+					<if test="division == ''B'">
+						X.INSDT
+					</if>
+				FROM
+					<if test="division == ''A'">
+						${lib1}.$D30PF$ X
+						<if test="ITCLS1 != '' ">
+						WHERE PROCD = #{ITCLS1}
+						</if>
+					</if>
+					<if test="division == ''B'">
+						${lib2}.$D30PF$ X
+						WHERE
+						D30DT = #{D30DT}
+						<if test="ITCLS1 != '' ">
+						AND PROCD = #{ITCLS1}
+						</if>
+					</if>
+				) A LEFT OUTER JOIN (SELECT ITNBR,ITDSC FROM ${lib1}.BM008PR) B ON A.PRTNO=B.ITNBR
+			
+	</select>
+	
+	<select id="searchByMst050pf" resultType="StandardCostHistoryDomain" parameterType="StandardCostHistoryDomain">
+		SELECT
+				TRIM(GRPCD) GRPCD,
+				TRIM(MSTCD) MSTCD,
+				TRIM(MSTCD) || '  ' || TRIM(MSTRM)  MSTRM
+		FROM
+				PSCDBLIB.MST050PF
+		WHERE COMPS = 'C1' 
+		AND GRPCD = 'PRD'
+		AND MSTCD != '$'		 
+		ORDER BY MSTCD
+	</select>
+	
+	 <select id="searchByCalculationMaterial" resultType="CalculationMaterialDomain" parameterType="CalculationMaterialDomain">   
+		SELECT
+			 		  X.PYVND
+			 		, X.PSPNO
+			 		, X.ITDSC
+			 		, X.MSTSM
+			 		, X.YESCS
+			 		, Y.PRICE
+			 		, Z.KRSUR
+			 		, Z.SURKR
+			 		, Z.SURUS
+			 		, Z.SURJP
+			 		, Z.SURUR
+			 		, Z.KRPUR
+			 		, Z.KRCKD
+			 		, Z.CKDUS
+			 		, Z.CKDJP
+			 		, Z.CKDUR
+			 		, Z.CKDKR
+			 		, X.QY04
+			 		, X.QY05
+			 		, X.QY06
+			 		, X.QY07
+			 		, X.QY08
+			 		, X.QY09
+			 		, X.QY10
+			 		, X.QY11
+			 		, X.QY12
+			 		, X.QY01
+			 		, X.QY02
+			 		, X.QY03
+			    FROM
+					 (SELECT
+					  		A.*
+					  		,B.ITDSC
+					  		,C.MSTSM
+			          FROM
+						  (SELECT 
+							     PYVND
+							   , PSPNO
+							   , CARCD
+							   , YESCS	
+							   
+							   
+							   <foreach item="item" index="index" collection="yearList" >
+									<!-- ,sum(case plnym when ${item} then a.monqy else 0 end) ym${index} -->
+							       , SUM(CASE PLNYM WHEN ${item}04 THEN MONQY ELSE 0 END) QY${index}
+    						   </foreach>
+							   
+<!-- 							   , SUM(CASE PLNYM WHEN $YEAR$05 THEN MONQY ELSE 0 END) QY05
+							   , SUM(CASE PLNYM WHEN $YEAR$06 THEN MONQY ELSE 0 END) QY06
+							   , SUM(CASE PLNYM WHEN $YEAR$07 THEN MONQY ELSE 0 END) QY07
+							   , SUM(CASE PLNYM WHEN $YEAR$08 THEN MONQY ELSE 0 END) QY08
+							   , SUM(CASE PLNYM WHEN $YEAR$09 THEN MONQY ELSE 0 END) QY09
+							   , SUM(CASE PLNYM WHEN $YEAR$10 THEN MONQY ELSE 0 END) QY10
+							   , SUM(CASE PLNYM WHEN $YEAR$11 THEN MONQY ELSE 0 END) QY11
+							   , SUM(CASE PLNYM WHEN $YEAR$12 THEN MONQY ELSE 0 END) QY12
+							   , SUM(CASE PLNYM WHEN $YEARPLUS$01 THEN MONQY ELSE 0 END) QY01
+							   , SUM(CASE PLNYM WHEN $YEARPLUS$02 THEN MONQY ELSE 0 END) QY02
+							   , SUM(CASE PLNYM WHEN $YEARPLUS$03 THEN MONQY ELSE 0 END) QY03
+ -->							   
+							   
+					  	   FROM ${lib2}.spy200pf 
+					  	   WHERE PLNYM BETWEEN $YEAR$04 AND $YEARPLUS$03 and plngb='2'
+					       GROUP BY PYVND, PSPNO, CARCD, YESCS
+					      ) A
+					      
+					  LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR
+					  LEFT OUTER JOIN ${lib2}.MST051LF C ON A.CARCD=C.MSTCD
+					 )X
+					 LEFT OUTER JOIN 
+					 	(SELECT A.PRTNO
+					 	       ,A.CUSNO
+					 	       ,A.EDATM
+					 	       ,A.PRICE 
+					 	 FROM ${lib1}.EM001PR A 
+					 	 WHERE EDATM = (SELECT MAX(EDATM) 
+					 	                FROM ${lib1}.EM001PR B 
+					 	                WHERE A.CUSNO=B.CUSNO 
+					 	                AND A.PRTNO=B.PRTNO)) Y on X.PYVND=Y.CUSNO 
+					 	 AND X.PSPNO=Y.PRTNO
+					 LEFT OUTER JOIN ${lib2}.CJJ500PF Z ON X.PSPNO=Z.STPNO
+			  ORDER BY X.PYVND, X.PSPNO
+    </select>
+    
+    <!-- trim X -->
+    <!-- <select id="tblBaseSqldwhz001q" resultMap="MaterialReceiving" parameterType="MaterialReceiving">                                
+        SELECT  a.comps                                 
+               ,a.house                                 
+               ,trim(a.vndnr) vndnr                             
+               ,a.pspno                             
+               ,b.itdsc                             
+               ,a.ittyp                             
+               ,a.itcls                             
+               ,a.prdgu                             
+               ,a.prdcd                             
+               ,a.supgu                             
+               ,a.trcst                             
+               ,a.crcyw                             
+               ,a.trfot                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}01 then trqty else 0 end) AS month1                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}02 then trqty else 0 end) AS month2                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}03 then trqty else 0 end) AS month3                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}04 then trqty else 0 end) AS month4                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}05 then trqty else 0 end) AS month5                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}06 then trqty else 0 end) AS month6                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}07 then trqty else 0 end) AS month7                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}08 then trqty else 0 end) AS month8                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}09 then trqty else 0 end) AS month9                             
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}10 then trqty else 0 end) AS month10                                
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}11 then trqty else 0 end) AS month11                                
+               ,sum (case when substr(a.trndt, 1, 6) = ${year}12 then trqty else 0 end) AS month12                                
+         FROM   ${lib2}.bid100pf a                              
+               ,${lib1}.bm008pr b                                
+         WHERE a.pspno = b.itnbr                                
+	         AND   a.trndt <![CDATA[>=]]> #{startDate}                               
+	         AND   a.trndt <![CDATA[<=]]> #{endDate}                                 
+	         AND   a.inpgu in('11', '32','41')                              
+        AND   a.vndnr in('K25', 'G50','K13', 'K48','K52')                              
+         GROUP by a.comps, a.house, a.vndnr, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+         ORDER by a.comps, a.house, a.vndnr, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                                                            
+    </select>  -->                            
+    <!-- <select id="tblBaseSqldwhz001q" resultMap="MaterialReceiving" parameterType="MaterialReceiving">                                
+        SELECT  a.comps                                 
+               ,a.house                                 
+               ,a.vndnr                                 
+               ,c.vname                             
+               ,a.pspno                             
+               ,b.itdsc                             
+               ,a.ittyp                             
+               ,a.itcls                             
+               ,a.prdgu                             
+               ,a.prdcd                             
+               ,a.supgu                             
+               ,a.trcst                             
+               ,a.crcyw                             
+               ,a.trfot                             
+               ,sum (case when int(a.trndt/100) = ${year}01 then trqty else 0 end) AS month1                             
+               ,sum (case when int(a.trndt/100) = ${year}02 then trqty else 0 end) AS month2                             
+               ,sum (case when int(a.trndt/100) = ${year}03 then trqty else 0 end) AS month3                             
+               ,sum (case when int(a.trndt/100) = ${year}04 then trqty else 0 end) AS month4                             
+               ,sum (case when int(a.trndt/100) = ${year}05 then trqty else 0 end) AS month5                             
+               ,sum (case when int(a.trndt/100) = ${year}06 then trqty else 0 end) AS month6                             
+               ,sum (case when int(a.trndt/100) = ${year}07 then trqty else 0 end) AS month7                             
+               ,sum (case when int(a.trndt/100) = ${year}08 then trqty else 0 end) AS month8                             
+               ,sum (case when int(a.trndt/100) = ${year}09 then trqty else 0 end) AS month9                             
+               ,sum (case when int(a.trndt/100) = ${year}10 then trqty else 0 end) AS month10                                
+               ,sum (case when int(a.trndt/100) = ${year}11 then trqty else 0 end) AS month11                                
+               ,sum (case when int(a.trndt/100) = ${year}12 then trqty else 0 end) AS month12                                
+         FROM   ${lib2}.bid100pf a left outer join ${lib1}.vennam c on a.vndnr = c.vndnr                              
+               ,${lib1}.bm008pr b                                
+         WHERE a.pspno = b.itnbr                                
+         AND   a.trndt <![CDATA[>=]]> #{startDate}                               
+         AND   a.trndt <![CDATA[<=]]> #{endDate}                                 
+         AND   a.inpgu in('11', '32','41')                              
+        AND   a.vndnr in('K25', 'G50','K13', 'K48','K52')                              
+         GROUP by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                              
+         ORDER by a.comps, a.house, a.vndnr, c.vname, a.pspno, b.itdsc, a.ittyp, a.itcls, a.prdgu, a.prdcd, a.supgu, a.trcst, a.crcyw, a.trfot                                                            
+    </select> -->
+    
+    <select id="searchByVennam" resultMap="MaterialReceiving" parameterType="MaterialReceivingDomain">
+    	select 
+    			  trim(vndnr) vndnr
+    			, vname 
+ 		from 
+ 				${lib1}.vennam
+    </select>
+    
+    <select id="searchByConditionBm008pr" resultMap="MaterialReceiving" parameterType="MaterialReceivingDomain">
+    	select 
+    			  trim(itnbr) itnbr
+    			, itdsc 
+ 		from 
+ 				${lib1}.bm008pr
+    </select>
+    
+	<select id="searchByProductStockShippingReceiving" resultType="ProductStockShippingReceivingDomain"  parameterType="ProductStockShippingReceivingDomain">
+	<!-- IMI 입고, IMO 출고 IMC 조정 IMQ 재고 DIF 실사차이 -->
+	SELECT
+		A.PSPNO, 
+		A.IMI04, A.IMI05, A.IMI06, A.IMI07, A.IMI08, A.IMI09, A.IMI10, A.IMI11, A.IMI12, A.IMI01, A.IMI02, A.IMI03,	
+		A.IMO04, A.IMO05, A.IMO06, A.IMO07, A.IMO08, A.IMO09, A.IMO10, A.IMO11, A.IMO12, A.IMO01, A.IMO02, A.IMO03,
+		A.IMQ00, 
+		A.IMQ04, A.IMQ05, A.IMQ06, A.IMQ07, A.IMQ08, A.IMQ09, A.IMQ10, A.IMQ11, A.IMQ12, A.IMQ01, A.IMQ02, A.IMQ03,
+		A.DIF04, A.DIF05, A.DIF06, A.DIF07, A.DIF08, A.DIF09, A.DIF10, A.DIF11, A.DIF12, A.DIF01, A.DIF02, A.DIF03,
+		A.IMC04, A.IMC05, A.IMC06, A.IMC07, A.IMC08, A.IMC09, A.IMC10, A.IMC11, A.IMC12, A.IMC01, A.IMC02, A.IMC03,
+		CASE WHEN Z.ITTYP='1' THEN B.EMPRICE ELSE C.CMPRICE END PRICE
+	FROM(
+		SELECT
+			A.PSPNO, 			
+			SUM(A.IMI04) AS IMI04, SUM(A.IMI05) AS IMI05, SUM(A.IMI06) AS IMI06, SUM(A.IMI07) AS IMI07, SUM(A.IMI08) AS IMI08, SUM(A.IMI09) AS IMI09,
+			SUM(A.IMI10) AS IMI10, SUM(A.IMI11) AS IMI11, SUM(A.IMI12) AS IMI12, SUM(A.IMI01) AS IMI01, SUM(A.IMI02) AS IMI02, SUM(A.IMI03) AS IMI03,
+			SUM(A.IMO04) AS IMO04, SUM(A.IMO05) AS IMO05, SUM(A.IMO06) AS IMO06, SUM(A.IMO07) AS IMO07, SUM(A.IMO08) AS IMO08, SUM(A.IMO09) AS IMO09,
+			SUM(A.IMO10) AS IMO10, SUM(A.IMO11) AS IMO11, SUM(A.IMO12) AS IMO12, SUM(A.IMO01) AS IMO01, SUM(A.IMO02) AS IMO02, SUM(A.IMO03) AS IMO03,
+			SUM(A.IMC04) AS IMC04, SUM(A.IMC05) AS IMC05, SUM(A.IMC06) AS IMC06, SUM(A.IMC07) AS IMC07, SUM(A.IMC08) AS IMC08, SUM(A.IMC09) AS IMC09,
+			SUM(A.IMC10) AS IMC10, SUM(A.IMC11) AS IMC11, SUM(A.IMC12) AS IMC12, SUM(A.IMC01) AS IMC01, SUM(A.IMC02) AS IMC02, SUM(A.IMC03) AS IMC03,
+			SUM(A.IMQ00) AS IMQ00, 
+			SUM(A.IMQ04) AS IMQ04, SUM(A.IMQ05) AS IMQ05, SUM(A.IMQ06) AS IMQ06, SUM(A.IMQ07) AS IMQ07, SUM(A.IMQ08) AS IMQ08, SUM(A.IMQ09) AS IMQ09,
+			SUM(A.IMQ10) AS IMQ10, SUM(A.IMQ11) AS IMQ11, SUM(A.IMQ12) AS IMQ12, SUM(A.IMQ01) AS IMQ01, SUM(A.IMQ02) AS IMQ02, SUM(A.IMQ03) AS IMQ03,
+			SUM(A.DIF04) AS DIF04, SUM(A.DIF05) AS DIF05, SUM(A.DIF06) AS DIF06, SUM(A.DIF07) AS DIF07, SUM(A.DIF08) AS DIF08, SUM(A.DIF09) AS DIF09,
+			SUM(A.DIF10) AS DIF10, SUM(A.DIF11) AS DIF11, SUM(A.DIF12) AS DIF12, SUM(A.DIF01) AS DIF01, SUM(A.DIF02) AS DIF02, SUM(A.DIF03) AS DIF03
+		FROM
+			PSEDBLIB.BHZ100PF A
+		WHERE
+			A.COMPS='E1'
+			AND A.IMHYY=2018
+			AND A.PSPNO='10312-01151'
+		GROUP BY A.COMPS, A.IMHYY, A.PSPNO, A.HOUSE
+		) A
+		LEFT OUTER JOIN (SELECT ITNBR, ITTYP FROM PERESLIB.BM008PR WHERE ITNBR='10312-01151') Z ON A.PSPNO=Z.ITNBR
+		LEFT OUTER JOIN (SELECT COALESCE(PRTNO,'') PRTNO, COALESCE(PRICE,0) EMPRICE
+                           FROM PERESLIB.em001pr Y
+                           where Y.edatm = (select MAX(X.edatm)
+                                            from PERESLIB.em001pr x
+                                           where Y.prtno=x.prtno
+                                           and x.EDATM <![CDATA[<=]]> 20180829)
+                          AND PRTNO='10312-01151'
+                          ORDER BY CUSNO DESC fetch first 1 row only
+		)B  ON A.PSPNO=B.PRTNO
+		LEFT OUTER JOIN (SELECT COALESCE(PRTNO,'') PRTNO,
+                               CASE WHEN EDAT3 != 99999999 THEN PRCE3
+                                    WHEN EDAT2 != 99999999 THEN PRCE2
+                                    WHEN EDAT1 != 99999999 THEN PRCE1
+                                    ELSE 0
+                               END CMPRICE
+                              FROM PERESLIB.CM001PR 
+                              WHERE PRTNO='10312-01151'
+                              and PRCLS='1'
+                              ORDER BY SPCOD DESC fetch first 1 row only 
+		)C ON A.PSPNO=C.PRTNO
+    </select>
+    
+    <!-- 제품 현재고  -->
+    <select id="searchByProductInventory" resultType="ProductInventoryDomain"  parameterType="ProductInventoryDomain">
+		<if test = 'jobName.equals("item")'>
+			<include refid="productInventoryItem"></include>
+		</if>
+		<if test = '!jobName.equals("item")'>
+			<include refid="productInventoryPrdcdHouse"></include>
+		</if>
+	</select>
+    <!-- 제품 현재고 : 품번별 -->
+	<sql id="productInventoryItem">
+	SELECT
+		A.HOUSE, TRIM(A.ITNBR) AS ITNBR, TRIM(A.ITDSC) AS ITDSC, A.CUSNO, TRIM(D.CUSNM) AS CUSNM, SUM(A.MOHTQ) AS MOHTQ, C.ENDDT
+	FROM (
+		SELECT
+			A.ITNBR, A.ITDSC, C.HOUSE, C.MOHTQ, G.CUSNO
+		FROM
+			${lib1}.BM008PR A
+			LEFT OUTER JOIN ${lib1}.HM000PR C ON A.ITNBR = C.ITNBR
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST100PF where COMPS = #{comps}) D ON A.ITNBR = D.PRTNO
+			LEFT OUTER JOIN (SELECT Y.PRTNO,MAX(Y.CUSNO) CUSNO FROM ${lib1}.em000pr Y 
+								where Y.edatm = (select MAX(X.edatm) 
+									from ${lib1}.em000pr x
+									where Y.prtno=x.prtno
+									and Y.CUSNO=x.CUSNO
+									and x.EDATM <![CDATA[<=]]> #{startDate})
+						                   GROUP BY Y.PRTNO
+						                   ) G ON A.ITNBR=G.PRTNO
+			WHERE
+				( A.ITTYP = '1' OR A.ITTYP = '9' )
+				<if test = "pspno != null and pspno != ''">
+				AND A.ITNBR LIKE  #{pspno} || '%'
+				</if>       
+				AND C.MOHTQ != 0
+			AND SUBSTR(A.ITCLS,2)='1'
+		) A
+		LEFT OUTER JOIN (SELECT  A.PSPNO, TRIM(MAX(A.ENDDT)) AS ENDDT FROM ${lib2}.SMZ100PF A GROUP BY A.PSPNO ) C ON A.ITNBR = C.PSPNO
+		LEFT OUTER JOIN (SELECT A.CUSNO, A.CUSNM FROM ${lib1}.CUSMAS A) D ON A.CUSNO = D.CUSNO
+	WHERE
+		'SqlMap-MgntInfo.searchByProductInventory'='SqlMap-MgntInfo.searchByProductInventory'
+		AND A.HOUSE IN  (select SUBSTR(MAJCD,6,1) from ${lib2}.mst040pf where MAJCD like 'HOUSE%' AND MJCHR=#{comps})
+	GROUP BY A.HOUSE, A.ITNBR, A.ITDSC, A.CUSNO, D.CUSNM, C.ENDDT
+	ORDER BY A.ITNBR
+	</sql>
+ 	<!-- 제품 현재고 : 제품별/창고별 -->
+	<sql id="productInventoryPrdcdHouse">
+	SELECT 
+		TRIM(A.ITNBR) AS ITNBR, TRIM(B.ITDSC) AS ITDSC, A.HOUSE, B.ITTYP, B.ITCLS, A.MOHTQ, 
+		<if test = 'jobName.equals("prdcd")'>
+		DECIMAL(A.MOHTQ*D.MNFCS) AMT
+		</if>
+		<if test = 'jobName.equals("house")'>
+		A.BEGIN, A.RECMO, A.ISSMO, A.ADJMO,  B.PACKC, COALESCE(D.TRQTYRC,0) AS TRQTYRC, COALESCE(E.TRQTYIW,0) AS TRQTYIW
+		</if>
+	FROM ${lib1}.HM000PR A 
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.ITNBR = B.ITNBR  
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST100PF WHERE COMPS=#{comps}) C ON A.ITNBR = C.PRTNO
+		<if test = 'jobName.equals("prdcd")'>
+		LEFT OUTER JOIN ${lib1}.F#D30PR D ON A.ITNBR=D.PRTNO
+		</if>	
+		<if test = 'jobName.equals("house")'>
+		<!-- 입고 -->
+		LEFT OUTER JOIN (
+			SELECT
+				PRTNO, HOUSE, SUM(TRQTY) AS TRQTYRC
+			FROM
+				${lib1}.HD001PR
+			WHERE
+				TCODE='RC'
+				AND TRNDT = (
+					SELECT 
+					REPLACE(CHAR(DATE(CAST(ADSDT||'000000' AS TIMESTAMP)- 1 DAYS), ISO), '-', '') 
+					FROM ${lib1}.SC000PR WHERE PRMNO='ADS'
+				)
+			GROUP BY TCODE, PRTNO, HOUSE, TRNDT
+		) D ON A.ITNBR=D.PRTNO AND A.HOUSE=D.HOUSE
+		<!-- 출고 -->
+		LEFT OUTER JOIN (
+			SELECT
+				PRTNO, HOUSE, SUM(TRQTY) AS TRQTYIW
+			FROM
+				${lib1}.HD001PR
+			WHERE
+				TCODE='IW'
+				AND TRNDT = (
+					SELECT 
+					REPLACE(CHAR(DATE(CAST(ADSDT||'000000' AS TIMESTAMP)- 1 DAYS), ISO), '-', '') 
+					FROM ${lib1}.SC000PR WHERE PRMNO='ADS'
+				)
+			GROUP BY TCODE, PRTNO, HOUSE, TRNDT
+		) E ON A.ITNBR=E.PRTNO AND A.HOUSE=E.HOUSE
+		</if>
+	WHERE
+		'SqlMap-MgntInfo.searchByProductInventory'='SqlMap-MgntInfo.searchByProductInventory'
+		<choose>
+			<when test = "house != null and house != ''">
+			AND A.HOUSE  = #{house}
+			</when>
+			<otherwise>
+			AND A.HOUSE IN (select SUBSTR(MAJCD,6,1) 
+			              from ${lib2}.mst040pf 
+ 					      where MAJCD like 'HOUSE%' AND COMPS=#{company})
+			</otherwise>
+		</choose>
+		<if test = "itcls != null and itcls != ''">
+		AND SUBSTR(B.ITCLS,2,1) = #{itcls}
+		</if>
+		<if test = "itcls == null and itcls == ''">
+		AND (SUBSTR(B.ITCLS,2,1) = '1' OR SUBSTR(B.ITCLS,2,1) = '3') 
+		</if>
+		<if test = "prdcd != null and prdcd != ''">
+		AND C.PRDCD  = #{prdcd}
+		</if>
+		<if test = 'jobName.equals("prdcd")'>
+		AND A.MOHTQ != 0
+		</if>
+		<if test = 'jobName.equals("house")'>
+			<if test = "packc != null and packc != ''">
+			AND B.PACKC  = #{packc}
+			</if>	
+			AND (BEGIN != 0 OR ISSMO != 0 OR RECMO != 0 OR ADJMO != 0 OR MOHTQ != 0)
+		</if>
+		AND B.ITTYP = '1'
+	ORDER BY A.ITNBR
+	</sql>	
+    
+	<select id="searchByImportInventory" resultType="ImportInventoryDomain"  parameterType="ImportInventoryDomain">       
+	SELECT
+		TRIM(A.EXPNO) AS EXPNO,
+		COALESCE(C.MOHTQ,0) AS MOHTQ,
+		A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0) AS DOQTYSAQTYMOHTQ,
+		COALESCE(D.MNFCS,0) AS MNFCS,
+		COALESCE((A.DOQTY-A.SAQTY)*COALESCE(D.MNFCS,0),0) AS DSMPRICE,
+		<!-- 
+		(A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0))*COALESCE(D.MNFCS,0) AS DSMMNFCSPRICE
+		 -->
+		(A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0))*D.MNFCS AS DSMMNFCSPRICE
+	FROM 
+		${lib2}.BZZ500PF A
+		LEFT OUTER JOIN
+					(SELECT ITNBR, MOHTQ FROM ${lib1}.HM000PR WHERE HOUSE='1')B ON A.EXPNO=B.ITNBR
+		LEFT OUTER JOIN
+					(SELECT ITNBR, MOHTQ FROM ${lib1}.HM000PR WHERE HOUSE=
+						(SELECT TRIM(CTLDT) FROM ${lib1}.SC008PR WHERE DTANO='HAP')
+					)C ON A.EXPNO=C.ITNBR
+		LEFT OUTER JOIN 
+					(SELECT PRTNO, MNFCS FROM ${lib1}.F#D30PR) D ON A.EXPNO = D.PRTNO
+	WHERE
+		'SqlMap-MgntInfo.searchByImportInventory'='SqlMap-MgntInfo.searchByImportInventory'
+		AND A.COMPS = #{comps}
+		<if test = "expno != null and expno != ''">
+		AND A.EXPNO <![CDATA[>=]]> #{expno}
+		</if>
+		<if test = 'mohtqTf.equals("T")'>
+		AND (A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0) !=0 OR B.MOHTQ != 0)
+		</if>
+	ORDER BY A.EXPNO
+	</select>
+	<select id="searchByImportInventoryPop1" resultType="ImportInventoryPopDomain"  parameterType="ImportInventoryPopDomain">       
+	SELECT
+		A.COMPS, TRIM(A.EXPNO) AS EXPNO, TRIM(E.EXDSC) AS EXDSC, E.EXPHS, E.EXRTT, E.CARCD, TRIM(E.MSTSM) AS CARNM,
+		TRIM(G.VNDNR) AS VNDNR, TRIM(G.VNAME) AS VNAME, TRIM(E.PSPNO) AS PSPNO, E.EXRAT, F.BUYCD, F.BUYRM,
+		COALESCE(C.MOHTQ,0) AS D1, A.BAQTY-A.DOQTY AS D2, A.DOQTY-A.SAQTY AS D3,
+		COALESCE(B.MOHTQ,0) AS D4, A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0) AS D5, A.DOQTY-A.TOQTY AS D6,
+		COALESCE(H.M00QY,0) M00QY, COALESCE(H.M10QY,0) M10QY, COALESCE(H.M20QY,0) M20QY, COALESCE(H.M30QY,0) M30QY,
+		CASE WHEN COALESCE(H.M00QY,0) != 0 THEN DECIMAL((H.M00QY/24),9,3) ELSE 0 END SMDQY1,
+		CASE WHEN COALESCE(H.M00QY,0) != 0 THEN DECIMAL((A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0))/DECIMAL((H.M00QY/24),9,3),10,0) ELSE 0.000 END SMDDT1, 
+		CASE WHEN COALESCE(H.M00QY,0) != 0 AND  E.EXRTT != 0 THEN DECIMAL(((H.M00QY*E.EXRTT)/100),10,3) ELSE 0 END SMAQY1,
+		CASE WHEN COALESCE(H.M00QY,0) != 0 AND  E.EXRTT != 0 THEN DECIMAL(((H.M00QY*E.EXRTT)/100)/DECIMAL((H.M00QY/24),9,3),10,0) ELSE 0 END SMADT1,
+		CASE WHEN COALESCE(H.M00QY,0) != 0 THEN DECIMAL((A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0)),10,3) ELSE 0.000 END
+		-CASE WHEN COALESCE(H.M00QY,0) != 0 AND  E.EXRTT != 0 THEN DECIMAL((H.M00QY*E.EXRTT)/100,10,3) ELSE 0.000 END *1.000 SMCQY1,
+		CASE WHEN COALESCE(H.M00QY,0) != 0 THEN DECIMAL((A.DOQTY-A.SAQTY+COALESCE(B.MOHTQ,0))/DECIMAL((H.M00QY/24),9,3),10,0) ELSE 0 END 
+		-CASE WHEN COALESCE(H.M00QY,0) != 0 AND  E.EXRTT != 0 THEN DECIMAL(((H.M00QY*E.EXRTT)/100)/DECIMAL((H.M00QY/24),9,3),10,0) ELSE 0 END SMCDT1             
+	FROM
+		${lib2}.BZZ500PF A
+		LEFT OUTER JOIN (SELECT ITNBR, MOHTQ FROM ${lib1}.HM000PR WHERE HOUSE='1') B ON A.EXPNO=B.ITNBR
+		LEFT OUTER JOIN (SELECT ITNBR, MOHTQ FROM ${lib1}.HM000PR WHERE HOUSE=
+                          (SELECT TRIM(CTLDT) FROM ${lib1}.SC008PR WHERE DTANO='HAP')
+                  ) C ON A.EXPNO=C.ITNBR      
+         LEFT OUTER JOIN
+	                  (SELECT * FROM ${lib2}.BUY500PF A
+	                  LEFT OUTER JOIN (SELECT MSTCD, MSTSM FROM ${lib2}.MST050PF) F ON A.CARCD = F.MSTCD
+	                  ) E ON A.COMPS=E.COMPS AND A.EXPNO=E.EXPNO
+         LEFT OUTER JOIN (SELECT * FROM ${lib2}.BUY050PF WHERE BUYCO=#{comps}) F ON 'CAR'||E.CARCD=F.BUYCD
+         LEFT OUTER JOIN ${lib1}.VENNAM G ON E.PRVND=G.VNDNR
+         LEFT OUTER JOIN (SELECT * FROM ${lib2}.FRM100PF WHERE PLNYM=${startDate}) H ON A.EXPNO=H.PSPNO 
+	WHERE
+		'SqlMap-MgntInfo.searchByImportInventoryPop1'='SqlMap-MgntInfo.searchByImportInventoryPop1'
+		AND A.COMPS = #{comps}
+		<if test = "expno != null and expno != ''">
+		AND A.EXPNO = #{expno}
+		</if>   
+	ORDER BY A.EXPNO
+	</select>
+	<select id="searchByImportInventoryPop2" resultType="ImportInventoryPopDomain"  parameterType="ImportInventoryPopDomain">       
+	SELECT
+		A.ORDER ,A.DUDAT, A.ORQTY-COALESCE(B.PTQTY,0) ORQTY
+	FROM
+		${lib2}.BOM501LF A 
+		LEFT OUTER JOIN (SELECT
+							ORDER,COMPS,EXPNO,SUM(PTQTY) PTQTY
+						FROM
+							${lib2}.BAA102LF
+				        WHERE
+				        	COMPS = #{comps} AND EXPNO = #{expno}
+				        GROUP BY ORDER,COMPS,EXPNO
+        ) B ON A.ORDER=B.ORDER AND A.COMPS=B.COMPS AND A.EXPNO=B.EXPNO
+	WHERE
+		'SqlMap-MgntInfo.searchByImportInventoryPop2'='SqlMap-MgntInfo.searchByImportInventoryPop2'
+		AND A.COMPS = #{comps}
+		AND A.EXPNO = #{expno}
+		AND A.ORQTY != COALESCE(B.PTQTY,0)
+	</select>
+
+	<!-- 자재현재고 조회 창고별(A-PART포함) -->
+	<select id="searchByMaterialInventoryHouse" resultType="MaterialInventoryDomain"  parameterType="MaterialInventoryDomain">
+	SELECT 
+		TRIM(A.ITNBR) AS ITNBR, TRIM(B.ITDSC) AS ITDSC, A.HOUSE, B.ITTYP, B.ITCLS,
+		A.BEGIN, A.RECMO, A.ISSMO, A.ADJMO, A.MOHTQ, DECIMAL(A.MOHTQ*D.MNFCS) AMT
+	FROM ${lib1}.HM000PR A 
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.ITNBR = B.ITNBR  
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST100PF WHERE COMPS=#{comps}) C ON A.ITNBR = C.PRTNO 
+		LEFT OUTER JOIN ${lib1}.F#D30PR D ON A.ITNBR=D.PRTNO
+	WHERE
+		'SqlMap-MgntInfo.searchByMaterialInventoryHouse'='SqlMap-MgntInfo.searchByMaterialInventoryHouse'
+		<!-- 
+		 <if test="house == null and house == ''">
+		AND A.HOUSE IN (select SUBSTR(MAJCD,6,1) 
+			              from ${lib2}.mst040pf 
+ 					      where MAJCD like 'HOUSE%' AND COMPS=#{company})
+		</if>
+		<if test = "house != null and house != ''">
+		AND A.HOUSE  = #{house}
+		</if>
+		 -->
+		<choose>
+			<when test = "house != null and house != ''">
+			AND A.HOUSE  = #{house}
+			</when>
+			<otherwise>
+			AND A.HOUSE IN (select SUBSTR(MAJCD,6,1) 
+			              from ${lib2}.mst040pf 
+ 					      where MAJCD like 'HOUSE%' AND COMPS=#{company})
+			</otherwise>
+		</choose>
+		<if test = "prdcd != null and prdcd != ''">
+		AND C.PRDCD  = #{prdcd}
+		</if> 
+		<if test = "plann != null and plann != ''">
+		AND B.PLANN = #{plann}
+		</if> 
+		<if test = 'gubun.equals("1")'>
+		AND B.ITTYP != '1'
+		</if>
+		<if test = 'gubun.equals("2")'>
+		AND B.ITTYP = '9'
+		</if>
+		AND (BEGIN != 0 OR ISSMO != 0 OR RECMO != 0 OR ADJMO != 0 OR MOHTQ != 0)                           
+	ORDER BY A.ITNBR
+	</select>
+
+	<select id="searchByDwhCount" resultMap="DwhCount" parameterType="DataWarehouseFileDomain">
+	SELECT 
+		* 
+	FROM 
+		${lib2}.DWH000PF
+	WHERE 
+		'SqlMap-MgntInfo.searchByDwhCount'='SqlMap-MgntInfo.searchByDwhCount'
+		AND JOBFL=#{jobFileName}
+	ORDER BY JYYMM DESC 
+	FETCH FIRST 1 ROW ONLY
+	</select>
+	<!-- 자재재고현황  -->
+	<select id="searchByMaterialInventory" resultType="MaterialInventoryDomain"  parameterType="MaterialInventoryDomain">
+		<if test = 'jobFileName.equals("DWH151PF")'>
+			<include refid="materialInventoryDWH151PF"></include>
+		</if>
+		<if test = 'jobFileName.equals("DWH155PF")'>
+			<include refid="materialInventoryDWH155PF"></include>
+		</if>
+	</select>	
+	<!-- 자재재고현황 : 재고현황 -->
+	<sql id="materialInventoryDWH151PF">
+	SELECT 
+		A.HOUSE, A.PACKC, A.PRDCD, TRIM(A.PSPNO) AS PSPNO, TRIM(A.ITDSC) AS ITDSC, A.IMQQY, A.PRICE
+	FROM
+		${lib2}.${jobFileName} A
+	WHERE	
+		'SqlMap-MgntInfo.searchByMaterialInventory'='SqlMap-MgntInfo.searchByMaterialInventory'
+	ORDER BY A.PSPNO 
+	</sql>
+	<!-- 자재재고현황 : 자재입출고재고현황 -->
+	<sql id="materialInventoryDWH155PF">
+	SELECT 
+		A.COMPS, TRIM(A.PSPNO) AS PSPNO, TRIM(A.ITDSC) AS ITDSC, A.HOUSE, A.GUBUN, A.ITCLS1, A.ITCLS2, A.ITTYP, A.PLANN,
+		A.IMQ00, A.IMI12, A.IMO12, A.IMC12, A.IMQ12, A.DIF12, A.MNFCS
+	FROM
+		${lib2}.${jobFileName} A
+	WHERE	
+		'SqlMap-MgntInfo.searchByMaterialInventory'='SqlMap-MgntInfo.searchByMaterialInventory'
+	ORDER BY A.COMPS, A.PSPNO 
+	</sql>
+
+	<!-- 제품재고금액조회(차종별/득의선별)  -->
+	<select id="searchByProductInventoryCost" resultType="ProductInventoryDomain"  parameterType="ProductInventoryDomain">
+		<if test = 'jobName.equals("car")'>
+			<include refid="productInventoryCostCar"></include>
+		</if>
+		<if test = 'jobName.equals("customer")'>
+			<include refid="productInventoryCostCustomer"></include>
+		</if>
+	</select>
+	<!-- 제품재고금액조회 : 차종별 -->
+	<sql id="productInventoryCostCar">
+	SELECT
+		A.CUSNO, TRIM(C.CUSNM) AS CUSNM, A.CARCD, TRIM(A.MSTSM) AS CARNM, A.HOUSE, SUM(A.MOHTQ) AS MOHTQ, SUM(A.MOHTQ * B.PRICE) AS AMT
+	FROM(
+		SELECT  D.CARCD, F.MSTSM, A.ITNBR, C.HOUSE, C.MOHTQ, COALESCE(G.CUSNO,0) CUSNO
+		FROM ${lib1}.BM008PR A
+		LEFT OUTER JOIN ${lib1}.HM000PR C ON A.ITNBR = C.ITNBR
+		LEFT OUTER JOIN (select * from ${lib2}.MST100PF where COMPS = #{comps}) D ON A.ITNBR = D.PRTNO
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') F ON D.CARCD = F.MSTCD
+		LEFT OUTER JOIN (SELECT Y.PRTNO, MAX(Y.CUSNO) CUSNO FROM ${lib1}.em000pr Y 
+						  where Y.edatm = (select MAX(X.edatm) 
+						                    from ${lib1}.em000pr x
+						                    where Y.prtno=x.prtno
+						                          and x.EDATM <![CDATA[<=]]> #{startDate})
+						 GROUP BY Y.PRTNO) G ON A.ITNBR=G.PRTNO 
+		WHERE
+		(A.ITTYP='1' OR A.ITTYP='9')
+		AND C.MOHTQ != 0
+		AND  SUBSTR(A.ITCLS,2)='1'
+		<if test = 'house.equals("0")'>
+		AND C.HOUSE IN (select SUBSTR(MAJCD,6,1) from ${lib2}.mst040pf where MAJCD like 'HOUSE%' AND COMPS=#{company})
+		</if>
+		<if test = '!house.equals("0")'>
+		AND C.HOUSE  = #{house}
+		</if>	
+	) A
+	LEFT OUTER JOIN(SELECT A.CUSNO, A.PRTNO, A.EDATM, B.PRICE
+	                  FROM    (SELECT  CUSNO, PRTNO, MAX(EDATM) AS EDATM
+	                          FROM     ${lib1}.EM001PR
+	                          WHERE EDATM <![CDATA[<=]]> #{startDate}
+	                          GROUP BY CUSNO, PRTNO
+	                          ORDER BY CUSNO, PRTNO
+	                  ) A
+	                  LEFT OUTER JOIN ${lib1}.EM001PR B ON A.CUSNO = B.CUSNO AND A.PRTNO = B.PRTNO AND A.EDATM = B.EDATM
+	                  ) B ON A.ITNBR = B.PRTNO and a.cusno=b.cusno
+	LEFT OUTER JOIN (SELECT A.CUSNO, A.CUSNM FROM ${lib1}.CUSMAS A) C ON A.CUSNO = C.CUSNO
+	GROUP BY A.CUSNO, C.CUSNM, A.CARCD, A.MSTSM, A.HOUSE
+	ORDER BY A.CUSNO, A.CARCD
+	</sql>
+	<!-- 제품재고금액조회 : 득의선별 -->
+	<sql id="productInventoryCostCustomer">
+	SELECT
+		A.CUSNO, C.CUSNM, A.HOUSE, SUM(A.MOHTQ) AS MOHTQ , SUM(A.MOHTQ * B.PRICE) AS AMT
+	FROM
+		(SELECT
+			D.CARCD, F.MSTSM, A.ITNBR, C.HOUSE, C.MOHTQ, COALESCE(G.CUSNO,0) CUSNO
+		         FROM
+					${lib1}.BM008PR A
+					LEFT OUTER JOIN ${lib1}.HM000PR C ON A.ITNBR = C.ITNBR
+					LEFT OUTER JOIN (select * from ${lib2}.MST100PF where COMPS = #{comps}) D ON A.ITNBR = D.PRTNO
+					LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') F ON D.CARCD = F.MSTCD
+					LEFT OUTER JOIN (SELECT Y.PRTNO,MAX(Y.CUSNO) CUSNO FROM ${lib1}.em000pr Y 
+						                   where Y.edatm = (select MAX(X.edatm) 
+						                                    from ${lib1}.em000pr x
+						                                    where Y.prtno=x.prtno
+						                                    and x.EDATM <![CDATA[<=]]> #{startDate})
+						                   GROUP BY Y.PRTNO
+						            ) G ON A.ITNBR=G.PRTNO
+		WHERE 
+		(A.ITTYP = '1' 
+		<if test = 'ittyp.equals("1")'>
+		OR A.ITTYP = '9'
+		</if>                         
+		)
+		AND C.MOHTQ != 0
+		AND SUBSTR(A.ITCLS,2)='1'
+		ORDER BY D.CARCD
+		)A
+		LEFT OUTER JOIN (SELECT A.CUSNO, A.PRTNO, A.EDATM, B.PRICE FROM
+							(SELECT  CUSNO, PRTNO, MAX(EDATM) AS EDATM FROM ${lib1}.EM001PR
+		                          WHERE EDATM <![CDATA[<=]]> #{startDate}
+		                          GROUP BY CUSNO, PRTNO
+		                          ORDER BY CUSNO, PRTNO
+		                     )A
+		                 LEFT OUTER JOIN ${lib1}.EM001PR B ON A.CUSNO = B.CUSNO AND A.PRTNO = B.PRTNO AND A.EDATM = B.EDATM
+		                  ) B ON A.ITNBR = B.PRTNO and a.cusno=b.cusno
+		         LEFT OUTER JOIN (SELECT A.CUSNO, A.CUSNM FROM ${lib1}.CUSMAS A) C ON A.CUSNO = C.CUSNO
+	WHERE
+		A.HOUSE IN (select SUBSTR(MAJCD,6,1) from ${lib2}.mst040pf where MAJCD like 'HOUSE%' AND MJCHR=#{comps})
+	GROUP BY A.CUSNO, C.CUSNM, A.HOUSE
+	ORDER BY A.CUSNO, A.HOUSE
+	</sql>
+	
+	<!-- [생산정보]월폐기현황 -->
+	<select id="searchByMaterialWaste" resultType="MaterialWasteDomain"  parameterType="MaterialWasteDomain">
+	SELECT 
+		PACKC, COMPS, TRIM(PRTNO) AS PRTNO, TRIM(ITDSC) AS ITDSC, HOUSE, TRNDT, BADQY, SLPNO, REASN, QTYCD, TRQTY, SUCCD, ITTYP, ITCLS, MNFCS	
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByMaterialWaste'='SqlMap-MgntInfo.searchByMaterialWaste'
+	ORDER BY PACKC, COMPS, PRTNO
+	</select>
+	<!-- [생산정보]월SCRAP TICKET -->
+	<select id="searchByMaterialScrapTicket" resultType="MaterialWasteDomain"  parameterType="MaterialWasteDomain">
+	SELECT 
+		PACKC, TRIM(PRTNO) AS PRTNO, TRIM(ITDSC) AS ITDSC, HOUSE, TRNDT, SLPNO, REASN, QTYCD, TRQTY, SUCCD, ITTYP, ITCLS, MNFCS
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByMaterialScrapTicket'='SqlMap-MgntInfo.searchByMaterialScrapTicket'
+	ORDER BY PACKC, PRTNO 
+	</select>
+	<!-- [생산정보]저장품출고현황 -->
+	<select id="searchBySupplyShipping" resultType="SupplyShippingDomain"  parameterType="SupplyShippingDomain">
+		<if test = 'jobFileName.equals("DWH201PF")'>
+			<include refid="supplyShippingAll"></include>
+		</if>
+		<if test = 'jobFileName.equals("DWH202PF")'>
+			<include refid="supplyShippingHs"></include>
+		</if>
+	</select>
+	<sql id="supplyShippingAll">
+	SELECT
+		COMPS, ISIJP, ISDPT, DPCONM, ISIDT, ISICL, ISIPN, SMONM, SMOBD, ISADT, ISTIM, CHLQY, RPIST, CHLAM, OPMCU, OPOBJ, OPSUB, GMDL0
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchBySupplyShipping'='SqlMap-MgntInfo.searchBySupplyShipping'
+	</sql>
+	<sql id="supplyShippingHs">
+	SELECT
+		ISICL, ISIPN, SMONM, ISIJP, ISDPT, ISIDT, CHLAM	
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchBySupplyShipping'='SqlMap-MgntInfo.searchBySupplyShipping'
+	</sql>
+	<!-- [생산정보]WIP REPORT -->
+	<select id="searchByWipReport" resultType="WipReportDomain"  parameterType="WipReportDomain">
+	SELECT
+		TRIM(ITNBR) AS ITNBR, TRIM(ITDSC) AS ITDSC, ITTYP, ITCLS, PACKC, PLANN, MNFCS,
+		D0BFJ, D0INP, D0OUT, D0BAD, D1BFJ, D1INP, D1OUT, D1BAD, D2BFJ, D2INP, D2OUT, D2BAD,
+		D3BFJ, D3INP, D3OUT, D3BAD, D4BFJ, D4INP, D4OUT, D4BAD, D5BFJ, D5INP, D5OUT, D5BAD
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByWipReport'='SqlMap-MgntInfo.searchByWipReport'
+	</select>
+	<!-- [생산정보]생산실적현황 -->
+	<select id="searchByProductionRecord" resultType="ProductionRecordDomain"  parameterType="ProductionRecordDomain">
+	SELECT 
+		PRDCD, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC, PRTQY, PRTAM, PRTCS
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByProductionRecord'='SqlMap-MgntInfo.searchByProductionRecord'
+	</select>
+	<!-- [생산정보]제품입출고현황 -->
+	<select id="searchByProductShippingReceiving" resultType="ProductShippingReceivingDomain"  parameterType="ProductShippingReceivingDomain">
+	SELECT 
+		COMPS, PSPNO, ITDSC, HOUSE, GUBUN, ITCLS1, ITCLS2, ITTYP, PLANN, IMI12, IMO12, IMC12, IMQ12, DIF12, MNFCS, PRICE
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByProductShippingReceiving'='SqlMap-MgntInfo.searchByProductShippingReceiving'
+	</select>
+	
+	<!-- [판매정보]월출하지시현황 -->
+	<select id="searchByMonthlyShippingList" resultType="MonthlyShippingListDomain"  parameterType="MonthlyShippingListDomain">
+	SELECT 
+		TRKNO, CUSNO, SHPNO, CUSNM, SHPDT, PRFLG
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.MonthSalesPlan'='SqlMap-MgntInfo.MonthSalesPlan'
+	</select>
+	
+	<!-- [판매정보]월판매계획현황 -->
+	<select id="searchByMonthlySalesPlan" resultType="MonthlySalesPlanDomain"  parameterType="MonthlySalesPlanDomain">
+	SELECT 
+		ITTYP, ITCLS, PYVND, TRIM(CUSNM) AS CUSNM, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC,
+		SM0QY, SM1QY, SM2QY, SM3QY, SM4QY, SM5QY, SM0AM, SM1AM, SM2AM, SM3AM, SM4AM, SM5AM
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.MonthSalesPlan'='SqlMap-MgntInfo.MonthSalesPlan'
+	</select>
+	
+	<!-- [판매정보]정산현황 -->
+	<select id="searchByAccountSituation" resultType="AccountSituationDomain"  parameterType="AccountSituationDomain">
+	SELECT 
+		GUBUN, COMPS, PYVND, TRIM(CUSNM) AS CUSNM, ITCLS, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC, TAXQY, TAXCS, TAXAM	
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.yAccountSituation'='SqlMap-MgntInfo.yAccountSituation'
+	ORDER BY GUBUN, COMPS, PYVND
+	</select>
+	
+	<!-- [판매정보]가매출CheckList -->
+	<select id="searchByFakeSalesCheckList" resultType="FakeSalesCheckListDomain"  parameterType="FakeSalesCheckListDomain">
+	SELECT 
+		COMPS, PYVND, TRIM(CUSNM) AS CUSNM, ITCLS, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC,
+		SALCT, REASN, BFQTY, BFAMT, SLQTY, SLAMT, STQTY, STAMT
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByFakeSalesCheckList'='SqlMap-MgntInfo.searchByFakeSalesCheckList'
+	</select>
+		<!-- [판매정보]년제품출하현황(월별) -->
+	<select id="searchByYearlyProductShipping"  resultType="java.util.HashMap" parameterType="YearlyProductShippingDomain">
+	<if test = 'comps.equals("E1")'>
+			<include refid="yearlyProductShippingKE"></include>
+		</if>
+		<if test = '!comps.equals("E1")'>
+			<include refid="yearlyProductShippingKA"></include>
+		</if>
+	</select>
+	<sql id="yearlyProductShippingKE">
+	SELECT
+		SUBSTR(B.ITCLS,1,1) AS ITCLS, A.PYVND, TRIM(D.CUSNM) AS CUSNM, C.CARCD, E.MSTRM, TRIM(B.ITDSC) AS ITDSC, ${sqlCode} A.PSPNO
+		FROM
+		${lib2}.SMD110PF A 
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST100PF ) C ON A.PSPNO=C.PRTNO
+		LEFT OUTER JOIN ${lib1}.CUSMAS D ON A.PYVND=D.CUSNO 
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE GRPCD='CAR') E ON C.CARCD=E.MSTCD  
+	WHERE
+		SUBSTR(A.JPSDT,1,6) BETWEEN #{startDate} AND #{endDate}
+		AND A.SATYP NOT IN ('61','71')
+		<if test = "comps != null and comps != ''">
+		AND A.COMPS = #{comps}
+		</if> 
+	GROUP BY SUBSTR(B.ITCLS,1,1), A.PYVND, D.CUSNM, C.CARCD, E.MSTRM, B.ITDSC, A.PSPNO
+	ORDER BY ITCLS, A.PYVND, C.CARCD, A.PSPNO
+	</sql>
+	<sql id="yearlyProductShippingKA">
+	SELECT  
+		SUBSTR(B.ITCLS,1,1) AS ITCLS, A.PSPNO, TRIM(B.ITDSC) AS ITDSC, A.PYVND, TRIM(E.CUSNM) AS CUSNM, 
+		${sqlCode} A.PCOST 
+	FROM
+		${lib2}.SMD110PF A 
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR
+		LEFT OUTER JOIN ${lib1}.CUSMAS E ON A.PYVND = E.CUSNO
+	WHERE
+		SUBSTR(A.JPSDT,1,6) BETWEEN #{startDate} AND #{endDate}
+		AND A.SATYP NOT IN ('61','71')
+		<if test = "comps != null and comps != ''">
+		AND A.COMPS = #{comps}
+		</if> 
+	GROUP BY SUBSTR(B.ITCLS,1,1), A.PSPNO, B.ITDSC, A.PYVND,E.CUSNM, A.PCOST
+	ORDER BY ITCLS, A.PSPNO
+	</sql>
+
+	<!-- [판매정보]출하매출현황 -->
+	<select id="searchByShippingSales" resultType="ShippingSalesDomain"  parameterType="ShippingSalesDomain">
+	SELECT 
+		COMPS, PYVND, TRIM(CUSNM) AS CUSNM, PRDCD, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC, 
+		TRIM(CPRTN) AS CPRTN, TRIM(CPDSC) AS CPDSC, ITTYP, ITCLS, CARCD, MSTSM, MSTRM,
+		JPSQY, JPSAM, STRTAM, ETRTAM, BUGAAM, EDATM, PRICE, IORDT, IALYR, IDISR, IQTYP, IFRDT
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.ShippingSales'='SqlMap-MgntInfo.ShippingSales'
+		<if test = "comps != null and comps != ''">
+		AND COMPS = #{comps}
+		</if> 
+	</select>
+
+	<!-- [판매정보]영업출하현황(재료비) -->
+	<select id="searchByBusinessShippingMaterial" resultType="BusinessShippingMaterialDomain"  parameterType="BusinessShippingMaterialDomain">
+	SELECT 
+		ITCLS, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC, CARCD, TRIM(MSTRM) AS MSTRM, PYVND, TRIM(CUSNM) AS CUSNM, EDATM, 
+		PRICE, JPSQY, JPSAM, KRSUR, SURKR, SURUS, SURJP, SURUR, KRPUR, KRCKD, CKDUS, CKDJP, CKDUR, CKDKR
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.BusinessShippingMaterial'='SqlMap-MgntInfo.BusinessShippingMaterial'
+	</select>
+	
+	<!-- [판매정보]영업출하현황 -->
+	<select id="searchByBusinessShipping" resultType="BusinessShippingDomain"  parameterType="BusinessShippingDomain">
+	SELECT 
+		ITCLS, TRIM(PSPNO) AS PSPNO, TRIM(ITDSC) AS ITDSC, PYVND, TRIM(CUSNM) AS CUSNM, PCOST, JPSQY, JPSAM
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.BusinessShipping'='SqlMap-MgntInfo.BusinessShipping'
+	</select>
+	
+
+	<!-- [경영정보] 적상CheckList -->
+	<select id="searchByMonthlyShipmentCheckList" resultType="MonthlyShipmentCheckDomain"  parameterType="MonthlyShipmentCheckDomain">
+	SELECT
+		A.PINBR, A.USRS1, A.CINBR, A.USRS2, A.EDATM, A.EDATO, A.MDATE, A.QTYPR, B.UNMSR
+	FROM
+		${lib1}.BM010PR A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.CINBR=B.ITNBR 
+	WHERE
+		'SqlMap-MgntInfo.searchByMonthlyShipmentCheckList'='SqlMap-MgntInfo.searchByMonthlyShipmentCheckList'
+		AND B.UNMSR='KG' AND A.QTYPR>=1
+	</select>
+	
+	<select id="searchByDomesticPurchasePriceList" resultType="DomesticPurchasePriceListDomain"  parameterType="DomesticPurchasePriceListDomain">
+	SELECT
+		SUBSTR(A.ITCLS,1,1) AS ITCLS, TRIM(A.VNDNR) AS VNDNR, TRIM(A.PSPNO) AS PSPNO, TRIM(B.ITDSC) AS ITDSC,
+		 A.TRNDT, A.TRQTY, A.TRFOT, A.TRCST
+	FROM
+		${lib2}.BID100PF A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR
+		INNER JOIN (
+			SELECT  PRVNDR, PRITNO FROM ${lib2}.BID500PF
+			WHERE
+				PRFRDT <![CDATA[<=]]> #{endDate}
+				AND PRTODT <![CDATA[>=]]> #{startDate}
+				AND PREXCH = 'KW'
+			GROUP BY PRVNDR, PRITNO
+			HAVING MAX(PRPRDV) <![CDATA[<>]]> MIN(PRPRDV)
+		) C ON A.VNDNR = C.PRVNDR AND A.PSPNO = C.PRITNO
+	WHERE
+		'SqlMap-MgntInfo.searchByDomesticPurchasePriceList'='SqlMap-MgntInfo.searchByDomesticPurchasePriceList'
+		AND A.TRNDT BETWEEN #{startDate} AND #{endDate}
+	ORDER BY A.VNDNR, A.PSPNO, A.TRNDT
+	</select>
+	
+	<select id="searchByOceanListSalesRevenue" resultType="OceanListSalesRevenueDomain"  parameterType="OceanListSalesRevenueDomain">
+	SELECT 
+		COMPS, HOUSE, PRDDV, PRDDD, PYVND, PSPNO, JPSQY1, JPSAM1, JPSQY2, JPSAM2, ADDNO, PRLI1, PRLI2, PRTNO,
+		ODATE, INVCT, PRLCD, EDATE, MNFCS, DIRCS, DIRMC, RMATL, RMATI, RMIMC, PURCL, PURCI, PPIMC, LABCS, DEPCS, MFEXP, DIECS, MOHCS
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByOceanListSalesRevenue'='SqlMap-MgntInfo.searchByOceanListSalesRevenue'
+	</select>	
+	
+	<select id="searchByImportsTrade" resultType="ImportsTradeDomain"  parameterType="ImportsTradeDomain">
+	SELECT 
+		PRMRKE, HOUSEE, INVCTE, PRDDVE, CREAXE, REFFRE, PRTNOE, ODATEE, QUANTE, CURCDE, PRICEE, SCOSTE
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByImportsTrade'='SqlMap-MgntInfo.searchByImportsTrade'
+	</select>
+	
+	<!-- [경영정보]일조및로컬수입입고내역 -->
+	<select id="searchByImportDressingHistory"  resultType="ImportDressingHistoryDomain"  parameterType="ImportDressingHistoryDomain">
+		<if test = 'jobName.equals("summary")'>
+			<include refid="importDressingHistorySummary"></include>
+		</if>
+		<if test = 'jobName.equals("detail")'>
+			<include refid="importDressingHistoryDetail"></include>
+		</if>
+	</select>
+	<sql id="importDressingHistorySummary">
+	SELECT
+		A.VNDNR, C.VNAME, SUPGU, PSPNO, B.ITDSC, B.ITTYP, B.ITCLS, A.UNMSR, CRCYW, SUM(TRQTY) AS TRQTY, SUM(TRAMT) AS TRAMT
+	FROM
+		${lib2}.BID100PF A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR
+		LEFT OUTER JOIN ${lib1}.VENNAM  C ON A.VNDNR = C.VNDNR
+	WHERE
+		'SqlMap-MgntInfo.searchByImportDressingHistory'='SqlMap-MgntInfo.searchByImportDressingHistory'
+		AND TRNDT BETWEEN #{startDate} AND #{endDate}
+		AND SUPGU <![CDATA[>=]]> '02'
+	GROUP BY A.VNDNR, C.VNAME, SUPGU, PSPNO, B.ITDSC, B.ITTYP, B.ITCLS, A.UNMSR, CRCYW
+	ORDER BY PSPNO, ITCLS
+	
+	</sql>
+	<sql id="importDressingHistoryDetail">
+	SELECT 
+		A.VNDNR, C.VNAME, SUPGU, PSPNO, B.ITDSC, B.ITTYP, B.ITCLS, A.UNMSR, TRNDT, TRCST, STCST, CRCYW, TRQTY, TRAMT
+	FROM
+		${lib2}.BID100PF A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR
+		LEFT OUTER JOIN ${lib1}.VENNAM  C ON A.VNDNR = C.VNDNR
+	WHERE
+		'SqlMap-MgntInfo.searchByImportDressingHistory'='SqlMap-MgntInfo.searchByImportDressingHistory'
+		AND TRNDT BETWEEN #{startDate} AND #{endDate}
+		AND SUPGU <![CDATA[>=]]> '02'
+	ORDER BY PSPNO, TRNDT
+	</sql>
+	
+	<select id="searchByMonthlyImportsProduct" resultType="MonthlyImportsProductDomain"  parameterType="MonthlyImportsProductDomain">
+			SELECT
+                '현조' AS KUBUN,SUBSTR(G.ITCLS,1,1) CC, A.PSPNO , E.ITDSC, G.ITTYP, G.ITCLS, 
+                A.JPSQY, B.CPANO, SUBSTR(e.ITCLS,1,1) EE, E.ITTYP, E.ITCLS, B.QTYPR, B.EDATM,
+                B.EDATO, C.DPG1S1, C.VCNTR, D.MNFCS, A.JPSQY*B.QTYPR AA, (A.JPSQY*B.QTYPR)*D.MNFCS BB, F.CRCYE, F.PRCEE						
+			FROM
+				(SELECT PSPNO,SUM(JPSQY) JPSQY FROM PSCDBLIB.SMD110PF WHERE JPSDT BETWEEN #STARTDATE# AND #ENDDATE# GROUP BY PSPNO) A
+				LEFT OUTER JOIN (SELECT * FROM ${lib1}.BD040PR UNION ALL SELECT * FROM $LIB1$.BD463PR) B ON A.PSPNO=B.PPANO
+				LEFT OUTER JOIN 
+				(SELECT A.DPPRTN,A.DPG1S1,B.VCNTR FROM ${lib1}.BM400PR A LEFT OUTER JOIN $LIB1$.VENNAM B ON A.DPG1S1=B.VNDNR) C ON B.CPANO=C.DPPRTN
+				LEFT OUTER JOIN ${lib1}.$TABLE$ D ON B.CPANO=D.PRTNO
+				LEFT OUTER JOIN ${lib1}.BM008PR E ON B.CPANO=E.ITNBR
+				LEFT OUTER JOIN 
+				(SELECT
+					PRTNO,SPCOD,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN crcy3	
+				         WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN crcy2
+        				 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN crcy1 END AS CRCYE,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN PRCE3	
+       				     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN PRCE2			
+				  		 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN PRCE1 END AS PRCEE
+			  	 FROM ${lib1}.CM001PR WHERE PRCLS='1'
+				) F ON B.CPANO=F.PRTNO AND C.DPG1S1=F.SPCOD
+				LEFT OUTER JOIN ${lib1}.BM008PR G ON A.PSPNO=G.ITNBR
+			WHERE
+				C.VCNTR != ' ' AND C.VCNTR != 'KR'
+			UNION ALL
+			SELECT
+				'일조' AS KUBUN,SUBSTR(G.ITCLS,1,1) CC, A.PSPNO , E.ITDSC, G.ITTYP, G.ITCLS, 
+                A.JPSQY, B.CPANO, SUBSTR(e.ITCLS,1,1) EE, E.ITTYP, E.ITCLS, B.QTYPR, B.EDATM,
+                B.EDATO, C.DPG1S1, C.VCNTR, D.MNFCS, A.JPSQY*B.QTYPR AA, (A.JPSQY*B.QTYPR)*D.MNFCS BB, F.CRCYE, F.PRCEE	
+			FROM
+				(SELECT PSPNO,SUM(JPSQY) JPSQY FROM PSCDBLIB.SMD110PF WHERE JPSDT BETWEEN #STARTDATE# AND #ENDDATE# GROUP BY PSPNO) A
+				LEFT OUTER JOIN (SELECT * FROM ${lib1}.BD040PR UNION ALL SELECT * FROM ${lib1}.BD463PR) B ON A.PSPNO=B.PPANO
+				LEFT OUTER JOIN 
+				(SELECT A.DPPRTN,A.DPG1S1,B.VCNTR FROM ${lib1}.BM400PR A LEFT OUTER JOIN ${lib1}.VENNAM B ON A.DPG1S1=B.VNDNR) C ON B.CPANO=C.DPPRTN
+				LEFT OUTER JOIN ${lib1}.$TABLE$ D ON B.CPANO=D.PRTNO
+				LEFT OUTER JOIN ${lib1}.BM008PR E ON B.CPANO=E.ITNBR
+				LEFT OUTER JOIN 
+				(SELECT				
+					X.*			
+				FROM				
+					(SELECT			
+						A.*,ROWNUMBER() OVER (PARTITION BY A.PRTNO ORDER BY A.EDAT DESC,A.SPCOD DESC) AS ROWNUM		
+					 FROM			
+						(SELECT		
+							PRTNO,SPCOD,	
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN resn3	
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN resn2
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN resn1
+							END AS RESN,	
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN crcy3	
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN crcy2
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN crcy1			
+							END AS CRCYE,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN PRCE3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN PRCE2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN PRCE1			
+							END AS PRCEE,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN EDAT3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN EDAT2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN EDAT1			
+							END AS EDAT,				
+							CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]>#SELECTDATE# THEN TEMP3				
+								 WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]>#SELECTDATE# THEN TEMP2			
+								 WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]>#SELECTDATE# THEN TEMP1			
+							END AS TEMP,				
+							SPPNO,MDATE				
+						FROM					
+							${lib1}.CM001PR				
+						WHERE					
+							PRCLS='1'				
+						) A					
+					)X						
+				WHERE					
+					X.ROWNUM=1			
+				) F ON B.CPANO=F.PRTNO			
+				LEFT OUTER JOIN ${lib1}.BM008PR G ON A.PSPNO=G.ITNBR			
+				LEFT OUTER JOIN ${lib1}.BM012PR H ON B.CPANO=H.PSPART			
+			WHERE			
+			H.PSPART IS NOT NULL
+	</select>
+	<select id="searchByMonthlyDivisionRatio" resultType="MonthlyDivisionRatioDomain"  parameterType="MonthlyDivisionRatioDomain">
+	SELECT 
+		GLMCU, MCDC, GLOBJ, GLSUB, GMDL01, GLDCT, GLDGJ, GLICU, GLSBL, GLSBLT, GLAA, GLEXA, GLEXR
+	FROM
+		${lib2}.${jobFileName}
+	WHERE	
+		'SqlMap-MgntInfo.searchByMonthlyDivisionRatio'='SqlMap-MgntInfo.searchByMonthlyDivisionRatio'
+	</select>
+	
+	<select id="searchByDailyDepartmentCost" resultType="DailyDepartmentCostDomain"  parameterType="DailyDepartmentCostDomain">
+	<!-- 
+	SELECT 
+		a.glmcu BusinessUnit, b.mcdc BusinessUnitName, 
+		a.globj ObjectAccount, 
+		a.glsub Subsidiary, c.gmdl01 SubsidiaryName, 
+		a.gldct DocumentType, 
+		a.gldgj JulianGLDate, 
+		CAST(CAST( ((CAST( (a.GLDGJ - MOD(a.GLDGJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(a.GLDGJ, 1000) AS CHAR(7)) AS DATE) AS GLDate,
+		//a.glicu BatchNumber, 
+		a.glsbl Subledger, 
+		a.glsblt SubledgerType, 
+		a.glaa Amount, 
+		a.glexa NameAlpha, 
+		a.glexr Remark,
+		//a.GLDICJ JulianBatchDate, 
+		CAST(CAST( ((CAST( (a.GLDICJ - MOD(a.GLDICJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(a.GLDICJ, 1000) AS CHAR(7)) AS DATE) AS BatchDate
+	FROM 
+		cltdta.f0911 a
+	   LEFT OUTER JOIN cltdta.f0006lb b ON a.glmcu = b.mcmcu
+	   LEFT OUTER JOIN cltdta.f0901 c ON a.glmcu = c.gmmcu AND a.globj = c.gmobj AND a.glsub = c.gmsub
+	WHERE 
+		a.globj BETWEEN  '90000'  AND  '99999' 
+	   AND a.glpost =  'P'             
+	   AND a.gllt = 'AA'            
+	   AND a.glpn = 12      // 3월
+	   AND a.glfy = 18      //2019년    
+	 ORDER BY a.glsbl , a.glsblt
+	 -->
+	SELECT 
+		A.GLMCU, <!-- B.MCDC,  : 2021.05.06 --> B.MCDL01 AS MCDC,
+		A.GLOBJ, 
+		A.GLSUB, C.GMDL01, 
+		A.GLDCT, 
+		A.GLDGJ, 
+		CAST(CAST( ((CAST( (A.GLDGJ - MOD(A.GLDGJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(A.GLDGJ, 1000) AS CHAR(7)) AS DATE) AS GLDATE,
+		A.GLSBL, 
+		A.GLSBLT, 
+		A.GLAA, 
+		A.GLEXA, 
+		A.GLEXR,
+ 		CAST(CAST( ((CAST( (A.GLDICJ - MOD(A.GLDICJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(A.GLDICJ, 1000) AS CHAR(7)) AS DATE) AS BATCHDATE
+	FROM 
+		CLTDTA.F0911 A
+		LEFT OUTER JOIN CLTDTA.F0006LB B ON A.GLMCU = B.MCMCU
+		LEFT OUTER JOIN CLTDTA.F0901 C ON A.GLMCU = C.GMMCU AND A.GLOBJ = C.GMOBJ AND A.GLSUB = C.GMSUB
+	WHERE 
+		'SqlMap-MgntInfo.searchByDailyDepartmentCost'='SqlMap-MgntInfo.searchByDailyDepartmentCost'
+		AND A.GLOBJ BETWEEN  '90000'  AND  '99999' 
+		AND A.GLPOST =  'P'             
+		AND A.GLLT = 'AA'            
+		AND A.GLPN = ${pMonth}     <!--  // 3월 -->
+		AND A.GLFY = ${pYear}     <!--  //2019년     -->
+	ORDER BY A.GLSBL , A.GLSBLT
+	</select>
+	
+	<select id="searchByDupPartCheck" resultType="DuplicationPartDomain"  parameterType="DuplicationPartDomain">
+		SELECT  COUNT(SLPNO) AS DUPLICATION_COUNT, TCODE, TRNNO, TAGCD, INSNO, PRTNO, HOUSE, TRNDT, QTYCD, TRQTY, SUCCD, SLPNO, 
+			NGDCD, REASN, PRICE, CURCY, PURUM, UMCNV, ITCLS, CLSNO, CPRNO,DUEDT, ORQTY, PDTZ6,  DEVID, TERNO, SRADR, LINID  
+		FROM ${lib1}.HD001PR 
+		WHERE TCODE= 'RC' AND QTYCD = '1' AND TRNNO='06' 
+		GROUP BY TCODE, TRNNO, TAGCD, INSNO, PRTNO, HOUSE, TRNDT, QTYCD, TRQTY, SUCCD, SLPNO, NGDCD, REASN, PRICE, CURCY, PURUM, 
+			      UMCNV, ITCLS, CLSNO, CPRNO,DUEDT, ORQTY, PDTZ6,  DEVID, TERNO, SRADR, LINID  
+		HAVING COUNT(SLPNO) >= 2 
+	</select>
+	
+	<select id="searchByHvacSpool" resultType="HvacSpoolDomain"  parameterType="HvacSpoolDomain">
+		<!-- 전체 조회 -->
+		<!-- <if test = 'searchKubun.equals("total")'>
+			<include refid="performanceList"></include>
+			UNION ALL
+			<include refid="shipmentList"></include>
+		</if> -->
+		<!-- 실적 조회 -->
+		<!-- <if test = 'searchKubun.equals("shipment")'>
+			<include refid="performanceList"></include>
+		</if> -->
+		<!-- 출하 조회 -->
+		<!-- <if test = 'searchKubun.equals("performance")'>
+			<include refid="shipmentList"></include>
+		</if> -->
+		
+		<!--  
+		SELECT X.* FROM 
+		(
+		SELECT 
+			'출하' AS KUBUN,
+			COMPS, A.ITCLS, PSPNO, ITDSC, SUM(B.MOHTQ) AS MOHTQ,
+			JPQY01+ JPQY02+ JPQY03+ JPQY04+ JPQY05+ JPQY06+ JPQY07+ JPQY08+ JPQY09+ JPQY10+
+			JPQY11+ JPQY12+ JPQY13+ JPQY14+ JPQY15+ JPQY16+ JPQY17+ JPQY18+ JPQY19+ JPQY20+
+			JPQY21+ JPQY22+ JPQY23+ JPQY24+ JPQY25+ JPQY26+ JPQY27+ JPQY28+ JPQY29+ JPQY30+
+			JPQY31 MSUM,
+			JPQY01, JPQY02, JPQY03, JPQY04, JPQY05, JPQY06, JPQY07, JPQY08, JPQY09, JPQY10,
+			JPQY11, JPQY12, JPQY13, JPQY14, JPQY15, JPQY16, JPQY17, JPQY18, JPQY19, JPQY20,
+			JPQY21, JPQY22, JPQY23, JPQY24, JPQY25, JPQY26, JPQY27, JPQY28, JPQY29, JPQY30,
+			JPQY31
+		FROM 
+			${lib2}.FGP580PF A
+			LEFT OUTER JOIN ${lib1}.HM000PR B ON A.PSPNO = B.ITNBR 
+		WHERE COMPS = #{comps}
+		AND FRHYM = #{searchDate}
+		GROUP BY COMPS, A.ITCLS, PSPNO, ITDSC,JPQY01, JPQY02, JPQY03, JPQY04, JPQY05, JPQY06, JPQY07, JPQY08, JPQY09, JPQY10,
+			JPQY11, JPQY12, JPQY13, JPQY14, JPQY15, JPQY16, JPQY17, JPQY18, JPQY19, JPQY20,
+			JPQY21, JPQY22, JPQY23, JPQY24, JPQY25, JPQY26, JPQY27, JPQY28, JPQY29, JPQY30,JPQY31
+			UNION ALL
+		SELECT 		
+				'실적' AS KUBUN,
+				A.COMPS, B.ITCLS,A.PSPNO, A.ITDSC, SUM(C.MOHTQ) AS MOHTQ,
+				PTQY01+ PTQY02+ PTQY03+ PTQY04+ PTQY05+ PTQY06+ PTQY07+ PTQY08+ PTQY09+ PTQY10+
+				PTQY11+ PTQY12+ PTQY13+ PTQY14+ PTQY15+ PTQY16+ PTQY17+ PTQY18+ PTQY19+ PTQY20+
+				PTQY21+ PTQY22+ PTQY23+ PTQY24+ PTQY25+ PTQY26+ PTQY27+ PTQY28+ PTQY29+ PTQY30+
+				PTQY31 MSUM,
+				PTQY01, PTQY02, PTQY03, PTQY04, PTQY05, PTQY06, PTQY07, PTQY08, PTQY09, PTQY10,
+				PTQY11, PTQY12, PTQY13, PTQY14, PTQY15, PTQY16, PTQY17, PTQY18, PTQY19, PTQY20,
+				PTQY21, PTQY22, PTQY23, PTQY24, PTQY25, PTQY26, PTQY27, PTQY28, PTQY29, PTQY30,
+				PTQY31
+		FROM ${lib2}.FGP500PF A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR		
+		LEFT OUTER JOIN ${lib1}.HM000PR C ON A.PSPNO = C.ITNBR 
+		WHERE A.COMPS = #{comps}
+		AND A.TRNYM = #{searchDate}
+		GROUP BY A.COMPS, B.ITCLS,A.PSPNO, A.ITDSC, PTQY01, PTQY02, PTQY03, PTQY04, PTQY05, PTQY06, PTQY07, PTQY08, PTQY09, PTQY10,
+				PTQY11, PTQY12, PTQY13, PTQY14, PTQY15, PTQY16, PTQY17, PTQY18, PTQY19, PTQY20,
+				PTQY21, PTQY22, PTQY23, PTQY24, PTQY25, PTQY26, PTQY27, PTQY28, PTQY29, PTQY30, PTQY31
+		) X 
+		<if test = 'searchKubun.equals("performance")'>
+			WHERE X.KUBUN = '출하' 
+		</if>
+		<if test = 'searchKubun.equals("shipment")'>
+			WHERE X.KUBUN = '실적' 
+		</if>
+		ORDER BY X.COMPS, X.ITCLS, X.PSPNO, X.KUBUN
+		-->
+		SELECT
+			A.COMPS, TRIM(A.PSPNO) AS PSPNO, TRIM(B.ITDSC) AS ITDSC, B.ITCLS, A.KUBUN, D.PRDCD, TRIM(E.MSTRM) AS PRDNM, INT(C.MOHTQ) AS MOHTQ,
+			A.QTY01, A.QTY02, A.QTY03, A.QTY04, A.QTY05, QTY06,
+			A.QTY07, A.QTY08, A.QTY09, A.QTY10, A.QTY11, QTY12,
+			A.QTY13, A.QTY14, A.QTY15, A.QTY16, A.QTY17, QTY18, 
+			A.QTY19, A.QTY20, A.QTY21, A.QTY22, A.QTY23, QTY24,
+			A.QTY25, A.QTY26, A.QTY27, A.QTY28, A.QTY29, QTY30,
+			A.QTY31,
+			A.QTY01+ A.QTY02+ A.QTY03+ A.QTY04+ A.QTY05+ A.QTY06+ A.QTY07+ A.QTY08+ A.QTY09+ A.QTY10+
+			A.QTY11+ A.QTY12+ A.QTY13+ A.QTY14+ A.QTY15+ A.QTY16+ A.QTY17+ A.QTY18+ A.QTY19+ A.QTY20+
+			A.QTY21+ A.QTY22+ A.QTY23+ A.QTY24+ A.QTY25+ A.QTY26+ A.QTY27+ A.QTY28+ A.QTY29+ A.QTY30+
+			A.QTY31 MSUM
+		FROM(
+		SELECT 
+			A.COMPS, A.PSPNO, '출하' AS KUBUN,
+			SUM(COALESCE(B.JPQY01,0)) AS QTY01, SUM(COALESCE(B.JPQY02,0)) AS QTY02, SUM(COALESCE(B.JPQY03,0)) AS QTY03, SUM(COALESCE(B.JPQY04,0)) AS QTY04, SUM(COALESCE(B.JPQY05,0)) AS QTY05, SUM(COALESCE(B.JPQY06,0)) AS QTY06,
+			SUM(COALESCE(B.JPQY07,0)) AS QTY07, SUM(COALESCE(B.JPQY08,0)) AS QTY08, SUM(COALESCE(B.JPQY09,0)) AS QTY09, SUM(COALESCE(B.JPQY10,0)) AS QTY10, SUM(COALESCE(B.JPQY11,0)) AS QTY11, SUM(COALESCE(B.JPQY12,0)) AS QTY12,
+			SUM(COALESCE(B.JPQY13,0)) AS QTY13, SUM(COALESCE(B.JPQY14,0)) AS QTY14, SUM(COALESCE(B.JPQY15,0)) AS QTY15, SUM(COALESCE(B.JPQY16,0)) AS QTY16, SUM(COALESCE(B.JPQY17,0)) AS QTY17, SUM(COALESCE(B.JPQY18,0)) AS QTY18, 
+			SUM(COALESCE(B.JPQY19,0)) AS QTY19, SUM(COALESCE(B.JPQY20,0)) AS QTY20, SUM(COALESCE(B.JPQY21,0)) AS QTY21, SUM(COALESCE(B.JPQY22,0)) AS QTY22, SUM(COALESCE(B.JPQY23,0)) AS QTY23, SUM(COALESCE(B.JPQY24,0)) AS QTY24,
+			SUM(COALESCE(B.JPQY25,0)) AS QTY25, SUM(COALESCE(B.JPQY26,0)) AS QTY26, SUM(COALESCE(B.JPQY27,0)) AS QTY27, SUM(COALESCE(B.JPQY28,0)) AS QTY28, SUM(COALESCE(B.JPQY29,0)) AS QTY29, SUM(COALESCE(B.JPQY30,0)) AS QTY30,
+			SUM(COALESCE(B.JPQY31,0)) AS QTY31		
+		FROM 
+		(
+			<include refid="searchByHvacSpoolMain"></include>
+		) A
+		LEFT OUTER JOIN ${lib2}.FGP580PF B ON A.COMPS=B.COMPS AND A.PSPNO=B.PSPNO AND B.FRHYM=#{searchDate}  AND HOUSE IN ${searchHouse}
+		<!-- AND HOUSE IN ('1', '2') -->
+		GROUP BY A.COMPS, A.PSPNO
+		
+		UNION ALL
+		SELECT 
+			A.COMPS, A.PSPNO, '실적' AS KUBUN,
+			SUM(COALESCE(B.PTQY01,0)) AS QTY01, SUM(COALESCE(B.PTQY02,0)) AS QTY02, SUM(COALESCE(B.PTQY03,0)) AS QTY03, SUM(COALESCE(B.PTQY04,0)) AS QTY04, SUM(COALESCE(B.PTQY05,0)) AS QTY05, SUM(COALESCE(B.PTQY06,0)) AS QTY06,
+			SUM(COALESCE(B.PTQY07,0)) AS QTY07, SUM(COALESCE(B.PTQY08,0)) AS QTY08, SUM(COALESCE(B.PTQY09,0)) AS QTY09, SUM(COALESCE(B.PTQY10,0)) AS QTY10, SUM(COALESCE(B.PTQY11,0)) AS QTY11, SUM(COALESCE(B.PTQY12,0)) AS QTY12,
+			SUM(COALESCE(B.PTQY13,0)) AS QTY13, SUM(COALESCE(B.PTQY14,0)) AS QTY14, SUM(COALESCE(B.PTQY15,0)) AS QTY15, SUM(COALESCE(B.PTQY16,0)) AS QTY16, SUM(COALESCE(B.PTQY17,0)) AS QTY17, SUM(COALESCE(B.PTQY18,0)) AS QTY18, 
+			SUM(COALESCE(B.PTQY19,0)) AS QTY19, SUM(COALESCE(B.PTQY20,0)) AS QTY20, SUM(COALESCE(B.PTQY21,0)) AS QTY21, SUM(COALESCE(B.PTQY22,0)) AS QTY22, SUM(COALESCE(B.PTQY23,0)) AS QTY23, SUM(COALESCE(B.PTQY24,0)) AS QTY24,
+			SUM(COALESCE(B.PTQY25,0)) AS QTY25, SUM(COALESCE(B.PTQY26,0)) AS QTY26, SUM(COALESCE(B.PTQY27,0)) AS QTY27, SUM(COALESCE(B.PTQY28,0)) AS QTY28, SUM(COALESCE(B.PTQY29,0)) AS QTY29, SUM(COALESCE(B.PTQY30,0)) AS QTY30,
+			SUM(COALESCE(B.PTQY31,0)) AS QTY31
+		FROM 
+		(			
+			<include refid="searchByHvacSpoolMain"></include>
+		) A
+		LEFT OUTER JOIN ${lib2}.FGP500PF B ON A.COMPS=B.COMPS AND A.PSPNO=B.PSPNO AND B.TRNYM=#{searchDate} AND HOUSE IN ${searchHouse}
+		<!-- AND HOUSE IN ('1', '2') -->
+		GROUP BY A.COMPS, A.PSPNO
+		) A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR
+		LEFT OUTER JOIN (
+			SELECT ITNBR, SUM(MOHTQ) AS MOHTQ FROM ${lib1}.HM000PR WHERE HOUSE IN ${searchHouse}
+			<!--  WHERE HOUSE IN ('1', '2') -->
+			GROUP BY ITNBR
+		)C ON A.PSPNO=C.ITNBR 
+		LEFT OUTER JOIN ${lib2}.MST100PF D ON A.PSPNO=D.PRTNO AND A.COMPS=D.COMPS
+		LEFT OUTER JOIN ${lib2}.MST050PF E ON D.COMPS=E.COMPS AND E.GRPCD='PRD' AND D.PRDCD =E.MSTCD
+		WHERE
+			'searchByHvacSpool'='searchByHvacSpool'
+		<if test = 'searchKubun.equals("performance")'>
+			 AND A.KUBUN = '출하' 
+		</if>
+		<if test = 'searchKubun.equals("shipment")'>
+			AND A.KUBUN = '실적' 
+		</if>
+		<if test = "searchPrdcd != null and searchPrdcd != ''">
+		    AND D.PRDCD = #{searchPrdcd}
+		</if>
+		ORDER BY B.ITCLS, A.PSPNO, A.KUBUN DESC
+	</select>
+	<sql id="searchByHvacSpoolMain">
+	SELECT 
+		A.COMPS, A.PSPNO
+	FROM(
+		SELECT 
+			COMPS, PSPNO
+		FROM ${lib2}.FGP580PF
+		WHERE
+			'searchByHvacSpoolMain'='searchByHvacSpoolMain'
+			AND COMPS=#{comps}
+			AND FRHYM=#{searchDate}
+			AND HOUSE IN ${searchHouse}
+			<!-- AND HOUSE IN ('1', '2') -->
+			UNION ALL
+		SELECT 
+			COMPS, PSPNO
+		FROM ${lib2}.FGP500PF
+		WHERE
+			'searchByHvacSpoolMain'='searchByHvacSpoolMain'
+			AND COMPS=#{comps}
+			AND TRNYM=#{searchDate}
+			AND HOUSE IN ${searchHouse}
+			<!-- AND HOUSE IN ('1', '2') -->
+	) A
+	GROUP BY COMPS, PSPNO
+	</sql>
+	
+	 <!-- 실적 리스트 -->
+	<sql id="shipmentList">
+		SELECT 
+			'출하' AS KUBUN,
+			COMPS, A.ITCLS, PSPNO, ITDSC, SUM(B.MOHTQ) AS MOHTQ,
+			JPQY01+ JPQY02+ JPQY03+ JPQY04+ JPQY05+ JPQY06+ JPQY07+ JPQY08+ JPQY09+ JPQY10+
+			JPQY11+ JPQY12+ JPQY13+ JPQY14+ JPQY15+ JPQY16+ JPQY17+ JPQY18+ JPQY19+ JPQY20+
+			JPQY21+ JPQY22+ JPQY23+ JPQY24+ JPQY25+ JPQY26+ JPQY27+ JPQY28+ JPQY29+ JPQY30+
+			JPQY31 MSUM,
+			JPQY01, JPQY02, JPQY03, JPQY04, JPQY05, JPQY06, JPQY07, JPQY08, JPQY09, JPQY10,
+			JPQY11, JPQY12, JPQY13, JPQY14, JPQY15, JPQY16, JPQY17, JPQY18, JPQY19, JPQY20,
+			JPQY21, JPQY22, JPQY23, JPQY24, JPQY25, JPQY26, JPQY27, JPQY28, JPQY29, JPQY30,
+			JPQY31
+		FROM 
+			${lib2}.FGP580PF A
+			LEFT OUTER JOIN ${lib1}.HM000PR B ON A.PSPNO = B.ITNBR 
+		GROUP BY COMPS, A.ITCLS, PSPNO, ITDSC,JPQY01, JPQY02, JPQY03, JPQY04, JPQY05, JPQY06, JPQY07, JPQY08, JPQY09, JPQY10,
+			JPQY11, JPQY12, JPQY13, JPQY14, JPQY15, JPQY16, JPQY17, JPQY18, JPQY19, JPQY20,
+			JPQY21, JPQY22, JPQY23, JPQY24, JPQY25, JPQY26, JPQY27, JPQY28, JPQY29, JPQY30,JPQY31
+			WHERE COMPS = #{comps}
+			AND FRHYM = #{searchDate}
+	</sql>
+	
+	 <!-- 출하 리스트 -->
+	<sql id="performanceList">
+		SELECT 		
+				'실적' AS KUBUN,
+				A.COMPS, B.ITCLS,A.PSPNO, A.ITDSC, SUM(C.MOHTQ) AS MOHTQ,
+				PTQY01+ PTQY02+ PTQY03+ PTQY04+ PTQY05+ PTQY06+ PTQY07+ PTQY08+ PTQY09+ PTQY10+
+				PTQY11+ PTQY12+ PTQY13+ PTQY14+ PTQY15+ PTQY16+ PTQY17+ PTQY18+ PTQY19+ PTQY20+
+				PTQY21+ PTQY22+ PTQY23+ PTQY24+ PTQY25+ PTQY26+ PTQY27+ PTQY28+ PTQY29+ PTQY30+
+				PTQY31 MSUM,
+				PTQY01, PTQY02, PTQY03, PTQY04, PTQY05, PTQY06, PTQY07, PTQY08, PTQY09, PTQY10,
+				PTQY11, PTQY12, PTQY13, PTQY14, PTQY15, PTQY16, PTQY17, PTQY18, PTQY19, PTQY20,
+				PTQY21, PTQY22, PTQY23, PTQY24, PTQY25, PTQY26, PTQY27, PTQY28, PTQY29, PTQY30,
+				PTQY31
+		FROM ${lib2}.FGP500PF A
+		LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO = B.ITNBR		
+		LEFT OUTER JOIN ${lib1}.HM000PR C ON A.PSPNO = C.ITNBR 
+		GROUP BY A.COMPS, B.ITCLS,A.PSPNO, A.ITDSC, PTQY01, PTQY02, PTQY03, PTQY04, PTQY05, PTQY06, PTQY07, PTQY08, PTQY09, PTQY10,
+				PTQY11, PTQY12, PTQY13, PTQY14, PTQY15, PTQY16, PTQY17, PTQY18, PTQY19, PTQY20,
+				PTQY21, PTQY22, PTQY23, PTQY24, PTQY25, PTQY26, PTQY27, PTQY28, PTQY29, PTQY30, PTQY31
+		WHERE A.COMPS = #{comps}
+		AND A.TRNYM = #{searchDate}
+		
+	</sql>
+	
+	<!-- JDE 분개전표 -->	
+	<sql id="accountingJournal">
+	SELECT
+		A.GLICU, A.GLDGJ, CAST(CAST( ((CAST( (A.GLDGJ - MOD(A.GLDGJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(A.GLDGJ, 1000) AS CHAR(7)) AS DATE) AS GLDATE,
+		A.GLICUT, A.GLJELN,
+		TRIM(E.MCDC) AS MCDC, TRIM(A.GLMCU) AS GLMCU, TRIM(A.GLOBJ) AS GLOBJ, TRIM(A.GLSUB) AS GLSUB, TRIM(A.GLSBL) AS GLSBL, TRIM(A.GLASID) AS GLASID, TRIM(A.GLSBLT) AS GLSBLT, 
+		TRIM(E.MCRP12) AS MCRP12, TRIM(F.DRDL01) AS DRDL01, TRIM(E.MCRP12)||' '||TRIM(F.DRDL01) AS DRDLCAT, 
+		TRIM(B.GMDL01) AS GMDL01, TRIM(A.GLEXR) AS GLEXR, TRIM(A.GLEXA) AS GLEXA, A.GLDOC, A.GLDCT, A.GLMCU, TRIM(C.GMDL01)  AS GMDL02, TRIM(A.GLR2) AS GLR2, TRIM(D.ABTAX) AS ABTAX, A.GLAA,
+		CASE WHEN A.GLAA > 0 THEN A.GLAA ELSE 0 END AS GLAA01,
+		CASE WHEN A.GLAA <![CDATA[<]]> 0 THEN A.GLAA*-1 ELSE 0 END  AS GLAA02,
+		A.GLTORG,
+		CAST(CAST(((CAST( (A.GLDICJ - MOD(A.GLDICJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(A.GLDICJ, 1000) AS CHAR(7)) AS DATE) AS GLDICJ,
+		G.ICUSER, TRIM(A.GLAN8) AS GLAN8, TRIM(D.ABALPH) AS ABALPH
+		<!--  A.GLUSER(POST담당자), A.GLUPMJ, CAST(CAST(((CAST( (A.GLUPMJ - MOD(A.GLUPMJ, 1000)) / 1000 AS INT) + 1900) * 1000) + MOD(A.GLUPMJ, 1000) AS CHAR(7)) AS DATE) AS GLUPDATE(회계일자)-->
+	FROM
+		${lib4}.F0911 A
+		LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB)='') B ON A.GLMCU=B.GMMCU AND A.GLOBJ=B.GMOBJ
+		LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB) != '') C ON A.GLMCU=C.GMMCU AND A.GLOBJ=C.GMOBJ AND A.GLSUB=C.GMSUB
+		LEFT OUTER JOIN ${lib4}.F0101 D ON A.GLAN8=D.ABAN8
+		LEFT OUTER JOIN ${lib4}.F0006LB E ON A.GLMCU=E.MCMCU
+		LEFT OUTER JOIN CLTCOM.F0005 F ON F.DRSY ='00'AND F.DRRT='12' AND TRIM(E.MCRP12)=TRIM(F.DRKY)
+		LEFT OUTER JOIN ${lib4}.F0011 G ON A.GLICU=G.ICICU
+	WHERE
+		'SqlMap-MgntInfo.searchByAccountingJournal'='SqlMap-MgntInfo.searchByAccountingJournal'
+		AND A.GLPOST='P'
+<!-- 	AND A.GLDGJ >=  #{pStartDate} AND A.GLDGJ <![CDATA[<=]]> #{pEndDate}
+		AND A.GLDGJ BETWEEN #{pStartDate} AND #{pEndDate}
+		AND A.GLDGJ BETWEEN 113091 AND 113365
+  		AND A.GLDGJ >=  113091 AND A.GLDGJ <![CDATA[<=]]> 113091
+  		AND GLICU=353377
+ -->
+  		AND A.GLDGJ BETWEEN #{pStartDate} AND #{pEndDate}
+  		<!-- 
+  		<if test = "pGlobj != null and pGlobj != ''">
+		AND TRIM(A.GLOBJ) = #{pGlobj}
+		</if>
+		 -->
+		 AND TRIM(A.GLOBJ) BETWEEN #{pGlobj} AND #{pGlobj2}
+	ORDER BY A.GLICU, A.GLDGJ, A.GLDOC
+	</sql>
+	
+	<select id="searchByAccountingJournal" resultType="AccountingJournalDomain"  parameterType="AccountingJournalDomain">
+		<include refid="accountingJournal"></include>	
+	</select>
+	
+	<select id="searchByAccountingJournalCnt" resultType="java.lang.Integer"  parameterType="AccountingJournalDomain">
+	<!--
+	SELECT 
+		COUNT(A.GLICU) AS CNT
+	FROM (
+		<include refid="accountingJournal"></include>
+	) A
+	 -->
+	SELECT
+		COUNT(A.GLICU) AS CNT
+	FROM
+		${lib4}.F0911 A
+	WHERE
+		'SqlMap-MgntInfo.searchByAccountingJournalCnt'='SqlMap-MgntInfo.searchByAccountingJournalCnt'
+		AND A.GLPOST='P'
+  		AND A.GLDGJ BETWEEN #{pStartDate} AND #{pEndDate}
+  		<!-- 
+  		<if test = "pGlobj != null and pGlobj != ''">
+		AND TRIM(A.GLOBJ) = #{pGlobj}
+		</if>
+		 -->
+		 AND TRIM(A.GLOBJ) BETWEEN #{pGlobj} AND #{pGlobj2}
+	</select>
+	 <!-- 제품명 조회 -->
+	<select id="searchByPartName" resultType="QrPartListDomain"  parameterType="QrPartListDomain">
+	
+		SELECT B.CINBR,ITDSC,C.PRSNM FROM PERESLIB.BM008PR A
+                            LEFT OUTER JOIN PERESLIB.BM010PR B ON A.ITNBR = B.PINBR
+                            LEFT OUTER JOIN PSEDBLIB.FGP100PF C ON C.COMPS = 'E1' AND C.PROCS = #{lineCode} 
+		WHERE ITNBR = #{partNum}		 
+	</select>
+	
+	<!-- BOM 리스트 조회 -->
+	<select id="searchByQrPartList" resultType="QrPartListDomain"  parameterType="QrPartListDomain">
+		SELECT 			
+						A.CINBR,
+				  		INTEGER(A.QTYPR) AS QTYPR,
+				  		B.ITDSC,
+						B.ITTYP,
+						B.ITCLS,
+						C.WHSLC,
+				  INTEGER(D.LOTSZ) AS LOTSZ,				  
+				  INTEGER(D.MULQY) AS MULQY,				  
+				  CASE  
+				  	  WHEN C.WHSLC is null THEN 'ZZZZZZZ' 
+				      WHEN C.WHSLC ='' THEN 'ZZZZZZZ' 					
+  				  ELSE C.WHSLC END WHSLCDESC
+		FROM PERESLIB.BM010PR A LEFT OUTER JOIN PERESLIB.BM008PR B ON A.CINBR = B.ITNBR 
+			                 LEFT OUTER JOIN PERESLIB.HM000PR C ON A.CINBR = C.ITNBR AND C.HOUSE = '1'
+                             LEFT OUTER JOIN PERESLIB.BM009PR D ON A.CINBR = D.ITNBR  
+		WHERE PINBR = #{partNum}
+		AND  EDATO <![CDATA[<=]]> SUBSTR(REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-',''),3,8)
+		AND (EDATO <![CDATA[>]]> SUBSTR(REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-',''),3,8) OR EDATO = 0)
+		ORDER BY WHSLC DESC,CINBR ASC
+	</select>
+	
+	<!-- JDE 예산 계획대실적 조회 -->
+	<select id="searchByJdeBudget" resultType="JdeBudgetDomain"  parameterType="JdeBudgetDomain">
+	<!-- 
+	SELECT 
+		A.GBCTRY || A.GBFY AS BUDYEAR, 
+		TRIM(A.GBMCU) AS GBMCU, TRIM(D.MCDC) AS MCDC,
+		A.GBOBJ, A.GBSUB, TRIM(B.GMDL01) AS GMDL01, TRIM(C.GMDL01)  AS GMDL02,
+		TRIM(A.GBSBL) AS GBSBL,	A.GBLT, 
+		A.GBAN01, A.GBAN02, A.GBAN03, A.GBAN04, A.GBAN05, A.GBAN06,
+		A.GBAN07, A.GBAN08, A.GBAN09, A.GBAN10, A.GBAN11, A.GBAN12,
+		A.GBCTRY, A.GBFY
+	FROM
+		${lib4}.F0902 A
+		LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB)='') B ON A.GBMCU=B.GMMCU AND A.GBOBJ=B.GMOBJ
+		LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB) != '') C ON A.GBMCU=C.GMMCU AND A.GBOBJ=C.GMOBJ AND A.GBSUB=C.GMSUB
+		LEFT OUTER JOIN ${lib4}.F0006LB D ON A.GBMCU=D.MCMCU
+	WHERE
+		'SqlMap-MgntInfo.searchByJdeBudget'='SqlMap-MgntInfo.searchByJdeBudget'
+		AND A.GBFY = ${pStartDate}
+		 <if test = '!pGbmcu.equals("0")'>
+		    AND TRIM(A.GBMCU) = #{pGbmcu}
+		</if>
+		<if test = 'pGbmcu.equals("0")'>
+			 AND TRIM(A.GBMCU) in (
+		    	SELECT TRIM(MCMCU) FROM	${lib4}.F0006LB	WHERE trim(MCRP12) != '' AND trim(MCSTYL)='EX' AND trim(MCRP11)='001'
+		    )
+		</if>
+	ORDER BY A.GBCTRY, A.GBFY,  GBMCU, A.GBOBJ, A.GBSUB,  GBSBL, GBLT DESC
+ 	-->	
+	<!-- 	
+	SELECT 
+		A.GBCTRY || A.GBFY AS BUDYEAR, 
+		TRIM(A.GBMCU) AS GBMCU, TRIM(D.MCDC) AS MCDC,
+		A.GBOBJ, A.GBSUB, TRIM(B.GMDL01) AS GMDL01, TRIM(C.GMDL01)  AS GMDL02,
+		TRIM(A.GBSBL) AS GBSBL, A.GBLT,
+		A.GBAN01, A.GBAN02, A.GBAN03, A.GBAN04, A.GBAN05, A.GBAN06,
+		A.GBAN07, A.GBAN08, A.GBAN09, A.GBAN10, A.GBAN11, A.GBAN12,
+		A.GBCTRY, A.GBFY
+	FROM(
+		SELECT 
+			A.*,
+			'BA' AS GBLT,
+			COALESCE(B.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0) AS GBAN12
+		FROM (
+		SELECT 
+			A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+		FROM
+			${lib4}.F0902 A
+		WHERE
+			A.GBFY = 19 
+		GROUP BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL
+		) A
+		LEFT OUTER JOIN C${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+		
+		UNION ALL
+		SELECT 
+			A.*,
+			'AA' AS GBLT,
+			COALESCE(B.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0) AS GBAN12
+		FROM (
+			SELECT 
+			A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+		FROM
+			${lib4}.F0902 A
+		WHERE
+			A.GBFY = 19
+			GROUP BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='AA'
+	
+		UNION ALL
+		SELECT 
+			A.*,
+			'CA' AS GBLT,
+			COALESCE(B.GBAN01, 0)-COALESCE(C.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0)-COALESCE(C.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0)-COALESCE(C.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0)-COALESCE(C.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0)-COALESCE(C.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0)-COALESCE(C.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0)-COALESCE(C.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0)-COALESCE(C.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0)-COALESCE(C.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0)-COALESCE(C.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0)-COALESCE(C.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0)-COALESCE(C.GBAN12, 0) AS GBAN12
+		FROM (
+			SELECT 
+			A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+		FROM
+			${lib4}.F0902 A
+		WHERE
+			A.GBFY = 19
+			GROUP BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+		LEFT OUTER JOIN ${lib4}.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'	
+	)
+	) A
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB)='') B ON A.GBMCU=B.GMMCU AND A.GBOBJ=B.GMOBJ
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB) != '') C ON A.GBMCU=C.GMMCU AND A.GBOBJ=C.GMOBJ AND A.GBSUB=C.GMSUB
+	LEFT OUTER JOIN ${lib4}.F0006LB D ON A.GBMCU=D.MCMCU
+	ORDER BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL, GBLT DESC
+	 -->
+	 
+	SELECT 
+		A.GBCTRY || A.GBFY AS BUDYEAR, SORTSEQ,
+		TRIM(A.GBMCU) AS GBMCU, TRIM(D.MCDC) AS MCDC,
+		TRIM(A.GBOBJ) AS GBOBJ, TRIM(A.GBSUB) AS GBSUB, TRIM(B.GMDL01) AS GMDL01, TRIM(C.GMDL01) AS GMDL02,
+		TRIM(A.GBSBL) AS GBSBL, A.GBLT,
+		A.GBAN01, A.GBAN02, A.GBAN03, A.GBAN04, A.GBAN05, A.GBAN06,
+		A.GBAN07, A.GBAN08, A.GBAN09, A.GBAN10, A.GBAN11, A.GBAN12,
+		A.GBAN01+A.GBAN02+A.GBAN03+A.GBAN04+A.GBAN05+A.GBAN06+A.GBAN07+A.GBAN08+A.GBAN09+A.GBAN10+A.GBAN11+A.GBAN12 AS TOTGBAN,
+		A.GBCTRY, A.GBFY
+	FROM(
+		SELECT 
+			A.*,
+			'A' AS SORTSEQ,	'계획' AS GBLT,
+			COALESCE(B.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0) AS GBAN12
+		FROM (
+		<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+	
+		UNION ALL
+		SELECT 
+			A.*,
+			'B' AS SORTSEQ,	'실적' AS GBLT,
+			COALESCE(B.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0) AS GBAN12
+		FROM (
+		<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='AA'	
+		<!-- 
+		UNION ALL
+		SELECT 
+			A.*,
+			'C' AS SORTSEQ,	'차이' AS GBLT,
+			COALESCE(B.GBAN01, 0)-COALESCE(C.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0)-COALESCE(C.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0)-COALESCE(C.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0)-COALESCE(C.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0)-COALESCE(C.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0)-COALESCE(C.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0)-COALESCE(C.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0)-COALESCE(C.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0)-COALESCE(C.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0)-COALESCE(C.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0)-COALESCE(C.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0)-COALESCE(C.GBAN12, 0) AS GBAN12
+		FROM (
+		<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'	
+		LEFT OUTER JOIN ${lib4}.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'	
+	 
+		UNION ALL
+		SELECT 
+			A.*,
+			'D' AS SORTSEQ,	'계획비%' AS GBLT,		
+			CASE WHEN COALESCE(B.GBAN01, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN01, 0)/COALESCE(B.GBAN01, 0)*100,2)) ELSE 0.00 END AS GBAN01,
+			CASE WHEN COALESCE(B.GBAN02, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN02, 0)/COALESCE(B.GBAN02, 0)*100,2)) ELSE 0.00 END AS GBAN02,
+			CASE WHEN COALESCE(B.GBAN03, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN03, 0)/COALESCE(B.GBAN03, 0)*100,2)) ELSE 0.00 END AS GBAN03,
+			CASE WHEN COALESCE(B.GBAN04, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN04, 0)/COALESCE(B.GBAN04, 0)*100,2)) ELSE 0.00 END AS GBAN04,
+			CASE WHEN COALESCE(B.GBAN05, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN05, 0)/COALESCE(B.GBAN05, 0)*100,2)) ELSE 0.00 END AS GBAN05,
+			CASE WHEN COALESCE(B.GBAN06, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN06, 0)/COALESCE(B.GBAN06, 0)*100,2)) ELSE 0.00 END AS GBAN06,
+			CASE WHEN COALESCE(B.GBAN07, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN07, 0)/COALESCE(B.GBAN07, 0)*100,2)) ELSE 0.00 END AS GBAN07,
+			CASE WHEN COALESCE(B.GBAN08, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN08, 0)/COALESCE(B.GBAN08, 0)*100,2)) ELSE 0.00 END AS GBAN08,
+			CASE WHEN COALESCE(B.GBAN09, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN09, 0)/COALESCE(B.GBAN09, 0)*100,2)) ELSE 0.00 END AS GBAN09,
+			CASE WHEN COALESCE(B.GBAN10, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN10, 0)/COALESCE(B.GBAN10, 0)*100,2)) ELSE 0.00 END AS GBAN10,
+			CASE WHEN COALESCE(B.GBAN11, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN11, 0)/COALESCE(B.GBAN11, 0)*100,2)) ELSE 0.00 END AS GBAN11,
+			CASE WHEN COALESCE(B.GBAN12, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN12, 0)/COALESCE(B.GBAN12, 0)*100,2)) ELSE 0.00 END AS GBAN12
+		FROM (
+		<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'	
+		LEFT OUTER JOIN ${lib4}.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'	
+	 -->
+	) A
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB)='') B ON A.GBMCU=B.GMMCU AND A.GBOBJ=B.GMOBJ
+	LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB) != '') C ON A.GBMCU=C.GMMCU AND A.GBOBJ=C.GMOBJ AND A.GBSUB=C.GMSUB
+	LEFT OUTER JOIN ${lib4}.F0006LB D ON A.GBMCU=D.MCMCU
+	<if test = 'pSelectMenu.equals("BUCODE")'>
+	ORDER BY BUDYEAR, A.GBFY, GBMCU, GBSBL, GBOBJ, GBSUB, SORTSEQ
+	</if>
+	 <if test = 'pSelectMenu.equals("DPCODE")'>
+	ORDER BY BUDYEAR, A.GBFY, GBSBL, GBMCU, GBOBJ, GBSUB, SORTSEQ
+	</if>
+	</select>
+	
+	<sql id="JdeBudget">
+	SELECT 
+		A.GBCTRY, A.GBFY, A.GBMCU, A.GBOBJ, A.GBSUB, A.GBSBL
+	FROM
+		${lib4}.F0902 A
+	WHERE
+		'SqlMap-MgntInfo.searchByJdeBudget'='SqlMap-MgntInfo.searchByJdeBudget'
+		AND A.GBFY = ${pStartDate}
+		 <if test = '!pGbmcu.equals("0")'>
+		    AND TRIM(A.GBMCU) = #{pGbmcu}
+		</if>
+		<if test = 'pGbmcu.equals("0")'>
+			 AND TRIM(A.GBMCU) in (
+		    	SELECT TRIM(MCMCU) FROM	${lib4}.F0006LB	WHERE trim(MCRP12) != '' <!-- AND trim(MCSTYL)='EX' AND trim(MCRP11)='001' -->
+		    )
+		</if>
+		GROUP BY A.GBCTRY, A.GBFY, GBMCU, A.GBOBJ, A.GBSUB, GBSBL
+	</sql>
+<select id="searchByJdeBudgetxx" resultType="JdeBudgetDomain"  parameterType="JdeBudgetDomain">
+SELECT 
+	A.GBCTRY || A.GBFY AS BUDYEAR, 
+	TRIM(A.GBMCU) AS GBMCU, TRIM(D.MCDC) AS MCDC,
+	TRIM(A.GBOBJ) AS GBOBJ, TRIM(A.GBSUB) AS GBSUB, TRIM(B.GMDL01) AS GMDL01, TRIM(C.GMDL01) AS GMDL02,
+	'계획' AS GBLT1,
+	A.GBAN01BA, A.GBAN02BA, A.GBAN03BA, A.GBAN04BA, A.GBAN05BA, A.GBAN06BA,
+	A.GBAN07BA, A.GBAN08BA, A.GBAN09BA, A.GBAN10BA, A.GBAN11BA, A.GBAN12BA,
+	A.GBAN01BA+A.GBAN02BA+A.GBAN03BA+A.GBAN04BA+A.GBAN05BA+A.GBAN06BA+A.GBAN07BA+A.GBAN08BA+A.GBAN09BA+A.GBAN10BA+A.GBAN11BA+A.GBAN12BA AS TOTGBANBA,
+	'실적' AS GBLT2,
+	A.GBAN01AA, A.GBAN02AA, A.GBAN03AA, A.GBAN04AA, A.GBAN05AA, A.GBAN06AA,
+	A.GBAN07AA, A.GBAN08AA, A.GBAN09AA, A.GBAN10AA, A.GBAN11AA, A.GBAN12AA,
+	A.GBAN01AA+A.GBAN02AA+A.GBAN03AA+A.GBAN04AA+A.GBAN05AA+A.GBAN06AA+A.GBAN07AA+A.GBAN08AA+A.GBAN09AA+A.GBAN10AA+A.GBAN11AA+A.GBAN12AA AS TOTGBANAA,
+	<!--  
+	'차이' AS GBLT3,
+	A.GBAN01CA, A.GBAN02CA, A.GBAN03CA, A.GBAN04CA, A.GBAN05CA, A.GBAN06CA,
+	A.GBAN07CA, A.GBAN08CA, A.GBAN09CA, A.GBAN10CA, A.GBAN11CA, A.GBAN12CA,
+	A.GBAN01CA+A.GBAN02CA+A.GBAN03CA+A.GBAN04CA+A.GBAN05CA+A.GBAN06CA+A.GBAN07CA+A.GBAN08CA+A.GBAN09CA+A.GBAN10CA+A.GBAN11CA+A.GBAN12CA AS TOTGBANCA,
+	'계획비%' AS GBLT4,
+	A.GBAN01DA, A.GBAN02DA, A.GBAN03DA, A.GBAN04DA, A.GBAN05DA, A.GBAN06DA,
+	A.GBAN07DA, A.GBAN08DA, A.GBAN09DA, A.GBAN10DA, A.GBAN11DA, A.GBAN12DA,
+	A.GBAN01DA+A.GBAN02DA+A.GBAN03DA+A.GBAN04DA+A.GBAN05DA+A.GBAN06DA+A.GBAN07DA+A.GBAN08DA+A.GBAN09DA+A.GBAN10DA+A.GBAN11DA+A.GBAN12DA AS TOTGBANDA,
+	-->
+	A.GBCTRY, A.GBFY
+FROM(
+	SELECT 
+		A.*,
+		COALESCE(B.GBAN01, 0) AS GBAN01BA, COALESCE(B.GBAN02, 0) AS GBAN02BA, COALESCE(B.GBAN03, 0) AS GBAN03BA, COALESCE(B.GBAN04, 0) AS GBAN04BA,
+		COALESCE(B.GBAN05, 0) AS GBAN05BA, COALESCE(B.GBAN06, 0) AS GBAN06BA, COALESCE(B.GBAN07, 0) AS GBAN07BA, COALESCE(B.GBAN08, 0) AS GBAN08BA,
+		COALESCE(B.GBAN09, 0) AS GBAN09BA, COALESCE(B.GBAN10, 0) AS GBAN10BA, COALESCE(B.GBAN11, 0) AS GBAN11BA, COALESCE(B.GBAN12, 0) AS GBAN12BA,
+		                                                                                                                                          
+		COALESCE(C.GBAN01, 0) AS GBAN01AA, COALESCE(C.GBAN02, 0) AS GBAN02AA, COALESCE(C.GBAN03, 0) AS GBAN03AA, COALESCE(C.GBAN04, 0) AS GBAN04AA,
+		COALESCE(C.GBAN05, 0) AS GBAN05AA, COALESCE(C.GBAN06, 0) AS GBAN06AA, COALESCE(C.GBAN07, 0) AS GBAN07AA, COALESCE(C.GBAN08, 0) AS GBAN08AA,
+		COALESCE(C.GBAN09, 0) AS GBAN09AA, COALESCE(C.GBAN10, 0) AS GBAN10AA, COALESCE(C.GBAN11, 0) AS GBAN11AA, COALESCE(C.GBAN12, 0) AS GBAN12AA
+		<!--  
+		COALESCE(D.GBAN01, 0) AS GBAN01CA, COALESCE(D.GBAN02, 0) AS GBAN02CA, COALESCE(D.GBAN03, 0) AS GBAN03CA, COALESCE(D.GBAN04, 0) AS GBAN04CA,
+		COALESCE(D.GBAN05, 0) AS GBAN05CA, COALESCE(D.GBAN06, 0) AS GBAN06CA, COALESCE(D.GBAN07, 0) AS GBAN07CA, COALESCE(D.GBAN08, 0) AS GBAN08CA,
+		COALESCE(D.GBAN09, 0) AS GBAN09CA, COALESCE(D.GBAN10, 0) AS GBAN10CA, COALESCE(D.GBAN11, 0) AS GBAN11CA, COALESCE(D.GBAN12, 0) AS GBAN12CA,
+				
+		COALESCE(D.GBAN01DA, 0) AS GBAN01DA, COALESCE(D.GBAN02DA, 0) AS GBAN02DA, COALESCE(D.GBAN03DA, 0) AS GBAN03DA, COALESCE(D.GBAN04DA, 0) AS GBAN04DA,
+		COALESCE(D.GBAN05DA, 0) AS GBAN05DA, COALESCE(D.GBAN06DA, 0) AS GBAN06DA, COALESCE(D.GBAN07DA, 0) AS GBAN07DA, COALESCE(D.GBAN08DA, 0) AS GBAN08DA,
+		COALESCE(D.GBAN09DA, 0) AS GBAN09DA, COALESCE(D.GBAN10DA, 0) AS GBAN10DA, COALESCE(D.GBAN11DA, 0) AS GBAN11DA, COALESCE(D.GBAN12DA, 0) AS GBAN12DA
+		-->
+		FROM (
+		<include refid="JdeBudget"></include>
+	) A
+	LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+	LEFT OUTER JOIN ${lib4}.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'
+	<!--  
+	LEFT OUTER JOIN (
+		SELECT 
+			A.*,
+			COALESCE(B.GBAN01, 0)-COALESCE(C.GBAN01, 0) AS GBAN01, COALESCE(B.GBAN02, 0)-COALESCE(C.GBAN02, 0) AS GBAN02, COALESCE(B.GBAN03, 0)-COALESCE(C.GBAN03, 0) AS GBAN03, COALESCE(B.GBAN04, 0)-COALESCE(C.GBAN04, 0) AS GBAN04,
+			COALESCE(B.GBAN05, 0)-COALESCE(C.GBAN05, 0) AS GBAN05, COALESCE(B.GBAN06, 0)-COALESCE(C.GBAN06, 0) AS GBAN06, COALESCE(B.GBAN07, 0)-COALESCE(C.GBAN07, 0) AS GBAN07, COALESCE(B.GBAN08, 0)-COALESCE(C.GBAN08, 0) AS GBAN08,
+			COALESCE(B.GBAN09, 0)-COALESCE(C.GBAN09, 0) AS GBAN09, COALESCE(B.GBAN10, 0)-COALESCE(C.GBAN10, 0) AS GBAN10, COALESCE(B.GBAN11, 0)-COALESCE(C.GBAN11, 0) AS GBAN11, COALESCE(B.GBAN12, 0)-COALESCE(C.GBAN12, 0) AS GBAN12,
+				
+			CASE WHEN COALESCE(B.GBAN01, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN01, 0)/COALESCE(B.GBAN01, 0)*100,2)) ELSE 0.00 END AS GBAN01DA,
+			CASE WHEN COALESCE(B.GBAN02, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN02, 0)/COALESCE(B.GBAN02, 0)*100,2)) ELSE 0.00 END AS GBAN02DA,
+			CASE WHEN COALESCE(B.GBAN03, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN03, 0)/COALESCE(B.GBAN03, 0)*100,2)) ELSE 0.00 END AS GBAN03DA,
+			CASE WHEN COALESCE(B.GBAN04, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN04, 0)/COALESCE(B.GBAN04, 0)*100,2)) ELSE 0.00 END AS GBAN04DA,
+			CASE WHEN COALESCE(B.GBAN05, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN05, 0)/COALESCE(B.GBAN05, 0)*100,2)) ELSE 0.00 END AS GBAN05DA,
+			CASE WHEN COALESCE(B.GBAN06, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN06, 0)/COALESCE(B.GBAN06, 0)*100,2)) ELSE 0.00 END AS GBAN06DA,
+			CASE WHEN COALESCE(B.GBAN07, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN07, 0)/COALESCE(B.GBAN07, 0)*100,2)) ELSE 0.00 END AS GBAN07DA,
+			CASE WHEN COALESCE(B.GBAN08, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN08, 0)/COALESCE(B.GBAN08, 0)*100,2)) ELSE 0.00 END AS GBAN08DA,
+			CASE WHEN COALESCE(B.GBAN09, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN09, 0)/COALESCE(B.GBAN09, 0)*100,2)) ELSE 0.00 END AS GBAN09DA,
+			CASE WHEN COALESCE(B.GBAN10, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN10, 0)/COALESCE(B.GBAN10, 0)*100,2)) ELSE 0.00 END AS GBAN10DA,
+			CASE WHEN COALESCE(B.GBAN11, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN11, 0)/COALESCE(B.GBAN11, 0)*100,2)) ELSE 0.00 END AS GBAN11DA,
+			CASE WHEN COALESCE(B.GBAN12, 0) != 0 THEN DEC(ROUND(COALESCE(C.GBAN12, 0)/COALESCE(B.GBAN12, 0)*100,2)) ELSE 0.00 END AS GBAN12DA
+		FROM (
+			<include refid="JdeBudget"></include>
+		) A
+		LEFT OUTER JOIN ${lib4}.F0902 B ON A.GBCTRY=B.GBCTRY AND A.GBFY=B.GBFY AND A.GBMCU=B.GBMCU AND A.GBOBJ = B.GBOBJ AND A.GBSUB=B.GBSUB AND A.GBSBL=B.GBSBL AND B.GBLT='BA'
+		LEFT OUTER JOIN ${lib4}.F0902 C ON A.GBCTRY=C.GBCTRY AND A.GBFY=C.GBFY AND A.GBMCU=C.GBMCU AND A.GBOBJ = C.GBOBJ AND A.GBSUB=C.GBSUB AND A.GBSBL=C.GBSBL AND C.GBLT='AA'
+		) D ON A.GBCTRY=D.GBCTRY AND A.GBFY=D.GBFY AND A.GBMCU=D.GBMCU AND A.GBOBJ = D.GBOBJ AND A.GBSUB=D.GBSUB AND A.GBSBL=D.GBSBL 
+		-->
+	) A
+LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB)='') B ON A.GBMCU=B.GMMCU AND A.GBOBJ=B.GMOBJ
+LEFT OUTER JOIN (SELECT GMDL01, GMMCU, GMOBJ, GMSUB FROM ${lib4}.F0901 WHERE trim(GMSUB) != '') C ON A.GBMCU=C.GMMCU AND A.GBOBJ=C.GMOBJ AND A.GBSUB=C.GMSUB
+LEFT OUTER JOIN ${lib4}.F0006LB D ON A.GBMCU=D.MCMCU
+<if test = 'pSelectMenu.equals("BUCODE")'>
+ORDER BY BUDYEAR, A.GBFY, GBMCU, GBSBL, GBOBJ, GBSUB
+</if>
+ <if test = 'pSelectMenu.equals("DPCODE")'>
+ORDER BY BUDYEAR, A.GBFY, GBSBL, GBMCU, GBOBJ, GBSUB
+</if>
+</select>
+
+<select id="searchByImportProgress" resultType="ImportProgressDomain" parameterType="ImportProgressDomain">
+SELECT
+	<!-- 오더번호, 수입품번, CGMA, 개설,  ===,도착, 결제, 통관,  == ,사입일 -->
+	A.ORDER, TRIM(A.EXPNO) AS EXPNO, A.CCORD, B.OPNDT,
+	A.ORSEQ, A.PTDAT, 
+	CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END AS FTADTS,
+	A.TOADT, A.SASEQ, A.IPDAT, 
+	<!-- DETAIL화면
+	발주내역
+	오더번호 -->
+	TRIM(D.ORDER) AS ORDERX, F.ORDGU,
+	D.ORESR, F.ORFL1,
+		<!-- CIGMA ORD -->
+	TRIM(D.CCORD) AS CCORDX,
+	A.PRVND, E.VNAME AS PRVNM, D.ORDAT,
+		<!-- 수입품번, 품명, 발주단가, 수량, 발주금액 -->
+	TRIM(D.EXPNO) AS EXPNOX, TRIM(C.EXDSC) AS EXDSC,
+	D.ORCST AS ORCSTX, D.ORUNT AS ORUNTX, D.ORQTY AS ORQTYX, D.EXUNT AS EXUNTX, D.ORQTY * D.ORCST AS BAMTTT,
+	<!-- 발주조건 -->
+		<!-- REMARKS -->
+	TRIM(F.ORCOB) AS ORCOB,
+		<!-- ReqPr(요구조건), DlySc -->
+	F.ORREQ, TRIM(H.BUYRM) AS ORREQM, D.DUDAT AS DUDATX,
+		<!-- DesTo (도착지) --> 
+	F.ORSHP, TRIM(G.BUYRM) AS ORSHPM,
+		<!-- Paytm(결재기간) -->
+	F.ORTEM,TRIM(K.BUYRM) AS ORTEMM,
+		<!-- Price(가격조건) -->
+	F.ORCSS, TRIM(I.BUYRM) AS ORCSSM,
+		<!-- 선적지 -->
+	F.ORPOT,TRIM(L.BUYRM) AS ORPOTM, 
+		<!-- 결재조건, Descr -->
+	F.ORAPP,TRIM(J.BUYRM) AS ORAPPM, '' AS CARNM,
+		<!-- 원산지 -->
+	F.ORORG,TRIM(M.BUYRM) AS ORORGM,
+	<!-- L/C내역 -->
+	  <!-- 개설내역 -->
+		<!-- 은행코드, 개설은행, 개설일자,  LC번호, 개설비용 -->
+	N.BNKCD AS BNKCD5, TRIM(O.CAPNM) AS BNKNM, N.OPNDT  AS OPNDTX, TRIM(N.LOCNO) AS LOCNO, 
+	N.BNKAM + N.JBOAM + N.BDMAM + N.INGAM + N.HAJAM + N.JHAAM + N.ETCAM AS CLOTTT,
+	<!-- 도착내역 -->
+		<!-- B/L번호,  도착수량, 도착일자, 도착단가, 선적일자, 도착금액 -->
+	P.PBLNO AS PBLNO1, P.ORSEQ AS ORSEQ1,  P.PTQTY AS PTQTY1, P.PTDAT AS PTDAT1, 
+	P.DOCST AS DOCST1, P.DOUNT AS DOUNT1, P.SHPDT AS SHPDT1, P.DOAMT AS DOATTT,
+	<!-- 결제내역(FTACD 코드에 따라 달라짐) -->
+      <!-- 결제일자, 결제코드, 결제코드명, 결제비용총계 -->
+		<!-- 결제일자(결재 코드가 3일때, ELSE일때 최종 0일때를 합침 - 3일때는 없음) -->
+	CASE WHEN P.FTACD ='1' THEN P.FTADT WHEN P.FTACD ='2' THEN
+	(CASE WHEN R.LGDAT !=  0 THEN R.LGDAT WHEN R.OGDAT !=  0 THEN R.OGDAT END)
+	WHEN (P.FTACD ='3' OR (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END) !=0  OR P.FTACD ='0') THEN (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END)  ELSE '9999999' END AS FTADTX,
+		<!-- 결제코드1(결재 코드가 3일때, ELSE일때 최종 0일때를 합침 - 3일때는 없음) -->
+	<!-- (2021.03.22  : AS400 UPGRADE)	
+	CASE WHEN P.FTACD ='1' THEN P.FTACD WHEN P.FTACD ='2' THEN P.FTACD
+	 WHEN (P.FTACD ='3' OR (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END) !=0  OR P.FTACD ='0') THEN '3' ELSE '99' END AS FTACDX,
+	  -->
+	 CASE WHEN P.FTACD ='1' THEN CHAR(P.FTACD) WHEN P.FTACD ='2' THEN CHAR(P.FTACD)
+	 WHEN (P.FTACD ='3' OR (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END) !=0  OR P.FTACD ='0') THEN '3' ELSE '99' END AS FTACDX,
+		<!-- 결제코드명 (결재 코드가 3일때, ELSE일때 최종 0일때를 합침) -->
+	CASE WHEN P.FTACD ='1' THEN 'Fac' WHEN P.FTACD ='2' THEN 'L/C'  WHEN (P.FTACD ='3' OR (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END !=0)  OR P.FTACD ='0' ) THEN 'T/T' ELSE '' END AS FTANM,
+		<!-- LCNAM 완료 -->
+	CASE WHEN P.FTACD ='1' THEN '' WHEN P.FTACD ='2' THEN 
+	(CASE WHEN R.LGDAT !=  0 THEN 'L G' WHEN R.OGDAT !=  0 THEN '원본' END)
+	WHEN P.FTACD ='3' THEN ''  ELSE '' END AS LCNAM,
+		<!-- 결제비용총계 (결재 코드가 3일때, ELSE일때 최종 0일때를 합침) -->
+	CASE 
+	WHEN P.FTACD ='1' THEN  (Q.FTGAM + Q.FTBAM + Q.FTJAM + Q.FTEAM + Q.FTSAM) 
+	WHEN P.FTACD ='2' THEN 
+	(CASE WHEN R.LGDAT !=  0 THEN  (R.LGSAM + R.LGHAM + R.LGPAM + R.LGEAM + R.LGBUG) WHEN R.OGDAT !=  0 THEN  (R.OGSAM + R.OGHAM + R.OGBAM + R.OGXAM + R.OGDAM + R.OGEAM + R.OGBUG) END)
+	WHEN (P.FTACD ='3' OR (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END) !=0  OR P.FTACD ='0') THEN  (S.TTSAM + S.TTSSM + S.TTJSM) 
+	ELSE 0 END AS FTATTT,
+	<!-- 사입내역 -->
+		<!-- 사입일자, 사입구구분, 사입수량 -->
+	V.IPDAT AS IPDAT2, V.SAGUB, 
+	CASE WHEN V.SAGUB='1' THEN '일괄' WHEN V.SAGUB='2' THEN '분할' ELSE '' END AS SAGNM,
+	V.SASEQ AS SASEQ2, V.ISQTY,
+	<!-- 통관내역 -->
+		<!-- 지불처, 통관일자, 통관명, 통관금액 -->
+	T.TOGCD, T.TOGDT, TRIM(U.CAPNM) AS TOGNM,
+	T.CARAM + T.BUGAM + T.TOGAM + T.SPLAM + T.EDCAM + T.TECAM AS TOTTTT,
+	<!-- 오더년월 -->
+	substr(A.ORDYM,1,6) AS ORDYM
+FROM
+	${lib2}.BOM506LF A
+	LEFT OUTER JOIN ${lib2}.BAO100PF B ON A.COMPS=B.COMPS AND A.ORDER=B.ORDER 
+	LEFT OUTER JOIN ${lib2}.BUY500PF C ON A.COMPS=C.COMPS AND A.EXPNO=C.EXPNO 
+	LEFT OUTER JOIN ${lib2}.BOM500PF D ON A.COMPS=D.COMPS AND A.ORDER=D.ORDER  AND A.EXPNO=D.EXPNO 
+	LEFT OUTER JOIN ${lib1}.VENNAM E ON A.PRVND=E.VNDNR
+	LEFT OUTER JOIN ${lib2}.BOM600PF F ON A.COMPS=F.COMPS AND A.ORDER=F.ORDER 
+	LEFT OUTER JOIN ${lib2}.BUY050PF G ON A.COMPS=G.BUYCO AND 'SHIP' || F.ORSHP = G.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF H ON A.COMPS=H.BUYCO AND 'REQE' || F.ORREQ = H.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF I ON A.COMPS=I.BUYCO AND 'CNDC' || F.ORCSS = I.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF J ON A.COMPS=J.BUYCO AND 'CNDA' || F.ORAPP = J.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF K ON A.COMPS=K.BUYCO AND 'TERM' || F.ORTEM = K.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF L ON A.COMPS=L.BUYCO AND 'PORT' || F.ORPOT = L.BUYCD
+	LEFT OUTER JOIN ${lib2}.BUY050PF M ON A.COMPS=M.BUYCO AND 'ORGN' || F.ORORG = M.BUYCD
+	
+	LEFT OUTER JOIN ${lib2}.BAO100PF N ON A.COMPS=N.COMPS AND A.ORDER=N.ORDER 
+	LEFT OUTER JOIN ${lib2}.MST600PF O ON N.BNKCD=O.VNDOR
+	LEFT OUTER JOIN ${lib2}.BAA100PF P ON A.COMPS=P.COMPS AND A.ORDER=P.ORDER AND A.ORSEQ=P.ORSEQ AND A.EXPNO=P.EXPNO
+	LEFT OUTER JOIN ${lib2}.BAS100PF Q ON A.COMPS=Q.COMPS AND P.SHPDT=Q.BOTYM AND P.LCBNK=Q.BNKCD
+	LEFT OUTER JOIN ${lib2}.BAS200PF R ON A.COMPS=R.COMPS AND A.ORDER=R.ORDER AND A.ORSEQ=R.ORSEQ
+	LEFT OUTER JOIN ${lib2}.BAS300PF S ON A.COMPS=S.COMPS AND A.ORDER=S.ORDER 
+	
+	LEFT OUTER JOIN ${lib2}.BIE100PF T ON A.COMPS=T.COMPS AND P.PBLNO=T.PBLNO
+	LEFT OUTER JOIN ${lib2}.MST600PF U ON T.TOGCD=U.VNDOR
+	LEFT OUTER JOIN ${lib2}.BII500PF V ON A.COMPS=V.COMPS AND A.ORDER=V.ORDER AND A.ORSEQ=V.ORSEQ AND A.EXPNO=V.EXPNO	
+WHERE
+	A.COMPS = #{comps}
+	<!-- 		
+	<if test = 'pGubun.equals("X")'>
+		<if test = "pOrder != null and pOrder != ''">
+				AND A.ORDER = 'PF2-382'
+				AND A.ORDER = #{pOrder}
+		</if>
+	</if>
+	 -->
+	<if test = '!pGubun.equals("X")'>
+		<if test = 'pGubun.equals("A")'> <!-- 결제 -->
+		AND (CASE WHEN A.ORMDT !=0 THEN A.ORMDT ELSE A.FTADT END )  BETWEEN  #{startDate} AND #{endDate}
+		</if>
+		<if test = 'pGubun.equals("B")'> <!-- 도착 -->
+		AND A.PTDAT BETWEEN  #{startDate} AND #{endDate}
+		<!-- AND P.PTDAT BETWEEN  #{startDate} AND #{endDate} -->
+		</if>
+		<if test = 'pGubun.equals("C")'> <!-- 사입 -->
+		AND A.IPDAT BETWEEN  #{startDate} AND #{endDate}
+		<!-- AND V.IPDAT BETWEEN  #{startDate} AND #{endDate} -->
+		</if>
+		<if test = 'pGubun.equals("D")'> <!-- 통관 -->
+		AND A.TOADT BETWEEN  #{startDate} AND #{endDate}
+		<!-- AND T.TOGDT BETWEEN  #{startDate} AND #{endDate} -->
+		</if>
+		<if test = 'pGubun.equals("Y")'> <!-- 개설 -->
+		AND B.OPNDT BETWEEN  #{startDate} AND #{endDate}
+		<!-- AND N.OPNDT BETWEEN  #{startDate} AND #{endDate} -->
+		</if>
+		<if test = 'pGubun.equals("Z")'> <!-- 오더년월 -->
+		AND A.ORDYM BETWEEN substr(${startDate},1,6) AND substr(${endDate},1,6)
+		</if>
+	</if>
+	<if test = "pOrder != null and pOrder != ''">
+			AND A.ORDER = upper('${pOrder}')
+			<!-- AND A.ORDER >=  #{pOrder} 오류발생 : Java heap space-->
+	</if> 
+<if test = 'pGubun.equals("Z")'> <!-- 오더년월 -->
+ORDER BY A.COMPS, ORDYM, A.ORDER, A.EXPNO, A.ORSEQ
+</if>
+<if test = '!pGubun.equals("Z")'>
+ORDER BY A.COMPS, A.ORDER, A.EXPNO, A.ORSEQ
+</if>
+</select>
+</mapper>

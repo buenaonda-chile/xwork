@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CstBsRtDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="cstBsRt" type="CstBsRtDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRODUCT_NO" />
+        <result property="prdtNm" column="PRODUCT_NM" />    
+            
+        <result property="day" column="DAY" />
+        <result property="day1" column="DAY1" />
+        <result property="day2" column="DAY2" />
+        <result property="day3" column="DAY3" />
+        <result property="day4" column="DAY4" />
+        <result property="day5" column="DAY5" />
+        <result property="day6" column="DAY6" />
+        <result property="day7" column="DAY7" />
+        <result property="day8" column="DAY8" />
+        <result property="day9" column="DAY9" />
+        <result property="day10" column="DAY10" />
+        <result property="day11" column="DAY11" />
+        <result property="day12" column="DAY12" />
+        <result property="day13" column="DAY13" />
+        <result property="day14" column="DAY14" />
+        <result property="day15" column="DAY15" />
+        <result property="day16" column="DAY16" />
+        <result property="day17" column="DAY17" />
+        <result property="day18" column="DAY18" />
+        <result property="day19" column="DAY19" />
+        <result property="day20" column="DAY20" />
+        <result property="day21" column="DAY21" />
+        <result property="day22" column="DAY22" />
+        <result property="day23" column="DAY23" />
+        <result property="day24" column="DAY24" />
+        <result property="day25" column="DAY25" />
+        <result property="day26" column="DAY26" />
+        <result property="day27" column="DAY27" />
+        <result property="day28" column="DAY28" />
+        <result property="day29" column="DAY29" />
+        <result property="day30" column="DAY30" />
+        <result property="day31" column="DAY31" />
+        <result property="ttl" column="TTL" />
+                             
+        <result property="qy" column="QY" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        
+        <result property="modDate" column="MOD_DATE" />  
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+                               
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    
+    <select id="searchByCondition" resultMap="cstBsRt" parameterType="CstBsRtDomain">
+    
+    
+	WITH SET_A AS
+	(
+	SELECT U.OPERT_DE AS OPERT_DE, U.CLS_CODE, U.LOC_CODE, U.PRODUCT_NO, LINE_CODE, SUM(U.QY) AS QY
+	             FROM ( SELECT A.OPERT_DE , B.CLS_CODE , B.LOC_CODE , B.LINE_CODE , A.PSPNO AS PRODUCT_NO , QY
+	                    FROM ( SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE FROM ${lib2}.FGP500PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY01 AS QY, TRNYM || '01' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY02 AS QY, TRNYM || '02' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY03 AS QY, TRNYM || '03' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY04 AS QY, TRNYM || '04' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY05 AS QY, TRNYM || '05' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY06 AS QY, TRNYM || '06' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY07 AS QY, TRNYM || '07' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY08 AS QY, TRNYM || '08' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY09 AS QY, TRNYM || '09' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY10 AS QY, TRNYM || '10' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY11 AS QY, TRNYM || '11' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY12 AS QY, TRNYM || '12' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY13 AS QY, TRNYM || '13' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY14 AS QY, TRNYM || '14' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY15 AS QY, TRNYM || '15' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY16 AS QY, TRNYM || '16' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY17 AS QY, TRNYM || '17' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY18 AS QY, TRNYM || '18' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY19 AS QY, TRNYM || '19' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY20 AS QY, TRNYM || '20' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY21 AS QY, TRNYM || '21' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY22 AS QY, TRNYM || '22' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY23 AS QY, TRNYM || '23' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY24 AS QY, TRNYM || '24' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY25 AS QY, TRNYM || '25' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY26 AS QY, TRNYM || '26' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY27 AS QY, TRNYM || '27' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY28 AS QY, TRNYM || '28' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY29 AS QY, TRNYM || '29' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY30 AS QY, TRNYM || '30' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	                     UNION ALL SELECT COMPS, TRNYM, DEVID, PSPNO, ITDSC, PTQY31 AS QY, TRNYM || '31' AS OPERT_DE FROM ${lib2}.FGP540PF WHERE COMPS = #{clsCode} AND TRNYM = SUBSTR('${repym}', 1, 6)
+	
+	                    ) A
+	                             INNER JOIN PSZDBLIB.FHP010PF B ON A.DEVID = B.IF_CODE AND A.COMPS = B.CLS_CODE
+	                WHERE B.CLS_CODE = #{clsCode} 
+	                	AND A.TRNYM = SUBSTR('${repym}', 1, 6) 
+	                	<if test="locCode != null and locCode != ''">
+	                	AND B.LOC_CODE = #{locCode}  
+	                	</if>
+	                	AND LENGTH(TRIM(B.IF_CODE)) > 0 AND B.IF_TYPE = 'Q'
+	                UNION ALL SELECT OPERT_DE , CLS_CODE , LOC_CODE , LINE_CODE , PRODUCT_NO , QY 
+	                FROM PSZDBLIB.FHP100PF 
+	                WHERE CLS_CODE = #{clsCode} 
+	                	<if test="locCode != null and locCode != ''">
+	                	AND LOC_CODE = #{locCode} 
+	                	</if>
+	                	AND SUBSTR(OPERT_DE, 1, 6) = '${repym}' ) U
+	   GROUP BY OPERT_DE, CLS_CODE, LOC_CODE, LINE_CODE, PRODUCT_NO
+	)
+	select
+		A.loc_code,
+	    A.line_code,
+	    A.LINE_NM,
+	    CASE WHEN IFNULL(B.DAY1,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY1,0)) / double(IFNULL(B.DAY1,0)) * 100),15,2) END AS DAY1 ,
+	    CASE WHEN IFNULL(B.DAY2,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY2,0)) / double(IFNULL(B.DAY2,0)) * 100),15,2) END AS DAY2,
+	    CASE WHEN IFNULL(B.DAY3,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY3,0)) / double(IFNULL(B.DAY3,0)) * 100),15,2) END AS DAY3,
+	    CASE WHEN IFNULL(B.DAY4,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY4,0)) / double(IFNULL(B.DAY4,0)) * 100),15,2) END AS DAY4,
+	    CASE WHEN IFNULL(B.DAY5,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY5,0)) / double(IFNULL(B.DAY5,0)) * 100),15,2) END AS DAY5,
+	    CASE WHEN IFNULL(B.DAY6,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY6,0)) / double(IFNULL(B.DAY6,0)) * 100),15,2) END AS DAY6,
+	    CASE WHEN IFNULL(B.DAY7,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY7,0)) / double(IFNULL(B.DAY7,0)) * 100),15,2) END AS DAY7,
+	    CASE WHEN IFNULL(B.DAY8,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY8,0)) / double(IFNULL(B.DAY8,0)) * 100),15,2) END AS DAY8,
+	    CASE WHEN IFNULL(B.DAY9,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY9,0)) / double(IFNULL(B.DAY9,0)) * 100),15,2) END AS DAY9,
+	    CASE WHEN IFNULL(B.DAY10,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY10,0)) / double(IFNULL(B.DAY10,0)) * 100),15,2) END AS DAY10  ,
+	    CASE WHEN IFNULL(B.DAY11,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY11,0)) / double(IFNULL(B.DAY11,0)) * 100),15,2) END AS DAY11  ,
+	    CASE WHEN IFNULL(B.DAY12,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY12,0)) / double(IFNULL(B.DAY12,0)) * 100),15,2) END AS DAY12  ,
+	    CASE WHEN IFNULL(B.DAY13,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY13,0)) / double(IFNULL(B.DAY13,0)) * 100),15,2) END AS DAY13  ,
+	    CASE WHEN IFNULL(B.DAY14,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY14,0)) / double(IFNULL(B.DAY14,0)) * 100),15,2) END AS DAY14  ,
+	    CASE WHEN IFNULL(B.DAY15,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY15,0)) / double(IFNULL(B.DAY15,0)) * 100),15,2) END AS DAY15  ,
+	    CASE WHEN IFNULL(B.DAY16,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY16,0)) / double(IFNULL(B.DAY16,0)) * 100),15,2) END AS DAY16  ,
+	    CASE WHEN IFNULL(B.DAY17,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY17,0)) / double(IFNULL(B.DAY17,0)) * 100),15,2) END AS DAY17  ,
+	    CASE WHEN IFNULL(B.DAY18,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY18,0)) / double(IFNULL(B.DAY18,0)) * 100),15,2) END AS DAY18  ,
+	    CASE WHEN IFNULL(B.DAY19,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY19,0)) / double(IFNULL(B.DAY19,0)) * 100),15,2) END AS DAY19  ,
+	    CASE WHEN IFNULL(B.DAY20,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY20,0)) / double(IFNULL(B.DAY20,0)) * 100),15,2) END AS DAY20  ,
+	    CASE WHEN IFNULL(B.DAY21,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY21,0)) / double(IFNULL(B.DAY21,0)) * 100),15,2) END AS DAY21  ,
+	    CASE WHEN IFNULL(B.DAY22,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY22,0)) / double(IFNULL(B.DAY22,0)) * 100),15,2) END AS DAY22  ,
+	    CASE WHEN IFNULL(B.DAY23,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY23,0)) / double(IFNULL(B.DAY23,0)) * 100),15,2) END AS DAY23  ,
+	    CASE WHEN IFNULL(B.DAY24,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY24,0)) / double(IFNULL(B.DAY24,0)) * 100),15,2) END AS DAY24  ,
+	    CASE WHEN IFNULL(B.DAY25,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY25,0)) / double(IFNULL(B.DAY25,0)) * 100),15,2) END AS DAY25  ,
+	    CASE WHEN IFNULL(B.DAY26,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY26,0)) / double(IFNULL(B.DAY26,0)) * 100),15,2) END AS DAY26  ,
+	    CASE WHEN IFNULL(B.DAY27,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY27,0)) / double(IFNULL(B.DAY27,0)) * 100),15,2) END AS DAY27  ,
+	    CASE WHEN IFNULL(B.DAY28,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY28,0)) / double(IFNULL(B.DAY28,0)) * 100),15,2) END AS DAY28  ,
+	    CASE WHEN IFNULL(B.DAY29,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY29,0)) / double(IFNULL(B.DAY29,0)) * 100),15,2) END AS DAY29  ,
+	    CASE WHEN IFNULL(B.DAY30,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY30,0)) / double(IFNULL(B.DAY30,0)) * 100),15,2) END AS DAY30  ,
+	    CASE WHEN IFNULL(B.DAY31,0) = 0 THEN 0 ELSE DEC((double(IFNULL(A.DAY31,0)) / double(IFNULL(B.DAY31,0)) * 100),15,2) END AS DAY31,
+	    '0' AS TTL
+	
+	from
+	(
+	    (
+	        select A.cls_code,
+	        	   A.loc_code,
+	               A.line_code,
+	               MAX(TRIM(D.LINE_NM))    AS LINE_NM
+	--                A.product_no
+	--                , MAX(TRIM(C.ITDSC))      AS PRODUCT_NM
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '01' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY1"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '02' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY2"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '03' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY3"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '04' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY4"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '05' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY5"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '06' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY6"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '07' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY7"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '08' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY8"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '09' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY9"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '10' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY10"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '11' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY11"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '12' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY12"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '13' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY13"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '14' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY14"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '15' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY15"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '16' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY16"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '17' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY17"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '18' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY18"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '19' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY19"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '20' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY20"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '21' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY21"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '22' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY22"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '23' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY23"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '24' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY24"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '25' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY25"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '26' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY26"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '27' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY27"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '28' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY28"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '29' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY29"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '30' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY30"
+	               , DEC(SUM(case when substr(A.opert_de,7,2) =  '31' then A.qy * B.jm_labor / 60 end),15,2)  as "DAY31"
+	               , DEC(SUM(A.qy * B.jm_labor / 60),15,2) as TTL
+	        from
+	        (
+	            (
+	                select * from SET_A
+	            ) AS A
+	            LEFT OUTER JOIN PSZDBLIB.FHP010PF D
+	                            ON A.LINE_CODE = D.LINE_CODE
+	            LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PRODUCT_NO = C.ITNBR
+	            left outer join
+	            (
+	                select BB.cls_code,
+	                       BB.line_code,
+	                       BB.prdt_no,
+	                       BB.jm_labor
+	                from PSZDBLIB.FHP030PF BB
+	                where BB.YEAR = (case substr('${repym}',5,6)  when '01' then INT(substr('${repym}',1,4))-1
+	                                                            when '02' then INT(INT(substr('${repym}',1,4))-1)
+	                                                            when '03' then INT(substr('${repym}',1,4))-1
+	                                                            else INT(substr('${repym}',1,4)) end)
+	                and BB.FS_HALF = ( case substr('${repym}',5,6) when '04' then 'F'
+	                                                when '05' then 'F'
+	                                                when '06' then 'F'
+	                                                when '07' then 'F'
+	                                                when '08' then 'F'
+	                                                when '09' then 'F'
+	                                                else 'S' end)
+	                and CLS_CODE = #{clsCode}
+	
+	
+	            ) AS B on A.cls_code = B.cls_code and A.line_code = B.line_code and A.product_no = B.prdt_no
+	        )
+	        group by A.cls_code, A.loc_code, A.line_code--, A.product_no
+	        order by A.cls_code, A.loc_code, A.line_code--, A.product_no
+	    ) AS A left outer join
+	    (
+	        select A.line_code,
+	           MAX(TRIM(D.LINE_NM))                                                                              AS LINE_NM,
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '01' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY1",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '02' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY2",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '03' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY3",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '04' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY4",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '05' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY5",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '06' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY6",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '07' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY7",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '08' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY8",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '09' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY9",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '10' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY10",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '11' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY11",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '12' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY12",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '13' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY13",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '14' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY14",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '15' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY15",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '16' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY16",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '17' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY17",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '18' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY18",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '19' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY19",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '20' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY20",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '21' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY21",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '22' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY22",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '23' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY23",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '24' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY24",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '25' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY25",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '26' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY26",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '27' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY27",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '28' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY28",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '29' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY29",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '30' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY30",
+	           DEC(SUM(case when substr(A.opert_de, 7, 8) = '31' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2)             as "DAY31"
+	        from ((select AA.cls_code,
+	                      AA.loc_code,
+	                      AA.line_code,
+	                      AA.opert_de,
+	                      (SUM(AA.prsnl1) * SUM(AA.hr_mnt1)) + (SUM(AA.prsnl2) * SUM(AA.hr_mnt2)) +
+	                      (SUM(AA.prsnl3) * SUM(AA.hr_mnt3)) + (SUM(AA.prsnl4) * SUM(AA.hr_mnt4)) +
+	                      (SUM(AA.prsnl5) * SUM(AA.hr_mnt5)) + (SUM(AA.prsnl6) * SUM(AA.hr_mnt6)) +
+	                      (SUM(AA.prsnl7) * SUM(AA.hr_mnt7)) + (SUM(AA.prsnl8) * SUM(AA.hr_mnt8)) + SUM(AA.LGST_TIME) AS line_hr_mnt
+	               from pszdblib.FHP109PF AS AA /* 라인인원투입시간등록 */
+	               where substr(AA.opert_de, 1, 6) = '${repym}'
+	                 and AA.cls_code = #{clsCode}
+	                 <if test="locCode != null and locCode != ''">
+	                 and AA.loc_code = #{locCode}
+	                 </if>
+	               group by AA.opert_de, AA.cls_code, AA.loc_code, AA.line_code) AS A
+	                 LEFT OUTER JOIN PSZDBLIB.FHP010PF D ON A.LINE_CODE = D.LINE_CODE
+	                 left outer join (select BB.opert_de, BB.cls_code, BB.loc_code, BB.line_code, sum(BB.hr_mnt) AS lose_hr_mnt
+	                                  from pszdblib.FHP130PF AS BB /* 손실/제외/간접시간등록 */
+	                                  where substr(BB.opert_de, 1, 6) = '${repym}'
+	                                    and BB.cls_code = #{clsCode}
+	                                    <if test="locCode != null and locCode != ''">
+	                                    and BB.loc_code = #{locCode}
+	                                    </if>
+	                                    and BB.SE IN ('C','B')
+	                                  group by BB.opert_de, BB.cls_code, BB.loc_code, BB.line_code
+	                                  ORDER BY OPERT_DE) AS B
+	                                 on A.cls_code = B.cls_code and A.loc_code = B.loc_code and A.line_code = B.line_code and
+	                                    A.opert_de = B.opert_de )
+	        group by A.line_code
+	    ) AS B on A.line_code = B.line_code
+	)
+	order by A.loc_code, line_code
+	    
+    </select>
+    
+   
+
+</mapper>

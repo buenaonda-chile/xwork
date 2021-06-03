@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="88" Id="PGMPOPUP" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" scroll="false" TooltipFont="Default,0" Top="8" Ver="1.0" Width="440" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_sArgument"></Dataset>
+		</Datasets>
+		<Image Height="48" Id="Image3" ImageID="popup_title" Left="22" TabOrder="3" Top="19" Width="400"></Image>
+		<Static Font="굴림,12,Bold" Height="24" Id="Static3" Left="128" TabOrder="1" Text="프로그램이&#32;실행중&#32;입니다." Top="35" Width="216"></Static>
+		<Image Height="16" Id="Image0" ImageID="title_ico" Left="102" TabOrder="2" Top="35" Width="17"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+function form_OnLoadCompleted(obj)
+{
+SetWaitCursor(true); 
+alert("aa");
+/*
+	http.Sync = true;
+    
+    var sArgument_new ="";
+    
+    for(i=0;i<Length(sArgument);i++){
+		if(Substr(sArgument, i, 1) = "@"){
+			sArgument_new += " ";			
+		} else {
+			sArgument_new += Substr(sArgument, i, 1);						
+		}
+    }
+
+	Transaction(sKind, sMethodName, "", sOutDataSet, sArgument_new, "callback");
+	
+	//close(); 
+*/
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getBHZE204CP"){
+		// 조회건수가 없을경우
+		if(ds_BHZE204CP.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			//alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function closeForm()
+{
+	close();
+}
+
+]]></Script>
+</Window>

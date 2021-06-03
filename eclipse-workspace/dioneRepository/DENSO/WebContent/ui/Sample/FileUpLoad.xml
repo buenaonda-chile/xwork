@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="569" Id="FileWrite" Left="8" PidAttrib="7" Title="File&#32;UPLOAD" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_board">
+				<Contents>
+					<colinfo Id="NO" Size="256" Type="STRING"/>
+					<colinfo Id="TITLE" Size="256" Type="STRING"/>
+					<colinfo Id="REPLY" Size="256" Type="STRING"/>
+					<colinfo Id="WRITER" Size="256" Type="STRING"/>
+					<colinfo Id="WDATE" Size="256" Type="STRING"/>
+					<colinfo Id="RCNT" Size="256" Type="STRING"/>
+					<colinfo Id="CONTENTS" Size="256" Type="STRING"/>
+					<colinfo Id="FILEURL" Size="256" Type="STRING"/>
+					<colinfo Id="FILEEXT" Size="256" Type="STRING"/>
+					<colinfo Id="LFILENAME" Size="256" Type="STRING"/>
+					<colinfo Id="PFILENAME" Size="256" Type="STRING"/>
+					<colinfo Id="PASSWD" Size="256" Type="STRING"/>
+					<colinfo Id="BINFILE" Size="256" Type="BLOB"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_uploadFile">
+				<Contents>
+					<colinfo id="FILE_PATH" size="256" summ="default" type="STRING"/>
+					<colinfo id="FILE_NAME" size="256" summ="default" type="STRING"/>
+					<colinfo encrypt="base64" id="FILE_BLOB" size="256" summ="default" type="BLOB"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Div Height="35" Id="DIV_Bottom" Style="div_style1" TabOrder="1" Top="272" Width="784">
+			<Contents>
+				<Edit Border="Flat" Enable="FALSE" Height="20" Id="edt_file" InputPanel="FALSE" Left="106" LeftMargin="3" Style="edt_style1" TabOrder="1" Top="8" Width="502"></Edit>
+				<Button Align="Left" ButtonStyle="TRUE" Cursor="HAND" Height="20" Id="btn_file" Left="84" LeftMargin="23" OnClick="DIV_Bottom_btn_file_OnClick" TabOrder="1" Top="8" Width="22"></Button>
+				<Button Align="Left" ButtonStyle="TRUE" Cursor="HAND" Height="23" Id="btn_save" Left="632" LeftMargin="23" OnClick="btn_save_OnClick" TabOrder="2" Text="저장" Top="8" Width="56"></Button>
+				<Button Align="Left" ButtonStyle="TRUE" Cursor="HAND" Height="23" Id="btn_close" Left="692" LeftMargin="23" OnClick="btn_close_OnClick" TabOrder="3" Text="취소" Top="8" Width="52"></Button>
+				<Shape Bottom="33" Height="27" Id="SHP_RVL1" Left="621" LineColor="#759bc2" LineKind="Vertical" Right="622" TabOrder="4" Top="6" Width="1"></Shape>
+				<Shape Bottom="33" Height="27" Id="SHP_LVL1" Left="624" LineColor="#31437e" LineKind="Vertical" Right="632" TabOrder="7" Top="6" Width="8"></Shape>
+				<Static Align="Right" Font="굴림,9,Bold" Height="20" Id="Static0" Left="14" TabOrder="7" Text="업로드파일" Top="8" VAlign="Middle" Width="64"></Static>
+			</Contents>
+		</Div>
+		<File Bottom="384" Height="24" Id="fle_file" Left="632" Right="656" TabOrder="3" Top="360" Width="24"></File>
+		<FileDialog Bottom="384" Height="24" Id="fld_fileopen" Left="608" Right="632" TabOrder="3" Top="360" Width="24"></FileDialog>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FileUpLoad.xml
+ * ● PROGRAM DESCRIPTION  : File UPLOAD TEST
+ * ● DATE WRITTEN         : 2011.10.25
+ ----------------------------------------------------------------*/
+
+
+function btn_save_OnClick(obj)
+{
+	var blobbuffer;
+	if(fld_fileopen.FileName != "") {
+		if (!fle_file.IsExistFile())	{
+			alert("파일이 존재하지 않습니다. 확인후 다시 시도해 주십시오.");
+			return;
+		}
+
+		fle_file.Open("r+b");
+		blobbuffer = fle_file.ReadBinary();
+		fle_file.Close();
+
+		if(length(blobbuffer) <= 0) {
+			alert("내용이 없는 파일입니다. 확인후 다시 시도해 주십시오.");
+			return;
+		}
+	}
+
+	// 읽은 파일 내용을 dataset에 저장한다.
+	var fileInfo = split(fld_fileopen.FileName, ".");
+	ds_uploadFile.AddRow();
+	//ds_uploadFile.SetColumn(0, "FILE_PATH",   fileInfo[length(fileInfo)-1]);
+	ds_uploadFile.SetColumn(0, "FILE_NAME", fld_fileopen.FileName);
+	ds_uploadFile.SetColumn(0, "FILE_BLOB",   blobbuffer);
+
+	var sKind		= "file_upload";						
+	var sMethodName = "service::sample/fileUpload.do"; 
+	var sInDataSet  = "ds_uploadFile=ds_uploadFile:u"; //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";
+	var sArgument   = "";
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "Tran_CallBack");
+	http.Sync = false;
+	close();
+}
+
+function btn_close_OnClick(obj)
+{
+	close(false);
+}
+
+function DIV_Bottom_btn_file_OnClick(obj)
+{
+	if(fld_fileopen.Open()) {
+		fle_file.FileName = fld_fileopen.FilePath + "\\" + fld_fileopen.FileName;
+		//alert(fle_file.FileName);
+		DIV_Bottom.edt_file.Text = fle_file.FileName;
+	}
+}
+
+//-------------------------------------------------------------------------
+// Transaction 수행후 결과 처리 (Async)
+// Argument : SrvID(ServiceID),ErrorCode(에러코드),ErrorMsg(에러메세지)
+//-------------------------------------------------------------------------
+function Tran_CallBack(SrvId,ErrorCode,ErrorMsg)
+{
+	if(ErrorCode < 0) {
+		alert("[ " + ErrorCode + " ]\n\n" + ErrorMsg);  // Message Box를 띄운다
+		return;  
+	}
+}]]></Script>
+</Window>

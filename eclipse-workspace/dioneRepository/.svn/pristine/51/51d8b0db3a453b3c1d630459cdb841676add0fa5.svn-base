@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판스케줄마스타" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset CanColumnChange="ds_FGPZ170_CanColumnChange" CanRowPosChange="ds_FGPZ170_CanRowPosChange" DataSetType="Dataset" Id="ds_FGPZ170" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCDD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCMK" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCMKM" size="256" summ="default" type="STRING"/>
+					<colinfo id="JDTFM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="JDTTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="JOBTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CONTL" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGPZ170_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_DAYGU">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST091LF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGP100PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST090PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGP010PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST090PF_ROW"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGP120PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGP129PF"></Dataset>
+			<Dataset CanColumnChange="ds_FGPZ170_CanColumnChange" CanRowPosChange="ds_FGPZ170_CanRowPosChange" DataSetType="Dataset" Id="ds_FGPZ170_SUB" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCDD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCMK" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRCMKM" size="256" summ="default" type="STRING"/>
+					<colinfo id="JDTFM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="JDTTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="JOBTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="10" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="11" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FGPZ170" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="544" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="704" TabOrder="6" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="704">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="일"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" colspan="2" display="text" text="가동유무"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="시작일자"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="종료일자"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="작업시간"/>
+					</head>
+					<body>
+						<cell align="right" checklength="Byte" col="0" colid="PRCDD" display="normal" limit="3" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="1" colid="PRCMK" display="normal" limit="1" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="2" colid="PRCMKM" display="normal" limit="3" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="3" colid="JDTFM" display="date" edit="date" limit="8" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="4" colid="STRTM" display="normal" edit="number" expr='iif(STRTM==null,&apos;&apos;,substr(Lpad(STRTM,&quot;0&quot;,6),0,2)+&quot;:&quot;+substr(Lpad(STRTM,&quot;0&quot;,6),2,2)+&quot;:&quot;+substr(Lpad(STRTM,&quot;0&quot;,6),4,2))' limit="6" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="5" colid="JDTTO" display="date" edit="date" limit="8" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="6" colid="ENDTM" display="normal" edit="number" expr='iif(ENDTM==null,&apos;&apos;,substr(Lpad(ENDTM,&quot;0&quot;,6),0,2)+&quot;:&quot;+substr(Lpad(ENDTM,&quot;0&quot;,6),2,2)+&quot;:&quot;+substr(Lpad(ENDTM,&quot;0&quot;,6),4,2))' limit="6" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="7" colid="JOBTM" display="normal" limit="6" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="727" OnClick="fn_Search" TabOrder="7" TabStop="FALSE" Text="조회" Top="98" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="810" OnClick="fn_Input" TabOrder="8" TabStop="FALSE" Text="추가" Top="98" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="891" OnClick="fn_Save" TabOrder="9" TabStop="FALSE" Text="Button2" Top="98" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="966" OnClick="fn_Delete" TabOrder="10" TabStop="FALSE" Text="Button1" Top="98" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="14" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="15" Text="계&#32;획&#32;년&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="340" TabOrder="16" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="444" TabOrder="17" Text="작&#32;업&#32;공&#32;정" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="560" TabOrder="18" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="664" TabOrder="19" Text="주&#32;야&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="780" TabOrder="20" Top="34" VAlign="Middle" Width="206"></Static>
+		<Combo CodeColumn="cd" DataColumn="cdnm" Height="18" Id="cmb_DAYGU" InnerDataset="ds_DAYGU" Left="784" OnChanged="common_OnChanged" OnKeyDown="cmb_DAYGU_OnKeyDown" TabOrder="5" Top="37" Width="88"></Combo>
+		<Edit CheckLength="Byte" Height="21" Id="ed_PROCS" Left="563" MaxLength="5" OnChanged="common_OnChanged" OnKillFocus="ed_PROCS_OnKillFocus" TabOrder="4" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Calendar Dateformat="yyyy-MM" Height="21" Id="cmb_WRKYMK" Left="343" LeftMargin="10" OnChanged="common_OnChanged" OnKillFocus="cmb_WRKYMK_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="37" Width="88"></Calendar>
+		<Static Height="20" Id="ID03061" Left="875" TabOrder="21" Text="(Enter&#32;KEY&#32;Press)" Top="38" VAlign="Middle" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FGPZ170.xml
+ * ● PROGRAM DESCRIPTION  : 전광판스케줄마스타
+ * ● DATE WRITTEN         : 2013.06.10
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //조회, 추가, 저장
+	getComCode(); //공장구분 선택
+	getFGP010PF();//사업부별 기준작업시간
+	//cmb_WRKYMK.Value="20130601";
+	//ed_PROCS.Text="C-07";
+	//cmb_DAYGU.Value="D";
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false;
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getFGPZ170(){
+
+	if(!validationChk()){
+		return;
+	}
+
+	var sKind		= "getFGPZ170";						
+	var sMethodName = "service::psfaclib/selectFGPZ170.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FGPZ170=ds_FGPZ170";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@WRKYMK=" + quote(substr(cmb_WRKYMK.Value,0,6)); //계획년월
+		sArgument += "@PROCS=" + quote(ed_PROCS.Value); //작업공정
+		sArgument += "@DAYGU=" + quote(cmb_DAYGU.Value); //주야구분
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/  
+function setFGPZ170(){
+
+	if(ds_FGPZ170.GetRowType(ds_FGPZ170.currow)=="update" ||ds_FGPZ170.GetRowType(ds_FGPZ170.currow)=="insert" ){
+		if(!ds_FGPZ170_CanRowPosChange()){
+			return;
+		}
+	}
+	if(cmb_DAYGU.Value=="D"){
+		sumJobTim();	
+	}
+
+	var sKind		= "setFGPZ170";						
+	var sMethodName = "service::psfaclib/saveFGPZ170.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_FGPZ170=ds_FGPZ170:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FGPZ170_CHECK=ds_FGPZ170_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_FGPZ170_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_FGPZ170_CHECK.GetRowCount();i++){
+			alert("작업일자 : " +ds_FGPZ170_CHECK.GetColumn(i,"JDTFM")+ " = " + ds_FGPZ170_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getFGPZ170();  //error항목이 존재시에는 재조회
+		return;
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	var wrkym = cmb_WRKYMK.Value;
+	var procs = ed_PROCS.Text;
+	var daygu = cmb_DAYGU.Value;
+		cmb_WRKYMK.BKColor="white";
+		ed_PROCS.BKColor="white";
+		cmb_DAYGU.BKColor="white";
+		
+	if (wrkym == ""){
+		cmb_WRKYMK.BKColor="paleturquoise";
+		alert("[알림]계획년월을 입력하세요.");
+		//alert(setPopMessage("6015"));//[알림]계획년월을 입력하세요.
+		//setMessage("6015");
+		result = false;
+	}else if (procs == ""){
+		ed_PROCS.BKColor="paleturquoise";
+		alert("[알림]작업공정을 입력하세요.");
+		//alert(setPopMessage("6016"));//[알림]작업공정을 입력하세요.
+		//setMessage("6016");
+		result = false;
+	}else if (length(daygu) == 0){
+		cmb_DAYGU.BKColor="paleturquoise";
+		alert("[알림]주야구분을 입력하세요.");
+		//alert(setPopMessage("2027"));//[알림] 주야구분을 선택하세요.
+		//setMessage("2027");
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FGPZ170.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "전광판스케줄마스타";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|전광판스케줄마스타";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != -1) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getFGPZ170();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	if(ds_FGPZ170.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_FGPZ170.DeleteRow(ds_FGPZ170.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setFGPZ170();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+//계획년월 CHECK
+function cmb_WRKYMK_OnKillFocus(obj)
+{
+	if(length(trim(obj.Value)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getMST090PF";		
+	var sMethodName = "service::pscomlib/selectMST091LF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST091LF=ds_MST091LF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRCYM=" + quote(substr(obj.Value,0,6)); //계획년월
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_MST091LF.GetRowCount() < 1){
+		alert(setPopMessage("4003"));
+		setMessage("4003");	
+		cmb_MKYM.SetFocus();
+		return;
+	}
+	http.usewaitcursor = true;	
+}
+//작업공정 CHECK
+function ed_PROCS_OnKillFocus(obj)
+{
+	if(length(trim(obj.Value)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getFGP100PF";		
+	var sMethodName = "service::psfaclib/selectFGP100PF.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FGP100PF=ds_FGP100PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PROCS=" + quote(obj.Value); //작업공정
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_FGP100PF.GetRowCount() < 1){
+		alert(setPopMessage("6016"));
+		setMessage("6016");	
+		ed_PROCS.SetFocus();
+		return;
+	}
+	http.usewaitcursor = true;		
+}
+
+function ds_FGPZ170_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if (strColumnID == "JDTFM"){//시작일자Check
+		if(varNewValue!=""){
+			var setDate = dateChk(varNewValue);
+			if(setDate == false){
+				return setDate;
+			}
+			else{
+				var getPrcdt =ds_FGPZ170.GetColumn(nRow, "PRCDT");
+				if(getPrcdt < varNewValue){ //시작일은 작업일자와 같거나 작아야함.
+					alert("[알림]시작일은 작업일자와 같거나 작아야합니다.");
+					//alert(setPopMessage("6020"));//[알림]시작일은 작업일자와 같거나 작아야합니다.
+					//setMessage("6020");	
+					return false;
+				}			
+			}
+		}
+	}
+	if (strColumnID == "STRTM"){//시작시간Check
+		if(varNewValue!=""){
+			var setTime = timeChk(varNewValue);
+			if(setTime == false){
+				return setTime;
+			}else if(setTime == true && cmb_DAYGU.Value=="D"){//주간시간 check
+				var getDysTm =parseInt(ds_FGP010PF.GetColumn(0, "DYSTM"));			
+				var getDyeTm =parseInt(ds_FGP010PF.GetColumn(0, "DYETM"));
+				if(parseInt(varNewValue) < getDysTm || parseInt(varNewValue) > getDyeTm) {
+					alert("[알림]주간시작시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6021"));//[알림]시작시간 범위를 벗어났습니다.
+					//setMessage("6021");	
+					return false;
+				}		
+			}
+		}
+	}
+	if (strColumnID == "JDTTO"){//종료일자Check
+		if(varNewValue!=""){
+			var setDate = dateChk(varNewValue);
+			if(setDate == false){
+				return setDate;
+			}else{
+				var getPrcdt =ds_FGPZ170.GetColumn(nRow, "PRCDT");
+				var WRKDT="";
+				dateChk2(getPrcdt);
+				WRKDT = ds_MST090PF_ROW.GetColumn(0,"PRCDT");
+				if(getPrcdt != varNewValue && cmb_DAYGU.Value=="D"){ //주간은 계획일과 시작일이 같아야함.
+					alert("[알림]주간작업종료일은 작업일자와 동일해야합니다.");
+					//alert(setPopMessage("6022"));//[알림]주간작업종료일은 작업일자와 동일해야합니다.
+					//setMessage("6022");					
+					return false;
+				}else if((getPrcdt != varNewValue  && WRKDT != varNewValue) && cmb_DAYGU.Value=="N"){
+					alert("[알림]야간작업종료일은 작업일자와 같거나 하루작아야합니다.");
+					//alert(setPopMessage("6023"));//[알림]야간작업종료일은 작업일자와 같거나 하루작아야합니다.
+					//setMessage("6023");						
+					return false;
+				}				
+			}
+		}
+	}
+		
+	if (strColumnID == "ENDTM"){//시간Check
+		if(varNewValue!=""){
+			var setTime = timeChk(varNewValue);
+			if(setTime == false){
+				return setTime;
+			}else if(setTime == true && cmb_DAYGU.Value=="D"){//주간시간 check
+				var getDysTm =parseInt(ds_FGP010PF.GetColumn(0, "DYSTM"));			
+				var getDyeTm =parseInt(ds_FGP010PF.GetColumn(0, "DYETM"));
+				if(parseInt(varNewValue) < getDysTm || parseInt(varNewValue) > getDyeTm) {
+					alert("[알림]주간종료시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6024"));//[알림]종료시간 범위를 벗어났습니다.
+					//setMessage("6024");	
+					return false;
+				}		
+			}
+		}
+	}
+}
+
+function ds_FGPZ170_CanRowPosChange(obj,nOldRow,nRow)
+{
+	var result=true;
+	if(ds_FGPZ170.GetRowType(ds_FGPZ170.currow)=="update" ||ds_FGPZ170.GetRowType(ds_FGPZ170.currow)=="insert" ){
+		var getPrcdt =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "PRCDT");
+		var getJdtfm =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "JDTFM");
+		var getStrtm =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "STRTM");
+		var getJdtto =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "JDTTO");
+		var getEndTm =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "ENDTM");
+		var getContl =ds_FGPZ170.GetColumn(ds_FGPZ170.currow, "CONTL");
+
+		if(length(getJdtfm)!=0){ //시작일자가 있는경우 시작시간, 종료일자 check
+			if(length(getStrtm)==0){
+				alert("[알림]시작시간을  입력하세요.");
+				//alert(setPopMessage("6027"));//[알림]시작시간을  입력하세요.
+				//setMessage("6027");	
+				return false; 
+			}else if(length(getJdtto)==0){
+				alert("[알림]종료일자를 입력하세요.");
+				//alert(setPopMessage("6026"));//[알림]종료일자를 입력하세요.
+				//setMessage("6026");	
+				return false; 			
+			}//야간시작시간체크
+			if(getJdtfm==getPrcdt && cmb_DAYGU.Value=="N"){//야간작업시간 check(야간작업일=지시일)
+				if(parseInt(getStrtm) < 0 || parseInt(getStrtm) > parseInt(ds_FGP010PF.GetColumn(0, "NTETM"))){
+					alert("[알림]야간1시작시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6021"));//[알림]시작시간 범위를 벗어났습니다.
+					//setMessage("6021");	
+					return false; 
+				}
+			}else if(getJdtfm < getPrcdt && cmb_DAYGU.Value=="N"){//야간작업시간 check(야간작업일<지시일)
+				if(parseInt(getStrtm) < parseInt(ds_FGP010PF.GetColumn(0, "NTSTM")) || parseInt(getStrtm) >240000){
+					alert("[알림]야간2시작시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6021"));//[알림]시작시간 범위를 벗어났습니다.
+					//setMessage("6021");	
+					return false; 
+				}
+			}
+		}
+		if(length(getStrtm)!=0){ //시작시간이 있는경우 시작일자 check
+			if(length(getJdtfm)==0){
+				alert("[알림]시작일자를 입력하세요.");
+				//alert(setPopMessage("6025"));//[알림]시작일자를 입력하세요.
+				//setMessage("6025");
+				return false; 
+			}		
+		}
+		if(length(getJdtto)!=0){//종료일자가 있는경우 시작일자 check
+			if(length(getEndTm)==0){
+				alert("[알림]종료시간을  입력하세요.");
+				//alert(setPopMessage("6028"));//[알림]종료시간을 입력하세요.
+				//setMessage("6028");
+				return false; 
+			}else if(length(getJdtfm)==0){
+				alert("[알림]시작일자를 입력하세요.");
+				//alert(setPopMessage("6025"));//[알림]시작일자를 입력하세요.
+				//setMessage("6025");
+				return false; 			
+			}//야간종료시간체크
+			if(getJdtto==getPrcdt && cmb_DAYGU.Value=="N"){//야간작업시간 check(야간작업일=지시일)
+				if(parseInt(getEndTm) < 0 || parseInt(getEndTm) > parseInt(ds_FGP010PF.GetColumn(0, "NTETM"))){
+					alert("[알림]야간1종료시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6024"));//[알림]종료시간 범위를 벗어났습니다.
+					//setMessage("6024");
+					return false; 
+				}
+			}else if(getJdtto < getPrcdt && cmb_DAYGU.Value=="N"){//야간작업시간 check(야간작업일<지시일)
+				if(parseInt(getEndTm) < parseInt(ds_FGP010PF.GetColumn(0, "NTSTM")) || parseInt(getEndTm) >240000){
+					alert("[알림]야간2종료시간 범위를 벗어났습니다.");
+					//alert(setPopMessage("6024"));//[알림]종료시간 범위를 벗어났습니다.
+					//setMessage("6024");
+					return false; 
+				}
+			}					
+		}
+				
+		if(length(getStrtm)!=0 && length(getEndTm)!=0 && cmb_DAYGU.Value=="D"){//주간작업시간 check
+			if(parseInt(getStrtm) >= parseInt(getEndTm)){
+				alert("[확인]시작일자가 종료일자보다 클 수는 없습니다.");
+				//alert(setPopMessage("1503"));//[확인] 시작일자가 종료일자보다 클 수는 없습니다.
+				//setMessage("1503");	
+				return false; 
+			}
+		}
+		//rpg없음. 추가함.
+		if(length(getStrtm)!=0 && length(getEndTm)!=0 && cmb_DAYGU.Value=="N"){//야간작업시간 check
+			if(getJdtfm == getJdtto && parseInt(getStrtm) >= parseInt(getEndTm)){
+				alert("[확인]시작일자가 종료일자보다 클 수는 없습니다.");
+				//alert(setPopMessage("1503"));//[확인] 시작일자가 종료일자보다 클 수는 없습니다.
+				//setMessage("1503");				
+				return false; 
+			}
+		}
+				
+		if(length(getEndTm)!=0){ //종료시간이 있는경우 시작일자 check
+			if(length(getJdtto)==0){
+				alert("[알림]종료일자를 입력하세요.");
+				//alert(setPopMessage("6026"));//[알림]종료일자를 입력하세요.
+				//setMessage("6026");
+				return false; 
+			}		
+		}
+		if(length(getJdtfm)!=0){
+		//주간작업시간계산
+		var fhTime="";
+		var ehTime="";
+		var jobTime=0;
+		var noWkTime=0;
+
+		if(cmb_DAYGU.Value=="D"){
+			fhTime=parseInt(substr(lpad(getStrtm,0,6),0,2))*60+parseInt(substr(lpad(getStrtm,0,6),2,2));
+			ehTime=parseInt(substr(lpad(getEndTm,0,6),0,2))*60+parseInt(substr(lpad(getEndTm,0,6),2,2));
+			getFGP120PF(getPrcdt, getStrtm, getEndTm);
+			if(ds_FGP120PF.rowcount >0 ){
+				noWkTime= parseInt(ds_FGP120PF.GetColumn(0,"STMIN"));
+				jobTime= parseInt(ehTime) - parseInt(fhTime);
+				ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime-noWkTime);
+			}else{
+				getFGP129PF(getStrtm, getEndTm);
+				if(ds_FGP129PF.rowcount >0 ){
+					noWkTime= parseInt(ds_FGP129PF.GetColumn(0,"STMIN"));
+					jobTime= parseInt(ehTime) - parseInt(fhTime);
+					ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime-noWkTime);
+				}
+			}
+		}else if(cmb_DAYGU.Value=="N"){
+			var getNtstm=substr(lpad(ds_FGP010PF.GetColumn(0, "NTSTM"),0,6),0,4);
+			var getNtetm=substr(lpad(ds_FGP010PF.GetColumn(0, "NTETM"),0,6),0,4);
+			
+			//야간시작시각
+				//24시이전일때
+			if( parseInt(substr(lpad(getStrtm,0,6),0,4)) >= parseInt(getNtstm) && parseInt(substr(lpad(getStrtm,0,6),0,4))<= 2400){
+				//alert("24이전시작");
+				fhTime= 24*60 - (parseInt(substr(lpad(getStrtm,0,6),0,2))*60+parseInt(substr(lpad(getStrtm,0,6),2,2)));
+			}else{//야간시작시각이 00부터 사업부종료시간 이전일때
+				//alert("00시이후시작");
+				fhTime=parseInt(substr(lpad(getStrtm,0,6),0,2))*60+parseInt(substr(lpad(getStrtm,0,6),2,2));						
+			}
+			//야간졸료시각
+				//24시이전일때
+			if( parseInt(substr(lpad(getEndTm,0,6),0,4)) >= parseInt(getNtstm) && parseInt(substr(lpad(getEndTm,0,6),0,4))<= 2400){
+				//alert("24이전종료");
+				ehTime= 24*60 - (parseInt(substr(lpad(getEndTm,0,6),0,2))*60+parseInt(substr(lpad(getEndTm,0,6),2,2)));						
+				 
+			}else{//야간종료시각이 00부터 사업부종료시간 이전일때
+				//alert("00시이후종료");
+				ehTime=parseInt(substr(lpad(getEndTm,0,6),0,2))*60+parseInt(substr(lpad(getEndTm,0,6),2,2));						
+			}
+//alert(getEndTm+"==="+lpad(getEndTm,0,6)+"=="+parseInt(substr(lpad(getEndTm,0,6),0,4)) +"=="+parseInt(getNtetm));
+			if(parseInt(substr(lpad(getEndTm,0,6),0,4)) >= 0 && parseInt(substr(lpad(getEndTm,0,6),0,4))<=parseInt(getNtetm)){
+/*
+				jobTime= parseInt(ehTime) + parseInt(fhTime);
+				ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+				alert("종료시간이00이상 사업부종료시간이하");
+*/
+				//이부분만 로직이상함.동일날짜계산추가함 rpg없음.
+				if(getJdtfm == getJdtto){
+					jobTime= parseInt(ehTime) - parseInt(fhTime);
+					//ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+					//alert("동일날짜 종료시간이00이상 사업부종료시간이하");
+				}
+				else{
+					jobTime= parseInt(ehTime) + parseInt(fhTime);
+					//ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+					//alert("종료시간이00이상 사업부종료시간이하");				
+				}
+			}
+			else{
+				if(parseInt(substr(lpad(getEndTm,0,6),0,4)) = 2400){
+					jobTime= parseInt(ehTime) + parseInt(fhTime);
+					//ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);  
+				//alert("그외 종료시간이 24시");
+				}else{//시간계산이상함.
+					jobTime= parseInt(ehTime) - parseInt(fhTime);
+					//ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+				//alert("그외 종료시간이 24시가 아닌 경우");
+				}
+			}
+		//시작시간과 종료시간이 사업부시작시간보다 크고 24시보다 작을 경우	
+			if((parseInt(substr(lpad(getStrtm,0,6),0,4)) >= parseInt(getNtstm) && parseInt(substr(lpad(getStrtm,0,6),0,4))<= 2400) && 
+				(parseInt(substr(lpad(getEndTm,0,6),0,4)) >= parseInt(getNtstm) && parseInt(substr(lpad(getEndTm,0,6),0,4))<= 2400)){
+				//alert("시작시간과 종료시간이 사업부시작시간보다 크고 24시보다 작을 경우");
+				getFGP120PF(getPrcdt, getStrtm, getEndTm);
+				if(ds_FGP120PF.rowcount >0 ){
+					noWkTime= parseInt(ds_FGP120PF.GetColumn(0,"STMIN"));
+					ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime-noWkTime);
+				}else{
+					ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+				}
+			}
+			else{//시작시간과 종료시간이 0000보다 크고 사업부종료시간보다 작을 경우
+				if(parseInt(substr(lpad(getStrtm,0,6),0,4)) >= 0000 && parseInt(substr(lpad(getStrtm,0,6),0,4))<= parseInt(getNtetm) && 
+					parseInt(substr(lpad(getEndTm,0,6),0,4)) <= parseInt(getNtetm)){
+					//alert("시작시간과 종료시간이 0000보다 크고 사업부종료시간보다 작을 경우");
+					getFGP120PF(getPrcdt, getStrtm, getEndTm);
+					if(ds_FGP120PF.rowcount >0 ){
+						noWkTime= parseInt(ds_FGP120PF.GetColumn(0,"STMIN"));
+						ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime-noWkTime);
+					}else{
+						ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+					}			
+				}
+				else{//시작시간이 사업부시작시간보다 크고 24시보다 작을 경우, 종료시간이 0000보다크거나같고 사업부종료시간보다 작거나같음
+					if((parseInt(substr(lpad(getStrtm,0,6),0,4)) >= parseInt(getNtstm) && parseInt(substr(lpad(getStrtm,0,6),0,4))<= 2400) && 
+						(parseInt(substr(lpad(getEndTm,0,6),0,4)) >=0000 && parseInt(substr(lpad(getEndTm,0,6),0,4)) <= parseInt(getNtetm))){
+						//alert("시작시간이 사업부시작시간보다 크고 24시보다 작을 경우, 종료시간이 0000보다크거나같고 사업부종료시간보다 작거나같음");
+						getEndTm =parseInt(substr(lpad(getEndTm,0,6),0,4))+2400+"00";
+						if(parseInt(substr(lpad(getStrtm,0,6),0,4))>=0000 && parseInt(substr(lpad(getStrtm,0,6),0,4))<= parseInt(getNtetm)){
+							getStrtm =parseInt(substr(lpad(getStrtm,0,6),0,4))+2400+"00";
+						}
+//alert(getEndTm+"===="+getEndTm);
+						getFGP120PF(getPrcdt, getStrtm, getEndTm);
+						if(ds_FGP120PF.rowcount >0 ){
+							noWkTime= parseInt(ds_FGP120PF.GetColumn(0,"STMIN"));
+							ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime-noWkTime);
+						}else{
+							ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"JOBTM",jobTime);
+						}
+					}
+				}
+			}
+			if(getContl!="P"){
+				ds_FGPZ170.UpdateControl=false;
+				ds_FGPZ170.SetRowType(ds_FGPZ170.currow,"insert");
+				ds_FGPZ170.UpdateControl=true;
+				ds_FGPZ170.SetColumn(ds_FGPZ170.currow,"CONTL","P");
+			}
+		}
+		}
+	}
+	return result;
+}
+//시간포맷Check
+function timeChk(getTime){
+	var rlt = true;
+	var msg = "";
+	var timeChk = lpad(getTime,0,6);
+	if(substr(timeChk,0,2)>24){
+		alert("[알림]시간은 24보다 클수없습니다.");
+		//alert(setPopMessage("6017"));//[알림]시간은 24보다 클수없습니다.
+		//setMessage("6017");
+		rlt =false;
+	}
+	else if(substr(timeChk,2,2)>59){
+		alert("[알림]분은 59보다 클수없습니다.");
+		//alert(setPopMessage("6018"));//[알림]분은 59보다 클수없습니다.
+		//setMessage("6018");
+		rlt =false;
+	}
+	else if(substr(timeChk,4,2)>59){
+		alert("[알림]초는 59보다 클수없습니다.");
+		//alert(setPopMessage("6019"));//[알림]초는 59보다 클수없습니다.
+		//setMessage("6019");
+		rlt =false;
+	}
+	return rlt;
+}
+//날짜Check
+function dateChk(getdate){
+
+	var rlt = true;
+	var sKind		= "getMST090PF";		
+	var sMethodName = "service::pscomlib/selectMST090PF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST090PF=ds_MST090PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRCDT=" + quote(getdate); //작업일자
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+	if (ds_MST090PF.GetRowCount() < 1){
+		alert(setPopMessage("4061"));
+		setMessage("4061");	
+		rlt =false;
+	}
+	return rlt;
+}
+//날짜Check(현재날짜-1)
+function dateChk2(getdate){
+
+	var rlt = true;
+	var sKind		= "getMST090PF";		
+	var sMethodName = "service::pscomlib/selectMST090PF_ROW.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST090PF_ROW=ds_MST090PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRCDT=" + quote(getdate); //작업일자
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+//사업부별 기준작업시간
+function getFGP010PF()
+{
+	var sKind		= "getFGP100PF";		
+	var sMethodName = "service::psfaclib/selectFGP010PF.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FGP010PF=ds_FGP010PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+
+
+//일비가동시간조회1
+function getFGP120PF(prcdt, strtm, endTm)
+{
+	var sKind		= "getFGP120PF";		
+	var sMethodName = "service::psfaclib/selectFGP120PF.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FGP120PF=ds_FGP120PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRCDT=" + quote(prcdt); //작업일
+		sArgument += " PROCS=" + quote(ed_PROCS.Text); //공정코드
+		sArgument += " DAYGU=" + quote(cmb_DAYGU.Value); //주야구분
+		sArgument += " STRTM=" + quote(strtm); //시작시간
+		sArgument += " ENDTM=" + quote(endTm); //종료시간
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+
+//일비가동시간조회2(일비가동시간에 없는 경우 수행)
+function getFGP129PF(strtm, endTm)
+{
+	var sKind		= "getFGP129PF";		
+	var sMethodName = "service::psfaclib/selectFGP129PF.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FGP129PF=ds_FGP129PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PROCS=" + quote(ed_PROCS.Text); //공정코드
+		sArgument += " DAYGU=" + quote(cmb_DAYGU.Value); //주야구분
+		sArgument += " STRTM=" + quote(strtm); //시작시간
+		sArgument += " ENDTM=" + quote(endTm); //종료시간
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+
+
+function sumJobTim(){
+		//주간작업시간계산
+	var fhTime="";
+	var ehTime="";
+	var jobTime=0;
+	var noWkTime=0;
+	ds_FGPZ170.UpdateControl=false;
+	for(i=0; i<ds_FGPZ170.rowcount; i++){
+		var getPrcdt =ds_FGPZ170.GetColumn(i, "PRCDT");
+		var getJdtfm =ds_FGPZ170.GetColumn(i, "JDTFM");
+		var getStrtm =ds_FGPZ170.GetColumn(i, "STRTM");
+		var getJdtto =ds_FGPZ170.GetColumn(i, "JDTTO");
+		var getEndTm =ds_FGPZ170.GetColumn(i, "ENDTM");
+		var getContl =ds_FGPZ170.GetColumn(i, "CONTL");
+		var getPrcmkm =ds_FGPZ170.GetColumn(i, "PRCMKM");
+		//JOBTM이 없으면 신규INSERT임...				
+		if(cmb_DAYGU.Value=="D" && getContl!="P" && length(getJdtfm)!=0){
+			fhTime=parseInt(substr(lpad(getStrtm,0,6),0,2))*60+parseInt(substr(lpad(getStrtm,0,6),2,2));
+			ehTime=parseInt(substr(lpad(getEndTm,0,6),0,2))*60+parseInt(substr(lpad(getEndTm,0,6),2,2));
+			getFGP120PF(getPrcdt, getStrtm, getEndTm);
+			if(ds_FGP120PF.rowcount >0 ){
+				noWkTime= parseInt(ds_FGP120PF.GetColumn(0,"STMIN"));
+				jobTime= parseInt(ehTime) - parseInt(fhTime);
+				ds_FGPZ170.SetColumn(i,"JOBTM",jobTime-noWkTime);
+			}else{
+				getFGP129PF(getStrtm, getEndTm);
+				if(ds_FGP129PF.rowcount >0 ){
+					noWkTime= parseInt(ds_FGP129PF.GetColumn(0,"STMIN"));
+					jobTime= parseInt(ehTime) - parseInt(fhTime);
+					ds_FGPZ170.SetColumn(i,"JOBTM",jobTime-noWkTime);
+				}
+			}
+		ds_FGPZ170.SetColumn(i,"CONTL","P");
+		ds_FGPZ170.SetRowType(i,"insert");
+		}
+	}
+	ds_FGPZ170.UpdateControl=true;
+}
+function cmb_DAYGU_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

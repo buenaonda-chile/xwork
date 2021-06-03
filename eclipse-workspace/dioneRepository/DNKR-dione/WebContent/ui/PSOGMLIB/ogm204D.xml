@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="520" Id="gms204" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" scroll="false" Title="개선상세" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="928" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_obj210pf_01"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_obj210pf"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_fileUp">
+				<Contents>
+					<colinfo id="fileName" size="256" summ="default" type="STRING"/>
+					<colinfo encrypt="base64" id="proImage" size="256" summ="default" type="BLOB"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="906"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="5" Top="8" Width="752"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="840" Right="864" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="872" Right="896" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="1553" Id="searchBar" TabOrder="6" Top="31" Width="904"></Static>
+		<Button Height="21" Id="Button0" Left="824" OnClick="Button0_OnClick" TabOrder="7" Text="닫기" Top="48" Width="48"></Button>
+		<Static Align="Center" Font="굴림,28,Bold" Height="37" Id="Static9" Left="11" TabOrder="8" Text="개선상세" Top="43" Width="301"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="8" TabOrder="9" Text="테마" Top="104" VAlign="Middle" Width="64"></Static>
+		<TextArea Height="48" Id="txtteima" Left="80" MaxLength="400" TabOrder="1" Top="104" Width="360"></TextArea>
+		<TextArea Height="48" Id="txtdaesn" Left="80" MaxLength="400" TabOrder="2" Top="168" Width="360"></TextArea>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static0" Left="8" TabOrder="10" Text="대상" Top="168" VAlign="Middle" Width="64"></Static>
+		<TextArea Height="48" Id="txtchkan" Left="520" MaxLength="400" TabOrder="3" Top="168" Width="360"></TextArea>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="448" TabOrder="11" Text="착안점" Top="168" VAlign="Middle" Width="64"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static31" Left="568" TabOrder="13" Text="효과금액" Top="104" VAlign="Middle" Width="92"></Static>
+		<Edit Height="20" Id="txttsum" Left="664" MaxLength="12" TabOrder="12" Top="104" UpperOnly="TRUE" Width="104"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="568" TabOrder="15" Text="협조부서" Top="136" VAlign="Middle" Width="92"></Static>
+		<Edit Height="20" Id="txtkyoru" Left="664" MaxLength="12" TabOrder="14" Top="136" UpperOnly="TRUE" Width="216"></Edit>
+		<Static Height="18" Id="Static4" Left="770" TabOrder="16" Text="(단위:천원)" Top="106" VAlign="Middle" Width="62"></Static>
+		<Button Height="21" Id="btnSave" Left="768" OnClick="btnSave_OnClick" TabOrder="17" Text="저장" Top="48" Width="48"></Button>
+		<Button Height="21" Id="Button2" Left="712" TabOrder="18" Text="발행" Top="48" Width="48"></Button>
+		<Edit Height="21" Id="LabelForm" Left="568" TabOrder="19" Top="72" Width="121"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static2" Left="24" TabOrder="20" Text="구분" Top="248" VAlign="Middle" Width="32"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static5" Left="56" TabOrder="21" Text="코드No" Top="248" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="240" Id="Static12" Left="24" TabOrder="22" Text="기&#10;계&#10;보&#10;전&#10;비&#10;의&#10;억&#10;제&#10;활&#10;동" Top="272" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static13" Left="56" TabOrder="23" Text="A1" Top="272" VAlign="Middle" Width="33"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static17" Left="240" TabOrder="25" Text="(신작비용)" Top="272" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta1hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="24" Text="0" Top="288" Width="120"></Edit>
+		<Static Border="Flat" Height="40" Id="Static14" Left="88" TabOrder="26" Text="부품비의&#32;절감&#10;&#32;(부품재생이용,&#32;기타)" Top="272" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static15" Left="240" TabOrder="28" Text="(신작비용)" Top="312" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta2hyo" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="27" Text="0" Top="328" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static16" Left="240" TabOrder="30" Text="&#32;" Top="352" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta3hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="29" Text="0" Top="368" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static18" Left="240" TabOrder="32" Text="천원&#32;X회/Y" Top="392" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta4hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="31" Text="0" Top="408" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static19" Left="240" TabOrder="34" Text="(현상의&#32;비용)" Top="432" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta5hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="33" Text="0" Top="448" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static20" Left="240" TabOrder="36" Text="(현상의&#32;비용)" Top="472" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta6hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="35" Text="0" Top="488" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static21" Left="56" TabOrder="37" Text="A2" Top="312" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static22" Left="88" TabOrder="38" Text="부품비의&#32;절감&#10;&#32;(유휴,&#32;중고품의&#32;사용)" Top="312" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static23" Left="56" TabOrder="39" Text="A3" Top="352" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static24" Left="88" TabOrder="40" Text="부품비의&#32;절감&#10;&#32;(저가품에의&#32;변경,&#32;기타)" Top="352" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static25" Left="56" TabOrder="41" Text="A4" Top="392" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static26" Left="88" TabOrder="42" Text="부품비의&#32;절감&#10;&#32;(부품의&#32;수명&#32;연장,&#32;기타)" Top="392" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static27" Left="56" TabOrder="43" Text="A5" Top="432" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static28" Left="88" TabOrder="44" Text="부품비의&#32;절감&#10;&#32;(MAKER&#32;변경,&#32;기타)" Top="432" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static29" Left="56" TabOrder="45" Text="A6" Top="472" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static30" Left="88" TabOrder="46" Text="부품비의&#32;절감&#10;&#32;(시공&#32;방법의&#32;변경,&#32;기타)" Top="472" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static32" Left="88" TabOrder="47" Text="개선효과내용" Top="248" VAlign="Middle" Width="152" WordWrap="TRUE"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static6" Left="240" TabOrder="48" Text="A.&#32;현상의&#32;비용" Top="248" VAlign="Middle" Width="136" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static8" Left="376" TabOrder="50" Text="(재생비용)" Top="272" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta1cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="49" Text="0" Top="288" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static10" Left="376" TabOrder="51" Top="312" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static11" Left="376" TabOrder="53" Text="&#32;(교체부품비)" Top="352" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta3cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="52" Text="0" Top="368" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static33" Left="376" TabOrder="55" Top="392" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta4cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="54" Text="0" Top="408" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static34" Left="376" TabOrder="56" Top="432" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static35" Left="376" TabOrder="58" Text="(현상의&#32;비용)" Top="472" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta6cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="57" Text="0" Top="488" Width="120"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static36" Left="376" TabOrder="59" Text="B.&#32;개선의&#32;비용" Top="248" VAlign="Middle" Width="136" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static37" Left="512" TabOrder="60" Top="272" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static38" Left="512" TabOrder="61" Top="312" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static39" Left="512" TabOrder="62" Text="&#32;" Top="352" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static40" Left="512" TabOrder="64" Text="천원&#32;X회/Y" Top="392" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta4aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="63" Text="0" Top="408" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static41" Left="512" TabOrder="66" Text="(변경후의&#32;비용)" Top="432" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta5aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="65" Text="0" Top="448" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static42" Left="512" TabOrder="68" Text="(변경후의&#32;비용)" Top="472" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txta6aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="67" Text="0" Top="488" Width="120"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static43" Left="512" TabOrder="69" Text="C.&#32;개선후의&#32;비용" Top="248" VAlign="Middle" Width="136" WordWrap="TRUE"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla1hyo" Left="648" TabOrder="70" Text="0" Top="272" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla2hyo" Left="648" TabOrder="71" Text="0" Top="312" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla3hyo" Left="648" TabOrder="72" Text="0" Top="352" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla4hyo" Left="648" TabOrder="73" Text="0" Top="392" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla5hyo" Left="648" TabOrder="74" Text="0" Top="432" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lbla6hyo" Left="648" TabOrder="75" Text="0" Top="472" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static50" Left="648" TabOrder="76" Text="효과금액(A-(B+C))" Top="248" VAlign="Middle" Width="128" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="240" Id="lblasum" Left="776" TabOrder="77" Top="272" VAlign="Middle" Width="104"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="24" Id="Static57" Left="776" TabOrder="78" Text="합&#32;&#32;&#32;&#32;&#32;계" Top="248" VAlign="Middle" Width="104" WordWrap="TRUE"></Static>
+		<Static Height="15" Id="Static44" Left="824" TabOrder="79" Text="천원/Y" Top="368" Width="42"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="160" Id="Static45" Left="24" TabOrder="80" Text="생&#10;산&#10;성&#10;향&#10;상&#10;활&#10;동" Top="520" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static46" Left="56" TabOrder="81" Text="B1" Top="520" VAlign="Middle" Width="33"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static47" Left="240" TabOrder="83" Text="H/Y&#32;&#32;" Top="520" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb1hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="82" Text="0" Top="536" Width="120"></Edit>
+		<Static Border="Flat" Height="40" Id="Static48" Left="88" TabOrder="84" Text="인건비(공수)의&#32;절감&#10;(고장&#32;대책등에&#32;의한)" Top="520" VAlign="Middle" Width="152"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static49" Left="240" TabOrder="86" Text="H/Y&#32;&#32;" Top="560" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb2hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="85" Text="0" Top="576" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static51" Left="240" TabOrder="88" Text="H/Y&#32;&#32;" Top="600" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb3hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="87" Text="0" Top="616" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static52" Left="240" TabOrder="90" Text="OP인원수XC/T(H)" Top="640" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb4hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="89" Text="0" Top="656" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static55" Left="56" TabOrder="91" Text="B2" Top="560" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static56" Left="88" TabOrder="92" Text="인건비(공수)의&#32;절감&#10;(업무의&#32;개선,&#32;개량)" Top="560" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static58" Left="56" TabOrder="93" Text="B3" Top="600" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static59" Left="88" TabOrder="94" Text="인건비(공수)의&#32;절감&#10;(품질&#32;향상&#32;대책에&#32;의한)" Top="600" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static60" Left="56" TabOrder="95" Text="B4" Top="640" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static61" Left="88" TabOrder="96" Text="인건비(공수)의&#32;절감&#10;(가동율&#32;향상&#32;대책에&#32;의한)" Top="640" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static66" Left="376" TabOrder="98" Top="520" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb1cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="97" Text="0" Top="536" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static67" Left="376" TabOrder="99" Top="560" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static68" Left="376" TabOrder="101" Top="600" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb3cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="100" Text="0" Top="616" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static69" Left="376" TabOrder="103" Top="640" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb4cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="102" Text="0" Top="656" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static72" Left="512" TabOrder="104" Text="H/Y&#32;&#32;" Top="520" Width="136"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static73" Left="512" TabOrder="105" Text="H/Y&#32;&#32;" Top="560" Width="136"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static74" Left="512" TabOrder="106" Text="H/Y&#32;&#32;" Top="600" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static75" Left="512" TabOrder="107" Text="OP인원수XC/T(H)" Top="640" Width="136"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblb1hyo" Left="648" TabOrder="108" Text="0" Top="520" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblb2hyo" Left="648" TabOrder="109" Text="0" Top="560" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblb3hyo" Left="648" TabOrder="110" Text="0" Top="600" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblb4hyo" Left="648" TabOrder="111" Text="0" Top="640" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="160" Id="lblbsum" Left="776" TabOrder="112" Top="520" VAlign="Middle" Width="104"></Static>
+		<Static Height="15" Id="Static85" Left="824" TabOrder="113" Text="천원/Y" Top="576" Width="42"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="648" Id="Static53" Left="24" TabOrder="114" Text="설&#10;&#10;비&#10;&#10;에&#10;&#10;관&#10;&#10;한&#10;&#10;개&#10;&#10;선&#10;&#10;활&#10;&#10;동" Top="688" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static54" Left="56" TabOrder="115" Text="C1" Top="688" VAlign="Middle" Width="33"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static62" Left="240" TabOrder="117" Text="(고장&#32;정지&#32;시간)&#32;H/Y&#32;&#32;" Top="688" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc1hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="116" Text="0" Top="704" Width="120"></Edit>
+		<Static Border="Flat" Height="40" Id="Static63" Left="88" TabOrder="118" Text="고장손실비의&#32;절감&#10;(고장의재발&#32;방지&#32;대책)" Top="688" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static64" Left="240" TabOrder="120" Text="(쵸크&#32;정지&#32;시간)&#32;H/Y" Top="728" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc2hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="119" Text="0" Top="744" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static65" Left="240" TabOrder="122" Text="(단가&#32;/&#32;&#32;워크&#32;1개)원" Top="768" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc3hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="121" Text="0" Top="784" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static70" Left="240" TabOrder="124" Top="808" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc4hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="123" Text="0" Top="824" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static71" Left="56" TabOrder="125" Text="C2" Top="728" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static76" Left="88" TabOrder="126" Text="고장손실비의&#32;절감&#10;(쵸크정지&#32;재발&#32;방지&#32;대책)" Top="728" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static77" Left="56" TabOrder="127" Text="C3" Top="768" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static82" Left="88" TabOrder="128" Text="재료비의&#32;절감" Top="768" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static83" Left="56" TabOrder="129" Text="C4" Top="808" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="40" Id="Static86" Left="88" TabOrder="130" Text="안전대책의&#32;효과" Top="808" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static87" Left="376" TabOrder="132" Top="688" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc1cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="131" Text="0" Top="704" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static88" Left="376" TabOrder="133" Top="728" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static89" Left="376" TabOrder="135" Text="&#32;(년간생산개수)" Top="768" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc3cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="134" Text="0" Top="784" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static90" Left="376" TabOrder="137" Top="808" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc4cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="136" Text="0" Top="824" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static91" Left="512" TabOrder="138" Text="(고장&#32;정지&#32;시간)&#32;H/Y&#32;&#32;" Top="688" Width="136"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="Static92" Left="512" TabOrder="139" Text="(쵸크&#32;정지&#32;시간)&#32;H/Y&#32;&#32;" Top="728" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static93" Left="512" TabOrder="140" Text="(단가&#32;/&#32;&#32;워크&#32;1개)원" Top="768" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="40" Id="Static94" Left="512" TabOrder="142" Top="808" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtc4aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="141" Text="0" Top="824" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblc1hyo" Left="648" TabOrder="143" Text="0" Top="688" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblc2hyo" Left="648" TabOrder="144" Text="0" Top="728" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblc3hyo" Left="648" TabOrder="145" Text="0" Top="768" VAlign="Middle" Width="128"></Static>
+		<Static Align="Right" Border="Flat" Height="40" Id="lblc4hyo" Left="648" TabOrder="146" Text="0" Top="808" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="160" Id="lblcsum" Left="776" TabOrder="147" Top="688" VAlign="Middle" Width="104"></Static>
+		<Static Height="15" Id="Static100" Left="824" TabOrder="148" Text="천원/Y" Top="744" Width="42"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtb2cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="149" Text="0" Top="576" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtb1aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="150" Text="0" Top="536" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtb2aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="151" Text="0" Top="576" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtb3aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="152" Text="0" Top="616" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtb4aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="153" Text="0" Top="656" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtc1aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="154" Text="0" Top="704" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtc2aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="155" Text="0" Top="744" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtc3aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="156" Text="0" Top="784" Width="120"></Edit>
+		<Edit Align="RIGHT" Height="21" Id="txtc2cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="157" Text="0" Top="744" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static78" Left="240" TabOrder="159" Top="856" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd1hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="158" Text="0" Top="864" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static79" Left="56" TabOrder="160" Text="11" Top="856" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static80" Left="88" TabOrder="161" Text="O&#32;I&#32;L&#32;비용의&#32;절감" Top="856" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static81" Left="376" TabOrder="163" Top="856" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd1cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="162" Text="0" Top="864" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static84" Left="512" TabOrder="165" Top="856" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd1aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="164" Text="0" Top="864" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld1hyo" Left="648" TabOrder="166" Text="0" Top="856" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static95" Left="240" TabOrder="168" Top="888" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd2hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="167" Text="0" Top="896" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static96" Left="56" TabOrder="169" Text="12" Top="888" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static97" Left="88" TabOrder="170" Text="도료비의&#32;절감" Top="888" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static98" Left="376" TabOrder="172" Top="888" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd2cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="171" Text="0" Top="896" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static99" Left="512" TabOrder="174" Top="888" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd2aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="173" Text="0" Top="896" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld2hyo" Left="648" TabOrder="175" Text="0" Top="888" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static102" Left="240" TabOrder="177" Top="920" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd3hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="176" Text="0" Top="928" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static103" Left="56" TabOrder="178" Text="13" Top="920" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static104" Left="88" TabOrder="179" Text="약품비의&#32;절감" Top="920" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static105" Left="376" TabOrder="181" Top="920" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd3cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="180" Text="0" Top="928" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static106" Left="512" TabOrder="183" Top="920" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd3aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="182" Text="0" Top="928" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld3hyo" Left="648" TabOrder="184" Text="0" Top="920" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static108" Left="240" TabOrder="186" Top="952" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd5hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="185" Text="0" Top="960" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static109" Left="56" TabOrder="187" Text="15" Top="952" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static110" Left="88" TabOrder="188" Text="용도품비의&#32;절감" Top="952" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static111" Left="376" TabOrder="189" Top="952" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static112" Left="512" TabOrder="191" Top="952" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd5aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="190" Text="0" Top="960" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld5hyo" Left="648" TabOrder="192" Text="0" Top="952" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static114" Left="240" TabOrder="194" Top="984" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd7hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="193" Text="0" Top="992" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static115" Left="56" TabOrder="195" Text="17" Top="984" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static116" Left="88" TabOrder="196" Text="소모공구비의&#32;절감" Top="984" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static117" Left="376" TabOrder="198" Top="984" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd7cst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="197" Text="0" Top="992" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static118" Left="512" TabOrder="200" Top="984" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd7aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="199" Text="0" Top="992" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld7hyo" Left="648" TabOrder="201" Text="0" Top="984" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static120" Left="240" TabOrder="203" Top="1016" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd8hyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="202" Text="0" Top="1024" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static121" Left="56" TabOrder="204" Text="18" Top="1016" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static122" Left="88" TabOrder="205" Text="공구비의&#32;절감" Top="1016" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static123" Left="376" TabOrder="206" Top="1016" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static124" Left="512" TabOrder="208" Top="1016" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtd8aft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="207" Text="0" Top="1024" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbld8hyo" Left="648" TabOrder="209" Text="0" Top="1016" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static126" Left="240" TabOrder="211" Top="1048" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdbhyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="210" Text="0" Top="1056" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static127" Left="56" TabOrder="212" Text="20" Top="1048" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static128" Left="88" TabOrder="213" Text="치구비의&#32;절감" Top="1048" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static129" Left="376" TabOrder="215" Top="1048" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdbcst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="214" Text="0" Top="1056" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static130" Left="512" TabOrder="217" Top="1048" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdbaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="216" Text="0" Top="1056" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldbhyo" Left="648" TabOrder="218" Text="0" Top="1048" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static132" Left="240" TabOrder="220" Top="1080" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdchyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="219" Text="0" Top="1088" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static133" Left="56" TabOrder="221" Text="21" Top="1080" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static134" Left="88" TabOrder="222" Text="계측비의&#32;절감" Top="1080" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static135" Left="376" TabOrder="223" Top="1080" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static136" Left="512" TabOrder="225" Top="1080" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdcaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="224" Text="0" Top="1088" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldchyo" Left="648" TabOrder="226" Text="0" Top="1080" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static138" Left="240" TabOrder="228" Top="1112" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtddhyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="227" Text="0" Top="1120" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static139" Left="56" TabOrder="229" Text="22" Top="1112" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static140" Left="88" TabOrder="230" Text="금형비의&#32;절감" Top="1112" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static141" Left="376" TabOrder="232" Top="1112" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtddcst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="231" Text="0" Top="1120" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static142" Left="512" TabOrder="234" Top="1112" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtddaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="233" Text="0" Top="1120" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lblddhyo" Left="648" TabOrder="235" Text="0" Top="1112" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static144" Left="240" TabOrder="237" Top="1144" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdehyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="236" Text="0" Top="1152" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static145" Left="56" TabOrder="238" Text="24" Top="1144" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static146" Left="88" TabOrder="239" Text="기기비품비의&#32;절감" Top="1144" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static147" Left="376" TabOrder="240" Top="1144" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static148" Left="512" TabOrder="242" Top="1144" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdeaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="241" Text="0" Top="1152" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldehyo" Left="648" TabOrder="243" Text="0" Top="1144" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static150" Left="240" TabOrder="245" Top="1176" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdfhyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="244" Text="0" Top="1184" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static151" Left="56" TabOrder="246" Text="31" Top="1176" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static152" Left="88" TabOrder="247" Text="수선비의&#32;절감" Top="1176" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static153" Left="376" TabOrder="249" Top="1176" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdfcst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="248" Text="0" Top="1184" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static154" Left="512" TabOrder="251" Top="1176" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdfaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="250" Text="0" Top="1184" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldfhyo" Left="648" TabOrder="252" Text="0" Top="1176" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static156" Left="240" TabOrder="254" Top="1208" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdghyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="253" Text="0" Top="1216" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static157" Left="56" TabOrder="255" Text="32" Top="1208" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static158" Left="88" TabOrder="256" Text="에네지로스의&#32;절감" Top="1208" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static159" Left="376" TabOrder="258" Top="1208" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdgcst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="257" Text="0" Top="1216" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static160" Left="512" TabOrder="260" Top="1208" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdgaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="259" Text="0" Top="1216" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldghyo" Left="648" TabOrder="261" Text="0" Top="1208" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static162" Left="240" TabOrder="263" Top="1240" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdhhyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="262" Text="0" Top="1248" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static163" Left="56" TabOrder="264" Text="48" Top="1240" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static164" Left="88" TabOrder="265" Text="외주위탁비의&#32;절감" Top="1240" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static165" Left="376" TabOrder="266" Top="1240" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static166" Left="512" TabOrder="268" Top="1240" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdhaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="267" Text="0" Top="1248" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldhhyo" Left="648" TabOrder="269" Text="0" Top="1240" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static168" Left="240" TabOrder="271" Top="1272" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdihyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="270" Text="0" Top="1280" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static169" Left="56" TabOrder="272" Text="51" Top="1272" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static170" Left="88" TabOrder="273" Text="청소비의&#32;절감" Top="1272" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static171" Left="376" TabOrder="275" Top="1272" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdicst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="274" Text="0" Top="1280" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static172" Left="512" TabOrder="277" Top="1272" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdiaft" Left="520" OnKillFocus="calcu_OnKillFocus" TabOrder="276" Text="0" Top="1280" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldihyo" Left="648" TabOrder="278" Text="0" Top="1272" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static174" Left="240" TabOrder="280" Top="1304" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdjhyn" Left="248" OnKillFocus="calcu_OnKillFocus" TabOrder="279" Text="0" Top="1312" Width="120"></Edit>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static175" Left="56" TabOrder="281" Text="53" Top="1304" VAlign="Middle" Width="33"></Static>
+		<Static Border="Flat" Height="32" Id="Static176" Left="88" TabOrder="282" Text="仕損費의&#32;절감" Top="1304" VAlign="Middle" Width="152"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static177" Left="376" TabOrder="284" Top="1304" Width="136"></Static>
+		<Edit Align="RIGHT" Height="21" Id="txtdjcst" Left="384" OnKillFocus="calcu_OnKillFocus" TabOrder="283" Text="0" Top="1312" Width="120"></Edit>
+		<Static Align="Right" Border="Flat" Height="32" Id="lbldjhyo" Left="648" TabOrder="285" Text="0" Top="1304" VAlign="Middle" Width="128"></Static>
+		<Static Align="Center" Border="Flat" Height="32" Id="Static178" Left="512" TabOrder="286" Top="1304" Width="136"></Static>
+		<Static Align="Center" Border="Flat" Height="480" Id="lbldsum" Left="776" TabOrder="287" Top="856" VAlign="Middle" Width="104"></Static>
+		<Static Height="15" Id="Static107" Left="824" TabOrder="288" Text="천원/Y" Top="1072" Width="42"></Static>
+		<Image Border="Flat" FillType="STRETCH" Height="232" Id="brd4picbefor" Left="64" TabOrder="289" Top="1344" Width="288"></Image>
+		<Image Border="Flat" FillType="STRETCH" Height="232" Id="brd4picafter" Left="504" TabOrder="290" Top="1344" Width="288"></Image>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="64" Id="Static113" Left="464" TabOrder="291" Text="개&#10;선&#10;전" Top="1344" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="64" Id="Static101" Left="24" TabOrder="292" Text="개&#10;선&#10;전" Top="1344" VAlign="Middle" Width="32" WordWrap="TRUE"></Static>
+		<Button Height="32" Id="brd4btnbfpadd" Left="360" OnClick="brd4btnbfpadd_OnClick" TabOrder="293" Text="도면등록변경" Top="1344" Width="80"></Button>
+		<Button Height="32" Id="brd4btnbfpcnl" Left="360" OnClick="brd4btnbfpcnl_OnClick" TabOrder="294" Text="그림취소" Top="1384" Width="80"></Button>
+		<Button Height="32" Id="brd4btnafpadd" Left="800" TabOrder="295" Text="도면등록변경" Top="1344" Width="80"></Button>
+		<Button Height="32" Id="brd4btnafpcnl" Left="800" OnClick="brd4btnafpcnl_OnClick" TabOrder="296" Text="그림취소" Top="1384" Width="80"></Button>
+		<Static Align="Right" Height="16" Id="Static119" Left="438" TabOrder="297" Text="(단위:천원)" Top="232" VAlign="Bottom" Width="74"></Static>
+		<Static Align="Right" Height="16" Id="Static125" Left="574" TabOrder="298" Text="(단위:천원)" Top="232" VAlign="Bottom" Width="74"></Static>
+		<Edit Height="21" Id="lblmaxcode" Left="88" TabOrder="299" Top="224" Width="56"></Edit>
+		<Edit Height="21" Id="lblmaxcodenm" Left="152" TabOrder="300" Top="224" Width="56"></Edit>
+		<Edit Height="21" Id="lbljisno" Left="216" TabOrder="303" Top="224" Width="56"></Edit>
+		<File Bottom="1451" Height="24" Id="ProFile" Left="365" Right="389" TabOrder="302" Top="1427" Width="24"></File>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm200_popxml
+ * ● PROGRAM DESCRIPTION  : 이력편집_개선상세
+ * ● DATE WRITTEN         : 2011.09.25
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var gImgPath = "/bojen/images/";
+var gline_loss_value = 200; //1시간당 설비(라인) 정지 손실비(천원)
+var gmanpower_loss_value = 30; //1시간당 보전원 노무비(천원)
+
+
+function on_LoadCompleted(obj){
+	Scroll = true;
+	lbljisno.Text=txtjisno.Text;
+}
+
+/********************************************************************** 
+ * 내용설명 : 개선상세등록여부 조회
+ **********************************************************************/ 
+function getogm204_obj210pf(){
+	
+	var sKind		= "getogm204_obj210pf";						
+	var sMethodName = "service::psogmlib/selectOgm204_obj210pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_obj210pf=ds_obj210pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+//		sArgument += " JISNO=" + quote("PC2345"); //지시No
+		sArgument += " JISNO=" + quote(trim(lbljisno.Text)); //지시No
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+/********************************************************************** 
+ * 내용설명 : 개선상세등록 
+ **********************************************************************/ 
+function setogm204_obj210pf_insert(flag){
+	//var adusr = substr(userId,1,8);	// - 2020.07.21 : CGI-AD로 로직변경
+	var adusr = userId;
+//alert(adusr);
+	var sKind		= "setogm204_obj210pf_insert";						
+	var sMethodName = "service::psogmlib/saveOGM204_obj210pf_insert.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " FLAG=" + quote(trim(flag));
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " JISNO=" + quote(trim(lbljisno.Text));
+		sArgument += " TEIMA=" + quote(trim(txtteima.text));
+		sArgument += " DAESN=" + quote(trim(txtdaesn.text));
+		sArgument += " CHKAN=" + quote(trim(txtchkan.text));
+		sArgument += " KYORU=" + quote(parseInt(txtkyoru.text));
+		sArgument += " A_SUM=" + quote(parseInt(lblasum.text));
+		sArgument += " B_SUM=" + quote(parseInt(lblbsum.text));
+		sArgument += " C_SUM=" + quote(parseInt(lblcsum.Text));
+		sArgument += " D_SUM=" + quote(parseInt(lbldsum.Text));
+		sArgument += " T_SUM=" + quote(parseInt(txttsum.Text));
+		sArgument += " A1HYN=" + quote(parseInt(txta1hyn.Text));
+		sArgument += " A1CST=" + quote(parseInt(txta1cst.text));
+		sArgument += " A1HYO=" + quote(parseInt(lbla1hyo.text));
+		sArgument += " A2HYO=" + quote(parseInt(lbla2hyo.text));
+		sArgument += " A3HYN=" + quote(parseInt(txta3hyn.text));
+		sArgument += " A3CST=" + quote(parseInt(txta3cst.text));
+		sArgument += " A3HYO=" + quote(parseInt(lbla3hyo.text));
+		sArgument += " A4HYN=" + quote(parseInt(txta4hyn.text));
+		sArgument += " A4CST=" + quote(parseInt(txta4cst.text));
+		sArgument += " A4AFT=" + quote(parseInt(txta4aft.text));
+		sArgument += " A4HYO=" + quote(parseInt(lbla4hyo.text));
+		sArgument += " A5HYN=" + quote(parseInt(txta5hyn.text));
+		sArgument += " A5AFT=" + quote(parseInt(txta5aft.text));
+		sArgument += " A5HYO=" + quote(parseInt(lbla5hyo.text));
+		sArgument += " A6HYN=" + quote(parseInt(txta6hyn.text));
+		sArgument += " A6CST=" + quote(parseInt(txta6cst.text));
+		sArgument += " A6AFT=" + quote(parseInt(txta6aft.text));
+		sArgument += " A6HYO=" + quote(parseInt(lbla6hyo.text));
+		sArgument += " B1HYN=" + quote(parseInt(txtb1hyn.text));
+		sArgument += " B1CST=" + quote(parseInt(txtb1cst.text));
+		sArgument += " B1AFT=" + quote(parseInt(txtb1aft.text));
+		sArgument += " B1HYO=" + quote(parseInt(lblb1hyo.text));
+		sArgument += " B2HYN=" + quote(parseInt(txtb2hyn.text));
+		sArgument += " B2CST=" + quote(parseInt(txtb2cst.text));
+		sArgument += " B2AFT=" + quote(parseInt(txtb2aft.text));
+		sArgument += " B2HYO=" + quote(parseInt(lblb2hyo.text));
+		sArgument += " B3HYN=" + quote(parseInt(txtb3hyn.text));
+		sArgument += " B3CST=" + quote(parseInt(txtb3cst.text));
+		sArgument += " B3AFT=" + quote(parseInt(txtb3aft.text));
+		sArgument += " B3HYO=" + quote(parseInt(lblb3hyo.text));
+		sArgument += " B4HYN=" + quote(parseInt(txtb4hyn.text));
+		sArgument += " B4CST=" + quote(parseInt(txtb4cst.text));
+		sArgument += " B4AFT=" + quote(parseInt(txtb4aft.text));
+		sArgument += " B4HYO=" + quote(parseInt(lblb4hyo.text));
+		sArgument += " C1HYN=" + quote(parseInt(txtc1hyn.Text));
+		sArgument += " C1CST=" + quote(parseInt(txtc1cst.Text));
+		sArgument += " C1AFT=" + quote(parseInt(txtc1aft.Text));
+		sArgument += " C1HYO=" + quote(parseInt(lblc1hyo.text));
+		sArgument += " C2HYN=" + quote(parseInt(txtc2hyn.text));
+		sArgument += " C2CST=" + quote(parseInt(txtc2cst.text));
+		sArgument += " C2AFT=" + quote(parseInt(txtc2aft.text));
+		sArgument += " C2HYO=" + quote(parseInt(lblc2hyo.text));
+		sArgument += " C3HYN=" + quote(parseInt(txtc3hyn.text));
+		sArgument += " C3CST=" + quote(parseInt(txtc3cst.text));
+		sArgument += " C3AFT=" + quote(parseInt(txtc3aft.text));
+		sArgument += " C3HYO=" + quote(parseInt(lblc3hyo.text));
+		sArgument += " C4HYN=" + quote(parseInt(txtc4hyn.text));
+		sArgument += " C4CST=" + quote(parseInt(txtc4cst.text));
+		sArgument += " C4AFT=" + quote(parseInt(txtc4aft.text));
+		sArgument += " C4HYO=" + quote(parseInt(lblc4hyo.text));
+		sArgument += " D1HYN=" + quote(parseInt(txtd1hyn.text));
+		sArgument += " D1CST=" + quote(parseInt(txtd1cst.text));
+		sArgument += " D1AFT=" + quote(parseInt(txtd1aft.text));
+		sArgument += " D1HYO=" + quote(parseInt(lbld1hyo.text));
+		sArgument += " D2HYN=" + quote(parseInt(txtd2hyn.text));
+		sArgument += " D2CST=" + quote(parseInt(txtd2cst.text));
+		sArgument += " D2AFT=" + quote(parseInt(txtd2aft.text));
+		sArgument += " D2HYO=" + quote(parseInt(lbld2hyo.text));
+		sArgument += " D3HYN=" + quote(parseInt(txtd3hyn.text));
+		sArgument += " D3CST=" + quote(parseInt(txtd3cst.text));
+		sArgument += " D3AFT=" + quote(parseInt(txtd3aft.text));
+		sArgument += " D3HYO=" + quote(parseInt(lbld3hyo.text));
+		sArgument += " D5HYN=" + quote(parseInt(txtd5hyn.text));
+		sArgument += " D5AFT=" + quote(parseInt(txtd5aft.text));
+		sArgument += " D5HYO=" + quote(parseInt(lbld5hyo.text));
+		sArgument += " D7HYN=" + quote(parseInt(txtd7hyn.text));
+		sArgument += " D7CST=" + quote(parseInt(txtd7cst.text));
+		sArgument += " D7AFT=" + quote(parseInt(txtd7aft.text));
+		sArgument += " D7HYO=" + quote(parseInt(lbld7hyo.text));
+		sArgument += " D8HYN=" + quote(parseInt(txtd8hyn.text));
+		sArgument += " D8AFT=" + quote(parseInt(txtd8aft.text));
+		sArgument += " D8HYO=" + quote(parseInt(lbld8hyo.text));
+		sArgument += " DBHYN=" + quote(parseInt(txtdbhyn.text));
+		sArgument += " DBCST=" + quote(parseInt(txtdbcst.text));
+		sArgument += " DBAFT=" + quote(parseInt(txtdbaft.text));
+		sArgument += " DBHYO=" + quote(parseInt(lbldbhyo.text));
+		sArgument += " DCHYN=" + quote(parseInt(txtdchyn.text));
+		sArgument += " DCAFT=" + quote(parseInt(txtdcaft.text));
+		sArgument += " DCHYO=" + quote(parseInt(lbldchyo.text));
+		sArgument += " DDHYN=" + quote(parseInt(txtddhyn.text));
+		sArgument += " DDCST=" + quote(parseInt(txtddcst.text));
+		sArgument += " DDAFT=" + quote(parseInt(txtddaft.text));
+		sArgument += " DDHYO=" + quote(parseInt(lblddhyo.text));
+		sArgument += " DEHYN=" + quote(parseInt(txtdehyn.text));
+		sArgument += " DEAFT=" + quote(parseInt(txtdeaft.text));
+		sArgument += " DEHYO=" + quote(parseInt(lbldehyo.text));
+		sArgument += " DFHYN=" + quote(parseInt(txtdfhyn.text));
+		sArgument += " DFCST=" + quote(parseInt(txtdfcst.text));
+		sArgument += " DFAFT=" + quote(parseInt(txtdfaft.text));
+		sArgument += " DFHYO=" + quote(parseInt(lbldfhyo.text));
+		sArgument += " DGHYN=" + quote(parseInt(txtdghyn.text));
+		sArgument += " DGCST=" + quote(parseInt(txtdgcst.text));
+		sArgument += " DGAFT=" + quote(parseInt(txtdgaft.text));
+		sArgument += " DGHYO=" + quote(parseInt(lbldghyo.text));
+		sArgument += " DHHYN=" + quote(parseInt(txtdhhyn.text));
+		sArgument += " DHAFT=" + quote(parseInt(txtdhaft.text));
+		sArgument += " DHHYO=" + quote(parseInt(lbldhhyo.text));
+		sArgument += " DIHYN=" + quote(parseInt(txtdihyn.text));
+		sArgument += " DICST=" + quote(parseInt(txtdicst.text));
+		sArgument += " DIAFT=" + quote(parseInt(txtdiaft.text));
+		sArgument += " DIHYO=" + quote(parseInt(lbldihyo.text));
+		sArgument += " DJHYN=" + quote(parseInt(txtdjhyn.text));
+		sArgument += " DJCST=" + quote(parseInt(txtdjcst.text));
+		sArgument += " DJHYO=" + quote(parseInt(lbldjhyo.text));
+		sArgument += " ADDAT=" + quote(parseInt(nowDate));
+		sArgument += " ADTIM=" + quote(h);
+		sArgument += " ADUSR=" + quote(adusr);
+//		} 
+//		else
+//		{
+		sArgument += " CHDAT=" + quote(parseInt(nowDate));
+		sArgument += " CHTIM=" + quote(h);
+		sArgument += " CHUSR=" + quote(adusr);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 개선상세 도면등록여부조회
+ **********************************************************************/ 
+function getogm204_obj210pf_01(){
+	
+	var sKind		= "getogm204_obj210pf_01";						
+	var sMethodName = "service::psogmlib/selectOgm204_obj210pf_01.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_obj210pf_01=ds_obj210pf_01";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+//		sArgument += " JISNO=" + quote("PC2345"); //지시No
+		sArgument += " JISNO=" + quote(trim(lbljisno.Text)); //지시No
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+/********************************************************************** 
+ * 내용설명 : 도면등록
+ **********************************************************************/ 
+function setogm204_obj210pf_preimg(imgbf){
+	
+	var sKind		= "setogm204_obj210pf_preimg";						
+	var sMethodName = "service::psogmlib/saveOGM204_obj210pf_preImg.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " JISNO=" + quote(trim(lbljisno.Text)); //지시No
+		sArgument += " IMGBF=" + quote(imgbf); //imgbf
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+
+//필드값이 바뀔때마다 새로 asum,bsum,csum,dsum을 계산한다
+function calcu_sums()
+{
+	lbla1hyo.Value = parseInt(txta1hyn.Text) - parseInt(txta1cst.Text);
+	lbla2hyo.Value = parseInt(txta2hyo.Text);
+	lbla3hyo.Value = parseInt(txta3hyn.Text) - parseInt(txta3cst.Text);
+	lbla4hyo.Value = parseInt(txta4hyn.Text) -(parseInt(txta4cst.text) + parseInt(txta4aft.Text));
+	lbla5hyo.Value = parseInt(txta5hyn.Text) - parseInt(txta5aft.Text);
+	lbla6hyo.Value = parseInt(txta6hyn.Text) - (parseInt(txta6cst.text) + parseInt(txta6aft.Text));
+	
+	lblasum.Value = parseInt(lbla1hyo.Value) + parseInt(lbla2hyo.Value) + 
+					parseInt(lbla3hyo.Value) + parseInt(lbla4hyo.Value) 
+					+ parseInt(lbla5hyo.Value) + parseInt(lbla6hyo.Value) ;
+					
+	lblb1hyo.Value = (parseInt(txtb1hyn.Text)* gmanpower_loss_value) 
+										-(parseInt(txtb1cst.text) 
+										+ (parseInt(txtb1aft.Text) * gmanpower_loss_value));
+	lblb2hyo.Value = (parseInt(txtb2hyn.Text)* gmanpower_loss_value) 
+										-(parseInt(txtb2cst.text) 
+										+ (parseInt(txtb2aft.Text)* gmanpower_loss_value));
+	lblb3hyo.Value = (parseInt(txtb3hyn.Text)* gmanpower_loss_value)
+										-(parseInt(txtb3cst.text) 
+										+ (parseInt(txtb3aft.Text)* gmanpower_loss_value));
+	lblb4hyo.Value = (parseInt(txtb4hyn.Text)* gmanpower_loss_value)
+										- (parseInt(txtb4cst.text) 
+										+ (parseInt(txtb4aft.Text)* gmanpower_loss_value)); 
+	
+	lblbsum.Value = parseInt(lblb1hyo.Value) + parseInt(lblb2hyo.Value) + 
+					parseInt(lblb3hyo.Value) + parseInt(lblb4hyo.Value) ;
+					
+	lblc1hyo.Value = (parseInt(txtc1hyn.Text) * gline_loss_value) 
+										-(parseInt(txtc1cst.text) 
+										+ (parseInt(txtc1aft.Text) * gline_loss_value));
+	lblc2hyo.Value = (parseInt(txtc2hyn.Text) * gline_loss_value) 
+										-(parseInt(txtc2cst.text) 
+										+ (parseInt(txtc2aft.Text) * gline_loss_value));
+	lblc3hyo.Value = ((parseInt(txtc3hyn.Text) * parseInt(txtc3cst.text))/1000) 
+										- ((parseInt(txtc3aft.Text) * parseInt(txtc3cst.text))/1000);
+	lblc4hyo.Value = parseInt(txtc4hyn.Text) - (parseInt(txtc4cst.text)
+										+ parseInt(txtc4aft.text));
+	lblcsum.Value = parseInt(lblc1hyo.Value) + parseInt(lblc2hyo.Value) + 
+					parseInt(lblc3hyo.Value) + parseInt(lblc4hyo.Value) ;
+					
+	lbld1hyo.Value = parseInt(txtd1hyn.Text) -(parseInt(txtd1cst.text) + parseInt(txtd1aft.Text));
+	lbld2hyo.Value = parseInt(txtd2hyn.Text) -(parseInt(txtd2cst.text) + parseInt(txtd2aft.Text));
+	lbld3hyo.Value = parseInt(txtd3hyn.Text) -(parseInt(txtd3cst.text) + parseInt(txtd3aft.Text));
+	lbld5hyo.Value = parseInt(txtd5hyn.Text) - parseInt(txtd5aft.Text);
+	lbld7hyo.Value = parseInt(txtd7hyn.Text) -(parseInt(txtd7cst.text) + parseInt(txtd7aft.Text));
+	lbld8hyo.Value = parseInt(txtd8hyn.Text) - parseInt(txtd8aft.Text);
+	lbldbhyo.Value = parseInt(txtdbhyn.Text) -(parseInt(txtdbcst.text) + parseInt(txtdbaft.Text));
+	lbldchyo.Value = parseInt(txtdchyn.Text) - parseInt(txtdcaft.Text);
+	lblddhyo.Value = parseInt(txtddhyn.Text) -(parseInt(txtddcst.text) + parseInt(txtddaft.Text));
+	lbldehyo.Value = parseInt(txtdehyn.Text) - parseInt(txtdeaft.Text);
+	lbldfhyo.Value = parseInt(txtdfhyn.Text) -(parseInt(txtdfcst.text) + parseInt(txtdfaft.Text));
+	lbldghyo.Value = parseInt(txtdghyn.Text) -(parseInt(txtdgcst.text) + parseInt(txtdgaft.Text));
+	lbldhhyo.Value = parseInt(txtdhhyn.Text) - parseInt(txtdhaft.Text);
+	lbldihyo.Value = parseInt(txtdihyn.Text) -(parseInt(txtdicst.text) + parseInt(txtdiaft.Text));
+	lbldjhyo.Value = parseInt(txtdjhyn.Text) - parseInt(txtdjcst.Text);
+	lbldsum.Value = parseInt(lbld1hyo.Value) + parseInt(lbld2hyo.Value) + 
+					parseInt(lbld3hyo.Value) + parseInt(lbld5hyo.Value) +
+					parseInt(lbld7hyo.Value) + parseInt(lbld8hyo.Value) + 
+					parseInt(lbldbhyo.Value) + parseInt(lbldchyo.Value) + 
+					parseInt(lblddhyo.Value) + parseInt(lbldehyo.Value) + 
+					parseInt(lbldfhyo.Value) + parseInt(lbldghyo.Value) + 
+					parseInt(lbldhhyo.Value) + parseInt(lbldihyo.Value) + 
+					parseInt(lbldjhyo.Value) ;
+					
+	var tsum = (parseInt(lblasum.Value) + parseInt(lblbsum.Value) +
+					parseInt(lblcsum.Value) + parseInt(lbldsum.Value));
+	//txttsum.value = formatparseInt(tsum.toString());
+	txttsum.value = tsum;
+}
+
+
+function Button0_OnClick(obj)
+{
+	close();
+}
+
+function calcu_OnKillFocus(obj)
+{
+	if (length(trim(obj.Text)) == 0)
+	obj.Text = "0";
+//alert(obj+"=="+obj.Text);
+	calcu_sums();
+}
+
+function btnSave_OnClick(obj)
+{
+	if(length(trim(txtteima.Text)) == 0)
+	{
+		alert("테마를 입력해 주세요");
+		return;
+	}
+	
+	//효과금액이 1억을 넘는경우 체크
+	if(trim(txttsum.Text).length > 3)
+	{
+		//if(Number(numberToDBformat(trim(txttsum.Text))) > 100000)
+		if(parseInt(trim(txttsum.Text)) > 100000)
+		{
+			alert("효과금액이 1억원을 넘고 있습니다. 등록해도 괜찮습니까?\n효과단위는 '천원'입니다.");
+		}
+	}
+/*
+	getogm204_obj210pf();
+	if(ds_obj210pf.GetColCount()!=0){
+		alert("ok");
+	}
+	else {
+		alert("NG");
+	}
+*/	
+	getogm204_obj210pf();
+	if(Confirm("저장하려면 '확인'을, 취소하려면 '취소'를 클릭하세요.")){
+alert("ok");
+		if(ds_obj210pf.GetColCount()!=0){
+		var flag="update"; 
+alert("flag====>"+flag);
+			setogm204_obj210pf_insert(flag);	
+		}
+		else{
+		var flag="insert"; 
+alert("flag====>"+flag);
+			setogm204_obj210pf_insert(flag);
+			//var ECost = txtECost.Text
+			var ecost = trim(txttsum.Text);
+			txtECost.Text = ecost;
+		}
+	}
+	else{
+alert("NG");
+		return;
+	}
+}
+
+
+function brd4btnbfpadd_OnClick(obj) {
+
+	getogm204_obj210pf_01();
+	var file_name;;
+
+	if(ds_obj210pf_01.GetColCount()!=0){
+alert("ok");
+		FileDialog0.Filter = "Image Files(*.*)|*.*|";	
+		FileDialog0.Type = "OPEN";
+		if(FileDialog0.Open()){
+		
+//			var file_name = FileDialog0.FileName;
+			file_name = FileDialog0.FileName;
+			var file_name = FileDialog0.FileName;
+			var file_path = FileDialog0.FilePath;
+			var path = file_path + "\\" + file_name;
+			setMessageDirect(path);	
+			brd4picbefor.ImageID=path;
+			//ext_ExcelImportByIndex(path,0,"ds_main",0);
+			//Grid0.CreateFormat(); 
+			var lastdotpos;
+			for(var i = 0; i< path.length; i++)	{
+					if(path.CharAt(i) == ".")
+						lastdotpos = i;
+			}
+			var	ext = path.substr(lastdotpos+1,3);
+			var imgbf = trim(lbljisno.Text)+"_BFO."+ext;
+				imgbf=gImgPath+imgbf;
+alert("mgbf=======>"+imgbf);	
+			//fileTempSave(path);
+			//file_upload(obj);
+			setogm204_obj210pf_preimg(imgbf);
+
+		}
+		else{
+			alert("사진파일을 가져오지 않았습니다.");
+		}
+	}
+	else {
+		alert("개선테이블에 지시번호가 없습니다.\n\n먼저 개선데이타를 저장해 주세요");
+	}	
+	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 파일Upload
+ **********************************************************************/ 
+
+
+function brd4btnbfpcnl_OnClick(obj)
+{
+	getogm204_obj210pf_01();
+	if(ds_obj210pf_01.GetColCount()!=0){
+alert("ok");
+		var imgbf = "";	
+		setogm204_obj210pf_preimg(imgbf);
+		brd4picbefor.ImageID="";
+
+	}	
+	else {
+		alert("개선테이블에 지시번호가 없습니다.");
+	}	
+
+}
+]]></Script>
+</Window>

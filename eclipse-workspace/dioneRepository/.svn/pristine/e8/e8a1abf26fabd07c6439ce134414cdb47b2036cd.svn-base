@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="의료비신고파일생성" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_C"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_D"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD020PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_E"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_F"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_G"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ERROR" UseClientLayout="1">
+				<Contents>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="TITLE" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORG" size="256" summ="default" type="STRING"/>
+					<colinfo id="CHG" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ061Q"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MAIN">
+				<Contents>
+					<colinfo id="column0" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="1" Top="30" Width="1057"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="33" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="120" Style="static" TabOrder="3" Top="33" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static28" Left="860" TabOrder="8" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static31" Left="744" TabOrder="7" Text="제&#32;출&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_SUBMISSION" Left="865" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="6" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="4" Top="36" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="336" TabOrder="11" Top="34" VAlign="Middle" Width="195"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="220" TabOrder="10" Text="기&#32;준&#32;년&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_FR" Left="341" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="9" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_TO" Left="445" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Static Align="Center" Height="11" Id="Static154" Left="425" TabOrder="13" Text="~" Top="42" VAlign="Middle" Width="15"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="888" OnClick="fn_Search" TabOrder="14" Text="조회" Top="8" Width="75"></Button>
+		<FileDialog Bottom="540" Height="24" Id="FileDialog0" Left="224" Right="248" TabOrder="16" Top="516" Width="24"></FileDialog>
+		<File Bottom="546" Height="24" Id="File0" Left="331" Right="355" TabOrder="50" Top="522" Width="24"></File>
+		<Button Height="26" Id="btn_write" ImageID="sum_생성" Left="976" OnClick="btn_write_OnClick" TabOrder="16" Text="File&#32;생성" Top="34" Width="70"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="536" TabOrder="17" Text="연&#32;말&#32;정&#32;산" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="652" TabOrder="19" Top="34" VAlign="Middle" Width="88"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmb_PTJYM" Left="657" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="18" Top="38" Value="TODAY" Width="80"></Calendar>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_MAIN" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="584" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="520" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="1058" SelColor="black" TabOrder="20" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="33"/>
+						<col width="1002"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="의료비지급명세서"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1"/>
+						<cell align="left" checklength="Byte" col="1" colid="column0" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : lsk
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAYZ206C.xml
+ * ● PROGRAM DESCRIPTION  : 의료비신고파일생성 
+ * ● DATE WRITTEN         : 2016.02.11
+ * ● DATE REVISION        : 
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var result, SsId, BsId, Part, DName, TaxId, FileName,brandname;
+var FrDate, ToDate;
+
+var errcnt=0;
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	setYYMM();//기준년월
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		//sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+
+	var result = true;
+	cmd_PTJYM_FR.BKColor="white";
+	cmd_PTJYM_TO.BKColor="white";
+	cmb_SUBMISSION.BKColor="white";
+
+	if(cmd_PTJYM_FR.Value == ""){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_TO.Value == ""){
+		cmd_PTJYM_TO.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_TO.SetFocus();
+		result = false;
+	}else if(cmb_SUBMISSION.Value == ""){
+		cmb_SUBMISSION.BKColor="paleturquoise";
+		alert("[확인] 제출일자를 확인하세요.");	
+		cmb_SUBMISSION.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_FR.Value > cmd_PTJYM_TO.Value){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}
+	return result;
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	} else  {
+		
+	}	
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+//기준년월
+function setYYMM(){
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))-1+"0101";
+	}else{
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))+"0101";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}else{
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))+"1231";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		//alert(parseInt(substr(today(),0,4))-1);
+		cmb_PTJYM.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}
+}
+function fn_Search()
+{
+	if(!validationChk()){
+		return;
+	}
+	errcnt=0;
+	FrDate = substr(cmd_PTJYM_FR.Value,0,6); //기준년월(시작)
+	ToDate = substr(cmd_PTJYM_TO.Value,0,6); //기준년월(종료)
+	TotCnt=0;
+	C_Cnt=0;
+	D_Cnt=0;
+
+	if (ComboBoxPlant.Value = "E1") {										//PE
+		brandname = "덴소코리아일렉트로닉스주식회사";  				//법인명(40)
+		SsId = "6098101877"; 												//사업자등록번호
+		BsId = "1942110000141";  											//법인번호
+		TaxId = "DNPE538";  												//홈택스ID
+		FileName = "C6098101.877";
+		Lib1 ="PERESLIB";//cigma library
+		Lib2 ="PSEDBLIB";//회사 library
+		Lib3 ="PSEDBLIB";//사업부 library
+	}else if (ComboBoxPlant.Value = "C1") {									//KA창원
+		brandname = "덴소코리아오토모티브주식회사";  				//법인명(40)
+		SsId = "2068128245";  												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		TaxId = "DNPS200";  												//홈택스ID
+		FileName = "C2068128.245";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSCDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "H1") {									//PS홍성
+		brandname = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		SsId = "3108509579"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		TaxId = "DNPSHS";  													//홈택스ID
+		FileName = "C3108509.579";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSHDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "S1") {  								//PS화성
+		brandname = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		SsId = "1248561218"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		TaxId = "";  														//홈택스ID      
+		FileName = "C1248561.218";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSSDBLIB";//사업부 library		
+	}
+
+	var sKind		= "getHAYZ061Q";						
+	var sMethodName = "service::pshumlib/selectHAYZ061Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HAYZ061Q=ds_HAYZ061Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);		
+	http.Sync = true;		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+//GridUC_C.CreateFormat();		
+	if(ds_HAYZ061Q.rowcount < 1){
+		alert("[확인] 처리할 내역이 없습니다.");
+		setMessage("2564");
+		return;
+	}
+	for (i = 0; i < ds_HAYZ061Q.rowcount; i++) {
+		// [자료관리번호]  
+		//  1.레코드구분 + 2.자료구분 + 3.세무서 +  4.일련번호9(6) +  5.제출일자 
+		result = "A" + "26" + "609" +rightb("000000" + (i+1), 6) + cmb_SUBMISSION.Value;
+		
+		// [제출자] 
+		//  6.사업자등록번호X(10) + 7.홈테스ID X(20) + 8.세무프로그램코드X(4)
+		result += leftb(SsId + space(10), 10) + leftb(TaxId + space(20), 20) + "9000";
+		
+		// [원천징수의무자] 
+		//  9.사업자등록번호X(10) +  10.상호X(40)
+		result += leftb(SsId + space(10), 10) + leftb(brandname + space(40), 40);
+		
+		// [소득자(연말정산신청자)] 
+		//  11.소득자주민등록번호X(13) + 12.내외국인코드 9(1) + 13.성명X(30)
+		result += leftb(ds_HAYZ061Q.GetColumn(i,"KORNO") + space(13), 13) + 
+				  rightb("0" + ds_HAYZ061Q.GetColumn(i,"FORCDA"), 1) + 
+				  leftb(ds_HAYZ061Q.GetColumn(i,"KORNM") + space(30), 30);
+		
+		// [지급처] 
+		//  14.지급처사업자등록번호X(10) + 15.지급처상호 X(40) + 16.의료증빙코드X(1)
+		result += leftb(ds_HAYZ061Q.GetColumn(i,"HOPNO") + space(10), 10) + 
+				  leftb(ds_HAYZ061Q.GetColumn(i,"HOPNM") + space(40), 40) + 
+				  leftb(ds_HAYZ061Q.GetColumn(i,"HOPCD") + space(1), 1);
+		
+		// [지급명세] 
+		//  17.건수9(5) + 18.금액 9(11) + 19.난임수술비해당여부X(1)
+		result += rightb("00000" + ds_HAYZ061Q.GetColumn(i,"HOPCNT"), 5) +
+				  rightb("00000000000" + ds_HAYZ061Q.GetColumn(i,"HOPMON"), 11) +
+				  leftb(iif(ds_HAYZ061Q.GetColumn(i,"DFFCD") == "O","1","") + space(1), 1);
+				  
+		// [의료비공제대상자] 
+		//  20.주민등록번호X(13) + 21.내외국인코드 9(1) + 22.본인등해당여부9(1) + 23.제출대상기간코드9(1) + 24.공란X(19)
+		result += leftb(ds_HAYZ061Q.GetColumn(i,"APPNO") + space(13), 13) + 
+				  rightb("0" + ds_HAYZ061Q.GetColumn(i,"FORCDB"), 1) +
+				  rightb("0" + ds_HAYZ061Q.GetColumn(i,"APPCD"), 1) +
+				  "1" +
+				  space(19);
+		if(lengthb(result) !=251 ) {
+			alert("result길이 error"+lengthb(result)+"=="+ds_HAYZ061Q.GetColumn(i,"SABUN")+"("+ds_HAYZ061Q.GetColumn(i,"APPNO")+")");
+			errcnt += 1;
+		}else{
+			ds_MAIN.AddRow(i);
+			ds_MAIN.SetColumn(i,"column0",result);
+		}
+	}
+}
+
+function rightb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, lengthb(strText) - nSize, nSize);
+	return tmp;
+}
+
+function leftb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, 0, nSize);
+	return tmp;
+}
+
+function fn_write(obj)
+{
+	FileDialog0.Type = "SAVE";	
+	FileDialog0.FileName = FileName;
+	FileDialog0.Open("C:\\");	
+	File0.FileName = FileDialog0.FilePath + "\\" + FileName;	
+	File0.Open ( "w+" );
+	var len = File0.Write(result, 10000000000000);	
+	//alert("len= "+len);
+	File0.Close();
+}
+
+function all_Clear(){
+	ds_HAYZ061Q.Clear();
+	ds_MAIN.ClearData();
+
+}
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	all_Clear();
+}
+function btn_write_OnClick(obj)
+{
+	fn_write();
+}]]></Script>
+</Window>

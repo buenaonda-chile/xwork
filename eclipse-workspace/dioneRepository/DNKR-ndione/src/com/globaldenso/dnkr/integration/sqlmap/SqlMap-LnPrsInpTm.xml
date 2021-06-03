@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LnPrsInpTmDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="lnPrsInpTm" type="LnPrsInpTmDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />
+        <result property="lgstTime" column="LGST_TIME" />
+                
+        <result property="prsnl1" column="PRSNL1" />
+        <result property="prsnl2" column="PRSNL2" />
+        <result property="prsnl3" column="PRSNL3" />
+        <result property="prsnl4" column="PRSNL4" />
+        <result property="prsnl5" column="PRSNL5" />
+        <result property="prsnl6" column="PRSNL6" />
+        <result property="prsnl7" column="PRSNL7" />
+        <result property="prsnl8" column="PRSNL8" />       
+        <result property="hrMntSum" column="HR_MNT_SUM" />               
+                                                 
+
+        <result property="hrMnt1" column="HR_MNT1" />
+        <result property="hrMnt2" column="HR_MNT2" />        
+        <result property="hrMnt3" column="HR_MNT3" /> 
+        <result property="hrMnt4" column="HR_MNT4" /> 
+        <result property="hrMnt5" column="HR_MNT5" /> 
+        <result property="hrMnt6" column="HR_MNT6" /> 
+        <result property="hrMnt7" column="HR_MNT7" /> 
+        <result property="hrMnt8" column="HR_MNT8" /> 
+        <result property="dayTit" column="DAY_TIT" />     
+        <result property="type" column="TYPE" />              
+        
+ 
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+  
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="lnPrsInpTm" parameterType="LnPrsInpTmDomain">
+		SELECT A.* FROM (
+		SELECT 
+		 'D-1일' AS DAY_TIT
+		,'B' AS TYPE
+		, REPLACE(CHAR(DATE('${opertDe}') - 1 DAYS,ISO), '-','') AS OPERT_DE
+		, A.CLS_CODE
+		, A.LOC_CODE
+		, A.LINE_CODE
+		, A.LINE_NM		
+		, B.PRSNL1
+		, B.PRSNL2
+		, B.PRSNL3
+		, B.PRSNL4
+		, B.PRSNL5
+		, B.PRSNL6
+		, B.PRSNL7
+		, B.PRSNL8
+		, B.HR_MNT1
+		, B.HR_MNT2
+		, B.HR_MNT3
+		, B.HR_MNT4
+		, B.HR_MNT5
+		, B.HR_MNT6
+		, B.HR_MNT7
+		, B.HR_MNT8
+		, (B.HR_MNT1 + B.HR_MNT2 + B.HR_MNT3 + B.HR_MNT4 + B.HR_MNT5 + B.HR_MNT6 + B.HR_MNT7 + B.HR_MNT8) AS HR_MNT_SUM 			
+		, B.LGST_TIME
+		FROM PSZDBLIB.FHP010PF A
+		LEFT JOIN PSZDBLIB.FHP109PF B
+		ON A.CLS_CODE = B.CLS_CODE
+		AND A.LINE_CODE = B.LINE_CODE
+		AND B.OPERT_DE = REPLACE(CHAR(DATE('${opertDe}') - 1 DAYS,ISO), '-','')
+		UNION
+		SELECT 
+		 'D일' AS DAY_TIT
+		,'D' AS TYPE		 
+		, REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','') AS OPERT_DE
+		, A.CLS_CODE
+		, A.LOC_CODE
+		, A.LINE_CODE
+		, A.LINE_NM		
+		, B.PRSNL1
+		, B.PRSNL2
+		, B.PRSNL3
+		, B.PRSNL4
+		, B.PRSNL5
+		, B.PRSNL6
+		, B.PRSNL7
+		, B.PRSNL8
+		, B.HR_MNT1
+		, B.HR_MNT2
+		, B.HR_MNT3
+		, B.HR_MNT4
+		, B.HR_MNT5
+		, B.HR_MNT6
+		, B.HR_MNT7
+		, B.HR_MNT8
+		, (B.HR_MNT1 + B.HR_MNT2 + B.HR_MNT3 + B.HR_MNT4 + B.HR_MNT5 + B.HR_MNT6 + B.HR_MNT7 + B.HR_MNT8) AS HR_MNT_SUM 		
+		, B.LGST_TIME
+		FROM PSZDBLIB.FHP010PF A
+		LEFT JOIN PSZDBLIB.FHP109PF B
+		ON A.CLS_CODE = B.CLS_CODE
+		AND A.LINE_CODE = B.LINE_CODE
+		AND B.OPERT_DE = REPLACE(CHAR(DATE('${opertDe}'),ISO), '-','')
+		) A
+		WHERE CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+		ORDER BY LINE_CODE, TYPE
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="LnPrsInpTmDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+        	PSZDBLIB.FHP109PF
+		WHERE OPERT_DE = #{opertDe}
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{lineCode}		
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchLgstCount" resultType="java.lang.Integer" parameterType="LnPrsInpTmDomain">
+        SELECT 
+              120 AS CNT 
+        FROM 
+             PSZDBLIB.FHP109PF
+		WHERE OPERT_DE = #{operDe} 
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="LnPrsInpTmDomain">
+        INSERT INTO  PSZDBLIB.FHP109PF (
+				 OPERT_DE
+				,CLS_CODE
+				,LOC_CODE
+				,LINE_CODE
+				,PRSNL1
+				,PRSNL2
+				,PRSNL3
+				,PRSNL4
+				,PRSNL5
+				,PRSNL6
+				,PRSNL7
+				,PRSNL8		
+				,HR_MNT1
+				,HR_MNT2
+				,HR_MNT3
+				,HR_MNT4
+				,HR_MNT5
+				,HR_MNT6
+				,HR_MNT7
+				,HR_MNT8						
+				,LGST_TIME
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{opertDe}
+               ,#{clsCode}
+               ,#{locCode}
+               ,#{lineCode}
+               ,#{prsnl1}
+               ,#{prsnl2}
+               ,#{prsnl3}
+               ,#{prsnl4}
+               ,#{prsnl5}
+               ,#{prsnl6}
+               ,#{prsnl7}
+               ,#{prsnl8}                              
+               ,#{hrMnt1}
+               ,#{hrMnt2}
+               ,#{hrMnt3}
+               ,#{hrMnt4}
+               ,#{hrMnt5}
+               ,#{hrMnt6}
+               ,#{hrMnt7}
+               ,#{hrMnt8}                                                                                                                        
+               ,#{lgstTime} 
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="LnPrsInpTmDomain">
+        UPDATE 
+               PSZDBLIB.FHP109PF
+        SET
+			   PRSNL1 = #{prsnl1}
+			  ,PRSNL2 = #{prsnl2}
+			  ,PRSNL3 = #{prsnl3}
+			  ,PRSNL4 = #{prsnl4}
+			  ,PRSNL5 = #{prsnl5}
+			  ,PRSNL6 = #{prsnl6}
+			  ,PRSNL7 = #{prsnl7}
+			  ,PRSNL8 = #{prsnl8}		
+			  ,HR_MNT1 = #{hrMnt1}
+			  ,HR_MNT2 = #{hrMnt2}
+			  ,HR_MNT3 = #{hrMnt3}
+			  ,HR_MNT4 = #{hrMnt4}
+			  ,HR_MNT5 = #{hrMnt5}
+			  ,HR_MNT6 = #{hrMnt6}
+			  ,HR_MNT7 = #{hrMnt7}
+			  ,HR_MNT8 = #{hrMnt8}						
+			  ,LGST_TIME = #{lgstTime}	 
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE OPERT_DE = #{opertDe}
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{lineCode}	
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="LnPrsInpTmDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP109PF
+		WHERE OPERT_DE = #{opertDe}
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}
+		AND LINE_CODE = #{lineCode}	
+    </delete>
+    
+    
+
+</mapper>

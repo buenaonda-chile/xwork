@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form BKColor="white" Font="Arial,9" Height="624" Id="ORPE004" Left="8" OnFocus="ORPE004_OnFocus" OnLoadCompleted="ORPE004_OnLoadCompleted" PidAttrib="7" Title="사외성적서등록" TooltipFont="Default,0" Top="8" Ver="1.1" Width="1064" WorkArea="TRUE">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_files">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_orpe001r_jbcode">
+				<Contents>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_orpe004_select">
+				<Contents>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="FILENAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mst650pf"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="72" Id="searchBar" TabOrder="4" Top="32" Width="1040"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static12" Left="600" TabOrder="29" Top="39" Width="147"></Static>
+		<Combo CodeColumn="MNGNO" DataColumn="NAME" Editable="TRUE" Height="20" Id="cmb_mngno" InnerDataset="ds_orpe001r_jbcode" Left="605" Search="FILTERED" TabOrder="7" Top="41" Width="136"></Combo>
+		<Grid BindDataset="ds_files" BkColor2="default" BoldHead="true" Bottom="604" Enable="true" EndLineColor="default" Height="116" Id="Grid0" InputPanel="FALSE" Left="32" LineColor="default" Right="536" TabOrder="11" TabStop="true" Top="488" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="504">
+			<contents>
+				<columns>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+				</columns>
+				<head>
+					<cell col="0" display="text" text="chk"/>
+					<cell col="1" display="text" text="fullname"/>
+					<cell col="2" display="text" text="filename"/>
+					<cell col="3" display="text" text="prog_bar"/>
+					<cell col="4" display="text" text="filesize"/>
+					<cell col="5" display="text" text="progsize"/>
+				</head>
+				<body>
+					<cell col="0" colid="chk" display="text"/>
+					<cell col="1" colid="fullname" display="text"/>
+					<cell col="2" colid="filename" display="text"/>
+					<cell col="3" colid="prog_bar" display="text"/>
+					<cell col="4" colid="filesize" display="number"/>
+					<cell col="5" colid="progsize" display="text"/>
+				</body>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" BindDataset="ds_orpe004_select" BKColor="white" BkColor2="white" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="22" Height="504" Id="MainGrid" InputPanel="FALSE" Left="1" LineColor="#888888" MinWidth="100" OnCellDBLClick="MainGrid_OnCellDblClick" Right="1037" TabOrder="21" TabStop="true" Top="112" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1036">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="33"/>
+						<col width="80"/>
+						<col width="88"/>
+						<col width="180"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="246"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="교정번호"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="관리번호"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="계측기명"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="교정일"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" InputZeroTime="true" text="작성자"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" InputZeroTime="true" text="장비번호"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" InputZeroTime="true" text="형식"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" InputZeroTime="true" text="부서명"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" InputZeroTime="true" text="첨부파일명"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1" InputZeroTime="true"/>
+						<cell col="1" colid="REPNO" display="text" InputZeroTime="true"/>
+						<cell col="2" colid="MNGNO" display="text" InputZeroTime="true"/>
+						<cell col="3" colid="MNAME" display="text" InputZeroTime="true"/>
+						<cell align="center" col="4" colid="REPDT" display="date" InputZeroTime="true"/>
+						<cell align="center" col="5" colid="KORNM" display="text" InputZeroTime="true"/>
+						<cell col="6" colid="JNBNO" display="text" InputZeroTime="true"/>
+						<cell col="7" colid="MTYPE" display="text" InputZeroTime="true"/>
+						<cell col="8" colid="DPNM" display="text" InputZeroTime="true"/>
+						<cell col="9" colid="FILENAME" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static13" Left="384" TabOrder="30" Top="39" Width="110"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="1" TabOrder="1" Top="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="20" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="110" TabOrder="5" Top="41" Width="120"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="5" TabOrder="3" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="39" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="497" TabOrder="6" Text="자산관리번호" Top="39" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="751" TabOrder="8" Text="부서명" Top="39" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="282" TabOrder="9" Text="교정일" Top="72" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="10" Text="작성자" Top="72" VAlign="Middle" Width="100"></Static>
+		<Calendar EditAlign="CENTER" Height="20" Id="cal_repdt_from" Left="387" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="75" Width="90"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="600" TabOrder="13" Text="첨부파일명" Top="72" VAlign="Middle" Width="100"></Static>
+		<Edit Height="20" Id="ed_file" Left="710" TabOrder="14" Top="75" Width="290"></Edit>
+		<FileDialog Bottom="24" Height="24" Id="FileDlg" Left="1000" Right="1024" TabOrder="21" Width="24"></FileDialog>
+		<CyHttpFile Height="24" Id="CyHttpFile" Left="1032" Width="24"></CyHttpFile>
+		<Edit Height="20" Id="ed_repno" Left="387" MaxLength="10" OnKeyDown="ed_repno_OnKeyDown" TabOrder="15" Top="42" UpperOnly="TRUE" Width="104"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="282" TabOrder="16" Text="교정번호" Top="39" VAlign="Middle" Width="100"></Static>
+		<Combo CodeColumn="code" DataColumn="CDNM" Height="20" Id="cmb_dpt" InnerDataset="ds_mst650pf" Left="859" TabOrder="17" Top="41" Width="157"></Combo>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_writerId" Left="110" TabOrder="20" Top="75" Width="64"></Edit>
+		<Edit Align="CENTER" Enable="FALSE" Height="20" Id="ed_writer" Left="176" TabOrder="19" Top="75" Width="80"></Edit>
+		<Image Cursor="HAND" Height="17" Id="imgWriterId" ImageID="ic_search" Left="256" OnClick="imgWriterId_OnClick" Static="FALSE" TabOrder="18" Top="75" Width="20"></Image>
+		<Calendar EditAlign="CENTER" Height="20" Id="cal_repdt_to" Left="494" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="22" Top="75" Width="90"></Calendar>
+		<Static Align="Center" Font="Arial,12,Bold" Height="16" Id="Static9" Left="478" TabOrder="23" Text="~" Top="74" Width="15"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static100" Left="107" TabOrder="24" Top="39" Width="173"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static1" Left="107" TabOrder="25" Top="72" Width="173"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static8" Left="384" TabOrder="26" Top="72" Width="203"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static10" Left="707" TabOrder="27" Top="72" Width="301"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static11" Left="855" TabOrder="28" Top="39" Width="168"></Static>
+		<FileDialog Bottom="40" Height="24" Id="FileDialog0" Left="918" Right="942" TabOrder="31" Top="16" Width="24"></FileDialog>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Kim Jung hyun
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ORPE004.xml
+ * ● PROGRAM DESCRIPTION  : 계측기/사내성적서 조회
+ * ● DATE WRITTEN         : 2012.06.01
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+#include "script::fileupdown.js"
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var repno;
+var del_filename;
+
+function ORPE004_OnLoadCompleted(obj)
+{
+	getTitle();	
+	getDesign();	
+	getJbcode();
+	gFcOnTopButtonColor("1");
+	getComCode();
+	getogmGauge_mst650();
+	cmb_mngno.Index = 0;
+	//wb_preview.PageUrl = "C:/Desert.jpg";//str_param_server;
+	//wb_preview.Run();	
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getJbcode(){
+	http.Sync 	= true;
+	var sKind		= "getJbcode";						
+	var sMethodName = "service::psogmlib/selectORPE001Rjbcode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_orpe001r_jbcode=ds_orpe001r_jbcode";
+	var sArgument   = "";	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	
+	ds_orpe001r_jbcode.InsertRow(0);
+	ds_orpe001r_jbcode.SetColumn(0, "NAME", "전체선택");
+	ds_orpe001r_jbcode.SetColumn(0, "MNGNO", "%");
+}
+
+function getogmGauge_mst650()
+{
+	var sKind		= "getMst650pf";						
+	var sMethodName = "service::psogmlib/selectOGM_ORPE_Mst650pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_mst650pf=ds_mst650pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	
+	//Trace(" LIB2=" + Lib2);
+	//Trace(" COMPS=" + ComboBoxPlant.Value);
+		
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+
+function fn_Excel() {
+	if (ds_orpe004_select.rowcount > 0) {	
+		var fName   = "사내성적서";
+		var arrSheets  =  Array();  
+	
+		arrSheets[0]  = "MainGrid|사내성적서";
+		createExcelSheetS2(FileDialog0, fName ,arrSheets);
+	} else {
+		alert("다운받을 자료가 없습니다.");
+	}
+}
+
+function fn_Input() {	
+	ds_orpe001_main.DeleteAll();		
+	ds_orpe001_main.AddRow();
+	ed_repno.Text = "";
+	//cal_kjdt.DropDown();	
+}
+
+function fn_Search() {
+	var sKind		= "selectORPE004";						
+	var sMethodName = "service::psogmlib/selectORPE004.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_orpe004_select=ds_orpe004_select";
+	var sArgument   = "";	
+	
+	sArgument += " GUBUN=" + quote("I");		
+	
+	if(length(trim(ds_orpe001r_jbcode.GetColumn(ds_orpe001r_jbcode.row,"MNGNO"))) > 0) {		
+		sArgument += "@MNGNO=" + quote(cmb_mngno.Value);	
+	} else	{		
+		sArgument += "@MNGNO='%'";			
+	}	
+	
+	if(length(trim(cmb_dpt.Value)) > 0) {		
+		sArgument += "@DPTCD=" + quote(trim(cmb_dpt.Value));	
+	} else	{			
+		sArgument += "@DPTCD='%'";			
+	}	
+	
+	if(length (trim(ed_repno.Text)) > 0) {		
+		sArgument += "@REPNO=" + quote(trim(ed_repno.Text));	
+	} else	{		
+		sArgument += "@REPNO='%'";			
+	}	
+		
+	if(length(trim(cal_repdt_from.Value)) > 0) {		
+		sArgument += "@REPDT_FROM=" + quote(trim(cal_repdt_from.Value));	
+	} else	{		
+		sArgument += "@REPDT_FROM='%'";		
+	}	
+	
+	if(length(trim(cal_repdt_to.Value)) > 0) {		
+		sArgument += "@REPDT_TO=" + quote(trim(cal_repdt_to.Value));	
+	} else	{		
+		sArgument += "@REPDT_TO='%'";		
+	}							
+	
+	if(length(trim(ed_writerId.Text)) > 0) {		
+		sArgument += "@WRITER=" + quote(trim(ed_writerId.Text));	
+	} else	{			
+		sArgument += "@WRITER='%'";			
+	}	
+				
+	if(length(trim(ed_file.Text)) > 0) {		
+		sArgument += "@FILENAME=" + quote(trim(ed_file.Text));	
+	} else	{			
+		sArgument += "@FILENAME='%'";			
+	}				  	
+
+	//http.Sync=true;
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument, 272, 64, "TitleBar=false");	
+	//dialog(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	//dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//http.Sync=false;		
+}
+
+
+function MainGrid_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//다운로드 받을 파일명을 취득하여 변수에 설정(클릭한 로우의 파일)
+	var str_param = trim(ds_orpe004_select.GetColumn(ds_orpe004_select.currow,"FILENAME"));
+	//다운로드 받을 파일이 저장되어있는 서버 경로와 파일명
+	//var str_param_server = "D:/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+	var str_param_server = "C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+				
+	trace("str_param:" + str_param);
+	trace("str_param_server:" + str_param_server);
+	
+	//-----------  다이얼로그창  설정------------------
+    //다이얼로그창에 다운받을 파일명 설정
+	FileDlg.FileName= str_param;
+    //다이얼로그창에 다운받을 기본경로 설정
+	FileDlg.FilePath= "C:\\";
+	//다이얼로그창 버튼 SAVE로 설정
+	FileDlg.Type = "SAVE";
+	//확장자가 없을 때 기본 확장자 설정
+	FileDlg.AppendExtDefault = "TRUE";	
+	
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 처리 계속
+
+	if(FileDlg.Open()){
+	
+		//다운로드 받을 경로(로컬)
+		//var str_param_full = "C:/download/" + Dataset1.getColumn(nRow,"filename"); //다이얼로그창 미사용시(고정폴더)
+		var str_param_full = FileDlg.FilePath + "\\" + FileDlg.FileName;		
+		
+		trace("파일명:" + str_param);
+		trace("경로(파일명):" + str_param_full);
+		
+		//스크립트 파일의 함수 호출 
+		var file_size = CyHttpFile.GetFileSizeLocal(str_param_server);
+		trace("파일사이즈:" + file_size);
+		var ret = gfn_FileRead(CyHttpFile, str_param_full, str_param_server, file_size, nRow, "prog_bar", MainGrid);
+		
+		//호출함수 리턴값 처리
+		if ( ret[0] == "FAIL" )
+		{
+			alert(ret[1]);
+		}
+	}				
+}
+
+function ed_repno_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if (nChar == 13) {
+		fn_Search();
+	}	
+}
+
+function file_del(fname){
+
+	var sKind		= "file_del";						
+	//var sMethodName = "http://10.72.209.23/psogmlib/fileDel.do"; 
+	var sMethodName = G_baseURL+"psogmlib/fileDel.do"; 
+	var sInDataSet  = ""; //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";
+	var sArgument   = "";
+	var sArgument   = "";
+	var sArgument   = "";
+		sArgument += " FNAME=" + quote(fname);
+		//sArgument += " FDIR=" + quote("D:/DIONE_UPDOWN_FILE/dnpe_gauge/");
+		sArgument += " FDIR=" + quote("C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/dnpe_gauge/");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+}
+function imgWriterId_OnClick(obj,nX,nY)
+{
+	//if (ds_orpe001_main.rowcount <> 0) {
+		var sUseid;
+		var selectnumber = "1";    // 1.부서사용자
+		var rtn = dialog("PSOGMLIB::ogmSelect_BS.xml","COMPS="+ ComboBoxPlant.Value + " " + "GROUP="+ "1" + " " + "SEL=" + selectnumber + " " + "CODE=" + "",584,528);
+		
+		if (length(rtn) != 0){						
+			ed_writerId.Text = rtn[0];
+			ed_writer.Text = rtn[1];
+		}
+	//}	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="selectORPE004"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+function ORPE004_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1");
+	MainGrid.Height = 504;
+}
+]]></Script>
+</Window>

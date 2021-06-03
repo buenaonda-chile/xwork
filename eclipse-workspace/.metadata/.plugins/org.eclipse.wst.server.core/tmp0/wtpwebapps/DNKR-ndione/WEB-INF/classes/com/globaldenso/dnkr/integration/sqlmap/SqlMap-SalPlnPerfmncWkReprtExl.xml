@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncWkReprtExlDao">
+	
+	<resultMap id="SalPlnPerfmncWkReprtExl" type="SalPlnPerfmncWkReprtExlDomain">
+		<result property="maker" column="MAKER" />
+		<result property="pcosty" column="P_COST_Y" />
+		<result property="pcostm" column="P_COST_M" />
+		<result property="pcosts" column="P_COST_S" />
+		<result property="prgrsRate" column="PRGRS_RATE" />
+		
+		<result property="comps" column="COMPS" />
+		<result property="ymrate" column="YM_RATE" />
+		<result property="pcostwk" column="P_COST_WK" />
+		<result property="pcostcal" column="P_COST_CAL" />
+		<result property="rate1" column="RATE1" />
+		<result property="rate2" column="RATE2" />
+		
+	</resultMap>
+	
+  	<select id="searchByMaker" resultMap="SalPlnPerfmncWkReprtExl" parameterType="SalPlnPerfmncWkReprtExlDomain">
+	
+	select
+         (CASE WHEN A.COMPS='E1' THEN '${locNm1}' ELSE '' END) as maker,
+         ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) AS P_COST_Y,
+         ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         <choose>
+         <when test='today.equals(dumcb)'>
+         	CAST(((CAST(${subEdumcb} AS DECIMAL)/${endDay}) * (B.P_COST_M / 100000000)) AS DECIMAL(31,2)) AS P_COST_WK,
+         </when>
+         <otherwise>
+         	ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_WK,
+         </otherwise>
+         </choose>
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) AS P_COST_S,
+         <choose>
+         <when test='today.equals(dumcb)'>
+         	((CAST((CAST((C.P_COST_S / 100000000) AS FLOAT) / CAST((((CAST(${subEdumcb} AS FLOAT)/${endDay}) * CAST((B.P_COST_M / 100000000)AS FLOAT)))AS FLOAT))AS DECIMAL(31,4))-1)*100) AS PRGRS_RATE
+         </when>
+         <otherwise>
+         	 CAST(((((CAST((C.P_COST_S / 100000000) AS FLOAT) / ((B.P_COST_M / 100000000))))-1)*100)AS DECIMAL(31,2))  AS PRGRS_RATE
+         </otherwise>
+         </choose>
+      from
+         (SELECT
+         A.COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb}--계획년월
+         GROUP BY A.COMPS) B,
+
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+         A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+         AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY A.COMPS) C
+
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+
+	select
+         (CASE WHEN A.COMPS='C1' THEN '${locNm3}' WHEN A.COMPS='S1' THEN '${locNm4}' ELSE '' END) as maker,
+         ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) AS P_COST_Y,
+         ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         <choose>
+         <when test='today.equals(dumcb)'>
+         	CAST(((CAST(${subEdumcb} AS DECIMAL)/${endDay}) * (B.P_COST_M / 100000000)) AS DECIMAL(31,2)) AS P_COST_WK,
+         </when>
+         <otherwise>
+         	ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_WK,
+         </otherwise>
+         </choose>
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) AS P_COST_S,
+        <choose>
+         <when test='today.equals(dumcb)'>
+         	((CAST((CAST((C.P_COST_S / 100000000) AS FLOAT) / CAST((((CAST(${subEdumcb} AS FLOAT)/${endDay}) * CAST((B.P_COST_M / 100000000)AS FLOAT)))AS FLOAT))AS DECIMAL(31,4))-1)*100) AS PRGRS_RATE
+         </when>
+         <otherwise>
+         	 CAST(((((CAST((C.P_COST_S / 100000000) AS FLOAT) / ((B.P_COST_M / 100000000))))-1)*100)AS DECIMAL(31,2))  AS PRGRS_RATE
+         </otherwise>
+         </choose>
+      from
+         (SELECT
+         A.COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY A.COMPS) B,
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+        A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+         AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY A.COMPS) C
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+
+      select
+         'TOTAL' as maker,
+         (ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) + ROUND((D.P_COST_Y / CAST(100000000 AS FLOAT)),2)) AS P_COST_Y,
+         (ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) + ROUND((E.P_COST_M / CAST(100000000 AS FLOAT)),2)) AS P_COST_M,
+         <choose>
+         <when test='today.equals(dumcb)'>
+         	(CAST(((CAST(${subEdumcb} AS DECIMAL)/${endDay}) * (B.P_COST_M / 100000000)) AS DECIMAL(31,2))) + (CAST(((CAST(${subEdumcb} AS DECIMAL)/${endDay}) * (E.P_COST_M / 100000000)) AS DECIMAL(31,2))) AS P_COST_WK,
+         </when>
+         <otherwise>
+         	(ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) + ROUND((E.P_COST_M / CAST(100000000 AS FLOAT)),2)) AS P_COST_WK,
+         </otherwise>
+         </choose>
+         (ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) + ROUND((F.P_COST_S / CAST(100000000 AS FLOAT)),2)) AS P_COST_S,
+         <choose>
+         <when test='today.equals(dumcb)'>
+         	((CAST((CAST(((C.P_COST_S / 100000000) + (F.P_COST_S / 100000000))AS FLOAT) / CAST((CAST(((CAST(${subEdumcb} AS DECIMAL)/${endDay}) * (B.P_COST_M / 100000000)) AS DECIMAL(31,2)))AS FLOAT))AS DECIMAL(31,4))-1)*100) AS PRGRS_RATE
+         </when>
+         <otherwise>
+         	CAST(((((CAST( ((C.P_COST_S / 100000000) + (F.P_COST_S / 100000000)) AS FLOAT) / (((B.P_COST_M / 100000000) + (E.P_COST_M / 100000000)))))-1)*100) AS DECIMAL(31,2)) AS PRGRS_RATE
+         </otherwise>
+         </choose>
+         
+      from
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') A,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') B,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+         A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+         AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY '1') C,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB=#{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') D,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') E,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+        A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+         AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY '1') F
+      where
+      	'SqlMap-SalPlnPerfmncWkReprtExl.searchByMaker' = 'SqlMap-SalPlnPerfmncWkReprtExl.searchByMaker'
+         and A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+         and C.COMPS = D.COMPS
+         and D.COMPS = E.COMPS
+         and E.COMPS = F.COMPS
+		
+	</select>
+
+	<select id="searchByMaker2" resultMap="SalPlnPerfmncWkReprtExl" parameterType="SalPlnPerfmncWkReprtExlDomain">
+	
+	select 
+         (CASE WHEN A.COMPS='E1' THEN '${locNm1}' ELSE '' END) as COMPS,
+         (CASE WHEN A.COMPS='E1' THEN 'CLUSTER, SMK, HUD' ELSE '' END) as maker,         
+          ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) AS P_COST_Y, 
+         ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         ((CAST(A.P_COST_Y AS FLOAT) / 100000000) / (CAST(B.P_COST_M AS FLOAT) / 100000000) * 100) AS YM_RATE,
+          ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_WK,
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) - ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_CAL,
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) AS P_COST_S,
+         ((CAST(C.P_COST_S AS FLOAT) / 100000000) / (CAST(A.P_COST_Y AS FLOAT) / 100000000) * 100) AS RATE1,
+         ((CAST(C.P_COST_S AS FLOAT) / 100000000) / (CAST(B.P_COST_M AS FLOAT) / 100000000) * 100) AS RATE2
+      from
+         (SELECT 
+         A.COMPS, 
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+         
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY A.COMPS) B,
+         
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+         A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+      	AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY A.COMPS) C
+         
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+
+	select 
+         (CASE WHEN A.COMPS='C1' THEN '${locNm3}' WHEN A.COMPS='S1' THEN '${locNm4}' ELSE '' END) as COMPS,
+         (CASE WHEN A.COMPS='C1' THEN 'CVVT, OCV, COIL, FUEL PUMP 外' WHEN A.COMPS='S1' 
+         	THEN 'HVAC, ETC, BUS, W/M, WSW 外' ELSE '' END) as maker,
+         ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) AS P_COST_Y, 
+         ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         (ROUND((CAST(A.P_COST_Y AS FLOAT) / CAST(100000000 AS FLOAT)),2) / ROUND((CAST(B.P_COST_M AS FLOAT) / CAST(100000000 AS FLOAT)),2) * 100) AS YM_RATE,
+         ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_WK,
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) - ROUND((B.P_COST_M / CAST(100000000 AS FLOAT)),2) AS P_COST_CAL,
+         ROUND((C.P_COST_S / CAST(100000000 AS FLOAT)),2) AS P_COST_S,
+         ((CAST(C.P_COST_S AS FLOAT) / 100000000) / (CAST(A.P_COST_Y AS FLOAT) / 100000000) * 100) AS RATE1,
+         ((CAST(C.P_COST_S AS FLOAT) / 100000000) / (CAST(B.P_COST_M AS FLOAT) / 100000000) * 100) AS RATE2
+      from
+         (SELECT 
+         A.COMPS, 
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY A.COMPS) B,
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+         A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+      	AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY A.COMPS) C
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+      
+
+      select 
+         'TOTAL' as COMPS,
+         ' ' as maker,
+        (ROUND((A.P_COST_Y / CAST(100000000 AS FLOAT)),2) + ROUND((D.P_COST_Y / CAST(100000000 AS FLOAT)),2)) AS P_COST_Y, 
+         ROUND(((B.P_COST_M + E.P_COST_M) / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         CAST( (A.P_COST_Y + D.P_COST_Y) / 100000000  AS FLOAT ) / CAST((B.P_COST_M + E.P_COST_M) / 100000000 AS FLOAT ) * 100  AS YM_RATE,
+         ROUND(((B.P_COST_M + E.P_COST_M) / CAST(100000000 AS FLOAT)),2) AS P_COST_M,
+         ROUND((((C.P_COST_S + F.P_COST_S) - (B.P_COST_M + E.P_COST_M)) / CAST(100000000 AS FLOAT)),2) AS P_COST_CAL,
+         ROUND(((C.P_COST_S + F.P_COST_S) / CAST(100000000 AS FLOAT)),2) AS P_COST_S,
+         CAST( (C.P_COST_S + F.P_COST_S) / 100000000 AS FLOAT ) / CAST((A.P_COST_Y + D.P_COST_Y) / 100000000 AS FLOAT ) * 100 AS RATE1,
+         CAST( (C.P_COST_S + F.P_COST_S) / 100000000 AS FLOAT ) / CAST((B.P_COST_M + E.P_COST_M) / 100000000 AS FLOAT ) * 100 AS RATE2         
+      from
+         (SELECT 
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') A,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') B,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+        A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+      	AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY '1') C,
+         (SELECT 
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') D,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') E,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+         A.JPSDT <![CDATA[>=]]> ${sdumcb} 
+      	AND A.JPSDT <![CDATA[<=]]> ${edumcb}
+         GROUP BY '1') F
+      where
+      	'SqlMap-SalPlnPerfmncWkReprtExl.searchByMaker2' = 'SqlMap-SalPlnPerfmncWkReprtExl.searchByMaker2'
+         and A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+         and C.COMPS = D.COMPS
+         and D.COMPS = E.COMPS
+         and E.COMPS = F.COMPS
+		
+	</select>
+	<select id="searchProgressRate" resultMap="SalPlnPerfmncWkReprtExl" parameterType="SalPlnPerfmncWkReprtExlDomain">
+	
+    select 
+    (CASE WHEN #{dumcb} <![CDATA[<]]> VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMM')  THEN 100 
+    WHEN #{dumcb} <![CDATA[=]]> VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMM') THEN CAST(((D.DTA)*1.00) / ((C.DT)*1.00) * 100 AS DEC(6, 2)) ELSE 0 END) AS PRGRS_RATE
+    /*'SqlMap-SalPlnPerfmncWkReprtExl.searchProgressRate' = 'SqlMap-SalPlnPerfmncWkReprtExl.searchProgressRate'*/
+    FROM
+    (
+        select count(DISTINCT A.MAKDT) as DT
+         from PSEDBLIB.SAL100PF A
+         where SUBSTR(MAKDT, 1, 6) = #{dumcb}
+           and makmk not in ('H', 'S')
+    ) C,
+    (
+         select count(DISTINCT B.MAKDT) as DTA
+         from PSEDBLIB.SAL100PF B
+         where SUBSTR(MAKDT, 1, 6) = #{dumcb}
+         and makmk not in ('H', 'S')
+         and MAKDT <![CDATA[>=]]> ${sdumcb} 
+         and MAKDT <![CDATA[<=]]> ${edumcb}
+    ) D
+
+	
+	</select>
+	
+</mapper>

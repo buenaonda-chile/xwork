@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월누계제품출고금액조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SJSZ110Q">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SYSDATE"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="4" Top="32" Width="1060"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static16" Left="385" TabOrder="8" Top="35" VAlign="Middle" Width="136"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" FocusIndex="0" Height="18" Id="cmb_CHKYM" Left="390" LeftMargin="30" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="2" Top="39" Width="128"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static13" Left="267" TabOrder="7" Text="출&#32;고&#32;년&#32;월" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="6" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static10" Left="124" TabOrder="6" Top="35" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="128" OnChanged="common_OnChanged" TabOrder="3" Top="39" Width="128"></Combo>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoEnterType="Key" AutoFit="TRUE" AutoFitEndLine="Hide" AutoSelect="TRUE" BindDataset="ds_SJSZ110Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="599" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="536" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" Right="1058" TabOrder="10" TabStop="FALSE" Top="63" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="180"/>
+						<col width="180"/>
+						<col width="180"/>
+						<col width="180"/>
+						<col width="180"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="업체코드"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="업체명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="당월지시금액"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="전일월누계금액"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="출고누계금액"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="PYVND" display="text" expr='Lpad(PYVND,&quot;0&quot;,8)' TrimType="Both"/>
+						<cell align="left" col="1" colid="CUSNM" display="text" TrimType="Both"/>
+						<cell align="right" col="2" colid="DAYT" display="number" TrimType="Both"/>
+						<cell align="right" col="3" colid="MONT" display="number" TrimType="Both"/>
+						<cell align="right" col="4" colid="TOT" display="number" TrimType="Both"/>
+					</body>
+					<summary>
+						<cell col="0" colspan="2" display="text" text="TOTAL"/>
+						<cell align="right" col="2" display="number" expr='SUM(&quot;DAYT&quot;)'/>
+						<cell align="right" col="3" display="number" expr='SUM(&quot;MONT&quot;)'/>
+						<cell align="right" col="4" display="number" expr='SUM(&quot;TOT&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static Height="14" Id="Static0" Left="848" TabOrder="11" Text="당일출고금액&#32;=&#32;당일출하지시일기준" Top="43" Width="198"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="528" OnClick="fn_Search" TabOrder="12" Text="조회" Top="35" Visible="FALSE" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SJSZ110Q.xml
+ * ● PROGRAM DESCRIPTION  : 월누계제품출고금액조회
+ * ● DATE WRITTEN         : 2012.10.11
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); //공장구분 선택
+	//MainGrid.UserData = MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getSYSDATE(){
+	var sKind		= "getSYSDATE";						
+	var sMethodName = "service::pscomlib/selectSYSDATE.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SYSDATE=ds_SYSDATE";
+	var sArgument   = "";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;	
+}
+
+function getSJSZ110Q(){
+	
+	if(!validationChk()){
+		return;
+	}
+	//회계년도
+	var sChkym=substr(cmb_CHKYM.Value,0,4);
+	if(substr(cmb_CHKYM.Value,4,2) <= '03'){
+		sChkym = parseInt(sChkym)-1;
+	}
+	//select qry
+	var chkYYMM=parseInt(substr(cmb_CHKYM.Value,4,2));
+	var makdtVal = makeQry(chkYYMM);
+	var selDT = makeQry2(chkYYMM);
+
+	getSYSDATE(); //SYSTEM 날짜
+	var sysDt = ds_SYSDATE.GetColumn(0,"DT");
+	var sysVal= substr(sysDt,0,4)+substr(sysDt,5,2);
+	var chkDt= substr(cmb_CHKYM.Value,0,6);
+	var chkQry ="";
+	if(sysVal==chkDt){
+		chkQry = "COALESCE(SUM(F.SHPQY1),0) AS SHPQY1, COALESCE(SUM(F.SHPQY2),0) AS SHPQY2";
+	}
+	else {
+		chkQry = "'0' AS SHPQY1, '0' AS SHPQY2";
+	}
+
+	var sKind		= "getSJSZ110Q";						
+	var sMethodName = "service::pssallib/selectSJSZ110Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SJSZ110Q=ds_SJSZ110Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@CHKYM=" + quote(sChkym); //회계년도
+	sArgument += "@SELDT=" + quote(selDT); //전일월누계금액 쿼리
+	sArgument += "@MKQRY=" + quote(makdtVal); //출고누계금액 쿼리
+	sArgument += "@CHQRY=" + quote(chkQry); //선택년월
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 월column 생성 qry
+ **********************************************************************/ 
+ 
+function makeQry(YYMM){
+	var mqry="";
+	if( 3< YYMM && YYMM<13){
+		for( i=1; i <YYMM-2; i++){
+			if(length(mqry) != 0){
+				mqry = mqry +"+";
+			}
+			mqry = mqry +"SUM(A.CAM"+lpad(i,0,2)+")";
+		}
+	}
+	if( 0< YYMM && YYMM<4) {
+		for( i=1; i <YYMM+10; i++){
+			if(length(mqry) != 0){
+				mqry = mqry +"+";
+			}
+			mqry = mqry +"SUM(A.CAM"+lpad(i,0,2)+")";
+		}
+	}
+	return mqry;
+}
+
+function makeQry2(YYMM){
+	var mqry="";
+	if( 3< YYMM && YYMM<13){
+		for( i=YYMM-3; i <YYMM-2; i++){
+			mqry = "SUM(A.CAM"+lpad(i,0,2)+")";
+		}
+	}
+	if( 0< YYMM && YYMM<4) {
+		for( i=YYMM+9; i <YYMM+10; i++){
+			mqry = "SUM(A.CAM"+lpad(i,0,2)+")";
+		}
+	}
+	return mqry;
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	var jpyVal = cmb_CHKYM.Value;
+	cmb_CHKYM.BKColor="white";
+
+	if(jpyVal==""){
+		cmb_CHKYM.BKColor="paleturquoise";
+		alert(setPopMessage("4028"));
+		setMessage("4028");	
+		result =false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SJSZ110Q.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "월누계제품출고금액조회";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|월누계제품출고금액조회";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSJSZ110Q();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+	//setSALE154P();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+]]></Script>
+</Window>

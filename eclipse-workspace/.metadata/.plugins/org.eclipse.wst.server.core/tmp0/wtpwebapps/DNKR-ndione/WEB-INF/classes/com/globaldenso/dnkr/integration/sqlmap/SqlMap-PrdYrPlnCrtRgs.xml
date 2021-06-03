@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdYrPlnCrtRgsDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdYrPlnCrtRgsInput" type="PrdYrPlnCrtRgsDomain">
+        <result property="clsCode" column="CLS_CODE" />		<!-- 사업부코드 -->
+        <result property="locCode" column="LOC_CODE" />		<!-- 부서코드 -->
+        <result property="lineCode" column="LINE_CODE" />	<!-- 라인코드 -->
+        <result property="lineNm" column="LINE_NM" /> 		<!-- 라인명 -->
+        <result property="code" column="CODE" />			<!-- 작업코드 -->
+        <result property="codeNm" column="CODE_NM" /> 		<!-- 작업코드명 -->
+        <result property="year" column="YEAR" />			<!-- 시작일 -->
+        <result property="iem" column="IEM" />				<!-- 종료일 -->
+        <result property="apr" column="APR" />				
+        <result property="may" column="MAY" />				
+        <result property="jun" column="JUN" />
+        <result property="july" column="JULY" />
+        <result property="aug" column="AUG" />
+        <result property="sep" column="SEP" />
+        <result property="oct" column="OCT" />
+        <result property="nov" column="NOV" />
+        <result property="dec" column="DEC" />
+        <result property="jan" column="JAN" />
+        <result property="feb" column="FEB" />
+        <result property="mar" column="MAR" />
+        <result property="totSum" column="TOT_SUM" />
+        <result property="regUser" column="REG_USER" />		<!-- 등록자 -->
+        <result property="regDate" column="REG_DATE" />		<!-- 등록일 -->
+        <result property="modUser" column="MOD_USER" />		<!-- 수정자 -->
+        <result property="modDate" column="MOD_DATE" />		<!-- 수정일 -->     
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionOld" resultMap="PrdYrPlnCrtRgsInput" parameterType="PrdYrPlnCrtRgsDomain">
+		
+		SELECT
+		      TRIM(AA.YEAR) AS YEAR
+		    , TRIM(AA.CLS_CODE) AS CLS_CODE
+		    , TRIM(AA.LINE_CODE) AS LINE_CODE
+		    , TRIM(AA.LINE_NM) AS LINE_NM
+		    , TRIM(AA.CODE) AS CODE
+		    , TRIM(AA.CODE_NM) AS CODE_NM
+		    , TRIM(AA.LOC_CODE) AS LOC_CODE
+		    , BB.APR
+		    , BB.MAY
+		    , BB.JUN
+		    , BB.JULY
+		    , BB.AUG
+		    , BB.SEP
+		    , BB.OCT
+		    , BB.NOV
+		    , BB.DEC
+		    , BB.JAN
+		    , BB.FEB
+		    , BB.MAR
+		    ,((CASE WHEN BB.APR IS NULL THEN 0 ELSE BB.APR END)  
+		    +(CASE WHEN BB.MAY IS NULL THEN 0 ELSE BB.MAY END)   
+		    +( CASE WHEN BB.JUN IS NULL THEN 0 ELSE BB.JUN END)   
+		    +( CASE WHEN BB.JULY IS NULL THEN 0 ELSE BB.JULY END)   
+		    +( CASE WHEN BB.AUG IS NULL THEN 0 ELSE BB.AUG END)   
+		    +( CASE WHEN BB.SEP IS NULL THEN 0 ELSE BB.SEP END)   
+		    +( CASE WHEN BB.OCT IS NULL THEN 0 ELSE BB.OCT END)   
+		    +( CASE WHEN BB.NOV IS NULL THEN 0 ELSE BB.NOV END)   
+		    +( CASE WHEN BB.DEC IS NULL THEN 0 ELSE BB.DEC END)   
+		    +( CASE WHEN BB.JAN IS NULL THEN 0 ELSE BB.JAN END)   
+		    +( CASE WHEN BB.FEB IS NULL THEN 0 ELSE BB.FEB END)   
+		    +( CASE WHEN BB.MAR IS NULL THEN 0 ELSE BB.MAR END)  
+		    ) AS TOT_SUM
+        FROM (
+                 SELECT DISTINCT 
+                 		CAST(#{year} AS INTEGER) AS YEAR
+                      , A.CLS_CODE
+                      , A.LINE_CODE
+                      , A.LINE_NM
+                      , A.LOC_CODE
+                      , B.CODE
+                      , B.CODE_NM
+                 FROM (
+                     SELECT CLS_CODE
+                         , LINE_CODE
+                         , LINE_NM
+                         , 'H' WK_CODE
+                         , LOC_CODE
+                     FROM PSZDBLIB.FHP010PF
+                     WHERE 1=1
+                     <if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+					  AND LOC_CODE = #{locCode}
+					 </if>
+                     ) AS A JOIN PSZDBLIB.FHP020PF B
+                 ON A.WK_CODE = B.SE
+             ) AS AA  LEFT OUTER JOIN (
+					SELECT CAST(#{year} AS INTEGER) AS YEAR
+                     ,CASE WHEN A.CLS_CODE IS NULL THEN B.CLS_CODE ELSE A.CLS_CODE END AS CLS_CODE
+                     ,CASE WHEN A.loc_code IS NULL THEN B.loc_code ELSE A.loc_code END AS LOC_CODE
+                     ,CASE WHEN A.line_code IS NULL THEN B.line_code ELSE A.line_code END AS LINE_CODE
+                     ,CASE WHEN A.iem IS NULL THEN B.iem ELSE A.iem END AS IEM
+					 ,A.APR,A.MAY,A.JUN,A.JULY,A.AUG,A.SEP,A.OCT,A.NOV,A.DEC,B.JAN,B.FEB,B.MAR
+					FROM (	SELECT CAST(#{year} AS INTEGER) AS YEAR,CLS_CODE,LOC_CODE,LINE_CODE,IEM,APR,MAY,JUN,JULY,AUG,SEP,OCT,NOV,DEC
+					         	FROM PSZDBLIB.FHP120PF
+					         	WHERE YEAR = #{year}
+					         	AND CLS_CODE = #{clsCode}
+					         	AND LOC_CODE = #{locCode}
+					     ) A FULL OUTER JOIN ( SELECT CAST(#{year} AS INTEGER) AS YEAR,CLS_CODE,LOC_CODE,LINE_CODE,IEM,JAN,FEB,MAR
+					     		FROM PSZDBLIB.FHP120PF
+					            WHERE YEAR = #{yearNext}
+					            AND CLS_CODE = #{clsCode}
+					            AND LOC_CODE = #{locCode}) B
+					    ON A.CLS_CODE = B.CLS_CODE
+					    AND A.LOC_CODE = B.LOC_CODE
+					    AND A.LINE_CODE = B.LINE_CODE
+					    AND A.IEM = B.IEM  ) BB          
+                ON AA.YEAR = BB.YEAR AND AA.CLS_CODE = BB.CLS_CODE AND AA.LINE_CODE = BB.LINE_CODE AND AA.LOC_CODE=BB.LOC_CODE AND AA.CODE=BB.IEM
+        WHERE 1=1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+		  AND AA.CLS_CODE = #{clsCode}
+		</if>
+		ORDER BY AA.LINE_CODE ASC, AA.CODE ASC   
+    </select>
+    
+    <select id="searchByCondition" resultMap="PrdYrPlnCrtRgsInput" parameterType="PrdYrPlnCrtRgsDomain">
+		
+		SELECT
+		      TRIM(AA.YEAR) AS YEAR
+		    , TRIM(AA.CLS_CODE) AS CLS_CODE
+		    , TRIM(AA.LINE_CODE) AS LINE_CODE
+		    , TRIM(AA.LINE_NM) AS LINE_NM
+		    , TRIM(AA.CODE) AS CODE
+		    , TRIM(AA.CODE_NM) AS CODE_NM
+		    , TRIM(AA.LOC_CODE) AS LOC_CODE
+		    , BB.APR
+		    , BB.MAY
+		    , BB.JUN
+		    , BB.JULY
+		    , BB.AUG
+		    , BB.SEP
+		    , BB.OCT
+		    , BB.NOV
+		    , BB.DEC
+		    , BB.JAN
+		    , BB.FEB
+		    , BB.MAR
+		    ,((CASE WHEN BB.APR IS NULL THEN 0 ELSE BB.APR END)  
+		    +(CASE WHEN BB.MAY IS NULL THEN 0 ELSE BB.MAY END)   
+		    +( CASE WHEN BB.JUN IS NULL THEN 0 ELSE BB.JUN END)   
+		    +( CASE WHEN BB.JULY IS NULL THEN 0 ELSE BB.JULY END)   
+		    +( CASE WHEN BB.AUG IS NULL THEN 0 ELSE BB.AUG END)   
+		    +( CASE WHEN BB.SEP IS NULL THEN 0 ELSE BB.SEP END)   
+		    +( CASE WHEN BB.OCT IS NULL THEN 0 ELSE BB.OCT END)   
+		    +( CASE WHEN BB.NOV IS NULL THEN 0 ELSE BB.NOV END)   
+		    +( CASE WHEN BB.DEC IS NULL THEN 0 ELSE BB.DEC END)   
+		    +( CASE WHEN BB.JAN IS NULL THEN 0 ELSE BB.JAN END)   
+		    +( CASE WHEN BB.FEB IS NULL THEN 0 ELSE BB.FEB END)   
+		    +( CASE WHEN BB.MAR IS NULL THEN 0 ELSE BB.MAR END)  
+		    ) AS TOT_SUM
+        FROM (
+                 SELECT DISTINCT 
+                 		CAST(#{year} AS INTEGER) AS YEAR
+                      , A.CLS_CODE
+                      , A.LINE_CODE
+                      , A.LINE_NM
+                      , A.LOC_CODE
+                      , B.CODE
+                      , B.CODE_NM
+                 FROM (
+                     SELECT CLS_CODE
+                         , LINE_CODE
+                         , LINE_NM
+                         , 'H' WK_CODE
+                         , LOC_CODE
+                     FROM PSZDBLIB.FHP010PF
+                     WHERE 1=1
+                     <if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+					  AND LOC_CODE = #{locCode}
+					 </if>
+                     ) AS A INNER JOIN PSZDBLIB.FHP020PF B
+                 ON A.WK_CODE = B.SE
+             ) AS AA  LEFT OUTER JOIN PSZDBLIB.FHP120PF BB          
+                ON AA.YEAR = BB.YEAR AND AA.CLS_CODE = BB.CLS_CODE AND AA.LINE_CODE = BB.LINE_CODE AND AA.LOC_CODE=BB.LOC_CODE AND AA.CODE=BB.IEM
+        WHERE 1=1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+		  AND AA.CLS_CODE = #{clsCode}
+		</if>
+		ORDER BY AA.LINE_CODE ASC, AA.CODE ASC   
+    </select>    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+  	<select id="searchCount" resultType="java.lang.Integer" parameterType="PrdYrPlnCrtRgsDomain">
+        SELECT 
+              COUNT(*) AS CNT 
+        FROM PSZDBLIB.FHP120PF
+		WHERE 1 = 1
+		AND YEAR 	  = #{year}   
+		AND CLS_CODE  = #{clsCode}
+		AND LOC_CODE  = #{locCode}
+		AND LINE_CODE = #{lineCode}
+		AND IEM 	  = #{iem}
+    </select>
+  <!--  登録 SQL文 -->
+    <insert id="create" parameterType ="PrdYrPlnCrtRgsDomain">
+        INSERT INTO PSZDBLIB.FHP120PF (
+				  YEAR 
+				, CLS_CODE
+				, LOC_CODE
+				, LINE_CODE
+				, IEM
+				, APR
+				, MAY
+				, JUN
+				, JULY
+				, AUG
+				, SEP
+				, OCT
+				, NOV
+				, DEC
+				, JAN
+				, FEB
+				, MAR				
+				, REG_USER
+				, REG_DATE
+        ) values (
+        		#{year}
+               , #{clsCode}
+               , #{locCode}
+               , #{lineCode}
+               , #{iem}
+               , #{apr}
+               , #{may}
+               , #{jun}
+               , #{july}
+               , #{aug}
+               , #{sep}
+               , #{oct}
+               , #{nov}
+               , #{dec}
+               , #{jan}
+               , #{feb}
+               , #{mar}                
+               , #{regUser}
+               , REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>    
+   
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="PrdYrPlnCrtRgsDomain">
+        UPDATE 
+               PSZDBLIB.FHP120PF
+        SET
+        	APR = #{apr}
+			, MAY = #{may}
+			, JUN = #{jun}
+			, JULY = #{july}
+			, AUG = #{aug}
+			, SEP = #{sep}
+			, OCT = #{oct}
+			, NOV = #{nov}
+			, DEC = #{dec}
+			, JAN = #{jan}
+			, FEB = #{feb}
+			, MAR = #{mar}			
+         	, MOD_USER  = #{modUser}
+            , MOD_DATE  = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE  = #{clsCode}
+        AND   LINE_CODE = #{lineCode}
+        AND   LOC_CODE  = #{locCode}
+        AND   YEAR 		= #{year}  
+        AND   IEM 	    = #{iem}
+    </update>
+    
+   <!--  削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="PrdYrPlnCrtRgsDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP120PF
+        WHERE CLS_CODE  = #{clsCode}
+        AND   LINE_CODE = #{lineCode}
+        AND   LOC_CODE  = #{locCode}
+        AND   YEAR 	 	= CAST(#{year} AS INTEGER)
+        AND   IEM 	    = #{iem}
+    </delete>
+    
+  	<select id="searchQtySum" resultType="java.lang.Integer" parameterType="PrdYrPlnCrtRgsDomain">
+        SELECT 
+            ((CASE WHEN BB.APR IS NULL THEN 0 ELSE BB.APR END)  
+		    +(CASE WHEN BB.MAY IS NULL THEN 0 ELSE BB.MAY END)   
+		    +( CASE WHEN BB.JUN IS NULL THEN 0 ELSE BB.JUN END)   
+		    +( CASE WHEN BB.JULY IS NULL THEN 0 ELSE BB.JULY END)   
+		    +( CASE WHEN BB.AUG IS NULL THEN 0 ELSE BB.AUG END)   
+		    +( CASE WHEN BB.SEP IS NULL THEN 0 ELSE BB.SEP END)   
+		    +( CASE WHEN BB.OCT IS NULL THEN 0 ELSE BB.OCT END)   
+		    +( CASE WHEN BB.NOV IS NULL THEN 0 ELSE BB.NOV END)   
+		    +( CASE WHEN BB.DEC IS NULL THEN 0 ELSE BB.DEC END)   
+		    +( CASE WHEN BB.JAN IS NULL THEN 0 ELSE BB.JAN END)   
+		    +( CASE WHEN BB.FEB IS NULL THEN 0 ELSE BB.FEB END)   
+		    +( CASE WHEN BB.MAR IS NULL THEN 0 ELSE BB.MAR END)  
+		    ) AS TOT_SUM
+        FROM PSZDBLIB.FHP120PF
+		WHERE 1 = 1
+		AND YEAR 	  = #{yearNext}   
+		AND CLS_CODE  = #{clsCode}
+		AND LOC_CODE  = #{locCode}
+		AND LINE_CODE = #{lineCode}
+		AND IEM 	  = #{iem}
+		
+    </select> 
+        
+   <!--  削除 SQL文（主キー） -->
+    <delete id="deleteALL" parameterType="PrdYrPlnCrtRgsDomain">
+		DELETE FROM PSZDBLIB.FHP120PF
+	    WHERE CLS_CODE  = #{clsCode}
+	    AND   LOC_CODE  = #{locCode}
+	    AND   YEAR 		= '${year}'  
+	    AND   IEM 	    = '${iem}'    
+    </delete>    
+
+</mapper>

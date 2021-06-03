@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * web.xml
+ *
+ * $ web.xml 2516 2016-07-22 02:08:12Z 10088DS00879 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<web-app id="WebApp_ID" version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+  <!-- [EN] Context name -->
+  <!-- [JP] コンテキスト名称 -->
+  <display-name>dicas</display-name>
+
+  <!-- [EN] Context Parameters -->
+  <!-- [JP] コンテキストパラメータ -->
+  <!-- Spring Configuration -->
+  <context-param>
+    <param-name>spring.profiles.active</param-name>
+    <param-value>pro</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      classpath*:applicationContext-miyabi-*.xml
+    </param-value>
+  </context-param>
+
+  <!-- HTML Tag Sanitizing -->
+  <context-param>
+    <param-name>defaultHtmlEscape</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+  <!-- [EN] Servlet filter -->
+  <!-- [JP] サーブレットフィルタ -->
+  <!-- [EN] Japanese character corresponding filter -->
+  <!-- [JP] 日本語文字対応フィルタ -->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>
+      com.globaldenso.ai.miyabi.filter.CharacterEncodingFilter
+    </filter-class>
+    <!-- [EN] I want to specify the encoding for the parameter value. -->
+    <!-- [JP] パラメータ値にエンコード方式を指定します。 -->
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+
+  <!-- [EN] Multipart filter for commons-fileupload to log parameters by RequestLoggingFilter -->
+  <!-- [JP] マルチパートリクエストでRequestLoggingFilterを有効にするためのマルチパートフィルタ -->
+  <filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>
+      org.springframework.web.multipart.support.MultipartFilter
+    </filter-class>
+  </filter>
+
+  <!-- [EN] Building context DENSO filters -->
+  <!-- [JP] DENSOコンテキストの構築フィルタ -->
+  <filter>
+    <filter-name>DensoContextFilter</filter-name>
+    <filter-class>
+      com.globaldenso.ai.miyabi.filter.DensoContextFilter
+    </filter-class>
+  </filter>
+
+  <!-- [EN] Building a log filter context -->
+  <!-- [JP] ログコンテキストの構築フィルタ -->
+  <filter>
+    <filter-name>LogContextFilter</filter-name>
+    <filter-class>
+      com.globaldenso.ai.miyabi.filter.LogContextFilter
+    </filter-class>
+  </filter>
+
+  <!-- [EN] Logging filter presentation layer -->
+  <!-- [JP] プレゼンテーション層ロギングフィルタ -->
+  <filter>
+    <filter-name>RequestLoggingFilter</filter-name>
+    <filter-class>
+      com.globaldenso.ai.miyabi.filter.RequestLoggingFilter
+    </filter-class>
+    <init-param>
+      <!-- Servlet URL to be ignored by this filter -->
+      <!-- If you want to specify more than one URL, please specify the URLs in the comma-separated. -->
+      <param-name>ignoreServlets</param-name>
+      <param-value>/assets/*</param-value>
+    </init-param>
+  </filter>
+
+  <!-- [EN] Request check filter (for POST-Null problem) -->
+  <!-- [JP] リクエストチェックフィルタ(POSTNull対応) -->
+  <!--<filter>-->
+    <!--<filter-name>RequestCheckFilter</filter-name>-->
+    <!--<filter-class>-->
+      <!--com.globaldenso.ai.miyabi.filter.RequestCheckFilter-->
+    <!--</filter-class>-->
+    <!--<init-param>-->
+      <!--<param-name>ignoreServlets</param-name>-->
+      <!--<param-value></param-value>-->
+    <!--</init-param>-->
+  <!--</filter>-->
+
+  <!-- [EN] Spring Security -->
+  <!-- [JP] Spring Security -->
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <!-- [EN] Spring Device Resolver -->
+  <!-- [JP] Spring Device Resolver  -->
+  <filter>
+    <filter-name>deviceResolverRequestFilter</filter-name>
+    <filter-class>org.springframework.mobile.device.DeviceResolverRequestFilter</filter-class>
+  </filter>
+
+  <!-- [EN] Servlet filter mapping -->
+  <!-- [JP] サーブレットフィルタ マッピング -->
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>/api/file/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>DensoContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>LogContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>RequestLoggingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--<filter-mapping>-->
+    <!--<filter-name>RequestCheckFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
+
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>deviceResolverRequestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- [EN] Servlet listener -->
+  <!-- [JP] サーブレットリスナ -->
+  <listener>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+  
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+
+  <!-- [EN] Servlet -->
+  <!-- [JP] サーブレット -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/config/spring-*.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <!-- [EN] Servlet mapping -->
+  <!-- [JP] サーブレットマッピング -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!-- [EN] JSP configuration -->
+  <!-- [JP] JSP 設定 -->
+  <jsp-config>
+    <!-- [EN] aiCustomTag -->
+    <!-- [JP] aiカスタムタグ -->
+    <taglib>
+      <taglib-uri>http://ai.globaldenso.com/customTag</taglib-uri>
+      <taglib-location>/WEB-INF/tld/ai.tld</taglib-location>
+    </taglib>
+
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+      <scripting-invalid>false</scripting-invalid>
+      <include-prelude>/WEB-INF/jsp/base/prelude.jsp</include-prelude>
+      <include-coda>/WEB-INF/jsp/base/coda.jsp</include-coda>
+      <trim-directive-whitespaces>true</trim-directive-whitespaces>
+    </jsp-property-group>
+
+  </jsp-config>
+
+  <!-- [EN] Login Config -->
+  <!-- [JP] Login Config -->
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+
+  <!-- [EN] Error Page -->
+  <!-- [JP] エラーページ -->
+  <!-- [EN] Java exception -->
+  <!-- [JP] Java例外 -->
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/WEB-INF/jsp/error.jsp</location>
+  </error-page>
+
+  <!-- [EN] Welcome Page -->
+  <!-- [JP] Welcome Page -->
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <!-- [EN] Session timeout -->
+  <!-- [JP] Session timeout -->
+  <session-config>
+    <session-timeout>60000</session-timeout>
+  </session-config>
+
+</web-app>

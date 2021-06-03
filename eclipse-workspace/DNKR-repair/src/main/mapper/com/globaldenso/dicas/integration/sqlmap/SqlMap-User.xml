@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.UserDao">
+
+  <resultMap id="userMap" type="com.globaldenso.dicas.business.dto.UserDto">
+		<id property="_id" column="USER_ID" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="acctId" column="ACCT_ID" javaType="java.lang.String" />
+		<result property="acctPw" column="ACCT_PW" javaType="java.lang.String" />
+		<result property="email" column="EMAIL" javaType="java.lang.String" />
+		<result property="telNo" column="TEL_NO" javaType="java.lang.String" />
+		<result property="moblphonNo" column="MOBLPHON_NO" javaType="java.lang.String" />
+		<result property="fstNm" column="FST_NM" javaType="java.lang.String" />
+		<result property="mdlNm" column="MDL_NM" javaType="java.lang.String" />
+		<result property="lstNm" column="LST_NM" javaType="java.lang.String" />
+		<result property="lstFulnm" column="LST_FULNM" javaType="java.lang.String" />
+		<result property="fstFulnm" column="FST_FULNM" javaType="java.lang.String" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="roleCd" column="ROLE_CD" javaType="java.lang.String" />
+		<result property="officeCd" column="OFFICE_CD" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="deptCd" column="DEPT_CD" javaType="java.lang.String" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+		WITH USER_TBL AS (
+    SELECT A.USER_ID,
+           A.RGSTR_ID,
+           A.RGST_DT,
+           A.UPDTR_ID,
+		       A.UPDT_DT,
+		       A.ACCT_ID,
+		       A.ACCT_PW,
+		       A.EMAIL,
+		       A.TEL_NO,
+		       A.MOBLPHON_NO,
+		       A.FST_NM,
+		       A.MDL_NM,
+		       A.LST_NM,
+		       NVL(A.LST_NM,'') || NVL(A.MDL_NM,'') || NVL(A.FST_NM,'') AS LST_FULNM,
+		       NVL(A.FST_NM,'') || NVL(A.MDL_NM,'') || NVL(A.LST_NM,'') AS FST_FULNM,
+		       A.USE_YN,
+		       B.ROLE_CD,
+					 A.OFFICE_CD,
+					 C.OFFICE_NM,
+					 A.DEPT_CD
+    FROM TB_CM_USER A
+    INNER JOIN TB_CM_USER_ROLE B
+    	ON A.USER_ID = B.USER_ID
+    LEFT OUTER JOIN TB_BA_OFFICE_MASTER C
+    	ON A.OFFICE_CD = C.OFFICE_CD
+
+		)
+		SELECT USER_ID,
+					 RGSTR_ID,
+					 RGST_DT,
+					 UPDTR_ID,
+					 UPDT_DT,
+					 ACCT_ID,
+					 ACCT_PW,
+					 EMAIL,
+					 TEL_NO,
+					 MOBLPHON_NO,
+					 FST_NM,
+					 MDL_NM,
+					 LST_NM,
+					 LST_FULNM,
+					 FST_FULNM,
+					 USE_YN,
+					 ROLE_CD,
+					 OFFICE_CD,
+					 OFFICE_NM,
+					 DEPT_CD
+		FROM USER_TBL
+
+  </sql>
+
+  <sql id="where_01">
+
+		<if test="criteria.deptCd != null and criteria.deptCd != ''">
+			AND DEPT_CD = #{criteria.deptCd}
+		</if>
+		<if test="criteria.roleCd != null and criteria.roleCd != ''">
+			AND ROLE_CD = #{criteria.roleCd}
+		</if>
+	  <if test="criteria.acctId != null and criteria.acctId != ''">
+		  AND ACCT_ID LIKE '%' || #{criteria.acctId} || '%'
+	  </if>
+	  <if test="criteria.fulnm != null and criteria.fulnm != ''">
+		  AND (LST_FULNM LIKE '%' || #{criteria.fulnm} ||'%'
+		  	OR FST_FULNM LIKE '%' || #{criteria.fulnm} || '%')
+	  </if>
+	  <if test="criteria.useYn != null and criteria.useYn != ''">
+		  AND USE_YN = #{criteria.useYn}
+	  </if>
+
+  </sql>
+
+	<!-- 検索 SQL文（主キー） -->
+  <select id="searchByKey" resultMap="userMap" parameterType="com.globaldenso.dicas.business.domain.UserDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.USER_ID = #{_id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="userMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.USER_ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(USER_ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.UserDomain">
+
+    INSERT INTO TB_CM_USER (
+			USER_ID,
+			RGSTR_ID,
+			RGST_DT,
+			UPDTR_ID,
+			UPDT_DT,
+			ACCT_ID,
+			ACCT_PW,
+			EMAIL,
+			TEL_NO,
+			MOBLPHON_NO,
+			FST_NM,
+			MDL_NM,
+			LST_NM,
+			USE_YN,
+			OFFICE_CD,
+			DEPT_CD
+    ) VALUES (
+			#{_id},
+			#{rgstrId},
+			#{rgstDt},
+			#{updtrId},
+			#{updtDt},
+			#{acctId},
+			#{acctPw},
+			#{email},
+			#{telNo},
+			#{moblphonNo},
+			#{fstNm},
+			#{mdlNm},
+			#{lstNm},
+			#{useYn},
+			#{officeCd},
+			#{deptCd}
+    )
+
+    <selectKey resultType="long" keyProperty="_id" order="BEFORE">
+      SELECT SEQ_CM_USER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.UserDomain">
+
+    UPDATE TB_CM_USER
+    SET UPDTR_ID = #{updtrId},
+    		UPDT_DT = #{updtDt},
+    		EMAIL = #{email},
+    		TEL_NO = #{telNo},
+    		MOBLPHON_NO = #{moblphonNo},
+    		FST_NM = #{fstNm},
+    		MDL_NM = #{mdlNm},
+    		LST_NM = #{lstNm},
+    		USE_YN = #{useYn},
+    		OFFICE_CD = #{officeCd},
+    		DEPT_CD = #{deptCd}
+    WHERE USER_ID = #{_id}
+
+  </update>
+
+	<update id="updatePassword" parameterType="com.globaldenso.dicas.business.domain.UserDomain">
+
+		UPDATE TB_CM_USER
+		SET UPDTR_ID = #{updtrId},
+		    UPDT_DT = #{updtDt},
+		    ACCT_PW = #{acctPw}
+		WHERE USER_ID = #{_id}
+
+	</update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.UserDomain">
+
+    DELETE FROM TB_CM_USER
+    WHERE USER_ID = #{_id}
+
+  </delete>
+
+
+</mapper>

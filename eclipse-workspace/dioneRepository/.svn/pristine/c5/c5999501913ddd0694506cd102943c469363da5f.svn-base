@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderDao">
+	
+	<resultMap id="Order" type="OrderDomain">
+		<result property="orderKey" column="ORDER_KEY" />
+		<result property="meterialNumber" column="METERIAL_NUMBER" />
+		<result property="shortText" column="SHORT_TEXT" />
+		<result property="releaseDate" column="RELEASE_DATE" />
+		<result property="orderDateStr" column="ORDER_DATE_STR" />
+		<result property="baseUnitOfMeasure" column="BASE_UNIT_OF_MEASURE" />
+		<result property="regiDt" column="REGI_DT" />
+		<result property="regiId" column="REGI_ID" />
+		<result property="densoNumber" column="DENSO_NUMBER" />
+		<result property="alc" column="ALC" />
+		<result property="densoStockQty" column="DENSO_STOCK_QTY" />
+		<result property="customerNumber" column="CUSTOMER_NUMBER" />
+		<result property="materialDesc" column="MATERIAL_DESC" />
+		<result property="totalStockQty" column="TOTAL_STOCK_QTY" />
+    </resultMap>
+	
+	<resultMap id="OrderQty" type="OrderQtyDomain">
+		<result property="orderKey" column="ORDER_KEY" />
+		<result property="orderDate" column="ORDER_DATE" />
+		<result property="orderQty" column="ORDER_QTY" />
+		<result property="stockQty" column="STOCK_QTY" />
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="OrderDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_ORDER
+        where 
+                'SqlMap-Order.searchCount' = 'SqlMap-Order.searchCount'
+         <if test="orderKey != null">
+            and ORDER_KEY = #{orderKey}
+        </if>
+        <if test="meterialNumber != null">
+            and METERIAL_NUMBER = #{meterialNumber}
+        </if>
+        <if test="releaseDate != null">
+            and TO_CHAR(RELEASE_DATE, 'YYYY-MM-DD') = #{releaseDate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchQtyCount" resultType="java.lang.Integer"
+        parameterType="OrderQtyDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_ORDER_QTY
+        where 
+                'SqlMap-Order.searchCount' = 'SqlMap-Order.searchCount'
+         <if test="orderKey != null">
+            and ORDER_KEY = #{orderKey}
+        </if>
+        <if test="orderDate != null">
+            and ORDER_DATE = #{orderDate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchById" resultMap="Order"
+        parameterType="OrderDomain">
+        select ORDER_KEY
+        	 , METERIAL_NUMBER
+        	 , SHORT_TEXT
+        	 , RELEASE_DATE
+        	 , ORDER_DATE_STR
+        	 , BASE_UNIT_OF_MEASURE
+        	 , TO_CHAR(REGI_DT, 'YYYY-MM-DD') AS REGI_DT
+        	 , REGI_ID
+        	 , DENSO_NUMBER
+        	 , TOTAL_STOCK_QTY
+              <!-- , row_number() over (order by A.EMP_NUMBER desc) ROW_NUM -->
+        from 
+                DNKR_ORDER
+        where 'SqlMap-Order.searchById' = 'SqlMap-Order.searchById'
+            <if test="orderKey != null">
+            	and ORDER_KEY = #{orderKey}
+        	</if>
+	        <if test="meterialNumber != null">
+	            and METERIAL_NUMBER = #{meterialNumber}
+	        </if>
+	        <if test="releaseDate != null">
+	            and TO_CHAR(RELEASE_DATE, 'YYYY-MM-DD') = #{releaseDate}
+	        </if>
+    </select>
+    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Order"
+        parameterType="OrderDomain">
+        select ORDER_KEY
+        	 , METERIAL_NUMBER
+        	 , SHORT_TEXT
+        	 , RELEASE_DATE
+        	 , ORDER_DATE_STR
+        	 , BASE_UNIT_OF_MEASURE
+        	 , TO_CHAR(REGI_DT, 'YYYY-MM-DD') AS REGI_DT
+        	 , REGI_ID
+        	 , DENSO_NUMBER
+        	 , TOTAL_STOCK_QTY
+        	 , ALC
+        	 , DENSO_STOCK_QTY
+        	 , CUSTOMER_NUMBER
+        	 , MATERIAL_DESC
+              <!-- , row_number() over (order by A.EMP_NUMBER desc) ROW_NUM -->
+        from 
+                DNKR_ORDER
+        where 'SqlMap-Order.searchByCondition' = 'SqlMap-Order.searchByCondition'
+        	<if test="orderKey != null">
+	            and ORDER_KEY = #{orderKey}
+	        </if>
+	        <if test="meterialNumber != null">
+	            and METERIAL_NUMBER = #{meterialNumber}
+	        </if>
+	        <if test="releaseDate != null">
+	            and TO_CHAR(RELEASE_DATE, 'YYYY-MM-DD') = #{releaseDate}
+	        </if>
+	        <if test="stockFlag == '0010'">
+	        	AND TOTAL_STOCK_QTY IS NOT NULL
+	        </if>
+	        <if test="searchDate != null">
+	        	AND TO_CHAR(RELEASE_DATE, 'YYYY-MM-DD') = #{searchDate }
+	        </if>
+       ORDER BY RELEASE_DATE
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionQty" resultMap="OrderQty"
+        parameterType="OrderQtyDomain">
+        select 
+        	   ORDER_KEY
+        	 , ORDER_DATE
+        	 , ORDER_QTY
+        	 , STOCK_QTY
+              <!-- , row_number() over (order by A.EMP_NUMBER desc) ROW_NUM -->
+        from 
+                DNKR_ORDER_QTY
+        where 'SqlMap-Order.searchByConditionQty' = 'SqlMap-Order.searchByConditionQty'
+        	<if test="orderKey != null">
+	            and ORDER_KEY = #{orderKey}
+	        </if>
+	        <if test="orderDate != null">
+	            and ORDER_DATE = #{orderDate}
+	        </if>
+       ORDER BY ORDER_DATE
+    </select>
+    
+    <select id="getReleaseDate" resultMap="Order"
+        parameterType="OrderQtyDomain">
+        select 
+                DISTINCT(TO_CHAR(RELEASE_DATE, 'YYYY-MM-DD')) AS RELEASE_DATE
+        from 
+                DNKR_ORDER
+        where 
+                'SqlMap-Order.getReleaseDate' = 'SqlMap-Order.getReleaseDate'
+    </select>
+    
+    <select id="OrderNextIdx" resultType="java.lang.String"
+        parameterType="OrderDomain">
+        SELECT 'OK' || lpad(DNKR_ORDER_KEY.NEXTVAL, 6, '0') FROM DUAL
+    </select>
+    
+	<!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="OrderDomain">
+    	insert into DNKR_ORDER (
+                /* SqlMap-ORDER.create */
+            <if test="orderKey != null">
+                ORDER_KEY,
+            </if>
+            <if test="meterialNumber != null">
+                METERIAL_NUMBER,
+            </if>
+            <if test="shortText != null">
+                SHORT_TEXT,
+            </if>
+            <if test="releaseDate != null">
+                RELEASE_DATE,
+            </if>
+            <if test="orderDateStr != null">
+                ORDER_DATE_STR,
+            </if>
+            <if test="baseUnitOfMeasure != null">
+                BASE_UNIT_OF_MEASURE,
+            </if>
+            <if test="regiId != null">
+                REGI_ID,
+            </if>
+            <if test="densoNumber != null">
+                DENSO_NUMBER,
+            </if>
+            <if test="totalStockQty != null">
+                TOTAL_STOCK_QTY,
+            </if>
+            <if test="alc != null">
+                ALC,
+            </if>
+             <if test="densoStockQty != null">
+                DENSO_STOCK_QTY,
+            </if>
+             <if test="customerNumber != null">
+                CUSTOMER_NUMBER,
+            </if>
+             <if test="materialDesc != null">
+                MATERIAL_DESC,
+            </if>
+            	REGI_DT
+
+        ) values (            
+            <if test="orderKey != null">
+                #{orderKey },
+            </if>
+            <if test="meterialNumber != null">
+                #{meterialNumber },
+            </if>
+            <if test="shortText != null">
+                #{shortText },
+            </if>
+            <if test="releaseDate != null">
+                #{releaseDate },
+            </if>
+            <if test="orderDateStr != null">
+                #{orderDateStr },
+            </if>
+            <if test="baseUnitOfMeasure != null">
+                #{baseUnitOfMeasure },
+            </if>
+            <if test="regiId != null">
+                #{regiId },
+            </if>
+            <if test="densoNumber != null">
+                #{densoNumber },
+            </if>
+            <if test="totalStockQty != null">
+                #{totalStockQty},
+            </if>
+            <if test="alc != null">
+                 #{alc},
+            </if>
+             <if test="densoStockQty != null">
+                 #{densoStockQty},
+            </if>
+             <if test="customerNumber != null">
+                 #{customerNumber},
+            </if>
+             <if test="materialDesc != null">
+                 #{materialDesc},
+            </if>
+                SYSDATE
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createQty" parameterType ="OrderQtyDomain">
+    	insert into DNKR_ORDER_QTY (
+                /* SqlMap-ORDER_QTY.create */
+            <if test="orderKey != null">
+                ORDER_KEY,
+            </if>
+            <if test="orderDate != null">
+                ORDER_DATE,
+            </if>
+            <if test="orderQty != null">
+                ORDER_QTY,
+            </if>
+             <if test="stockQty != null">
+                STOCK_QTY,
+             </if>
+            	REGI_DT
+        ) values (            
+            <if test="orderKey != null">
+                #{orderKey },
+            </if>
+            <if test="orderDate != null">
+                #{orderDate },
+            </if>
+            <if test="orderQty != null">
+                #{orderQty },
+            </if>
+            <if test="stockQty != null">
+                #{stockQty },
+            </if>
+           		SYSDATE
+        )
+    </insert>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="OrderDomain">
+        update 
+                DNKR_ORDER
+        set
+            <if test="meterialNumber != null">
+            	METERIAL_NUMBER = #{meterialNumber},
+	        </if>
+	        <if test="shortText != null">
+	            SHORT_TEXT = #{shortText},
+	        </if>
+	        <if test="releaseDate != null">
+	            RELEASE_DATE = #{releaseDate},
+	        </if>
+	        <if test="orderDateStr != null">
+	            ORDER_DATE_STR = #{orderDateStr},
+	        </if>
+	        <if test="baseUnitOfMeasure != null">
+	            BASE_UNIT_OF_MEASURE = #{baseUnitOfMeasure},
+	        </if>
+	        <if test="densoNumber != null">
+	            DENSO_NUMBER = #{densoNumber},
+	        </if>
+	        <if test="totalStockQty != null">
+	            TOTAL_STOCK_QTY = #{totalStockQty},
+	        </if>
+	            ORDER_KEY = ORDER_KEY
+        where 
+                'SqlMap-Order.update' = 'SqlMap-Order.update'
+            and ORDER_KEY = #{orderKey}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateQty" parameterType="OrderQtyDomain">
+        update 
+                DNKR_ORDER_QTY
+        set
+            <if test="orderDate != null">
+            	ORDER_DATE = #{orderDate},
+	        </if>
+	        <if test="orderQty != null">
+	            ORDER_QTY = #{orderQty},
+	        </if>
+	        <if test="stockQty != null">
+	            STOCK_QTY = #{stockQty},
+	        </if>
+	            ORDER_KEY = ORDER_KEY
+        where 
+                'SqlMap-Order.updateQty' = 'SqlMap-Order.updateQty'
+            and ORDER_KEY = #{orderKey}
+    </update>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="OrderDomain">
+    	delete from 
+                DNKR_ORDER
+        where 
+                'SqlMap-Order.delete' = 'SqlMap-Order.delete'
+           <if test="orderKey != null">
+            and ORDER_KEY = #{orderKey}
+	        </if>
+	        <if test="meterialNumber != null">
+	            and METERIAL_NUMBER = #{meterialNumber}
+	        </if>
+	        <if test="releaseDate != null">
+	            and RELEASE_DATE = #{releaseDate}
+	        </if>
+    </delete>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteQty" parameterType="OrderQtyDomain">
+    	delete from 
+                DNKR_ORDER_QTY
+        where 
+                'SqlMap-Order.deleteQty' = 'SqlMap-Order.deleteQty'
+           <if test="orderKey != null">
+           AND ORDER_KEY = #{orderKey}
+           </if>
+           <if test="orderDate != null">
+           AND ORDER_DATE = #{orderDate}
+           </if>
+    </delete>
+    
+</mapper>

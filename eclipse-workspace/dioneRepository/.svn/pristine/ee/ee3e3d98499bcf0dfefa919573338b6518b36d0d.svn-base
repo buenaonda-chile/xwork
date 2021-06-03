@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="OrderDb2" type="OrderDb2Domain">
+        <result property="db2class" column="CLASS" />
+        <result property="cprtn" column="CPRTN" />
+        <result property="cusno" column="CUSNO" />
+        <result property="prtno" column="PRTNO" />
+        <result property="mohtq" column="MOHTQ" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="mkalc" column="MKALC" />
+    </resultMap>
+    
+     <!--  
+        SELECT TRIM(PRTNO)
+          FROM PERESLIB.EM000PR
+         WHERE CPRTN = #{cprtn }
+           AND CUSNO = #{cusno }
+         ORDER BY EDATM DESC FETCH FIRST 1 ROW ONLY
+    -->
+
+    <select id="getDensoNumber" resultType="OrderDb2Domain" parameterType="OrderDb2Domain">    
+	    SELECT TRIM(A.PRTNO) PRTNO, A.CUSNO, B.MOHTQ, C.ITDSC, D.MKALC
+		FROM PERESLIB.EM000PR A 
+			LEFT OUTER JOIN PERESLIB.HM000PR B ON B.ITNBR = A.PRTNO AND B.HOUSE IN ('1', '9')
+			LEFT OUTER JOIN PERESLIB.BM008PR C ON B.ITNBR = C.ITNBR
+			LEFT OUTER JOIN PSEDBLIB.MST200PF D ON B.ITNBR = D.PSPNO
+		WHERE A.CPRTN = #{cprtn}
+	    AND A.CUSNO = #{cusno}
+		ORDER BY A.EDATM DESC FETCH FIRST 1 ROW ONLY
+    </select>
+</mapper>

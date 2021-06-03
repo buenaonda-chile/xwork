@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.denso.mapper.LoginMapper">
+	<!-- 로그인 체크 -->
+	<select id="checkLogin" parameterType="string" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_USR_TID2
+		기존TABLE사용 : PSZDBLIB.M_COM_CDE
+	 -->
+	 SELECT RTRIM(A.USER_ID) USER_ID,
+			RTRIM(A.USER_NAME) USER_NAME,
+			RTRIM(A.COMPANY) COMPANY,
+			RTRIM(A.PLANT_CD) PLANT_CD,
+			RTRIM(A.PASSWORD) PASSWORD,
+			RTRIM(B.CODE2) LIB1,
+			RTRIM(C.CODE2) LIB2,
+			RTRIM(D.CODE2) LIB3,
+			RTRIM(A.MENU_PW) MENU_PW,
+			TRIM(A.PWFC) PWFC,
+			TRIM(A.PWCP) PWCP,
+			Z.NOTICE_YN,
+			Z.CUT_YN,
+			Z.CHANGE_DAT
+  	   FROM PSZDBLIB.M_USR_TID2 A
+		INNER JOIN (SELECT 
+						USER_ID
+						, CASE WHEN DATE(CURRENT DATE) >= DATE(PW_DAT) + (INTEGER(PWCP) DAYS) - (INTEGER(PWBD) DAYS) THEN 'Y' ELSE 'N' END NOTICE_YN
+						, CASE WHEN DATE(CURRENT DATE) >= (DATE(PW_DAT) + INTEGER(PWCP) DAYS) THEN 'Y' ELSE 'N' END CUT_YN
+						, DATE(PW_DAT) + (INTEGER(PWCP)-1) DAYS CHANGE_DAT
+				   	FROM PSZDBLIB.M_USR_TID2
+					) Z
+		 ON Z.USER_ID = A.USER_ID 					
+       LEFT OUTER JOIN PSZDBLIB.M_COM_CDE B
+         ON B.CLASS = 'LIB1'
+   	    AND B.CODE1 = A.COMPANY
+   	    AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE C
+         ON C.CLASS = 'LIB2'
+        AND C.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE D
+         ON D.CLASS = 'LIB3'
+        AND D.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+ 	  WHERE A.USER_ID = #{pData}
+ 	    AND A.STATUS = '1'
+	</select>
+	
+	<!-- 로그인 체크 -->
+	<!-- 
+	<select id="checkLoginHUM" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			BALCD,BSDAT,BEDAT,trim(NAYON) NAYON
+		FROM
+			${LIB3}.HMD250PF
+		WHERE
+			length(trim(translate('${SABUN}',' ','0123456789'))) = 0
+			AND SABUN = #{SABUN}
+			AND SUBSTR(BALCD,1,1) = '2'
+			AND (SELECT (YEAR(CURRENT DATE)*100+MONTH(CURRENT DATE))*100+DAY(CURRENT DATE) FROM SYSIBM.SYSDUMMY1) BETWEEN BSDAT AND BEDAT
+	</select>
+	 -->
+	<!-- 로그인 History 정보 등록 -->
+	<insert id="insertLoginHistory" parameterType="java.util.HashMap">
+		INSERT INTO 
+			PSZDBLIB.M_USR_LOG 
+		VALUES
+			(#{USERID},
+			#{USERPASS},
+			substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2) ||
+			substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			#{STATUS}
+		)
+	</insert>
+
+	<select id="selectMenuList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_MNU_INF2,  PSZDBLIB.M_MNU_AUT2
+		TOP_MENU가 1인 것만 생성함. tree menu생성용
+	 -->
+	 	SELECT 
+			TRIM(Z.MENU_ID) MENU_ID, TRIM(Z.MENU_NAME) MENU_NAME,
+			TRIM(Z.UP_MENU) UP_MENU, TRIM(Z.LEV) LEV,
+			TRIM(Z.INIT_URL) INIT_URL, TRIM(Z.LIST_CNT) LIST_CNT,
+			TRIM(Z.USE_YN) USE_YN, TRIM(Z.DISP_YN) DISP_YN,
+			TRIM(Z.MCODE) MCODE, TRIM(Z.PW_CHECK) PW_CHECK    
+		FROM
+		(
+		SELECT 
+			UP_MENU 
+		FROM (
+			SELECT
+			      A.UP_MENU
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A, PSZDBLIB.M_MNU_AUT2 B   
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND B.USER_YN = '1'
+			      AND A.USE_YN = 'Y'
+		      ) K1
+		UNION
+		SELECT 
+			MENU_ID UP_MENU
+		FROM (
+			SELECT
+			      A.MENU_ID
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A, PSZDBLIB.M_MNU_AUT2 B   
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND B.USER_YN = '1'
+			      AND A.USE_YN = 'Y'
+		      ) K2
+		UNION
+		SELECT C.UP_MENU FROM 
+		(
+		SELECT 
+			UP_MENU 
+		FROM (
+			SELECT
+			      A.UP_MENU
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A, PSZDBLIB.M_MNU_AUT2 B   
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND B.USER_YN = '1'
+			      AND A.USE_YN = 'Y'	      			      
+		      )  A
+		) B,
+		PSZDBLIB.M_MNU_INF2 C
+		WHERE
+			C.MENU_ID = B.UP_MENU
+			AND C.UP_MENU != ''
+		) Y,
+		PSZDBLIB.M_MNU_INF2 Z
+		WHERE 
+			Z.MENU_ID = Y.UP_MENU		
+			AND Z.TOP_MENU = #{TOP_MENU}	
+		ORDER BY integer(MENU_ORDER)
+
+<!--
+		SELECT 
+			*
+		FROM (
+			SELECT
+				TRIM(MENU_ID) MENU_ID, TRIM(MENU_NAME) MENU_NAME, TRIM(UP_MENU) UP_MENU,
+				TRIM(LEV) LEV, TRIM(INIT_URL) INIT_URL, TRIM(MENU_ORDER) MENU_ORDER,
+				TRIM(TOP_MENU) TOP_MENU, TRIM(MCODE) MCODE,	TRIM(SYSTEM_SEQ) SYSTEM_SEQ,
+				TRIM(USE_YN) USE_YN, TRIM(PW_CHECK) PW_CHECK, TRIM(COMPANY) COMPANY
+			FROM
+				PSZDBLIB.M_MNU_INF
+		    WHERE
+			    1 = 1
+			    <isNotEmpty prepend="and" property="COMP">
+				    COMPANY = #COMP#
+			    </isNotEmpty>
+			     <isNotEmpty prepend="and" property="URL">
+				    INIT_URL = #URL#
+			    </isNotEmpty>
+		) A
+		ORDER BY
+			DECIMAL(MENU_ORDER,9,2) ASC
+  -->
+	
+	</select>
+	<select id="selectComMsgList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			TRIM(MSG_SEQ) MSG_SEQ, TRIM(MSG_TEXT) MSG_TEXT
+		FROM
+			PSZDBLIB.M_MSG_INF
+		WHERE
+			USER_YN = '1'	
+	</select>
+	<!-- 
+	<select id="selectMenuAuthList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	
+		신규TABLE사용 : PSZDBLIB.M_MNU_INF2, PSZDBLIB.M_MNU_AUT2
+	
+		SELECT * FROM (
+		SELECT
+			'#{USER_ID}' USER_ID, TRIM(A.MENU_NAME) STEP1_NAME, TRIM(A.MENU_ID) STEP1_CODE,
+			'' STEP2_NAME, '' STEP2_CODE, '' STEP3_NAME, TRIM(A.MENU_ID) MENU_ID,
+			integer(B.USER_YN) USER_YN, A.MENU_ORDER, A.COMPANY
+		FROM
+			PSZDBLIB.M_MNU_INF2 A
+			LEFT OUTER JOIN PSZDBLIB.M_MNU_AUT2 B ON B.MENU_ID = A.MENU_ID AND USER_ID = #{USER_ID}	
+		WHERE
+			TOP_MENU != '1' AND TOP_MENU NOT LIKE 'N%' AND A.USE_YN = 'Y'
+		UNION 
+		SELECT 
+		    '#{USER_ID}' USER_ID, TRIM(STEP1_NAME) STEP1_NAME, TRIM(STEP1_CODE) STEP1_CODE,
+			CASE WHEN  STEP1_CODE = STEP2_CODE  THEN TRIM(STEP3_NAME) ELSE TRIM(STEP2_NAME) END STEP2_NAME, 
+			CASE WHEN  STEP1_CODE = STEP2_CODE  THEN TRIM(STEP3_CODE) ELSE TRIM(STEP2_CODE) END STEP2_CODE, 
+			CASE WHEN  STEP1_CODE = STEP2_CODE  THEN '' ELSE TRIM(STEP3_NAME) END STEP3_NAME, 
+			STEP3_CODE MENU_ID, integer(USER_YN) USER_YN, C.MENU_ORDER,	C.COMPANY
+		FROM (
+			SELECT 
+				CASE WHEN TRIM(UP) = '' THEN 
+					(SELECT MENU_NAME FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = B.UP_MENU) 
+				ELSE
+					(SELECT MENU_NAME FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = B.UP) 
+				END STEP1_NAME,
+				CASE WHEN TRIM(UP) = '' THEN 
+					(SELECT MENU_ID FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = B.UP_MENU) 
+				ELSE
+					(SELECT MENU_ID FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = B.UP) 
+				END STEP1_CODE,
+				(SELECT MENU_NAME FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = B.UP_MENU ) STEP2_NAME,
+				UP_MENU STEP2_CODE,	B.MENU_NAME STEP3_NAME,	B.MENU_ID STEP3_CODE, B.MENU_ORDER, B.COMPANY
+			FROM 
+				(
+				SELECT
+					(SELECT MENU_NAME FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = A.UP_MENU) UP_NAME,
+					A.UP_MENU,
+					(SELECT UP_MENU FROM PSZDBLIB.M_MNU_INF2 WHERE MENU_ID = A.UP_MENU) UP,
+					A.MENU_NAME, A.MENU_ID,	A.MENU_ORDER, A.COMPANY
+				FROM
+					PSZDBLIB.M_MNU_INF2 A
+				WHERE
+					INIT_URL != ''
+					AND (TOP_MENU = '1' OR TOP_MENU LIKE 'N%')
+				) B
+			) C 
+			LEFT OUTER JOIN PSZDBLIB.M_MNU_AUT2 D ON D.MENU_ID = C. STEP3_CODE AND D.USER_ID = #{USER_ID}
+		) Z
+		ORDER BY DECIMAL(MENU_ORDER,9,2) ASC
+	</select>
+	 -->
+	<select id="selectLeftTopMenuList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_MNU_INF2
+		기존TABLE사용 : 
+	 -->
+		SELECT 
+			TRIM(A.MENU_ID) MENU_ID, TRIM(A.MENU_NAME) MENU_NAME,
+			TRIM(A.INIT_URL) INIT_URL, TRIM(A.LEV) LEV,
+			TRIM(B.POPUP_YN) POPUP_YN, TRIM(B.POPUP_W) POPUP_W,
+			TRIM(B.POPUP_H) POPUP_H
+		FROM 
+			PSZDBLIB.M_MNU_INF2 A
+		INNER JOIN PSZDBLIB.M_OUT_SYS B
+		ON	B.SYSTEM_SEQ = A.SYSTEM_SEQ
+		WHERE
+			A.TOP_MENU != '1'
+			AND B.COMPANY = #{COMPANY}
+	</select>
+	<select id="selectBookMarkList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_MNU_INF2, M_FAV_MNU2
+	 -->
+		SELECT 
+			TRIM(Z.MENU_ID) MENU_ID, TRIM(Z.MENU_NAME) MENU_NAME,
+			TRIM(Z.UP_MENU) UP_MENU, TRIM(Z.LEV) LEV,
+			TRIM(Z.INIT_URL) INIT_URL, TRIM(Z.LIST_CNT) LIST_CNT,
+			TRIM(Z.USE_YN) USE_YN, TRIM(Z.DISP_YN) DISP_YN,
+			TRIM(Z.MCODE) MCODE, TRIM(MCODE) MCODE,
+  			TRIM(Z.PW_CHECK) PW_CHECK 
+		FROM 
+		(
+		SELECT 
+			UP_MENU 
+		FROM (
+			SELECT
+			      A.UP_MENU
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A,
+			      PSZDBLIB.M_FAV_MNU2 B   
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND A.USE_YN = 'Y'
+		      ) K1
+		UNION
+		SELECT 
+			MENU_ID UP_MENU
+		FROM (
+			SELECT
+			      A.MENU_ID
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A,
+			      PSZDBLIB.M_FAV_MNU2 B    
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND A.USE_YN = 'Y'
+		      ) K2
+		UNION
+		SELECT C.UP_MENU FROM 
+		(
+		SELECT 
+			UP_MENU 
+		FROM (
+			SELECT
+			      A.UP_MENU
+			FROM
+			      PSZDBLIB.M_MNU_INF2 A,
+			      PSZDBLIB.M_FAV_MNU2 B  
+			WHERE
+			      B.MENU_ID = A.MENU_ID
+			      AND B.USER_ID = #{USER_ID}
+			      AND A.INIT_URL != ''
+			      AND A.USE_YN = 'Y'	      			      
+		      )  A
+		) B,
+		PSZDBLIB.M_MNU_INF2 C
+		WHERE
+			C.MENU_ID = B.UP_MENU
+			AND C.UP_MENU != ''
+		) Y,
+		PSZDBLIB.M_MNU_INF2 Z
+		WHERE 
+			Z.MENU_ID = Y.UP_MENU
+			AND (Z.TOP_MENU = '1' OR TOP_MENU LIKE 'N%')
+			<!-- 수정전 
+			AND Z.TOP_MENU = #{TOP_MENU}
+			-->
+		ORDER BY integer(MENU_ORDER)
+	</select>
+	<select id="selectComCodeList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			TRIM(CLASS) CLASS, TRIM(CODE1) CODE1, TRIM(CODE2) CODE2, TRIM(CODE_NAME) CODE_NAME
+		FROM
+			PSZDBLIB.M_COM_CDE
+		WHERE
+			USER_YN ='1'
+			<if test="!@org.springframework.util.StringUtils@isEmpty(CLASS)">AND CLASS=#{CLASS}</if>
+			<if test="!@org.springframework.util.StringUtils@isEmpty(CODE1)">AND CODE1=#{CODE1}</if>
+	</select>
+	<select id="selectBtnAuthList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_BTN_AUT2
+	 -->
+		SELECT 
+			MAX(CASE WHEN BUTTON_ID = '1' THEN USER_YN END) BTN1,
+			MAX(CASE WHEN BUTTON_ID = '2' THEN USER_YN END) BTN2,
+			MAX(CASE WHEN BUTTON_ID = '3' THEN USER_YN END) BTN3,
+			MAX(CASE WHEN BUTTON_ID = '4' THEN USER_YN END) BTN4,
+			MAX(CASE WHEN BUTTON_ID = '5' THEN USER_YN END) BTN5,
+			MAX(CASE WHEN BUTTON_ID = '6' THEN USER_YN END) BTN6,
+			MAX(CASE WHEN BUTTON_ID = '7' THEN USER_YN END) BTN7
+		FROM 
+			PSZDBLIB.M_BTN_AUT2
+		WHERE 
+			USER_ID = #{USER_ID}
+		AND MENU_ID = #{MENU_ID}
+	</select>
+	<select id="selectPassWordChange" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<!--
+		신규TABLE사용 : PSZDBLIB.M_BTN_AUT2
+	 -->
+		SELECT 
+			USER_ID, DATE(PW_DAT) PW_DAT, DATE(PW_DAT) + INTEGER(PWCP) DAY CHANGE_DAT
+		FROM 
+			PSZDBLIB.M_USR_TID2
+		WHERE
+			USER_ID = #{USER_ID}
+	</select>
+	<update id="updatePassWordChange1" parameterType="java.util.HashMap">
+		UPDATE 
+			PSZDBLIB.M_USR_TID2
+		SET
+			PASSWORD = #{PASSWORD},
+			PW_DAT =  REPLACE(CHAR(DATE(current date), ISO), '-', '') || REPLACE(CHAR(time(current time), ISO), '.', '')
+		WHERE
+ 			USER_ID = #{USER_ID}
+	</update>
+	<update id="updatePassWordChange2" parameterType="java.util.HashMap">
+		UPDATE 
+			PSZDBLIB.M_USR_TID2
+		SET
+			MENU_PW = #{MENU_PW},
+			PW_DAT =  REPLACE(CHAR(DATE(current date), ISO), '-', '') || REPLACE(CHAR(time(current time), ISO), '.', '')
+		WHERE
+ 			USER_ID = #{USER_ID}
+	</update>
+	
+	<select id="selectUserNotice" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			TRIM(NTC_SEQ) NTC_SEQ, NTC_TITLE, SUBSTRING(NTC_SDATE,1,8) NTC_SDATE, SUBSTRING(NTC_EDATE,1,8) NTC_EDATE, NTC_CNT
+		FROM
+			PSZDBLIB.M_USR_NTC
+		WHERE
+			#{TODAY} BETWEEN SUBSTRING(NTC_SDATE,1,8) AND SUBSTRING(NTC_EDATE,1,8)
+			AND COMPANY = #{COMPANY}
+			AND STATUS = '1'
+		UNION
+		SELECT
+			TRIM(NTC_SEQ) NTC_SEQ, NTC_TITLE, SUBSTRING(NTC_SDATE,1,8) NTC_SDATE, SUBSTRING(NTC_EDATE,1,8) NTC_EDATE, NTC_CNT
+		FROM
+			PSZDBLIB.M_USR_NTC
+		WHERE
+			#{TODAY} BETWEEN SUBSTRING(NTC_SDATE,1,8) AND SUBSTRING(NTC_EDATE,1,8)
+			AND COMPANY = '00'
+			AND STATUS = '1'
+		UNION
+		SELECT
+			TRIM(NTC_SEQ) NTC_SEQ, NTC_TITLE, SUBSTRING(NTC_SDATE,1,8) NTC_SDATE, SUBSTRING(NTC_EDATE,1,8) NTC_EDATE, NTC_CNT
+		FROM
+			PSZDBLIB.M_USR_NTC
+		WHERE
+			#{TODAY} BETWEEN SUBSTRING(NTC_SDATE,1,8) AND SUBSTRING(NTC_EDATE,1,8)
+			AND PLANT_CD = #{PLANT_CD}
+			AND STATUS = '1'
+		UNION 
+		SELECT
+			TRIM(NTC_SEQ) NTC_SEQ, NTC_TITLE, SUBSTRING(NTC_SDATE,1,8) NTC_SDATE, SUBSTRING(NTC_EDATE,1,8) NTC_EDATE, NTC_CNT
+		FROM
+			PSZDBLIB.M_USR_NTC
+		WHERE
+			#{TODAY} BETWEEN SUBSTRING(NTC_SDATE,1,8) AND SUBSTRING(NTC_EDATE,1,8)
+			AND COMPANY = #{COMPANY}
+			AND PLANT_CD = '00'
+			AND STATUS = '1'
+	</select>
+</mapper>

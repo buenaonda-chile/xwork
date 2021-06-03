@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EmpDao">
+
+  <resultMap id="MaEmp" type="MaEmpDomain">
+        <result property="noEmp" column="NO_EMP" />
+        <result property="cdCompany" column="CD_COMPANY" />
+        <result property="nmKor" column="NM_KOR" />
+        <result property="nmEng" column="NM_ENG" />
+        <result property="nmChin" column="NM_CHIN" />
+        <result property="cdBizarea" column="CD_BIZAREA" />
+        <result property="cdDept" column="CD_DEPT" />
+        <result property="noEmail" column="NO_EMAIL" />
+        <result property="cdIncom" column="CD_INCOM" />
+        <result property="cdIncomNm" column="CD_INCOM_NM" />
+        <result property="tpEmp" column="TP_EMP" />
+        <result property="tpEmpNm" column="TP_EMP_NM" />
+        <result property="cdDutyStep" column="CD_DUTY_STEP" />
+        <result property="cdDutyStepNm" column="CD_DUTY_STEP_NM" />
+        <result property="cdNation" column="CD_NATION" />
+        <result property="cdNationNm" column="CD_NATION_NM" />
+  </resultMap>
+    
+  <!-- 더존 회사코드변경시 수정필요 -->    
+  <select id="searchEmpMaEmpList"  resultMap="MaEmp" parameterType="MaEmpDomain">
+       SELECT 
+             NO_EMP
+	   <!-- ,CD_COMPANY	-->
+            <!-- 더존 사업부코드변경 : 2019.04.15 (DENSO) -->
+            ,CASE WHEN CD_BIZAREA='1000' THEN '2000'
+                  WHEN CD_BIZAREA='2000' THEN '1000'
+                  WHEN CD_BIZAREA='3000' THEN '1000'
+                  WHEN CD_BIZAREA='5000' THEN '1000'
+                  WHEN CD_BIZAREA='4000' THEN '3000'
+                  ELSE ''
+             END AS CD_COMPANY
+            ,NM_KOR
+            ,NM_ENG
+            ,NM_CHIN
+            ,CD_BIZAREA
+            ,CD_DEPT
+            ,NO_EMAIL
+            <!-- 2020.04.21 추가 : 재직구분, 사원구분-->
+            ,CD_INCOM
+            ,FN_MA_GET_CODEDTL_NM_SYSDEF(A.CD_COMPANY, 'HR_H000014', A.CD_INCOM) CD_INCOM_NM 
+            ,TP_EMP
+            ,FN_MA_GET_CODEDTL_NM_SYSDEF(A.CD_COMPANY, 'HR_P000009', A.TP_EMP) TP_EMP_NM 
+            <!-- 2020.08.26 추가 : 직급, 내외국인-->
+            ,CD_DUTY_STEP
+            ,FN_MA_GET_CODEDTL_NM_SYSDEF(A.CD_COMPANY, 'HR_H000003', A.CD_DUTY_STEP) CD_DUTY_STEP_NM
+            ,CD_NATION
+            ,FN_MA_GET_CODEDTL_NM_SYSDEF(A.CD_COMPANY, 'HR_T000003', A.CD_NATION) CD_NATION_NM
+       FROM 
+               NEOE.MA_EMP A
+       WHERE 
+           'SqlMap-Emp.searchByKey' = 'SqlMap-Emp.searchByKey'
+           AND CD_COMPANY != 'TEST'
+           <!-- 삭제 : 2020.04.21 - 전체List를 가져와고 프로시저에서 분개하여 처리함.
+            AND A.CD_INCOM != '099'
+             --> <!-- 001-재직, 002-휴직, 099-퇴직 : 퇴사자가 아닌 사람만 -->
+           AND CD_COMPANY IN ('DENSO') <!-- 더존 사업부코드변경 : 2019.04.15 (DENSO) -->
+  </select>
+  
+    <!-- 더존 회사코드변경시 수정필요 --> 
+ 	<!-- 20118.06.05 추가 IT.T 제혼복  -->
+   <select id="searchEmpMaAccount"  resultMap="MaEmp" parameterType="MaEmpDomain">
+       SELECT
+       		<!-- 더존 사업부코드변경 : 2019.04.15 (DENSO) --> 
+            <!--  CD_COMPANY	 --><!-- 존재 -->
+             CASE WHEN CD_BIZAREA='1000' THEN '2000'
+                  WHEN CD_BIZAREA='2000' THEN '1000'
+                  WHEN CD_BIZAREA='3000' THEN '1000'
+                  WHEN CD_BIZAREA='5000' THEN '1000'
+                  WHEN CD_BIZAREA='4000' THEN '3000'
+                  ELSE ''
+             END AS CD_COMPANY
+            ,CD_BIZAREA	<!-- 존재 -->
+            ,CD_DEPT	<!-- 존재 -->
+            ,NM_DEPT
+            ,NO_EMP	<!-- 존재 -->
+            ,NM_KOR	<!-- 존재 -->
+            ,NM_ENG	<!-- 존재 -->
+            ,NM_CHIN	<!-- 존재 -->
+            ,NO_TEL_EMER
+            ,NO_EMAIL	<!-- 존재 -->
+            ,TP_EMP
+            ,TP_EMP_NM
+            ,CD_DUTY_RANK
+            ,CD_DUTY_RANK_NM
+            ,CD_DUTY_STEP
+            ,CD_DUTY_STEP_NM
+            ,CD_PAY_STEP
+            ,CD_DUTY_RESP
+            ,CD_DUTY_RESP_NM
+            ,CD_DUTY_TYPE
+            ,CD_DUTY_TYPE_NM
+            ,CD_DUTY_WORK
+            ,CD_DUTY_WORK_NM
+            ,CD_PLANT
+            ,CD_WC
+            ,CD_INCOM
+            ,CD_INCOM_NM
+            ,COMPS
+            ,LB_DEPT
+            ,TEAM_CD
+            ,TEAM_NM
+            ,DEPT_CD_MAP
+            ,DEPT_NM_MAP
+            ,TEAM_CD_MAP
+            ,TEAM_NM_MAP
+       FROM 
+			V_Z_DNKA_MA_EMP A
+       WHERE 
+           'SqlMap-Emp.searchEmpMaAccount' = 'SqlMap-Emp.searchEmpMaAccount'
+            AND CD_COMPANY IN ('DENSO')
+            <!-- AND CD_COMPANY IN ('1000', '2000') --> <!-- 더존 사업부코드변경(구kA:1000, 구KE:2000) -->
+            <!-- AND CD_COMPANY IN ('DENSO')--> <!-- 더존 사업부코드변경 : 2019.04.15 (DENSO) -->
+            <if test="noEmp != null">
+	          AND NO_EMP = #{noEmp}
+	        </if>
+  </select>
+  
+</mapper>

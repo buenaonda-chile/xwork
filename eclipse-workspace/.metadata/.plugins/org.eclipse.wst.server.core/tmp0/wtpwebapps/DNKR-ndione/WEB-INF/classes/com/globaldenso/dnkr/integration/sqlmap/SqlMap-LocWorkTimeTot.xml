@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LocWorkTimeTotDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="LocWorkTimeTot" type="LocWorkTimeTotDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRDT_NO" />  
+        <result property="prdtNm" column="PRDT_NM" />         
+        <result property="locCode" column="LOC_CODE" /> 
+        <result property="drctHdcn" column="DRCT_HDCN" /> 
+        <result property="indrHdcn" column="INDR_HDCN" /> 
+        <result property="jmLabor" column="JM_LABOR" />                                 
+        <result property="prfrTime" column="PRFR_TIME" /> 
+        <result property="excTmRt" column="EXC_TM_RT" /> 
+        <result property="indTmRt" column="IND_TM_RT" /> 
+        <result property="excIndRt" column="EXC_IND_RT" /> 
+        <result property="mrgFct" column="MRG_FCT" />                  
+        <result property="sgmRgsArb" column="SGM_RGS_ARB" />                          
+        <result property="stdrLabor" column="STDR_LABOR" />
+        <result property="cycleTime" column="CYCLE_TIME" />
+        <result property="uph" column="UPH" />        
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+
+        <result property="oldLineCode" column="OLD_LINE_CODE" />       
+        <result property="oldPrdtNo" column="OLD_PRDT_NO" /> 
+        
+        <result property="year" column="YEAR" />         
+        <result property="fsHalf" column="FS_HALF" />         
+        <result property="oldYear" column="OLD_YEAR" />         
+        <result property="oldFsHalf" column="OLD_FS_HALF" />  
+                       
+        <result property="resultManHour" column="RESULT_MAN_HOUR" />
+        <result property="totalQY" column="TOTAL_QY" />
+        <result property="jmBaseTime" column="JM_BASE_TIME" />
+        <result property="indexPlan" column="INDEX_PLAN" />
+        <result property="indexResult" column="INDEX_RESULT" />
+        <result property="prodIndex" column="PROD_INDEX" />
+
+        <result property="sickLeaveTot" column="SICK_LEAVE_TOT" />
+        <result property="injuryTot" column="INJURY_TOT" />
+        <result property="vacationTot" column="VACATION_TOT" />
+        <result property="monthlyLeaveSum" column="MONTHLY_LEAVE_SUM" />
+		<result property="lrlyLatenTime" column="LRLY_LATEN_TIME" />
+		<result property="overtimeSum" column="OVERTIME_SUM" />
+		<result property="bHrMnt" column="B_HR_MNT" />
+		<result property="cHrMnt" column="C_HR_MNT" />
+		<result property="totHrMnt" column="TOT_HR_MNT" />
+		<result property="ptm" column="PTM" />
+		<result property="partCode" column="PART_CODE" />
+
+
+    </resultMap>
+
+    <!-- 부서별 작업 시간 집계표-->
+    <select id="searchByCondition" resultMap="LocWorkTimeTot" parameterType="LocWorkTimeTotDomain">
+		
+		SELECT COALESCE(AT.LOC_CODE,HR.LOC_CODE) AS LOC_CODE
+	        , COALESCE(AT.CLS_CODE,HR.CLS_CODE) AS CLS_CODE
+	        , (SELECT MAX(D.PART_CODE) AS PART_CODE FROM PSZDBLIB.FHP010PF D
+            	WHERE D.CLS_CODE='E1' AND D.LOC_CODE=COALESCE(AT.LOC_CODE,HR.LOC_CODE) GROUP BY D.LOC_CODE) AS PART_CODE
+	        , COALESCE(AT.SICK_LEAVE_SUM,0) AS SICK_LEAVE_TOT /* 병가 휴직 */
+	        , COALESCE(AT.INJURY_SUM,0) AS INJURY_TOT /*공상*/
+	        , COALESCE(AT.VACATION_SUM,0) AS VACATION_TOT /*경조(인정) 휴가*/
+	        , COALESCE(AT.MONTHLY_LEAVE_SUM,0) AS MONTHLY_LEAVE_SUM /*월차*/
+	        , COALESCE(AT.LRLY_LATEN_TIME,0) AS LRLY_LATEN_TIME /*조퇴지각*/
+	        , COALESCE(AT.OVERTIME_SUM,0) AS OVERTIME_SUM /*잔업*/
+	        /*, HR.LOC_CODE AS LOC_CODE_HR*/
+	        , COALESCE(HR.B_HR_MNT,0) AS B_HR_MNT /*제외시간*/
+	        , COALESCE(HR.C_HR_MNT,0) AS C_HR_MNT /*간접시간*/
+	        , COALESCE(HR.TOT_HR_MNT,0) AS TOT_HR_MNT /*총투입시간*/
+	        , COALESCE(HR.PTM,0) AS PTM /*직접시간*/
+	        /*, DISTINCT (LOC_CODE)*/
+	    FROM (
+	            SELECT DISTINCT X.LOC_CODE
+	                , MAX(X.CLS_CODE) as CLS_CODE
+	                , SUM(X.SICK_LEAVE_SUM) AS SICK_LEAVE_SUM /*병가 휴직*/
+	                , SUM(X.INJURY_SUM) AS INJURY_SUM /*공상 산재*/
+	                , SUM(X.VACATION_SUM) AS VACATION_SUM /*경조(인정) 휴가*/
+	                , SUM(X.MONTHLY_LEAVE_SUM) AS MONTHLY_LEAVE_SUM /*월차*/
+	                , SUM(X.OVERTIME_SUM1) AS OVERTIME_SUM1 /*잔업*/
+	                , SUM(X.OVERTIME_SUM2) AS OVERTIME_SUM2 /*잔업2*/
+	                , SUM(X.OVERTIME_SUM3) AS OVERTIME_SUM3 /*잔업3*/
+	                , SUM(X.OVERTIME_SUM4) AS OVERTIME_SUM4 /*잔업4*/
+	                , SUM(X.OVERTIME_SUM1)+SUM(X.OVERTIME_SUM2)+SUM(X.OVERTIME_SUM3)+SUM(X.OVERTIME_SUM4) AS OVERTIME_SUM
+	                , SUM(X.LRLY_TIME) AS LRLY_TIME /*조퇴시간*/
+	                , SUM(X.LATEN_TIME) AS LATEN_TIME /*지각*/
+	                , SUM(X.LRLY_TIME) + SUM(X.LATEN_TIME) AS LRLY_LATEN_TIME/*조퇴지각*/
+	                , SUM(X.GNOT_TIME) AS GNOT_TIME /*외출*/
+	            FROM (
+	                    SELECT DISTINCT A.LOC_CODE
+	                            , MAX(A.CLS_CODE) AS CLS_CODE
+	                            , MAX(A.OPERT_DE) AS  OPERT_DE
+	                            , max(A.work_code2) as work_code
+	                            , SUM(CASE A.WORK_CODE2 WHEN '93' THEN 1 ELSE 0 END) AS VACATION_SUM /*경조(인정) 휴가*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '95' THEN 1 ELSE 0 END) AS INJURY_SUM /*공상 산재*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '94' THEN 1 ELSE 0 END) AS SICK_LEAVE_SUM /*병가 휴직*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '90' THEN 1 ELSE 0 END) AS MONTHLY_LEAVE_SUM /*월차*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '11' THEN 1 ELSE 0 END) AS OVERTIME_SUM1 /*잔업*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '12' THEN 1 ELSE 0 END) AS OVERTIME_SUM2 /*잔업2*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '13' THEN 1 ELSE 0 END) AS OVERTIME_SUM3 /*잔업3*/
+	                            , SUM(CASE A.WORK_CODE2 WHEN '14' THEN 1 ELSE 0 END) AS OVERTIME_SUM4 /*잔업4*/
+	                            , SUM(A.LRLY_TIME) AS LRLY_TIME /*조퇴시간*/
+	                             , SUM(A.LATEN_TIME) AS LATEN_TIME /*지각시간*/
+	                             , SUM(A.GNOT_TIME) AS GNOT_TIME /*외출시간*/
+	                    FROM PSZDBLIB.FHP080PF A
+	                    WHERE 1=1
+	                    /*AND A.CLS_CODE = 'E1'
+	                    AND A.LOC_CODE = '4701'
+	                    AND A.LOC_CODE IN('4706','4707') 반코드*/
+	                    AND A.LOC_CODE IN(
+	                        SELECT DISTINCT F010.LOC_CODE FROM PSZDBLIB.FHP010PF F010 /*손실 제외 간접 시간 등록*/
+	                        WHERE F010.CLS_CODE = 'E1' AND F010.PART_CODE = '4700'
+	                        )
+	                    AND SUBSTR(A.OPERT_DE,1,6) = '202103'
+	                    GROUP BY A.LOC_CODE, A.WORK_CODE2 /*해당월의 전체 사번,전체 요일 합 사번합 요일합 ,부서별작업코드별 데이터*/
+	                ) X
+	            GROUP BY X.LOC_CODE /*해당월의 전체 사번,전체 요일 합 사번합 요일합 ,부서별 데이터*/
+	        ) AT FULL OUTER JOIN (
+	            SELECT C.LOC_CODE AS   LOC_CODE              /*반코드*/
+	                 , MAX(C.CLS_CODE) AS CLS_CODE
+	                 , SUM(C.HR_MNT_TOT) AS HR_MNT_TOT /* 라인인원시간소계*/
+	                 , SUM(C.LGST_TIME) AS LGST_TIME /* 라인인원 물류시간*/
+	                 , SUM(C.C_HR_MNT) AS C_HR_MNT /*간접시간*/
+	                 , SUM(C.B_HR_MNT) AS B_HR_MNT /*제외시간*/
+	                 , SUM(C.HR_MNT_TOT)+SUM(C.LGST_TIME) as TOT_HR_MNT /*총투입시간*/
+	                 , SUM(C.HR_MNT_TOT)+SUM(C.LGST_TIME)-SUM(C.C_HR_MNT)-SUM(C.B_HR_MNT) AS PTM /*직접시간*/
+	            FROM (
+	                     select max(D.LOC_CODE) AS LOC_CODE
+	                            , max(D.CLS_CODE) AS CLS_CODE
+	                            , max(D.HR_MNT1 + D.HR_MNT2 + D.HR_MNT3 + D.HR_MNT4
+	                                + D.HR_MNT5 + D.HR_MNT6 + D.HR_MNT7 + D.HR_MNT8) as HR_MNT_TOT /* 라인인원시간소계*/
+	                            , max(D.LGST_TIME) as LGST_TIME /* 라인인원 물류시간*/
+	                            , sum(CASE B.SE WHEN 'C' THEN B.HR_MNT ELSE 0 END) AS C_HR_MNT /* 간접 */
+	                            , sum(CASE B.SE WHEN 'B' THEN B.HR_MNT ELSE 0 END) AS B_HR_MNT /* 제외 */
+	                     FROM PSZDBLIB.FHP109PF D LEFT OUTER JOIN PSZDBLIB.FHP130PF B /*손실 제외 간접 시간 등록*/ /*제외(B), 간접(C)*/
+	                                                         ON B.CLS_CODE = D.CLS_CODE
+	                                                         AND B.LOC_CODE = D.LOC_CODE
+	                                                         AND B.LINE_CODE = D.LINE_CODE
+	                                                         AND B.OPERT_DE = D.OPERT_DE
+	                                                         AND B.SE IN( 'B', 'C') /*제외(B), 간접(C)*/
+	                      WHERE 1 = 1
+	                      AND SUBSTR(D.OPERT_DE, 1, 6) = '202103'
+	                      AND D.CLS_CODE = 'E1' /*사업부코드*/
+	                      /*AND D.LOC_CODE ='4707'*/
+	                      AND D.LOC_CODE IN(
+	                            SELECT DISTINCT F010.LOC_CODE FROM PSZDBLIB.FHP010PF F010 /*손실 제외 간접 시간 등록*/
+	                            WHERE F010.CLS_CODE = 'E1' AND F010.PART_CODE = '4700'
+	                      )
+	                     group by D.LOC_CODE,D.LINE_CODE, D.OPERT_DE /*부서별 일자별 라인별 합, FHP130PF에 코드별로 여러개 있어서 합침*/
+	                 ) C
+	            GROUP BY C.LOC_CODE
+	        ) HR ON AT.LOC_CODE = HR.LOC_CODE
+	            AND AT.CLS_CODE = HR.CLS_CODE
+    </select>      
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="LocWorkTimeTotDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}        
+		AND   LINE_CODE = '${lineCode}'
+		AND   PRDT_NO = '${prdtNo}'	        
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="LocWorkTimeTotDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}         
+		AND   LINE_CODE = '${oldLineCode}'
+		AND   PRDT_NO = '${oldPrdtNo}'		      
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="LocWorkTimeTotDomain">
+        INSERT INTO  PSZDBLIB.FHP030PF (
+				 CLS_CODE
+				,LINE_CODE
+				,YEAR
+				,FS_HALF
+				,PRDT_NO
+				,LOC_CODE
+				,JM_LABOR
+				,STDR_LABOR
+				,CYCLE_TIME			
+				,DRCT_HDCN
+				,INDR_HDCN
+				,PRFR_TIME
+				,EXC_TM_RT
+				,IND_TM_RT
+				,EXC_IND_RT		
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{lineCode}
+               ,#{year}
+               ,#{fsHalf}                              
+               ,#{prdtNo}
+               ,#{locCode}               
+               ,#{jmLabor} 
+               ,#{stdrLabor}                
+               ,#{cycleTime}                               
+               ,#{drctHdcn}                 
+               ,#{indrHdcn}   
+               ,#{prfrTime}                   
+               ,#{excTmRt}                 
+               ,#{indTmRt} 
+               ,#{excIndRt}                                                                      
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="LocWorkTimeTotDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = #{lineCode}
+        	,PRDT_NO = #{prdtNo}        	
+			,JM_LABOR = #{jmLabor}
+			,STDR_LABOR = #{stdrLabor}
+			,CYCLE_TIME = #{cycleTime}
+	 		,DRCT_HDCN = #{drctHdcn}
+			,INDR_HDCN = #{indrHdcn}
+			,PRFR_TIME = #{prfrTime}
+			,EXC_TM_RT = #{excTmRt}
+			,IND_TM_RT = #{indTmRt}
+			,EXC_IND_RT = #{excIndRt}
+        	,MOD_USER = #{modUser}
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}          
+        AND   LINE_CODE = #{oldLineCode}
+        AND   PRDT_NO = #{oldPrdtNo}        
+    </update>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateTest" parameterType="LocWorkTimeTotDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = '${lineCode}'
+        	,PRDT_NO = '${prdtNo}'        	
+			,JM_LABOR = '${jmLabor}'
+			,STDR_LABOR = '${stdrLabor}'
+			,CYCLE_TIME = '${cycleTime}'
+	 		,DRCT_HDCN = '${drctHdcn}'
+			,INDR_HDCN = '${indrHdcn}'
+			,PRFR_TIME = '${prfrTime}'
+			,EXC_TM_RT = '${excTmRt}'
+			,IND_TM_RT = '${indTmRt}'
+			,EXC_IND_RT = '${excIndRt}'
+        	,MOD_USER = '${modUser}'
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = '${oldYear}'        
+		AND   FS_HALF = '${oldFsHalf}'          
+        AND   LINE_CODE = '${oldLineCode}'
+        AND   PRDT_NO = '${oldPrdtNo}'        
+    </update>    
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="LocWorkTimeTotDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}          
+        AND   LINE_CODE = #{lineCode}
+        AND   PRDT_NO = #{prdtNo}   
+    </delete>
+    
+    
+
+</mapper>

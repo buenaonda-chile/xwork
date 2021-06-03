@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    <!-- 빈 설정 -->
+	<!-- <bean class="com.denso.util.BeanConfigurer"/> -->
+
+	<bean id="springBeanAccessor" class="com.denso.util.SpringBeanAccessor"/>
+    
+    <context:component-scan base-package="com.denso">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	
+	<bean class="com.denso.util.MybatisConfigurer">
+		<property name="configLocation" value="classpath:mybatis/config/mybatis.configuration.xml" />
+		<property name="mapperLocations" value="classpath*:mybatis/mapper/*.xml" />
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.denso.mapper" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" depends-on="springBeanAccessor">
+		<property name="driverClassName" value="#{datasource['jdbc.driverClassName']}"/>
+		<property name="url" value="#{datasource['jdbc.url']}"/>
+		<property name="username" value="#{datasource['jdbc.username']}"/>
+		<property name="password" value="#{datasource['jdbc.password']}"/>
+		<property name="maxActive" value="#{datasource['jdbc.maxActive']}"/>
+		<property name="initialSize" value="#{datasource['jdbc.initialSize']}"/>
+		<property name="validationQuery" value="#{datasource['jdbc.validationQuery']}"/>
+		<property name="testOnBorrow" value="#{datasource['jdbc.testOnBorrow']}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="#{datasource['jdbc.timeBetweenEvictionRunsMillis']}"/>				
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+	<!-- 설정정보 -->
+	<beans profile="local">
+		<util:properties id="commonConfig" location="classpath:common-config-local.properties" />
+		<util:properties id="datasource" location="classpath:datasource-local.properties"/>
+	</beans>
+	<beans profile="dev">
+		<util:properties id="commonConfig" location="classpath:common-config-dev.properties" />
+		<util:properties id="datasource" location="classpath:datasource-dev.properties"/>
+	</beans>
+	<beans profile="prod">
+		<util:properties id="commonConfig" location="classpath:common-config-prod.properties" />
+		<util:properties id="datasource" location="classpath:datasource-prod.properties"/>
+	</beans>
+	
+</beans>

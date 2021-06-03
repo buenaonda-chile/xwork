@@ -1,0 +1,1160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="sample">
+
+	<parameterMap id="testParameters" class="java.util.HashMap">
+	    <parameter property="COMPS1" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	    <parameter property="JOBDT1" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	    <parameter property="PROCS1" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	    <parameter property="daygu1" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	</parameterMap>
+	<procedure id="testProc" parameterMap="testParameters" >
+	    { CALL  PSEOBJLIB.FGPZ170UPC(?,?,?,?) }
+	</procedure>
+
+	<select id="selectPassWordChangeDate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			USER_ID
+			, DATE(PW_DAT) PW_DAT
+			, DATE(PW_DAT) + INTEGER(PWCP) DAY CHANGE_DAT
+		FROM 
+			PSZDBLIB.M_USR_TID
+		WHERE
+			USER_ID = #USER_ID#
+	</select>
+
+	<select id="selectMaxDate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT MAX(JYYMM) MAXDATE, TRIM(JOBFL) JOBFL FROM $LIB$.DWH000PF GROUP BY JOBFL
+	</select>
+
+	<select id="selectFPMC109MaxDate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			SUBSTR(CHAR((DATE(TRIM(CHAR(MJINT)) || CHAR('01010101')) + 1 MONTHS),ISO),1,7) MAXDATE
+		FROM 
+			$LIB$.MST040PF
+		WHERE
+			COMPS = #COMPS# AND MAJCD = 'FPM110PFMAGAM'
+	</select>
+
+
+	<select id="selectDownLoadDWH111PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$
+		WHERE SUBSTR(CHAR(WKDAT),1,6) = SUBSTR('$YYYYMM$',1,6)
+	</select>
+
+	<select id="selectDownLoadDWH104PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$ 
+		WHERE SUBSTR(TRNDT,1,6) = SUBSTR('$YYYYMM$',1,6)
+	</select>
+
+	<select id="selectDownLoadDWH108PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$
+		WHERE SUBSTR(CHAR(TRNDT),1,6) = SUBSTR('$YYYYMM$',1,6)
+	</select>
+
+
+	<select id="selectDownLoadDWH251PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$
+	</select>
+
+	<select id="selectDownLoadDWH107PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$
+	</select>
+
+	<select id="selectDownLoadDWH301PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM $LIB$.$TABLENM$
+	</select>
+
+
+	<select id="selectDownLoadDWH352PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT COMPS, PYVND, CUSNM FROM $LIB$.$TABLENM$
+	</select>
+
+
+
+
+	<insert id="insertSVH111PF" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.SVH111PF VALUES (#Col01#)
+	</insert>
+
+	<insert id="insertSVH454PF" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.SVH454PF VALUES (#Col01#)
+	</insert>
+
+	<insert id="insertSVK904PF" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.SVK904PF VALUES (#Col01#)
+	</insert>
+
+
+
+
+
+
+	<select id="selectPpmi001M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM (B.COMPS) COMPS
+			, RUNCD
+			, TRIM(A.PROCS) PROCS
+			, TRIM(B.PROSM) PROSM
+			, TRIM(D.MSTSM) MSTSM
+			, TRIM(DAYGU) DAYGU
+			, TRIM(A.PRTNO) PRTNO
+			, TRIM(CHAR(ORDAT)) ORDAT
+			, CYCTM
+			, FSTQY
+			, ATOQY
+			, PRDQY
+			, PRDQY*100/FSTQY FSTQY_RATE
+			, PRDQY*100/ATOQY ATOQY_RATE
+		FROM 
+			$LIB$.FGP230PF A
+		LEFT OUTER JOIN $LIB$.MST060PF AS B ON	B.PROCS = A.PROCS
+		LEFT OUTER JOIN PSEDBLIB.MST100PF AS C ON A.PRTNO = C.PRTNO
+		LEFT OUTER JOIN PSEDBLIB.MST051LF AS D ON C.CARCD = D.MSTCD
+		
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="COMPS">
+				B.COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ORDAT">
+				CHAR(A.ORDAT) = #ORDAT#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="PROCS">
+				A.PROCS LIKE '%' || '$PROCS$' || '%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="DAYGU">
+				A.DAYGU = #DAYGU#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ROWGB">
+				A.PROCS IN (
+							SELECT PROCS FROM $LIB$.FGP100PF WHERE ROWGB = #ROWGB#
+							)
+			</isNotEmpty>
+		</dynamic>		 
+	</select>
+	
+
+	<select id="selectPpmi001M_Sum" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			SUM(FSTQY) as sum1, SUM(ATOQY) as sum2, SUM(PRDQY) as sum3, DEC(SUM(PRDQY)*100/SUM(FSTQY),10,2) as per1, DEC(SUM(PRDQY*100)/SUM(ATOQY),10,2) as per2 
+		FROM 
+			PSEDBLIB.FGP230PF 
+		WHERE 
+			PROCS IN (SELECT PROCS FROM PSEDBLIB.FGP100PF WHERE ROWGB = #ROWGB#)
+		AND ORDAT = #ORDAT#
+		AND DAYGU = #DAYGU#		 
+	</select>
+
+
+
+	<select id="selectPpmi001MCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			ROWGB
+			,TRIM(ROWNM) ROWNM
+		FROM 
+			$LIB$.FGP020PF
+		WHERE
+			COMPS = #COMPS#
+ 	</select>
+
+
+
+
+
+	<select id="selectPpmi002M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			PRTNO
+			, SEQNO
+			, SUM(ORQTY) ORQTY
+			, CYCTM
+			, SUM(SUM_PRTQY) SUM_PRTQY
+			, SUM(SUM2) SUM2
+			, SUM(SUM3) SUM3
+			, TM
+			, SUM(PRTQY) PRTQY
+		FROM 
+		(		
+			SELECT 
+				PRTNO
+				, SEQNO
+				, MAX(ORQTY) ORQTY
+				, CYCTM
+				, SUM(PRTQY) SUM_PRTQY
+				, MAX(ORQTY) - SUM(PRTQY) SUM2
+				, DECIMAL((SUM(PRTQY) * 100 ) / MAX(ORQTY),3) SUM3
+				, TM
+				, SUM(PRTQY) PRTQY
+			FROM
+			(
+			SELECT
+				A.PRTNO
+				, B.SEQNO
+				, B.ORQTY
+				, A.CYCTM
+				, A.PRTQY
+				, CASE WHEN 
+					LENGTH(TRIM(VARCHAR(A.PRSTM))) = 5 THEN '0' || LEFT(TRIM(VARCHAR(A.PRSTM)),1)
+				  ELSE
+					LEFT(TRIM(VARCHAR(A.PRSTM)),2)
+				  END   TM
+			FROM 
+				$LIB$.FGP210PF B
+			LEFT OUTER JOIN $LIB$.FGP220PF A
+			 ON A.COMPS = B.COMPS
+				AND A.PROCS = B.PROCS
+				AND A.PRTNO = B.PRTNO
+				AND A.DAYGU = B.DAYGU
+				AND A.TRNDT = B.ORDAT
+			WHERE
+				B.COMPS = #COMPS#
+				AND B.PROCS = #PROCS#
+				AND B.DAYGU = #DAYGU#
+				AND B.ORDAT = $ORDAT$
+				AND B.ORQTY != 0
+			) K
+			GROUP BY
+				PRTNO
+				, SEQNO
+				, CYCTM
+				, TM
+			HAVING
+				SUM(ORQTY) - SUM(PRTQY) > 0
+		) Z
+		GROUP BY
+			PRTNO
+			, SEQNO	
+			, CYCTM
+			, TM		 
+		ORDER BY
+			PRTNO
+			, SEQNO		
+	</select>
+
+
+
+	<select id="selectPpmi003MGroup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			TRIM(COMPS) COMPS
+			, TRIM(PROCS) PROCS
+			, SEQNO
+			, TRIM(PRSNM) PRSNM
+		FROM 
+			$LIB$.FGP100PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="PROCS">
+				PROCS LIKE '%' || '$PROCS$' || '%'	
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="PRSNM">
+				PRSNM LIKE '%' || '$PRSNM$' || '%'					
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="ROWGB">
+				ROWGB = $ROWGB$				
+			</isNotEmpty>									
+		GROUP BY
+			COMPS
+			, PROCS
+			, SEQNO
+			, PRSNM	
+		ORDER BY
+			PROCS ASC		
+	</select>
+
+
+
+	<select id="selectPpmi003M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			TRIM(COMPS) COMPS
+			, TRIM(PROCS) PROCS
+			, ROWGB
+			, SEQNO
+			, TRIM(PRSNM) PRSNM
+			, GIJUN
+			, TRIM(CRPRD) CRPRD
+			, TRIM(IPCDE) IPCDE
+			, TRIM(CNTYP) CNTYP
+		FROM 
+			$LIB$.FGP100PF
+		WHERE
+			COMPS = #COMPS#
+			AND PROCS = #PROCS#
+			AND PRSNM = #PRSNM#
+	</select>
+
+
+
+	<select id="selectPpmi004M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			'$STEP_TXT$' STEP_TXT
+			, '$PINBR$' PINBR
+			, TRIM(CHAR((
+				SELECT 
+					COUNT(1)
+				FROM 
+					PERESLIB.BM008PR AA,
+					(
+					SELECT CINBR, QTYPR FROM $CigmaLIB$.BM010PR WHERE PINBR = '$PINBR$'
+					UNION ALL
+					SELECT CINBR, QTYPR FROM $CigmaLIB$.BD462PR WHERE PINBR = '$PINBR$'
+					) BB
+				WHERE 
+					BB.CINBR = AA.ITNBR
+					AND AA.ITNBR <![CDATA[<=]]> A.ITNBR 
+			   ))) ROWNUMBER
+			, A.ITNBR
+			, B.QTYPR
+			, A.UNMSR
+			, A.ITTYP
+			, A.MDATE
+			, A.ITDSC
+		FROM 
+			$CigmaLIB$.BM008PR A,
+			(
+			SELECT CINBR, QTYPR FROM $CigmaLIB$.BM010PR WHERE PINBR = '$PINBR$'
+			UNION ALL
+			SELECT CINBR, QTYPR FROM $CigmaLIB$.BD462PR WHERE PINBR = '$PINBR$'
+			) B
+		WHERE
+			B.CINBR = A.ITNBR
+	</select>
+
+
+
+	<select id="selectPpmi004MSub" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			'$STEP_TXT$' STEP_TXT
+			, '$PINBR$' PINBR
+			, '$STEP$' || TRIM(CHAR((
+				SELECT 
+					COUNT(1)
+				FROM 
+					PERESLIB.BM008PR AA,
+					(
+					SELECT CINBR, QTYPR FROM $CigmaLIB$.BM010PR WHERE PINBR = '$PINBR$'
+					UNION ALL
+					SELECT CINBR, QTYPR FROM $CigmaLIB$.BD462PR WHERE PINBR = '$PINBR$'
+					) BB
+				WHERE 
+					BB.CINBR = AA.ITNBR
+					AND AA.ITNBR <![CDATA[<=]]> A.ITNBR 
+			   ))) ROWNUMBER
+			, A.ITNBR
+			, B.QTYPR
+			, A.UNMSR
+			, A.ITTYP
+			, A.MDATE
+			, A.ITDSC
+		FROM 
+			$CigmaLIB$.BM008PR A,
+			(
+			SELECT CINBR, QTYPR FROM $CigmaLIB$.BM010PR WHERE PINBR = '$PINBR$'
+			UNION ALL
+			SELECT CINBR, QTYPR FROM $CigmaLIB$.BD462PR WHERE PINBR = '$PINBR$'
+			) B
+		WHERE
+			B.CINBR = A.ITNBR
+	</select>
+
+
+
+
+	<select id="selectPpmi005M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			'$STEP$' STEP
+			, A.ITNBR
+			, B.QTYPR
+			, A.UNMSR
+			, A.ITTYP
+			, A.MDATE
+			, A.ITDSC
+		FROM 
+			$CigmaLIB$.BM008PR A,
+			(
+			SELECT PINBR, QTYPR FROM $CigmaLIB$.BM010PR WHERE CINBR = '$CINBR$'
+			UNION ALL
+			SELECT PINBR, QTYPR FROM $CigmaLIB$.BD462PR WHERE CINBR = '$CINBR$'
+			) B
+		WHERE
+			B.PINBR = A.ITNBR
+	</select>
+
+
+
+
+	<select id="selectPpmi006MTab1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			COMPS
+			, PROCS
+			, ORDAT
+			, DAYGU
+			, JOBSQ
+			, PRTNO
+			, CYCTM
+			, SEQNO
+			, ORQTY
+			, SPLIT
+			, SERNO
+			, PRLOT
+			, QTUNT
+			, ROUND(ORQTY * CYCTM / 60,2) ORQTY_CYCTM
+		FROM
+			$LIB$.FGP210PF
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="COMPS">
+				COMPS = #COMPS#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="ORDAT">
+				ORDAT = $ORDAT$
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="PROCS">
+				PROCS = #PROCS#
+			</isNotEmpty>								
+			<isNotEmpty prepend="and" property="DAYGU">
+				DAYGU = #DAYGU#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="PRTNO">
+				PRTNO = #PRTNO#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="JOBSQ">
+				JOBSQ = #JOBSQ#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="CYCTM">
+				CYCTM = #CYCTM#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ORQTY">
+				ORQTY = #ORQTY#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="SEQNO">
+				SEQNO = #SEQNO#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="ORQTY_CYCTM">
+				ORQTY * CYCTM = $ORQTY_CYCTM$
+			</isNotEmpty>						
+		</dynamic>				
+	</select>
+
+
+	<insert id="insertPpmi006MTab1" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.FGP210PF 
+			(COMPS, ORDAT, PROCS,SPLIT, SEQNO, SERNO, DAYGU, JOBSQ, PRTNO, PRLOT, QTUNT, ORQTY, CYCTM)
+		VALUES 
+			(#COMPS#, #ORDAT#, #PROCS#, #SPLIT#, #SEQNO#, #SERNO#, #DAYGU#, #JOBSQ#, #PRTNO#, #PRLOT#, #QTUNT#, #ORQTY#, #CYCTM#)
+	</insert>
+
+
+	<update id="updatePpmi006MTab1" parameterClass="java.util.HashMap">
+		UPDATE
+			$LIB$.FGP210PF
+		SET
+			JOBSQ = #JOBSQ#, 
+			PRLOT = #PRLOT#, 
+			QTUNT = #QTUNT#, 
+			ORQTY = #ORQTY#, 
+			CYCTM = #CYCTM#
+		WHERE
+			COMPS = #COMPS#
+			AND ORDAT = #ORDAT#
+			AND PROCS = #PROCS#
+			AND SPLIT = #SPLIT#
+			AND SEQNO = #SEQNO#
+			AND SERNO = #SERNO#
+			AND DAYGU = #DAYGU#
+			AND PRTNO = #PRTNO#
+	</update>
+
+
+	<delete id="deletePpmi006MTab1" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.FGP210PF
+		WHERE
+			COMPS = #COMPS#
+			AND ORDAT = #ORDAT#
+			AND PROCS = #PROCS#
+			AND SPLIT = #SPLIT#
+			AND SEQNO = #SEQNO#
+			AND SERNO = #SERNO#
+			AND DAYGU = #DAYGU#
+			AND PRTNO = #PRTNO#
+	</delete>
+
+
+
+	<select id="selectPpmi006MTab1Sub" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			DAYGU
+			, PRMAN_QCMAN 
+			, STRTM
+			, ENDTM
+			, JOBTM ENDTM_STRTM
+			, ROUND(SUM(ORQTY_CYCTM),2) ORQTY_CYCTM
+			, ROUND(JOBTM - SUM(ORQTY_CYCTM),2) GAB
+		FROM (
+				SELECT
+					A.COMPS
+					, A.PROCS
+					, A.DAYGU
+					, PRMAN + QCMAN PRMAN_QCMAN 
+					, CASE WHEN LENGTH(TRIM(CHAR(B.STRTM))) = 5 THEN '0' || TRIM(CHAR(B.STRTM)) ELSE TRIM(CHAR(B.STRTM)) END STRTM
+					, CASE WHEN LENGTH(TRIM(CHAR(B.ENDTM))) = 5 THEN '0' || TRIM(CHAR(B.ENDTM)) ELSE TRIM(CHAR(B.ENDTM)) END ENDTM
+					, B.JOBTM
+					, ORQTY * CYCTM / 60 ORQTY_CYCTM
+				FROM
+					$LIB$.FGP140PF A
+				LEFT OUTER JOIN $LIB$.FGP170PF B
+				ON 	B.COMPS = A.COMPS
+					AND B.JOBDT = A.ORDAT
+					AND B.PROCS = A.PROCS
+					AND B.DAYGU = A.DAYGU
+				INNER JOIN $LIB$.FGP210PF C
+				ON 	C.COMPS = B.COMPS
+					AND C.ORDAT = B.JOBDT
+					AND C.PROCS = B.PROCS
+					AND C.DAYGU = B.DAYGU
+				WHERE
+					A.COMPS = #COMPS#
+					AND A.ORDAT = $ORDAT$
+					AND A.PROCS = #PROCS#
+					AND A.DAYGU = #DAYGU#
+		) Z
+		GROUP BY
+			 PROCS
+			, DAYGU
+			, PRMAN_QCMAN 
+			, STRTM
+			, ENDTM
+			, JOBTM		
+	</select>
+
+
+
+	<select id="selectPpmi006MTab2Code" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			COMPS
+			, CLSGU
+			, CLSLG
+			, TRIM(CLGNM) CLGNM
+			, CLSMD
+			, TRIM(CMDNM) CMDNM
+			, CLSSM
+			, TRIM(CSMNM) CSMNM
+		FROM 
+			$LIB$.FGP110PF
+		WHERE
+			COMPS = #COMPS#
+			AND CLSGU = 'B'
+	</select>
+
+	<select id="selectPpmi006MTab2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			COMPS
+			, DAYGU
+			, BADLG
+			, ORDAT
+			, PROCS
+			, (SELECT CLGNM FROM PSEDBLIB.FGP110PF WHERE COMPS = A.COMPS AND CLSGU = 'B' AND TRIM(CLSLG) = A.BADLG AND TRIM(CLSMD) = A.BADMD AND TRIM(CLSSM) = A.BADSM) BADLG_NAME
+			, BADMD
+			, (SELECT CMDNM FROM PSEDBLIB.FGP110PF WHERE COMPS = A.COMPS AND CLSGU = 'B' AND TRIM(CLSLG) = A.BADLG AND TRIM(CLSMD) = A.BADMD AND TRIM(CLSSM) = A.BADSM) BADMD_NAME
+			, BADSM
+			, (SELECT CSMNM FROM PSEDBLIB.FGP110PF WHERE COMPS = A.COMPS AND CLSGU = 'B' AND TRIM(CLSLG) = A.BADLG AND TRIM(CLSMD) = A.BADMD AND TRIM(CLSSM) = A.BADSM) BADSM_NAME
+			, TRIM(PSPNO) PSPNO
+			, BADQY
+			, CASE WHEN LENGTH(TRIM(CHAR(BADTM))) = 5 THEN '0' || CHAR(BADTM) ELSE CHAR(BADTM) END BADTM
+			, BADNM
+		FROM 
+			$LIB$.FGP260PF A
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="COMPS">
+				COMPS = #COMPS#
+			</isNotEmpty>			
+			<isNotEmpty prepend="and" property="PROCS">
+				PROCS = #PROCS#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ORDAT">
+				ORDAT = $ORDAT$
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="DAYGU">
+				DAYGU = #DAYGU#
+			</isNotEmpty>						
+			<isNotEmpty prepend="and" property="BADLG">
+				BADLG = #BADLG#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="BADMD">
+				BADMD = #BADMD#
+			</isNotEmpty>								
+			<isNotEmpty prepend="and" property="BADSM">
+				BADSM = #BADSM#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="PSPNO">
+				PSPNO = #PSPNO#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="BADQY">
+				BADQY = $BADQY$
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="BADTM">
+				BADTM = $BADTM$
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="BADNM">
+				BADNM = #BADNM#
+			</isNotEmpty>
+		</dynamic>			
+	</select>
+
+
+	<insert id="insertPpmi006MTab2" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.FGP260PF
+			(COMPS, ORDAT, PROCS, DAYGU, BADTM, BADLG, BADMD, BADSM, BADNM, PSPNO, BADQY)
+		VALUES 
+			(#COMPS#, $ORDAT$, #PROCS#, #DAYGU#, INTEGER('$BADTM$'), #BADLG#, #BADMD#, #BADSM#, #BADNM#, #PSPNO#, $BADQY$)
+	</insert>
+
+
+	<update id="updatePpmi006MTab2" parameterClass="java.util.HashMap">
+		UPDATE
+			$LIB$.FGP260PF
+		SET
+			BADLG = #BADLG#
+			, BADMD = #BADMD#
+			, BADSM = #BADSM#
+			, BADNM = #BADNM#
+			, PSPNO = #PSPNO#
+			, BADQY = #BADQY#
+		WHERE
+			COMPS = #COMPS#
+			AND ORDAT = #ORDAT#
+			AND PROCS = #PROCS#
+			AND DAYGU = #DAYGU#
+			AND BADTM = INTEGER('$BADTM$')
+	</update>
+
+
+	<delete id="deletePpmi006MTab2" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.FGP260PF
+		WHERE
+			COMPS = #COMPS#
+			AND ORDAT = #ORDAT#
+			AND PROCS = #PROCS#
+			AND DAYGU = #DAYGU#
+			AND BADTM = INTEGER('$BADTM$')
+	</delete>
+
+
+	<select id="selectPpmi007M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(B.ITDSC) ITDSC
+			, TRIM(B.ITTYP) ITTYP
+			, TRIM(B.ITCLS) ITCLS
+			, TRIM(A.PRTNO) PRTNO
+			, CYCTM
+			, COMPS
+			, TRIM(PROCS) PROCS
+			, DAYGU			
+		FROM
+			$LIB$.FGP200PF A
+		LEFT OUTER JOIN $CigmaLIB$.BM008PR B
+		ON	B.ITNBR = A.PRTNO
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="COMPS">
+				COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="PROCS">
+				PROCS LIKE '%' || '$PROCS$' || '%'	
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="DAYGU">
+				DAYGU = #DAYGU#
+			</isNotEmpty>								
+		</dynamic>
+	</select>
+
+	<insert id="insertPpmi007M" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.FGP200PF
+			(COMPS,PROCS,DAYGU,PRTNO,CYCTM)
+		 VALUES
+		 	(#COMPS#,#PROCS#,#DAYGU#,#PRTNO#,#CYCTM#)
+	</insert>
+
+
+	<delete id="deletePpmi007M" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.FGP200PF
+		WHERE 
+			COMPS = #COMPS#
+			AND PROCS = #PROCS# 
+			AND DAYGU = #DAYGU#
+			AND PRTNO = #PRTNO#
+	</delete>
+
+
+
+	<update id="updatePpmi007M" parameterClass="java.util.HashMap">
+		UPDATE
+			$LIB$.FGP200PF
+		SET
+			CYCTM = #CYCTM#
+		WHERE
+			COMPS = #COMPS#
+			AND PROCS = #PROCS#
+			AND DAYGU = #DAYGU#
+			AND PRTNO = #PRTNO#
+	</update>
+
+
+
+
+	<select id="selectPpmi008MGroup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			TRIM(ITNBR) ITNBR
+			, TRIM(ITDSC) ITDSC
+		FROM 
+			$CigmaLIB$.BM008PR
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="ITNBR">
+				ITNBR = #ITNBR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ITTYP">
+				ITTYP = #ITTYP#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="ITCLS">
+				ITCLS = #ITCLS#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="MDATE">
+				MDATE = INTEGER('$MDATE$')
+			</isNotEmpty>	
+		</dynamic>	
+	</select>
+
+
+
+	<select id="selectPpmi008MCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			$CLASS$ CODE
+			, $CLASS$ CODE_NAME 
+		FROM 
+			$CigmaLIB$.BM008PR
+		GROUP BY 
+			$CLASS$
+	</select>
+
+
+
+	<select id="selectPpmi008M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			'$COMPS$' COMPS
+			, TRIM(A.ITNBR) PRTNO
+			, TRIM(ITDSC) ITDSC
+			, TRIM(UNMSR) UNMSR
+			, TRIM(ITCLS) ITCLS
+			, PLANN
+			, TRIM(ORDPC) ORDPC
+			, TRIM(ITTYP) ITTYP
+			, WEGHT
+			, NODAS
+			, STDSU
+			, TRIM(B.BDYCD)  BDYCD
+			, TRIM(B.ROLCD) ROLCD
+			, TRIM(B.MGMCD) MGMCD
+		FROM 
+			$CigmaLIB$.BM008PR A
+		LEFT OUTER JOIN $LIB$.MST100PF B
+			ON B.PRTNO = A.ITNBR
+		WHERE
+			A.ITNBR = #ITNBR#
+	</select>
+
+	<insert id="insertPpmi008M" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.MST100PF
+			(COMPS,PRTNO,PRDCD, CARCD, BDYCD, ROLCD, MGMCD, QYEXT, INPDT, INPMN, CHGDT, CHGMN)
+		 VALUES
+		 	(#COMPS#
+		 	,#PRTNO#
+		 	, '   '
+		 	, '   '
+		 	, #BDYCD#
+		 	, #ROLCD#
+		 	, #MGMCD#
+		 	, 'Y'
+		 	, INTEGER(substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2))
+		 	, #USER_ID#
+		 	, INTEGER(substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2))
+		 	, #USER_ID#
+		 	)
+	</insert>
+
+
+	<delete id="deletePpmi008M" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.MST100PF
+		WHERE 
+			COMPS = #COMPS#
+			AND PRTNO = #PRTNO# 
+	</delete>
+
+
+
+	<update id="updatePpmi009M" parameterClass="java.util.HashMap">
+		UPDATE
+			$LIB$.FGP100PF
+		SET
+			COMPS = #COMPS#
+			, PROCS = #PROCS#
+			, ROWGB = #ROWGB#
+			, SEQNO = #SEQNO#
+			, PRSNM = #PRSNM#
+			, GIJUN = #GIJUN#
+			, CRPRD = #CRPRD#
+			, IPCDE = #IPCDE#
+			, CNTYP = #CNTYP#
+		WHERE
+			COMPS = #COMPS#
+			AND PROCS = #PROCS#
+	</update>
+
+	<insert id="insertPpmi009M" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.FGP100PF
+			(COMPS,PROCS,ROWGB,SEQNO,PRSNM, GIJUN, CRPRD, IPCDE, CNTYP)
+		 VALUES
+		 	(#COMPS#,#PROCS#,#ROWGB#,#SEQNO#,#PRSNM#, #GIJUN#, #CRPRD#, #IPCDE#, #CNTYP#)
+	</insert>
+
+
+	<delete id="deletePpmi009M" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.FGP100PF
+		WHERE 
+			COMPS = #COMPS#
+			AND PROCS = #PROCS# 
+	</delete>
+
+
+
+	<select id="selectPpmi010M" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			COMPS
+			, JOBDT
+			, CONTL 
+			, JDTFM
+			, STRTM
+			, JDTTO
+			, ENDTM
+			, DAYGU	
+			, PROCS	
+			, JOBTM	
+		FROM 
+			$LIB$.FGP170PF
+		WHERE
+			 PROCS = #PROCS#
+			 AND SUBSTR(CHAR(JOBDT),1,6) = #JOBMONTH#
+			 AND DAYGU = #DAYGU#
+		ORDER BY JOBDT ASC
+						 
+	</select>
+
+
+	<update id="updatePpmi010M" parameterClass="java.util.HashMap">
+		UPDATE
+			$LIB$.FGP170PF
+		SET
+			JDTFM = #JDTFM#
+			, STRTM = #STRTM#
+			, JDTTO = #JDTTO#
+			, ENDTM = #ENDTM#
+		WHERE
+			COMPS = #COMPS#
+			AND JOBDT = #JOBDT#
+			AND PROCS = #PROCS#
+			AND DAYGU = #DAYGU#		
+	</update>
+
+	<insert id="insertPpmi010M" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.FGP170PF
+			(COMPS,JOBDT,PROCS, DAYGU, JDTFM, STRTM, JDTTO, ENDTM, JOBTM, CONTL)
+		VALUES
+		 	(#COMPS#,#JOBDT#,#PROCS#,#DAYGU#,#JDTFM#,#STRTM#,#JDTTO#,#ENDTM#,#JOBTM#,#CONTL#)
+	</insert>
+
+
+	<delete id="deletePpmi010M" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB$.FGP170PF
+		WHERE
+			COMPS = #COMPS#
+			AND JOBDT = #JOBDT#
+			AND PROCS = #PROCS#
+			AND DAYGU = #DAYGU#	
+	</delete>
+
+
+	<insert id="insertHWB032PF" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB$.HWB032PF VALUES (#IDNBR#,#TRF01#,#TRF02#,#TRF03#,#TRF04#,#TRF05#,#TRF06#,#TRF07#,#TRF08#,#TRF09#,#TRF10#)
+	</insert>
+
+	<delete id="deleteTest" parameterClass="java.util.HashMap">
+		delete from PSDIOLIB.FEM010PF
+	</delete>
+	<insert id="insertTest" parameterClass="java.util.HashMap">
+		INSERT INTO PSDIOLIB.FEM010PF VALUES (#COMPS#,#GRPCD#,#FEMCD#,#FEMNM#)
+	</insert>
+	<update id="TableLockTest_mst040pf" parameterClass="java.util.HashMap">
+		update pststlib.mst040pf set MAJMK='이상건 TEST' where comps='C1'
+	</update>
+	<update id="TableLockTest" parameterClass="java.util.HashMap">
+		LOCK TABLE PSDIOLIB.FEM010PF IN EXCLUSIVE MODE ALLOW READ 
+	</update>
+	<update id="TableunLockTest" parameterClass="java.util.HashMap">
+		<!-- UNLOCK TABLE PSDIOLIB.SPM100PF -->
+		{{ DLCOBJ     OBJ((PSDIOLIB/SPM100PF *FILE *EXCL)) }} 
+	</update>
+	<parameterMap id="ProcParamSPMZ109C" class="java.util.HashMap">
+	    <parameter property="COMPS" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	    <parameter property="PLNYM" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	    <parameter property="ERRCD" javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+	</parameterMap>
+	<procedure id="TableunLockTest1" parameterMap="ProcParamSPMZ109C" >
+	    { DLCOBJ     OBJ((PSDIOLIB/SPM100PF *FILE *EXCL)) } 
+	</procedure>
+	
+	<update id="TableLockTestupdate" parameterClass="java.util.HashMap">
+		update psdiolib.spm100pf set sm0qy=3 where pyvnd=2380
+	</update>
+	
+	<select id="selectinsabontoR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			DIGITS(Z.SABUNB) SABUN,b.DPDPNM,A.grade,A.KORNM,a.cuadr 
+		FROM 
+			$LIB9$.$DBPF$ Z 
+			LEFT OUTER JOIN	$LIB3$.HMD020PF A ON Z.SABUNB=A.SABUN 
+			LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST650PF WHERE DPCOMP = #COMPS#) B ON A.DPTCD=B.DPCODE 
+		ORDER BY 
+			B.DPSQNO,A.GRADE,A.HOBON DESC,Z.SABUNB	 
+	</select>
+	
+	<select id="selectINOUT_TIME" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+               b.prcdt, b.daymk,
+               MIN(CASE WHEN a.sabun='030225' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E030225_in, 
+               MIN(CASE WHEN a.sabun='030225' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E030225_out,
+               MIN(CASE WHEN a.sabun='960305' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E960305_in, 
+               MIN(CASE WHEN a.sabun='960305' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E960305_out,
+               MIN(CASE WHEN a.sabun='080459' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E080459_in,
+               MIN(CASE WHEN a.sabun='080459' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E080459_out,
+               MIN(CASE WHEN a.sabun='110486' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E110486_in,
+               MIN(CASE WHEN a.sabun='110486' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E110486_out,
+               MIN(CASE WHEN a.sabun='120149' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E120149_in,
+               MIN(CASE WHEN a.sabun='120149' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E120149_out, 
+               
+
+               MIN(CASE WHEN a.sabun='0030244' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E0030244_in, 
+               MIN(CASE WHEN a.sabun='0030244' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E0030244_out,
+               MIN(CASE WHEN a.sabun='0990021' AND  a.itime <![CDATA[<=]]> 1400  THEN  itime END) as E0990021_in, 
+               MIN(CASE WHEN a.sabun='0990021' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E0990021_out,
+               MIN(CASE WHEN a.sabun='0110266' AND  a.itime <![CDATA[<=]]> 1400  THEN  itime END) as E0110266_in, 
+               MIN(CASE WHEN a.sabun='0110266' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E0110266_out,
+
+               MIN(CASE WHEN a.sabun='030191'  AND  a.itime <![CDATA[<=]]> 1400  THEN itime END) as E030191_in,
+               MIN(CASE WHEN a.sabun='030191'  AND  a.itime <![CDATA[>=]]> 1700  THEN itime END) as E030191_out,
+               MIN(CASE WHEN a.sabun='080205'  AND  a.itime <![CDATA[<=]]> 1400  THEN itime END) as E080205_in, 
+               MIN(CASE WHEN a.sabun='080205'  AND  a.itime <![CDATA[>=]]> 1700  THEN itime END) as E080205_out
+,
+
+               MIN(CASE WHEN a.sabun='030230' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E030230_in, 
+               MIN(CASE WHEN a.sabun='030230' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E030230_out,
+               MIN(CASE WHEN a.sabun='110290' AND  a.itime <![CDATA[<=]]> 1410  THEN  itime END) as E110290_in, 
+               MIN(CASE WHEN a.sabun='110290' AND  a.itime <![CDATA[>=]]> 1700  THEN  itime END) as E110290_out
+
+		from
+		(
+			select idnbr as sabun, trf02 as iddat, substr(trf03,1,2)||substr(trf03,4,2) as itime
+			from pssdblib.hwb032pfbf
+			where trf02 like '$MONTH$'
+			and idnbr in ('030191', '080205')
+			
+			union all
+			
+			select idnbr as sabun, trf02 as iddat, substr(trf03,1,2)||substr(trf03,4,2) as itime
+			from pscdblib.hwb032pfbf
+			where trf02 like '$MONTH$'
+			and idnbr in ('0030244', '0990021', '0110266')
+			
+			union all
+			
+			select sabun, iddat, right('0000' || itime, 4) as itime
+			from psedblib.hwb100pf
+			where comps in ('E1', 'H1')
+			and iddat like '$MONTH$'
+			and sabun in ('030225', '960305', '080459', '110486', '120149', '030230', '110290')
+		) a RIGHT OUTER JOIN (select * from psedblib.mst090pf where prcdt like '$MONTH$' and comps = 'E1') b
+		ON a.iddat = b.prcdt		
+		GROUP  BY b.prcdt, b.daymk		
+		ORDER  BY  1	
+	</select>
+	<select id="selectFEP200PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT TRIM(A.ITMNO) AS ITMNO, TRIM(B.ITMNM) AS ITMNM,
+		A.YANNO || '-'  || A.SPECD || '-'  || A.GUBCD || '-'  || A.PHINO AS WRKNM,
+		CASE WHEN A.GUBCD='1' THEN '개발' 
+		WHEN A.GUBCD='2' THEN '양산설비'
+		WHEN A.GUBCD='3' THEN '수리'
+		WHEN A.GUBCD='4' THEN '노후신작' ELSE '' END AS GUBCD,
+		
+<!--  
+		C.WRKTM/A.PWKTMH AS WRKTM,
+		C.MCHTM/A.PMCTMH AS SULTM,
+		A.PWKDTH, TRIM(D.INTTX) AS INTTX,
+-->
+CASE WHEN (C.WRKTM IS NULL OR A.PWKTMH IS NULL) OR (C.WRKTM=0 OR A.PWKTMH=0) THEN 0 ELSE C.WRKTM/A.PWKTMH  END AS WRKTM,
+CASE WHEN (C.MCHTM IS NULL OR A.PMCTMH IS NULL) OR (C.MCHTM=0 OR A.PMCTMH=0) THEN 0 ELSE C.MCHTM/A.PMCTMH  END AS SULTM,
+A.PWKDTH, TRIM(D.INTTX) AS INTTX,
+C.WRKTM, A.PWKTMH, C.MCHTM, A.PMCTMH
+
+		FROM (
+			SELECT A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO,
+			SUM(A.PMCTMH) AS PWKTMH,
+			SUM(A.PMCTMH) AS PMCTMH,
+			MAX(A.PWKDTH) AS PWKDTH 
+			FROM PSCDBLIB.FEP200PF A
+			GROUP BY  A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO)A
+			LEFT OUTER JOIN PSCDBLIB.FEE100PF B ON A.COMPS=B.COMPS AND A.ITMNO=B.ITMNO AND A.YANNO=B.YANNO AND A.SPECD=B.SPECD
+			LEFT OUTER JOIN (
+				SELECT A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO,
+				SUM(A.WRKTM) AS WRKTM,
+				SUM(A.MCHTM) AS MCHTM
+				FROM PSCDBLIB.FEW100PF A
+				GROUP BY  A.COMPS,A.ITMNO,A.YANNO,A.SPECD,A.GUBCD,A.PHINO)C ON A.COMPS=C.COMPS AND A.ITMNO=C.ITMNO AND A.YANNO=C.YANNO AND A.SPECD=C.SPECD AND A.GUBCD=C.GUBCD AND A.PHINO=C.PHINO
+			LEFT OUTER JOIN PSCDBLIB.FEH100PF D ON A.COMPS=D.COMPS AND A.ITMNO=D.ITMNO AND A.YANNO=D.YANNO AND A.SPECD=D.SPECD AND A.GUBCD=D.GUBCD AND A.PHINO=D.PHINO
+	<dynamic prepend="WHERE"> 		
+		<isNotEmpty property="ITMNO">
+			A.ITMNO =#ITMNO#
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+<select id="selectBIDC257Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+SELECT
+	A.COMPSB,
+	A.SGVNDB,B.VNAME ,A.SGJNOB,A.SGPNOB,C.ITDSC ,A.PRDCDB,A.SGSDTB,A.SGEDTB,A.RPCSTB,A.SGCSTB,A.SGCSTB-A.RPCSTB AS CHICST,
+	A.RPBQYB,A.RPMQYB,A.RPQTYB,(A.RPQTYB*A.SGCSTB)-(A.RPQTYB*A.RPCSTB) AS SGAMTS,A.SGRSNB || D.BUYRM AS SGRSNB
+FROM
+	$LIB2$.BID259PF A
+	LEFT OUTER JOIN (SELECT VNDNR,VNAME FROM $LIB1$.VENNAM) B ON A.SGVNDB=B.VNDNR
+	LEFT OUTER JOIN (SELECT ITNBR,ITDSC,ITTYP,ITCLS,UNMSR FROM $LIB1$.BM008PR) C ON A.SGPNOB=C.ITNBR
+	LEFT OUTER JOIN (SELECT * FROM $LIB2$.BUY050PF)D ON A.COMPSB=D.BUYCO AND D.BUYCD = 'BID'||A.SGRSNB
+WHERE
+	A.SGVNDB BETWEEN #CUVND1# AND #CUVND2#
+	<isNotEmpty prepend="and" property="COMPS">
+	A.COMPSB = #COMPS# 
+	</isNotEmpty>
+ORDER BY
+	A.COMPSB,A.SGVNDB,A.SGJNOB,A.SGPNOB
+</select>
+
+<delete id="deleteBZZE220C" parameterClass="java.util.HashMap">
+DELETE FROM 
+	PSDIOLIB.BZZ220PF
+WHERE 
+	COMPS = #COMPS#
+	AND CRTYM=$YYMM$
+</delete>
+
+<insert id="insertBZZE220C" parameterClass="java.util.HashMap">
+INSERT INTO PSDIOLIB.BZZ220PF(
+SELECT
+	X.COMPS,X.CRTYM,X.PRDGU,X.EXKOR,SUM(X.ITMQTY),SUM(X.VNDQTY)
+FROM
+	(SELECT
+		COMPS,INT(TRNDTB/100) AS CRTYM,PRDGU,
+		CASE WHEN SUPGU='01' THEN '1' WHEN SUPGU='02' THEN '2' WHEN SUPGU='03' THEN '2' ELSE ' ' END AS EXKOR,
+		COUNT(DISTINCT PRTNOB) AS ITMQTY,COUNT(DISTINCT CUVND) AS VNDQTY
+	FROM
+		$LIB2$.JHS120PF
+	WHERE
+		COMPS=#COMPS#
+		AND INT(TRNDTB/100)=$YYMM$
+		AND DTAGU = 'D'
+		AND PRDGU NOT IN ('0','1','2')
+	GROUP BY
+		COMPS,INT(TRNDTB/100),PRDGU,
+		CASE WHEN SUPGU='01' THEN '1' WHEN SUPGU='02' THEN '2' WHEN SUPGU='03' THEN '2' ELSE ' ' END
+	UNION ALL
+	SELECT
+		COMPS,INT(TRNDTB/100) AS CRTYM,PRDGU,
+		CASE WHEN SUPGU='01' THEN '1' WHEN SUPGU='02' THEN '2' WHEN SUPGU='03' THEN '2' ELSE ' ' END AS EXKOR,
+		COUNT(DISTINCT PRTNOB) AS ITMQTY,COUNT(DISTINCT CUVND) AS VNDQTY
+	FROM
+		$LIB2$.JHS140PF
+	WHERE
+		COMPS=#COMPS#
+		AND INT(TRNDTB/100)=$YYMM$
+		AND DTAGU = 'D'
+		AND PRDGU NOT IN ('0','1','2')
+	GROUP BY
+		COMPS,INT(TRNDTB/100),PRDGU,
+		CASE WHEN SUPGU='01' THEN '1' WHEN SUPGU='02' THEN '2' WHEN SUPGU='03' THEN '2' ELSE ' ' END) X
+GROUP BY
+	X.COMPS,X.CRTYM,X.PRDGU,X.EXKOR
+)
+</insert>
+<select id="selectSJTZ230" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.COMPS, A.MAKYM, A.PYVND, A.SHPTO, TRIM(A.PSPNO) AS PSPNO, TRIM(A.MKPNO) AS MKPNO,
+		A.STLWH, A.MKQTY, TRIM(B.ITDSC) AS ITDSC
+	FROM 
+		PSDIOLIB.SJT230PF A
+		LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PSPNO=B.ITNBR
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PYVND=$PYVND$
+		<isNotEmpty  prepend ="AND" property="SHPTO">
+		A.SHPTO = $SHPTO$
+		</isNotEmpty>
+		AND A.MAKYM=$MAKYM$
+</select>
+<select id="selectSJTZ230_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM 
+		PSDIOLIB.SJT230PF A
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PYVND=$PYVND$
+		<isNotEmpty  prepend ="AND" property="SHPTO">
+		A.SHPTO = $SHPTO$
+		</isNotEmpty>
+		AND A.MAKYM=$MAKYM$
+		AND A.PSPNO=#PSPNO#
+		AND A.MKPNO=#MKPNO#
+</select>
+<insert id="insertSJTZ230" parameterClass="java.util.HashMap">
+	INSERT INTO 
+		PSDIOLIB.SJT230PF
+		(COMPS, MAKYM, PYVND, SHPTO, PSPNO, MKPNO, STLWH, MKQTY)
+	VALUES
+		(#COMPS#,$MAKYM$,$PYVND$,$SHPTO$,#PSPNO#,#MKPNO#,$STLWH$,$MKQTY$)
+</insert>
+<update id="updateSJTZ230" parameterClass="java.util.HashMap">
+	UPDATE 
+		PSDIOLIB.SJT230PF A
+	SET 
+		A.MKQTY = $MKQTY$
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PYVND=$PYVND$
+		AND A.SHPTO=$SHPTO$
+		AND A.MAKYM=$MAKYM$
+		AND A.PSPNO=#PSPNO#
+		AND A.MKPNO=#MKPNO#	
+</update>
+<delete id="deleteSJTZ230" parameterClass="java.util.HashMap">
+	DELETE FROM 
+		PSDIOLIB.SJT230PF A
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PYVND=$PYVND$
+		AND A.SHPTO=$SHPTO$
+		AND A.MAKYM=$MAKYM$
+		AND A.PSPNO=#PSPNO#
+		AND A.MKPNO=#MKPNO#
+</delete>
+</sqlMap>

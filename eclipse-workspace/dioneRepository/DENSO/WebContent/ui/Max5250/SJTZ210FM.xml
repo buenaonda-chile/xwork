@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnKeyDown="fnc_OnKeyDown" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="autoConvert" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" OnKeyDown="fnc_OnKeyDown" TabOrder="344" Width="798"></Image>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="1" OnKeyDown="fnc_OnKeyDown" TabOrder="343" Width="29"></Image>
+		<Static Height="20" Id="ID01002" Left="356" TabOrder="0" Text="SJTZ210FM" Top="4" VAlign="Middle" Width="90"></Static>
+		<Static Height="20" Id="ID01021" Left="26" TabOrder="1" Text="【　세금계산서　ＴＸ　】" Top="4" VAlign="Middle" Width="260"></Static>
+		<Static Height="20" Id="ID01070" Left="652" TabOrder="2" Text="2010/12/09" Top="4" VAlign="Middle" Width="68"></Static>
+		<Static Height="20" Id="ID02072" Left="720" TabOrder="3" Text="16:19:19" Top="4" VAlign="Middle" Width="80"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="lineBar2" TabOrder="4" Top="31" Width="798"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="Bar_ID03002" TabOrder="5" Top="31" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0_ID03002" Left="10" LineColor="#dceaf7" Right="15" TabOrder="5" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Height="20" Id="ID03002" Left="20" TabOrder="3" Text="사업부&#32;:" Top="31" VAlign="Middle" Width="90"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="Bar_ID03015" Left="130" TabOrder="7" Top="31" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0_ID03015" Left="140" LineColor="#dceaf7" Right="145" TabOrder="8" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Height="20" Id="ID03015" Left="150" TabOrder="3" Text="업체&#32;:" Top="31" VAlign="Middle" Width="70"></Static>
+		<Static Height="20" Id="ID03032" Left="320" TabOrder="3" Top="31" VAlign="Middle" Width="20"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="Bar_ID03035" Left="346" TabOrder="12" Top="31" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0_ID03035" Left="356" LineColor="#dceaf7" Right="361" TabOrder="13" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Height="20" Id="ID03035" Left="366" TabOrder="4" Text="계산서번호&#32;:" Top="31" VAlign="Middle" Width="130"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="Bar_ID03060" Left="559" TabOrder="16" Top="31" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0_ID03060" Left="569" LineColor="#dceaf7" Right="574" TabOrder="17" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Height="20" Id="ID03060" Left="579" TabOrder="5" Text="활동&#32;CD:" Top="31" VAlign="Middle" Width="90"></Static>
+		<Static Height="20" Id="ID03072" Left="680" TabOrder="6" Text="(A/C/D)" Top="31" VAlign="Middle" Width="54"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="22" Id="lineBar4" TabOrder="22" Top="473" Width="798"></Static>
+		<Static Height="20" Id="ID23002" Left="20" TabOrder="7" Top="473" VAlign="Middle" Width="780"></Static>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24023" ImageID="7_btn" Left="230" OnKeyDown="fnc_OnKeyDown" TabOrder="8" Text="PF03:&#32;작업종료" Top="494" Width="113"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24042" ImageID="7_btn" Left="420" OnKeyDown="fnc_OnKeyDown" TabOrder="9" Text="PF12:&#32;작업취소" Top="494" Width="113"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24061" ImageID="7_btn" Left="610" OnKeyDown="fnc_OnKeyDown" TabOrder="10" Text="PA1,2:&#32;전후화면" Top="494" Width="113"></Button>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="18" Id="FD03012" ImeMode="none" Left="107" OnKeyDown="fnc_OnKeyDown" TabOrder="11" Top="33" Width="20"></Edit>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="18" Id="FD03023" ImeMode="none" Left="237" OnKeyDown="fnc_OnKeyDown" TabOrder="12" Top="33" Width="80"></Edit>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="18" Id="FD03032" ImeMode="none" Left="320" OnKeyDown="fnc_OnKeyDown" TabOrder="13" Top="33" Width="20"></Edit>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="18" Id="FD03049" ImeMode="none" Left="454" OnKeyDown="fnc_OnKeyDown" TabOrder="14" Top="33" Width="100"></Edit>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="18" Id="FD03070" ImeMode="none" Left="666" OnKeyDown="fnc_OnKeyDown" TabOrder="15" Top="33" Width="10"></Edit>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+}
+function sendField(){
+	MAX5250.SendToField("FD03012",FD03012.Text );
+	MAX5250.SendToField("FD03023",FD03023.Text );
+	MAX5250.SendToField("FD03032",FD03032.Text );
+	MAX5250.SendToField("FD03049",FD03049.Text );
+	MAX5250.SendToField("FD03070",FD03070.Text );
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	form.SetFocus();
+	if(IsValid(btn_pgdn))
+	chkPage(page); 
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+		ID01002.Text=ds_main.getColumn(0,"ID01002");
+		ID01002.Color=ds_main.getColumn(0,"ID01002_c");
+		ID01002.BkColor=ds_main.getColumn(0,"ID01002_b");
+		ID01002.Font=ds_main.getColumn(0,"ID01002_f");
+		ID01002.Enable=ds_main.getColumn(0,"ID01002_s");
+		ID01024.Text=ds_main.getColumn(0,"ID01024");
+		ID01024.Color=ds_main.getColumn(0,"ID01024_c");
+		ID01024.BkColor=ds_main.getColumn(0,"ID01024_b");
+		ID01024.Font=ds_main.getColumn(0,"ID01024_f");
+		ID01024.Enable=ds_main.getColumn(0,"ID01024_s");
+		ID01070.Text=ds_main.getColumn(0,"ID01070");
+		ID01070.Color=ds_main.getColumn(0,"ID01070_c");
+		ID01070.BkColor=ds_main.getColumn(0,"ID01070_b");
+		ID01070.Font=ds_main.getColumn(0,"ID01070_f");
+		ID01070.Enable=ds_main.getColumn(0,"ID01070_s");
+		ID02072.Text=ds_main.getColumn(0,"ID02072");
+		ID02072.Color=ds_main.getColumn(0,"ID02072_c");
+		ID02072.BkColor=ds_main.getColumn(0,"ID02072_b");
+		ID02072.Font=ds_main.getColumn(0,"ID02072_f");
+		ID02072.Enable=ds_main.getColumn(0,"ID02072_s");
+		ID03002.Text=ds_main.getColumn(0,"ID03002");
+		ID03002.Color=ds_main.getColumn(0,"ID03002_c");
+		ID03002.BkColor=ds_main.getColumn(0,"ID03002_b");
+		ID03002.Font=ds_main.getColumn(0,"ID03002_f");
+		ID03002.Enable=ds_main.getColumn(0,"ID03002_s");
+		ID03012.Text=ds_main.getColumn(0,"ID03012");
+		ID03012.Color=ds_main.getColumn(0,"ID03012_c");
+		ID03012.BkColor=ds_main.getColumn(0,"ID03012_b");
+		ID03012.Font=ds_main.getColumn(0,"ID03012_f");
+		ID03012.Enable=ds_main.getColumn(0,"ID03012_s");
+		ID03021.Text=ds_main.getColumn(0,"ID03021");
+		ID03021.Color=ds_main.getColumn(0,"ID03021_c");
+		ID03021.BkColor=ds_main.getColumn(0,"ID03021_b");
+		ID03021.Font=ds_main.getColumn(0,"ID03021_f");
+		ID03021.Enable=ds_main.getColumn(0,"ID03021_s");
+		ID03029.Text=ds_main.getColumn(0,"ID03029");
+		ID03029.Color=ds_main.getColumn(0,"ID03029_c");
+		ID03029.BkColor=ds_main.getColumn(0,"ID03029_b");
+		ID03029.Font=ds_main.getColumn(0,"ID03029_f");
+		ID03029.Enable=ds_main.getColumn(0,"ID03029_s");
+		ID03049.Text=ds_main.getColumn(0,"ID03049");
+		ID03049.Color=ds_main.getColumn(0,"ID03049_c");
+		ID03049.BkColor=ds_main.getColumn(0,"ID03049_b");
+		ID03049.Font=ds_main.getColumn(0,"ID03049_f");
+		ID03049.Enable=ds_main.getColumn(0,"ID03049_s");
+		ID03059.Text=ds_main.getColumn(0,"ID03059");
+		ID03059.Color=ds_main.getColumn(0,"ID03059_c");
+		ID03059.BkColor=ds_main.getColumn(0,"ID03059_b");
+		ID03059.Font=ds_main.getColumn(0,"ID03059_f");
+		ID03059.Enable=ds_main.getColumn(0,"ID03059_s");
+		ID03061.Text=ds_main.getColumn(0,"ID03061");
+		ID03061.Color=ds_main.getColumn(0,"ID03061_c");
+		ID03061.BkColor=ds_main.getColumn(0,"ID03061_b");
+		ID03061.Font=ds_main.getColumn(0,"ID03061_f");
+		ID03061.Enable=ds_main.getColumn(0,"ID03061_s");
+		ID04002.Text=ds_main.getColumn(0,"ID04002");
+		ID04002.Color=ds_main.getColumn(0,"ID04002_c");
+		ID04002.BkColor=ds_main.getColumn(0,"ID04002_b");
+		ID04002.Font=ds_main.getColumn(0,"ID04002_f");
+		ID04002.Enable=ds_main.getColumn(0,"ID04002_s");
+		ID23001.Text=ds_main.getColumn(0,"ID23001");
+		ID23001.Color=ds_main.getColumn(0,"ID23001_c");
+		ID23001.BkColor=ds_main.getColumn(0,"ID23001_b");
+		ID23001.Font=ds_main.getColumn(0,"ID23001_f");
+		ID23001.Enable=ds_main.getColumn(0,"ID23001_s");
+		ID24045.Text=ds_main.getColumn(0,"ID24045");
+		ID24045.Color=ds_main.getColumn(0,"ID24045_c");
+		ID24045.BkColor=ds_main.getColumn(0,"ID24045_b");
+		ID24045.Font=ds_main.getColumn(0,"ID24045_f");
+		ID24045.Enable=ds_main.getColumn(0,"ID24045_s");
+		ID24065.Text=ds_main.getColumn(0,"ID24065");
+		ID24065.Color=ds_main.getColumn(0,"ID24065_c");
+		ID24065.BkColor=ds_main.getColumn(0,"ID24065_b");
+		ID24065.Font=ds_main.getColumn(0,"ID24065_f");
+		ID24065.Enable=ds_main.getColumn(0,"ID24065_s");
+		FD03012.Text=ds_main.getColumn(0,"FD03012");
+		FD03012.Color=ds_main.getColumn(0,"FD03012_c");
+		FD03012.BkColor=ds_main.getColumn(0,"FD03012_b");
+		FD03012.Font=ds_main.getColumn(0,"FD03012_f");
+		FD03012.Enable=ds_main.getColumn(0,"FD03012_s");
+		FD03029.Text=ds_main.getColumn(0,"FD03029");
+		FD03029.Color=ds_main.getColumn(0,"FD03029_c");
+		FD03029.BkColor=ds_main.getColumn(0,"FD03029_b");
+		FD03029.Font=ds_main.getColumn(0,"FD03029_f");
+		FD03029.Enable=ds_main.getColumn(0,"FD03029_s");
+		FD03059.Text=ds_main.getColumn(0,"FD03059");
+		FD03059.Color=ds_main.getColumn(0,"FD03059_c");
+		FD03059.BkColor=ds_main.getColumn(0,"FD03059_b");
+		FD03059.Font=ds_main.getColumn(0,"FD03059_f");
+		FD03059.Enable=ds_main.getColumn(0,"FD03059_s");
+	}
+}
+function fnc_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam){
+	if(nChar == 13){
+		sendColumn();
+		sendField();
+	}
+}
+]]></Script>
+</Window>

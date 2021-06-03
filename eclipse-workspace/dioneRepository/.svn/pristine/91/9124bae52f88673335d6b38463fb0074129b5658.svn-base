@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="경비예산신청서(수정계획)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents>
+					<colinfo id="CODE2" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_yyyy">
+				<Contents>
+					<colinfo id="yyyy" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ229Q1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GUB">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE>P0</CODE>
+						<CODE_NAME>상반기</CODE_NAME>
+					</record>
+					<record>
+						<CODE>P1</CODE>
+						<CODE_NAME>하반기</CODE_NAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST650PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ239Q1_C"></Dataset>
+		</Datasets>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="52" Id="Static8" Left="313" TabOrder="47" Top="63" Width="724"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="90" Id="searchBar" TabOrder="4" Top="30" Width="1060"></Static>
+		<Button Height="24" Id="btnExcel" ImageID="sum_excel" Left="981" OnClick="fn_Excel" TabOrder="4" Text="추가" Top="2" Width="70"></Button>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="897" OnClick="fn_Search" TabOrder="4" TabStop="FALSE" Text="조회" Top="2" Width="75"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="6" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="7" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="ComboBoxPlant_OnChanged" TabOrder="6" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static2" Left="232" TabOrder="9" Text="년&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;도" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="348" Style="static" TabOrder="9" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="yyyy" DataColumn="yyyy" Height="19" Id="cmb_yyyy" InnerDataset="ds_yyyy" Left="352" OnChanged="cmb_yyyy_OnChanged" TabOrder="11" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="460" TabOrder="12" Text="상하반기&#32;구분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="576" Style="static" TabOrder="13" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="CODE" DataColumn="CODE_NAME" Enable="FALSE" Height="19" Id="cmb_CATGB" INDEX="1" InnerDataset="ds_GUB" Left="580" OnChanged="cmb_CATGB_OnChanged" TabOrder="14" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static9" Left="688" TabOrder="15" Text="부&#32;서&#32;선&#32;택" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static10" Left="804" Style="static" TabOrder="16" Top="34" VAlign="Middle" Width="96"></Static>
+		<Edit Height="19" Id="ed_DPTCD" Left="808" MaxLength="4" Number="TRUE" OnChanged="ed_DPTCD_OnChanged" TabOrder="17" Top="38" Width="88"></Edit>
+		<Static Height="18" Id="st_DPTCD" Left="906" TabOrder="18" Top="39" VAlign="Middle" Width="150"></Static>
+		<Pie Height="2" Id="Pie0" Left="906" LineColor="SCROLLBAR" TabOrder="19" Top="58" Width="149"></Pie>
+		<Checkbox Height="26" Id="chk04P" Left="368" OnClick="chkChange_OnClick" TabOrder="20" Text="04月" Top="64" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk05P" Left="424" OnClick="chkChange_OnClick" TabOrder="21" Text="05月" Top="64" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk06P" Left="480" OnClick="chkChange_OnClick" TabOrder="22" Text="06月" Top="64" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk07P" Left="536" OnClick="chkChange_OnClick" TabOrder="23" Text="07月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk08P" Left="592" OnClick="chkChange_OnClick" TabOrder="24" Text="08月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk09P" Left="648" OnClick="chkChange_OnClick" TabOrder="25" Text="09月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk10P" Left="704" OnClick="chkChange_OnClick" TabOrder="26" Text="10月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk11P" Left="760" OnClick="chkChange_OnClick" TabOrder="27" Text="11月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk12P" Left="816" OnClick="chkChange_OnClick" TabOrder="28" Text="12月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk01P" Left="872" OnClick="chkChange_OnClick" TabOrder="29" Text="01月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk02P" Left="928" OnClick="chkChange_OnClick" TabOrder="30" Text="02月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Height="26" Id="chk03P" Left="984" OnClick="chkChange_OnClick" TabOrder="31" Text="03月" Top="64" Value="FALSE" Width="47"></Checkbox>
+		<Static Align="Right" Height="22" Id="Static6" Left="319" TabOrder="32" Text="실적&#32;:" Top="66" VAlign="Middle" Width="41"></Static>
+		<Static Align="Right" Height="22" Id="Static7" Left="320" TabOrder="45" Text="계획&#32;:" Top="90" VAlign="Middle" Width="41"></Static>
+		<Checkbox Enable="FALSE" Height="26" Id="chk04C" Left="368" TabOrder="33" Text="04月" Top="88" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk05C" Left="424" TabOrder="34" Text="05月" Top="88" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk06C" Left="480" TabOrder="35" Text="06月" Top="88" Value="FALSE" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk07C" Left="536" TabOrder="36" Text="07月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk08C" Left="592" TabOrder="37" Text="08月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk09C" Left="648" TabOrder="38" Text="09月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk10C" Left="704" TabOrder="39" Text="10月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk11C" Left="760" TabOrder="40" Text="11月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk12C" Left="816" TabOrder="41" Text="12月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk01C" Left="872" TabOrder="42" Text="01月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk02C" Left="928" TabOrder="43" Text="02月" Top="88" Width="47"></Checkbox>
+		<Checkbox Enable="FALSE" Height="26" Id="chk03C" Left="984" TabOrder="44" Text="03月" Top="88" Width="47"></Checkbox>
+		<Static Align="Right" Border="None" Font="Default,12" Height="52" Id="st_name" Left="80" TabOrder="46" Text="見込&#32;:" Top="63" VAlign="Middle" Width="224"></Static>
+		<Grid AreaSelect="TRUE" AutoEnter="TRUE" AutoFitEndLine="Hide" BindDataset="ds_MIZZ229Q1" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="614" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="486" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="MainGrid_OnHeadClick" Right="1056" SelColor="black" TabOrder="48" TabStop="true" Top="128" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="30"/>
+						<col fix="left" width="45"/>
+						<col fix="left" width="68"/>
+						<col fix="left" width="61"/>
+						<col fix="left" width="30"/>
+						<col fix="left" width="167"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="188"/>
+						<col width="80"/>
+						<col width="188"/>
+						<col width="53"/>
+						<col width="90"/>
+						<col width="80"/>
+						<col width="72"/>
+						<col width="162"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell align="center" bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="NO" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" rowspan="2" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" rowspan="2" text="부서"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" colspan="3" display="text" text="計定科目"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" colspan="3" display="text" text="2015年&#32;4月~9月"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" colspan="3" display="text" text="2015年&#32;10月~3月"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" colspan="4" display="text" text="2016年"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" colspan="2" display="text" row="1" text="計定CODE"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" row="1" text="計定名"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" row="1" text="年計ⓐ"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" row="1" text="実績(推)ⓑ"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" row="1" text="差ⓑ-ⓐ"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" row="1" text="年計ⓒ"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" row="1" text="修計ⓓ"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" row="1" text="差ⓓ-ⓒ"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" row="1" text="年計ⓐ+ⓒ"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" row="1" text="算出根拠"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" row="1" text="修計ⓑ+ⓓ"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" row="1" text="算出根拠"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" colspan="2" display="text" rowspan="2" text="업체"/>
+						<cell bkcolor="#dfdfdf" col="18" color="#002043" display="text" rowspan="2" text="배분율%"/>
+						<cell bkcolor="#dfdfdf" col="19" color="#002043" display="text" rowspan="2" text="신규구분"/>
+						<cell bkcolor="#dfdfdf" col="20" color="#002043" display="text" rowspan="2" text="비고"/>
+						<cell bkcolor="#dfdfdf" col="21" color="#002043" colspan="12" display="text" text="2016년"/>
+						<cell bkcolor="#dfdfdf" col="33" color="#002043" colspan="12" display="text" text="2016년"/>
+						<cell bkcolor="#dfdfdf" col="21" color="#002043" display="text" row="1" text="04月"/>
+						<cell bkcolor="#dfdfdf" col="22" color="#002043" display="text" row="1" text="05月"/>
+						<cell bkcolor="#dfdfdf" col="23" color="#002043" display="text" row="1" text="06月"/>
+						<cell bkcolor="#dfdfdf" col="24" color="#002043" display="text" row="1" text="07月"/>
+						<cell bkcolor="#dfdfdf" col="25" color="#002043" display="text" row="1" text="08月"/>
+						<cell bkcolor="#dfdfdf" col="26" color="#002043" display="text" row="1" text="09月"/>
+						<cell bkcolor="#dfdfdf" col="27" color="#002043" display="text" row="1" text="10月"/>
+						<cell bkcolor="#dfdfdf" col="28" color="#002043" display="text" row="1" text="11月"/>
+						<cell bkcolor="#dfdfdf" col="29" color="#002043" display="text" row="1" text="12月"/>
+						<cell bkcolor="#dfdfdf" col="30" color="#002043" display="text" row="1" text="01月"/>
+						<cell bkcolor="#dfdfdf" col="31" color="#002043" display="text" row="1" text="02月"/>
+						<cell bkcolor="#dfdfdf" col="32" color="#002043" display="text" row="1" text="03月"/>
+						<cell bkcolor="#dfdfdf" col="33" color="#002043" display="text" row="1" text="04月"/>
+						<cell bkcolor="#dfdfdf" col="34" color="#002043" display="text" row="1" text="05月"/>
+						<cell bkcolor="#dfdfdf" col="35" color="#002043" display="text" row="1" text="06月"/>
+						<cell bkcolor="#dfdfdf" col="36" color="#002043" display="text" row="1" text="07月"/>
+						<cell bkcolor="#dfdfdf" col="37" color="#002043" display="text" row="1" text="08月"/>
+						<cell bkcolor="#dfdfdf" col="38" color="#002043" display="text" row="1" text="09月"/>
+						<cell bkcolor="#dfdfdf" col="39" color="#002043" display="text" row="1" text="10月"/>
+						<cell bkcolor="#dfdfdf" col="40" color="#002043" display="text" row="1" text="11月"/>
+						<cell bkcolor="#dfdfdf" col="41" color="#002043" display="text" row="1" text="12月"/>
+						<cell bkcolor="#dfdfdf" col="42" color="#002043" display="text" row="1" text="01月"/>
+						<cell bkcolor="#dfdfdf" col="43" color="#002043" display="text" row="1" text="02月"/>
+						<cell bkcolor="#dfdfdf" col="44" color="#002043" display="text" row="1" text="03月"/>
+					</head>
+					<body>
+						<cell align="right" col="0" color="#333333" display="normal" expr="row+1"/>
+						<cell align="center" checklength="Byte" col="1" colid="COMPS" color="#333333" display="normal" limit="6" LimitDec="0" suppress="1"/>
+						<cell align="center" checklength="Byte" col="2" colid="DPTCD" color="#333333" display="normal" limit="6" LimitDec="0" suppress="1"/>
+						<cell align="center" checklength="Byte" col="3" colid="CMOBJ" color="#333333" display="normal" limit="6" LimitDec="0" suppress="1"/>
+						<cell align="left" checklength="Byte" col="4" colid="CMSUB" color="#333333" display="normal" limit="40" suppress="1" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="5" colid="GMDL01" color="#333333" display="normal" limit="40" suppress="1"/>
+						<cell align="right" checklength="Byte" col="6" colid="CATAMBB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="7" colid="CATAMB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="8" color="#333333" display="number" expr="toNumber(CATAMB)-toNumber(CATAMBB)" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="9" colid="CATAM" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="10" color='expr:iif(toNumber(CATAM)-toNumber(CATAMB)&#32;&gt;&#32;0,&quot;RED&quot;,&quot;#333333&quot;)' display="number" expr="toNumber(CATAM)-toNumber(CATAMB)" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="11" color="#333333" display="number" expr="toNumber(CATAMB)-toNumber(CATAMBB)" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="12" colid="CATAM" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell col="13" display="text"/>
+						<cell align="right" checklength="Byte" col="14" color='expr:iif(toNumber(CATAM)-toNumber(CATAMB)&#32;&gt;&#32;0,&quot;RED&quot;,&quot;#333333&quot;)' display="number" expr="toNumber(CATAM)-toNumber(CATAMB)" limit="8" LimitDec="0"/>
+						<cell col="15" display="text"/>
+						<cell align="center" checklength="Byte" col="16" colid="VNDNR" color="#333333" display="normal" limit="3"/>
+						<cell align="left" checklength="Byte" col="17" colid="VNDNM" color="#333333" display="normal" limit="1"/>
+						<cell align="center" checklength="Byte" col="18" colid="COMPE" color="#333333" display="normal" limit="2" LimitDec="0"/>
+						<cell align="center" checklength="Byte" col="19" colid="NEWIT" color="#333333" display="normal" limit="1"/>
+						<cell align="left" checklength="Byte" col="20" colid="R2394" color="#333333" display="normal" limit="20"/>
+						<cell align="right" checklength="Byte" col="21" colid="AMT04B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="22" colid="AMT05B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="23" colid="AMT06B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="24" colid="AMT07B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="25" colid="AMT08B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="26" colid="AMT09B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="27" colid="AMT10B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="28" colid="AMT11B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="29" colid="AMT12B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="30" colid="AMT01B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="31" colid="AMT02B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="32" colid="AMT03B" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="33" colid="AMT04BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="34" colid="AMT05BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="35" colid="AMT06BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="36" colid="AMT07BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="37" colid="AMT08BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="38" colid="AMT09BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="39" colid="AMT10BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="40" colid="AMT11BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="41" colid="AMT12BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="42" colid="AMT01BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="43" colid="AMT02BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" checklength="Byte" col="44" colid="AMT03BB" color="#333333" display="number" limit="8" LimitDec="0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="6" display="text" text="합계"/>
+						<cell align="right" col="6" display="number" expr='sum(&quot;CATAMBB&quot;)'/>
+						<cell align="right" col="7" display="number" expr='sum(&quot;CATAMB&quot;)'/>
+						<cell align="right" col="8" display="number" expr='toNumber(sum(&quot;CATAMB&quot;))-toNumber(sum(&quot;CATAMBB&quot;))'/>
+						<cell align="right" col="9" display="number" expr='SUM(&quot;CATAM&quot;)'/>
+						<cell align="right" col="10" display="number" expr='toNumber(SUM(&quot;CATAM&quot;))-toNumber(SUM(&quot;CATAMB&quot;))'/>
+						<cell align="right" col="11" display="number" expr='toNumber(sum(&quot;CATAMB&quot;))-toNumber(sum(&quot;CATAMBB&quot;))'/>
+						<cell align="right" col="12" display="number" expr='SUM(&quot;CATAM&quot;)'/>
+						<cell col="13" display="text"/>
+						<cell align="right" col="14" display="number" expr='toNumber(SUM(&quot;CATAM&quot;))-toNumber(SUM(&quot;CATAMB&quot;))'/>
+						<cell col="15" display="text"/>
+						<cell col="16" display="text"/>
+						<cell col="17" display="text"/>
+						<cell col="18" display="text"/>
+						<cell col="19" display="text"/>
+						<cell col="20" display="text"/>
+						<cell col="21" display="text"/>
+						<cell col="22" display="text"/>
+						<cell col="23" display="text"/>
+						<cell col="24" display="text"/>
+						<cell col="25" display="text"/>
+						<cell col="26" display="text"/>
+						<cell col="27" display="text"/>
+						<cell col="28" display="text"/>
+						<cell col="29" display="text"/>
+						<cell col="30" display="text"/>
+						<cell col="31" display="text"/>
+						<cell col="32" display="text"/>
+						<cell col="33" display="text"/>
+						<cell col="34" display="text"/>
+						<cell col="35" display="text"/>
+						<cell col="36" display="text"/>
+						<cell col="37" display="text"/>
+						<cell col="38" display="text"/>
+						<cell col="39" display="text"/>
+						<cell col="40" display="text"/>
+						<cell col="41" display="text"/>
+						<cell col="42" display="text"/>
+						<cell col="43" display="text"/>
+						<cell col="44" display="text"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Edit Height="321" Id="Edit0" Left="153" TabOrder="49" Text="수정중" Top="97" Width="737"></Edit>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * 작업년도 하반기 예산 신청서
+ *        1. yyyy 상반기확정예산(P0) : 4월~9월
+ *        2. yyyy 실적(A0)           : 4월~9월
+ *        3. yyyy 상반기확정예산(P0) : 10월~3월
+ *        4. yyyy 하반기TX예산(P1)   : 10월~3월 
+ * @@Revision History      :
+ * @@author                : LSK
+ * @@see
+ * ● SYSTEM NAME          : Denso Platform
+ * ● PROGRAM NO.          : MIZZ229Q3.xml
+ * ● PROGRAM DESCRIPTION  : 경비예산 신청서
+ * ● DATE WRITTEN         : 2016.06.23
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();	
+	SetYYYY13(substr(nowDate,0,4),ds_yyyy);
+	cmb_yyyy.Value = substr(nowDate,0,4);
+	//getCategory();
+	//getMIZZ229Q3();
+	gFcOnTopButtonColor("1"); 
+	
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "9999";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+	
+	MainGrid.SetCellProp("Head", 4, "text", toNumber(cmb_yyyy.Value) +"年 4月~9月");
+	MainGrid.SetCellProp("Head", 5, "text", toNumber(cmb_yyyy.Value) +"年 10月~3月");
+	MainGrid.SetCellProp("Head", 19, "text", toNumber(cmb_yyyy.Value)+"년 실적");
+	MainGrid.SetCellProp("Head", 20, "text", toNumber(cmb_yyyy.Value)+"년 상반기 예산");
+	st_name.Text = toNumber(cmb_yyyy.Value) +"年 見込";
+	
+}
+
+function getComCode(){
+	setCompsName(ds_ComCode_PLNT);
+	//ds_ComCode_PLNT.InsertRow(0);
+	//ds_ComCode_PLNT.SetColumn(0,"CODE2","");
+	//ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	ComboBoxPlant.Value=comps;
+}
+
+function getCategory(){
+	
+	var sKind		= "getCategory";						
+	var sMethodName = "service::budget/getCategoryList"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_Category=ds_Category";
+	var sArgument   = "";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ds_Category.InsertRow(0);
+	ds_Category.SetColumn(0,"CD","");
+	ds_Category.SetColumn(0,"CDNM","[전체]");
+	cmb_Category.index = 0;	
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	//MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getMIZZ229Q3(){
+	//cmb_Category.index = 0;
+	
+	var targetCATGB;
+	var targetYYYY;
+	if(cmb_CATGB.Value == "P0") {
+		targetYYYY = toNumber(cmb_yyyy.Value) - 1;
+		targetCATGB ="A0"; // 전년실적비교
+	}else if(cmb_CATGB.Value == "P1") {
+		targetYYYY = toNumber(cmb_yyyy.Value);
+		targetCATGB ="P0"; // 상반기예산비교
+	}else{
+		alert("[경고] System오류. "); 
+		return;
+	}
+	
+	var groupcomp;
+	var LIB99;
+	if(ComboBoxPlant.Value == "E1"){
+		groupcomp = "PE"; LIB99="CLTDTAE";
+	}else if(ComboBoxPlant.Value == "C1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "H1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "S1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "R1"){
+		groupcomp = "KR"; LIB99="CLTDTAE";
+	}else{
+		groupcomp = "";
+	}
+	
+	http.Sync = true;
+	var sKind		= "getMIZZ229Q3";						
+	var sMethodName = "service::budget/getMIZZ229Q1List";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MIZZ229Q1=ds_MIZZ229Q1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " CATYY=" + quote(cmb_yyyy.Value);
+		sArgument += " CATGB=" + quote(cmb_CATGB.Value);      //P0:상반기예산  P1:하반기예산 
+		sArgument += " CATGB_YYYY=" + quote(targetYYYY);      // 전년실적비교 or 상반기예산비교
+		sArgument += " CATGB_TARGET=" + quote(targetCATGB);   //A0:실적  P0:상반기예산
+		sArgument += " DPTCD=" + quote(ed_DPTCD.Text);  // 부서코드
+		sArgument += " GRCOM=" + quote(groupcomp);
+		sArgument += " LIB99=" + quote(LIB99);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	
+	/*
+	var str = dialog("Common::PGMLOAD_SHIP.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	*/
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		if (ds_MIZZ229Q1.rowcount > 0){
+			calCHKFIELD();
+		}
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+function calCHKFIELD(){
+	for(var i=0;i<ds_MIZZ229Q1.rowcount;i++){
+		var chked1=0;
+		var chked2=0;
+		if(cmb_CATGB.value = "P0"){
+		/*	if(chk04P.Value==true) chked04=chked04+"AMT04B";
+			if(chk05P.Value==true) chked05=chked05+"AMT05B";
+			if(chk06P.Value==true) chked06=chked05+"AMT06B";
+			if(chk07P.Value==true) chked07=chked04+"AMT07B";
+			if(chk08P.Value==true) chked08=chked05+"AMT08B";
+			if(chk09P.Value==true) chked09=chked05+"AMT09B";
+			if(chk10P.Value==true) chked10=chked04+"AMT10B";
+			if(chk11P.Value==true) chked11=chked05+"AMT11B";
+			if(chk12P.Value==true) chked12=chked05+"AMT12B";
+			if(chk01P.Value==true) chked01=chked04+"AMT01B";
+			if(chk02P.Value==true) chked02=chked05+"AMT02B";
+			if(chk03P.Value==true) chked03=chked05+"AMT03B";
+		*/	
+			if(chk04P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT04B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT04BB"));}
+			if(chk05P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT05B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT05BB"));}
+			if(chk06P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT06B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT06BB"));}
+			if(chk07P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT07B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT07BB"));}
+			if(chk08P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT08B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT08BB"));}
+			if(chk09P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT09B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT09BB"));}
+			if(chk10P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT10B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT10BB"));}
+			if(chk11P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT11B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT11BB"));}
+			if(chk12P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT12B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT12BB"));}
+			if(chk01P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT01B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT01BB"));}
+			if(chk02P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT02B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT02BB"));}
+			if(chk03P.Value==true) {chked1+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT03B")); }else{chked2+=toNumber(ds_MIZZ229Q1.GetColumn(i,"AMT03BB"));}
+			ds_MIZZ229Q1.SetColumn(i,"CATAMB",chked1+chked2);
+		}
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName;
+	if(cmb_CATGB.Value == "P0"){
+		fName   = cmb_yyyy.Value+"경비예산신청서_상반기";
+	}else{
+		fName   = cmb_yyyy.Value+"경비예산신청서_하반기";
+	}
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|경비예산신청서";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	alert(nCell);
+	//if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_MIZZ229Q1.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getMIZZ229Q3();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setMIZZ229Q3();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1");
+}
+
+function ed_DPTCD_OnChanged(obj,strText)
+{
+	if(length(trim(strText)) == 4){
+		var Lib9="";
+		if(ComboBoxPlant.Value == "E1"){
+			Lib9="PSEDBLIB";
+		}else if(ComboBoxPlant.Value == "R1"){
+			Lib9="PSRDBLIB";
+		}else{
+			Lib9="PSCDBLIB";
+		}
+		var sKind		= "getMST650PFList";						
+		var sMethodName = "service::budget/getMST650PFList"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_MST650PF=ds_MST650PF";
+		var sArgument   = "";
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+			sArgument += " LIB9=" + quote(Lib9);
+			sArgument += " DPTCD=" + quote(strText);
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+		if(ds_MST650PF.rowcount > 0){
+			st_DPTCD = ds_MST650PF.GetColumn(0,"DPDPNM");
+			//ds_MIZZ229.ClearData();
+			//ds_MIZZ220.ClearData();
+			//ds_MIZZ221.ClearData();
+			ds_MIZZ229Q1.ClearData();
+		}else{
+			st_DPTCD = "";
+			alert("[경고] 부서코드를 확인바랍니다."); 
+			return;
+		}
+	}else{
+		st_DPTCD = "";
+	}
+}
+
+function ComboBoxPlant_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MST650PF.ClearData();
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "9999";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+	ds_MIZZ229Q1.ClearData();
+}
+function cmb_CATGB_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(obj.value = "P0"){
+		MainGrid.SetCellProp("Head", 4, "text", toNumber(cmb_yyyy.Value) - 1+"年");
+		MainGrid.SetCellProp("Head", 5, "text", toNumber(cmb_yyyy.Value) + "年");
+		MainGrid.SetCellProp("Head", 19, "text", toNumber(cmb_yyyy.Value) - 1+"년 실적");
+		MainGrid.SetCellProp("Head", 20, "text", toNumber(cmb_yyyy.Value) - 1+"년 상반기 예산");
+		st_name.Text = toNumber(cmb_yyyy.Value) - 1+"年 見込";
+		chk04P.Value = true; chk05P.Value = true; chk06P.Value = true; chk07P.Value = true; chk08P.Value = true; chk09P.Value = true;
+		chk10P.Value = true; chk11P.Value = true; chk12P.Value = true; chk01P.Value = false; chk02P.Value = false; chk03P.Value = false;
+		chk04C.Value = false; chk05C.Value = false; chk06C.Value = false; chk07C.Value = false; chk08C.Value = false; chk09C.Value = false;
+		chk10C.Value = false; chk11C.Value = false; chk12C.Value = true; chk01C.Value = true; chk02C.Value = true; chk03C.Value = true;
+	}else{
+		MainGrid.SetCellProp("Head", 4, "text", toNumber(cmb_yyyy.Value) +"年 4月~9月");
+		MainGrid.SetCellProp("Head", 5, "text", toNumber(cmb_yyyy.Value) +"年 10月~3月");
+		MainGrid.SetCellProp("Head", 19, "text", toNumber(cmb_yyyy.Value)+"년 실적");
+		MainGrid.SetCellProp("Head", 20, "text", toNumber(cmb_yyyy.Value)+"년 상반기 예산");
+		st_name.Text = toNumber(cmb_yyyy.Value) + "년 상반기 추정예산";
+		chk04P.Value = true; chk05P.Value = true; chk06P.Value = true; chk07P.Value = false; chk08P.Value = false; chk09P.Value = false;
+		chk10P.Value = false; chk11P.Value = false; chk12P.Value = false; chk01P.Value = false; chk02P.Value = false; chk03P.Value = false;
+		chk04C.Value = false; chk05C.Value = false; chk06C.Value = false; chk07C.Value = true; chk08C.Value = true; chk09C.Value = true;
+		chk10C.Value = true; chk11C.Value = true; chk12C.Value = true; chk01C.Value = true; chk02C.Value = true; chk03C.Value = true;
+		
+	}
+	ds_MIZZ229Q1.ClearData();
+	//MainGrid.tab2.Grid0.SetCellProp("Head", 26, "text", next4YY+"");
+}
+
+function cmb_yyyy_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cmb_CATGB.value = "P0"){
+		MainGrid.SetCellProp("Head", 4, "text", toNumber(cmb_yyyy.Value) - 1+"年");
+		MainGrid.SetCellProp("Head", 5, "text", toNumber(cmb_yyyy.Value) + "年");
+		MainGrid.SetCellProp("Head", 19, "text", toNumber(cmb_yyyy.Value) - 1+"년 실적");
+		MainGrid.SetCellProp("Head", 20, "text", toNumber(cmb_yyyy.Value) - 1+"년 상반기 예산");
+		st_name.Text = toNumber(cmb_yyyy.Value) - 1+"年 見込";
+	}else{
+		MainGrid.SetCellProp("Head", 4, "text", toNumber(cmb_yyyy.Value) +"年 4月~9月");
+		MainGrid.SetCellProp("Head", 5, "text", toNumber(cmb_yyyy.Value) +"年 10月~3月");
+		MainGrid.SetCellProp("Head", 19, "text", toNumber(cmb_yyyy.Value)+"년 실적");
+		MainGrid.SetCellProp("Head", 20, "text", toNumber(cmb_yyyy.Value)+"년 상반기 예산");
+		st_name.Text = toNumber(cmb_yyyy.Value) + "년 상반기 추정예산";
+	}
+	ds_MIZZ229Q1.ClearData();
+}
+
+function chkChange_OnClick(obj,strValue)
+{
+	if(obj.Value == false) object(left(obj.ID,5)+"C").Value = true;
+	if(obj.Value == true) object(left(obj.ID,5)+"C").Value = false;
+}
+]]></Script>
+</Window>

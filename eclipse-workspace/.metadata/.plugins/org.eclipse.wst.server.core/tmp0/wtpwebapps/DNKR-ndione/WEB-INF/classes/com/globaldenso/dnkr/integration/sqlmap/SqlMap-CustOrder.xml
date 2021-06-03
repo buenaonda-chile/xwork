@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustomerOrderDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustOrderDataMng" type="CustOrderDataMngDomain">
+        <result property="comps" column="COMPS" />
+        <result property="typcd" column="TYPCD" />
+        <result property="typcnm" column="TYPNM" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="pspno" column="PSPNO" />
+        <result property="plndt" column="PLNDT" />                
+        <result property="basqy" column="BASQY" />
+        <result property="plncd" column="PLNCD" />        
+        <result property="chgdt" column="CHGDT" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCustOrderDataMng" resultMap="CustOrderDataMng" parameterType="CustOrderDataMngDomain">
+SELECT 
+	A.COMPS, A.TYPCD, 
+	CASE WHEN A.TYPCD='AA' THEN '서열' WHEN A.TYPCD='BB' THEN '비서열' WHEN A.TYPCD='CC' THEN '확정오더' ELSE '' END AS TYPNM,
+	A.PYVND, CASE WHEN A.COMPS='E1' THEN TRIM(B.CUSNM) ELSE TRIM(C.CUSNM) END AS CUSNM,
+	TRIM(A.PSPNO) AS PSPNO, A.PLNDT, A.BASQY, A.SHPTO, A.PLNCD, A.CHGDT
+FROM
+	PSZDBLIB.SVZ600PF A
+	LEFT OUTER JOIN PERESLIB.CUSMAS B ON A.PYVND=B.CUSNO
+	LEFT OUTER JOIN PSRESLIB.CUSMAS C ON A.PYVND=C.CUSNO
+WHERE
+	'SqlMap-CustOrder.searchByCustOrderDataMng' = 'SqlMap-CustOrder.searchByCustOrderDataMng'
+	
+	<if test="comps != null and comps !='' ">	
+	AND A.COMPS = #{comps}	
+	</if>
+	<if test="chgdt != null and chgdt !='' ">	
+	AND A.CHGDT = #{chgdt}	
+	</if>
+	<if test="typcd != null and typcd !='' ">	
+	AND A.TYPCD = #{typcd}	
+	</if>
+	<if test="pyvnd != null and pyvnd !='' ">	
+	AND A.PYVND = #{pyvnd}	
+	</if>
+	<if test="pspno != null and pspno !='' ">	
+	AND A.PSPNO = #{pspno}	
+	</if>
+	<if test="plndt != null and plndt !='' ">	
+	AND A.PLNDT = #{plndt}	
+	</if>
+	<if test="plncd != null and plncd !='' ">	
+	AND A.PLNCD = #{plncd}	
+	</if>	
+ORDER BY A.COMPS, A.TYPCD, A.PYVND, A.PLNDT, A.PSPNO
+    </select>
+    
+    <select id="searchCountCustOrderDataMng" resultType="java.lang.Integer" parameterType="CustOrderDataMngDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ600PF
+        WHERE 
+             'SqlMap-CustOrder.searchCountCustOrderDataMng' = 'SqlMap-CustOrder.searchCountCustOrderDataMng'										
+          AND COMPS = #{comps}
+          AND TYPCD = #{typcd}	
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND PLNDT = #{plndt}
+          AND PLNCD = #{plncd}
+          AND CHGDT = #{chgdt}
+    </select>
+
+    <update id="updateCustOrderDataMng" parameterType="CustOrderDataMngDomain">
+        UPDATE 
+               PSZDBLIB.SVZ600PF
+        SET
+            BASQY = #{basqy},
+            CHPDT = substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            CHGTM = substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+            CHPID = #{chpid}
+        WHERE 
+              'SqlMap-CustOrder.updateCustOrderDataMng' = 'SqlMap-CustOrder.updateCustOrderDataMng'
+          AND COMPS = #{comps}
+          AND TYPCD = #{typcd}	
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND PLNDT = #{plndt}
+          AND PLNCD = #{plncd}
+          AND CHGDT = #{chgdt}
+    </update>
+    
+    <delete id="deleteCustOrderDataMng" parameterType="CustOrderDataMngDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVZ600PF
+        WHERE 
+              'SqlMap-CustOrder.deleteCustOrderDataMng' = 'SqlMap-CustOrder.deleteCustOrderDataMng'
+          AND COMPS = #{comps}
+          AND TYPCD = #{typcd}	
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND PLNDT = #{plndt}
+          AND PLNCD = #{plncd}
+          AND CHGDT = #{chgdt}
+    </delete>
+
+</mapper>

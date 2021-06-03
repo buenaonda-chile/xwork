@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustOrderTypeMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustOrderTypeMst" type="CustOrderTypeMstDomain">
+        <result property="pchk" column="PCHK" />
+        
+        <result property="comps" column="COMPS" />
+        <result property="cusnm" column="CUSNM" />        
+        <result property="pyvnd" column="PYVND" />
+        <result property="pspno" column="PSPNO" />
+        <result property="gubcd" column="GUBCD" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="carnm" column="CARNM" />
+        <result property="mkpno" column="MKPNO" />        
+        <result property="seqno" column="SEQNO" />
+        <result property="seqcd" column="SEQCD" />        
+        <result property="mcrcd" column="MCRCD" />        
+        <result property="efffr" column="EFFFR" />
+        <result property="effto" column="EFFTO" />
+        <result property="strdt" column="STRDT" />
+        <result property="devnm" column="DEVNM" />
+        <result property="uptdt" column="UPTDT" />
+        <result property="upttm" column="UPTTM" />
+        
+        <result property="seqno2" column="SEQNO2" />
+        <result property="seqcd2" column="SEQCD2" />        
+        <result property="mcrcd2" column="MCRCD2" />        
+        <result property="efffr2" column="EFFFR2" />
+        <result property="effto2" column="EFFTO2" />
+
+        <result property="usrid" column="USRID" />
+                
+        <result property="oldSeqno" column="OLD_SEQNO" />
+        <result property="oldSeqcd" column="OLD_SEQCD" />
+        <result property="oldMcrcd" column="OLD_MCRCD" />
+        <result property="oldEfffr" column="OLD_EFFFR" />
+        <result property="oldEffto" column="OLD_EFFTO" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />
+        
+        <result property="makdt" column="MAKDT" />        
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustOrderTypeMst" parameterType="CustOrderTypeMstDomain">
+    	<if test='pchk.equals("2")'>
+			SELECT										
+				   B.COMPS, C.CUSNM, A.CUSNO AS PYVND, A.PRTNO AS PSPNO, TRIM(D.ITDSC) AS ITDSC,									
+				   TRIM(F.MSTSM) AS CARNM, TRIM(A.CPRTN) AS MKPNO, 									
+				   TRIM(B.MCRCD) AS MCRCD, TRIM(B.SEQCD) AS SEQCD, TRIM(B.SEQNO) AS SEQNO, B.EFFFR, B.EFFTO,
+				   TRIM(B.SEQNO) AS OLD_SEQNO, TRIM(B.SEQCD) AS OLD_SEQCD, TRIM(B.MCRCD) AS OLD_MCRCD, B.EFFFR AS OLD_EFFFR, B.EFFTO AS OLD_EFFTO									
+			FROM ${lib1}.EM000PR A										
+			     LEFT OUTER JOIN PSZDBLIB.SVM100PF B ON A.CUSNO=B.PYVND AND A.PRTNO=B.PSPNO  AND B.COMPS=#{comps}										
+			     LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.CUSNO=C.CUSNO										
+			     LEFT OUTER JOIN ${lib1}.BM008PR D ON A.PRTNO=D.ITNBR										
+			     LEFT OUTER JOIN ${lib2}.MST100PF E ON E.COMPS=#{comps} AND A.PRTNO=E.PRTNO										
+			     LEFT OUTER JOIN ${lib2}.MST050PF F ON F.COMPS=#{comps} AND F.GRPCD='CAR' AND E.CARCD=F.MSTCD										
+			WHERE
+			      'SqlMap-CustOrderTypeMst.searchByCondition' = 'SqlMap-CustOrderTypeMst.searchByCondition'
+			  AND A.CUSNO = #{pyvnd}
+			  <if test="pspno != null and pspno !='' ">										
+			  AND A.PRTNO <![CDATA[>=]]> #{pspno}									
+			  </if>									
+			  AND A.EDATM = (SELECT MAX(Z.EDATM) FROM ${lib1}.EM000PR Z WHERE A.CUSNO=Z.CUSNO AND A.PRTNO=Z.PRTNO)									
+			ORDER BY A.PRTNO
+		</if>
+		
+		<if test='pchk.equals("1")'>										
+			SELECT 										
+			       A.COMPS, A.PYVND, A.PSPNO, TRIM(A.MCRCD) AS MCRCD, TRIM(A.SEQNO) AS SEQNO, 										
+			       TRIM(A.SEQCD) AS SEQCD, A.EFFFR, A.EFFTO,										
+			       A.STRDT, A.DEVNM, A.UPTDT, A.UPTTM, A.USRID,										
+			       B.CUSNM, TRIM(C.ITDSC) AS ITDSC, TRIM(E.MSTSM) AS CARNM,										
+			       TRIM(F.CPRTN) AS MKPNO,
+			       TRIM(A.SEQNO) AS OLD_SEQNO, TRIM(A.SEQCD) AS OLD_SEQCD, TRIM(A.MCRCD) AS OLD_MCRCD, A.EFFFR AS OLD_EFFFR, A.EFFTO AS OLD_EFFTO 
+			FROM PSZDBLIB.SVM100PF A										
+			     LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO										
+			     LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PSPNO=C.ITNBR										
+			     LEFT OUTER JOIN ${lib2}.MST100PF D ON A.COMPS=D.COMPS AND A.PSPNO=D.PRTNO										
+			     LEFT OUTER JOIN ${lib2}.MST050PF E ON A.COMPS=E.COMPS AND E.GRPCD='CAR' AND D.CARCD=E.MSTCD										
+			     LEFT OUTER JOIN  										
+				(SELECT Y.*									
+					FROM ${lib1}.EM000PR Y								
+					WHERE Y.EDATM = (SELECT MAX(X.EDATM)								
+									FROM ${lib1}.EM000PR X				
+									WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO)				
+				) F ON A.PYVND=F.CUSNO AND A.PSPNO=F.PRTNO									
+			WHERE
+			      'SqlMap-CustOrderTypeMst.searchByCondition' = 'SqlMap-CustOrderTypeMst.searchByCondition'										
+			  AND A.COMPS=#{comps}										
+			  AND A.PYVND=#{pyvnd}
+			  <if test="pspno != null and pspno !='' ">										
+			  AND A.PSPNO <![CDATA[>=]]> #{pspno}									
+			  </if>									
+			ORDER BY A.COMPS, A.PYVND, A.PSPNO, A.MCRCD, A.SEQCD, A.SEQNO
+		</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCheck" resultType="java.lang.Integer" parameterType="CustOrderTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT
+        FROM 
+             PSZDBLIB.SVZ080PF
+        WHERE 
+             'SqlMap-CustOrderTypeMst.searchCheck' = 'SqlMap-CustOrderTypeMst.searchCheck'																				
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrcd}
+          AND MSECD = #{seqcd}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+	<select id="searchCheck2" resultType="java.lang.Integer" parameterType="CustOrderTypeMstDomain">
+		SELECT 
+			   COUNT(*) CNT 
+		FROM 
+			${lib2}.SAL100PF
+		WHERE 
+             'SqlMap-CustOrderTypeMst.searchCheck2' = 'SqlMap-CustOrderTypeMst.searchCheck2'		
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+		  AND MAKDT = #{makdt}	
+	</select>
+	    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+	<select id="searchCheck3" resultType="java.lang.Integer" parameterType="CustOrderTypeMstDomain">
+		SELECT 
+			   COUNT(*) CNT
+		FROM 
+			${lib2}.MST200PF
+		WHERE
+		     'SqlMap-CustOrderTypeMst.searchCheck3' = 'SqlMap-CustOrderTypeMst.searchCheck3'
+		  AND COMPS = #{comps}
+		  AND PSPNO = #{pspno}
+		  AND MKALC = #{seqcd}
+	</select>
+	
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="CustOrderTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM100PF
+        WHERE 
+             'SqlMap-CustOrderTypeMst.searchCount' = 'SqlMap-CustOrderTypeMst.searchCount'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="CustOrderTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM100PF
+        WHERE 
+             'SqlMap-CustOrderTypeMst.searchCount2' = 'SqlMap-CustOrderTypeMst.searchCount2'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND MCRCD = #{mcrcd}
+          AND SEQCD = #{seqcd}
+          AND SEQNO = #{seqno}
+    </select>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createSVM200" parameterType ="CustOrderTypeMstDomain">
+    	/* SqlMap-CustOrderTypeMst.createSVM200 */
+        INSERT INTO ${lib2}.SVM200PF
+       (
+           COMPS, PYVND, PSPNO, GUBCD, 
+           SEQNO1, SEQCD1, MCRCD1, EFFFR1, EFFTO1, 
+           SEQNO2, SEQCD2, MCRCD2, EFFFR2, EFFTO2,
+           DEVNM2,	
+           UPTDT2, UPTTM2, USRID2
+        )	
+        VALUES (
+                #{comps},
+                #{pyvnd},
+                #{pspno},
+                #{gubcd},
+                #{seqno},
+                #{seqcd},
+                #{mcrcd},
+                #{efffr},
+                #{effto},
+                #{seqno2},
+                #{seqcd2},
+                #{mcrcd2},
+                #{efffr2},
+                #{effto2},
+                '',<!-- DEVNM2 -->
+                substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+                substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+                #{usrid}
+               )
+    </insert>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="CustOrderTypeMstDomain">
+    	/* SqlMap-CustOrderTypeMst.create */
+        INSERT INTO PSZDBLIB.SVM100PF
+        (
+           COMPS, PYVND, PSPNO, MCRCD, SEQNO, SEQCD, EFFFR, EFFTO,
+           STRDT, DEVNM, UPTDT, UPTTM, USRID
+        ) VALUES (
+           #{comps},
+           #{pyvnd},
+           #{pspno},
+           #{mcrcd},
+           #{seqno},
+           #{seqcd},
+           #{efffr},
+           #{effto},
+           substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+           'DIONE', <!-- DEVNM -->
+           substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+           substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+           #{usrid}
+        )
+    </insert>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="CustOrderTypeMstDomain">
+        UPDATE 
+               PSZDBLIB.SVM100PF
+        SET
+            MCRCD = #{mcrcd},
+            SEQCD = #{seqcd},
+            SEQNO = #{seqno},
+            EFFFR = #{efffr},
+            EFFTO = #{effto},
+            DEVNM = 'DIONE',
+            UPTDT = substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            UPTTM = substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+            USRID = #{usrid}
+        WHERE 
+              'SqlMap-CustOrderTypeMst.update' = 'SqlMap-CustOrderTypeMst.update'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="CustOrderTypeMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVM100PF
+        WHERE 
+              'SqlMap-CustOrderTypeMst.delete' = 'SqlMap-CustOrderTypeMst.delete'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND MCRCD = #{mcrcd}
+          AND SEQCD = #{seqcd}
+          AND SEQNO = #{seqno}
+    </delete>
+
+</mapper>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;택트타임&#32;마스터&#32;등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi007m"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi007m" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="589" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="525" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="1055" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1055">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="420"/>
+						<col width="100"/>
+						<col width="113"/>
+						<col width="211"/>
+						<col width="172"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="형태"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="분류"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="택트타임"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="ITDSC" display="text" LimitDec="0"/>
+						<cell align="center" col="2" colid="ITTYP" display="text" LimitDec="0"/>
+						<cell align="center" col="3" colid="ITCLS" display="text"/>
+						<cell align="center" col="4" colid="PRTNO" display="normal" edit="expr:iif(ds_ppmi007m.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;normal&apos;,&#32;&apos;none&apos;&#32;)"/>
+						<cell align="right" autosizing="none" col="5" colid="CYCTM" display="normal" edit="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="2" Top="30" Width="1057"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="4" TabOrder="5" Top="32" Width="100"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape1" Left="16" LineColor="#dceaf7" Right="21" TabOrder="3" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="26" Style="static" TabOrder="4" Text="사업장" Top="37" VAlign="Middle" Width="75"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="105" ResetIndex="FIRST" TabOrder="6" Top="33" Width="90"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="203" TabOrder="9" Top="32" Width="100"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="215" LineColor="#dceaf7" Right="220" TabOrder="7" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="225" Style="static" TabOrder="8" Text="공정코드" Top="37" VAlign="Middle" Width="75"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="402" TabOrder="12" Top="32" Width="100"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="424" Style="static" TabOrder="11" Text="주야구분" Top="37" VAlign="Middle" Width="75"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape3" Left="414" LineColor="#dceaf7" Right="419" TabOrder="10" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_daygu" ImeMode="none" INDEX="0" InnerDataset="ds_daygu" Left="504" ResetIndex="FIRST" TabOrder="13" Top="33" Width="90"></Combo>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_procs" ImeMode="none" Left="304" MaxLength="10" TabOrder="14" Top="34" Width="90"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="15" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="15" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI001.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 텍트타임 마스터 등록
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var CigmaLib = G_ds_user.GetColumn(0,"LIB1");
+
+var nowDate = today();
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+
+
+
+/*
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;	
+*/	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getPpmi007m(){
+	http.Sync = true;
+	var sKind		= "getPpmi007m";						
+	var sMethodName = "service::sample/selectPpmi007M.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi007m=ds_ppmi007m";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	if(length(trim(cb_comp.Value)) == 0){
+		alert(setPopMessage("2025"));	// 20110103l-koowgnojeel, 2025 == 사업장을 선택하세요.
+		cb_comp.SetFocus();
+		return;
+	}
+	if(length(trim(ed_procs.Value)) == 0){	
+		alert(setPopMessage("2026"));	// 20110103l-koowgnojeel, 2026 == 공정코드를 입력하세요.
+		ed_procs.SetFocus();
+		return;	
+	}
+	if(length(trim(cd_daygu.Value)) == 0){			
+		alert(setPopMessage("2027"));	// 20110103l-koowgnojeel, 2027 == 주야구분을 선택하세요.
+		cd_daygu.SetFocus();
+		return;	
+	}		
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " CigmaLIB=" + quote(CigmaLib);	
+	sArgument += " COMPS=" + quote(cb_comp.Value);
+	sArgument += " PROCS=" + quote(ed_procs.Value);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setPpmi007m()
+{
+	var sKind		= "setPpmi007m";						
+	var sMethodName = "service::sample/savePpmi007M.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ppmi007m=ds_ppmi007m:U";     		//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    								// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB=" + quote(Lib);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getPpmi007m"){
+		// 조회건수가 없을경우
+		if(ds_ppmi007m.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setPpmi007m"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getPpmi007m();
+}
+
+function fn_Input()
+{
+	ds_ppmi007m.AddRow();
+	ds_ppmi007m.SetColumn(ds_ppmi007m.row,"COMPS",cb_comp.Value);
+	ds_ppmi007m.SetColumn(ds_ppmi007m.row,"PROCS",ed_procs.Value);
+	ds_ppmi007m.SetColumn(ds_ppmi007m.row,"DAYGU",cd_daygu.Value);
+
+}
+
+function fn_Delete()
+{
+	if(confirm("정말로 삭제하시겠습니까?              ") == true){
+		ds_ppmi007m.DeleteRow(ds_ppmi007m.row);
+	}
+
+}
+
+function fn_Save()
+{
+	setPpmi007m();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+
+]]></Script>
+</Window>

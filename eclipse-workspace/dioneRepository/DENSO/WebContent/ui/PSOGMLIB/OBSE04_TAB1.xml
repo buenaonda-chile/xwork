@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="528" Id="OBSE04_TAB1" Left="8" OnFocus="OBSE04_TAB1_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;생산잔업지시" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="850" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04_Tab1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04_Tab1Sub"></Dataset>
+		</Datasets>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="109" Id="st_top" Left="1" TabOrder="3" Text="생산&#32;합계" Top="416" Width="845"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Height="376" Id="st_bottom" Left="1" TabOrder="4" Text="작업&#32;지시" Top="35" Width="845"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="DS_OBSE04_Tab1" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="408" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="356" Id="grd_main" InputPanel="FALSE" Left="4" LineColor="#888888" MinWidth="100" Right="842" TabOrder="0" TabStop="true" Top="52" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="838">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="141"/>
+						<col width="110"/>
+						<col width="100"/>
+						<col width="121"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="주야구분"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="작업순위"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="지시수량"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="텍트타임"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="소요공수"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="SEQ"/>
+					</head>
+					<body>
+						<cell align="right" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" LimitDec="0"/>
+						<cell align="right" col="2" colid="JOBSQ" display="normal"/>
+						<cell align="left" col="3" colid="PRTNO" display="normal"/>
+						<cell col="4" colid="MSTSM" display="text"/>
+						<cell align="right" autosizing="none" col="5" colid="ORQTY" display="normal"/>
+						<cell align="right" autosizing="none" col="6" colid="CYCTM" display="normal"/>
+						<cell align="right" col="7" colid="ORQTY_CYCTM" color="#333333" display="number"/>
+						<cell align="right" col="8" colid="SEQNO" color="#333333" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="DS_OBSE04_Tab1Sub" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="520" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="88" Id="Grid0" InputPanel="FALSE" Left="4" LineColor="#888888" MinWidth="100" Right="842" TabOrder="2" TabStop="true" Top="432" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="838">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="87"/>
+						<col width="96"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="140"/>
+						<col width="140"/>
+						<col width="140"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="주야구분"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="작업인원"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="작업공수"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="계획공수"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="차이공수"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" LimitDec="0"/>
+						<cell align="right" col="2" colid="PRMAN_QCMAN" display="normal"/>
+						<cell align="left" col="3" colid="STRTM" display="text" Mask="##:##:##"/>
+						<cell align="left" col="4" colid="ENDTM" display="text" Mask="##:##:##"/>
+						<cell align="right" col="5" colid="ENDTM_STRTM" color="#333333" display="number"/>
+						<cell align="right" col="6" colid="ORQTY_CYCTM" color="#333333" display="number"/>
+						<cell align="right" col="7" colid="GAB" color="#333333" display="number"/>
+					</body>
+					<summary>
+						<cell bkcolor="#dfdfdf" col="0" display="text"/>
+						<cell align="center" bkcolor="#dfdfdf" col="1" display="text" text="합계"/>
+						<cell align="right" bkcolor="#dfdfdf" col="2" display="text" expr='sum(&quot;PRMAN_QCMAN&quot;)'/>
+						<cell bkcolor="#dfdfdf" col="3" display="text"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text"/>
+						<cell align="right" bkcolor="#dfdfdf" col="5" display="text" expr='sum(&quot;ENDTM_STRTM&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="6" display="text" expr='sum(&quot;ORQTY_CYCTM&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="7" display="text" expr='sum(&quot;GAB&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Radio Border="Flat" BorderColor="INACTIVECAPTION" Height="28" Id="Radio0" INDEX="-1" Left="1" TabOrder="5" Top="2" Value="A" Width="263">
+			<Contents>
+				<Layout code="D" height="15" left="10" text="주간" top="5" width="50"/>
+				<Layout code="N" height="15" left="100" text="야간" top="5" width="50"/>
+				<Layout code="A" height="15" left="200" text="전체" top="5" width="50"/>
+			</Contents>
+		</Radio>
+		<Button Height="20" Id="Button0" Left="744" OnClick="Button0_OnClick" TabOrder="6" Text="Button0" Top="8" Visible="FALSE" Width="56"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE04_1.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산정보조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+var procs = "" ;
+var ordat = "" ;
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2010-12-08
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE04Tab1(){
+          
+	http.Sync = true;
+	var sKind		= "getOBSE04Tab1";						
+	var sMethodName = "service::psogmlib/selectOBSE04_Tab1.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE04_Tab1=DS_OBSE04_Tab1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);	
+	
+	if (Radio0.Value = 'D') {
+		sArgument += " DAYGU=D";
+	} else if(Radio0.Value = 'N') {
+		sArgument += " DAYGU=N";
+	}
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+
+
+	if(DS_OBSE04_Tab1.rowcount <= 0) return ;
+	
+	http.Sync = true;
+	var sKind		= "getOBSE04Tab1Sub";						
+	var sMethodName = "service::psogmlib/selectOBSE04_Tab1Sub.do";     			// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             							// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE04_Tab1Sub=DS_OBSE04_Tab1Sub";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);
+	
+	if (Radio0.Value = 'D') {
+		sArgument += " DAYGU=D";
+	} else if(Radio0.Value = 'N') {
+		sArgument += " DAYGU=N";
+	} else if(Radio0.Value = 'A') {
+		sArgument += " DAYGU=%";
+	}		
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = ed_syyyymmdd.Value + "-전광판 생산현황";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|전광판 생산현황";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	}else {
+		DS_OBSE04_Tab1.rowposition = -1;
+		DS_OBSE04_Tab1Sub.rowposition = -1;
+		
+		if(svcId=="getOBSE04Tab1") {			
+			DS_OBSE04_Tab1.Sort("JOBSQ,MSTSM", true);
+			DS_OBSE04_Tab1.rowposition = -1;
+		}		
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBSE04Tab1();
+}
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{
+	
+}
+
+function fn_Save()
+{
+	
+}
+
+function fn_print()
+{
+
+}
+
+function fn_Excel()
+{
+
+}
+
+function fn_Help()
+{
+
+}
+
+function Button0_OnClick(obj)
+{
+	trace(DS_OBSE04_Tab1.SaveXML());
+}
+
+function OBSE04_TAB1_OnFocus(obj)
+{
+	
+}
+]]></Script>
+</Window>

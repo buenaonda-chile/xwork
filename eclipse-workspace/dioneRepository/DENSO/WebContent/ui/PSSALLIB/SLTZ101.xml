@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="용차사용&#32;신청확인&#32;등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset CanColumnChange="ds_SLTZ101_CanColumnChange" DataSetType="Dataset" Id="ds_SLTZ101" OnRowPosChanged="ds_SLTZ101_OnRowPosChanged" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_INOUT">
+				<Contents>
+					<colinfo id="code" size="1" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="30" summ="default" type="STRING"/>
+					<record>
+						<code>1</code>
+						<code_name>하행</code_name>
+					</record>
+					<record>
+						<code>2</code>
+						<code_name>상행</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST050PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ101_CHECK" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ101_A" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ101_BOX">
+				<Contents>
+					<colinfo id="INOUTB" size="256" summ="default" type="STRING"/>
+					<colinfo id="JPSNOB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXQYB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXAMB" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="5" Top="32" Width="1048"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="266" TabOrder="5" Text="업&#32;체&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="384" Style="static" TabOrder="5" Top="34" VAlign="Middle" Width="398"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" Style="static" TabOrder="6" Top="34" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="cb_searchCodeName1" InnerDataset="ds_VComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="1" Top="37" Width="130"></Combo>
+		<Edit Height="20" Id="ed_pyvnd" ImeMode="none" Left="388" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_pyvnd_OnCharChanged" OnKillFocus="ed_pyvnd_OnKillFocus" TabOrder="2" Top="37" Width="130"></Edit>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="524" TabOrder="7" Top="54" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgMaker" ImageID="ic_search" Left="755" OnClick="imgMaker_OnClick" Static="FALSE" TabOrder="5" TabStop="FALSE" Top="38" Width="20"></Image>
+		<Static Height="14" Id="st_pyvnd" Left="527" TabOrder="9" Top="39" Width="225"></Static>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SLTZ101" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="360" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="296" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="1048" TabOrder="6" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="52"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="180"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="발행번호"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="입출구분"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사용일자"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="확인일자"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="운수업체"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="납품장소"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="운행구분"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="경유지명"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="사용금액"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="text" expr="currow+1"/>
+						<cell align="center" col="1" colid="LNTNO" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="center" col="2" colid="INOUT" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="center" col="3" colid="USEDT" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="center" col="4" colid="CFMDT" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="center" col="5" colid="CAPNM" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;upper&apos;,&apos;none&apos;)" limit="2"/>
+						<cell align="left" col="6" colid="MSTRM1" display="text"/>
+						<cell align="left" col="7" colid="MSTRM2" display="text"/>
+						<cell align="left" col="8" colid="MSTRM3" display="text"/>
+						<cell col="9" colid="USEAM" display="number" limit="7"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static0" Left="786" TabOrder="14" Text="발&#32;행&#32;번&#32;호" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Right" Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="904" Style="static" TabOrder="15" Text="이후" Top="34" VAlign="Middle" Width="136"></Static>
+		<Edit Height="20" Id="ed_LNTNO" ImeMode="none" Left="908" MaxLength="6" Number="TRUE" OnChanged="common_OnChanged" TabOrder="3" Top="37" Width="98"></Edit>
+		<Div Height="256" Id="displayDiv" TabOrder="7" TabStop="FALSE" Text="Div0" Top="360" Width="1048">
+			<Contents>
+				<Static Border="RaisedEdge" Height="181" Id="Static24" Left="824" TabOrder="65" Top="43" Width="215"></Static>
+				<Static Align="Center" Border="Flat" BorderColor="white" Font="Default,9,Bold" Height="26" Id="Static8" Left="8" TabOrder="4" Text="사업부:" Top="16" VAlign="Middle" Width="58"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="8" TabOrder="1" Text="사&#32;용&#32;일&#32;자" Top="88" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static0" Left="8" TabOrder="2" Text="납&#32;품&#32;업&#32;체" Top="120" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static1" Left="8" TabOrder="4" Text="납&#32;품&#32;장&#32;소" Top="152" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static27" Left="8" TabOrder="5" Text="출&#32;발&#32;장&#32;소" Top="184" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static2" Left="8" TabOrder="3" Text="차&#32;량&#32;규&#32;격" Top="216" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" Border="None" BorderColor="#b4b4b4" Color="blue" Font="Default,12,Bold,UnderLine" Height="34" Id="Static6" Left="408" TabOrder="7" Text="용차&#32;사용신청&#32;확인&#32;상세" Top="6" VAlign="Middle" Width="224"></Static>
+				<Static Align="Center" Border="Flat" BorderColor="white" Font="Default,9,Bold" Height="26" Id="Static3" Left="96" TabOrder="8" Text="발행번호:" Top="16" VAlign="Middle" Width="66"></Static>
+				<Static Align="Center" Border="Flat" BorderColor="white" Font="Default,9,Bold" Height="26" Id="Static4" Left="216" TabOrder="9" Text="차량처리:" Top="16" VAlign="Middle" Width="66"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="8" TabOrder="10" Text="입&#32;출&#32;구&#32;분" Top="56" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static7" Left="208" TabOrder="11" Text="운&#32;행&#32;구&#32;분" Top="56" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static9" Left="208" TabOrder="12" Text="경&#32;유&#32;지&#32;역" Top="88" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static10" Left="408" TabOrder="11" Text="도&#32;착&#32;일&#32;자" Top="56" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static11" Left="408" TabOrder="12" Text="도&#32;착&#32;시&#32;간" Top="88" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="58" Id="Static13" Left="208" TabOrder="15" Text="전&#32;표&#32;번&#32;호" Top="184" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static44" Left="208" TabOrder="14" Text="차&#32;량&#32;금&#32;액" Top="152" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static14" Left="208" TabOrder="13" Text="운&#32;수&#32;업&#32;체" Top="120" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="408" TabOrder="18" Text="발&#32;행&#32;일&#32;자" Top="120" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static38" Left="408" TabOrder="21" Text="발&#32;행&#32;시&#32;간" Top="152" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static30" Left="608" TabOrder="19" Text="마&#32;감&#32;구&#32;분" Top="56" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static16" Left="608" TabOrder="18" Text="마&#32;감&#32;년&#32;월" Top="88" VAlign="Middle" Width="90"></Static>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static32" Left="608" TabOrder="20" Text="마&#32;감&#32;일&#32;자" Top="120" VAlign="Middle" Width="90"></Static>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CRTDT" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit1" Left="499" Mask="####-##-##" TabOrder="1" TabStop="FALSE" Top="120" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="USEDT" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit0" Left="99" Mask="####-##-##" TabOrder="2" TabStop="FALSE" Top="88" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CRTTM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit6" Left="499" Mask="##:##:##" TabOrder="3" TabStop="FALSE" Top="152" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MGMGU" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit20" Left="699" Mask="@" TabOrder="4" TabStop="FALSE" Top="56" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MGMDT" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit21" Left="699" Mask="####-##-##" TabOrder="5" TabStop="FALSE" Top="120" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MGMYM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit19" Left="699" Mask="####-##" TabOrder="6" TabStop="FALSE" Top="88" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="white" Column="COMPS" DisableBKColor="white" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="med_COMPS" Left="59" Mask="@@" TabOrder="7" TabStop="FALSE" Top="16" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="white" Column="LNTNO" DisableBKColor="white" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="med_LNTNO" Left="163" Mask="@@@@@@" TabOrder="8" TabStop="FALSE" Top="16" Type="STRING" Width="40"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="white" Column="EXPCD" DisableBKColor="white" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit4" Left="283" Mask="@" TabOrder="9" TabStop="FALSE" Top="16" Type="STRING" Width="16"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="INOUT" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit5" Left="99" Mask="@" TabOrder="10" TabStop="FALSE" Top="56" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MKLOC" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit8" Left="99" Mask="@@" TabOrder="11" TabStop="FALSE" Top="152" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CARSQ" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit9" Left="99" Mask="@@" TabOrder="12" TabStop="FALSE" Top="184" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="USEGB" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit11" Left="299" Mask="@" TabOrder="13" TabStop="FALSE" Top="56" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="TRNCD" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit12" Left="299" Mask="@" TabOrder="14" TabStop="FALSE" Top="88" Type="STRING" Width="24"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="USEAM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit14" Left="299" Mask="##,###" TabOrder="15" TabStop="FALSE" Top="152" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CRTDT" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit15" Left="499" Mask="####-##-##" TabOrder="16" TabStop="FALSE" Top="56" Type="STRING" Width="96"></MaskEdit>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CRTTM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit16" Left="499" Mask="##:##:##" TabOrder="17" TabStop="FALSE" Top="88" Type="STRING" Width="96"></MaskEdit>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Color="blue" Font="Default,9,Bold" Height="26" Id="Static17" Left="840" TabOrder="40" Text="차&#32;량&#32;번&#32;호" Top="56" VAlign="Middle" Width="90"></Static>
+				<Static Align="Right" Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static18" Left="931" Style="static" TabOrder="41" Top="56" VAlign="Middle" Width="96"></Static>
+				<Edit BindDataset="ds_SLTZ101" Column="CARNO" Height="23" Id="ed_CARNO" Left="932" MaxLength="6" Number="TRUE" TabOrder="18" Text="Edit0" Top="58" Width="94"></Edit>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Color="blue" Font="Default,9,Bold" Height="26" Id="Static19" Left="840" TabOrder="43" Text="확인자코드" Top="88" VAlign="Middle" Width="90"></Static>
+				<Static Align="Right" Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static20" Left="931" Style="static" TabOrder="44" Top="88" VAlign="Middle" Width="96"></Static>
+				<Edit BindDataset="ds_SLTZ101" Column="CFMCD" Height="23" Id="ed_CFMCD" Left="932" MaxLength="4" TabOrder="19" Text="Edit0" Top="90" Width="94"></Edit>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Color="blue" Font="Default,9,Bold" Height="26" Id="Static21" Left="840" TabOrder="46" Text="확&#32;인&#32;일&#32;자" Top="120" VAlign="Middle" Width="90"></Static>
+				<Static Align="Right" Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static22" Left="931" Style="static" TabOrder="47" Top="120" VAlign="Middle" Width="96"></Static>
+				<Calendar BindDataset="ds_SLTZ101" Column="CFMDT" Height="22" Id="ca_CFMDT" Left="932" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="20" Top="122" Width="94"></Calendar>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static23" Left="840" TabOrder="49" Text="확&#32;인&#32;시&#32;간" Top="152" VAlign="Middle" Width="90"></Static>
+				<MaskEdit Align="Center" BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CFMTM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="MaskEdit26" Left="931" Mask="##:##:##" TabOrder="21" TabStop="FALSE" Top="152" Type="STRING" Width="96"></MaskEdit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MSTRM1" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit2" Left="126" TabOrder="22" TabStop="FALSE" Top="152" Width="69"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MSTRM4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit3" Left="126" TabOrder="23" TabStop="FALSE" Text="Edit2" Top="184" Width="69"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CARTN" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit4" Left="99" TabOrder="24" TabStop="FALSE" Text="Edit2" Top="216" Width="96"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MSTRM2" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit5" Left="326" TabOrder="25" TabStop="FALSE" Top="56" Width="69"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="MSTRM3" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit6" Left="326" TabOrder="26" TabStop="FALSE" Top="88" Width="69"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="pyvnd" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit7" Left="99" TabOrder="27" TabStop="FALSE" Text="Edit2" Top="120" Width="96"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="CAPNM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit8" Left="299" TabOrder="28" TabStop="FALSE" Text="Edit2" Top="120" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO1" Left="299" TabOrder="29" TabStop="FALSE" Top="184" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO2" Left="399" TabOrder="30" TabStop="FALSE" Top="184" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO3" Left="499" TabOrder="31" TabStop="FALSE" Top="184" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO4" Left="299" TabOrder="32" TabStop="FALSE" Top="216" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO5" Left="399" TabOrder="33" TabStop="FALSE" Top="216" Width="96"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO6" Left="499" TabOrder="34" TabStop="FALSE" Top="216" Width="96"></Edit>
+				<Edit BindDataset="ds_SLTZ101" Border="Flat" BorderColor="#b4b4b4" Column="INONM" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="Edit9" Left="126" TabOrder="35" TabStop="FALSE" Top="56" Width="69"></Edit>
+				<Button Height="28" Id="btnConf" ImageID="sum_save" Left="896" OnClick="fn_Save" TabOrder="36" TabStop="FALSE" Text="Button0" Top="188" Width="71"></Button>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY1" Left="603" TabOrder="37" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY2" Left="619" TabOrder="38" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY3" Left="635" TabOrder="39" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY4" Left="603" TabOrder="40" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY5" Left="619" TabOrder="41" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY6" Left="635" TabOrder="42" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT1" Left="659" TabOrder="43" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT2" Left="675" TabOrder="44" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT3" Left="691" TabOrder="45" TabStop="FALSE" Text="Edit2" Top="184" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT4" Left="659" TabOrder="46" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT5" Left="675" TabOrder="47" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT6" Left="691" TabOrder="48" TabStop="FALSE" Text="Edit2" Top="216" Visible="FALSE" Width="16"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_JPSNO7" Left="715" TabOrder="49" TabStop="FALSE" Top="184" Visible="FALSE" Width="64"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXQY7" Left="715" TabOrder="50" TabStop="FALSE" Top="216" Visible="FALSE" Width="56"></Edit>
+				<Edit Align="CENTER" Border="Flat" BorderColor="#b4b4b4" Enable="FALSE" Font="Default,9,Bold" Height="26" Id="ed_BOXCT7" Left="760" TabOrder="51" TabStop="FALSE" Top="216" Visible="FALSE" Width="56"></Edit>
+			</Contents>
+		</Div>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SLTZ101.xml
+ * ● PROGRAM DESCRIPTION  : 용차사용 금액 등록
+ * ● DATE WRITTEN         : 2012.06.12
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+/*
+var Lib1 = 'PSRESLIB';
+var Lib2 = 'PSCDBLIB';
+var company = 'PS';
+var comps = 'H1';
+*/
+var nowDate = today();
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 
+	MainGrid.UserData = MainGrid.Height;
+
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");		
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+
+	cb_searchCodeName1.Value = comps;
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSLTZ101(){
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+
+	//조회
+	var sKind		= "getSLTZ101";						
+	var sMethodName = "service::pssallib/selectSLTZ101.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SLTZ101=ds_SLTZ101";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += "@PYVND=" + quote(ed_pyvnd.Text);
+	sArgument += "@LNTNO=" + quote(ed_LNTNO.Text);
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));  
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+ function setSLTZ101(){
+
+	if(length(trim(st_pyvnd.Text)) < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}	
+	if(length(trim(displayDiv.ed_CARNO.Text)) < 1){ //차량번호
+		alert(setPopMessage("4018"));  // [확인] 차량번호를 입력바랍니다.
+		setMessage("4018");	
+		displayDiv.ed_CARNO.SetFocus();
+		return;
+	}
+	if(length(trim(displayDiv.ed_CFMCD.Text)) < 1){ //확인자코드
+		alert(setPopMessage("4019"));  //[확인] 확인자코드를 확인바랍니다.
+		setMessage("4019");	
+		displayDiv.ed_CFMCD.SetFocus();
+		return;
+	}
+	
+	ds_SLTZ101_BOX.ClearData();
+
+	if(displayDiv.MaskEdit4.Value == "N"){ //차량미처리
+		var retVal;
+		retVal = dialog("PSSALLIB::SLTZ101D.xml", "", 300,300, "Title=true CloseFlag=false");
+		ds_SLTZ101_BOX.LoadXML(retVal);
+	}else if(displayDiv.MaskEdit4.Value == "Y"){  //차량처리
+		var rRow;
+		rRow=ds_SLTZ101_BOX.InsertRow();
+		ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","1");
+		ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB","L000001");
+		ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+		ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		if(length(trim(displayDiv.ed_JPSNO1.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO1.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}
+		if(length(trim(displayDiv.ed_JPSNO2.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO2.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}			
+		if(length(trim(displayDiv.ed_JPSNO3.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO3.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}
+		if(length(trim(displayDiv.ed_JPSNO4.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO4.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}
+		if(length(trim(displayDiv.ed_JPSNO5.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO5.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}
+		if(length(trim(displayDiv.ed_JPSNO6.Text)) > 0){
+			rRow=ds_SLTZ101_BOX.InsertRow();
+			ds_SLTZ101_BOX.SetColumn(rRow,"INOUTB","2");
+			ds_SLTZ101_BOX.SetColumn(rRow,"JPSNOB",displayDiv.ed_JPSNO6.Text);
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXQYB","0");
+			ds_SLTZ101_BOX.SetColumn(rRow,"BOXAMB","0");
+		}
+	}else{
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		return;
+	}
+
+
+
+	var arrINOUTB = array();
+	var arrJPSNOB = array();
+	var arrBOXQYB = array();
+	for (var i=0; i<ds_SLTZ101_BOX.GetRowCount(); i++){
+		arrINOUTB[i] = ds_SLTZ101_BOX.GetColumn(i,"INOUTB");
+		arrJPSNOB[i] = ds_SLTZ101_BOX.GetColumn(i,"JPSNOB");
+		arrBOXQYB[i] = ds_SLTZ101_BOX.GetColumn(i,"BOXQYB");
+		if(arrJPSNOB[i] != "L000001"){
+			object("displayDiv.ed_BOXQY"+(i+1)).Text=arrBOXQYB[i];
+		}else{
+			displayDiv.ed_BOXQY7.Text = arrBOXQYB[i];
+		}
+	}
+ 	http.Sync = true;
+	var sKind		= "SAVE_SLTZ101";						
+	var sMethodName = "service::pssallib/insertSLTZ101.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SLTZ101_CHECK=ds_SLTZ101_CHECK";
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(displayDiv.med_COMPS.Value);
+	sArgument += " INOUT=" + quote(displayDiv.MaskEdit5.Value);
+	sArgument += " EXPCD=" + quote(displayDiv.MaskEdit4.Value);
+	sArgument += " LNTNO=" + quote(trim(displayDiv.med_LNTNO.Value));
+	sArgument += " CARNO=" + quote(trim(displayDiv.ed_CARNO.Text));
+	sArgument += " CFMCD=" + quote(trim(displayDiv.ed_CFMCD.Text));
+	sArgument += " CFMDT=" + quote(displayDiv.ca_CFMDT.Value);
+	
+	sArgument += " INOUTB1=" + quote(arrINOUTB[0]);
+	sArgument += " INOUTB2=" + quote(arrINOUTB[1]);
+	sArgument += " INOUTB3=" + quote(arrINOUTB[2]);
+	sArgument += " INOUTB4=" + quote(arrINOUTB[3]);
+	sArgument += " INOUTB5=" + quote(arrINOUTB[4]);
+	sArgument += " INOUTB6=" + quote(arrINOUTB[5]);
+	sArgument += " INOUTB7=" + quote(arrINOUTB[6]);
+	sArgument += " JPSNOB1=" + quote(arrJPSNOB[0]);
+	sArgument += " JPSNOB2=" + quote(arrJPSNOB[1]);
+	sArgument += " JPSNOB3=" + quote(arrJPSNOB[2]);
+	sArgument += " JPSNOB4=" + quote(arrJPSNOB[3]);
+	sArgument += " JPSNOB5=" + quote(arrJPSNOB[4]);
+	sArgument += " JPSNOB6=" + quote(arrJPSNOB[5]);
+	sArgument += " JPSNOB7=" + quote(arrJPSNOB[6]);
+	sArgument += " BOXQYB1=" + quote(arrBOXQYB[0]);
+	sArgument += " BOXQYB2=" + quote(arrBOXQYB[1]);
+	sArgument += " BOXQYB3=" + quote(arrBOXQYB[2]);
+	sArgument += " BOXQYB4=" + quote(arrBOXQYB[3]);
+	sArgument += " BOXQYB5=" + quote(arrBOXQYB[4]);
+	sArgument += " BOXQYB6=" + quote(arrBOXQYB[5]);
+	sArgument += " BOXQYB7=" + quote(arrBOXQYB[6]);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	ds_SLTZ101_BOX.ClearData();
+
+ }
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "용차사용신청확인등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|용차사용신청확인등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	//trace(ds_SLTZ101_CHECK.SaveXML());
+	if (ds_SLTZ101_CHECK.GetRowCount() > 0){			
+		for(var i=0;i<ds_SLTZ101_CHECK.GetRowCount();i++){		
+			alert(ds_SLTZ101_CHECK.GetColumn(i,"LNTNO") + " ="
+			    + ds_SLTZ101_CHECK.GetColumn(i,"RTMSG"));	
+		}
+		getSLTZ101();        //error항목이 존재시에는 재조회		
+		return;		
+	}	
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		//setSLTZ101_110();
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	clear_Data();
+	getSLTZ101();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setSLTZ101();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SLTZ101.ClearData();
+	clear_Data();
+}
+
+function imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pyvnd.Text);
+	if (length(trim(ed_pyvnd.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pyvnd.Text = rtn[0];
+		st_pyvnd.Text = rtn[1];
+	}
+}
+
+function ed_pyvnd_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_pyvnd.Text = "";
+}
+
+function ed_pyvnd_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+		ed_pyvnd.SetFocus();
+		return;
+	}
+	st_pyvnd.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;
+}
+
+
+function ds_SLTZ101_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if (strColumnID == "CFMCD"){
+		//check
+		http.Sync = true;
+		var sKind		= "getmst050pf";		
+		var sMethodName = "service::pscomlib/selectMST050PF.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_MST050PF=ds_MST050PF";
+		var sArgument   = "";
+			sArgument  += " LIB2=" + quote(Lib2);
+			sArgument  += " COMPS=" + quote(cb_searchCodeName1.Value);
+			sArgument  += " GRPCD=" + quote("SAL");
+			sArgument  += " MSTCD=" + quote(varNewValue);
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync = false;
+		if (ds_MST050PF.GetRowCount() < 1){
+			alert(setPopMessage("4019"));
+			setMessage("4019");	
+			return false;
+		}
+	}
+}
+
+function ds_SLTZ101_OnRowPosChanged(obj,nOldRow,nRow)
+{
+	if(ds_SLTZ101.GetRowCount() < 1) return;
+	clear_Data();
+	http.Sync 	= true;
+	var sKind		= "getsltz101_a";						
+	var sMethodName = "service::pssallib/selectSLTZ101_A.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SLTZ101_A=ds_SLTZ101_A";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(cb_searchCodeName1.Value);
+		sArgument += " PYVND=" + quote(ds_SLTZ101.GetColumn(nRow,"PYVND"));
+		sArgument += " MKLOC=" + quote(ds_SLTZ101.GetColumn(nRow,"MKLOC"));
+		sArgument += " LNTNO=" + quote(ds_SLTZ101.GetColumn(nRow,"LNTNO"));
+		//sArgument += " INOUT=" + quote(ds_SLTZ101.GetColumn(nRow,"INOUT"));
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if(ds_SLTZ101_A.GetRowCount() > 0){
+		var arrValueJ = array();
+		var arrValueQ = array();
+		var arrValueA = array();
+		for(var i=0; i<ds_SLTZ101_A.GetRowCount();i++){
+			if (ds_SLTZ101_A.GetColumn(i,"JPSNO") != "L000001"){
+				arrValueJ[i] = ds_SLTZ101_A.GetColumn(i,"JPSNO");
+				arrValueQ[i] = ds_SLTZ101_A.GetColumn(i,"BOXQY");
+				arrValueA[i] = ds_SLTZ101_A.GetColumn(i,"BOXAM");
+			}else{
+				arrValueJ[6] = ds_SLTZ101_A.GetColumn(i,"JPSNO");
+				arrValueQ[6] = ds_SLTZ101_A.GetColumn(i,"BOXQY");
+				arrValueA[6] = ds_SLTZ101_A.GetColumn(i,"BOXAM");
+			}
+		}
+		displayDiv.ed_JPSNO1.Text = arrValueJ[0];
+		displayDiv.ed_JPSNO2.Text = arrValueJ[1];
+		displayDiv.ed_JPSNO3.Text = arrValueJ[2];
+		displayDiv.ed_JPSNO4.Text = arrValueJ[3];
+		displayDiv.ed_JPSNO5.Text = arrValueJ[4];
+		displayDiv.ed_JPSNO6.Text = arrValueJ[5];
+		displayDiv.ed_BOXQY1.Text = arrValueQ[0];
+		displayDiv.ed_BOXQY2.Text = arrValueQ[1];
+		displayDiv.ed_BOXQY3.Text = arrValueQ[2];
+		displayDiv.ed_BOXQY4.Text = arrValueQ[3];
+		displayDiv.ed_BOXQY5.Text = arrValueQ[4];
+		displayDiv.ed_BOXQY6.Text = arrValueQ[5];
+		displayDiv.ed_BOXCT1.Text = arrValueA[0];
+		displayDiv.ed_BOXCT2.Text = arrValueA[1];
+		displayDiv.ed_BOXCT3.Text = arrValueA[2];
+		displayDiv.ed_BOXCT4.Text = arrValueA[3];
+		displayDiv.ed_BOXCT5.Text = arrValueA[4];
+		displayDiv.ed_BOXCT6.Text = arrValueA[5];
+		if(length(arrValueA[6]) < 1){
+			displayDiv.ed_JPSNO7.Text = "L000001";
+			displayDiv.ed_BOXQY7.Text = "0";
+			displayDiv.ed_BOXCT7.Text = "0";
+		}else{
+			displayDiv.ed_JPSNO7.Text = arrValueJ[6];
+			displayDiv.ed_BOXQY7.Text = arrValueQ[6];
+			displayDiv.ed_BOXCT7.Text = arrValueA[6];
+		}
+	}
+	if(ds_SLTZ101.GetColumn(nRow,"MGMGU") == "*"){
+		displayDiv.ed_CARNO.Enable = false;
+		displayDiv.ed_CFMCD.Enable = false;
+		displayDiv.ca_CFMDT.Enable = false;
+		displayDiv.btnConf.Enable = false;
+	}else{
+		displayDiv.ed_CARNO.Enable = true;
+		displayDiv.ed_CFMCD.Enable = true;
+		displayDiv.ca_CFMDT.Enable = true;
+		displayDiv.btnConf.Enable = true;
+	}
+	
+}
+
+function clear_Data()
+{
+	displayDiv.ed_JPSNO1.Text = "";
+	displayDiv.ed_JPSNO2.Text = "";
+	displayDiv.ed_JPSNO3.Text = "";
+	displayDiv.ed_JPSNO4.Text = "";
+	displayDiv.ed_JPSNO5.Text = "";
+	displayDiv.ed_JPSNO6.Text = "";
+	displayDiv.ed_JPSNO7.Text = "";
+	displayDiv.ed_BOXQY1.Text = "";
+	displayDiv.ed_BOXQY2.Text = "";
+	displayDiv.ed_BOXQY3.Text = "";
+	displayDiv.ed_BOXQY4.Text = "";
+	displayDiv.ed_BOXQY5.Text = "";
+	displayDiv.ed_BOXQY6.Text = "";
+	displayDiv.ed_BOXQY7.Text = "";
+	displayDiv.ed_BOXCT1.Text = "";
+	displayDiv.ed_BOXCT2.Text = "";
+	displayDiv.ed_BOXCT3.Text = "";
+	displayDiv.ed_BOXCT4.Text = "";
+	displayDiv.ed_BOXCT5.Text = "";
+	displayDiv.ed_BOXCT6.Text = "";
+	displayDiv.ed_BOXCT7.Text = "";
+}]]></Script>
+</Window>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dicas.business.dao.BoardAtchmnflDao">
+  <resultMap id="resultMap" type="com.globaldenso.dicas.business.dto.BoardAtchmnflDto">
+    <id property="boardSeq" column="BOARD_SEQ" javaType="java.lang.Long" />
+    <id property="atchmnflId" column="ATCHMNFL_ID" javaType="java.lang.Long" />
+    <association property="atchmnflItem" column="ATCHMNFL_ID"
+      javaType="com.globaldenso.dicas.business.dto.AtchmnflDto"
+      select="com.globaldenso.dicas.business.dao.AtchmnflDao.searchUseFileByKey"/>
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT BOARD_SEQ,
+           ATCHMNFL_ID
+    FROM TB_DC_COMM_BOARD_ATCHMNFL
+
+  </sql>
+
+  <select id="searchByCondition" resultMap="resultMap" parameterType="com.globaldenso.dicas.business.dto.BoardAtchmnflDto">
+
+    SELECT *
+    FROM (
+      <include refid="select_01" />
+    ) A
+    WHERE BOARD_SEQ = #{boardSeq}
+
+  </select>
+
+  <select id="searchCountByKey" resultType="int" parameterType="com.globaldenso.dicas.business.dto.BoardAtchmnflDto">
+
+    SELECT COUNT(*) AS CNT
+    FROM (
+    <include refid="select_01" />
+    ) A
+    WHERE BOARD_SEQ = #{boardSeq}
+      AND ATCHMNFL_ID = #{atchmnflId}
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.dto.BoardAtchmnflDto">
+
+    INSERT INTO TB_DC_COMM_BOARD_ATCHMNFL (
+      BOARD_SEQ,
+      ATCHMNFL_ID
+    ) VALUES (
+      #{boardSeq},
+      #{atchmnflId}
+    )
+
+  </insert>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.dto.BoardAtchmnflDto">
+
+    DELETE FROM TB_DC_COMM_BOARD_ATCHMNFL
+    WHERE BOARD_SEQ = #{boardSeq}
+    <if test="atchmnflId != null">
+      AND ATCHMNFL_ID = #{atchmnflId}
+    </if>
+
+  </delete>
+
+</mapper>

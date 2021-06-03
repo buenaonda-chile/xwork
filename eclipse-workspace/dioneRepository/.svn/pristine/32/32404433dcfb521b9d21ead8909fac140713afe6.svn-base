@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="제품내제품&#32;현재고&#32;조회(창고별)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_BHZC201Q" UseClientLayout="1">
+				<Contents>
+					<colinfo id="ITNBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="HOUSE" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITCLS" size="256" summ="default" type="STRING"/>
+					<colinfo id="BEGIN" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="RECMO" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="ISSMO" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="ADJMO" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="MOHTQ" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_itcls1">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>I</cd>
+						<cdnm>IG</cdnm>
+					</record>
+					<record>
+						<cd>U</cd>
+						<cdnm>WSW</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_house">
+				<Contents>
+					<colinfo id="housecd" size="256" summ="default" type="STRING"/>
+					<colinfo id="housenm" size="256" summ="default" type="STRING"/>
+					<record>
+						<housecd>1</housecd>
+						<housenm>1</housenm>
+					</record>
+					<record>
+						<housecd>2</housecd>
+						<housenm>2</housenm>
+					</record>
+					<record>
+						<housecd>3</housecd>
+						<housenm>3</housenm>
+					</record>
+					<record>
+						<housecd>V</housecd>
+						<housenm>V</housenm>
+					</record>
+					<record>
+						<housecd>W</housecd>
+						<housenm>W</housenm>
+					</record>
+					<record>
+						<housecd></housecd>
+						<housenm>전체</housenm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_itcls2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>1</cd>
+						<cdnm>제품</cdnm>
+					</record>
+					<record>
+						<cd>3</cd>
+						<cdnm>내제품</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST050PF"></Dataset>
+		</Datasets>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="housecd" Color="#333333" DataColumn="housenm" Height="20" Id="cb_house" ImeMode="none" INDEX="0" InnerDataset="ds_house" Left="125" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="4" Top="36" Width="88"></Combo>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="38" Style="static" TabOrder="3" Text="창고" Top="40" VAlign="Middle" Width="75"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_BHZC201Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="620" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="556" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1055" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1055">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="100"/>
+						<col width="140"/>
+						<col width="40"/>
+						<col width="35"/>
+						<col width="35"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="창고"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="ITTYP"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="ITCLS"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="이월"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="입고"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="출고"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="조정"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="재고"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="ITNBR" display="text"/>
+						<cell align="left" col="1" colid="ITDSC" display="text"/>
+						<cell align="left" col="2" colid="HOUSE" display="text"/>
+						<cell align="left" col="3" colid="ITTYP" display="text"/>
+						<cell align="left" col="4" colid="ITCLS" display="text"/>
+						<cell align="right" col="5" colid="BEGIN" display="number" Mask="#,##0"/>
+						<cell align="right" col="6" colid="RECMO" display="number" Mask="#,##0"/>
+						<cell align="right" col="7" colid="ISSMO" display="number" Mask="#,##0"/>
+						<cell align="right" col="8" colid="ADJMO" display="number" Mask="#,##0"/>
+						<cell align="right" col="9" colid="MOHTQ" display="number" Mask="#,##0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="5" display="text" text="TOTAL"/>
+						<cell align="right" col="5" display="number" expr='SUM(&quot;BEGIN&quot;)'/>
+						<cell align="right" col="6" display="number" expr='SUM(&quot;RECMO&quot;)'/>
+						<cell align="right" col="7" display="number" expr='SUM(&quot;ISSMO&quot;)'/>
+						<cell align="right" col="8" display="number" expr='SUM(&quot;ADJMO&quot;)'/>
+						<cell align="right" col="9" display="number" expr='SUM(&quot;MOHTQ&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="34" Id="searchBar" TabOrder="2" Top="30" Width="1057"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="5" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="5" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="4" TabOrder="10" Text="창&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;고" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="232" TabOrder="11" Text="공&#32;장&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="12" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="348" Style="static" TabOrder="13" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static9" Left="460" TabOrder="14" Text="제&#32;품&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="20" Id="cb_plant" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="352" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="7" Top="36" Width="88"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static7" Left="576" Style="static" TabOrder="15" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="MSTCD" Color="#333333" DataColumn="MSTRM" Height="20" Id="cb_itcls1" ImeMode="none" INDEX="0" InnerDataset="ds_MST050PF" Left="580" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="8" Top="36" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static2" Left="688" TabOrder="16" Text="제&#32;품&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="804" Style="static" TabOrder="17" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="20" Id="cb_itcls2" ImeMode="none" INDEX="0" InnerDataset="ds_itcls2" Left="808" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="9" Top="36" Width="88"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 이상건
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : BHZC201Q.xml
+ * ● PROGRAM DESCRIPTION  : 제품내제품 현재고 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();	
+	getComCode();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	//ed_syyyymmdd.Value = nowDate;
+	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+	
+	//Static1.BkColor = G_ds_design.GetColumn(0,"BTBkColor1");
+	//Static4.BkColor = G_ds_design.GetColumn(0,"BTBkColor2");	
+	//Static7.BkColor = G_ds_design.GetColumn(0,"BTBkColor2");		
+	//Static2.BkColor = G_ds_design.GetColumn(0,"BTBkColor2");		
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE2","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_plant.Index = 0;
+	//ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+
+
+	http.Sync 	= true;
+	var sKind		= "getMST050";						
+	var sMethodName = "service::pscomlib/selectMST050.do"; 	
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST050PF=ds_MST050PF";
+	var sArgument   = "";
+		sArgument   += " LIB2=" + quote(Lib2);
+		sArgument   += " COMPS=" + quote(comps);
+		sArgument   += " GRPCD='PRD'";
+		sArgument   += " MSTGU='$'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_MST050PF.InsertRow(0);
+	ds_MST050PF.SetColumn(0,"mstcd","");
+	ds_MST050PF.SetColumn(0,"mstrm","[전체]");
+	cb_itcls1.index = 0;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getBHZC201Q(){
+	var sKind		= "getBHZC201Q";						
+	var sMethodName = "service::psimmlib/selectBHZC201Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BHZC201Q=ds_BHZC201Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@HOUSE=" + quote(cb_house.Value);
+	sArgument += "@COMPANY=" + quote(company);
+	sArgument += "@ITCLS1=" + quote(cb_itcls1.Value);
+	sArgument += "@ITCLS2=" + quote(cb_itcls2.Value);
+	sArgument += "@PACKC=" + quote(cb_plant.Value);
+
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "제품현재고현황";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|현재고현황";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		alert("4 CALLBACK");
+	}else if(svcId=="getBHZC201Q"){
+		// 조회건수가 없을경우
+		if(ds_BHZC201Q.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getBHZC201Q();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_BHZC201Q.DeleteAll();
+}
+]]></Script>
+</Window>

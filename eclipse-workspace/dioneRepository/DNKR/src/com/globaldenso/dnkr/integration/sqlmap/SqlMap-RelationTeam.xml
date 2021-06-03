@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.RelationTeamDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="RelationTeam" type="RelationTeamDomain">
+        <result property="relationCode" column="TEAM_CODE" />
+        <result property="useYn" column="TEAM_USE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="authCode" column="AUTH_CODE" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="relationCode" column="REL_CODE" />
+        <result property="rltnCode" column="RLTN_CODE" />
+        <result property="hRltnCode" column="H_RLTN_CODE" />
+        <result property="relationName" column="REL_NAME" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="clsName" column="CLS_NAME" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+
+    <resultMap id="RelationClsLocCode" type="RelationTeamDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+    </resultMap>
+    
+        
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="RelationTeam" parameterType="RelationTeamDomain">
+        select 
+                A.TEAM_CODE
+              , A.LOC_CODE 
+              , A.TEAM_USE
+              , A.AUTH_CODE 
+              , A.RLTN_CODE
+              , A.CLS_CODE
+              , A.H_RLTN_CODE
+              , B.REL_NAME
+        from 
+                DNKR_RELATION_TEAM A
+              , DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationTeam.searchByKey' = 'SqlMap-RelationTeam.searchByKey'
+            and A.TEAM_CODE = B.REL_CODE
+            and A.TEAM_CODE = #{relationCode}
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = #{locCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="cmcLangCode == null or cmcLangCode == ''">
+            and B.CMC_CODE = 'en'
+       	</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="RelationTeam" parameterType="RelationTeamDomain">
+        select 
+                A.TEAM_CODE
+              , A.LOC_CODE
+              , A.TEAM_USE
+              , A.AUTH_CODE
+              , A.RLTN_CODE
+              , A.CLS_CODE
+              , A.H_RLTN_CODE
+              , B.REL_NAME
+        from 
+                VIEW_RELATION_H_TEAM A
+              , DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationTeam.searchByCondition' = 'SqlMap-RelationTeam.searchByCondition'
+            and A.TEAM_CODE = B.REL_CODE
+        <if test="relationCode != null and relationCode != ''">
+            and A.TEAM_CODE = #{relationCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = #{locCode}
+        </if>
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.TEAM_USE = #{useYn}
+        </if>
+        <if test="relationName != null and relationName != ''">
+            and B.REL_NAME Like '%' || #{relationName} || '%'
+        </if>
+        order by 
+               <!--  A.LOC_CODE asc  2019.04.16-->
+               A.LOC_CODE, A.TEAM_USE desc, A.RLTN_CODE
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="RelationTeam" parameterType="RelationTeamDomain">
+        select 
+                 TEAM_CODE
+               , LOC_CODE
+               , TEAM_USE
+               , AUTH_CODE
+               , RLTN_CODE
+               , CLS_CODE
+               , H_RLTN_CODE
+               , REL_NAME
+               , LOC_NAME
+               , CLS_NAME
+               , ROW_NUM
+        from (
+            select 
+	                 A.TEAM_CODE
+	               , A.LOC_CODE
+	               , A.TEAM_USE
+	               , A.AUTH_CODE
+	               , A.RLTN_CODE
+	               , A.CLS_CODE
+	               , A.H_RLTN_CODE
+	               , B.REL_NAME
+	               , C.REL_NAME LOC_NAME
+	               , D.REL_NAME CLS_NAME
+	               , row_number() over (order by A.TEAM_CODE desc) ROW_NUM
+	        from 
+	                VIEW_RELATION_H_TEAM A
+	              , DNKR_RELATION_NM B
+	              , DNKR_RELATION_NM C
+	              , DNKR_RELATION_NM D
+	        where 
+                    'SqlMap-RelationTeam.searchByConditionForPaging' = 'SqlMap-RelationTeam.searchByConditionForPaging'
+            	and A.TEAM_CODE = B.REL_CODE
+            	and A.LOC_CODE = C.REL_CODE
+            	and A.CLS_CODE = D.REL_CODE
+	        <if test="relationCode != null and relationCode != ''">
+	            and A.TEAM_CODE = #{relationCode}
+	        </if>
+	        <if test="cmcLangCode != null and cmcLangCode != ''">
+	            and B.CMC_CODE = #{cmcLangCode}
+	            and C.CMC_CODE = #{cmcLangCode}
+	            and D.CMC_CODE = #{cmcLangCode}
+	        </if>
+	        <if test="useYn != null and useYn != ''">
+	            and A.TEAM_USE = #{useYn}
+	        </if>
+	        <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="RelationTeamDomain">
+        select 
+                count(rownum) 
+        from 
+                VIEW_RELATION_H_TEAM A
+              , DNKR_RELATION_NM B
+        where 
+                'SqlMap-RelationTeam.searchCount' = 'SqlMap-RelationTeam.searchCount'
+            and A.TEAM_CODE = B.REL_CODE
+        <if test="relationCode != null and relationCode != ''">
+            and A.TEAM_CODE = #{relationCode}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = #{locCode}
+        </if>
+         <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and B.CMC_CODE = #{cmcLangCode}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and A.TEAM_USE = #{useYn}
+        </if>
+        <if test="relationName != null and relationName != ''">
+            and B.REL_NAME = #{relationName}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchTeamCount" resultType="java.lang.Integer" parameterType="RelationTeamDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_RELATION_TEAM
+        where 
+                'SqlMap-RelationTeam.searchTeamCount' = 'SqlMap-RelationTeam.searchTeamCount'
+         <if test="relationCode != null and relationCode != ''">
+            and TEAM_CODE = #{relationCode}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and LOC_CODE = #{locCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and CMC_CODE = #{cmcLangCode}
+        </if>
+    </select>
+
+	<!-- 登録 SQL文 -->
+    <insert id="createCode" parameterType ="RelationTeamDomain">
+        insert into DNKR_RELATION_TEAM (
+                /* SqlMap-RelationTeam.createCode */
+            <if test="useYn != null">
+                TEAM_USE,
+            </if>
+            <if test="locCode != null">
+                LOC_CODE,
+            </if>
+            <if test="authCode != null">
+                AUTH_CODE,
+            </if>
+            <if test="rltnCode != null">
+                RLTN_CODE
+            </if>
+            <if test="relationCode != null">
+                TEAM_CODE
+            </if>
+        ) values (
+            <if test="useYn != null">
+                #{useYn},
+            </if>
+            <if test="locCode != null">
+                #{locCode},
+            </if>
+            <if test="authCode != null">
+                #{authCode},
+            </if>
+            <if test="rltnCode != null">
+                #{rltnCode},
+            </if>
+            <if test="relationCode != null">
+                'TEAM' || lpad(DNKR_RELATION_TEAM_SEQ.NEXTVAL, 6, '0')
+            </if>
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createName" parameterType ="RelationTeamDomain">
+        insert into DNKR_RELATION_NM (
+                /* SqlMap-RelationLoc.createName */
+            <if test="cmcLangCode != null">
+                CMC_CODE,
+            </if>
+            <if test="relationName != null">
+                REL_NAME,
+            </if>
+            <if test="relationCode != null">
+                REL_CODE
+            </if>
+        ) values (
+            <if test="cmcLangCode != null">
+                #{cmcLangCode},
+            </if>
+            <if test="relationName != null">
+                #{relationName},
+            </if>
+             <if test="relationCode != null">
+                'TEAM' || lpad(DNKR_RELATION_TEAM_SEQ.CURRVAL, 6, '0')
+            </if>
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateCode" parameterType="RelationTeamDomain">
+        update 
+                DNKR_RELATION_TEAM
+        set
+            <if test="useYn != null">
+                TEAM_USE = #{useYn}
+            </if>
+        where 
+                'SqlMap-RelationTeam.updateCode' = 'SqlMap-RelationTeam.updateCode'
+            and TEAM_CODE = #{relationCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateAuth" parameterType="RelationTeamDomain">
+        update 
+                DNKR_RELATION_TEAM
+        set
+            <if test="authCode != null">
+                AUTH_CODE = #{authCode}
+            </if>
+        where 
+                'SqlMap-RelationTeam.updateCode' = 'SqlMap-RelationTeam.updateCode'
+            and TEAM_CODE = #{relationCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateName" parameterType="RelationTeamDomain">
+        update 
+                DNKR_RELATION_NM 
+        set
+            <if test="relationName != null">
+                REL_NAME = #{relationName}
+            </if>
+        where 
+                'SqlMap-RelationTeam.updateName' = 'SqlMap-RelationTeam.updateName'
+            and REL_CODE = #{relationCode}
+            and CMC_CODE = #{cmcLangCode}
+    </update>
+
+	<!--  -->
+    <delete id="deleteCode" parameterType="RelationTeamDomain">
+        delete from 
+                DNKR_RELATION_TEAM
+        where 
+                'SqlMap-RelationTeam.deleteCode' = 'SqlMap-RelationTeam.deleteCode'
+            and TEAM_CODE = #{relationCode}
+    </delete>
+    
+    <!--  -->
+    <delete id="deleteName" parameterType="RelationTeamDomain">
+        delete from 
+                DNKR_RELATION_NM
+        where 
+                'SqlMap-RelationTeam.deleteName' = 'SqlMap-RelationTeam.deleteName'
+        <if test="relationCode != null and relationCode != ''">
+            and REL_CODE = #{relationCode}
+        </if>
+        <if test="cmcLangCode != null and cmcLangCode != ''">
+            and CMC_CODE = #{cmcLangCode}
+        </if>
+    </delete>
+    
+    <insert id="insertDeptTmpData">
+    	insert into MA_DEPT_TMP (
+                /* SqlMap-RelationTeam.insertDeptTmpData */
+            CD_DEPT
+        ) values (
+            'TEST'
+        )
+    </insert>
+    
+     <!--  -->
+    <delete id="deleteTmp">
+       	DELETE FROM MA_DEPT_TMP
+    </delete>
+    
+	<insert id="insertDept"  parameterType="java.util.List">
+    	INSERT ALL
+    		<foreach collection="list" item="item" index="index" separator=""> 
+			INTO MA_DEPT_TMP ( 
+					 CD_DEPT
+		           , CD_COMPANY
+		           , NM_DEPT
+		           , CD_BIZAREA
+		           , CD_CC
+		           , H_DEPT
+				  ) VALUES
+				  (
+				  	#{item.cdDept}
+				   , #{item.cdCompany}
+				   , #{item.nmDept}
+				   , #{item.cdBizarea}
+				   , #{item.cdCc}
+				   , #{item.hDept}
+				  ) 
+			</foreach>
+			SELECT * FROM DUAL
+    </insert>
+    
+    
+    <select id="procMergeTeam" parameterType="HashMap" statementType="CALLABLE">
+        {CALL PROC_MERGE_TEAM
+        	(
+                #{rtnCd, mode=OUT, jdbcType=DECIMAL, javaType=long},
+                #{rtnMsg, mode=OUT, jdbcType=VARCHAR, javaType=string}
+            )
+        }
+    </select>
+
+	<!-- 2019.04.17 JHB TEST
+		 ①최신부서코드가 아닌 항목에 대해서는 사용여부를 False로 변경
+		 ②false된 부서코드 DNKR_RELATION_NM에서 삭제해야하나?(확인필요)	 
+	 -->
+	 <!-- 사업부/사업장코드 조회 -->
+	<select id="searchByClsLocCode" resultMap="RelationClsLocCode">
+	SELECT
+		A.CLS_CODE, B.LOC_CODE, A.CLS_USE, B.LOC_USE
+	FROM
+		DNKR_RELATION_CLASS A, DNKR_RELATION_LOCATION B
+	WHERE
+		A.CLS_CODE=B.CLS_CODE
+		AND A.CLS_USE='Y'
+		AND B.LOC_USE='Y'
+	</select>
+	
+	<sql id="teamLatestYear" >
+	 SELECT 
+		MAX(A.USE_YEAR) AS USE_YEAR
+	FROM
+		(
+		select
+		<!-- SUBSTR(A.RLTN_CODE,2,2) AS USE_YEAR1,
+			SUBSTR(A.RLTN_CODE,1,3) AS USE_YEAR2, -->
+			to_number(SUBSTR(translate(SUBSTR(A.RLTN_CODE,1,3),'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-=','1234567890'),1,10)) AS USE_YEAR
+		from 
+			VIEW_RELATION_H_TEAM A, DNKR_RELATION_NM B
+		where 
+			'SqlMap-RelationTeam.searchTeamLatestYear' = 'SqlMap-RelationTeam.searchTeamLatestYear'
+			and A.TEAM_CODE = B.REL_CODE
+			and B.CMC_CODE = 'kr'
+			and A.CLS_CODE = #{clsCode}
+			and A.LOC_CODE = #{locCode} <!-- 공장별로 확인후 업데이트처리 -->
+		order by A.LOC_CODE, A.TEAM_USE desc, A.RLTN_CODE
+		) A
+	</sql>
+    <!-- 최신년도 조회 -->
+	<!--  
+	<select id="searchByTeamLatestYear"  resultMap="RelationTeam" parameterType="RelationTeamDomain">
+	 <include refid="teamLatestYear"></include>
+	</select>
+    -->
+    <!-- 최신부서코드가 아닌 항목에 대해서는 사용여부를 False로 변경 -->
+    <update id="updateTeamLatestYearUse" parameterType="RelationTeamDomain">
+	UPDATE
+		 DNKR_RELATION_TEAM 
+	SET
+		TEAM_USE = 'N'
+	WHERE
+		RLTN_CODE != ' '
+		AND RLTN_CODE IS NOT NULL 
+		AND (H_RLTN_CODE IS NULL OR H_RLTN_CODE = ' ')
+		AND CLS_CODE = #{clsCode}
+		AND LOC_CODE = #{locCode}  <!-- 공장별로 확인후 업데이트처리 -->
+		AND to_number(SUBSTR(translate(SUBSTR(RLTN_CODE,1,3),'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-=','1234567890'),1,10)) != (
+		<include refid="teamLatestYear"></include>
+		) 
+    </update>
+    
+</mapper>

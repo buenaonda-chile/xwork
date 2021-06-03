@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="공통코드" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCodeClass" OnRowPosChanged="CalssRowPosChange"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode" OnRowPosChanged="comCodeRowPosChange"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_viewyn">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>0</cd>
+						<cdnm>Y</cdnm>
+					</record>
+					<record>
+						<cd>1</cd>
+						<cdnm>N</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static16" Left="384" TabOrder="4" Top="488" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static2" Left="718" TabOrder="7" Top="490" Width="150"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ComCodeClass" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="585" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="553" Id="ClassGrd" InputPanel="FALSE" Left="2" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="380" TabOrder="1" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="378">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="122"/>
+						<col width="207"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="구분코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="설명"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="CLASS" display="normal" edit="expr:iif(ds_ComCodeClass.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;normal&apos;,&#32;&apos;none&apos;&#32;)" limit="4"/>
+						<cell align="left" col="2" colid="CLASS_NAME" display="normal" limit="15"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static9" Left="386" TabOrder="3" Top="490" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static15" Left="410" Style="static" TabOrder="2" Text="구분코드" Top="495" VAlign="Middle" Width="69"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ComCode" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="485" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="453" Id="CodeGrd" InputPanel="FALSE" Left="384" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1052" TabOrder="5" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="668">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="150"/>
+						<col width="150"/>
+						<col width="259"/>
+						<col width="70"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="코드1"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="코드2"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="코드명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="normal" text="고정코드"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="CODE1" display="normal"/>
+						<cell align="center" col="2" colid="CODE2" color="#333333" display="normal"/>
+						<cell align="center" col="3" colid="CODE_NAME" color="#333333" display="normal"/>
+						<cell align="center" col="4" colid="VIEW_YN_NAME" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static1" Left="742" Style="static" TabOrder="6" Text="설명" Top="495" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_ComCode" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CLASS" Enable="FALSE" Height="29" Id="ed_class" Left="537" MaxLength="4" TabOrder="8" Top="490" Width="180"></Edit>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static0" Left="384" TabOrder="11" Top="521" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static3" Left="718" TabOrder="13" Top="523" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static4" Left="386" TabOrder="10" Top="523" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static5" Left="410" Style="static" TabOrder="9" Text="코드1" Top="528" VAlign="Middle" Width="69"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static6" Left="744" Style="static" TabOrder="12" Text="코드2" Top="528" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_ComCode" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CODE1" Enable="FALSE" Height="29" Id="Edit0" Left="537" MaxLength="15" TabOrder="14" Top="523" Width="180"></Edit>
+		<Edit BindDataset="ds_ComCode" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CODE2" Enable="FALSE" Height="29" Id="Edit2" Left="869" MaxLength="8" TabOrder="15" Top="523" Width="180"></Edit>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="33" Id="Static7" Left="384" TabOrder="18" Top="554" Width="667"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static8" Left="718" TabOrder="20" Top="556" Width="150"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static10" Left="386" TabOrder="17" Top="556" Width="150"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static11" Left="410" Style="static" TabOrder="16" Text="코드명" Top="561" VAlign="Middle" Width="69"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static12" Left="742" Style="static" TabOrder="19" Top="561" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_ComCode" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CODE_NAME" Height="29" Id="Edit3" Left="537" MaxLength="15" TabOrder="21" Top="556" Width="180"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="29" Id="Edit4" Left="869" MaxLength="15" TabOrder="22" Top="556" Width="180"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="23" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="23" Top="8" Width="1032"></Static>
+		<Edit BindDataset="ds_ComCode" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CLASS_NAME" Height="29" Id="Edit1" Left="869" TabOrder="25" Top="490" Width="180"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static13" Left="744" Style="static" TabOrder="26" Text="고정코드여부" Top="561" VAlign="Middle" Width="77"></Static>
+		<Combo BindDataset="ds_ComCode" Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" Column="view_yn" DataColumn="cdnm" Height="25" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_viewyn" Left="870" ResetIndex="FIRST" TabOrder="27" Top="557" Width="180"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ComCode.xml
+ * ● PROGRAM DESCRIPTION  : 공통코드 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+
+#include "script::lib_script_common.js";
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)					
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCodeClass(){
+	http.Sync = true;
+	var sKind		= "getComCodeClass";						
+	var sMethodName = "service::user/selectComCodeClass.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ComCodeClass=ds_ComCodeClass";    	// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+
+	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 그룹 테이터셋 변경시
+ * 주요변수 : 
+ **********************************************************************/ 
+function CalssRowPosChange(obj,nOldRow,nRow)
+{
+	http.Sync = true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::user/selectComCode.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             		// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ComCode=ds_ComCode";    			// 조회 후 돌려 받을 DataSet 명칭
+
+	var sArgument   = "";
+	sArgument += " CLASS=" + quote(ds_ComCodeClass.GetColumn(ds_ComCodeClass.row,"CLASS"));	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setComCode(){
+	if(!validationChk()) return;
+	var sKind		= "setComCode";						
+	var sMethodName = "service::user/comCodeSave.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ComCode=ds_ComCode:U";     		//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    								// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : validation 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+function validationChk(){
+	for(var i=0; i<ds_ComCode.rowcount(); i++){
+		if(length(trim(ds_ComCode.GetColumn(i, "CLASS")))==0){
+			alert(setPopMessage("2033"));	// 20110103l-koowgnojeel, 2033 == 구분 코드를 입력해 주세요.
+			ds_ComCode.row = i;
+			return false;
+		}
+		if(length(trim(ds_ComCode.GetColumn(i, "CODE1")))==0){
+			alert(setPopMessage("2034"));	// 20110103l-koowgnojeel, 2034 == 코드1을 입력해 주세요.
+			ds_ComCode.row = i;
+			return false;
+		}	
+		if(length(trim(ds_ComCode.GetColumn(i, "CODE_NAME")))==0){
+			alert(setPopMessage("2035"));	// 20110103l-koowgnojeel, 2035 == 코드명을 입력해 주세요.
+			ds_ComCode.row = i;
+			return false;
+		}
+		
+		var rCnt = 0;
+		for(j=0;j<ds_ComCode.rowcount;j++){
+			if( ds_ComCode.GetColumn(j, "CLASS") == ed_class.Value 
+			     && ds_ComCode.GetColumn(j, "CODE1") == Edit0.Value
+			     && ds_ComCode.GetColumn(j, "CODE2") == Edit2.Value ){
+				rCnt++;
+			}
+		}
+		if(rCnt > 1) {
+			alert(setPopMessage("2036"));	// 20110103l-koowgnojeel, 2036 == 동일한 데이터가 있습니다.
+			return false;			
+		}
+	}
+	return true;
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getComCodeClass"){
+		// 조회건수가 없을경우
+		if(ds_ComCodeClass.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setComCode"){
+		//getComCodeClass();
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : INSERT 모드일 경우만 입력 활성화
+ * 주요변수 : 
+ **********************************************************************/ 
+function comCodeRowPosChange(obj,nOldRow,nRow)
+{
+	if(ds_ComCode.GetRowType(ds_Comcode.row) == "insert"){
+		Edit0.Enable = true;
+		Edit2.Enable = true;
+	} else {
+		Edit0.Enable = false;
+		Edit2.Enable = false;		
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Search()
+{
+	getComCodeClass();
+}
+
+function fn_Input()
+{
+	if(ds_ComCode.GetColumn(ds_ComCode.row,"VIEW_YN") == 'Y') {
+		alert(setPopMessage("2037"));	// 20110103l-koowgnojeel, 2037 == 변경할 수 없는 고정 코드입니다.
+		return false ;
+	}
+	if(checkInsertCount("ds_ComCode")== false) return;
+	ds_ComCode.AddRow();
+	ds_ComCode.SetColumn(ds_ComCode.row,"CLASS",ds_ComCodeClass.GetColumn(ds_ComCodeClass.row,"CLASS"));
+	ds_ComCode.SetColumn(ds_ComCode.row,"CLASS_NAME",ds_ComCodeClass.GetColumn(ds_ComCodeClass.row,"CLASS_NAME"));
+	
+}
+
+function fn_Delete()
+{
+	if(confirm("정말로 삭제하시겠습니까?                         ") == false) return ;
+	ds_ComCode.DeleteRow(ds_ComCode.row);
+	setComCode();
+}
+
+function fn_Save()
+{
+	setComCode();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function add_class(obj)
+{
+	ds_ComCodeClass.AddRow();
+
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

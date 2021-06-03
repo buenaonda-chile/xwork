@@ -1,0 +1,2527 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="pscomlib">
+	<select id="selectSABUN" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM 
+			$LIB3$.HMD020PF
+		WHERE 
+			SABUN=$SABUN$
+	</select>
+	<select id="selectMST040" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(MAJCD) MAJCD,
+			MJINT,
+			TRIM(MJCHR) MJCHR,
+			MAJTM,
+			MAJDT,
+			TRIM(MAJMK) MAJMK
+		FROM
+			$LIB2$.MST040PF 
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="MAJCD">
+				MAJCD = #MAJCD#
+			</isNotEmpty>	
+	</select>
+	<update id="updateMST040" parameterClass="java.util.HashMap">
+		update  
+			$LIB2$.MST040PF  
+		set 
+			mjint = $MJINT$,
+			majtm = substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			majdt = substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2)
+		<isNotEmpty prepend="," property="MAJMK">
+			MAJMK = #MAJMK#
+		</isNotEmpty>
+		WHERE
+			COMPS = #COMPS#
+			AND	MAJCD = #MAJCD#	
+	</update>
+	<insert id="insertMST040" parameterClass="java.util.HashMap">
+		insert into
+			$LIB2$.MST040PF  
+		values
+			(
+			#COMPS#,#MAJCD#,$MJINT$,' ',
+			substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+			#MAJMK#
+			)	
+	</insert>
+	<update id="updateMST040_fac" parameterClass="java.util.HashMap">
+		update  
+			$LIB2$.MST040PF  
+		set 
+
+			mjint = $MJINT$,
+			majtm = substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			majdt = $MAJDT$
+		WHERE
+			COMPS = #COMPS#
+			AND	MAJCD = #MAJCD#	
+	</update>
+	<insert id="insertMST040_fac" parameterClass="java.util.HashMap">
+		insert into
+			$LIB2$.MST040PF  
+		values
+			(
+			#COMPS#,#MAJCD#,$MJINT$,' ',
+			substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			$MAJDT$, #MAJMK#
+			)	
+	</insert>
+	<insert id="insertMST049" parameterClass="java.util.HashMap">
+		insert into
+			$LIB2$.MST049PF  
+		values
+			(
+			#COMPS#,#PGSRC#,#PGMNM#,$PDATE$,#JOBID#,
+			substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+			substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			#JOBIP#,
+			#BIGO1#
+			)	
+	</insert>
+	<select id="selectMST050" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(GRPCD) GRPCD,
+			TRIM(MSTCD) MSTCD,
+			TRIM(MSTSM) MSTSM,
+			TRIM(MSTCD) || '  ' || TRIM(MSTRM)  MSTRM
+		FROM
+			$LIB2$.MST050PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="GRPCD">
+				GRPCD = #GRPCD#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="MSTCD">
+				MSTCD = #MSTCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="MSTGU">
+				MSTCD != #MSTGU#
+			</isNotEmpty>
+			ORDER BY MSTCD
+	</select>
+	<select id="selectMST650" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			$LIB2$.MST650PF
+		WHERE
+			DPCOMP = #COMPS#
+			<isNotEmpty prepend="and" property="DPCODE">
+				DPCODE = #DPCODE#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="DPEDSW">
+				DPEDSW = #DPEDSW#
+			</isNotEmpty>
+			<!-- dppat0인 것만(team만 조회)  
+			<isNotEqual property="FLAG1" compareValue="Y">
+				<isNotEqual property="COMPS" compareValue="E1">
+					<isNotEmpty prepend="and" property="DPPAT0">
+						DPPAT0 = $DPPAT0$
+					</isNotEmpty>
+				</isNotEqual>
+			</isNotEqual>
+			<isEqual property="FLAG1" compareValue="Y">
+				AND (DPPAT1 =#FLAGVAL# OR DPPAT1=#FLAGVAL# OR DPCODE=#FLAGVAL#)
+			</isEqual>	
+			-->		
+			ORDER BY DPSQNO
+	</select>
+<!--  
+	<select id="selectMST650_SUB" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			A.*
+		FROM
+			$LIB2$.MST650PF A
+		WHERE
+			A.DPCOMP = #COMPS#
+			<isNotEmpty prepend="and" property="DPCODE">
+				A.DPCODE = (SELECT B.DPPAT1 FROM $LIB2$.MST650PF B
+							WHERE B.DPCOMP=#COMPS# AND B.DPCODE =#DPCODE#)
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="DPEDSW">
+				A.DPEDSW = #DPEDSW#
+			</isNotEmpty>
+			ORDER BY A.DPSQNO
+	</select>
+-->			
+	<select id="selectCGMPARMDA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT CUSNM
+		FROM $LIB1$.CUSMAS 
+		WHERE CUSNO=$CUSNO$
+	</select>
+	<select id="selectCGMPARMAA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT *
+		FROM $LIB1$.BM008PR 
+		WHERE ITNBR=#PSPNO#
+	</select>
+	<select id="selectCGMPARMBB" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM000PR 
+		WHERE 
+			CUSNO=$P_CUSNO$
+			AND CPRTN=#P_CPRTN#
+			<isNotEmpty prepend="and" property="P_PCKCD">
+				PRTNO LIKE '%' || '$P_PCKCD$' || '%' <!-- 특정PACKAGE CODE로 찿을때 -->
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="P_EDATM">
+				EDATM <![CDATA[<=]]> $P_EDATM$                  <!-- 적용일자로 찿을때 -->
+			</isNotEmpty>
+		ORDER BY
+			EDATM DESC
+		FETCH FIRST 1 ROW ONLY
+	</select>
+	<select id="selectCGMPARMKA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT *
+		FROM $LIB1$.HM000PR 
+		WHERE ITNBR=#PSPNO#
+		AND HOUSE=#HOUSE#
+	</select>
+	<select id="selectCVTSPY200C0" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT *
+		FROM $LIB2$.SPYFLAGPF 
+		WHERE PYYYY = $PYYYY$
+		AND   PLNGB = #PLNGB# 
+	</select>
+	<delete id="deleteCVTSPY200C0" parameterClass="java.util.HashMap">
+		DELETE FROM $LIB2$.SPYFLAGPF  
+		WHERE PYYYY = $PYYYY$
+		AND   PLNGB = #PLNGB# 
+	</delete>
+	
+	<delete id="deleteSPY200PF" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB2$.SPY200PF 
+		WHERE 
+			PLNYM  between $STRYM$ and $ENDYM$
+			AND   PLNGB = #PLNGB# 
+	</delete>
+	
+	<insert id="insertCVTSPY200C0" parameterClass="java.util.HashMap">
+		INSERT INTO 
+			$LIB2$.SPYFLAGPF  
+		VALUES
+			($PYYYY$,#PLNGB#,1,0,0,0) 
+	</insert>
+	<update id="updateCVTSPY200C0" parameterClass="java.util.HashMap">
+		update 
+			$LIB2$.SPYFLAGPF  
+		set 
+			step3=1
+		where 
+			pyyyy = $PYYYY$ 
+			and plngb=#PLNGB#  
+	</update>
+	<update id="updateCVTSPY200C7" parameterClass="java.util.HashMap">
+		update 
+			$LIB2$.SPYFLAGPF  
+		set 
+			step4=1
+		where 
+			pyyyy = $PYYYY$ 
+			and plngb=#PLNGB#  
+	</update>
+	<delete id="deleteSPYYMPRPF" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			$LIB2$.SPYYMPRPF 
+		WHERE 
+			PYYYY = $PYYYY$
+			AND   PLNGB = #PLNGB# 
+	</delete>
+	<insert id="insertSPYYMPRPF" parameterClass="java.util.HashMap">
+		insert into $LIB2$.SPYYMPRPF 
+		values(
+			$PYYYY$,
+			#PLNGB#,
+			<isNotEmpty  property="CustomerNumber">$CustomerNumber$,</isNotEmpty>
+			<isEmpty  property="CustomerNumber">0,</isEmpty>
+			#DNPN#,
+			<isNotEmpty  property="CurrentPrice">$CurrentPrice$,</isNotEmpty>
+			<isEmpty  property="CurrentPrice">0,</isEmpty>
+			
+			<isNotEmpty  property="AprPrice1">$AprPrice1$,</isNotEmpty>
+			<isEmpty  property="AprPrice1">0,</isEmpty>
+			<isNotEmpty  property="MayPrice1">$MayPrice1$,</isNotEmpty>
+			<isEmpty  property="MayPrice1">0,</isEmpty>
+	  		<isNotEmpty  property="JunPrice1">$JunPrice1$,</isNotEmpty>
+	  		<isEmpty  property="JunPrice1">0,</isEmpty>
+      		<isNotEmpty  property="JulPrice1">$JulPrice1$,</isNotEmpty>
+      		<isEmpty  property="JulPrice1">0,</isEmpty>
+		    <isNotEmpty  property="AugPrice1">$AugPrice1$,</isNotEmpty>
+		    <isEmpty  property="AugPrice1">0,</isEmpty>
+		    <isNotEmpty  property="SepPrice1">$SepPrice1$,</isNotEmpty>
+		    <isEmpty  property="SepPrice1">0,</isEmpty>
+		    <isNotEmpty  property="OctPrice1">$OctPrice1$,</isNotEmpty>
+		    <isEmpty  property="OctPrice1">0,</isEmpty>
+		    <isNotEmpty  property="NovPrice1">$NovPrice1$,</isNotEmpty>
+		    <isEmpty  property="NovPrice1">0,</isEmpty>
+		    <isNotEmpty  property="DecPrice1">$DecPrice1$,</isNotEmpty>
+		    <isEmpty  property="DecPrice1">0,</isEmpty>
+		    <isNotEmpty  property="JanPrice1">$JanPrice1$,</isNotEmpty>
+		    <isEmpty  property="JanPrice1">0,</isEmpty>
+		    <isNotEmpty  property="FebPrice1">$FebPrice1$,</isNotEmpty>
+		    <isEmpty  property="FebPrice1">0,</isEmpty>
+		    <isNotEmpty  property="MarPrice1">$MarPrice1$,</isNotEmpty>
+		    <isEmpty  property="MarPrice1">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Q1Price2">$Q1Price2$,</isNotEmpty>
+		    <isEmpty  property="Q1Price2">0,</isEmpty>
+		    <isNotEmpty  property="Q2Price2">$Q2Price2$,</isNotEmpty>
+		    <isEmpty  property="Q2Price2">0,</isEmpty>
+		    <isNotEmpty  property="Q3Price2">$Q3Price2$,</isNotEmpty>
+		    <isEmpty  property="Q3Price2">0,</isEmpty>
+		    <isNotEmpty  property="Q4Price2">$Q4Price2$,</isNotEmpty>
+		    <isEmpty  property="Q4Price2">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Q1Price3">$Q1Price3$,</isNotEmpty>
+		    <isEmpty  property="Q1Price3">0,</isEmpty>
+		    <isNotEmpty  property="Q2Price3">$Q2Price3$,</isNotEmpty>
+		    <isEmpty  property="Q2Price3">0,</isEmpty>
+		    <isNotEmpty  property="Q3Price3">$Q3Price3$,</isNotEmpty>
+		    <isEmpty  property="Q3Price3">0,</isEmpty>
+		    <isNotEmpty  property="Q4Price3">$Q4Price3$,</isNotEmpty>
+		    <isEmpty  property="Q4Price3">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Price4">$Price4$,</isNotEmpty>
+		    <isEmpty  property="Price4">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Price5">$Price5$,</isNotEmpty>
+		    <isEmpty  property="Price5">0,</isEmpty>
+		    
+		    <isNotEmpty  property="AprQty1">$AprQty1$,</isNotEmpty>
+		    <isEmpty  property="AprQty1">0,</isEmpty>
+		    <isNotEmpty  property="MayQty1">$MayQty1$,</isNotEmpty>
+		    <isEmpty  property="MayQty1">0,</isEmpty>
+		    <isNotEmpty  property="JunQty1">$JunQty1$,</isNotEmpty>
+		    <isEmpty  property="JunQty1">0,</isEmpty>
+		    <isNotEmpty  property="JulQty1">$JulQty1$,</isNotEmpty>
+		    <isEmpty  property="JulQty1">0,</isEmpty>
+		    <isNotEmpty  property="AugQty1">$AugQty1$,</isNotEmpty>
+		    <isEmpty  property="AugQty1">0,</isEmpty>
+		    <isNotEmpty  property="SepQty1">$SepQty1$,</isNotEmpty>
+		    <isEmpty  property="SepQty1">0,</isEmpty>
+		    <isNotEmpty  property="OctQty1">$OctQty1$,</isNotEmpty>
+		    <isEmpty  property="OctQty1">0,</isEmpty>
+		    <isNotEmpty  property="NovQty1">$NovQty1$,</isNotEmpty>
+		    <isEmpty  property="NovQty1">0,</isEmpty>
+		    <isNotEmpty  property="DecQty1">$DecQty1$,</isNotEmpty>
+		    <isEmpty  property="DecQty1">0,</isEmpty>
+		    <isNotEmpty  property="JanQty1">$JanQty1$,</isNotEmpty>
+		    <isEmpty  property="JanQty1">0,</isEmpty>
+		    <isNotEmpty  property="FebQty1">$FebQty1$,</isNotEmpty>
+		    <isEmpty  property="FebQty1">0,</isEmpty>
+		    <isNotEmpty  property="MarQty1">$MarQty1$,</isNotEmpty>
+		    <isEmpty  property="MarQty1">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Q1Qty2">$Q1Qty2$,</isNotEmpty>
+		    <isEmpty  property="Q1Qty2">0,</isEmpty>
+		    <isNotEmpty  property="Q2Qty2">$Q2Qty2$,</isNotEmpty>
+		    <isEmpty  property="Q2Qty2">0,</isEmpty>
+		    <isNotEmpty  property="Q3Qty2">$Q3Qty2$,</isNotEmpty>
+		    <isEmpty  property="Q3Qty2">0,</isEmpty>
+		    <isNotEmpty  property="Q4Qty2">$Q4Qty2$,</isNotEmpty>
+		    <isEmpty  property="Q4Qty2">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Q1Qty3">$Q1Qty3$,</isNotEmpty>
+		    <isEmpty  property="Q1Qty3">0,</isEmpty>
+		    <isNotEmpty  property="Q2Qty3">$Q2Qty3$,</isNotEmpty>
+		    <isEmpty  property="Q2Qty3">0,</isEmpty>
+		    <isNotEmpty  property="Q3Qty3">$Q3Qty3$,</isNotEmpty>
+		    <isEmpty  property="Q3Qty3">0,</isEmpty>
+		    <isNotEmpty  property="Q4Qty3">$Q4Qty3$,</isNotEmpty>
+		    <isEmpty  property="Q4Qty3">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Qty4">$Qty4$,</isNotEmpty>
+		    <isEmpty  property="Qty4">0,</isEmpty>
+		    
+		    <isNotEmpty  property="Qty5">$Qty5$,</isNotEmpty>
+		    <isEmpty  property="Qty5">0,</isEmpty>
+		    char(current date,iso),char(current time,iso),' ',' ',$ROWNUM$
+		)
+	</insert>
+		
+	<select id="selectCVTSPY200C1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT A.*
+		FROM $LIB2$.SPYYMPRPF A EXCEPTION JOIN $LIB1$.BM008PR B ON A.PSPNO=B.ITNBR
+		WHERE A.PYYYY=$PYYYY$
+		AND A.PLNGB=#PLNGB#
+		AND not(QT104 = 0 AND QT105 = 0 AND QT106 = 0 AND
+			QT107 = 0 AND QT108 = 0 AND QT109 = 0 AND
+			QT110 = 0 AND QT111 = 0 AND QT112 = 0 AND
+			QT101 = 0 AND QT102 = 0 AND QT103 = 0 AND
+			QT2Q1 = 0 AND QT2Q2 = 0 AND QT2Q3 = 0 AND
+			QT2Q4 = 0 AND QT3Q1 = 0 AND QT3Q2 = 0 AND
+			QT3Q3 = 0 AND QT3Q4 = 0 AND QT4Q0 = 0 AND
+			QT5Q0 = 0)
+	</select>
+	<update id="updateCVTSPY200C1" parameterClass="java.util.HashMap">
+		UPDATE $LIB2$.SPYYMPRPF 
+		SET PSPNO=#PSPNO#
+		WHERE PYYYY=$PYYYY$
+		AND PLNGB=#PLNGB#
+		AND YYNUM=$YYNUM$ 
+	</update>
+	<select id="selectCVTSPY200C2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT A.*
+		FROM $LIB2$.SPYYMPRPF A EXCEPTION JOIN $LIB1$.CUSMAS B ON A.CUSNO=B.CUSNO
+		WHERE A.PYYYY=$PYYYY$
+		AND A.PLNGB=#PLNGB#
+		AND not(QT104 = 0 AND QT105 = 0 AND QT106 = 0 AND
+			QT107 = 0 AND QT108 = 0 AND QT109 = 0 AND
+			QT110 = 0 AND QT111 = 0 AND QT112 = 0 AND
+			QT101 = 0 AND QT102 = 0 AND QT103 = 0 AND
+			QT2Q1 = 0 AND QT2Q2 = 0 AND QT2Q3 = 0 AND
+			QT2Q4 = 0 AND QT3Q1 = 0 AND QT3Q2 = 0 AND
+			QT3Q3 = 0 AND QT3Q4 = 0 AND QT4Q0 = 0 AND
+			QT5Q0 = 0)
+	</select>
+	<update id="updateCVTSPY200C2" parameterClass="java.util.HashMap">
+		UPDATE $LIB2$.SPYYMPRPF 
+		SET CUSNO=$CUSNO$
+		WHERE PYYYY=$PYYYY$
+		AND PLNGB=#PLNGB#
+		AND YYNUM=$YYNUM$ 
+	</update>
+	<select id="selectCVTSPY200C3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT B.*
+		FROM
+		(
+			SELECT X.CUSNO,X.PSPNO,COUNT(*)
+			FROM
+			(
+				SELECT CUSNO,PSPNO,PR104,PR105,PR106,PR107,PR108,PR109,PR110,PR111,PR112,
+						 PR101,PR102,PR103,PR2Q1,PR2Q2,PR2Q3,PR2Q4,PR3Q1,PR3Q2,PR3Q3,PR3Q4,PR4Q0,
+						 PR5Q0
+				FROM $LIB2$.SPYYMPRPF
+				WHERE PYYYY=$PYYYY$   
+				AND PLNGB=#PLNGB#  
+				AND not(QT104 = 0 AND QT105 = 0 AND QT106 = 0 AND    QT107 = 0 AND QT108 = 0 AND QT109 = 0 AND
+						  QT110 = 0 AND QT111 = 0 AND QT112 = 0 AND    QT101 = 0 AND QT102 = 0 AND QT103 = 0 AND
+						  QT2Q1 = 0 AND QT2Q2 = 0 AND QT2Q3 = 0 AND    QT2Q4 = 0 AND QT3Q1 = 0 AND QT3Q2 = 0 AND
+						  QT3Q3 = 0 AND QT3Q4 = 0 AND QT4Q0 = 0 AND    QT5Q0 = 0)  
+				GROUP BY CUSNO,PSPNO,PR104,PR105,PR106,PR107,PR108,PR109,PR110,PR111,PR112,
+						 PR101,PR102,PR103,PR2Q1,PR2Q2,PR2Q3,PR2Q4,PR3Q1,PR3Q2,PR3Q3,PR3Q4,PR4Q0,
+						 PR5Q0
+			) X
+			GROUP BY X.CUSNO,X.PSPNO
+			HAVING COUNT(*) > 1
+		) A 
+		LEFT OUTER JOIN 
+		(SELECT * FROM $LIB2$.SPYYMPRPF WHERE PYYYY=$PYYYY$ AND PLNGB=#PLNGB#)B ON A.CUSNO=B.CUSNO AND A.PSPNO=B.PSPNO
+	</select>
+	<update id="updateCVTSPY200C3" parameterClass="java.util.HashMap">
+		UPDATE $LIB2$.SPYYMPRPF 
+		SET CUSNO=$CUSNO$
+		WHERE PYYYY=$PYYYY$
+		AND PLNGB=#PLNGB#
+		AND YYNUM=$YYNUM$ 
+	</update>
+	<delete id="deleteSPYDSKRPF" parameterClass="java.util.HashMap">
+		DELETE FROM $LIB2$.SPYDSKRPF 
+		WHERE YYEAR = $PYYYY$ OR YYEAR = $PYYY1$ OR YYEAR = $PYYY2$ OR
+		      YYEAR = $PYYY3$ OR YYEAR = $PYYY4$
+	</delete>
+	<insert id="insertSPYDSKRPF" parameterClass="java.util.HashMap">
+		INSERT INTO $LIB2$.SPYDSKRPF
+			select 
+				CUSNO,PSPNO,
+				$PYYYY$,decimal(AVG(PRICE),13,2),
+				CASE WHEN SUM(QT104) != 0 THEN SUM(PR104*QT104)/SUM(QT104) ELSE 0 END,
+				CASE WHEN SUM(QT105) != 0 THEN SUM(PR105*QT105)/SUM(QT105) ELSE 0 END,
+				CASE WHEN SUM(QT106) != 0 THEN SUM(PR106*QT106)/SUM(QT106) ELSE 0 END,
+				CASE WHEN SUM(QT107) != 0 THEN SUM(PR107*QT107)/SUM(QT107) ELSE 0 END,
+				CASE WHEN SUM(QT108) != 0 THEN SUM(PR108*QT108)/SUM(QT108) ELSE 0 END,
+				CASE WHEN SUM(QT109) != 0 THEN SUM(PR109*QT109)/SUM(QT109) ELSE 0 END,
+				CASE WHEN SUM(QT110) != 0 THEN SUM(PR110*QT110)/SUM(QT110) ELSE 0 END,
+				CASE WHEN SUM(QT111) != 0 THEN SUM(PR111*QT111)/SUM(QT111) ELSE 0 END,
+				CASE WHEN SUM(QT112) != 0 THEN SUM(PR112*QT112)/SUM(QT112) ELSE 0 END,
+				CASE WHEN SUM(QT101) != 0 THEN SUM(PR101*QT101)/SUM(QT101) ELSE 0 END,
+				CASE WHEN SUM(QT102) != 0 THEN SUM(PR102*QT102)/SUM(QT102) ELSE 0 END,
+				CASE WHEN SUM(QT103) != 0 THEN SUM(PR103*QT103)/SUM(QT103) ELSE 0 END,
+				SUM(QT104),
+				SUM(QT105),
+				SUM(QT106),
+				SUM(QT107),
+				SUM(QT108),
+				SUM(QT109),
+				SUM(QT110),
+				SUM(QT111),
+				SUM(QT112),
+				SUM(QT101),
+				SUM(QT102),
+				SUM(QT103),
+				SUM(QT104)+	SUM(QT105)+	SUM(QT106)+	SUM(QT107)+	SUM(QT108)+	SUM(QT109)+
+				SUM(QT110)+	SUM(QT111)+	SUM(QT112)+	SUM(QT101)+	SUM(QT102)+	SUM(QT103),
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				'',''
+			from $LIB2$.spyymprpf
+			WHERE PYYYY=$PYYYY$
+			AND PLNGB=#PLNGB#
+			AND not(QT104 = 0 AND QT105 = 0 AND QT106 = 0 AND QT107 = 0 AND QT108 = 0 AND QT109 = 0 AND
+			        QT110 = 0 AND QT111 = 0 AND QT112 = 0 AND QT101 = 0 AND QT102 = 0 AND QT103 = 0)
+			GROUP BY CUSNO,PSPNO
+			UNION ALL
+			select 
+				CUSNO,PSPNO,
+				$PYYY1$,decimal(AVG(PRICE),13,2),
+				0,0,
+				CASE WHEN SUM(QT2Q1) != 0 THEN SUM(PR2Q1*QT2Q1)/SUM(QT2Q1) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT2Q2) != 0 THEN SUM(PR2Q2*QT2Q2)/SUM(QT2Q2) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT2Q3) != 0 THEN SUM(PR2Q3*QT2Q3)/SUM(QT2Q3) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT2Q4) != 0 THEN SUM(PR2Q4*QT2Q4)/SUM(QT2Q4) ELSE 0 END,
+				0,0,
+				SUM(QT2Q1),
+				0,0,
+				SUM(QT2Q2),
+				0,0,
+				SUM(QT2Q3),
+				0,0,
+				SUM(QT2Q4),
+				SUM(QT2Q1)+	SUM(QT2Q2)+	SUM(QT2Q3)+	SUM(QT2Q4),
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				'',''
+			from $LIB2$.spyymprpf
+			WHERE PYYYY=$PYYYY$
+			AND PLNGB=#PLNGB#
+			AND not(QT2Q1 = 0 AND QT2Q2 = 0 AND QT2Q3 = 0 AND QT2Q4 = 0)
+			GROUP BY CUSNO,PSPNO
+			UNION ALL
+			select 
+				CUSNO,PSPNO,
+				$PYYY2$,decimal(AVG(PRICE),13,2),
+				0,0,
+				CASE WHEN SUM(QT3Q1) != 0 THEN SUM(PR3Q1*QT3Q1)/SUM(QT3Q1) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT3Q2) != 0 THEN SUM(PR3Q2*QT3Q2)/SUM(QT3Q2) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT3Q3) != 0 THEN SUM(PR3Q3*QT3Q3)/SUM(QT3Q3) ELSE 0 END,
+				0,0,
+				CASE WHEN SUM(QT3Q4) != 0 THEN SUM(PR3Q4*QT3Q4)/SUM(QT3Q4) ELSE 0 END,
+				0,0,
+				SUM(QT3Q1),
+				0,0,
+				SUM(QT3Q2),
+				0,0,
+				SUM(QT3Q3),
+				0,0,
+				SUM(QT3Q4),
+				SUM(QT3Q1)+	SUM(QT3Q2)+	SUM(QT3Q3)+	SUM(QT3Q4),
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				'',''
+			from $LIB2$.spyymprpf
+			WHERE PYYYY=$PYYYY$
+			AND PLNGB=#PLNGB#
+			AND not(QT3Q1 = 0 AND QT3Q2 = 0 AND QT3Q3 = 0 AND QT3Q4 = 0)
+			GROUP BY CUSNO,PSPNO
+			UNION ALL
+			select 
+				CUSNO,PSPNO,
+				$PYYY3$,decimal(AVG(PRICE),13,2),
+				0,0,0,0,0,0,0,0,0,0,0,
+				CASE WHEN SUM(QT4Q0) != 0 THEN SUM(PR4Q0*QT4Q0)/SUM(QT4Q0) ELSE 0 END,
+				0,0,0,0,0,0,0,0,0,0,0,
+				SUM(QT4Q0),
+				SUM(QT4Q0),
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				'',''
+			from $LIB2$.spyymprpf
+			WHERE PYYYY=$PYYYY$
+			AND PLNGB=#PLNGB#
+			AND QT4Q0 != 0
+			GROUP BY CUSNO,PSPNO
+			UNION ALL
+			select 
+				CUSNO,PSPNO,
+				$PYYY4$,decimal(AVG(PRICE),13,2),
+				0,0,0,0,0,0,0,0,0,0,0,
+				CASE WHEN SUM(QT5Q0) != 0 THEN SUM(PR5Q0*QT5Q0)/SUM(QT5Q0) ELSE 0 END,
+				0,0,0,0,0,0,0,0,0,0,0,
+				SUM(QT5Q0),
+				SUM(QT5Q0),
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				'',''
+			from $LIB2$.spyymprpf
+			WHERE PYYYY=$PYYYY$
+			AND PLNGB=#PLNGB#
+			AND QT5Q0 != 0
+			GROUP BY CUSNO,PSPNO
+	</insert>
+	<select id="selectCVTSPY200C5" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+			CUSNO,PSPNO,PRI00,
+			PRC04,PRC05,PRC06,PRC07,PRC08,PRC09,PRC10,PRC11,PRC12,PRC01,PRC02,PRC03,
+			QTY04,QTY05,QTY06,QTY07,QTY08,QTY09,QTY10,QTY11,QTY12,QTY01,QTY02,QTY03
+		from 
+			$LIB2$.SPYDSKRPF
+		where 
+			yyear=$PYYYY$
+	</select>
+	
+	<select id="selectCVTSPY200C7" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.PRDCD,A.PYVND,E.CUSNM,A.PSPNO,B.ITDSC,B.ITTYP,B.ITCLS,A.PLTCD,
+		       SUM(CASE WHEN A.PLNYM=$Y104$ THEN A.MONQY ELSE 0 END) Y1Q04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y104$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y105$ THEN A.MONQY ELSE 0 END) Y1Q05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y105$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y106$ THEN A.MONQY ELSE 0 END) Y1Q06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y106$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y107$ THEN A.MONQY ELSE 0 END) Y1Q07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y107$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y108$ THEN A.MONQY ELSE 0 END) Y1Q08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y108$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y109$ THEN A.MONQY ELSE 0 END) Y1Q09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y109$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y110$ THEN A.MONQY ELSE 0 END) Y1Q10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y110$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y111$ THEN A.MONQY ELSE 0 END) Y1Q11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y111$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y112$ THEN A.MONQY ELSE 0 END) Y1Q12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y112$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y101$ THEN A.MONQY ELSE 0 END) Y1Q01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y101$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y102$ THEN A.MONQY ELSE 0 END) Y1Q02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y102$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y103$ THEN A.MONQY ELSE 0 END) Y1Q03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y103$ THEN A.MONQY*A.YESCS ELSE 0 END) Y1A03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y204$ THEN A.MONQY ELSE 0 END) Y2Q04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y204$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y205$ THEN A.MONQY ELSE 0 END) Y2Q05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y205$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y206$ THEN A.MONQY ELSE 0 END) Y2Q06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y206$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y207$ THEN A.MONQY ELSE 0 END) Y2Q07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y207$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y208$ THEN A.MONQY ELSE 0 END) Y2Q08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y208$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y209$ THEN A.MONQY ELSE 0 END) Y2Q09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y209$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y210$ THEN A.MONQY ELSE 0 END) Y2Q10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y210$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y211$ THEN A.MONQY ELSE 0 END) Y2Q11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y211$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y212$ THEN A.MONQY ELSE 0 END) Y2Q12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y212$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y201$ THEN A.MONQY ELSE 0 END) Y2Q01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y201$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y202$ THEN A.MONQY ELSE 0 END) Y2Q02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y202$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y203$ THEN A.MONQY ELSE 0 END) Y2Q03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y203$ THEN A.MONQY*A.YESCS ELSE 0 END) Y2A03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y304$ THEN A.MONQY ELSE 0 END) Y3Q04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y304$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y305$ THEN A.MONQY ELSE 0 END) Y3Q05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y305$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y306$ THEN A.MONQY ELSE 0 END) Y3Q06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y306$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y307$ THEN A.MONQY ELSE 0 END) Y3Q07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y307$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y308$ THEN A.MONQY ELSE 0 END) Y3Q08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y308$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y309$ THEN A.MONQY ELSE 0 END) Y3Q09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y309$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y310$ THEN A.MONQY ELSE 0 END) Y3Q10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y310$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y311$ THEN A.MONQY ELSE 0 END) Y3Q11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y311$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y312$ THEN A.MONQY ELSE 0 END) Y3Q12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y312$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y301$ THEN A.MONQY ELSE 0 END) Y3Q01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y301$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y302$ THEN A.MONQY ELSE 0 END) Y3Q02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y302$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y303$ THEN A.MONQY ELSE 0 END) Y3Q03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y303$ THEN A.MONQY*A.YESCS ELSE 0 END) Y3A03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y404$ THEN A.MONQY ELSE 0 END) Y4Q04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y404$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y405$ THEN A.MONQY ELSE 0 END) Y4Q05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y405$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y406$ THEN A.MONQY ELSE 0 END) Y4Q06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y406$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y407$ THEN A.MONQY ELSE 0 END) Y4Q07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y407$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y408$ THEN A.MONQY ELSE 0 END) Y4Q08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y408$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y409$ THEN A.MONQY ELSE 0 END) Y4Q09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y409$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y410$ THEN A.MONQY ELSE 0 END) Y4Q10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y410$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y411$ THEN A.MONQY ELSE 0 END) Y4Q11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y411$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y412$ THEN A.MONQY ELSE 0 END) Y4Q12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y412$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y401$ THEN A.MONQY ELSE 0 END) Y4Q01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y401$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y402$ THEN A.MONQY ELSE 0 END) Y4Q02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y402$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y403$ THEN A.MONQY ELSE 0 END) Y4Q03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y403$ THEN A.MONQY*A.YESCS ELSE 0 END) Y4A03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y504$ THEN A.MONQY ELSE 0 END) Y5Q04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y504$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A04 ,
+		       SUM(CASE WHEN A.PLNYM=$Y505$ THEN A.MONQY ELSE 0 END) Y5Q05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y505$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A05 ,
+		       SUM(CASE WHEN A.PLNYM=$Y506$ THEN A.MONQY ELSE 0 END) Y5Q06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y506$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A06 ,
+		       SUM(CASE WHEN A.PLNYM=$Y507$ THEN A.MONQY ELSE 0 END) Y5Q07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y507$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A07 ,
+		       SUM(CASE WHEN A.PLNYM=$Y508$ THEN A.MONQY ELSE 0 END) Y5Q08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y508$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A08 ,
+		       SUM(CASE WHEN A.PLNYM=$Y509$ THEN A.MONQY ELSE 0 END) Y5Q09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y509$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A09 ,
+		       SUM(CASE WHEN A.PLNYM=$Y510$ THEN A.MONQY ELSE 0 END) Y5Q10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y510$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A10 ,
+		       SUM(CASE WHEN A.PLNYM=$Y511$ THEN A.MONQY ELSE 0 END) Y5Q11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y511$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A11 ,
+		       SUM(CASE WHEN A.PLNYM=$Y512$ THEN A.MONQY ELSE 0 END) Y5Q12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y512$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A12 ,
+		       SUM(CASE WHEN A.PLNYM=$Y501$ THEN A.MONQY ELSE 0 END) Y5Q01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y501$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A01 ,
+		       SUM(CASE WHEN A.PLNYM=$Y502$ THEN A.MONQY ELSE 0 END) Y5Q02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y502$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A02 ,
+		       SUM(CASE WHEN A.PLNYM=$Y503$ THEN A.MONQY ELSE 0 END) Y5Q03 ,
+		       SUM(CASE WHEN A.PLNYM=$Y503$ THEN A.MONQY*A.YESCS ELSE 0 END) Y5A03
+		FROM 
+			$LIB2$.SPY200PF A 
+			LEFT OUTER JOIN $LIB1$.BM008PR B ON A.PSPNO=B.ITNBR
+		    LEFT OUTER JOIN $LIB1$.CUSMAS E ON A.PYVND = E.CUSNO
+		WHERE 
+			A.PLNYM BETWEEN $Y104$ AND $Y503$
+			AND A.PLNGB = #PLNGB#
+		GROUP BY 
+			A.PRDCD,A.PYVND,E.CUSNM,A.PSPNO,B.ITDSC,B.ITTYP,B.ITCLS,A.PLTCD
+	</select>
+
+	<select id="selectItemMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ITNBR A1,ITDSC A2,ITTYP A3
+		FROM
+			$LIB1$.BM008PR
+		<dynamic prepend="WHERE">
+		<isNotEmpty prepend="AND" property="ITNBR">
+			ITNBR=#ITNBR#
+		</isNotEmpty>
+		<isEqual prepend="AND" property = "G_GUB" compareValue="1">
+			((ITTYP='1' AND ITCLS LIKE '_1')  <!-- FINISHED -->
+			OR
+			(ITTYP='9' AND ITCLS LIKE '_1'))  <!-- A-PART -->
+		</isEqual>
+		<isEqual prepend="AND" property = "G_GUB" compareValue="2">
+			(ITTYP='1' AND ITCLS LIKE '_3')  <!-- INHOUSE -->
+		</isEqual>
+		<isEqual prepend="AND" property = "G_GUB" compareValue="3">
+			((ITTYP='9' AND ITCLS LIKE '_1')  <!-- A-PART --> 
+			OR
+			(ITTYP='4' AND ITCLS LIKE '_4')  <!-- NON DCJ PART -->
+			OR
+			(ITTYP='4' AND ITCLS LIKE '_5') <!--  DCJ PART -->
+			OR
+			(ITTYP='3' AND ITCLS LIKE '_A'))  <!-- NON DCJ ROW MATERIAL -->
+		</isEqual>
+		</dynamic>
+		ORDER BY
+			ITNBR
+	</select>
+		
+	<select id="selectCustomerMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			CUSNO A1, CUSNM A2, CUSA1 A3
+		FROM
+			$LIB1$.CUSMAS1
+		<dynamic prepend="WHERE">
+		<isNotEmpty prepend="AND" property="CUSNO">
+			CUSNO=#CUSNO#
+		</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			CUSNO
+	</select>
+	
+	<select id="selectCodeMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			MSTCD A1, MSTSM A2, MSTRM A3
+		FROM
+			$LIB2$.MST050PF
+		WHERE
+			COMPS=#COMPS#
+			<isEqual prepend="AND" property = "G_GUB" compareValue="1">
+			GRPCD='LOC'
+			</isEqual>
+			<isEqual prepend="AND" property = "G_GUB" compareValue="2">
+			GRPCD='USE'
+			</isEqual>
+			<isEqual prepend="AND" property = "G_GUB" compareValue="3">
+			GRPCD='TRN'
+			</isEqual>
+			<isEqual prepend="AND" property = "G_GUB" compareValue="4">
+			GRPCD='SLC'
+			</isEqual>
+			<!-- 추가가능...... -->
+			<isEqual prepend="AND" property = "G_GUB" compareValue="5">
+			GRPCD='CAR'
+			</isEqual>
+			<isEqual prepend="AND" property = "G_GUB" compareValue="6">
+			GRPCD='BIL'
+			</isEqual>			
+			<isNotEmpty prepend="AND" property="MSTCD">
+			MSTCD=#MSTCD#
+			</isNotEmpty>
+		ORDER BY
+			MSTCD
+	</select>
+	<select id="selectVendorMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(VNDNR) A1, VNAME A2, VADD1 A3
+		FROM
+			$LIB1$.VENNAM
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="VNDNR">
+			VNDNR=#VNDNR#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			VNDNR
+	</select>
+	<select id="selectSaleCusMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			VNDOR A1, COPNM A2, ADDRA A3
+		FROM
+			$LIB2$.MST600PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="VNDOR">
+			VNDOR=#VNDOR#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			VNDOR
+	</select>
+	<!-- mst040pf 관리마스타 추가 : 제환복 -->
+	<select id="selectManagerMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(MAJCD) A1, MJINT A2, TRIM(MAJMK) A3
+		FROM
+			$LIB2$.MST040PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="MAJCD">
+				MAJCD = 'S' || REPEAT('0', 4-length(trim(char($MAJCD$)))) || INTEGER($MAJCD$)
+				
+			</isNotEmpty>
+			<isEmpty prepend="and" property="MAJCD">
+				MAJCD LIKE 'S0%' 
+			</isEmpty>			
+	ORDER BY MAJCD			
+	</select>
+<!-- 변경전 	
+	<select id="selectDPARTMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(DPCODE) A1, TRIM(DPCONM) A2, TRIM(DPDPNM) A3
+		FROM
+			$LIB2$.MST650PF
+		WHERE
+			DPCOMP = #COMPS#
+			<isNotEmpty prepend="and" property="DPCODE">
+				DPCODE = #DPCODE#
+			</isNotEmpty>	
+		ORDER BY DPSQNO
+	</select>
+-->		
+	<select id="selectDPARTMaster" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		DISTINCT A.DHCOMP, TRIM(A.DHCODE) A1, TRIM(B.DPCONM) A2, TRIM(B.DPDPNM) A3
+	FROM 
+		$LIB2$.FHD000PF A
+	LEFT OUTER JOIN $LIB2$.MST650PF B ON A.DHCOMP=B.DPCOMP AND A.DHCODE= B.DPCODE
+	WHERE
+		A.DHCOMP =#COMPS#
+		<isNotEmpty prepend="and" property="DPCODE">
+		A.DHCODE = #DPCODE#
+		</isNotEmpty>	
+	ORDER BY A1
+	</select>	
+	<!-- VARIDATEION 부서코드별작업자 -->		
+	<select id="selectINSAMasterPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.SABUN A1, TRIM(A.KORNM) A2, TRIM(B.DPCONM) A3, TRIM(A.DPTCD) AS DPTCD
+		, A.GNDAT <!-- 추가 2015.0710 -->
+	FROM 
+		$LIB3$.HMD020PF A  
+		LEFT OUTER JOIN $LIB2$.MST650PF B ON B.DPCOMP=#COMPS# AND A.DPTCD= B.DPCODE
+	WHERE
+	A.CNDCD !='R'
+	<isEqual prepend="and" property="PAYCD" compareValue="1">
+		A.PAYCD <![CDATA[>]]> 1
+	</isEqual>
+	<isEqual prepend="and" property="PAYCD" compareValue="2">
+		A.PAYCD IN ('2','3')
+	</isEqual>
+	<isNotEmpty prepend="and" property="KORNM">
+		A.KORNM <![CDATA[>=]]> #KORNM#
+	</isNotEmpty>
+	<isNotEmpty prepend="and" property="SABUN">
+		A.SABUN = $SABUN$
+	</isNotEmpty>
+<!-- 
+	<isNotEmpty prepend="and" property="DPTCD">
+		 A.DPTCD=$DPTCD$
+	</isNotEmpty>
+ -->		
+	ORDER BY A2		
+	</select>
+	<!-- VARIDATEION 작업코드  -->					
+	<select id="selectJOBCodePopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT A.JOBCD A1, A.JOBMK A2, A.JOBTM A3, A.STRTM, A.ENDTM, A.JOBHM
+	FROM $LIB2$.FHD050PF A
+	WHERE
+	A.COMPS = #COMPS#
+	<isNotEmpty prepend="and" property="JOBCD">
+		A.JOBCD =$JOBCD$
+	</isNotEmpty>
+	ORDER BY A1
+	</select>
+	<!-- 잔업코드  -->
+	<select id="selectOVERTIMEPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT A.SPSCD A1, TRIM(A.SPSNM) AS A2
+	FROM $LIB2$.FHD070PF A
+	WHERE
+	A.COMPS = #COMPS#
+	<isNotEmpty prepend="and" property="SWKCD">
+		A.SPSCD = $SWKCD$
+	</isNotEmpty>	
+	<isNotEmpty prepend="and" property="SPSNM">
+		A.SPSNM LIKE %#SPSNM#%
+	</isNotEmpty>
+	</select>							
+	<select id="selectDEPARTPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT A.DPCODE A1, TRIM(A.DPCONM) AS A2, TRIM(A.DPDPNM) AS A3
+	FROM $LIB2$.MST650PF A
+	WHERE
+	A.DPCOMP = #COMPS#
+	<isNotEmpty prepend="and" property="DPCODE">
+		A.DPCODE = #DPCODE#
+	</isNotEmpty>	
+	<isNotEmpty prepend="and" property="DPEDSW">
+		A.DPEDSW = #DPEDSW#
+	</isNotEmpty>
+	</select>	
+	<select id="selectFHD085PFPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		 A.ZIPCD A1, TRIM(A.ZIPNM) AS A2
+	FROM 
+		$LIB2$.FHD085PF A
+	WHERE
+		A.COMPS =#COMPS#
+		<isNotEmpty prepend="and" property="ZIPCD">
+		A.ZIPCD LIKE '$ZIPCD$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ZIPNM">
+		A.ZIPNM LIKE '%$ZIPNM$%'
+		</isNotEmpty>	
+	ORDER BY A1
+	</select>	
+	<select id="selectMST060PFPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		TRIM(A.PROCS) A1, TRIM(A.PROSM) AS A2, TRIM(A.PRONM) AS A3
+	FROM 
+		$LIB2$.MST060PF A
+	WHERE
+		A.COMPS =#COMPS#
+		<isNotEmpty prepend="and" property="PROCS">
+		A.PROCS LIKE '%$PROCS$%'
+		</isNotEmpty>	
+	ORDER BY A1
+	</select>
+	<select id="selectOBMZ160PFPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		TRIM(A.SABUN) A1, TRIM(A.KORNM) AS A2, TRIM(A.MANCD) AS A3
+	FROM 
+		$LIB2$.OBM160PF A
+	WHERE
+		A.COMPS = #COMPS#
+		<isNotEmpty prepend="AND" property="KORNM">
+		A.KORNM LIKE '%' || '$KORNM$' || '%' 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="SABUN">
+		A.SABUN = $SABUN$ 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="KORNM2">
+		A.KORNM = #KORNM2#
+		</isNotEmpty>
+	ORDER BY A2
+	</select>		
+	<!-- 등록화면 사용여부 Check -->
+	<select id="selectM_MNU_KEY" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			PSZDBLIB.M_MNU_KEY 
+		WHERE
+			MENU_ID=#MENU_ID#
+			AND USER_ID=#USER_ID#
+			<isNotEmpty prepend="AND" property="KEY_01">
+			KEY_01=#KEY_01#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_02">
+			KEY_02=#KEY_02#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_03">
+			KEY_03=#KEY_03#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_04">
+			KEY_04=#KEY_04#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_05">
+			KEY_05=#KEY_05#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_06">
+			KEY_06=#KEY_06#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_07">
+			KEY_07=#KEY_07#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_08">
+			KEY_08=#KEY_08#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_09">
+			KEY_09=#KEY_09#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_10">
+			KEY_10=#KEY_10#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_11">
+			KEY_11=#KEY_11#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_12">
+			KEY_12=#KEY_12#
+			</isNotEmpty>
+	</select>
+	<insert id="insertM_MNU_KEY" parameterClass="java.util.HashMap">
+		insert into 
+			PSZDBLIB.M_MNU_KEY 
+			(
+			MENU_ID,
+			USER_ID,
+			USER_NM,
+			$KEYTARGET$
+			)
+		values
+			(
+			#MENU_ID#,
+			#USER_ID#,
+			#USER_NM#,
+			$KEYVALUE$
+			)
+	</insert>
+	<delete id="deleteM_MNU_KEY" parameterClass="java.util.HashMap">
+		DELETE FROM 
+			PSZDBLIB.M_MNU_KEY 
+		WHERE 
+			MENU_ID=#MENU_ID#
+			AND USER_ID=#USER_ID#
+			<isNotEmpty prepend="AND" property="KEY_01">
+			KEY_01=#KEY_01#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_02">
+			KEY_02=#KEY_02#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_03">
+			KEY_03=#KEY_03#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_04">
+			KEY_04=#KEY_04#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_05">
+			KEY_05=#KEY_05#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_06">
+			KEY_06=#KEY_06#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_07">
+			KEY_07=#KEY_07#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_08">
+			KEY_08=#KEY_08#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_09">
+			KEY_09=#KEY_09#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_10">
+			KEY_10=#KEY_10#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_11">
+			KEY_11=#KEY_11#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="KEY_12">
+			KEY_12=#KEY_12#
+			</isNotEmpty>
+	</delete>
+	
+	<!-- Parameter:품번(ITNBR),거래처(CUSNO)                       
+	       Display:품명,공장구분,ittyp,itcls
+	       Display:OEM품번
+	       Display:단가,이유,적용일
+	       Display:거래처명    -->
+	<select id="selectSAL001" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.ITDSC,A.PACKC,A.ITTYP,A.ITCLS,
+			B.CPRTN,
+			C.PRICE,C.REASN,C.EDATM,
+			(SELECT cusnm FROM $LIB1$.CUSMAS1 WHERE CUSNO=$CUSNO$) CUSNM
+		FROM 
+			$LIB1$.BM008PR A
+			LEFT OUTER JOIN
+			(SELECT * FROM $LIB1$.EM000PR WHERE PRTNO=#ITNBR# AND CUSNO=$CUSNO$ FETCH FIRST 1 ROWS ONLY) B ON A.ITNBR=B.PRTNO
+			LEFT OUTER JOIN
+			(SELECT * FROM $LIB1$.EM001PR Z WHERE Z.PRTNO=#ITNBR# AND Z.CUSNO=$CUSNO$ AND Z.EDATM = (SELECT MAX(X.EDATM) FROM $LIB1$.EM001PR X WHERE Z.PRTNO=X.PRTNO AND Z.CUSNO=X.CUSNO)) C ON A.ITNBR=C.PRTNO
+		WHERE
+			A.ITNBR=#ITNBR#
+	</select>
+	
+	<!-- Parameter:VAN ID, 공장코드          Display:사업부,DENSO거래처코드-->
+	<select id="selectSVM020PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.SVM020PF 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="P_VNDCD">
+			VNDCD=#P_VNDCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_FACCD">
+			FACCD=#P_FACCD#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 중복서열코드마스타 -->
+	<select id="selectSVZ080PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.SVZ080PF 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="P_COMPS">
+			COMPS=#P_COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_PYVND">
+			PYVND=$P_PYVND$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MCRCD">
+			MCRCD=#P_MCRCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MSECD">
+			MSECD=#P_MSECD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MCRC1">
+			MCRC1=#P_MCRC1#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MSEC1">
+			MSEC1=#P_MSEC1#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 업체서열 차종마스타 조회 -->
+	<select id="selectSVM100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.SVM100PF 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="P_COMPS">
+			COMPS=#P_COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_PYVND">
+			PYVND=$P_PYVND$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_PSPNO">
+			PSPNO=#P_PSPNO#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MCRCD">
+			MCRCD=#P_MCRCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_SEQCD">
+			SEQCD=#P_SEQCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_SEQNO">
+			SEQNO=#P_SEQNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 차종서열 제외 마스타 조회 -->
+	<select id="selectSVM300PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.SVM300PF 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="P_COMPS">
+			COMPS=#P_COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_PYVND">
+			PYVND=$P_PYVND$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_MCRCD">
+			MKCAR=#P_MCRCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_SEQCD">
+			SEYCD=#P_SEQCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="P_SEQNO">
+			SEYNO=#P_SEQNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- Parameter:품번                              Display:품명,공장구분,담당자,ittyp,itcls등등 -->
+	<select id="selectBM008PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.BM008PR 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="ITNBR">
+			ITNBR=#ITNBR#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:거래처코드                  Display:거래처명등등 -->
+	<select id="selectCUSMAS1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.CUSMAS1 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO"> 
+			CUSNO=$CUSNO$
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- Parameter:구매업체코드                 Display:구매업체명등등 -->
+	<select id="selectVENNAM" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.VENNAM 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="VNDNR"> 
+			VNDNR=#VNDNR#
+			</isNotEmpty>
+		</dynamic>
+	</select>	
+	<!-- Parameter:품번,거래처코드         Display:OEM품번 -->
+	<select id="selectEM000PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM000PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			</isNotEmpty>
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO)
+		</dynamic>
+	</select>
+	<select id="selectEM000PR_CPRTN" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM000PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="MKPNO">
+			A.CPRTN= #MKPNO#
+			</isNotEmpty>
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000PR C WHERE A.CPRTN=C.CPRTN AND A.CUSNO=C.CUSNO)
+		</dynamic>
+	</select>
+	<select id="selectEM000PR_CUSNO" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.CUSNO,TRIM(A.CPRTN) CPRTN,TRIM(A.PRTNO) PRTNO,A.CPDSC,A.EDATM,A.SHPCL,A.REGCD,A.REASN,A.TEMMK,A.LDUPD			
+		FROM 
+			$LIB1$.EM000PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="TAXDT">
+			A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO AND C.EDATM <![CDATA[<=]]> $TAXDT$)
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- Parameter:품번,거래처코드         Display:판매단가 -->
+	<select id="selectEM001PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM001PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			</isNotEmpty>
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM001PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO)							
+		</dynamic>
+	</select>
+	<!-- Parameter:거래처코드         Display:판매단가 -->
+	<select id="selectEM001PR_CUSNO" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.CUSNO,TRIM(A.PRTNO) PRTNO,A.PRICE,A.CURCD,A.REASN,A.EDATM,A.LDUPD
+		FROM 
+			$LIB1$.EM001PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="TAXDT">
+			A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM001PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO AND C.EDATM <![CDATA[<=]]> $TAXDT$)
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="selectEM000PR2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.*, B.CARCD, TRIM(C.MSTSM) AS CARNM, TRIM(D.ITDSC) AS ITDSC
+		FROM 
+			$LIB1$.EM000PR A
+			LEFT OUTER JOIN $LIB2$.MST100PF B ON B.COMPS=#COMPS# AND A.PRTNO=B.PRTNO 
+			LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST050PF 
+				WHERE COMPS=#COMPS# AND GRPCD='CAR') C ON B.CARCD=C.MSTCD
+			LEFT OUTER JOIN $LIB1$.BM008PR D ON A.PRTNO=D.ITNBR
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO
+							AND C.EDATM <![CDATA[<=]]> $TAXDT$)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="CPRTN">
+			A.CPRTN = #CPRTN#
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000PR C WHERE A.CPRTN=C.CPRTN AND A.CUSNO=C.CUSNO
+							AND C.EDATM <![CDATA[<=]]> $TAXDT$)
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY A.EDATM DESC
+	</select>
+	<select id="selectEM000PR3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.CUSNO, TRIM(A.CPRTN) AS CPRTN, TRIM(A.PRTNO) AS PRTNO, A.CPDSC, A.EDATM, A.SHPCL, A.REGCD, A.REASN, A.TEMMK, A.LDUPD
+		FROM 
+			$LIB1$.EM000LR0 A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="CPRTN">
+			A.CPRTN = #CPRTN#
+			</isNotEmpty>
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM000LR0 C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO
+							AND SUBSTR(C.EDATM,1,6) <![CDATA[<=]]> $MAKYM$)
+		</dynamic>
+		ORDER BY A.EDATM DESC
+	</select>
+	<select id="selectEM000PR_DETAIL" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.CUSNO, TRIM(A.CPRTN) AS CPRTN, TRIM(A.PRTNO) AS PRTNO, 
+		TRIM(C.ITDSC) AS ITDSC, D.CARCD, TRIM(E.MSTSM) AS CARNM, D.BDYCD, TRIM(F.MSTSM) AS BDYNM, A.EDATM 
+	FROM 
+		$LIB1$.EM000PR A
+		LEFT OUTER JOIN $LIB1$.CUSMAS B ON A.CUSNO=B.CUSNO
+		LEFT OUTER JOIN $LIB1$.BM008PR C ON A.PRTNO=C.ITNBR
+		LEFT OUTER JOIN $LIB2$.MST100PF D ON D.COMPS=#COMPS# AND A.PRTNO=D.PRTNO
+		LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST050PF		
+						WHERE GRPCD='CAR') E ON E.COMPS=#COMPS# AND D.CARCD=E.MSTCD
+		LEFT OUTER JOIN (SELECT * FROM $LIB2$.MST050PF		
+						WHERE GRPCD='BDY') F ON F.COMPS=#COMPS# AND D.BDYCD=F.MSTCD						
+	WHERE
+	<isEqual property = "SELCHK" compareValue="CPRTN">
+				A.CPRTN=#CPRTN#
+		AND A.EDATM = (SELECT MAX(Y.EDATM) 
+						FROM PERESLIB.EM000PR Y 
+						WHERE A.CUSNO=Y.CUSNO AND A.CPRTN=Y.CPRTN)
+	</isEqual>		
+	<isEqual property = "SELCHK" compareValue="PRTNO">
+		A.PRTNO=#PRTNO#
+		AND A.EDATM = (SELECT MAX(Y.EDATM) 
+						FROM PERESLIB.EM000PR Y 
+						WHERE A.CUSNO=Y.CUSNO AND A.PRTNO=Y.PRTNO)
+	</isEqual>	
+		AND A.CUSNO=$CUSNO$
+	</select>
+	<select id="selectEM001PR2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM001PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			</isNotEmpty>
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM001PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO
+							AND C.EDATM <![CDATA[<=]]> $TAXDT$)
+		</dynamic>
+<!--2013.10.07 추가  -->
+		ORDER BY A.EDATM DESC
+	</select>
+	
+	<!-- Parameter:         Display:* -->
+	<select id="selectBM030PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.BM030PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="RECCL">
+			A.RECCL=$RECCL$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="CONNO">
+			A.CONNO=$CONNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SPCOD">
+			A.SPCOD=#SPCOD#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="PPRTN">
+			A.PPRTN=#PPRTN#
+			</isNotEmpty>				
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:거래처코드         Display:HOUSE -->
+	<select id="selectEM035PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM035PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CUSNO">
+			A.CUSNO=$CUSNO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SHPNO">
+			A.SHPNO=$SHPNO$
+			</isNotEmpty>			
+		</dynamic>
+	</select>
+	
+	<!-- RPG(CGMPARMMB) SUB CONTRACTOR MA CHECK -->
+	<!-- Parameter:무상거래처코드         Display:  -->
+	<select id="selectEM040PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.EM040PR A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="CONNO">
+			A.CONNO=$CONNO$
+			</isNotEmpty>			
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:        Display:CIGMA일자  -->
+	<select id="selectSC000PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.SC000PR 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="PRMNO">
+			PRMNO=$PRMNO$
+			</isNotEmpty>			
+		</dynamic>
+	</select>
+	
+	<select id="selectMST040PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(MAJCD) MAJCD,
+			MJINT,
+			TRIM(MJCHR) MJCHR,
+			MAJTM,
+			MAJDT,
+			TRIM(MAJMK) MAJMK
+		FROM
+			$LIB2$.MST040PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="MAJCD">
+				MAJCD = #MAJCD#
+			</isNotEmpty>	
+	</select>
+	
+	<!-- RPG(CGMPARMGB) -->
+	<!-- Parameter:사업부(PEPS)         Display:HOUSE 코드-->
+	<select id="selectMST040PF_HOUSE" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(MAJCD) MAJCD,
+			SUBSTR(MAJCD,6,1) MAJCD_H,
+			TRIM(MJCHR) MJCHR,
+			TRIM(MAJMK) MAJMK
+		FROM
+			$LIB2$.MST040PF
+		WHERE
+			COMPS = #GCOMPS#
+			and MAJCD like 'HOUSE%'
+			<isNotEmpty prepend="and" property="MAJCD">
+				MJCHR = #COMPS#
+			</isNotEmpty>	
+	</select>
+		
+	<!-- Parameter:사업부,분류OR코드         Display:분류별코드명-->
+	<select id="selectMST050PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			TRIM(GRPCD) GRPCD,
+			TRIM(MSTCD) MSTCD,
+			TRIM(MSTSM) MSTSM,
+			TRIM(MSTRM) MSTRM,
+			TRIM(MSTCD) || '  ' || TRIM(MSTRM)  MSTCDRM
+		FROM
+			$LIB2$.MST050PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="GRPCD">
+				GRPCD = #GRPCD#
+			</isNotEmpty>	
+			<isNotEmpty prepend="and" property="MSTCD">
+				MSTCD = #MSTCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="MSTGU">
+				MSTCD != #MSTGU#
+			</isNotEmpty>
+			ORDER BY MSTCD
+	</select>
+	
+	<!-- Parameter:사업부,Process Code         Display:코드명-->
+	<select id="selectMST060PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			$LIB2$.MST060PF
+		WHERE
+			COMPS = #COMPS#
+			<isNotEmpty prepend="and" property="PROCS">
+				PROCS = #PROCS#
+			</isNotEmpty>
+		ORDER BY
+			PROCS
+	</select>
+	
+	<!-- Parameter:일자	         Display:생산코드,급여코드,재무코드,요일 -->
+	<select id="selectMST090PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.MST090PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRCDT">
+			PRCDT = #PRCDT#
+			</isNotEmpty>
+			<isEqual prepend="AND" property = "CHKDT" compareValue="SDATE">
+			PRCDT <![CDATA[>=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)
+			FETCH FIRST $CHKCNT$ ROW ONLY
+			</isEqual>	
+			<isEqual prepend="AND" property = "CHKDT" compareValue="PDATE">
+			PRCDT <![CDATA[>=]]> $STDDT$
+			FETCH FIRST $CHKCNT$ ROW ONLY
+			</isEqual>	
+			
+		</dynamic>
+	</select>
+	<select id="selectMST090PF_ROW" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			(SELECT  A.*,  ROW_NUMBER() OVER() AS RN  FROM $LIB2$.MST090PF A
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="AND" property="COMPS">
+				COMPS = #COMPS#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="PRCDT">
+				PRCDT <![CDATA[<]]> #PRCDT#
+				</isNotEmpty>			
+			</dynamic>
+			)A
+		WHERE
+			A.RN = 1
+		ORDER BY A.PRCDT DESC
+	</select>	
+	<!-- 제환복추가 -->	
+	<select id="selectMST091LF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.MST091LF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRCYM">
+			PRCYM = #PRCYM#
+			</isNotEmpty>
+		</dynamic>		
+	</select>
+	
+	<!-- Parameter:품번	         Display:차종코드,규격코드,제품코드 -->
+	<select id="selectMST100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.MST100PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			PRTNO = #PRTNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:품번	         Display: ALC코드,색상코드,등등-->
+	<select id="selectMST200PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.MST200PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS = #COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PSPNO">
+			PSPNO = #PSPNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:품번,그룹코드         Display:차종명,규격명,제품명 -->
+	<select id="selectMST050100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			B.*
+		FROM
+			$LIB2$.MST100PF A
+			LEFT OUTER JOIN
+			(
+			SELECT 
+				* 
+			FROM 
+				$LIB2$.MST050PF 
+			WHERE 
+				COMPS=#COMPS# 
+				<isNotEmpty prepend="AND" property="GRPCD">
+				GRPCD = #GRPCD#
+				</isNotEmpty>	
+			) B 
+				<isEqual prepend="ON" property = "GRPCD" compareValue="CAR">
+				A.CARCD=B.MSTCD
+				</isEqual>
+				<isEqual prepend="ON" property = "GRPCD" compareValue="BDY">
+				A.BDYCD=B.MSTCD
+				</isEqual>
+				<isEqual prepend="ON" property = "GRPCD" compareValue="PRD">
+				A.PRDCD=B.MSTCD
+				</isEqual>
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			A.COMPS=#COMPS# 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTNO">
+			A.PRTNO = #PRTNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- Parameter:거래처	         Display:거래처명,주소등등 -->
+	<select id="selectMST600PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			trim(VNDOR) AS VNDOR,CONO1,CONO2,CONO3,COPNM,CAPNM,
+			VIPNM,ADDRA,ADDRB,PYCON,TELAA,TELAB,TELAC,TELBA,TELBB,TELBC,UPTAE,JONMA,JONMB,PLANA,PLANB			
+		FROM
+			$LIB2$.MST600PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="VNDOR">
+			VNDOR=#VNDOR#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="VNDOR_5LIKE"> <!-- 운송업체만 -->
+			VNDOR like '5%'
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			VNDOR
+	</select>
+	
+	<!-- Parameter:부서코드(3자리)         Display:부서명 -->
+	<select id="selectMST652LF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			$LIB2$.MST652LF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			DPCOMP=#COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="DPCDCM">
+			DPCDCM=#DPCDCM#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- RPG(CGMPARMHC)    SC000PR+SC003PR 오리지날일근거　당월　위치 RETURN -->
+	<!-- Parameter:	없음
+		 Display  : PCNUM1(SC000PR의 일자), PCNUM2(현재월의 오리지날일), PCNUM3(월데이타의 순번)
+		            CHR1(1~30 SC003PR의 CALCD 1~30), CHR2(1~1 SC003PR의 CALCD 1~1)  -->
+	<select id="selectSC000_003PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		B.ADSDT PCNUM1,
+		A.MPPDT PCNUM2,
+		CASE 
+		WHEN B.DD>A.MPPDT 
+			THEN '50ON'
+			ELSE '50OFF' 
+		END PCNUM3,
+		SUBSTR(A.CALCD,1,30) CHR1,
+		SUBSTR(A.CALCD,31,1) CHR2
+	FROM 
+		$LIB1$.SC003PR A,
+		(SELECT ADSDT,DECIMAL(SUBSTR(ADSDT,1,6),6,0) YM, DECIMAL(SUBSTR(ADSDT,7,2),6,0) DD FROM $LIB1$.SC000PR WHERE PRMNO='ADS')B	
+	WHERE
+		A.PRMNO='ABS'
+		AND A.YRMON = B.YM
+	</select>
+	<select id="selectSC003PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		PRMNO, YRMON, CALCD
+		<isNotEmpty prepend="," property="YRMONDT">
+		 SUBSTR(CALCD, $YRMONDT$,1) AS CALCDCHK
+		</isNotEmpty>
+	FROM 
+		$LIB1$.SC003PR
+	WHERE
+		PRMNO=#PRMNO#
+		AND YRMON=$YRMON$
+	</select>
+		<select id="selectSC003PR_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		PRMNO, YRMON, WKDAY
+	FROM 
+		$LIB1$.SC003PR
+	WHERE
+		PRMNO=#PRMNO#
+		AND YRMON>=$YRMON$
+		ORDER BY YRMON
+		<isNotEmpty property="CHKCNT">
+			FETCH FIRST $CHKCNT$ ROW ONLY
+		</isNotEmpty>	
+	</select>
+	<select id="selectSC003PR_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		PRMNO,
+		MAX(A.CGA01) AS CGA01, MAX(A.CGA02) AS CGA02, MAX(A.CGA03) AS CGA03, MAX(A.CGA04) AS CGA04,
+		MAX(A.CGA05) AS CGA05, MAX(A.CGA06) AS CGA06, MAX(A.CGA07) AS CGA08, MAX(A.CGA08) AS CGA09,
+		MAX(A.CGA09) AS CGA10, MAX(A.CGA10) AS CGA11, MAX(A.CGA11) AS CGA12, MAX(A.CGA12) AS CGA13,
+		MAX(A.CGA01)+MAX(A.CGA02)+MAX(A.CGA03)+MAX(A.CGA04)+MAX(A.CGA05)+MAX(A.CGA06) AS CGA07,
+		MAX(A.CGA07)+MAX(A.CGA08)+MAX(A.CGA09)+MAX(A.CGA10)+MAX(A.CGA11)+MAX(A.CGA12) AS CGA14,
+		MAX(A.CGA01)+MAX(A.CGA02)+MAX(A.CGA03)+MAX(A.CGA04)+MAX(A.CGA05)+MAX(A.CGA06)+
+		MAX(A.CGA07)+MAX(A.CGA08)+MAX(A.CGA09)+MAX(A.CGA10)+MAX(A.CGA11)+MAX(A.CGA12) AS CGA15
+	FROM (
+		SELECT 
+			A.*,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='04' THEN A.WKDAY ELSE 0 END AS CGA01,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='05' THEN A.WKDAY ELSE 0 END AS CGA02,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='06' THEN A.WKDAY ELSE 0 END AS CGA03,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='07' THEN A.WKDAY ELSE 0 END AS CGA04,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='08' THEN A.WKDAY ELSE 0 END AS CGA05,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='09' THEN A.WKDAY ELSE 0 END AS CGA06,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='10' THEN A.WKDAY ELSE 0 END AS CGA07,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='11' THEN A.WKDAY ELSE 0 END AS CGA08,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='12' THEN A.WKDAY ELSE 0 END AS CGA09,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='01' THEN A.WKDAY ELSE 0 END AS CGA10,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='02' THEN A.WKDAY ELSE 0 END AS CGA11,
+			CASE WHEN SUBSTR(A.YRMON,5,2)='03' THEN A.WKDAY ELSE 0 END AS CGA12
+		FROM 
+			$LIB1$.SC003PR A
+		WHERE
+			A.YRMON BETWEEN $PLNYY1$ AND $PLNYY2$
+			AND A.PRMNO=#PRMNO#) A
+	GROUP BY PRMNO
+	</select>
+	
+	<!-- RPG(CGMPARMHF)    SC000PR+SC003PR 현재CIGMA일자 , 전일가동일 위치 RETURN 
+	    * 전일가동일은 Controller에서 생성한다.
+	* Parameter:	없음
+		 Display  : B.ADSDT,B.YM,B.DD : 현재CIGMA일자
+		            a.YRMON,A.WKDAY,A.MPPDT : cigma년월,근무일수,오리지날일 
+		            FIFDT : 제일가동일
+		            FIFYN : 현재CIGMA일자와 제일가동일이 일치하는지 여부
+	-->
+	<select id="selectSC000_003PR_F" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		B.ADSDT,B.YM,B.DD,
+		a.YRMON,A.CALCD,A.WKDAY,A.MPPDT,POSSTR(CALCD,'1') FIFDT,
+		CASE WHEN B.DD=POSSTR(CALCD,'1') THEN 'Y' ELSE 'N' END FIFYN
+	FROM 
+		$LIB1$.SC003PR a, 
+		(SELECT ADSDT,SUBSTR(ADSDT,1,6) YM, SUBSTR(ADSDT,7,2) DD FROM $LIB1$.SC000PR WHERE PRMNO='ADS') b
+	WHERE 
+		a.prmno='ABS' and a.yrmon = b.ym
+	</select>
+	<select id="selectSYSDATE" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT  
+	<!--
+			REPLACE(CHAR(CURRENT DATE),'-','') AS DT,	REPLACE(CHAR(CURRENT TIME),'.','') AS TM
+  	-->
+  			CURRENT DATE AS DT, CURRENT TIME AS TM, 
+  			SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2) AS DT2,
+ 			SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) AS DT3
+  	FROM  
+  		SYSIBM.SYSDUMMY1
+	</select>
+	<select id="selectSAL100" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  
+	 		*
+	   	FROM  
+	  		$LIB2$.SAL100PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS=#COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PYVND">
+			PYVND=#PYVND#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="MAKDT">
+			MAKDT=#MAKDT#
+			</isNotEmpty>
+		</dynamic>  		
+	</select>
+	<select id="selectSAL100_SE" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  
+	 		*
+	   	FROM  
+	  		$LIB2$.SAL100PF
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS=#COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PYVND">
+			PYVND=#PYVND#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="MAKDT">
+			MAKDT <![CDATA[>=]]>  #MAKDT#
+			</isNotEmpty>
+			<isNotEmpty property="CHKCNT">
+			FETCH FIRST $CHKCNT$ ROW ONLY
+			</isNotEmpty>			
+		</dynamic>  		
+	</select>			
+	<!-- RPG(CGMPARMZA)    제조원가 RETURN -->
+	<!-- Parameter:품번         Display:제조원가등등 -->
+	<select id="selectF_D30PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			$LIB1$.$D30PR$
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="PRTNO">
+			PRTNO=#PRTNO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- RPG(CGMPARMKA)    Inventory Master RETURN -->
+	<select id="selectHM000PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.HM000PR 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="ITNBR">
+			ITNBR=#ITNBR#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="HOUSE">
+			HOUSE=#HOUSE#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- RPG(CGMPARMGA)    재고창고Check -->
+	<select id="selectSC008PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB1$.SC008PR 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="DTANO">
+			DTANO=#DTANO#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<update id="createAlias" parameterClass="java.util.HashMap">
+		CREATE ALIAS $LIB2$.$ALIASNAME$ FOR $LIB2$.$FILENAME$($MEMBER$)
+	</update>
+	<update id="dropAlias" parameterClass="java.util.HashMap">
+		DROP ALIAS $LIB2$.$ALIASNAME$
+	</update>
+	
+	<!-- RPG(CGMPARMIA)    작업공정CHECK RETURN -->
+	<select id="selectBM001PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  
+	 		*
+	   	FROM  
+	  		$LIB1$.BM001PR
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="PROCS">
+			PROCS=#PROCS#
+			</isNotEmpty>
+		</dynamic>  		
+	</select>
+	
+	<!-- RPG(CGMPARMJA)    현재고 ,WAREHOUSE STOCK LOCATION RETURN -->
+	<select id="selectBM009PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  
+	 		*
+	   	FROM  
+	  		$LIB1$.BM009PR
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="PSPNO">
+			ITNBR=#PSPNO#
+			</isNotEmpty>
+		</dynamic>  		
+	</select>
+	
+	<!-- RPG(CGMPARMZB)    구매단가 RETURN -->
+	<!-- Parameter:업체,품번         Display:구매단가등등 -->
+	<select id="selectCM001PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			PRTNO,SPCOD,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $IMADATE$ THEN resn3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $IMADATE$ THEN resn2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $IMADATE$ THEN resn1
+			END AS RESN,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $IMADATE$ THEN crcy3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $IMADATE$ THEN crcy2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $IMADATE$ THEN crcy1
+			END AS CRCY,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $IMADATE$ THEN PRCE3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $IMADATE$ THEN PRCE2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $IMADATE$ THEN PRCE1
+			END AS PRCE,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $IMADATE$ THEN EDAT3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $IMADATE$ THEN EDAT2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $IMADATE$ THEN EDAT1
+			END AS EDAT,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $IMADATE$ THEN TEMP3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $IMADATE$ THEN TEMP2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $IMADATE$ THEN TEMP1
+			END AS TEMP,
+			SPPNO,MDATE
+		FROM
+			$LIB1$.CM001PR
+		WHERE
+			PRCLS='1'
+			<isNotEmpty prepend="AND" property="PRTNO">
+			PRTNO=#PRTNO#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SPCOD">
+			SPCOD=#SPCOD#
+			</isNotEmpty>	
+	</select>
+
+	<!-- RPG(CGMPARMZA)    구매단가 RETURN -->
+	<!-- Parameter:품번         Display:구매단가등등 -->
+	<select id="selectCM001PR_ZA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			PRTNO,SPCOD,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN resn3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN resn2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN resn1
+			END AS RESN,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN crcy3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN crcy2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN crcy1
+			END AS CRCY,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN PRCE3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN PRCE2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN PRCE1
+			END AS PRCE,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN EDAT3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN EDAT2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN EDAT1
+			END AS EDAT,
+			CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN TEMP3
+			     WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN TEMP2
+			     WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN TEMP1
+			END AS TEMP,
+			SPPNO,MDATE
+		FROM
+			$LIB1$.CM001PR
+		WHERE
+			PRCLS='1'
+			AND	PRTNO=#PSPNO#
+		ORDER BY 
+			EDAT DESC,SPCOD DESC
+		FETCH FIRST 1 ROWS ONLY	
+	</select>
+
+	<!-- RPG(CGMPARMZA)    (품번기준 전체) 품번별 전체 최신 구매단가 RETURN  -->
+	<!-- Parameter:기준일         Display:구매단가등등 -->
+	<select id="selectCM001PR_ZAA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			X.*
+		FROM
+			(SELECT
+				A.*,ROWNUMBER() OVER (PARTITION BY A.PRTNO ORDER BY A.EDAT DESC,A.SPCOD DESC) AS ROWNUM
+			FROM
+				(SELECT
+					PRTNO,SPCOD,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN resn3
+						  WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN resn2
+						  WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN resn1
+					END AS RESN,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN crcy3
+						  WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN crcy2
+						  WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN crcy1
+					END AS CRCY,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN PRCE3
+						  WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN PRCE2
+						  WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN PRCE1
+					END AS PRCE,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN EDAT3
+						  WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN EDAT2
+						  WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN EDAT1
+					END AS EDAT,
+					CASE WHEN EDAT3 != 99999999 AND EDAT3 <![CDATA[<=]]> $YMD$ THEN TEMP3
+						  WHEN EDAT2 != 99999999 AND EDAT2 <![CDATA[<=]]> $YMD$ THEN TEMP2
+						  WHEN EDAT1 != 99999999 AND EDAT1 <![CDATA[<=]]> $YMD$ THEN TEMP1
+					END AS TEMP,
+					SPPNO,MDATE
+				FROM
+					$LIB1$.CM001PR
+				WHERE
+					PRCLS='1'
+				) A
+			)X
+		WHERE
+			X.ROWNUM=1
+	</select>
+		
+	<!-- RPG(CGMPARMZA)    판매단가 RETURN -->
+	<!-- Parameter:품번,기준일         Display:판매단가등등 -->
+	<select id="selectEM001PR_ZA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			$LIB1$.EM001PR A
+		WHERE
+			A.PRTNO = #PSPNO#
+			AND A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM001PR C 
+								WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO
+								AND C.EDATM <![CDATA[<=]]> $YMD$)
+		ORDER BY
+			A.CUSNO DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!-- RPG(CGMPARMZA)    (품번기준 전체) 품번별 전체 최신 판매단가 RETURN -->
+	<!-- Parameter:기준일         Display:판매단가등등 -->
+	<select id="selectEM001PR_ZAA" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		X.*
+	FROM
+		(SELECT
+			A.*,
+			ROWNUMBER() OVER (PARTITION BY A.PRTNO ORDER BY A.CUSNO DESC) AS ROWNUM
+		FROM
+			$LIB1$.EM001PR A
+		WHERE
+			A.EDATM = (SELECT MAX(C.EDATM) FROM $LIB1$.EM001PR C 
+								WHERE A.PRTNO=C.PRTNO
+								AND C.EDATM <![CDATA[<=]]> $YMD$)) X
+	WHERE
+		X.ROWNUM=1
+	</select>
+	
+	<!-- Parameter:사업부,코드         Display:코드명 -->
+	<select id="selectBUY050PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	<!-- 
+		SELECT * FROM $LIB2$.BUY050PF WHERE BUYCO=#BUYCO# AND BUYCD=#BUYCD#
+	 -->	
+		SELECT * FROM $LIB2$.BUY050PF WHERE BUYCO=#BUYCO# 
+			<isNotEmpty prepend="AND" property="BUYCD">
+			BUYCD=#BUYCD#
+			</isNotEmpty>	
+	</select>
+	
+	<!-- Parameter:품번         Display:구매업체,배분율 등등 -->
+	<select id="selectBM400PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			* 
+		FROM 
+			$LIB1$.BM400PR 
+		WHERE
+			DPPRTN=#DPPRTN#
+	</select>
+	<select id="selectCGMPARMAA2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.ITNBR, TRIM(A.ITDSC) AS ITDSC, A.ITTYP, A.ITCLS, SUBSTR(A.ITCLS,2,1) AS ITC, A.UNMSR 
+		FROM 
+			$LIB1$.BM008PR A
+		WHERE
+			ITNBR=#PSPNO#
+			<isNotEmpty prepend="AND" property="ITTYP">
+			ITTYP=#ITTYP#
+			</isNotEmpty>				
+	</select>
+	<select id="selectSMD010PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			A.*
+		FROM 
+			$LIB2$.SMD010PF A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="COMPS">
+			COMPS=#COMPS#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PYVND">
+			PYVND=$PYVND$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SHPTO">
+			SHPTO=$SHPTO$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PSPNO">
+			PSPNO=#PSPNO#
+			</isNotEmpty>
+			<isEqual prepend="AND" property = "SPERT" compareValue="Y">
+			(STRDT <![CDATA[<=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)
+			AND ENDDT <![CDATA[>=]]> SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2))
+			</isEqual>
+		</dynamic>  			
+	</select>	
+	<update id="updateMST040_PSDIOLIB" parameterClass="java.util.HashMap">
+		update  
+			PSDIOLIB.MST040PF  
+		set 
+			mjint = $MJINT$,
+			majtm = substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			majdt = substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2)
+			<isNotEmpty  property="MAJMK">
+			,MAJMK = #MAJMK#
+			</isNotEmpty>
+		WHERE
+			COMPS = #COMPS#
+			AND	MAJCD = #MAJCD#	
+	</update>
+	
+	<select id="selectDWHZ000Q" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		* 
+	FROM 
+		$LIB2$.DWH000PF
+	WHERE 
+		JOBFL='$JOBFL$' 
+	ORDER BY JYYMM DESC 
+	FETCH FIRST 1 ROW ONLY
+	</select>
+	
+	<select id="selectDWHXXXXQ" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+	SELECT 
+		* 
+	FROM 
+		$LIB2$.$JOBFL$
+	<dynamic prepend="WHERE">
+		<isNotEmpty prepend="AND" property="COMPS">
+		COMPS = #COMPS#
+		</isNotEmpty> 
+	</dynamic>
+	</select>
+	<select id="selectCGMPARMHC" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.ADSDT, B.MPPDT,
+		CASE WHEN A.ADSDT-(INT(A.ADSDT)/100*100) > MPPDT THEN 1 ELSE 2 END SEQMON
+<!-- 	
+		A.ADSDT, B.MPPDT,
+		CASE WHEN A.ADSDT-(INT(A.ADSDT)/100*100) > MPPDT THEN 1 ELSE 2 END SEQMON,
+		20130101 AS ADSDT, 1 AS SEQMON
+		SUBSTR(A.ADSDT,1,4) AS YY, SUBSTR(A.ADSDT,5,2) AS MM, SUBSTR(A.ADSDT,7,2) AS DD
+ -->
+	FROM 
+		$LIB1$.SC000PR A
+		LEFT OUTER JOIN (SELECT Z.* FROM $LIB1$.SC003PR Z WHERE Z.PRMNO='ABS') B ON INT(A.ADSDT)/100 = B.YRMON
+	</select>
+	<select id="selectBM010PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		PINBR, USRS1, CINBR, USRS2, QTYPR
+	FROM 
+		$LIB1$.BM010PR
+<!-- 
+	WHERE
+	 (EDATM <![CDATA[>]]>SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2)
+	  AND  SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) <![CDATA[<]]>EDATO) 	
+ -->
+<!-- 
+	UNION ALL
+	SELECT 
+		PINBR, USRS1, CINBR, USRS2, QTYPR
+	FROM 
+		$LIB1$.BD462PR
+ -->
+<!-- 
+	WHERE
+	 (EDATM <![CDATA[>]]>SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2)
+	  AND  SUBSTR(trim(char(date(current date), ISO)),1,4)  || SUBSTR(trim(char(date(current date), ISO)),6,2) <![CDATA[<]]>EDATO) 	
+ -->	
+	</select>
+
+	<select id="selectBC010PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.WCDATE, A.WCYEAR, A.WCRLWK, A.WCDYWK, A.WCWKDY,
+		CASE WHEN A.WCDYWK !=6 THEN 1 ELSE 0.5 END AS RUND
+	FROM
+		$LIB1$.BC010PR A
+	WHERE
+		<isEqual property = "FLAG" compareValue="MRUND">
+		SUBSTR(A.WCDATE,1,6)=$WCDATE$
+		</isEqual>
+		<isEqual property = "FLAG" compareValue="NRUND">
+		A.WCDATE BETWEEN $WCDATE_P1$ AND $WCDATE_P2$
+		</isEqual>
+		AND A.WCWKDY=1
+	ORDER BY A.WCDATE
+	</select>
+
+	<select id="selectEM006PR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		CURC2,COALESCE(ERATE,0) ERATE
+	FROM 
+		$LIB1$.EM006PR 
+	WHERE 
+		RCLAS='A1' 
+		AND CURC1='KW' 
+		AND EDATM <![CDATA[<=]]> $CURYM$ 
+		AND EDATT <![CDATA[>=]]> $CURYM$
+	</select>
+
+	<select id="selectCGMPARMGB" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			COMPS, TRIM(MAJCD) MAJCD, SUBSTR(TRIM(MAJCD),6,1) MAJCD_H,
+			TRIM(MJCHR) MJCHR, TRIM(MAJMK) MAJMK
+		FROM
+			$LIB2$.MST040PF
+		WHERE
+			COMPS = #GCOMPS#
+			AND MAJCD like 'HOUSE%'
+			AND MJCHR = #COMPS#
+	</select>
+	<select id="selectBHZ600" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.*, TRIM(B.CUSNM) AS CUSNM 
+	FROM 
+		$LIB2$.BHZ600PF A
+		LEFT OUTER JOIN $LIB1$.CUSMAS B ON A.PYVND=B.CUSNO
+	WHERE 
+		A.COMPS=#COMPS#
+		AND A.PYVND=$PYVND$
+	</select>
+	<select id="selectYJOBCHK" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		*
+	FROM 
+		$LIB1$.SC001PR
+	WHERE 
+		PRJOB=#PRJOB#
+		AND FOJOB=#FOJOB#
+	</select>
+	<select id="selectXABENDM" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		*
+	FROM 
+		$LIB1$.SC002PR
+	WHERE 
+		MSGCD=#MSGCD#
+	</select>
+	<select id="selectSmanPopup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.DHCOMP, A.PESABN, A.DHCODE, TRIM(A.KORNM) AS KORNM, TRIM(A.PASMK) AS PASMK, A.STRDT, A.ENDDT,
+		TRIM(B.DPCONM) AS DPCONM
+	FROM
+		$LIB2$.FHD010PF A
+		LEFT OUTER JOIN $LIB2$.MST650PF B ON A.DHCOMP=B.DPCOMP AND A.DHCODE=B.DPCODE
+	WHERE
+		A.DHCOMP = #COMPS#
+		<isNotEmpty prepend="AND" property="KORNM">
+		A.KORNM >= #KORNM#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="PESABN">
+		A.PESABN = $PESABN$
+		</isNotEmpty> 			
+	ORDER BY KORNM
+	</select>	
+	<select id="selectBUY040PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		*
+	FROM 
+		$LIB2$.BUY040PF
+	WHERE 
+		COMBU=#COMPS#
+		<isNotEmpty prepend="AND" property="BUCOD">
+			BUCOD=#BUCOD#
+		</isNotEmpty>
+	</select>
+	<update id="updateBUY040PF_1" parameterClass="java.util.HashMap">
+	UPDATE
+		PSDIOLIB.BUY040PF
+	SET
+		BUINT=SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2)
+	WHERE
+	 	COMBU=#COMPS#
+		AND BUCOD=#BUCOD#
+	</update>
+	<insert id="insertBUY040PF_1" parameterClass="java.util.HashMap">
+	INSERT
+		PSDIOLIB.BUY040PF
+	VALUES
+		(#COMPS#,#BUCOD#,
+		SUBSTR(trim(char(date(current date), ISO)),1,4) || SUBSTR(trim(char(date(current date), ISO)),6,2) || SUBSTR(trim(char(date(current date), ISO)),9,2),
+		0,'','출고요구이동작업')
+	</insert>
+	
+	<!-- cigma 입고품번 check -->
+	<select id="selectBZI100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  
+	 		*
+	   	FROM  
+	  		$LIB2$.BZI100PF
+		WHERE
+			COMPS=#COMPS#
+			<isNotEmpty prepend="AND" property="VNDNR">
+			VNDNR=#VNDNR#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PSPNO">
+			PSPNO=#PSPNO#
+			</isNotEmpty>		
+	</select>
+	
+	<!-- 가입고품번 재고수량  -->
+	<select id="selectBZI500PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			PSPNO,VNDNR,SUM(JAGQY) MOHTQ_G 
+		FROM 
+			PSEDBLIB.BZI500PF 
+		WHERE COMPS=#COMPS#
+			AND HOUSE=#HOUSE#
+			AND VNDNR=#VNDNR#
+			AND PSPNO=#PSPNO#
+		GROUP BY 
+			PSPNO,VNDNR
+	</select>
+
+	<!-- 공정코드와인사부서코드MATCHING마스타  -->
+	<select id="selectFHD000PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.FHD000PF
+		WHERE 
+			DHCOMP=#COMPS#
+			<isNotEmpty prepend="AND" property="DPTCD">
+			DHCODE=#DPTCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PROCS">
+			PROCS=$PROCS$
+			</isNotEmpty>
+	</select>
+			
+	<!-- 생산일일근태마스타    -->
+	<select id="selectFHD100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.FHD100PF
+		WHERE 
+			DHCOMP=#COMPS#
+			<isNotEmpty prepend="AND" property="DPTCD">
+			DHCODE=#DPTCD#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="WRKDT">
+			WRKDT=$WRKDT$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SABUN">
+			PESABN=$SABUN$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="WRKCD">
+			WRKCD=#WRKCD#
+			</isNotEmpty>
+	</select>
+	<select id="selectBJM100PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+			*
+		FROM 
+			$LIB2$.BJM100PF
+		WHERE 
+			COMPS=#COMPS#
+			<isNotEmpty prepend="AND" property="SMOCL">
+			SMOCL=#SMOCL#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SMOPN">
+			SMOPN=#SMOPN#
+			</isNotEmpty>
+	</select>
+	<select id="selectINSAMasterPopup2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		A.PASSA, A.PASSB, A.PASSC, A.CUADR, COALESCE(A.PEDTA,' ') AS PEDTA,
+		A.WFBCD, A.CHBCD,A. PTBCD, A.TRBCD, A.KYBCD, A.BYFL1, A.BUBCD, A.SOSCD, A.PMWCD, A.BYFL2,
+		A.SABUN A1, TRIM(A.KORNM) A2, TRIM(B.DPDPNM) A3, TRIM(A.CNDCD) AS CNDCD, A.GRADE
+	FROM
+		$LIB3$.HMD020PF A 
+		LEFT OUTER JOIN $LIB2$.MST650PF B ON A.DPTCD=B.DPCODE AND B.DPCOMP=#COMPS#
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="CNDCD">
+				A.CNDCD !='R'
+			</isNotEmpty>
+			<isEqual prepend="and" property="PAYCD" compareValue="1">
+				A.PAYCD <![CDATA[>]]> 1
+			</isEqual>
+			<isEqual prepend="and" property="PAYCD" compareValue="2">
+				A.PAYCD IN ('2','3')
+			</isEqual>
+			<isNotEmpty prepend="and" property="KORNM">
+				A.KORNM <![CDATA[>=]]> #KORNM#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="SABUN">
+				A.SABUN = $SABUN$
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="selectBM008PR_PRD" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		TRIM(A.ITNBR) AS ITNBR, TRIM(A.ITDSC) AS ITDSC, A.ITTYP, A.ITCLS, A.PACKC,
+		TRIM(B.PRDCD) AS PRDCD, TRIM(C.MSTRM) AS PRDNM
+	FROM
+		$LIB1$.BM008PR A
+		LEFT OUTER JOIN $LIB2$.MST100PF B ON A.ITNBR=B.PRTNO AND B.COMPS=#COMPS#
+		LEFT OUTER JOIN $LIB2$.MST050PF C ON B.COMPS=C.COMPS AND C.GRPCD='PRD' AND B.PRDCD =C.MSTCD
+	WHERE
+		A.ITNBR = #PRTNO#
+	</select>	
+		
+	<select id="selectLCKUSRJOB" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		A.COMPS, TRIM(A.PGMCD) AS PGMCD, TRIM(A.PGMNM) AS PGMNM, TRIM(A.USRID) AS USRID,
+		A.STRDT, A.STRTM, A.ENDDT, A.EMDTM, A.USER_YN,
+		TRIM(B.USER_NAME) AS USER_NAME
+	FROM 
+		PSDIOLIB.LCKUSRJOB A
+		LEFT OUTER JOIN PSZDBLIB.M_USR_TID B ON A.USRID=B.USER_ID 		
+	WHERE COMPS=#COMPS#
+		<isNotEmpty prepend="AND" property="PGMCD">
+		PGMCD=#PGMCD#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="USER_YN">
+		USER_YN=#USER_YN#
+		</isNotEmpty>
+</select>
+<select id="selectLCKUSRJOB_Check" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 
+		COUNT(*) CNT 
+	FROM 
+		PSDIOLIB.LCKUSRJOB
+	WHERE
+		COMPS=#COMPS#
+		AND PGMCD=#PGMCD#
+		AND USRID=#USRID#
+		AND STRDT=$STRDT$
+		AND STRTM=$STRTM$
+</select>
+<insert id="insertLCKUSRJOB" parameterClass="java.util.HashMap">
+INSERT INTO PSDIOLIB.LCKUSRJOB
+	(COMPS, PGMCD, PGMNM, USRID, STRDT, STRTM, ENDDT, EMDTM, USER_YN)
+VALUES
+	(#COMPS#, #PGMCD#, #PGMNM#, #USRID#, $STRDT$, $STRTM$, $ENDDT$, $EMDTM$, #USER_YN#)
+</insert>
+<update id="updateLCKUSRJOB" parameterClass="java.util.HashMap">
+	UPDATE 
+		PSDIOLIB.LCKUSRJOB
+	SET 
+		USER_YN = #USER_YN#,
+		ENDDT = REPLACE(CHAR(DATE(current date), ISO), '-', ''),
+		EMDTM = REPLACE(CHAR(time(current time), ISO), '.', '')
+	WHERE 
+		COMPS=#COMPS#
+		AND PGMCD=#PGMCD#
+		AND USRID=#USRID#
+		AND STRDT=$STRDT$
+		AND STRTM=$STRTM$
+</update>
+
+<!-- JDE 계정코드 조회 -->
+<select id="selectJdeF0006LB" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		TRIM(MCMCU) AS MCMCU, TRIM(MCDC) AS MCDC, TRIM(MCMCU) ||':'|| TRIM(MCDC) AS MCNAME
+	FROM
+		$LIB4$.F0006LB
+	WHERE
+		'SqlMap-CodeDb2.comCodeJdeF0006LB'='SqlMap-CodeDb2.comCodeJdeF0006LB'
+		AND trim(MCRP12) != '' <!-- AND trim(MCSTYL)='EX' AND trim(MCRP11)='001' -->
+	<!-- 
+		<if test="mcstyl != null and mcstyl != ''">
+			AND trim(MCSTYL)=#{mcstyl}
+		</if>
+		<if test="mcrp11 != null and mcrp11 != ''">
+			AND trim(MCRP11)=#{mcrp11}
+		</if>
+	 -->
+	ORDER BY MCMCU
+</select>
+    
+<select id="selectMst650PF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		DPCOMP, TRIM(DPCODE) AS DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+		<!--  
+		CASE WHEN DPCOMP='E1' THEN '마산' WHEN DPCOMP='C1' THEN '창원' WHEN DPCOMP='S1' THEN '화성' ELSE DPCOMP END ||':'|| DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+		-->
+		DPCODE ||':'|| TRIM(DPDPNM) ||':'|| CASE WHEN DPCOMP='E1' THEN '마산' WHEN DPCOMP='C1' THEN '창원' WHEN DPCOMP='S1' THEN '화성' ELSE DPCOMP END  AS DPCODPNM
+		
+	FROM PSEDBLIB.MST650PF
+	WHERE DPCOMP='E1'
+		AND TRIM(DPCONM) != '.' AND TRIM(DPCONM) != '' AND DPSYDT !=0
+	UNION ALL
+	SELECT
+		DPCOMP, TRIM(DPCODE) AS DPCODE, TRIM(DPCONM) AS DPCONM , TRIM(DPDPNM) AS DPDPNM,
+		<!--  
+		CASE WHEN DPCOMP='E1' THEN '마산' WHEN DPCOMP='C1' THEN '창원' WHEN DPCOMP='S1' THEN '화성' ELSE DPCOMP END ||':'|| DPCODE ||':'|| TRIM(DPDPNM) AS DPCODPNM
+		-->
+		DPCODE ||':'|| TRIM(DPDPNM) ||':'|| CASE WHEN DPCOMP='E1' THEN '마산' WHEN DPCOMP='C1' THEN '창원' WHEN DPCOMP='S1' THEN '화성' ELSE DPCOMP END  AS DPCODPNM
+	FROM PSCDBLIB.MST650PF
+	WHERE DPCOMP IN ('C1','S1') AND DPEDSW='T'
+		AND DPPAT0=1
+	ORDER BY DPCOMP, DPCODE
+</select>
+</sqlMap>

@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="일일&#32;근태자료&#32;전송" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GATE01">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CODE">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>전체</cdnm>
+					</record>
+					<record>
+						<cd>1</cd>
+						<cdnm>출근</cdnm>
+					</record>
+					<record>
+						<cd>2</cd>
+						<cdnm>사외</cdnm>
+					</record>
+					<record>
+						<cd>3</cd>
+						<cdnm>공외</cdnm>
+					</record>
+					<record>
+						<cd>6</cd>
+						<cdnm>퇴근</cdnm>
+					</record>
+					<record>
+						<cd>7</cd>
+						<cdnm>사입</cdnm>
+					</record>
+					<record>
+						<cd>8</cd>
+						<cdnm>공입</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CODE2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnmGate" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnmRpg" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnmGate>출근</cdnmGate>
+						<cdnmRpg>출근</cdnmRpg>
+					</record>
+					<record>
+						<cd>2</cd>
+						<cdnmGate>공외</cdnmGate>
+						<cdnmRpg>사외</cdnmRpg>
+					</record>
+					<record>
+						<cd>3</cd>
+						<cdnmGate>복귀</cdnmGate>
+						<cdnmRpg>공외</cdnmRpg>
+					</record>
+					<record>
+						<cd>4</cd>
+						<cdnmGate>퇴근</cdnmGate>
+						<cdnmRpg></cdnmRpg>
+					</record>
+					<record>
+						<cd>5</cd>
+						<cdnmGate>사외</cdnmGate>
+						<cdnmRpg></cdnmRpg>
+					</record>
+					<record>
+						<cd>6</cd>
+						<cdnmGate></cdnmGate>
+						<cdnmRpg>퇴근</cdnmRpg>
+					</record>
+					<record>
+						<cd>7</cd>
+						<cdnmGate></cdnmGate>
+						<cdnmRpg>사입</cdnmRpg>
+					</record>
+					<record>
+						<cd>8</cd>
+						<cdnmGate></cdnmGate>
+						<cdnmRpg>공입</cdnmRpg>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GATE01_filter">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ERROR"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="5" Top="29" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<FileDialog Bottom="65" Height="24" Id="FileDialog0" Left="983" Right="1007" TabOrder="11" Top="41" Width="24"></FileDialog>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="8" TabOrder="4" Text="전&#32;송&#32;일" Top="33" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="125" Style="static" TabOrder="6" Top="33" VAlign="Middle" Width="95"></Static>
+		<Button Cursor="HAND" Height="28" Id="btn_process" ImageID="sum_생성" Left="760" OnClick="fn_Remote" TabOrder="7" Top="32" Width="75"></Button>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_GATE01" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="600" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="536" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" Right="640" SelColor="black" TabOrder="8" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="640">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="100"/>
+						<col width="150"/>
+						<col width="118"/>
+						<col width="78"/>
+						<col width="78"/>
+						<col width="78"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" rowspan="2" text="근태Reading&#32;Time"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" rowspan="2" text="EQCODE"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" colspan="2" display="text" text="근태코드"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" rowspan="2" text="근태명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" row="1" text="근태기기"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" row="1" text="전송코드"/>
+					</head>
+					<body>
+						<cell align="center" checklength="Byte" col="0" colid="SABUN" color="#333333" display="normal" suppress="1" useime="false"/>
+						<cell align="center" checklength="Byte" col="1" colid="ACKTIME" color="#333333" display="normal" useime="false"/>
+						<cell align="center" checklength="Byte" col="2" colid="EQCODE" color="#333333" display="normal" useime="false"/>
+						<cell align="right" checklength="Byte" col="3" colid="FLAG1" color="#333333" display="number" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(FLAG_NEW,7,&quot;lightcoral&quot;,8,&quot;lightgoldenrodyellow&quot;,&quot;white&quot;)' checklength="Byte" col="4" colid="FLAG_NEW" color="#333333" display="number" edit="expr:iif(FLAG_NEW==7||FLAG_NEW=8,&apos;regexpr&apos;,&apos;none&apos;)" limit="1" LimitDec="0" RegExprFilter="[7,8]" useime="false"/>
+						<cell align="center" checklength="Byte" col="5" colid="FLAG_NEW" color="#333333" combocol="cd" combodataset="ds_CODE" combotext="cdnm" display="combo" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Calendar Dateformat="yyyy-MM-dd" Height="22" Id="Calendar0" Left="128" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="36" Width="88"></Calendar>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="680" OnClick="fn_Search" TabOrder="9" Text="조회" Top="32" Width="75"></Button>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="345" Style="static" TabOrder="10" Top="34" VAlign="Middle" Width="95"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="227" TabOrder="12" Text="전송코드필터" Top="34" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="cd" DataColumn="cdnm" Height="19" Id="cmb_GROUP" INDEX="0" InnerDataset="ds_CODE" Left="349" OnChanged="cmb_GROUP_OnChanged" TabOrder="11" Top="37" Width="90"></Combo>
+		<Static Height="15" Id="Static2" Left="655" TabOrder="13" Text="※&#32;근태코드&#32;참고" Top="67" VAlign="Middle" Width="135"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_CODE2" BkColor2="default" BkSelColor="white" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="256" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" DisableBKColor="white" Enable="FALSE" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="30" Height="176" Id="Grid0" InputPanel="FALSE" Left="656" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="864" SelColor="black" TabOrder="14" TabStop="FALSE" Top="80" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="208">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="45"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="코드"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="근태기기&#13;&#10;코드명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="근태PGM&#13;&#10;코드명"/>
+					</head>
+					<body>
+						<cell align="center" checklength="Byte" col="0" colid="cd" color="#333333" display="normal"/>
+						<cell align="center" checklength="Byte" col="1" colid="cdnmGate" color="#333333" display="normal"/>
+						<cell align="center" checklength="Byte" col="2" colid="cdnmRpg" color="#333333" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="451" TabOrder="17" Text="상세필터" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static6" Left="569" Style="static" TabOrder="15" Top="34" VAlign="Middle" Width="95"></Static>
+		<Combo CodeColumn="cd" DataColumn="cdnm" Height="19" Id="cmb_GROUP2" INDEX="0" InnerDataset="ds_CODE" Left="573" OnChanged="cmb_GROUP2_OnChanged" TabOrder="16" Top="37" Width="90"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 민명규
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : GATE01.xml
+ * ● PROGRAM DESCRIPTION  : 일일근태 내역 전송 - ke
+ * ● DATE WRITTEN         : 2014.07.16
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+/********************************************************************** 
+ * 개 발 자 : 민명규 
+ * 개발일자 : 2014.07.16
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	//getComCode();
+	MainGrid.UserData = MainGrid.Height;
+	Calendar0.Value = today();
+}
+/*
+근태기기/RPG
+1 : 출근
+2 : 공용외출 ->  3
+3 : 복귀   -> 7
+4 : 퇴근  -> 6
+5. 사용외출 -> 2
+
+*/
+
+/********************************************************************** 
+ * 개 발 자 : 민명규 
+ * 개발일자 : 2014.07.16
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+}
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053"); //상세화면 메시지
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.RowHeight = G_ds_design.GetColumn(0,"RowHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	//searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	
+	//displayDiv.Width = G_ds_design.GetColumn(0,"Width");
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getInOutTime(){
+
+	var sKind		= "getInOutTime";						
+	var sMethodName = "service::pshumlib/selectNewGateAccessData.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             					// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_GATE01=ds_GATE01"; 
+	var sArgument   = "";
+		sArgument += " ACKTIME=" + quote(Calendar0.Value);
+
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+}
+
+function setInOutTime(){
+	
+	if(ds_GATE01.rowcount<1){
+		alert("등록된 근태자료가 없습니다.");
+		setMessage("등록된 근태자료가 없습니다.");
+		return;
+	}
+
+	var sKind		= "setInOutTime";						
+	var sMethodName = "service::pshumlib/saveNewGateAccessData.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_GATE01=ds_GATE01";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ERROR=ds_ERROR"; 
+	var sArgument   = "";
+		sArgument += " ACKTIME=" + quote(Calendar0.Value);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+
+//제환복수정
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else if(svcId=="getInOutTime"){
+		if(ds_GATE01.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");
+			ds_GATE01_filter.Copy(ds_GATE01);
+		}
+	}else if(svcId=="setInOutTime"){
+		if(ds_ERROR.rowcount <= 0){
+			alert(setPopMessage("1001"));
+			setMessage("1001");
+		// 정상 조회
+		} else {
+			//alert(setPopMessage("1002"));
+			//setMessage("1002");
+			alert(ds_ERROR.GetColumn(0,"RTMSG") + " 오류명 : " +ds_ERROR.GetColumn(0,"RTERR"));
+			setMessage("1002");
+		}
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getInOutTime();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+
+function fn_Remote()
+{
+	setInOutTime();
+}
+
+function common_OnChanged(obj,strPreText,nChar,strPostText,nLLParam,nHLParam)
+{
+	ds_GATE01.ClearData();
+	ds_GATE01_filter.ClearData();
+}
+//단순필터
+function cmb_GROUP_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cmb_GROUP.Value == ""){
+		ds_GATE01.UnFilter();
+	} else {
+		ds_GATE01.Filter("FLAG_NEW=='" + cmb_GROUP.Value + "'");
+	}
+}
+//가공필터
+function cmb_GROUP2_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cmb_GROUP2.Value == ""){
+		ds_GATE01.UnFilter();
+	} else {
+	/*
+		//1.UnFilter사용 2.
+		ds_GATE01.UnFilter(); 
+		var getfilter="";
+		for(i=0; i<ds_GATE01.rowcount; i++){
+			if(ds_GATE01.GetColumn(i,"FLAG_NEW")==cmb_GROUP2.Value){
+				if(length(getfilter)==0){
+					getfilter = "SABUN=='"+ds_GATE01.GetColumn(i,"SABUN")+"'";
+				}else{
+					getfilter += " || SABUN=='"+ds_GATE01.GetColumn(i,"SABUN")+"'";
+				}
+			}
+		
+		}
+	*/
+		//2.데이터셋복제사용(정상조회시 복제함)
+		var getfilter="";
+		for(i=0; i<ds_GATE01_filter.rowcount; i++){
+			if(ds_GATE01_filter.GetColumn(i,"FLAG_NEW")==cmb_GROUP2.Value){
+				if(length(getfilter)==0){
+					getfilter = "SABUN=='"+ds_GATE01_filter.GetColumn(i,"SABUN")+"'";
+				}else{
+					getfilter += " || SABUN=='"+ds_GATE01_filter.GetColumn(i,"SABUN")+"'";
+				}
+			}
+		
+		}
+		if(length(getfilter)==0){
+			ds_GATE01.Filter("FLAG_NEW=='" + cmb_GROUP2.Value + "'");
+		}else{
+			ds_GATE01.Filter(getfilter);
+		}
+		//trace(getfilter);
+	}
+}
+]]></Script>
+</Window>

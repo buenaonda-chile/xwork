@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.SubCategoryDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.SubCategoryDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="mainCategory" column="MAIN_CATEGORY" javaType="java.lang.String" />
+		<result property="smallCategory" column="SMALL_CATEGORY" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="smallCategoryNm" column="SMALL_CATEGORY_NM" javaType="java.lang.String" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+		<result property="partDivNm" column="PART_DIV_NM" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		A.ID
+		,A.MAIN_CATEGORY
+		,A.SMALL_CATEGORY
+		,A.AUTOINSERT
+		,A.SMALL_CATEGORY_NM
+		,A.USE_YN
+		,A.PART_DIV
+        ,B.CODE_KO_NM AS PART_DIV_NM
+		,A.RGSTR_ID
+		,A.RGST_DT
+		,A.UPDTR_ID
+		,A.UPDT_DT
+
+    FROM TB_BA_SUB_CATEGORY A
+      INNER JOIN TB_CM_CODE B
+      ON B.GRP_CD = 'CAQPD'
+      AND B.CODE_CD = A.PART_DIV
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.mainCategory != null and criteria.mainCategory != ''">
+          AND (MAIN_CATEGORY LIKE '%'||#{criteria.mainCategory}||'%'
+          OR SMALL_CATEGORY LIKE '%'||#{criteria.mainCategory}||'%'
+          OR SMALL_CATEGORY_NM LIKE '%'||#{criteria.mainCategory}||'%')
+      </if>
+
+      <if test="criteria.useYn != null and criteria.useYn != ''">
+          AND A.USE_YN = #{criteria.useYn}
+      </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.SubCategoryDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.SubCategoryDomain">
+
+    INSERT INTO TB_BA_SUB_CATEGORY (
+		ID
+		,MAIN_CATEGORY
+		,SMALL_CATEGORY
+		,AUTOINSERT
+		,SMALL_CATEGORY_NM
+		,USE_YN
+		,PART_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{mainCategory}
+		,#{smallCategory}
+		,#{autoinsert}
+		,#{smallCategoryNm}
+		,#{useYn}
+		,#{partDiv}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_SUB_CATEGORY.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.SubCategoryDomain">
+
+    UPDATE TB_BA_SUB_CATEGORY SET
+		MAIN_CATEGORY = #{mainCategory}
+		,SMALL_CATEGORY = #{smallCategory}
+		,AUTOINSERT = #{autoinsert}
+		,SMALL_CATEGORY_NM = #{smallCategoryNm}
+		,USE_YN = #{useYn}
+		,PART_DIV = #{partDiv}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.SubCategoryDomain">
+
+    DELETE FROM TB_BA_SUB_CATEGORY
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

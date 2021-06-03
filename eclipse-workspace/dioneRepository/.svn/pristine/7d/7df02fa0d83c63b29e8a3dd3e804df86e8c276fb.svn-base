@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EmpDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="EmpDb2" type="EmpDb2Domain">
+        <result property="userId" column="USER_ID" />
+        <result property="userName" column="USER_NAME" />
+        <result property="company" column="COMPANY" />
+        <result property="plantCd" column="PLANT_CD" />
+        <result property="password" column="PASSWORD" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+        <result property="lib4" column="LIB4" />
+        <result property="menu_pw" column="MENU_PW" />
+    </resultMap>
+    
+    <!-- 사원정보(책임자) -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="EmpInfo" type="EmpDb2Domain">
+        <result property="sabun" column="SABUN" />
+        <result property="kornm" column="KORNM" />
+        <result property="dptcd" column="DPTCD" />
+        <result property="sdpcd" column="SDPCD" />
+        <result property="mcode" column="MCODE" />
+        <result property="code" column="CODE" />
+        <result property="name1" column="NAME1" />
+        <result property="name2" column="NAME2" />
+    </resultMap>
+    
+     <!--  -->
+    <select id="searchByDb2Id" resultMap="EmpDb2" parameterType="EmpDb2Domain">
+        SELECT RTRIM(A.USER_ID) USER_ID,
+			RTRIM(A.USER_NAME) USER_NAME,
+			RTRIM(A.COMPANY) COMPANY,
+			RTRIM(A.PLANT_CD) PLANT_CD,
+			RTRIM(A.PASSWORD) PASSWORD,
+			RTRIM(B.CODE2) LIB1,
+			RTRIM(C.CODE2) LIB2,
+			RTRIM(D.CODE2) LIB3,
+			RTRIM(E.CODE2) LIB4,
+			RTRIM(A.MENU_PW) MENU_PW
+  	   FROM PSZDBLIB.M_USR_TID A
+		INNER JOIN (SELECT 
+						USER_ID
+						, CASE WHEN DATE(CURRENT DATE) >= DATE(PW_DAT) + (INTEGER(PWCP) DAYS) - (INTEGER(PWBD) DAYS) THEN 'Y' ELSE 'N' END NOTICE_YN
+						, CASE WHEN DATE(CURRENT DATE) >= (DATE(PW_DAT) + INTEGER(PWCP) DAYS) THEN 'Y' ELSE 'N' END CUT_YN
+						, DATE(PW_DAT) + (INTEGER(PWCP)-1) DAYS CHANGE_DAT
+				   	FROM PSZDBLIB.M_USR_TID
+					) Z
+		 ON Z.USER_ID = A.USER_ID 					
+       LEFT OUTER JOIN PSZDBLIB.M_COM_CDE B
+         ON B.CLASS = 'LIB1'
+   	    AND B.CODE1 = A.COMPANY
+   	    AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE C
+         ON C.CLASS = 'LIB2'
+        AND C.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE D
+         ON D.CLASS = 'LIB3'
+        AND D.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+        LEFT OUTER JOIN PSZDBLIB.M_COM_CDE E
+         ON E.CLASS = 'LIB4'
+        AND E.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+ 	  WHERE A.USER_ID = #{userId}
+ 	    AND A.STATUS = '1'
+    </select>
+    
+    <!-- 사원정보(책임자) -->
+    <select id="selectOgm200_hmd020pf" resultMap="EmpInfo" parameterType="EmpDb2Domain">
+		select 
+				  a.sabun sabun
+				, trim(a.kornm) as kornm
+				, a.dptcd as dptcd
+				, b.sdpcd as sdpcd  
+		from 
+			<!-- LIB확인필요 lib1 -->
+			${lib3}.hmd020pf as a  
+		left outer join ${lib2}.obc080pf as b  
+			on a.sabun = b.sabun  
+		where
+			'SqlMap-Psogm.selectOgm200_hmd020pf' = 'SqlMap-Psogm.selectOgm200_hmd020pf' 
+			and a.sabun = #{sabun}
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 사원 정보 -->
+	<select id="selectOGMUserID" resultMap="EmpInfo" parameterType="EmpDb2Domain">
+		select 
+				  distinct
+				  trim(a.USER_ID) code
+				, trim(b.USER_NAME) name1
+				, trim(c.text) name2
+		from 
+				   PSZDBLIB.M_MNU_AUT a
+				,  PSZDBLIB.M_USR_TID b
+				,  PSZDBLIB.M_USR_TID c
+		where 
+				'Psogm.selectOGMMaker' = 'Psogm.selectOGMMaker'
+			and	a.menu_id in (select menu_id from PSZDBLIB.M_MNU_INF a where a.mcode=#{mcode})
+			and a.user_yn ='1'
+			and a.user_id=b.user_id
+			and a.user_id=c.user_id   
+			and c.plant_cd=#{plantCd}
+		<if test="userId != null and userId != ''">
+			and (
+					a.USER_ID like '%' || '${userId}' || '%'
+					or b.USER_NAME like '%' || '${userId}' || '%'
+			)
+		</if>
+	</select>
+</mapper>

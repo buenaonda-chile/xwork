@@ -1,0 +1,92 @@
+/*
+ * Project : dicas
+ *
+ * $Id$
+ *
+ * Copyright (c) 2018 DENSO IT SOLUTIONS. All rights reserved.
+ */
+package com.globaldenso.dicas.presentation.controller;
+
+import com.globaldenso.ai.miyabi.token.TokenManager;
+import com.globaldenso.ai.miyabi.viewid.annotation.ViewId;
+import com.globaldenso.dicas.business.dto.MenuDto;
+import com.globaldenso.dicas.business.service.MenuService;
+import com.globaldenso.dicas.constant.DicasConstant;
+import com.globaldenso.dicas.constant.DicasConstant.MenuAttribute;
+import com.globaldenso.dicas.security.common.LoginVO;
+import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
+import egovframework.rte.fdl.string.EgovStringUtil;
+import java.util.List;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * [EN] The class defines the controls of sub (WCM0003).<br>
+ * [JP] WCM0003 基本機能メニュー画面の制御を定義するクラス。<br>
+ * @author $Author$
+ * @version $Revision$
+ */
+@Controller
+public class SubController {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubController.class);
+
+  @Autowired
+  private MenuService menuService;
+
+  /**
+   * [EN] Default constructor.<br>
+   * [JP] デフォルトコンストラクタ。<br>
+   */
+  public SubController() {
+    // no process
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = {"/sub", "sub/{menuId}"})
+  public ModelAndView init(@PathVariable("menuId") Optional<String> menuId,
+      HttpServletRequest request) throws Exception {
+
+    LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+    ModelAndView mv = new ModelAndView();
+
+    if (menuId.isPresent()) {
+      request.getSession().setAttribute(MenuAttribute.MENU_ID, menuId.get());
+      mv.setViewName("redirect:/sub");
+    } else {
+
+      String menuKey = String.valueOf(request.getSession().getAttribute(MenuAttribute.MENU_ID));
+
+      List<MenuDto> menuDtos = menuService.searchByLoginUser(Long.parseLong(loginVO.getUniqId()));
+
+      mv.addObject("menuItems", menuDtos);
+      mv.addObject("menuKey", menuKey);
+      mv.setViewName(".tiles.page.sub");
+    }
+
+    return mv;
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = {"/subTraining", "subTraining/{menuId}"})
+  public ModelAndView init2(@PathVariable("menuId") Optional<String> menuId,
+      HttpServletRequest request) throws Exception {
+
+      ModelAndView mv = new ModelAndView();
+      
+
+      mv.addObject("menuItems", null);
+      mv.addObject("menuKey", "149");
+      mv.setViewName(".tiles.page.subTraining");
+    
+
+    return mv;
+  }
+}

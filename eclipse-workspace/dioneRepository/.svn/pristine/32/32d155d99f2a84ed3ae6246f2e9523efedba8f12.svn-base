@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="품목현황_상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm011d1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm011d2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm011d3">
+				<Contents>
+					<colinfo id="iodat" size="256" summ="default" type="STRING"/>
+					<colinfo id="a1" size="256" summ="default" type="STRING"/>
+					<colinfo id="a2" size="256" summ="default" type="STRING"/>
+					<colinfo id="a3" size="256" summ="default" type="STRING"/>
+					<colinfo id="a4" size="256" summ="default" type="STRING"/>
+					<colinfo id="a5" size="256" summ="default" type="STRING"/>
+					<colinfo id="a6" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="221" Id="searchBar" TabOrder="3" Top="32" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="1" TabOrder="4" Text="Parts&#32;No." Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="340" TabOrder="5" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;명" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="700" TabOrder="6" Text="규&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;격" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static8" TabOrder="7" Text="부&#32;품&#32;구&#32;분" Top="100" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="1" TabOrder="8" Text="분&#32;&#32;&#32;&#32;&#32;&#32;&#32;류" Top="36" VAlign="Middle" Width="92"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ogm011d3" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="612" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="332" Id="MainGrid" InputPanel="FALSE" Left="144" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="912" TabOrder="9" TabStop="true" Top="280" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="768">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="36"/>
+						<col width="121"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="처리일"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="출고량"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="발주량"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="입고량"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="구&#32;분"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="입고예정일"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="신단가"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="text" expr="currow+1"/>
+						<cell align="center" col="1" colid="IODAT" display="normal"/>
+						<cell align="right" col="2" colid="A1" display="expr:iif(A1==&apos;&apos;,&apos;normal&apos;,&apos;number&apos;)" Mask="#,##0"/>
+						<cell align="right" col="3" colid="A2" display="expr:iif(A2==&apos;&apos;,&apos;normal&apos;,&apos;number&apos;)" expr='decode(A2,&quot;0&quot;,&quot;&quot;,A2)' Mask="#,##0"/>
+						<cell align="right" col="4" colid="A3" display="expr:iif(A3==&apos;&apos;,&apos;normal&apos;,&apos;number&apos;)" expr='decode(A3,&quot;0&quot;,&quot;&quot;,A3)' Mask="#,##0"/>
+						<cell align="center" col="5" colid="A4" display="normal"/>
+						<cell align="center" col="6" colid="A5" display="normal"/>
+						<cell align="right" col="7" colid="A6" display="number" Mask="#,##0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static0" Left="340" TabOrder="10" Text="단&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;위" Top="100" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static4" Left="700" TabOrder="11" Text="평&#32;균&#32;단&#32;가" Top="100" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static10" Left="864" TabOrder="12" Text="신&#32;&#32;&#32;단&#32;&#32;&#32;가" Top="100" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static11" TabOrder="13" Text="구&#32;&#32;&#32;입&#32;&#32;&#32;선" Top="132" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static12" Left="340" TabOrder="14" Text="재&#32;고&#32;수&#32;량" Top="132" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static13" Left="504" TabOrder="16" Text="납&#32;기&#32;일&#32;수" Top="132" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static14" Left="700" TabOrder="15" Text="최&#32;소&#32;발&#32;주" Top="132" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static16" TabOrder="17" Text="M&#32;A&#32;K&#32;E&#32;R" Top="164" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static17" Left="340" TabOrder="18" Text="발&#32;&#32;&#32;주&#32;&#32;&#32;점" Top="164" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static18" Left="504" TabOrder="20" Text="미&#32;&#32;&#32;입&#32;&#32;&#32;고" Top="164" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static19" Left="700" TabOrder="19" Text="재&#32;고&#32;관&#32;리" Top="164" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static20" Left="864" TabOrder="21" Text="대&#32;체&#32;품&#32;목" Top="164" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static21" TabOrder="22" Text="설&#32;비&#32;N&#32;o" Top="196" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static22" Left="340" TabOrder="23" Text="발&#32;주&#32;수&#32;량" Top="196" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static23" Left="504" TabOrder="25" Text="출&#32;고&#32;누&#32;적" Top="196" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static24" Left="700" TabOrder="24" Text="관&#32;리&#32;부&#32;서" Top="196" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static26" TabOrder="26" Text="공&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;정" Top="228" VAlign="Middle" Width="92"></Static>
+		<Static Font="굴림,9,Bold" Height="19" Id="Static1" Left="146" TabOrder="27" Text="*&#32;입출고&#32;정보" Top="261" VAlign="Middle" Width="123"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblprtno" Left="96" TabOrder="28" Top="68" VAlign="Middle" Width="119"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="PGUCD" Height="20" Id="lblpgucd" Left="96" TabOrder="29" Top="100" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MSTRM" Height="20" Id="Static15" Left="160" TabOrder="30" Top="100" VAlign="Middle" Width="139"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="VNDOR" Height="20" Id="lblvndor" Left="96" TabOrder="31" Top="132" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="VNAME" Height="20" Id="Static27" Left="160" TabOrder="32" Top="132" VAlign="Middle" Width="139"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MAKER" Height="20" Id="lblmaker" Left="96" TabOrder="33" Top="164" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MAKNM" Height="20" Id="LabelMaker" Left="160" TabOrder="34" Top="164" VAlign="Middle" Width="139"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MSHNO" Height="20" Id="lblmshno" Left="96" TabOrder="35" Top="196" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MSHNM" Height="20" Id="Static31" Left="160" TabOrder="36" Top="196" VAlign="Middle" Width="139"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="KONGJ" Height="20" Id="lblkongj" Left="96" TabOrder="37" Top="228" VAlign="Middle" Width="927"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="PUNIT" Height="20" Id="lblpunit" Left="436" TabOrder="38" Top="100" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="PRTNM" Height="20" Id="lblprtnm" Left="436" TabOrder="39" Top="68" VAlign="Middle" Width="227"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="DPTCD" Height="20" Id="lbldptcd" Left="796" TabOrder="40" Top="196" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="DPCONM" Height="20" Id="Static43" Left="860" TabOrder="41" Top="196" VAlign="Middle" Width="163"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MODEL" Height="20" Id="lblmodel" Left="796" TabOrder="42" Top="68" VAlign="Middle" Width="227"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="ORDCD" Height="20" Id="Static48" Left="796" TabOrder="43" Top="164" VAlign="Middle" Width="63"></Static>
+		<Static BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="CPART" Height="20" Id="lblcpart" Left="960" TabOrder="44" Top="164" VAlign="Middle" Width="63"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblClass" Left="96" TabOrder="45" Top="36" VAlign="Middle" Width="119"></Static>
+		<MaskEdit BindDataset="ds_ogm011d2" Border="Flat" BorderColor="#dfdfdf" Column="QTY" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit0" Left="436" TabOrder="46" Top="132" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="PCOST" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit1" Left="796" TabOrder="47" Top="100" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="NCOST" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit2" Left="960" TabOrder="48" Top="100" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="POINT" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit3" Left="436" TabOrder="49" Top="164" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d2" Border="Flat" BorderColor="#dfdfdf" Column="ORDQY" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit4" Left="436" TabOrder="50" Top="196" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="LDTIM" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit5" Left="600" TabOrder="51" Top="132" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d2" Border="Flat" BorderColor="#dfdfdf" Column="JANQTY" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit6" Left="600" TabOrder="52" Top="164" Width="63"></MaskEdit>
+		<MaskEdit Border="Flat" BorderColor="#dfdfdf" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit7" Left="600" TabOrder="53" Top="196" Width="63"></MaskEdit>
+		<MaskEdit BindDataset="ds_ogm011d1" Border="Flat" BorderColor="#dfdfdf" Column="MINQY" DisableBKColor="white" Enable="FALSE" Height="20" Id="MaskEdit8" Left="796" TabOrder="54" Top="132" Width="63"></MaskEdit>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm011.xml
+ * ● PROGRAM DESCRIPTION  : 품목현황_상세
+ * ● DATE WRITTEN         : 2011.08.17
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	switch (GROUP) {
+		case '1' : lblClass.Text = "예비품"; break;
+		case '2' : lblClass.Text = "비품"; break;
+		case '3' : lblClass.Text = "식자재"; break;
+	}
+	//lblClass.Text = GROUP;
+	lblprtno.Text = PRTNO;
+
+	getOgm011d();
+}
+
+function getDesign(){
+//	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+//	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+//	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getOgm011d(){
+
+	var sKind		= "getOgm011d";						
+	var sMethodName = "service::psogmlib/selectOGM011d1.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm011d1=ds_ogm011d1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB1=" + quote(OLIB1);
+	sArgument += " LIB2=" + quote(OLIB2);
+	sArgument += " COMPS=" + quote(COMPS); //사업부
+	sArgument += " GROUP=" + quote(GROUP); //그룹
+	sArgument += " PRTNO=" + quote(lblprtno.Text); //품번
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	
+	var sKind		= "getOgm011d";						
+	var sMethodName = "service::psogmlib/selectOGM011d2.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm011d2=ds_ogm011d2";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB1=" + quote(OLIB1);
+	sArgument += " LIB2=" + quote(OLIB2);
+	sArgument += " COMPS=" + quote(COMPS); //사업부
+	sArgument += " GROUP=" + quote(GROUP); //그룹
+	sArgument += " PRTNO=" + quote(lblprtno.Text); //품번
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+	
+	var sKind		= "getOgm011d";						
+	var sMethodName = "service::psogmlib/selectOGM011d3.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm011d3=ds_ogm011d3";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(OLIB1);
+	sArgument += "@LIB2=" + quote(OLIB2);
+	sArgument += "@COMPS=" + quote(COMPS); //사업부
+	sArgument += "@GROUP=" + quote(GROUP); //그룹
+	sArgument += "@PRTNO=" + quote(lblprtno.Text); //품번
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	MaskEdit7.Text = ds_ogm011d3.sum('A1');
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+
+
+
+function menu_OnFocus(obj)
+{
+	
+}
+]]></Script>
+</Window>

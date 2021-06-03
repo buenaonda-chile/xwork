@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="620" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월&#32;득의선별&#32;판매계획대&#32;실적&#32;" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_SPYC900Q" UseClientLayout="1">
+				<Contents>
+					<colinfo id="G" size="256" summ="default" type="STRING"/>
+					<colinfo id="V" size="256" summ="default" type="STRING"/>
+					<colinfo id="CUSNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="Y2" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="M2" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="P2" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="YRATE" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="MRATE" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ad">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODENAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE></CODE>
+						<CODENAME>[전체]</CODENAME>
+					</record>
+					<record>
+						<CODE>A</CODE>
+						<CODENAME>ASMO</CODENAME>
+					</record>
+					<record>
+						<CODE>D</CODE>
+						<CODENAME>DENSO</CODENAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_plngb">
+				<Contents>
+					<colinfo id="code" size="1" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="30" summ="default" type="STRING"/>
+					<record>
+						<code>1</code>
+						<code_name>기본계획</code_name>
+					</record>
+					<record>
+						<code>2</code>
+						<code_name>수정계획</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SPYC900Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="620" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="556" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="detail_View" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1055" TabOrder="1" TabStop="true" ToolTipText="조회결과&#32;Double-Click&#32;시&#32;해당&#32;값에&#32;대한&#32;상세보기로&#32;전환됩니다." Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1055">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="90"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="90"/>
+						<col width="90"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="거래처"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="거래처명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="기본계획금액"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="월판매계획금액"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="판매실적금액"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="기본%"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="월판매%"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="G" display="text"/>
+						<cell align="left" col="1" colid="V" display="text"/>
+						<cell align="left" col="2" colid="CUSNM" display="text"/>
+						<cell align="right" col="3" colid="Y2" display="number" Mask="#,##0"/>
+						<cell align="right" col="4" colid="M2" display="number" Mask="#,##0"/>
+						<cell align="right" col="5" colid="P2" display="number" Mask="#,##0"/>
+						<cell align="right" col="6" colid="YRATE" display="number" Mask="#,##0.#0"/>
+						<cell align="right" col="7" colid="MRATE" display="number" Mask="#,##0.#0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="3" display="text" text="TOTAL"/>
+						<cell align="right" col="3" display="number" expr='SUM(&quot;Y2&quot;)' Mask="#,##0"/>
+						<cell align="right" col="4" display="number" expr='SUM(&quot;M2&quot;)' Mask="#,##0"/>
+						<cell align="right" col="5" display="number" expr='SUM(&quot;P2&quot;)' Mask="#,##0"/>
+						<cell align="right" col="6" display="number" expr='parseFloat(SUM(&quot;P2&quot;))/parseFloat(SUM(&quot;Y2&quot;))*100' Mask="#,##0.#0"/>
+						<cell align="right" col="7" display="number" expr='parseFloat(SUM(&quot;P2&quot;))/parseFloat(SUM(&quot;M2&quot;))*100' Mask="#,##0.#0"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" TabOrder="2" Top="32" Width="1057"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static1" Left="208" TabOrder="5" Text="공장구분" Top="34" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="1" TabOrder="3" Text="사업부" Top="34" VAlign="Middle" Width="100"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="20" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="102" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="4" Top="36" Width="88"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="6" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="6" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="20" Id="cb_plant" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="309" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="8" Top="36" Width="88"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static2" Left="416" TabOrder="9" Text="계획년월" Top="34" VAlign="Middle" Width="100"></Static>
+		<Calendar Dateformat="yyyy-MM" Height="21" Id="ca_plnym" Left="518" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="10" Top="37" Width="88"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static7" Left="622" TabOrder="11" Text="A/D" Top="34" VAlign="Middle" Width="100"></Static>
+		<Combo BindDataset="ds_ad" Border="Flat" BorderColor="SCROLLBAR" CodeColumn="CODE" Color="#333333" DataColumn="CODENAME" Height="20" Id="cb_ad" ImeMode="none" INDEX="0" InnerDataset="ds_ad" Left="724" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="12" Top="36" Width="88"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static10" Left="830" TabOrder="13" Text="계&#32;획&#32;구&#32;분" Top="34" VAlign="Middle" Width="100"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static9" Left="930" Style="static" TabOrder="14" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo BorderColor="SCROLLBAR" CodeColumn="code" Color="#333333" DataColumn="code_name" Height="20" Id="cb_plngb" ImeMode="none" INDEX="0" InnerDataset="ds_plngb" Left="936" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="15" Top="36" Width="88"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="722" Style="static" TabOrder="16" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="514" Style="static" TabOrder="17" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="306" Style="static" TabOrder="18" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static6" Left="98" Style="static" TabOrder="19" Top="34" VAlign="Middle" Width="96"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 이상건
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : BHZC201Q.xml
+ * ● PROGRAM DESCRIPTION  : 제품내제품 현재고 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();	
+	MainGrid.ToolTipText = setPopMessage("2053");	
+	getComCode();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	ca_plnym.Value = nowDate;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+	
+	Static4.BkColor = G_ds_design.GetColumn(0,"BTBkColor1");
+	Static1.BkColor = G_ds_design.GetColumn(0,"BTBkColor1");	
+	Static2.BkColor = G_ds_design.GetColumn(0,"BTBkColor2");	
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE2","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_plant.Index = 0;
+	cb_comp.Index = 0;
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSPYC900Q()
+{
+	if (cb_plngb.Value == '1'){
+		MainGrid.SetCellProp("Head", 3, "text", "기본계획금액");
+		MainGrid.SetCellProp("Head", 6, "text", "기본%");
+	}else{
+		MainGrid.SetCellProp("Head", 3, "text", "수정계획금액");
+		MainGrid.SetCellProp("Head", 6, "text", "수정%");
+	}
+	
+	var sKind		= "getSPYC900Q";						
+	var sMethodName = "service::pssallib/selectSPYC900Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SPYC900Q=ds_SPYC900Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(cb_comp.Value); //사업부
+	sArgument += "@PLTCD=" + quote(cb_plant.Value); //공장구분
+    sArgument += "@PLNYM=" + quote(substr(ca_plnym.Value,0,6)); //계획년월 
+    sArgument += "@MGMCD=" + quote(cb_ad.Value); //denso,asmo구분
+    sArgument += "@PLNGB=" + quote(cb_plngb.Value); //계획구분
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = substr(ca_plnym.Value,0,6)+"월판매계획대실적";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|월판매계획대실적";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else if(svcId=="getSPYC900Q"){
+		// 조회건수가 없을경우
+		if(ds_SPYC900Q.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+ 
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSPYC900Q();
+
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function detail_View(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	if(ds_SPYC900Q.rowcount <= 0 || ds_SPYC900Q.GetRowType(ds_SPYC900Q.row) != 'normal') return ;
+	var plantcd;
+	if(cb_plant.Value == "") {
+		plantcd="ZZ";
+	}else {
+		plantcd=cb_plant.Value;
+	}
+	var str = dialog("PSSALLIB::SPYC900QD.xml",
+					"P_COMPS=" + ds_SPYC900Q.GetColumn(ds_SPYC900Q.row,"G") + " " + 
+					"P_PLTCD=" + plantcd + " " + 
+					"P_PYVND=" + ds_SPYC900Q.GetColumn(ds_SPYC900Q.row,"V") + " " + 
+					"P_YYMM=" + SubStr(ca_plnym.Value,0,6) + " " +
+	                "P_PLNGB=" + cb_plngb.Value,1100,600);
+	//trace (str);
+}
+
+function Button0_OnClick(obj)
+{
+	detail_View(obj);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SPYC900Q.DeleteAll();
+}
+]]></Script>
+</Window>

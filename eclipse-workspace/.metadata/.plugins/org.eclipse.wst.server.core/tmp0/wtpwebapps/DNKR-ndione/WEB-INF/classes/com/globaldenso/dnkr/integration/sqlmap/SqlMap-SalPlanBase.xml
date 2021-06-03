@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlanBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="SalPlanBase" type="SalPlanBaseDomain">
+        <result property="comps" column="COMPS" />
+        <result property="code" column="CODE" />
+        <result property="name" column="NAME" />
+        <result property="sub" column="SUB" />
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+    </resultMap>
+ 
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchInfoMaster" resultMap="SalPlanBase" parameterType="SalPlanBaseDomain">
+		SELECT 
+			 TRIM(CODE1) AS CODE
+			,TRIM(CODE_NAME) AS NAME
+		FROM PSZDBLIB.M_COM_CDE
+		WHERE 1=1
+		<if test="code != null and code != ''">			
+			AND CLASS like '%' || '${code}' || '%'
+		</if> 
+    </select>    
+    <!-- 検索 SQL文（任意条件） -->      
+
+</mapper>

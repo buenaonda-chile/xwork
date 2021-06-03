@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dicas.business.dao.UserRoleDao">
+
+  <resultMap id="resultMap" type="com.globaldenso.dicas.business.dto.UserRoleDto">
+    <id property="userId" column="USER_ID" javaType="java.lang.Long" />
+    <id property="roleCd" column="ROLE_CD" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+
+   SELECT USER_ID,
+          ROLE_CD
+   FROM TB_CM_USER_ROLE
+
+  </sql>
+
+  <!-- 検索 SQL文（主キー） -->
+  <select id="selectByKey" resultMap="resultMap" parameterType="com.globaldenso.dicas.business.dto.UserRoleDto">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.USER_ID = #{userId}
+      AND AA.ROLE_CD = #{roleCd}
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.UserRoleDomain">
+
+    INSERT INTO TB_CM_USER_ROLE (
+      USER_ID,
+      ROLE_CD,
+      RGSTR_ID,
+      RGST_DT,
+      UPDTR_ID,
+      UPDT_DT
+    ) VALUES (
+      #{userId},
+      #{roleCd},
+      #{rgstrId},
+      #{rgstDt},
+      #{updtrId},
+      #{updtDt}
+    )
+
+  </insert>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.UserRoleDomain">
+
+    DELETE FROM TB_CM_USER_ROLE
+    WHERE USER_ID = #{userId}
+      AND ROLE_CD = #{roleCd}
+
+  </delete>
+</mapper>

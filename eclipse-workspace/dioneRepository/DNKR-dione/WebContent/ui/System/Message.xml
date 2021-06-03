@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="메세지&#32;관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_message"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnm>사용</cdnm>
+					</record>
+					<record>
+						<cd>0</cd>
+						<cdnm>미사용</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_messageAll"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="61" Id="Static26" Left="3" TabOrder="2" Top="526" Width="1054"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static8" Left="5" TabOrder="6" Top="528" Width="1049"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_message" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="523" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="459" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1054" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1054">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="105"/>
+						<col width="743"/>
+						<col width="166"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="메세지&#32;코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="메세지&#32;내용"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사용유무"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="MSG_SEQ" display="normal"/>
+						<cell align="left" col="2" colid="MSG_TEXT" color="#333333" display="combo"/>
+						<cell align="center" autosizing="none" col="3" colid="USER_YN" combocol="cd" combodataset="ds_status" combotext="cdnm" display="combo"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static0" Left="541" TabOrder="7" Top="528" Width="106"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static13" Left="5" TabOrder="3" Top="528" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static14" Left="29" Style="static" TabOrder="4" Text="메세지코드" Top="533" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="545" Height="5" Id="Shape6" Left="17" LineColor="#dceaf7" Right="22" TabOrder="5" Top="540" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static20" Left="565" Style="static" TabOrder="8" Text="사용유무" Top="533" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="545" Height="5" Id="Shape2" Left="553" LineColor="#dceaf7" Right="558" TabOrder="9" Top="540" Type="Ellipse" Width="5"></Shape>
+		<Combo BindDataset="ds_message" Border="Flat" BorderColor="#888888" CodeColumn="cd" Color="#333333" Column="USER_YN" DataColumn="cdnm" Height="23" Id="cb_status" INDEX="0" InnerDataset="ds_status" Left="649" ResetIndex="FIRST" TabOrder="10" Top="530" Width="402"></Combo>
+		<Edit BindDataset="ds_message" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="MSG_SEQ" Height="23" Id="ed_Vmsgseq" Left="115" MaxLength="4" OnKillFocus="checkid" TabOrder="11" Top="531" Width="422"></Edit>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static34" Left="5" TabOrder="13" Top="556" Width="1049"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static36" Left="5" TabOrder="12" Top="556" Width="106"></Static>
+		<Shape BKColor="#94c1ea" Bottom="573" Height="5" Id="Shape8" Left="17" LineColor="#dceaf7" Right="22" TabOrder="15" Top="568" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static37" Left="29" Style="static" TabOrder="14" Text="메세지&#32;내용" Top="561" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_message" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="MSG_TEXT" Height="23" Id="ed_VmsgText" Left="115" MaxLength="100" TabOrder="16" Top="559" Width="935"></Edit>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="22" Top="30" Width="1057"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static12" Left="3" TabOrder="21" Top="32" Width="760"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="239" TabOrder="20" Top="32" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static15" Left="261" Style="static" TabOrder="17" Text="메세지&#32;내용" Top="37" VAlign="Middle" Width="69"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static16" Left="3" TabOrder="19" Top="32" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static21" Left="25" Style="static" TabOrder="18" Text="메세지&#32;코드" Top="37" VAlign="Middle" Width="69"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_msgseq" Left="110" MaxLength="10" TabOrder="23" Top="34" Width="126"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_msgtext" Left="346" MaxLength="10" TabOrder="24" Top="34" Width="414"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="25" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="25" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : Message.xml
+ * ● PROGRAM DESCRIPTION  : 메세지 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getMsgListAll();
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)					
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getMsgList(){
+	var sKind		= "getMsgList";						
+	var sMethodName = "service::user/selectMsg.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             	// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_message=ds_message";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " MSG_SEQ=" + quote(ed_msgseq.Value);
+	sArgument += " MSG_TEXT=" + quote(ed_msgtext.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 모든리스트 조회 (중복체크용)
+ * 주요변수 : 
+ **********************************************************************/ 
+function getMsgListAll(){
+	var sKind		= "getMsgList";						
+	var sMethodName = "service::user/selectMsg.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_message=ds_message";    				// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "");
+	ds_messageAll.Copy('ds_message');
+	//ds_message.DeleteAll();
+	ds_message.ClearData();
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setMsgList(){
+	var sKind		= "setMsgList";						
+	var sMethodName = "service::user/msgSave.do";     			// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_message=ds_message:U";     			//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    									// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 중복 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+function checkid(obj)
+{
+	if(ds_message.GetRowType(ds_message.row) != 'insert') return ;
+	for(i=0;i<ds_messageAll.rowcount; i++){
+		if(ds_messageAll.GetColumn(i,"MSG_SEQ") == ed_Vmsgseq.Value) {
+			alert(setPopMessage("2040"));	// 20110103l-koowgnojeel, 2040 == 사용중인 메세지들입니다.
+			ed_Vmsgseq.SetFocus();
+			return;
+		}
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getMsgList"){
+		// 조회건수가 없을경우
+		if(ds_menuList.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setMsgList"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+
+}
+
+
+
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+
+function fn_Search()
+{
+	getMsgList();
+}
+
+function fn_Input()
+{
+
+	ds_message.AddColumn("MSG_SEQ");
+	ds_message.AddColumn("MSG_TEXT");
+	ds_message.AddColumn("USER_YN");
+
+	if(checkInsertCount("ds_message")== false) return;
+	ds_message.AddRow();
+	cb_status.Value = '1';	
+}
+
+function fn_Delete()
+{
+	ds_message.DeleteRow(ds_message.currow);
+}
+
+function fn_Save()
+{
+	setMsgList();
+
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="SubFileSaveForm" Left="8" OnLoadCompleted="SubFileSaveForm_OnLoadCompleted" PidAttrib="7" Title="서브파일&#32;위치&#32;등록" TooltipFont=",0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menu">
+				<Contents>
+					<colinfo id="SCREEN_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="COLUMN_START" size="256" summ="default" type="STRING"/>
+					<colinfo id="COLUMN_LENGTH" size="256" summ="default" type="STRING"/>
+					<colinfo id="COLUMN_HEIGHT" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_START" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_LENGTH" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_HEIGHT" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_END" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_POS" size="256" summ="default" type="STRING"/>
+					<colinfo id="RECORD_COUNT" size="256" summ="default" type="STRING"/>
+					<colinfo id="SCREEN_TYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="URL" size="256" summ="default" type="STRING"/>
+					<colinfo id="TITLE" size="256" summ="default" type="STRING"/>
+					<colinfo id="POP_START_ROW" size="256" summ="default" type="STRING"/>
+					<colinfo id="POP_START_COL" size="256" summ="default" type="STRING"/>
+					<colinfo id="POP_END_ROW" size="256" summ="default" type="STRING"/>
+					<colinfo id="POP_END_COL" size="256" summ="default" type="STRING"/>
+					<colinfo id="USE_YN" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_gbn">
+				<Contents>
+					<colinfo id="code" size="256" type="STRING"/>
+					<colinfo id="codename" size="256" type="STRING"/>
+					<record>
+						<code>0</code>
+						<codename>기타</codename>
+					</record>
+					<record>
+						<code>1</code>
+						<codename>서브</codename>
+					</record>
+					<record>
+						<code>2</code>
+						<codename>팝업</codename>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" Left="105" TabOrder="5" Top="30" Width="949"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static0" Left="1" TabOrder="4" Top="30" Width="106"></Static>
+		<Grid AutoEnter="TRUE" AutoFitEndLine="Hide" BindDataset="DS_MENU" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="528" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="472" Id="MainGrid" InputPanel="FALSE" LineColor="#b4b4b4" OnCellDBLClick="Grid0_OnCellDblClick" OnHeadClick="Grid0_OnHeadClick" Right="1054" ScrollCell="true" TabOrder="1" TabStop="true" Top="56" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="1054">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="89"/>
+						<col width="147"/>
+						<col width="166"/>
+						<col width="61"/>
+						<col width="55"/>
+						<col width="50"/>
+						<col width="44"/>
+						<col width="50"/>
+						<col width="126"/>
+						<col width="103"/>
+						<col width="47"/>
+						<col width="65"/>
+						<col width="39"/>
+						<col width="34"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="스크린&#32;ID"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="타이틀"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="URL"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="H_시작"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="H_높이"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="B_시작"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="B_높이"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="B_종료"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="H_POS"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="B_위치"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="C_개수"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="R_개수"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" text="사용"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" text="팝업시작R"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" text="팝업시작C"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" display="text" text="팝업종료R"/>
+						<cell bkcolor="#dfdfdf" col="17" color="#002043" display="text" text="팝업종료C"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="SCREEN_ID" display="normal"/>
+						<cell align="left" col="1" colid="TITLE" display="normal"/>
+						<cell align="left" autosizing="none" col="2" colid="URL" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="3" colid="COL_START" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="4" colid="COL_HEIGHT" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="5" colid="REC_START" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="6" colid="REC_HEIGHT" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="7" colid="REC_END" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="8" colid="COL_LENGTH" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="9" colid="REC_POS" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="10" colid="REC_LENGTH" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="11" colid="REC_COUNT" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="12" colid="SCR_TYPE" combocol="code" combodataset="ds_gbn" combotext="codename" display="normal" edit="combo"/>
+						<cell align="left" autosizing="none" col="13" colid="USE_YN" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="14" colid="POP_STRROW" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="15" colid="POP_STRCOL" display="normal" edit="normal"/>
+						<cell align="left" autosizing="none" col="16" colid="POP_ENDROW" combocol="code" combodataset="ds_gbn" combotext="codename" display="normal" edit="combo"/>
+						<cell align="left" autosizing="none" col="17" colid="POP_ENDCOL" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="21" Id="Static38" Left="21" Style="static" TabOrder="2" Text="스크린ID" Top="32" VAlign="Middle" Width="70"></Static>
+		<Shape BKColor="#888888" Bottom="43" Height="5" Id="Shape1" Left="13" LineColor="#dceaf7" Right="18" TabOrder="3" Top="38" Type="Ellipse" Width="5"></Shape>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="SCROLLBAR" DisableBKColor="#eeeeee" Height="21" Id="Edit0" ImeMode="none" Left="108" MaxLength="15" TabOrder="6" Top="32" UpperOnly="TRUE" Width="205"></Edit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="7" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="7" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+/********************************************************************** 
+ * 개 발 자 :  김봉수
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 타이틀 생성
+ **********************************************************************/ 
+function SubFileSaveForm_OnLoadCompleted(obj)
+{
+	getTitle();	
+/*
+	var subStr = "";
+	var sKind		= "GETSUBFILELIST";						
+	var sMethodName = "service::max5250/getSubFileList.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_menu";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_menu = ds_menu";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " str=";
+*/
+//	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 :  김봉수
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 검색버턴 실행 함수
+ * 
+ **********************************************************************/ 
+function btn_search()
+{
+	var subStr = "";
+	var sKind		= "GETSUBFILELIST";						
+	var sMethodName = "service::max5250/getSubFileList.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_menu";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_menu = ds_menu";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " str=";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");
+}
+//추가
+
+function btn_add_OnClick(obj)
+{
+	if(ds_menu.rowcount == 0) ds_menu.AddRow();
+	else ds_menu.InsertRow(0);
+	
+	var rtn  = Dialog("Max5250::screenInfoSave.xml", 545 , 370);
+	if(rtn != 1) ds_menu.DeleteRow(0);
+}
+//저장
+function btn_save_OnClick(obj)
+{
+	var subStr = "";
+	var sKind		= "SETSUBFILE";						
+	var sMethodName = "service::max5250/setSubFile.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_menu:U";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " str=";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");
+}
+
+function btn_del_OnClick(obj)
+{
+	var subStr = "";
+	var sKind		= "DELETESUBFILE";						
+	var sMethodName = "service::max5250/deleteSubFile.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_menu:D";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " id="+quote(ds_menu.GetColumn(ds_menu.currow,"SCREEN_ID"));
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");
+	ds_menu.DeleteRow(ds_menu.currow);
+}
+
+
+function Grid0_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var rtn  = Dialog("Max5250::screenInfoSave.xml", 545 , 370);
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="GETSUBFILELIST"){
+		// 조회건수가 없을경우
+		if(ds_menu.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="DELETESUBFILE" || svcId=="SETSUBFILE"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+
+
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	btn_search();
+}
+
+function fn_Input()
+{
+	btn_add_OnClick();
+}
+
+function fn_Delete()
+{
+	btn_del_OnClick();
+}
+
+function fn_Save()
+{
+	btn_save_OnClick("");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	 lib_grid_SetGridSort(obj,nCell);
+}
+]]></Script>
+</Window>

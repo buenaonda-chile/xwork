@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="FHDZ119SM" Left="8" OnLoadCompleted="FHDZ119SM_OnLoadCompleted" PidAttrib="7" Title="FHDZ119SM" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="cd" size="256" type="STRING"/>
+					<colinfo id="cdnm" size="256" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>선택</cdnm>
+					</record>
+					<record>
+						<cd>C1</cd>
+						<cdnm>C1</cdnm>
+					</record>
+					<record>
+						<cd>E1</cd>
+						<cdnm>E1</cdnm>
+					</record>
+					<record>
+						<cd>H1</cd>
+						<cdnm>H1</cdnm>
+					</record>
+					<record>
+						<cd>S1</cd>
+						<cdnm>S1</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="264" TabOrder="10" Top="168" Width="220"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static23" Left="264" TabOrder="6" Top="144" Width="220"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="CDnm" Height="21" Id="cb_buso" ImeMode="none" INDEX="0" InnerDataset="Dataset0" Left="371" ResetIndex="FIRST" TabOrder="1" Top="145" Width="106"></Combo>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Dateformat="yyyy/MM" Height="21" Id="Calendar0" Left="372" SaturdayTextColor="blue" SpinStyle="1" SundayTextColor="red" TabOrder="2" Top="170" Width="104"></Calendar>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="264" TabOrder="5" Top="144" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="159" Height="5" Id="Shape12" Left="276" LineColor="#dceaf7" Right="281" TabOrder="3" Top="154" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="286" Style="static" TabOrder="4" Text="사업부" Top="149" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="264" TabOrder="9" Top="168" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="183" Height="5" Id="Shape0" Left="276" LineColor="#dceaf7" Right="281" TabOrder="7" Top="178" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="286" Style="static" TabOrder="8" Text="근태일자" Top="173" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="264" TabOrder="14" Top="192" Width="220"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="264" TabOrder="13" Top="192" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="207" Height="5" Id="Shape1" Left="276" LineColor="#dceaf7" Right="281" TabOrder="11" Top="202" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static9" Left="286" Style="static" TabOrder="12" Text="작업반" Top="197" VAlign="Middle" Width="77"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="Edit0" Left="372" TabOrder="15" Top="194" Width="101"></Edit>
+		<Static Font="Default,9,Bold" Height="16" Id="Static0" Left="286" TabOrder="16" Text="다음을&#32;선택하시오" Top="122" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="267" TabOrder="17" Top="120" Width="13"></Image>
+		<Button ButtonStyle="TRUE" Height="21" Id="Button0" ImageID="btn_pop_txt_02" Left="436" OnClick="Button0_OnClick" TabOrder="18" Text="확인" Top="223" Width="48"></Button>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" Left="-2" TabOrder="21" Width="800"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="12" Id="Static2" Left="40" TabOrder="19" Text="통합MRP&#32;&gt;&#32;메뉴8&#32;&gt;&#32;생산&#32;작업일보&#32;마감작업" Top="8" Width="341"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="1" TabOrder="20" Width="29"></Image>
+	</Form>
+	<Script><![CDATA[var isAuth = false;
+function FHDZ119SM_OnLoadCompleted(obj)
+{
+		if(!isAuth){
+		cb_buso.Enable = false;
+		Calendar0.Enable =false;
+		BHZZ100SM.Enable = false;
+		Edit0.Enable =false;
+		var str = dialog("Group1::BHZZ100CP.xml",300,300);
+		if(str == "1"){
+			cb_buso.Enable = true;
+			Calendar0.Enable =true;
+			BHZZ100SM.Enable = true;
+			Edit0.Enable =true;
+		}
+	}
+}
+]]></Script>
+</Window>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.SaleSDRepairItemDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.SaleSDRepairItemDto">
+  		<id property="saleNo" column="SALE_NO" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="saleDt" column="SALE_DT" javaType="java.lang.String" />
+		<result property="custId" column="SALE_CUST_ID" javaType="java.lang.Long" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="partNo" column="REP_PART_NO" javaType="java.lang.String" />
+		<result property="partNm" column="PART_NM" javaType="java.lang.String" />
+		<result property="custEmpId" column="SALE_EMP_SEQ" javaType="java.lang.Long" />
+		<result property="custEmpNm" column="SALE_EMP_NM" javaType="java.lang.String" />
+		<result property="qty" column="QTY" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.SaleSDRepairItemDomain">
+
+    SELECT *
+    FROM TB_SALE_INFO
+    WHERE SALE_NO = #{saleNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT SALE_NO
+  			   	,TO_CHAR(TO_DATE(SALE_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS SALE_DT
+  			   	,SALE_CUST_ID
+  			   	,(SELECT CUST_NM FROM TB_CM_CUST WHERE SALE_CUST_ID = ID) AS CUST_NM
+  			   	,SALE_EMP_SEQ
+  			   	,(SELECT FST_NM FROM TB_CM_USER WHERE SALE_EMP_SEQ = USER_ID) AS SALE_EMP_NM
+  			   	,REP_PART_NO
+  			   	,(SELECT ITEM_KOR_NM FROM TB_DC_ITEM_INFO WHERE REP_PART_NO = PART_NO) AS PART_NM
+  			   	,SALE_EMP_SEQ
+  			   	,QTY
+  			   	,ETC_CN
+  		FROM TB_SALE_INFO
+  		
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(SALE_NO) AS CNT
+    FROM TB_SALE_INFO
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.SaleSDRepairItemDomain">
+   
+    INSERT INTO TB_SALE_INFO(
+			 SALE_NO
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,SALE_DT
+			,SALE_CUST_ID			
+			,SALE_EMP_SEQ
+			,REP_PART_NO
+			,QTY
+			,ETC_CN
+	)VALUES(
+			 #{saleNo}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,replace(#{saleDt},'-')
+			,#{custId}
+			,#{custEmpId}
+			,#{partNo}
+			,#{qty}
+			,#{remark}
+	)
+
+    <selectKey resultType="String" keyProperty="saleNo" order="BEFORE">
+      SELECT FN_GET_RECT('SALE') FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.SaleSDRepairItemDomain">
+
+    UPDATE TB_SALE_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,SALE_DT = replace(#{saleDt},'-')
+		,REP_PART_NO = #{partNo}
+		,SALE_CUST_ID = #{custId}
+		,SALE_EMP_SEQ = #{custEmpId}
+		,QTY = #{qty}
+		,ETC_CN = #{remark}
+ 	WHERE SALE_NO = #{saleNo}
+ 	
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.SaleSDRepairItemDomain">
+
+ 	DELETE FROM TB_SALE_INFO
+    WHERE SALE_NO = #{saleNo}
+
+  </delete>
+
+
+</mapper>

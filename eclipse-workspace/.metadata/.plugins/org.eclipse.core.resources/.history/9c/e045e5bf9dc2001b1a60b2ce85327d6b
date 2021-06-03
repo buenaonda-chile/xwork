@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.DeliveryCDRepairItemDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.DeliveryCDRepairItemDto">
+  		<id property="delvNo" column="DELV_NO" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="delvDt" column="DELV_DT" javaType="java.lang.String" />
+		<result property="partNo" column="PART_NO" javaType="java.lang.String" />
+		<result property="partNm" column="ITEM_KOR_NM" javaType="java.lang.String" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="custId" column="CUST_ID" javaType="java.lang.Long" />
+		<result property="custEmpId" column="CUST_EMP_SEQ" javaType="java.lang.Long" />
+		<result property="custEmpNm" column="CUST_EMP_NM" javaType="java.lang.String" />
+		<result property="admissStatus" column="ADMISS_STATUS" javaType="java.lang.String" />
+		<result property="delvDiv" column="DELV_DIV" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+    SELECT *
+    FROM TB_DELV_MST
+    WHERE DELV_NO = #{delvNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT * FROM
+				((SELECT DELV_NO
+  			   			,TO_CHAR(TO_DATE(DELV_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS DELV_DT 
+  			   			,PO_CUST_ID
+  			   			,(SELECT CUST_NM FROM TB_CM_CUST WHERE CUST_ID = ID) AS CUST_NM
+  			   			,(SELECT FST_NM FROM TB_CM_USER WHERE DELV_EMP_SEQ = USER_ID) AS DELV_EMP_NM
+  			   			,DELV_EMP_SEQ
+  			   			,ETC_CN
+  				FROM TB_DELV_MST
+  				WHERE DELV_DIV = 'O1') A LEFT OUTER JOIN
+   				( SELECT C.PART_NO,C.DELV_NO,D.ITEM_KOR_NM FROM
+   						(SELECT PART_NO
+   								,DELV_NO
+    					FROM TB_DELV_DTL) C JOIN
+    					(SELECT PART_NO,ITEM_KOR_NM
+    					FROM TB_DC_ITEM_INFO) D ON C.PART_NO=D.PART_NO
+    			) B ON A.DELV_NO=B.DELV_NO)
+    			WHERE 'SqlMap-DeliveryCDRepairItem.searchByCondition' = 'SqlMap-DeliveryCDRepairItem.searchByCondition'
+	  <if test="criteria.searchDelDtFr != null and criteria.searchDelDtFr != ''">
+		  AND PO_DT  &gt;=  #{criteria.searchDelDtFr}
+	  </if>
+	  <if test="criteria.searchDelDtTo != null and criteria.searchDelDtTo != ''">
+		  AND PO_DT  &lt;=  #{criteria.searchDelDtTo}  || '9999'
+	  </if>
+	  <if test="criteria.custNm != null and criteria.custNm != ''">
+		  AND CUST_NM  LIKE '%' || #{criteria.custNm} || '%'
+	  </if>
+	  <if test="criteria.partNo != null and criteria.partNo != ''">
+		  AND PART_NO  LIKE '%' || #{criteria.partNo} || '%'
+	  </if>
+	  <if test="criteria.orderNo != null and criteria.orderNo != ''">
+		  AND A.PO_NO  LIKE  '%' || #{criteria.orderNo} || '%'
+	  </if>
+  		
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(PO_NO) AS CNT
+    FROM TB_PO_MST
+
+  </select>
+
+  <insert id="createMst" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+    INSERT INTO TB_PO_MST(
+			 PO_NO
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,PO_DT
+			,PO_DIV
+			,PO_STATUS
+			,PO_CUST_ID
+			,PO_EMP_SEQ
+			,ADMISS_STATUS
+			,ETC_CN
+	)VALUES(
+			 #{orderNo}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,replace(#{orderDt},'-')
+			,'O1'
+			,'R1'
+			,#{custId}
+			,#{custEmpId}
+			,'A1'
+			,#{remark}
+	)
+
+    <selectKey resultType="String" keyProperty="orderNo" order="BEFORE">
+      SELECT FN_GET_RECT('PO') FROM DUAL
+    </selectKey>
+
+  </insert>
+  
+   <insert id="createDtl" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+  	INSERT INTO TB_PO_DTL(
+			 PO_NO
+			,PO_DTL_SEQ
+			,PART_NO
+			,UNIT
+			,QTY
+			,ETC_CN
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+	)VALUES(
+			 #{orderNo}
+			,'1'
+			,#{partNo}
+			,(select UNIT FROM TB_DC_ITEM_INFO WHERE PART_NO = #{partNo})
+			,'1'
+			,#{remark}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+	)
+  </insert>
+
+  <update id="updateMst" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+    UPDATE TB_PO_MST
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,PO_DT = replace(#{orderDt},'-')
+		,PO_CUST_ID = #{custId}
+		,ETC_CN = #{remark}
+ 	WHERE PO_NO = #{orderNo}
+
+  </update>
+  
+  <update id="updateDtl" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+	UPDATE TB_PO_DTL
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,PART_NO = #{partNo}
+		,ETC_CN = #{remark}
+ 	WHERE PO_NO = #{orderNo}
+
+  </update>
+
+  <delete id="deleteMst" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+    DELETE FROM TB_PO_MST
+    WHERE PO_NO = #{orderNo}
+
+  </delete>
+
+  <delete id="deleteDtl" parameterType="com.globaldenso.dicas.business.domain.DeliveryCDRepairItemDomain">
+
+    DELETE FROM TB_PO_DTL
+    WHERE PO_NO = #{orderNo}
+
+  </delete>
+
+</mapper>

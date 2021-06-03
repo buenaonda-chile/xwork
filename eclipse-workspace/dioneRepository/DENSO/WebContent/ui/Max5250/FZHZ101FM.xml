@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnKeyDown="fnc_OnKeyDown" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="autoConvert" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" TabOrder="14" Top="29" Width="798"></Static>
+		<Static Height="12" Id="ID03057" Left="520" TabOrder="0" Text="&#32;이후&#32;" Top="37" VAlign="Middle" Width="60"></Static>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="21" Id="FD03014" Left="107" OnKeyDown="fnc_OnKeyDown" TabOrder="1" Top="31" Width="50"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="21" Id="FD03040" Left="371" OnKeyDown="fnc_OnKeyDown" TabOrder="2" Top="31" Width="141"></Edit>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" BindDataset="ds_column" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="83" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="26" Id="MainGrid" InputPanel="FALSE" LineColor="#b4b4b4" MinWidth="100" OnKeyDown="fnc_OnKeyDown" Right="798" ScrollCell="true" TabOrder="4" TabStop="true" Top="57" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="798">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="159"/>
+						<col width="159"/>
+						<col width="159"/>
+						<col width="159"/>
+						<col width="159"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="품　　명"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="적용일자"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="MAN"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="MACHINE"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="COLUMN_1" display="normal" edit="normal"/>
+						<cell align="left" col="1" colid="COLUMN_2" display="normal" edit="normal"/>
+						<cell align="left" col="2" colid="COLUMN_3" display="normal" edit="normal"/>
+						<cell align="left" col="3" colid="COLUMN_4" display="normal" edit="normal"/>
+						<cell align="left" col="4" colid="COLUMN_5" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Height="28" Id="Image1" ImageID="main_tit_bak" TabOrder="9" Width="798"></Image>
+		<Static Height="12" Id="ID01002" Left="507" TabOrder="5" Text="FHDZ070FM" Top="8" Width="90"></Static>
+		<Static Height="12" Id="ID01070" Left="635" TabOrder="6" Text="2010/11/02" Top="8" Width="68"></Static>
+		<Image Height="28" Id="Image3" ImageID="main_tit_icon" Left="1" OnKeyDown="fnc_OnKeyDown" TabOrder="8" Width="29"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="ID01023" Left="33" TabOrder="7" Text="품목정보&#32;마스타" Top="8" Width="500"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static0" Left="264" TabOrder="13" Top="29" Width="106"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" TabOrder="12" Top="29" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="44" Height="5" Id="Shape3" Left="276" LineColor="#dceaf7" Right="281" TabOrder="10" Top="39" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#888888" Bottom="45" Height="5" Id="Shape1" Left="16" LineColor="#dceaf7" Right="21" TabOrder="11" Top="40" Type="Ellipse" Width="5"></Shape>
+		<Button ButtonStyle="TRUE" Height="24" Id="btn_add" ImageID="2_btn" Left="744" OnClick="btn_add_OnClick" OnKeyDown="fnc_OnKeyDown" TabOrder="15" Text="검색" Top="29" Width="53"></Button>
+		<Static Height="12" Id="ID03002" Left="24" TabOrder="16" Text="&#32;작업공정&#32;:" Top="36" VAlign="Middle" Width="70"></Static>
+		<Static Height="12" Id="ID03028" Left="288" TabOrder="17" Text="&#32;품　　번&#32;:" Top="36" VAlign="Middle" Width="62"></Static>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24027" ImageID="7_btn" Left="558" OnClick="ID24027_OnClick" OnKeyDown="fnc_OnKeyDown" TabOrder="18" Text="작업종료" Top="504" Width="113"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24045" ImageID="7_btn" Left="672" OnClick="ID24045_OnClick" OnKeyDown="fnc_OnKeyDown" TabOrder="19" Text="전후화면" Top="504" Width="115"></Button>
+		<Static Height="20" Id="ID02072" Left="712" TabOrder="20" Text="16:46:14" Top="4" VAlign="Middle" Width="72"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+	Max5250.SendToColumn("COLUMN_1",ds_column.getColumn(0,"COLUMN_1"),1);
+	Max5250.SendToColumn("COLUMN_2",ds_column.getColumn(0,"COLUMN_2"),1);
+	Max5250.SendToColumn("COLUMN_3",ds_column.getColumn(0,"COLUMN_3"),1);
+	Max5250.SendToColumn("COLUMN_4",ds_column.getColumn(0,"COLUMN_4"),1);
+	Max5250.SendToColumn("COLUMN_5",ds_column.getColumn(0,"COLUMN_5"),1);
+}
+function sendField(){
+	MAX5250.SendToField("FD03014",FD03014.Text );
+	MAX5250.SendToField("FD03040",FD03040.Text );
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+		ID01002.Text=ds_main.getColumn(0,"ID01002");
+		ID01002.Color=ds_main.getColumn(0,"ID01002_c");
+		ID01002.BkColor=ds_main.getColumn(0,"ID01002_b");
+		ID01002.Font=ds_main.getColumn(0,"ID01002_f");
+		ID01023.Text=ds_main.getColumn(0,"ID01023");
+		ID01023.Color=ds_main.getColumn(0,"ID01023_c");
+		ID01023.BkColor=ds_main.getColumn(0,"ID01023_b");
+		ID01023.Font=ds_main.getColumn(0,"ID01023_f");
+		ID01070.Text=ds_main.getColumn(0,"ID01070");
+		ID01070.Color=ds_main.getColumn(0,"ID01070_c");
+		ID01070.BkColor=ds_main.getColumn(0,"ID01070_b");
+		ID01070.Font=ds_main.getColumn(0,"ID01070_f");
+		ID02072.Text=ds_main.getColumn(0,"ID02072");
+		ID02072.Color=ds_main.getColumn(0,"ID02072_c");
+		ID02072.BkColor=ds_main.getColumn(0,"ID02072_b");
+		ID02072.Font=ds_main.getColumn(0,"ID02072_f");
+		ID03002.Text=ds_main.getColumn(0,"ID03002");
+		ID03002.Color=ds_main.getColumn(0,"ID03002_c");
+		ID03002.BkColor=ds_main.getColumn(0,"ID03002_b");
+		ID03002.Font=ds_main.getColumn(0,"ID03002_f");
+		ID03028.Text=ds_main.getColumn(0,"ID03028");
+		ID03028.Color=ds_main.getColumn(0,"ID03028_c");
+		ID03028.BkColor=ds_main.getColumn(0,"ID03028_b");
+		ID03028.Font=ds_main.getColumn(0,"ID03028_f");
+		ID03057.Text=ds_main.getColumn(0,"ID03057");
+		ID03057.Color=ds_main.getColumn(0,"ID03057_c");
+		ID03057.BkColor=ds_main.getColumn(0,"ID03057_b");
+		ID03057.Font=ds_main.getColumn(0,"ID03057_f");
+
+		FD03014.Text=ds_main.getColumn(0,"FD03014");
+		FD03014.Color=ds_main.getColumn(0,"FD03014_c");
+		FD03014.BkColor=ds_main.getColumn(0,"FD03014_b");
+		FD03014.Font=ds_main.getColumn(0,"FD03014_f");
+		FD03014.Enable=ds_main.getColumn(0,"FD03014_s");
+		FD03040.Text=ds_main.getColumn(0,"FD03040");
+		FD03040.Color=ds_main.getColumn(0,"FD03040_c");
+		FD03040.BkColor=ds_main.getColumn(0,"FD03040_b");
+		FD03040.Font=ds_main.getColumn(0,"FD03040_f");
+		FD03040.Enable=ds_main.getColumn(0,"FD03040_s");
+	}
+}
+
+function fnc_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam){
+	if(nChar == 13){
+		sendColumn();
+		sendField();
+	}
+}
+
+function btn_add_OnClick(obj)
+{
+//	initScreenName = "FZHZ101FM_1";
+	sendField();
+}
+//작업종료
+function ID24027_OnClick(obj)
+{
+	MAX5250.SendKeys("[PF03]");
+}
+
+function ID24045_OnClick(obj)
+{
+	
+}
+]]></Script>
+</Window>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * applicationContext-miyabi-jdbc.xml * * [JP] 雅 の DB 接続設定ファイルです。(ローカル環境用) 
+	* [JP] * [JP] 以下の DB 接続情報を定義しています。 * [JP] * [JP] ・トランザクションマネージャーの設定 * [JP] 
+	・データソースの設定 * [JP] ・jdbc.properties の指定 * [JP] ・MyBatis の設定 * * [EN] This 
+	is the configuration file for DB connection Miyabi. (For local environment) 
+	* [EN] * [EN] We define the following DB connection information. * [EN] * 
+	[EN] ・Configuration of the transaction manager * [EN] ・Configuration of the 
+	data source * [EN] ・Specify jdbc.properties * [EN] ・Configuration of the 
+	MyBatis * * $ applicationContext-miyabi-jdbc.xml 1757 2015-07-03 05:43:12Z 
+	10088DS00879 $ * * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed" value="true" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplate"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManager2"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource2" />
+	</bean>
+
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSource2"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver2}" />
+		<property name="url" value="${jdbc.url2}" />
+		<property name="username" value="${jdbc.username2}" />
+		<property name="password" value="${jdbc.password2}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed"
+			value="true" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurer2"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplate2"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory2" />
+	</bean>
+
+	<bean id="sqlSessionFactory2"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-dzone.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSource2" />
+		</property>
+	</bean>
+
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManager4"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource4" />
+	</bean>
+
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSource4"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver4}" />
+		<property name="url" value="${jdbc.url4}" />
+		<property name="username" value="${jdbc.username4}" />
+		<property name="password" value="${jdbc.password4}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed"
+			value="true" />
+		<property name="validationQuery"
+			value="SELECT current date FROM sysibm.sysdummy1" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurer4"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplate4"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory4" />
+	</bean>
+
+	<bean id="sqlSessionFactory4"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-db2.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSource4" />
+		</property>
+	</bean>
+
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	
+	<bean id="dataSource5" 
+        class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${mssql.driver}" />
+        <property name="url" value="${mssql.url}" />
+        <property name="username" value="${mssql.username}" />
+        <property name="password" value="${mssql.password}" />
+        <property name="initialSize" value="1" />
+        <property name="maxTotal" value="1" />
+        <property name="maxIdle" value="1" />
+        <property name="maxWaitMillis" value="10000" />
+        <property name="minIdle" value="1" />
+        <property name="removeAbandonedOnBorrow" value="true" />
+        <property name="removeAbandonedOnMaintenance" value="true" />
+        <property name="removeAbandonedTimeout" value="300" />
+        <property name="logAbandoned" value="false" />
+        <property name="accessToUnderlyingConnectionAllowed" value="true" />
+    </bean>
+	
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurer5"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplate5"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory5" />
+	</bean>
+
+	<bean id="sqlSessionFactory5"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-mssql.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSource5" />
+		</property>
+	</bean>
+	
+
+<!-- ============================================================================================ -->	
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManagerMesC1"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceMesC1" />
+	</bean>	
+	
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSourceMesC1"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mes.c1.url}" />
+		<property name="username" value="${jdbc.mes.username}" />
+		<property name="password" value="${jdbc.mes.password}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed" value="true" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurerMesC1"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplateMesC1"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactoryMesC1" />
+	</bean>
+
+	<bean id="sqlSessionFactoryMesC1"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-mes.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSourceMesC1" />
+		</property>
+	</bean>
+
+<!-- ============================================================================================ -->	
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManagerMesE1"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceMesE1" />
+	</bean>	
+	
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSourceMesE1"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mes.e1.url}" />
+		<property name="username" value="${jdbc.mes.username}" />
+		<property name="password" value="${jdbc.mes.password}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed" value="true" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurerMesE1"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplateMesE1"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactoryMesE1" />
+	</bean>
+
+	<bean id="sqlSessionFactoryMesE1"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-mes.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSourceMesE1" />
+		</property>
+	</bean>
+	
+<!-- ============================================================================================ -->	
+	<!-- [JP] トランザクション管理 ============================================== -->
+	<!-- [EN] Transaction management ===================================== -->
+	<bean id="transactionManagerMesS1"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceMesS1" />
+	</bean>	
+	
+	<!-- [JP] データソース ========================================================== 
+		[EN] Data source ======================================================= 
+		[JP] 【注意】 [JP] 大人数で開発を行った場合にコネクション数が不足する可能性があるため、 [JP] ローカル環境でのコネクション数を制限しています。 
+		[JP] 本番環境ではこの設定を使用しないでください。 [EN] [Note] [EN] Because there is a possibility 
+		that the number of connections is insufficient when a large number of people 
+		and have developed, [EN] we are to limit the number of connections in the 
+		local environment. [EN] Please do not use this setting in a production environment. 
+		========================================================================== -->
+	<bean id="dataSourceMesS1"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mes.s1.url}" />
+		<property name="username" value="${jdbc.mes.username}" />
+		<property name="password" value="${jdbc.mes.password}" />
+		<property name="initialSize" value="1" />
+		<property name="maxTotal" value="1" />
+		<property name="maxIdle" value="1" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="minIdle" value="1" />
+		<property name="removeAbandonedOnBorrow" value="true" />
+		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="logAbandoned" value="false" />
+		<property name="accessToUnderlyingConnectionAllowed" value="true" />
+	</bean>
+
+	<!-- [JP] JDBCプロパティファイル ============================================ -->
+	<!-- [EN] JDBC properties file ======================================== -->
+	<bean id="jdbcConnectionConfigurerMesS1"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:jdbc-miyabi.properties" />
+	</bean>
+
+	<!-- [JP] MyBATIS 設定 ======================================================= -->
+	<!-- [EN] MyBATIS configuration ============================================= -->
+	<bean id="sqlSessionTemplateMesS1"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactoryMesS1" />
+	</bean>
+
+	<bean id="sqlSessionFactoryMesS1"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/mybatis-config-mes.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSourceMesS1" />
+		</property>
+	</bean>
+	
+</beans>

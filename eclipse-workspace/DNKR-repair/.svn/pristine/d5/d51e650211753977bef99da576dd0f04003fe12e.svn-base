@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.ReceiptDNKRRepairPartAdmissDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.ReceiptDNKRRepairPartAdmissDto">
+  		<id property="orderNo" column="PO_NO" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="orderDt" column="RECT_DT" javaType="java.lang.String" />
+		<result property="status" column="PO_STATUS" javaType="java.lang.String" />
+		<result property="custId" column="PO_CUST_ID" javaType="java.lang.String" />
+		<result property="custEmpNm" column="PO_EMP_SEQ" javaType="java.lang.String" />
+		<result property="admissStatus" column="ADMISS_STATUS" javaType="java.lang.String" />
+		<result property="orderDiv" column="PO_DIV" javaType="java.lang.String" />
+		<result property="remark" column="ETC_CN" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.ReceiptDNKRRepairPartAdmissDomain">
+
+    SELECT *
+    FROM TB_RECT_MST	
+    WHERE RECT_NO = #{rectNo}
+	  AND ROWNUM = 1
+
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT * FROM TB_RECT_MST
+  		
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(RECT_NO) AS CNT
+    FROM TB_RECT_MST
+
+  </select>
+
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.ReceiptDNKRRepairPartAdmissDomain">
+
+    UPDATE TB_RECT_MST
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,RECT_DT = TO_DATE(#{rectDt}, 'YYYY-MM-DD')
+		,CUST_ID = #{custId}
+		,CUST_EMP_NM = #{custEmpNm}
+		,ETC_CN = #{remark}
+ 	WHERE RECT_NO = #{rectNo}
+
+  </update>
+
+</mapper>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="선택하세요" TooltipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_Select">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMPrtno"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMMaker"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="8" Top="30" Width="523"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="3" TabOrder="7" Top="32" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="527"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Select" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="582" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="518" Id="menuGrd2" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="menuGrd2_OnCellDblClick" Right="524" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="524">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="41"/>
+						<col width="60"/>
+						<col width="150"/>
+						<col width="150"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="CODE"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="NAME1"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="NAME2"/>
+					</head>
+					<body>
+						<cell col="0" display="text" expr="currow+1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="A1" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="2" colid="A2" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="3" colid="A3" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_info" Left="40" TabOrder="2" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="4" Top="8" Width="104"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="15" LineColor="#dceaf7" Right="20" TabOrder="5" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="25" Style="static" TabOrder="6" Text="찾&#32;기" Top="37" VAlign="Middle" Width="69"></Static>
+		<Edit Height="25" Id="ed_select" Left="96" TabOrder="9" Top="32" UpperOnly="TRUE" Width="152"></Edit>
+		<Image Cursor="HAND" Height="27" Id="imgQuery" ImageID="btn2_sear" Left="285" OnClick="imgQuery_OnClick" Static="FALSE" TabOrder="10" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgSelect" ImageID="btn2_sele" Left="365" OnClick="imgSelect_OnClick" Static="FALSE" TabOrder="11" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgClose" ImageID="btn2_out" Left="445" OnClick="imgClose_OnClick" Static="FALSE" TabOrder="12" Top="31" Width="75"></Image>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 이상건
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogmSelect.xml
+ * ● PROGRAM DESCRIPTION  : 공통사용(선택된 값으로 명 찾기)
+ * ● DATE WRITTEN         : 2011.08.25
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 화면 로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj)
+{
+	ed_select.Text = CODE;
+	if (CODE == "zzzzzzzzzz") ed_select.Text="";
+	switch (SEL){
+		case 1 : title_info.Text = "코드선택"; break;
+		case 2 : title_info.Text = "품목선택"; break;
+		case 3 : title_info.Text = "업체선택"; break;
+		case 4 : title_info.Text = "메이커선택"; break;
+		case 5 : title_info.Text = "사용자선택"; break;
+		case 6 : title_info.Text = "부서선택"; break;
+		case 7 : title_info.Text = "설비선택"; break;
+		case 8 : title_info.Text = "사원선택"; break;
+		case 9 : title_info.Text = "부품구분선택"; break;
+		case 10 : title_info.Text = "사원정보선택"; break;
+		default : title_info.Text = "";
+	}
+	imgQuery_OnClick();
+}
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 선택별 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgQuery_OnClick(obj,nX,nY)
+{
+	var iSel = SEL;
+	//title_user.Value = USER_ID;
+	if (iSel== 1){   //code
+		http.Sync 	= true;
+		var sKind		= "getUserAuth";		
+		var sMethodName = "service::user/menuAuth.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_menuAuth=ds_menuAuth";
+		var sArgument   = "";
+			sArgument   += " USER_ID=" + quote(USER_ID);
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 2){   //품목
+		http.Sync 	= false;
+		var sKind		= "getOGMPrtno";		
+		var sMethodName = "service::psogmlib/selectOGMPrtno.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " GROUP=" + quote(GROUP); //그룹
+		sArgument += " PRTNO=" + quote(ed_select.Text); //품번	
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 3){   //구매업체  (구입선)
+		http.Sync 	= false;
+		var sKind		= "getOGMVndnr";		
+		var sMethodName = "service::psogmlib/selectOGMVndnr.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " VNDNR=" + quote(ed_select.Text); //구매업체코드
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 4){   //업체(maker)
+		http.Sync 	= false;
+		var sKind		= "getOGMMaker";		
+		var sMethodName = "service::psogmlib/selectOGMMaker.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " GROUP=" + quote(GROUP); //그룹
+		sArgument += " MAKER=" + quote(ed_select.Text); //maker code
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 5){   //사용자
+		http.Sync 	= false;
+		var sKind		= "getOGMUSER_ID";		
+		var sMethodName = "service::psogmlib/selectOGMUserID.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " USER_ID=" + quote(ed_select.Text); //디오네 사용자 code
+		sArgument += " MCODE=" + quote(MCODE);  //MCODE=(10073 )예비품        (10083)설비보전이력
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 6){   //부서
+		http.Sync 	= false;
+		var sKind		= "getOGMPrtcd";		
+		var sMethodName = "service::psogmlib/selectOGMPrtcd.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " GROUP=" + quote(GROUP); //그룹
+		sArgument += " PRTCD=" + quote(ed_select.Text); //부서코드
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 7){   //설비
+		http.Sync 	= false;
+		var sKind		= "getOGMMshno";		
+		var sMethodName = "service::psogmlib/selectOGMMshno.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " GROUP=" + quote(GROUP); //그룹
+		sArgument += " MSHNO=" + quote(ed_select.Text); //설비번호
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 9){   //부품구분
+		http.Sync 	= false;
+		var sKind		= "getOGMMstcd";		
+		var sMethodName = "service::psogmlib/selectOGMMstcd.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(COMPS); //사업부
+		sArgument += " GROUP=" + quote(GROUP); //그룹
+		sArgument += " MSTCD=" + quote(ed_select.Text); //설비번호
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgSelect_OnClick(obj,nX,nY)
+{
+	var arrReturn  =  Array();
+	arrReturn[0]  = ds_Select.GetColumn(ds_Select.row,"A1");
+	arrReturn[1]  = ds_Select.GetColumn(ds_Select.row,"A2");
+	arrReturn[2]  = ds_Select.GetColumn(ds_Select.row,"A3");
+	close(arrReturn);
+}
+
+function menuGrd2_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	imgSelect_OnClick();
+}
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : close
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgClose_OnClick(obj,nX,nY)
+{
+	Close();
+}
+
+
+
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.DsptLvPlanDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="DsptLvPlanInput" type="DsptLvPlanDomain">
+        <result property="clsCode" column="CLS_CODE" />		<!-- 사업부코드 -->
+        <result property="locCode" column="LOC_CODE" />		<!-- 부서코드 -->
+        <result property="locNm" column="LOC_NM" />
+        <result property="lineCode" column="LINE_CODE" />	<!-- 라인코드 -->
+        <result property="lineNm" column="LINE_NM" /> 		<!-- 라인명 -->
+        
+        <result property="dsptcLoc" column="DSPTC_LOC" />	<!-- 파견부서 -->
+        <result property="startDate" column="START_DATE" />	<!-- 시작일 -->
+        <result property="endDate" column="END_DATE" />	<!-- 종료일 -->
+        <result property="stsP" column="STS" />	<!-- 파견/휴직 -->
+        <result property="refrnP" column="REFRN" />	<!-- 비고 -->
+        
+        <result property="regUser" column="REG_USER" />		<!-- 등록자 -->
+        <result property="regDate" column="REG_DATE" />		<!-- 등록일 -->
+        <result property="modUser" column="MOD_USER" />		<!-- 수정자 -->
+        <result property="modDate" column="MOD_DATE" />		<!-- 수정일 -->
+             
+    </resultMap>
+
+	<select id="searchLineList" resultMap="DsptLvPlanInput" parameterType="DsptLvPlanDomain">
+		SELECT 
+		    CLS_CODE
+		    , LINE_CODE
+		    , LINE_NM
+		    , LOC_CODE
+		FROM PSZDBLIB.FHP010PF
+		WHERE 1=1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+		  AND CLS_CODE = #{clsCode}
+		</if>
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+		  AND LOC_CODE = #{locCode}
+		</if>
+	</select>
+
+	<select id="searchLineValues" resultMap="DsptLvPlanInput" parameterType="DsptLvPlanDomain">
+		SELECT 
+		    OPERT_DE
+		    , CLS_CODE
+		    , LOC_CODE
+		    , LINE_CODE
+		    , SE
+		    , CODE
+		    , HR_MNT
+		FROM PSZDBLIB.FHP130PF
+		WHERE 1=1
+		  AND OPERT_DE  = #{opertDe}
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+		  AND CLS_CODE  = #{clsCode}
+		</if>
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+		  AND LOC_CODE  = #{locCode}
+		</if>
+	</select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="DsptLvPlanInput" parameterType="DsptLvPlanDomain">
+		
+		select CLS_CODE,
+		    EMPNO,
+		    LOC_CODE,
+		    DSPTC_LOC,
+		    (SUBSTR(START_DATE,1,4) || '-' || SUBSTR(START_DATE,5,2) || '-' || SUBSTR(START_DATE,7,2)) AS START_DATE,
+		    (SUBSTR(END_DATE,1,4) || '-' || SUBSTR(END_DATE,5,2) || '-' || SUBSTR(END_DATE,7,2)) AS END_DATE,
+		    STS,
+		    REFRN
+		from PSZDBLIB.FHP150PF
+		where cls_code = #{clsCode}
+		    and loc_code = #{locCode}
+		
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+  	<select id="searchCount" resultType="java.lang.Integer" parameterType="DsptLvPlanDomain">
+       
+        SELECT
+    		COUNT(*) AS CNT
+		from PSZDBLIB.FHP150PF
+		where cls_code = #{clsCode}
+			and loc_code = #{locCode}
+		    and empno = #{empNo}
+		
+    </select>
+    
+   <!--  登録 SQL文 -->
+    <insert id="create" parameterType ="DsptLvPlanDomain">
+    	INSERT INTO PSZDBLIB.FHP150PF (
+    							CLS_CODE,
+    							LOC_CODE,
+    							EMPNO,
+                               	DSPTC_LOC,
+                               	START_DATE,
+                               	END_DATE,
+                               	STS,
+                               	<if test='refrnP != null and !refrnP.equalsIgnoreCase("")'>
+                               	REFRN,
+                               	</if>
+                               	REG_USER,
+                               	REG_DATE
+                               )
+	    VALUES (
+	    		#{clsCode},
+	    		#{locCode},
+	    		#{empNo},
+	            #{dsptcLoc},
+	            #{startDate},
+	            #{endDate},
+	            #{stsP},
+	            <if test='refrnP != null and !refrnP.equalsIgnoreCase("")'>
+	            #{refrnP},
+	            </if>
+	            #{regUser},REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+	            )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="DsptLvPlanDomain">
+    
+        update PSZDBLIB.FHP150PF
+		set CLS_CODE  = #{clsCode},
+		    EMPNO = #{empNo},
+		    DSPTC_LOC = #{dsptcLoc},
+		    START_DATE = #{startDate},
+		    END_DATE = #{endDate},
+		    STS = #{stsP},
+		    REFRN = #{refrnP},
+		    MOD_USER = #{modUser},
+		    MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		where 1 = 1
+		  AND CLS_CODE = #{clsCode}
+		  and EMPNO = #{empNo}
+		  
+    </update>
+
+   <!--  削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="DsptLvPlanDomain">
+        DELETE FROM PSZDBLIB.FHP150PF
+		WHERE 1=1
+	      AND EMPNO = #{empNo}
+    </delete>
+
+</mapper>

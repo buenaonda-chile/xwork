@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SurveyDao">
+
+<resultMap type="SurveyDomain" id="Survey">
+	<result property="srvCode" column="SRV_CODE"/>
+	<result property="srvStart" column="SRV_START"/>
+	<result property="srvEnd" column="SRV_END"/>
+	<result property="srvUse" column="SRV_USE"/>
+	<result property="srvAnonymous" column="SRV_ANONYMOUS"/>
+	<result property="srvTitle" column="SRV_TITLE"/>
+	<result property="cnt" column="CNT"/>
+	<result property="rowNum" column="ROW_NUM" />
+	<result property="teamCode" column="TEAM_CODE"/>
+</resultMap>
+
+<resultMap type="QuestionDomain" id="QuestionList">
+	<result property="qstCode" column="QST_CODE"/>
+	<result property="srvCode" column="SRV_CODE"/>
+	<result property="qstType" column="QST_TYPE"/>
+	<result property="qstTitle" column="QST_TITLE"/>
+	<result property="qstHelp" column="QST_HELP"/>
+	<result property="cmcCode" column="CMC_CODE"/>
+	<result property="aswCode" column="ASW_CODE"/>
+	<result property="aswTitle" column="ASW_TITLE"/>
+</resultMap>
+
+<resultMap type="TargetDomain" id="Target">
+	<result property="qstCode" column="QST_CODE"/>
+	<result property="srvCode" column="SRV_CODE"/>
+	<result property="aswCode" column="ASW_CODE"/>
+	<result property="drAnswer" column="DR_ANSWER"/>
+	 <result property="empNumber" column="EMP_NUMBER" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="clsName" column="CLS_NAME" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="teamCode" column="H_TEAM_CODE" />
+        <result property="teamName" column="TEAM_NAME" />
+        <result property="authCode" column="AUTH_CODE" />
+        <result property="empName" column="EMP_NAME" />
+        <result property="empEmail" column="EMP_EMAIL" />
+        <result property="empId" column="EMP_ID" />
+        <result property="empUse" column="EMP_USE" />
+        <result property="empSyncDate" column="EMP_SYNC_DATE" />
+        <result property="empPwd" column="EMP_PWD" />
+        <result property="empPrivateAuth" column="EMP_PRIVATE_AUTH" />
+        <result property="inOutType" column="IN_OUT_TYPE" />
+        <!-- <result property="workCode" column="WORK_TYPE_CODE" /> -->
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="relName" column="REL_NAME" />
+        <result property="chkYn" column="CHK_YN" />
+        <result property="rowNum" column="ROW_NUM" />
+</resultMap>
+
+<resultMap type="TargetDomain" id="TeamTarget">
+	 <result property="empNumber" column="EMP_NUMBER" />
+        <result property="teamCode" column="TEAM_CODE" />
+        <result property="teamName" column="TEAM_NAME" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="authCode" column="AUTH_CODE" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="clsName" column="CLS_Name" />
+        <result property="empEmail" column="EMP_EMAIL" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="relName" column="REL_NAME" />
+        <result property="chkYn" column="CHK_YN" />
+        <result property="rowNum" column="ROW_NUM" />
+</resultMap>
+
+
+<resultMap type="QuestionDomain" id="AnswerList">
+	<result property="aswCode" column="ASW_CODE"/>
+	<result property="aswTitle" column="ASW_TITLE"/>
+</resultMap>
+
+<resultMap type="QuestionDomain" id="ResponseList">
+	<result property="empNumber" column="EMP_NUMBER"/>
+	<result property="qstCode" column="QST_CODE"/>
+	<result property="srvCode" column="SRV_CODE"/>
+	<result property="qstType" column="QST_TYPE"/>
+	<result property="aswCode" column="ASW_CODE"/>
+	<result property="drAnswer" column="DR_ANSWER"/>
+</resultMap>
+
+<select id="searchCount" resultType="java.lang.Integer" parameterType="SurveyDomain">
+		SELECT 
+				  COUNT(A.SRV_CODE) AS searchTotalCount 
+		FROM DNKR_SURVEY_CODE A
+		<if test="empNumber != null and empNumber != ''">
+              inner join (select SRV_CODE FROM DNKR_SURVEY_TARGET WHERE EMP_NUMBER=#{empNumber}) D ON A.SRV_CODE IN (D.SRV_CODE)
+        </if>
+        INNER JOIN DNKR_SURVEY_CODE_NM B ON A.SRV_CODE = B.SRV_CODE
+        
+        left JOIN (
+                 SELECT COUNT(SRV_CODE) AS CNT,SRV_CODE FROM (
+                    SELECT  EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_MUL_RESULT
+                        <if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                    UNION
+                    SELECT EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_DES_RESULT
+						<if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                        ) GROUP BY srv_code
+                ) C ON C.SRV_CODE=A.SRV_CODE
+                
+		WHERE CMC_CODE=#{cmcCode}
+					
+				<if test="srvUse != null">
+	        		AND SRV_USE = #{srvUse}
+	        	</if>
+	        	<if test="srvTitle != null and srvTitle != ''">
+	        		AND B.SRV_TITLE LIKE '%' || #{srvTitle} || '%'
+	        	</if>
+	        	<if test="srvEnd != null">
+	        		AND TO_CHAR(A.SRV_END,'YYYY-MM-DD<!--  hh24:mi:ss -->') &lt;= #{srvEnd}
+	        	</if>
+	        	<if test="srvStart != null">
+	        		AND TO_CHAR(A.SRV_START,'YYYY-MM-DD<!--  hh24:mi:ss -->') &gt;= #{srvStart}
+	        	</if>
+</select>
+
+<!-- 설문리스트(페이징) -->
+ <select id="searchByConditionForPaging" resultMap="Survey"
+        parameterType="SurveyDomain">
+        
+       SELECT 
+       		SRV_CODE
+       		, SRV_START
+	        , SRV_END
+	        , SRV_USE
+	        , SRV_ANONYMOUS
+	        , SRV_TITLE
+	        , CNT
+       		, ROW_NUM
+       		, TEAM_CODE
+        FROM( 
+	       	SELECT 
+	        	A.SRV_CODE
+	        	, A.SRV_START
+	        	, A.SRV_END
+	        	, A.SRV_USE
+	        	, A.SRV_ANONYMOUS
+	        	, A.TEAM_CODE
+	        	, B.SRV_TITLE
+	        	, C.CNT
+	        	, row_number() over (order by TO_NUMBER(A.SRV_CODE) desc) ROW_NUM
+	        FROM
+	        	DNKR_SURVEY_CODE A
+	        	<if test="empNumber != null and empNumber != ''">
+               		inner join (select SRV_CODE FROM DNKR_SURVEY_TARGET WHERE EMP_NUMBER=#{empNumber}) D ON A.SRV_CODE IN (D.SRV_CODE)
+               	</if>
+	        	INNER JOIN DNKR_SURVEY_CODE_NM B ON A.SRV_CODE = B.SRV_CODE
+	        	
+	        	left JOIN (
+                 SELECT COUNT(SRV_CODE) AS CNT,SRV_CODE FROM (
+                    SELECT  EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_MUL_RESULT
+                        <if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                    UNION
+                    SELECT EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_DES_RESULT
+						<if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                        ) GROUP BY srv_code
+                ) C ON C.SRV_CODE=A.SRV_CODE
+                
+	        	WHERE CMC_CODE=#{cmcCode}
+	        	<if test="srvUse != null">
+	        		AND SRV_USE = #{srvUse}
+	        	</if>
+	        	<if test="srvTitle != null and srvTitle != ''">
+	        		AND B.SRV_TITLE LIKE '%' || #{srvTitle} || '%'
+	        	</if>
+	        	<if test="srvEnd != null">
+	        		AND TO_CHAR(A.SRV_END,'YYYY-MM-DD<!--  hh24:mi:ss -->') &lt;= #{srvEnd}
+	        	</if>
+	        	<if test="srvStart != null">
+	        		AND TO_CHAR(A.SRV_START,'YYYY-MM-DD<!--  hh24:mi:ss -->') &gt;= #{srvStart}
+	        	</if>
+	        	
+       	) WHERE ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+       	ORDER BY SRV_START DESC       	
+        	
+</select>
+
+<!-- <select id="searchByConditionForPaging" resultMap="Survey"
+        parameterType="SurveyDomain">
+        
+       SELECT 
+       		SRV_CODE
+       		, SRV_START
+	        , SRV_END
+	        , SRV_USE
+	        , SRV_ANONYMOUS
+	        , SRV_TITLE
+	        , CNT
+       		, ROW_NUM
+        FROM( 
+	       	SELECT 
+	        	A.SRV_CODE
+	        	, A.SRV_START
+	        	, A.SRV_END
+	        	, A.SRV_USE
+	        	, A.SRV_ANONYMOUS
+	        	, B.SRV_TITLE
+	        	, CASE WHEN A.SRV_ANONYMOUS = 'Y' THEN D.CNT ELSE C.CNT END AS CNT
+	        	, row_number() over (order by TO_NUMBER(A.SRV_CODE) desc) ROW_NUM
+	        FROM
+	        	DNKR_SURVEY_CODE A
+	        	<if test="empNumber != null and empNumber != ''">
+               		inner join (select SRV_CODE FROM DNKR_SURVEY_TARGET WHERE EMP_NUMBER=#{empNumber}) D ON A.SRV_CODE IN (D.SRV_CODE)
+               	</if>
+	        	INNER JOIN DNKR_SURVEY_CODE_NM B ON A.SRV_CODE = B.SRV_CODE
+	        	
+	        	left JOIN (
+                 SELECT COUNT(SRV_CODE) AS CNT,SRV_CODE FROM (
+                    SELECT  EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_MUL_RESULT
+                        <if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                    UNION
+                    SELECT EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_DES_RESULT
+						<if test="empNumber != null and empNumber != ''">
+                        	WHERE EMP_NUMBER=#{empNumber}
+                        </if>
+                        ) GROUP BY srv_code
+                ) C ON C.SRV_CODE=A.SRV_CODE
+                
+                left JOIN (
+                 SELECT COUNT(SRV_CODE) AS CNT,SRV_CODE FROM (
+                    SELECT  EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_MUL_RESULT
+                    UNION ALL
+                    SELECT EMP_NUMBER,SRV_CODE
+                        FROM DNKR_SURVEY_DES_RESULT
+                        ) GROUP BY SRV_CODE
+                ) D ON D.SRV_CODE=A.SRV_CODE
+                
+	        	WHERE CMC_CODE=#{cmcCode}
+	        	<if test="srvUse != null">
+	        		AND SRV_USE = #{srvUse}
+	        	</if>
+	        	<if test="srvTitle != null and srvTitle != ''">
+	        		AND B.SRV_TITLE LIKE '%' || #{srvTitle} || '%'
+	        	</if>
+	        	<if test="srvEnd != null">
+	        		AND TO_CHAR(A.SRV_END,'YYYY-MM-DD hh24:mi:ss') &lt;= #{srvEnd}
+	        	</if>
+	        	<if test="srvStart != null">
+	        		AND TO_CHAR(A.SRV_START,'YYYY-MM-DD hh24:mi:ss') &gt;= #{srvStart}
+	        	</if>
+	        	
+       	) WHERE ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+        	
+</select> -->
+
+<!-- 설문대상리스트(페이징) -->
+ <select id="searchByTargetPaging" resultMap="Target" parameterType="TargetDomain">
+     select 
+                EMP_NUMBER
+              , LOC_CODE
+              , CLS_CODE
+              , H_TEAM_CODE
+              , LOC_NAME
+              , CLS_NAME
+              , TEAM_NAME
+              , AUTH_CODE
+              , EMP_NAME
+              , EMP_EMAIL
+              , EMP_ID
+              , EMP_USE
+              , EMP_SYNC_DATE
+              , EMP_PWD
+              , EMP_PRIVATE_AUTH
+              , IN_OUT_TYPE
+              , ROW_NUM
+        from (
+        	 select 
+        	 			EMP_NUMBER
+		              , CLS_CODE
+		              , CLS_NAME
+		              , LOC_CODE
+		              , LOC_NAME
+		              , H_TEAM_CODE
+		              , TEAM_NAME
+		              , AUTH_CODE
+		              , EMP_NAME
+		              , EMP_EMAIL
+		              , EMP_ID
+		              , EMP_USE
+		              , EMP_SYNC_DATE
+		              , EMP_PWD
+		              , EMP_PRIVATE_AUTH
+		              , IN_OUT_TYPE
+	                  , row_number() over (order by EMP_NUMBER desc) ROW_NUM
+		      from
+		       ( select 
+		        		DISTINCT
+		                A.EMP_NUMBER
+		              , A.CLS_CODE
+		              , B.REL_NAME CLS_NAME
+		              , A.LOC_CODE
+		              , C.REL_NAME LOC_NAME
+		              , A.H_TEAM_CODE
+		              , D.REL_NAME TEAM_NAME
+		              , A.AUTH_CODE
+		              , A.EMP_NAME
+		              , A.EMP_EMAIL
+		              , A.EMP_ID
+		              , A.EMP_USE
+		              , A.EMP_SYNC_DATE
+		              , A.EMP_PWD
+		              , A.EMP_PRIVATE_AUTH
+		              , A.IN_OUT_TYPE
+	            from 
+	                DNKR_EMP A
+		        left join
+		         		DNKR_RELATION_NM B
+		        on    A.CLS_CODE = B.REL_CODE
+		          and B.CMC_CODE = #{cmcLangCode}	
+		        left join 
+		                DNKR_RELATION_NM C
+		        on 	  A.LOC_CODE = C.REL_CODE
+		          and C.CMC_CODE = #{cmcLangCode}
+		        left join     
+		                DNKR_RELATION_NM D
+		        on 	  A.H_TEAM_CODE = D.REL_CODE
+		          and D.CMC_CODE = #{cmcLangCode}
+		        inner JOIN
+                		(       SELECT EMP_NUMBER FROM (
+		  		SELECT QST_CODE, EMP_NUMBER 
+		 	 		FROM DNKR_SURVEY_MUL_RESULT WHERE SRV_CODE=${srvCode}
+		  		UNION
+		  		SELECT QST_CODE,EMP_NUMBER
+		 			FROM DNKR_SURVEY_DES_RESULT WHERE SRV_CODE=${srvCode}
+		  		)	GROUP BY (EMP_NUMBER)) E ON E.EMP_NUMBER = A.EMP_NUMBER
+		        where 
+	                   1=1
+	        <if test="empNumber != null and empNumber != ''">
+	            and A.EMP_NUMBER = #{empNumber}
+	        </if>
+	        <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+	        <if test="teamCode != null and teamCode != ''">
+	            and A.H_TEAM_CODE = #{teamCode}
+	        </if>
+	        <if test="authCode != null and authCode != ''">
+	            and A.AUTH_CODE = #{authCode}
+	        </if>
+	        <!-- <if test="empName != null and empName != ''">
+	            and A.EMP_NAME = #{empName}
+	        </if> -->
+	        <if test="empName != null and empName != ''">
+	            and A.EMP_NAME like '%' || #{empName} || '%'
+	        </if>
+	        <if test="empEmail != null and empEmail != ''">
+	            and A.EMP_EMAIL = #{empEmail}
+	        </if>
+	        <!-- <if test="empId != null and empId != ''">
+	            and A.EMP_ID = #{empId}
+	        </if> -->
+	         <if test="empId != null and empId != ''">
+	            and A.EMP_ID like '%' || #{empId} || '%'
+	        </if>
+	        <if test="empUse != null and empUse != ''">
+	            and A.EMP_USE = #{empUse}
+	        </if>
+	        <if test="empSyncDate != null">
+	            and A.EMP_SYNC_DATE = #{empSyncDate}
+	        </if>
+	        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+	            and A.EMP_PRIVATE_AUTH = #{empPrivateAuth}
+	        </if>
+	        <if test="inOutType != null and inOutType != ''">
+	            and A.IN_OUT_TYPE = #{inOutType}
+	        </if>
+	        )
+	        
+         )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+</select>
+
+<!-- 기명 참여자 인원수 -->
+<select id="searchTargetCount" resultType="java.lang.Integer" parameterType="TargetDomain">
+	SELECT COUNT(EMP_NUMBER) FROM(
+  		SELECT EMP_NUMBER FROM (
+  		SELECT QST_CODE, EMP_NUMBER 
+ 	 		FROM DNKR_SURVEY_MUL_RESULT WHERE SRV_CODE=${srvCode}
+ 	 	UNION
+  		SELECT QST_CODE,EMP_NUMBER
+ 			FROM DNKR_SURVEY_DES_RESULT WHERE SRV_CODE=${srvCode}
+  		)		
+  		GROUP BY (EMP_NUMBER)
+	)
+</select>
+
+<!-- 익명 참여자 인원수 -->
+<select id="searchAnonyTargetCount" resultType="java.lang.Integer" parameterType="TargetDomain">
+	SELECT COUNT(*) FROM(
+  		SELECT EMP_NUMBER FROM (
+  		SELECT QST_CODE, EMP_NUMBER 
+ 	 		FROM DNKR_SURVEY_MUL_RESULT WHERE SRV_CODE=${srvCode}
+ 	 	UNION
+  		SELECT QST_CODE,EMP_NUMBER
+ 			FROM DNKR_SURVEY_DES_RESULT WHERE SRV_CODE=${srvCode}
+  		)
+  		where EMP_NUMBER like 'AN%'
+  		GROUP BY (EMP_NUMBER)		
+	)
+</select>
+
+<!-- 맥스설문코드 -->
+<select id="searchMaxCount" resultType="java.lang.String">
+	SELECT NVL(MAX(TO_NUMBER(SRV_CODE)),0) AS srvCode FROM DNKR_SURVEY_CODE 
+</select>
+
+<!-- 맥스문항코드 -->
+<select id="questionMaxCode" resultType="java.lang.String">
+	SELECT NVL(MAX(TO_NUMBER(QST_CODE)),0) AS qstCode FROM DNKR_SURVEY_QUESTION 
+</select>
+
+<!-- 맥스답항코드 -->
+<select id="answerMaxCode" resultType="java.lang.String">
+	SELECT NVL(MAX(TO_NUMBER(ASW_CODE)),0) AS aswCode FROM DNKR_SURVEY_ANSWER 
+</select>
+
+<select id="questionSrvMaxCode" resultType="java.lang.String">
+	SELECT NVL(MAX(TO_NUMBER(SRV_CODE)),0) AS srvCode FROM DNKR_SURVEY_QUESTION 
+</select>
+
+<!-- 설문추가 -->
+<insert id="create" parameterType="SurveyDomain">
+	INSERT INTO DNKR_SURVEY_CODE(
+		SRV_CODE
+     	, SRV_START
+        , SRV_END
+        , SRV_USE
+        , SRV_ANONYMOUS
+        , TEAM_CODE
+	)
+	VALUES(
+		#{srvCode}
+		,TO_DATE(#{srvStart},'YYYY-MM-DD HH24:MI:SS')
+		,TO_DATE(#{srvEnd},'YYYY-MM-DD HH24:MI:SS')
+		,'N'
+		,#{srvAnonymous}
+		,#{teamCode}
+	)
+</insert>
+
+<!-- 언어별 설문명 추가 -->
+<insert id="createName" parameterType="SurveyDomain">
+	INSERT INTO DNKR_SURVEY_CODE_NM(
+		SRV_CODE
+     	, CMC_CODE
+        , SRV_TITLE
+	)
+	VALUES(
+		#{srvCode}
+		, #{cmcCode}
+		, #{srvTitle}
+	)
+</insert>
+
+<select id="view" resultMap="Survey">
+	 	SELECT 
+	        	A.SRV_CODE
+	        	, A.SRV_START
+	        	, A.SRV_END
+	        	, A.SRV_USE
+	        	, A.SRV_ANONYMOUS
+	        	, B.SRV_TITLE
+	        	, A.TEAM_CODE
+	        FROM
+	        	DNKR_SURVEY_CODE A
+	        	INNER JOIN DNKR_SURVEY_CODE_NM B ON A.SRV_CODE = B.SRV_CODE
+	        WHERE 'SqlMap-Survey.view' = 'SqlMap-Survey.view'
+	        <if test="cmcCode != null and cmcCode != ''">	
+	        	AND B.CMC_CODE = #{cmcCode}
+	        </if>
+	        <if test="cmcCode == null or cmcCode == ''">	
+	        	AND B.CMC_CODE = 'kr'
+	        </if>
+	        	AND A.SRV_CODE = #{srvCode}
+</select>
+
+<update id="update" parameterType="SurveyDomain">
+	UPDATE DNKR_SURVEY_CODE SET
+		SRV_START = TO_DATE(#{srvStart},'YYYY-MM-DD HH24:MI:SS')
+		, SRV_END = TO_DATE(#{srvEnd},'YYYY-MM-DD HH24:MI:SS')
+		, SRV_ANONYMOUS = #{srvAnonymous}
+	WHERE
+		SRV_CODE = #{srvCode}		
+</update>
+
+<update id="updateName" parameterType="SurveyDomain">
+	UPDATE DNKR_SURVEY_CODE_NM SET
+		SRV_TITLE = #{srvTitle}
+	WHERE
+		SRV_CODE = #{srvCode} 
+		AND CMC_CODE=#{cmcCode}		
+</update>
+
+<delete id="delete" parameterType="SurveyDomain">
+	DELETE FROM DNKR_SURVEY_CODE WHERE SRV_CODE=#{srvCode}
+</delete>
+
+<delete id="deleteName" parameterType="SurveyDomain">
+	DELETE FROM DNKR_SURVEY_CODE_NM WHERE SRV_CODE=#{srvCode}
+</delete>
+
+<insert id="questionCreate" parameterType="QuestionDomain">
+		INSERT INTO DNKR_SURVEY_QUESTION(
+		QST_CODE
+		, SRV_CODE
+		, QST_TYPE
+	)
+	VALUES(
+		#{qstCode}
+		, #{srvCode}
+		, #{qstType}
+	)
+</insert>
+
+<insert id="questionCreateName" parameterType="QuestionDomain">
+		INSERT INTO DNKR_SURVEY_QUESTION_NM(
+		QST_CODE
+		, CMC_CODE
+		, SRV_CODE
+		, QST_TITLE
+		, QST_HELP
+	)
+	VALUES(
+		#{qstCode}
+		, #{cmcCode}
+		, #{srvCode}
+		, #{qstTitle}
+		, #{qstHelp}
+	)
+</insert>
+
+<insert id="answerCreate" parameterType="QuestionDomain">
+		INSERT INTO DNKR_SURVEY_ANSWER(
+		ASW_CODE
+		, QST_CODE
+		, SRV_CODE
+	)
+	VALUES(
+		#{aswCode}
+		, #{qstCode}
+		, #{srvCode}
+	)
+</insert>
+
+<insert id="answerCreateName" parameterType="QuestionDomain">
+		INSERT INTO DNKR_SURVEY_ANSWER_NM(
+		ASW_CODE
+		, CMC_CODE
+		, SRV_CODE
+		, ASW_TITLE
+	)
+	VALUES(
+		#{aswCode}
+		, #{cmcCode}
+		, #{srvCode}
+		, #{aswTitle}
+	)
+</insert>
+
+<select id="questionView" resultMap="QuestionList">
+	SELECT
+		A.QST_CODE
+		, A.SRV_CODE
+		, A.QST_TYPE
+		, B.QST_TITLE
+		, B.QST_HELP
+		, B.CMC_CODE
+	FROM
+		DNKR_SURVEY_QUESTION A
+		INNER JOIN DNKR_SURVEY_QUESTION_NM B ON A.QST_CODE=B.QST_CODE
+	WHERE
+		A.SRV_CODE = #{srvCode}
+		<if test="cmcCode != null">
+		 AND B.CMC_CODE = #{cmcCode}
+		</if>
+	ORDER BY TO_NUMBER(A.QST_CODE) ASC
+</select>
+
+<select id="answerView" resultMap="AnswerList">
+	SELECT
+		  A.ASW_CODE
+		, B.ASW_TITLE
+	FROM
+		DNKR_SURVEY_ANSWER A
+		INNER JOIN DNKR_SURVEY_ANSWER_NM B ON A.ASW_CODE=B.ASW_CODE
+	WHERE
+		A.SRV_CODE = #{srvCode} AND
+		A.QST_CODE = #{qstCode} AND
+		B.CMC_CODE = #{cmcCode}
+	ORDER BY A.ASW_CODE 	
+</select>
+
+<select id="questionModi" resultMap="QuestionList">
+	SELECT
+		A.QST_CODE
+		, A.SRV_CODE
+		, A.QST_TYPE
+		, B.QST_TITLE
+		, B.QST_HELP
+		, B.CMC_CODE
+	FROM
+		DNKR_SURVEY_QUESTION A
+		INNER JOIN DNKR_SURVEY_QUESTION_NM B ON A.QST_CODE=B.QST_CODE
+	WHERE
+		A.SRV_CODE = #{srvCode} AND
+		B.CMC_CODE = #{cmcCode} AND
+		B.QST_CODE = #{qstCode}
+</select>
+
+<update id="questionNameUpdate" parameterType="QuestionDomain">
+	UPDATE DNKR_SURVEY_QUESTION_NM
+	SET
+		QST_TITLE = #{qstTitle}
+		, QST_HELP = #{qstHelp}
+	WHERE
+		QST_CODE = #{qstCode} AND
+		CMC_CODE = #{cmcCode}
+</update>
+
+
+<delete id="answerNameDelete" parameterType="QuestionDomain">
+	DELETE FROM 
+		DNKR_SURVEY_ANSWER_NM
+	WHERE
+		
+		SRV_CODE = #{srvCode}
+		<if test="cmcCode != null"> 
+			AND	CMC_CODE = #{cmcCode} 
+		</if>
+		<if test="aswCode != null">
+			AND	ASW_CODE = #{aswCode}
+		</if>
+</delete>
+
+<delete id="answerDelete" parameterType="QuestionDomain">
+	DELETE FROM 
+		DNKR_SURVEY_ANSWER
+	WHERE
+		SRV_CODE = #{srvCode}
+		<if test="qstCode != null">  
+		AND QST_CODE = #{qstCode} 
+		</if>
+		<if test="aswCode != null"> 
+		AND ASW_CODE = #{aswCode}
+		</if>
+</delete>
+
+<select id="getAswCode" parameterType="QuestionDomain" resultType="java.lang.String">
+	SELECT ASW_CODE FROM DNKR_SURVEY_ANSWER
+	WHERE
+		QST_CODE = #{qstCode} AND
+		SRV_CODE = #{srvCode}
+</select>
+
+<delete id="questionDelete" parameterType="QuestionDomain">
+	DELETE FROM DNKR_SURVEY_QUESTION
+	WHERE SRV_CODE = #{srvCode}
+	<if test="qstCode != null">
+	AND QST_CODE = #{qstCode}
+	</if>
+</delete>
+
+<delete id="questionNameDelete" parameterType="QuestionDomain">
+	DELETE FROM DNKR_SURVEY_QUESTION_NM
+	WHERE SRV_CODE = #{srvCode}
+	<if test="qstCode != null">
+	AND QST_CODE = #{qstCode}
+	</if>
+	<if test="cmcCode != null">
+	AND CMC_CODE = #{cmcCode}
+	</if>
+</delete>
+
+<select id="answerCount" parameterType="QuestionDomain" resultType="java.lang.Integer">
+	SELECT COUNT(ASW_CODE)
+	FROM 
+		DNKR_SURVEY_ANSWER
+	WHERE 
+		SRV_CODE = #{srvCode} AND 
+		QST_CODE = #{qstCode}
+</select>
+
+<select id="answerCodeList" parameterType="QuestionDomain" resultType="java.lang.String">
+	SELECT
+		ASW_CODE
+	FROM
+		DNKR_SURVEY_ANSWER
+	WHERE
+		SRV_CODE = #{srvCode} AND
+		QST_CODE = #{qstCode}
+	ORDER BY ASW_CODE
+</select>
+
+<!-- 설문별 문항리스트 -->
+<select id="questionList" parameterType="QuestionDomain" resultMap="QuestionList">
+	SELECT QST_CODE, SRV_CODE, QST_TYPE FROM DNKR_SURVEY_QUESTION
+	WHERE SRV_CODE = #{srvCode} ORDER BY QST_CODE;
+</select>
+
+<select id="questionNameList" parameterType="QuestionDomain" resultMap="QuestionList">
+	SELECT QST_CODE,CMC_CODE,SRV_CODE, QST_TITLE,QST_HELP FROM DNKR_SURVEY_QUESTION_NM
+	WHERE SRV_CODE = #{srvCode} AND QST_CODE = #{qstCode}
+</select>
+
+<!-- 설문.문항별 답항리스트 -->
+<select id="answerList" parameterType="QuestionDomain" resultMap="QuestionList">
+	SELECT ASW_CODE, QST_CODE, SRV_CODE FROM DNKR_SURVEY_ANSWER
+	WHERE SRV_CODE = #{srvCode} AND QST_CODE= #{qstCode}
+</select>
+
+<select id="answerNameList" parameterType="QuestionDomain" resultMap="QuestionList">
+	SELECT ASW_CODE,CMC_CODE,SRV_CODE,ASW_TITLE FROM DNKR_SURVEY_ANSWER_NM
+	WHERE SRV_CODE = #{srvCode} AND ASW_CODE = #{aswCode}
+</select>
+
+<!-- 설문 사용여부 수정 -->
+<update id="srvUseUpdate" parameterType="SurveyDomain">
+	UPDATE DNKR_SURVEY_CODE
+	SET 
+	SRV_USE = #{srvUse}
+	WHERE
+	SRV_CODE=#{srvCode}
+</update>
+
+<!-- 설문 참여 시 객관식 답변생성 -->
+<insert id="targetMulCreate" parameterType="TargetDomain">
+	INSERT INTO DNKR_SURVEY_MUL_RESULT(
+		QST_CODE
+		, ASW_CODE
+		, EMP_NUMBER
+		, SRV_CODE 
+	)VALUES(
+		#{qstCode}
+		, #{aswCode}
+		, #{empNumber}
+		, #{srvCode}
+	)
+</insert>
+
+<!-- 설문 참여 시 주관식 답변생성 -->
+<insert id="targetDesCreate" parameterType="TargetDomain">
+	INSERT INTO DNKR_SURVEY_DES_RESULT(
+		QST_CODE
+		, EMP_NUMBER
+		, DR_ANSWER
+		, SRV_CODE 
+	)VALUES(
+		#{qstCode}
+		, #{empNumber}
+		, #{drAnswer}
+		, #{srvCode}
+	)
+</insert>
+
+<select id="answerTotalCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT NVL(COUNT(ASW_CODE),0) FROM DNKR_SURVEY_MUL_RESULT WHERE ASW_CODE = #{aswCode}
+</select>
+
+<select id="answerTotalDesView" parameterType="TargetDomain" resultType="java.lang.String">
+	SELECT DR_ANSWER FROM DNKR_SURVEY_DES_RESULT WHERE QST_CODE = #{qstCode} ORDER BY EMP_NUMBER ASC
+</select>
+
+<select id="answerTotalMulView" parameterType="TargetDomain" resultType="java.lang.String">
+	SELECT ASW_CODE FROM DNKR_SURVEY_MUL_RESULT WHERE ASW_CODE = #{aswCode} AND EMP_NUMBER = #{empNumber} ORDER BY EMP_NUMBER ASC
+</select>
+<select id="answerDesView" parameterType="TargetDomain" resultType="java.lang.String">
+	SELECT DR_ANSWER FROM DNKR_SURVEY_DES_RESULT WHERE QST_CODE = #{qstCode} AND EMP_NUMBER = #{empNumber} ORDER BY EMP_NUMBER ASC
+</select>
+
+<select id="procDelete" parameterType="HashMap" statementType="CALLABLE">
+	 {CALL PROC_SURVEY_DELETE
+        	( 
+        		#{srvCode, mode=IN, jdbcType=DECIMAL, javaType=string},
+        		#{mode, mode=IN, jdbcType=DECIMAL, javaType=string},
+                #{rtnCnt, mode=OUT, jdbcType=DECIMAL, javaType=long},
+                #{rtnMsg, mode=OUT, jdbcType=VARCHAR, javaType=string}
+            )
+        }
+</select>
+
+<select id="searchEmployCount" parameterType="TargetDomain" resultType="java.lang.Integer">
+        select 
+                count(rowNum)
+        from 
+                DNKR_EMP A
+                <if test="mode != null">
+                inner join DNKR_SURVEY_TARGET B ON B.SRV_CODE=${srvCode} and A.EMP_NUMBER = B.EMP_NUMBER
+                </if>
+                
+        where 1=1
+         <if test="empNumber != null and empNumber != ''">
+            and A.EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and A.LOC_CODE = #{locCode}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and A.CLS_CODE = #{clsCode}
+        </if>
+        <if test="teamCode != null and teamCode != ''">
+            and A.H_TEAM_CODE = #{teamCode}
+        </if>
+        <if test="authCode != null and authCode != ''">
+            and A.AUTH_CODE = #{authCode}
+        </if>
+        <!-- <if test="empName != null and empName != ''">
+            and EMP_NAME = #{empName}
+        </if> -->
+         <if test="empName != null and empName != ''">
+            and A.EMP_NAME like '%' || #{empName} || '%'
+        </if>
+        <if test="empEmail != null and empEmail != ''">
+            and A.EMP_EMAIL = #{empEmail}
+        </if>
+        <if test="empId != null and empId != ''">
+            and A.EMP_ID like '%' || #{empId} || '%'
+        </if>
+        <if test="empUse != null and empUse != ''">
+            and A.EMP_USE = #{empUse}
+        </if>
+        <if test="empSyncDate != null">
+            and A.EMP_SYNC_DATE = #{empSyncDate}
+        </if>
+        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+            and A.EMP_PRIVATE_AUTH = #{empPrivateAuth}
+        </if>
+        <if test="inOutType != null and inOutType != ''">
+            and A.IN_OUT_TYPE = #{inOutType}
+        </if>
+</select>
+
+<select id="searchByConditionEmployForPaging" parameterType="TargetDomain" resultMap="Target">
+select 
+                EMP_NUMBER
+              , LOC_CODE
+              , CLS_CODE
+              , H_TEAM_CODE
+              , LOC_NAME
+              , CLS_NAME
+              , TEAM_NAME
+              , AUTH_CODE
+              , EMP_NAME
+              , EMP_EMAIL
+              , EMP_ID
+              , EMP_USE
+              , EMP_SYNC_DATE
+              , EMP_PWD
+              , EMP_PRIVATE_AUTH
+              , IN_OUT_TYPE
+              , CHK_YN
+              , ROW_NUM
+        from (
+        	 select 
+        	 			EMP_NUMBER
+		              , CLS_CODE
+		              , CLS_NAME
+		              , LOC_CODE
+		              , LOC_NAME
+		              , H_TEAM_CODE
+		              , TEAM_NAME
+		              , AUTH_CODE
+		              , EMP_NAME
+		              , EMP_EMAIL
+		              , EMP_ID
+		              , EMP_USE
+		              , EMP_SYNC_DATE
+		              , EMP_PWD
+		              , EMP_PRIVATE_AUTH
+		              , IN_OUT_TYPE
+		              , CHK_YN
+	                  , row_number() over (order by EMP_NUMBER desc) ROW_NUM
+		      from
+		       ( select 
+		        		DISTINCT
+		                A.EMP_NUMBER
+		              , A.CLS_CODE
+		              , B.REL_NAME CLS_NAME
+		              , A.LOC_CODE
+		              , C.REL_NAME LOC_NAME
+		              , A.H_TEAM_CODE
+		              , D.REL_NAME TEAM_NAME
+		              , A.AUTH_CODE
+		              , A.EMP_NAME
+		              , A.EMP_EMAIL
+		              , A.EMP_ID
+		              , A.EMP_USE
+		              , A.EMP_SYNC_DATE
+		              , A.EMP_PWD
+		              , A.EMP_PRIVATE_AUTH
+		              , A.IN_OUT_TYPE
+		              , F.CHK_YN
+	            from 
+	                DNKR_EMP A
+	            <if test="mode != null">
+                	inner join DNKR_SURVEY_TARGET E ON E.SRV_CODE=${srvCode} and A.EMP_NUMBER = E.EMP_NUMBER
+                </if>
+		        left join
+		         		DNKR_RELATION_NM B
+		        on    A.CLS_CODE = B.REL_CODE
+		          and B.CMC_CODE = #{cmcLangCode}	
+		        left join 
+		                DNKR_RELATION_NM C
+		        on 	  A.LOC_CODE = C.REL_CODE
+		          and C.CMC_CODE = #{cmcLangCode}
+		        left join     
+		                DNKR_RELATION_NM D
+		        on 	  A.H_TEAM_CODE = D.REL_CODE
+		          and D.CMC_CODE = #{cmcLangCode}
+		        left join (SELECT COUNT(EMP_NUMBER) AS CHK_YN, EMP_NUMBER,SRV_CODE FROM DNKR_SURVEY_TARGET  GROUP BY EMP_NUMBER,SRV_CODE) F ON F.SRV_CODE=#{srvCode} and A.EMP_NUMBER = F.EMP_NUMBER
+		        where 
+	                    1=1
+	        <if test="empNumber != null and empNumber != ''">
+	            and A.EMP_NUMBER = #{empNumber}
+	        </if>
+	        <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+	        <if test="teamCode != null and teamCode != ''">
+	            and A.H_TEAM_CODE = #{teamCode}
+	        </if>
+	        <if test="authCode != null and authCode != ''">
+	            and A.AUTH_CODE = #{authCode}
+	        </if>
+	        <!-- <if test="empName != null and empName != ''">
+	            and A.EMP_NAME = #{empName}
+	        </if> -->
+	        <if test="empName != null and empName != ''">
+	            and A.EMP_NAME like '%' || #{empName} || '%'
+	        </if>
+	        <if test="empEmail != null and empEmail != ''">
+	            and A.EMP_EMAIL = #{empEmail}
+	        </if>
+	        <!-- <if test="empId != null and empId != ''">
+	            and A.EMP_ID = #{empId}
+	        </if> -->
+	         <if test="empId != null and empId != ''">
+	            and A.EMP_ID like '%' || #{empId} || '%'
+	        </if>
+	        <if test="empUse != null and empUse != ''">
+	            and A.EMP_USE = #{empUse}
+	        </if>
+	        <if test="empSyncDate != null">
+	            and A.EMP_SYNC_DATE = #{empSyncDate}
+	        </if>
+	        <if test="empPrivateAuth != null and empPrivateAuth != ''">
+	            and A.EMP_PRIVATE_AUTH = #{empPrivateAuth}
+	        </if>
+	        <if test="inOutType != null and inOutType != ''">
+	            and A.IN_OUT_TYPE = #{inOutType}
+	        </if>
+	        )
+	        
+         )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+</select>
+
+<!-- 설문대상 추가 -->
+<insert id="createEmpTarget" parameterType="TargetDomain">
+	INSERT INTO DNKR_SURVEY_TARGET(SRV_CODE,EMP_NUMBER,EMP_EMAIL,TGT_PARTICIPATION,TEAM_CODE)
+	VALUES(
+		#{srvCode}
+		, #{empNumber}
+		, #{empEmail}
+		, 'Y'
+		, #{teamCode}
+	)
+</insert>
+
+<!-- 설문대상 삭제 -->
+<delete id="deleteEmpTarget" parameterType="TargetDomain">
+	DELETE FROM DNKR_SURVEY_TARGET WHERE SRV_CODE = #{srvCode} AND EMP_NUMBER=#{empNumber}
+</delete>
+
+<select id="searchByTeamListCondition" parameterType="TargetDomain" resultMap="TeamTarget">
+	 select 
+               DISTINCT( A.TEAM_CODE)
+              , A.LOC_CODE
+              , A.AUTH_CODE
+              , A.CLS_CODE
+              , B.REL_NAME AS TEAM_NAME
+              , C.REL_NAME AS CLS_NAME
+              , D.REL_NAME AS LOC_NAME
+              , E.CHK_YN
+        from 
+               VIEW_RELATION_H_TEAM A
+              inner join DNKR_RELATION_NM B ON A.TEAM_CODE = B.REL_CODE
+              inner join DNKR_RELATION_NM C ON A.CLS_CODE = C.REL_CODE
+              inner join DNKR_RELATION_NM D ON A.LOC_CODE = D.REL_CODE
+              left join (SELECT COUNT(EMP_NUMBER) AS CHK_YN,TEAM_CODE FROM DNKR_SURVEY_TARGET WHERE SRV_CODE = #{srvCode} GROUP BY TEAM_CODE) E ON A.TEAM_CODE = E.TEAM_CODE
+        where 
+            B.CMC_CODE = #{cmcLangCode}
+            and A.TEAM_USE = 'Y'
+            and C.REL_NAME like '구%'
+             <if test="locCode != null and locCode != ''">
+	            and A.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and A.CLS_CODE = #{clsCode}
+	        </if>
+	         <if test="teamCode != null and teamCode != ''">
+	            and A.TEAM_CODE = #{teamCode}
+	        </if>
+        
+</select>
+
+<select id="createEmpTeamTarget" parameterType="TargetDomain" resultMap="TeamTarget">
+	SELECT EMP_NUMBER, EMP_EMAIL FROM DNKR_EMP WHERE EMP_USE='Y' AND H_TEAM_CODE=#{teamCode}
+
+</select>
+<select id="searchTargetEmpCount" parameterType="TargetDomain" resultType="java.lang.Integer">
+	SELECT COUNT(EMP_NUMBER) FROM DNKR_SURVEY_TARGET WHERE SRV_CODE =#{srvCode} AND EMP_NUMBER=#{empNumber} 
+</select>
+
+
+	<!-- 설문 대상수 -->
+	<select id="searchTargetTotCount" parameterType="TargetDomain" resultType="java.lang.Integer">
+		select 
+				count(EMP_NUMBER) 
+		from 	DNKR_SURVEY_TARGET 
+		where   'SqlMap-Survey.searchTargetEmpCount' = 'SqlMap-Survey.searchTargetEmpCount'
+			and SRV_CODE =#{srvCode}  
+	</select>
+
+	<!-- 설문코드에 따른 익명 MAX EMP_NUM 반환 -->
+	<select id="searchMaxAnonyEmpNum" parameterType="TargetDomain" resultType="java.lang.String">
+		select 
+				  concat('AN', lpad(to_char(cast(substr(NVL(max(EMP_NUMBER), 'AN00000000'), 3, 10) AS INTEGER) + 1), 8, '0')) AS EMP_NUMBER
+		from
+				( select EMP_NUMBER
+				  from (
+				  	select EMP_NUMBER, SRV_CODE from DNKR_SURVEY_MUL_RESULT
+				  	union
+				  	select EMP_NUMBER, SRV_CODE FROM DNKR_SURVEY_DES_RESULT
+				  )
+				  where
+				  		'SqlMap-Survey.searchMaxAnonyEmpNum' = 'SqlMap-Survey.searchMaxAnonyEmpNum'		 
+				  	and EMP_NUMBER like 'AN%'
+				  <if test="srvCode != null and srvCode != ''">
+				  	and SRV_CODE = #{srvCode}
+				  </if>
+				  group by EMP_NUMBER
+				)		  
+	</select>
+	
+	<!-- 설문별 응답 사번리스트(설문결과 엑세다운로드) -->
+	<select id="searchByResponseEmpList" parameterType="QuestionDomain" resultMap="ResponseList">
+	  		SELECT 
+	  				EMP_NUMBER 
+	  		FROM (
+	  				SELECT 
+	  						  QST_CODE
+	  						, EMP_NUMBER 
+	 	 			FROM DNKR_SURVEY_MUL_RESULT WHERE SRV_CODE=${srvCode}
+	 	 			UNION
+	  				SELECT 
+	  						  QST_CODE
+	  						, EMP_NUMBER
+	 				FROM DNKR_SURVEY_DES_RESULT WHERE SRV_CODE=${srvCode}
+	  		)
+	  		where 
+	  				'SqlMap-Survey.searchByResponseEmpList' = 'SqlMap-Survey.searchByResponseEmpList'
+	  		GROUP BY (EMP_NUMBER) ORDER BY EMP_NUMBER ASC
+	</select>
+	
+	<!-- 설문별 응답 리스트(설문결과 엑세다운로드) -->
+	<select id="searchByResponseList" parameterType="QuestionDomain" resultMap="ResponseList">
+	  		SELECT 
+	  				  QST_CODE
+	  				, SRV_CODE
+	  				, QST_TYPE
+	  				, RS_EMP_NUMBER AS EMP_NUMBER
+	  				, FNC_GET_SURVEY_MUL_RESULTS(SRV_CODE, QST_CODE, RS_EMP_NUMBER) AS ASW_CODE, DR_ANSWER
+        	FROM (
+        			select 
+        					  A.QST_CODE AS QST_CODE
+        					, A.SRV_CODE AS SRV_CODE
+        					, A.QST_TYPE AS QST_TYPE
+        					, B.DR_ANSWER AS DR_ANSWER
+    						, CASE 
+         						WHEN A.QST_TYPE = 'text' 
+         							THEN B.EMP_NUMBER
+         						ELSE C.EMP_NUMBER
+    						  END AS RS_EMP_NUMBER
+  					FROM DNKR_SURVEY_QUESTION A
+  					LEFT JOIN DNKR_SURVEY_DES_RESULT B
+  					ON A.SRV_CODE = B.SRV_CODE AND A.QST_CODE = B.QST_CODE
+  					LEFT JOIN (SELECT DISTINCT QST_CODE, EMP_NUMBER, SRV_CODE FROM DNKR_SURVEY_MUL_RESULT) C
+  					ON A.SRV_CODE = C.SRV_CODE AND A.QST_CODE = C.QST_CODE
+  					WHERE A.SRV_CODE=${srvCode}
+  					ORDER BY  to_number(QST_CODE) ASC, RS_EMP_NUMBER ASC
+  			)
+  			WHERE 
+  					'SqlMap-Survey.searchByResponseList' = 'SqlMap-Survey.searchByResponseList'
+  					AND RS_EMP_NUMBER IS NOT NULL
+	</select>
+
+</mapper>

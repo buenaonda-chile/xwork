@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.TotalAlnalysisDao">
+
+	<resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.TotalAlnalysisDto">
+		<id property="baseDate" column="BASE_DATE" javaType="java.lang.String" />
+		<result property="prodCnt" column="PROD_CNT" javaType="java.lang.Long" />
+		<result property="saleCnt" column="SALE_CNT" javaType="java.lang.Long" />
+		<result property="repairCnt" column="REPAIR_CNT" javaType="java.lang.Long" />
+		<result property="tireStd" column="TIRE_STD" javaType="java.lang.String" />
+		<result property="model" column="MODEL" javaType="java.lang.String" />
+		<result property="inquiryGubun" column="INQUIRY_GUBUN" javaType="java.lang.String" />
+		<result property="div" column="DIV" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+		<result property="replacePartNo" column="REPLACE_PART_NO" javaType="java.lang.String" />
+		<result property="hmcPartNo" column="HMC_PART_NO" javaType="java.lang.String" />
+		<result property="saleCountry" column="SALE_COUNTRY" javaType="java.lang.String" />
+		<result property="qualityProblemNm" column="QUALITY_PROBLEM_NM" javaType="java.lang.String" />
+
+	</resultMap>
+
+	<resultMap id="codeMap2" type="com.globaldenso.dicas.business.dto.TotalAlnalysisDto">
+		<id property="name" column="NAME" javaType="java.lang.String" />
+		<result property="cnt" column="CNT" javaType="java.lang.Long" />
+		<result property="per" column="PER" javaType="java.lang.Double" />
+	</resultMap>
+
+	<sql id="select_01">
+
+    select
+		A.BASE_DATE, PROD_CNT, SALE_CNT, REPAIR_CNT
+		from
+		(SELECT SUBSTR(A.PROD_DATE,1,6) BASE_DATE, count(*) PROD_CNT FROM
+        VW_CLAIM_TOTAL A
+        WHERE 1=1
+		<include refid="where_01"/>
+
+		GROUP BY SUBSTR(A.PROD_DATE,1,6)) A,
+		(SELECT SUBSTR(A.SALE_DATE,1,6) BASE_DATE, count(*) SALE_CNT FROM
+        VW_CLAIM_TOTAL A
+		WHERE 1=1
+		<include refid="where_01"/>
+
+		GROUP BY SUBSTR(A.SALE_DATE,1,6)) B,
+		(SELECT TO_CHAR(B.REPAIR_DATE,'yyyyMM') BASE_DATE, count(*) REPAIR_CNT FROM
+        VW_CLAIM_TOTAL A,
+        TB_DC_RESULT_MASTER B
+        WHERE 1=1
+		<include refid="where_01"/>
+
+        AND A.MANAGE_NO = B.MANAGE_NO
+		GROUP BY TO_CHAR(B.REPAIR_DATE,'yyyyMM')) C
+		WHERE
+		A.BASE_DATE = B.BASE_DATE
+		AND B.BASE_DATE = C.BASE_DATE
+
+  </sql>
+
+	<sql id="where_01">
+		<!-- 기준일자 -->
+		<if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+			<if test="criteria.dateSearchOption == '01'">
+				<if test="criteria.searchResultDateFr != null and criteria.searchResultDateFr != ''">
+					AND A.RECEIPT_DATE  &gt;=  #{criteria.searchResultDateFr}
+				</if>
+				<if test="criteria.searchResultDateTo != null and criteria.searchResultDateTo != ''">
+					AND A.RECEIPT_DATE  &lt;=  #{criteria.searchResultDateTo}
+				</if>
+			</if>
+			<if test="criteria.dateSearchOption == '02'">
+				<if test="criteria.searchResultDateFr != null and criteria.searchResultDateFr != ''">
+					AND A.SALE_DATE  &gt;=  #{criteria.searchResultDateFr}
+				</if>
+				<if test="criteria.searchResultDateTo != null and criteria.searchResultDateTo != ''">
+					AND A.SALE_DATE  &lt;=  #{criteria.searchResultDateTo}
+				</if>
+			</if>
+			<if test="criteria.dateSearchOption == '03' ">
+				<if test="criteria.searchResultDateFr != null and criteria.searchResultDateFr != ''">
+					AND A.PROD_DATE  &gt;=  #{criteria.searchResultDateFr}
+				</if>
+				<if test="criteria.searchResultDateTo != null and criteria.searchResultDateTo != ''">
+					AND A.PROD_DATE  &lt;=  #{criteria.searchResultDateTo}
+				</if>
+			</if>
+		</if>
+		<!-- CS/RS -->
+		<if test="criteria.csrsSearchOption != null and criteria.csrsSearchOption != ''">
+			AND A.CSRS = #{criteria.csrsSearchOption}
+		</if>
+		<!-- 승상용 -->
+		<if test="criteria.tireStd != null and criteria.tireStd != ''">
+			AND A.TIRE_STD = #{criteria.tireStd}
+		</if>
+		<!-- 차종 -->
+		<if test="criteria.model != null and criteria.model != ''">
+			AND A.MODEL = #{criteria.model}
+		</if>
+		<!-- 부품구분 -->
+		<if test="criteria.inquiryGubun != null and criteria.inquiryGubun != ''">
+			AND A.INQUIRY_GUBUN = #{criteria.inquiryGubun}
+		</if>
+		<!-- 접수구분 -->
+		<if test="criteria.div != null and criteria.div != ''">
+			AND A.DIV = #{criteria.div}
+		</if>
+		<!-- 엔진명 -->
+		<if test="criteria.engineType != null and criteria.engineType != ''">
+			AND A.ENGINE_TYPE = #{criteria.engineType}
+		</if>
+		<!-- 고객품번 -->
+		<if test="criteria.hmcPartNo != null and criteria.hmcPartNo != ''">
+			AND A.HMC_PART_NO LIKE '%'||#{criteria.hmcPartNo}||'%'
+		</if>
+		<!-- 판매국가 -->
+		<if test="criteria.saleCountry != null and criteria.saleCountry != ''">
+			AND A.SALE_COUNTRY = #{criteria.saleCountry}
+		</if>
+		<!-- RO등록 -->
+		<if test="criteria.roSearchOption != null and criteria.roSearchOption != ''">
+			<if test="criteria.roSearchOption == '01'">
+				AND (A.RO_NO != ' ' AND A.RO_NO IS NOT NULL)
+			</if>
+			<if test="criteria.roSearchOption == '02'">
+				AND (A.RO_NO = ' ' OR A.RO_NO IS NULL)
+			</if>
+		</if>
+		<!-- 품질문제명 -->
+		<if test="criteria.qualityProblemNm != null and criteria.qualityProblemNm != ''">
+			AND A.QUALITY_PROBLEM_NM = #{criteria.qualityProblemNm}
+		</if>
+
+  </sql>
+
+	<!-- ?? SQL?????? -->
+	<select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.TotalAlnalysisDomain">
+
+		SELECT *
+		FROM (
+		<include refid="select_01"/>
+		) AA
+		WHERE AA.BASE_DATE = #{baseDate}
+
+	</select>
+
+	<select id="searchChartData" resultMap="codeMap" parameterType="Map">
+    /*
+        SQLID   : TotalAlnalysis.xml_searchChartData
+        COMMENT : 종합분석 차트 데이터 처리
+    */
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="select_01" />
+		) A
+		ORDER BY A.BASE_DATE ASC
+		) AA
+
+		ORDER BY BASE_DATE ASC
+
+	</select>
+
+	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="select_01" />
+		) A
+		ORDER BY A.BASE_DATE ASC
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY BASE_DATE ASC
+
+	</select>
+
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+		SELECT COUNT(BASE_DATE) AS CNT
+		FROM (
+		<include refid="select_01" />
+		) AA
+
+	</select>
+    <!-- 현상별 상담현황-->
+	<select id="searchByCondition2" resultMap="codeMap" parameterType="Map">
+
+        select NAME,
+              CNT,
+              ROUND((RATIO_TO_REPORT(CNT) OVER ()) * 100, 2) PER
+        from
+          (SELECT NVL(C.MAIN_CATEGORY_NM,'미입력') AS NAME,
+                  count(*)           AS CNT
+            FROM VW_CLAIM_TOTAL A
+                LEFT OUTER JOIN TB_BA_MAIN_CATEGORY C
+                    ON A.MAIN_CATEGORY = C.MAIN_CATEGORY
+            WHERE 1=1
+            <include refid="where_01"/>
+
+          GROUP BY MAIN_CATEGORY_NM
+          ORDER BY C.MAIN_CATEGORY_NM
+        )
+
+	</select>
+    <!-- 차종별 현황-->
+	<select id="searchByCondition3" resultMap="codeMap" parameterType="Map">
+
+		select
+		NAME,
+		CNT,
+		ROUND((RATIO_TO_REPORT(CNT) OVER ()) * 100, 2) PER
+		from
+		(select
+		NVL(A.MODEL,'미입력') AS NAME,
+		count(*) AS CNT
+		from
+        VW_CLAIM_TOTAL A
+		WHERE 1=1
+		<include refid="where_01"/>
+
+		GROUP BY A.MODEL
+		ORDER BY MODEL
+		)
+
+	</select>
+    <!-- 부품별 현황-->
+	<select id="searchByCondition4" resultMap="codeMap" parameterType="Map">
+
+        select
+		NAME,
+		CNT,
+		ROUND((RATIO_TO_REPORT(CNT) OVER ()) * 100, 2) PER
+		from
+		(select
+		NVL(A.HMC_PART_NO, '미입력') AS NAME,
+		count(*) AS CNT
+		from
+        VW_CLAIM_TOTAL A
+        WHERE 1=1
+		<include refid="where_01"/>
+
+		GROUP BY A.HMC_PART_NO
+		ORDER BY HMC_PART_NO)
+
+	</select>
+
+    <!-- 주행거리별 현황-->
+	<select id="searchByCondition5" resultMap="codeMap" parameterType="Map">
+
+	        select
+		NAME,
+		CNT,
+		ROUND((RATIO_TO_REPORT(CNT) OVER ()) * 100, 2) PER
+		from
+        (select '0~9999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '0' and '9999' <include refid="where_01"/> union all
+        select '10000~19999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '10000' and '19999' <include refid="where_01"/> union all
+        select '20000~29999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '20000' and '29999' <include refid="where_01"/> union all
+        select '30000~39999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '30000' and '39999' <include refid="where_01"/> union all
+        select '40000~49999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '40000' and '49999' <include refid="where_01"/> union all
+        select '50000~59999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '50000' and '59999' <include refid="where_01"/> union all
+        select '60000~69999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '60000' and '69999' <include refid="where_01"/> union all
+        select '70000~79999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '70000' and '79999' <include refid="where_01"/> union all
+        select '80000~89999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '80000' and '89999' <include refid="where_01"/> union all
+        select '90000~99999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '90000' and '99999' <include refid="where_01"/> union all
+        select '100000~109999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '100000' and '109999' <include refid="where_01"/> union all
+        select '110000~119999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '110000' and '119999' <include refid="where_01"/> union all
+        select '120000~129999' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage between '120000' and '129999' <include refid="where_01"/> union all
+        select '130000~' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage >= '130000' <include refid="where_01"/> union all
+        select '미입력' as name, count(*) cnt from VW_CLAIM_TOTAL A where mileage IS NULL <include refid="where_01"/>
+        )
+
+	</select>
+
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.IncidentCostDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.IncidentCostDto">
+        <id property="id" column="ID" javaType="java.lang.Long" />
+        <result property="div" column="DIV" javaType="java.lang.String" />
+		<result property="itemCd" column="ITEM_CD" javaType="java.lang.String" />
+		<result property="itemNm" column="ITEM_NM" javaType="java.lang.String" />
+		<result property="value" column="VALUE" javaType="java.lang.Double" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		DIV
+		,ITEM_CD
+		,ITEM_NM
+		,VALUE
+		,USE_YN
+		,PART_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ID
+
+    FROM TB_BA_INCIDENT_COST
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.div != null and criteria.div != ''">
+          AND DIV = #{criteria.div}
+      </if>
+
+      <if test="criteria.itemNm != null and criteria.itemNm != ''">
+          AND ITEM_NM LIKE '%'||#{criteria.itemNm}||'%'
+      </if>
+
+      <if test="criteria.useYn != null and criteria.useYn != ''">
+          AND USE_YN = #{criteria.useYn}
+      </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.IncidentCostDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.IncidentCostDomain">
+
+    INSERT INTO TB_BA_INCIDENT_COST (
+		DIV
+		,ITEM_CD
+		,ITEM_NM
+		,VALUE
+		,USE_YN
+		,PART_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ID
+
+    ) VALUES (
+		#{div}
+		,#{itemCd}
+		,#{itemNm}
+		,#{value}
+		,#{useYn}
+		,#{partDiv}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+		,#{id}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_INCIDENT_COST.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.IncidentCostDomain">
+
+    UPDATE TB_BA_INCIDENT_COST SET
+		DIV = #{div}
+		,ITEM_CD = #{itemCd}
+		,ITEM_NM = #{itemNm}
+		,VALUE = #{value}
+		,USE_YN = #{useYn}
+		,PART_DIV = #{partDiv}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.IncidentCostDomain">
+
+    DELETE FROM TB_BA_INCIDENT_COST
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

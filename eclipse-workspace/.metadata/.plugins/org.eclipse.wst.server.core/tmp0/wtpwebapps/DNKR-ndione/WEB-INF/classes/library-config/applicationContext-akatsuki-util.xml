@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * [JP] applicationContext-akatsuki-util.xml (編集不可)
+ * [JP]
+ * [JP] Akatsuki の共通部品用 Spring 設定ファイルです。
+ * [JP]
+ * [JP] 雅 で共通部品を利用する場合は、アプリ側の web.xml にこの設定ファイルを
+ * [JP] 追加してください。
+ * [JP]
+ * [JP] Akatsuki で共通部品を利用する場合は、アプリ側の applicationContext にこの設定ファイルを
+ * [JP] import してください。
+ * 
+ * [EN] applicationContext-akatsuki-util.xml (Not editable)
+ * [EN]
+ * [EN] This is the Spring configuration file for the Common Library of the Akatsuki.
+ * [EN]
+ * [EN] If you use Common Library in MIYABI, 
+ * [EN] please add this to the web.xml of the application configuration file.
+ * [EN]
+ * [EN] If you use Common Library in the Akatsuki, 
+ * [EN] please import this configuration file applicationContext-side to the app.
+ * 
+ * $ applicationContext-akatsuki-util.xml 6997 2014-02-21 05:58:59Z HIDETOSHI_NAKATANI@denso.co.jp $
+ *
+ * Copyright (c) 2011 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- [JP] FacadeService実装 -->
+    <!-- [EN] FacadeService implementation -->
+    <!-- [JP] キュー登録部品に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for parts queue registration -->
+    <bean id="requestjobFacadeService"
+        class="com.globaldenso.ai.akatsuki.library.business.service.RequestjobFacadeServiceImpl">
+        <property name="queueService" ref="queueService" />
+        <property name="jobManageService" ref="jobManageService" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト登録部品に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for parts resident request registration -->
+    <bean id="residentRequestjobFacadeService"
+        class="com.globaldenso.ai.akatsuki.library.business.service.ResidentRequestjobFacadeServiceImpl">
+        <property name="aijbResidentReqManageService" ref="aijbResidentReqManageService" />
+        <property name="residentRequestService" ref="residentRequestService" />
+        <property name="jobManageService" ref="jobManageService" />
+        <property name="vwAijbReqManageUnionAllService" ref="vwAijbReqManageUnionAllService" />
+    </bean>
+
+    <!-- [JP] メッセージログ登録部品に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for parts message log registration -->
+    <bean id="messageLogFacadeService"
+        class="com.globaldenso.ai.akatsuki.library.business.service.MessageLogFacadeServiceImpl">
+        <property name="aijbMessageLogManageService" ref="aijbMessageLogManageService" />
+        <property name="messageLogManageService" ref="messageLogManageService" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for resident request management -->
+    <bean id="residentRequestService"
+        class="com.globaldenso.ai.akatsuki.business.service.ResidentRequestServiceImpl">
+        <property name="residentRequestDao" ref="residentRequestDao" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理   常駐リクエスト情報を管理するテーブル Service -->
+    <!-- [EN] Resident Request Management   Table for managing the information resident request Service -->
+    <bean id="aijbResidentReqManageService" class="com.globaldenso.ai.akatsuki.auto.business.service.AijbResidentReqManageServiceImpl">
+        <property name="aijbResidentReqManageDao" ref="aijbResidentReqManageDao" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理統合ビュー   常駐リクエスト管理と常駐リクエスト履歴を横断的に検索するためのビュー Service -->
+    <!-- [EN] Resident Request Management Union View   View for managing the information resident request management and resident request management history Service -->
+    <bean id="vwAijbReqManageUnionAllService" class="com.globaldenso.ai.akatsuki.auto.business.service.VwAijbReqManageUnionAllServiceImpl">
+        <property name="vwAijbReqManageUnionAllDao" ref="vwAijbReqManageUnionAllDao" />
+    </bean>
+
+    <!-- [JP] メッセージログ管理に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for message log management -->
+    <bean id="messageLogManageService"
+        class="com.globaldenso.ai.akatsuki.business.service.MessageLogManageServiceImpl">
+        <property name="messageLogManageDao" ref="messageLogManageDao" />
+    </bean>
+
+    <!-- [JP] メッセージログ管理 Service -->
+    <!-- [EN] Message Log Management Service -->
+    <bean id="aijbMessageLogManageService" class="com.globaldenso.ai.akatsuki.auto.business.service.AijbMessageLogManageServiceImpl">
+        <property name="aijbMessageLogManageDao" ref="aijbMessageLogManageDao" />
+    </bean>
+
+    <!-- [JP] akatsuki-util共通Service実装 -->
+    <!-- [EN] Common Service implementation akatsuki-util -->
+    <!-- [JP] キューに関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for the queue -->
+    <bean id="queueService"
+        class="com.globaldenso.ai.akatsuki.business.service.QueueServiceImpl">
+        <property name="queueInfDao" ref="queueInfDao" />
+        <property name="jobManageDao" ref="jobManageDao" />
+        <property name="queueExecuteHistoryService" ref="queueExecuteHistoryService" />
+    </bean>
+
+    <!-- [JP] ジョブに関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for the job -->
+    <bean id="jobManageService"
+        class="com.globaldenso.ai.akatsuki.business.service.JobManageServiceImpl">
+        <property name="jobManageDao" ref="jobManageDao" />
+    </bean>
+
+    <!-- [JP] キュー実行履歴に関するサービスクラス DI用の設定です -->
+    <!-- [EN] This setting is for the service class DI for the execute history of queue -->
+    <bean id="queueExecuteHistoryService"
+        class="com.globaldenso.ai.akatsuki.business.service.QueueExecuteHistoryServiceImpl">
+        <property name="queueExecuteHistoryInfDao"
+            ref="queueExecuteHistoryInfDao" />
+        <property name="queueService" ref="queueService" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理DAO -->
+    <!-- [EN] Resident Request Management DAO -->
+    <bean id="residentRequestDao"
+        class="com.globaldenso.ai.akatsuki.integration.ResidentRequestDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理   常駐リクエスト情報を管理するテーブル DAO -->
+    <!-- [EN] Resident Request Management   Table for managing the information resident request DAO -->
+    <bean id="aijbResidentReqManageDao" class="com.globaldenso.ai.akatsuki.auto.integration.AijbResidentReqManageDaoImpl">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+    </bean>
+
+    <!-- [JP] 常駐リクエスト管理統合ビュー   常駐リクエスト管理と常駐リクエスト履歴を横断的に検索するためのビュー DAO -->
+    <!-- [EN] Resident Request Management View   View in order to search across Resident Request History and Resident Request Management DAO -->
+    <bean id="vwAijbReqManageUnionAllDao" class="com.globaldenso.ai.akatsuki.auto.integration.VwAijbReqManageUnionAllDaoImpl">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+    </bean>
+
+    <!-- [JP] メッセージログ管理DAO -->
+    <!-- [EN] Message Log Management DAO -->
+    <bean id="messageLogManageDao"
+        class="com.globaldenso.ai.akatsuki.integration.MessageLogManageDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <!-- [JP] メッセージログ管理 DAO -->
+    <!-- [EN] Message Log Management DAO -->
+    <bean id="aijbMessageLogManageDao" class="com.globaldenso.ai.akatsuki.auto.integration.AijbMessageLogManageDaoImpl">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+    </bean>
+
+    <!-- [JP] キュー実行履歴 DAO -->
+    <!-- [EN] Queue Execute History DAO -->
+    <bean id="queueExecuteHistoryInfDao"
+        class="com.globaldenso.ai.akatsuki.integration.QueueExecuteHistoryInfDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <!-- [JP] akatsuki-util共通DAO実装 -->
+    <!-- [EN] akatsuki-util Common DAO implementation -->
+    <bean id="queueInfDao"
+        class="com.globaldenso.ai.akatsuki.integration.QueueInfDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+    <bean id="jobManageDao"
+        class="com.globaldenso.ai.akatsuki.integration.JobManageDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+</beans>

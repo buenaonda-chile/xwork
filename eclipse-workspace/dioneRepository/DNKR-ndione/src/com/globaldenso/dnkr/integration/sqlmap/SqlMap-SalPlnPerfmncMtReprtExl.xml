@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncMtReprtExlDao">
+	
+	<resultMap id="SalPlnPerfmncMtReprtExl" type="SalPlnPerfmncMtReprtExlDomain">
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="pQtyM" column="P_QTY_M" />
+		<result property="pQtyS" column="P_QTY_S" />
+		<result property="rate" column="RATE" />
+	</resultMap>
+	
+	
+	<select id="searchBySalPlnList" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+		
+		select 
+			A.prdcd as ITEM_CD,
+			A.P_QTY_M,
+			B.P_QTY_S,
+			CAST(B.P_QTY_S as FLOAT) / CAST(A.P_QTY_M as FLOAT) as RATE
+		from 
+			(SELECT
+				A.prdcd AS prdcd,  
+				SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M
+			FROM ${lib2}.SPM110PF A
+			WHERE
+				A.PLNYM = #{dumcb}--계획년월
+			GROUP BY A.prdcd
+			having SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) > 29999
+			) A,
+			(SELECT
+				A.prdcd AS prdcd,
+				SUM(A.JPSQY) AS P_QTY_S
+			FROM
+			${lib2}.SMD110PF A
+			WHERE
+				SUBSTR(A.JPSDT, 1,6) = #{dumcb}
+				GROUP BY A.prdcd) B
+		WHERE
+			A.prdcd = B.prdcd
+		
+	</select>
+	
+	
+	<select id="searchByCondition" resultMap="SalPlnPerfmncMtReprtExl" parameterType="SalPlnPerfmncMtReprtExlDomain">
+		
+		select 
+			A.prdcd as ITEM_CD,
+			A.P_QTY_M,
+			B.P_QTY_S,
+			CAST(B.P_QTY_S as FLOAT) / CAST(A.P_QTY_M as FLOAT) as RATE
+		from 
+			(SELECT
+				A.prdcd AS prdcd,  
+				SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M
+			FROM ${lib2}.SPM110PF A
+			WHERE
+				A.PLNYM = #{dumcb}--계획년월
+			GROUP BY A.prdcd
+			having SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) > 29999
+			) A,
+			(SELECT
+				A.prdcd AS prdcd,
+				SUM(A.JPSQY) AS P_QTY_S
+			FROM
+			${lib2}.SMD110PF A
+			WHERE
+				SUBSTR(A.JPSDT, 1,6) = #{dumcb}
+				GROUP BY A.prdcd) B
+		WHERE
+			A.prdcd = B.prdcd
+		
+	</select>
+	
+</mapper>

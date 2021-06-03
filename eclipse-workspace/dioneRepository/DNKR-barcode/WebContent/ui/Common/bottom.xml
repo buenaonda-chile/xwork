@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="560" Id="Bottom" Left="8" OnLoadCompleted="Bottom_OnLoadCompleted" OnSize="on_size" OnTimer="Bottom_OnTimer" PidAttrib="7" Title="Frame&#32;Bottom" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1280" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_winButton">
+				<Contents>
+					<colinfo id="HANDLE" size="256" type="STRING"/>
+					<colinfo id="URL" size="256" type="STRING"/>
+					<colinfo id="POS_LEFT" size="256" type="DECIMAL"/>
+					<colinfo id="MENU_NM" size="256" type="STRING"/>
+					<colinfo id="MENU_ID" size="256" type="STRING"/>
+					<colinfo id="IMG_ID" size="256" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_popMenu">
+				<Contents>
+					<colinfo id="LEV" size="256" summ="default" type="STRING"/>
+					<colinfo id="ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="NM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="IMG" size="256" summ="default" type="STRING"/>
+					<record>
+						<ID>1</ID>
+						<IMG></IMG>
+						<LEV>0</LEV>
+						<NM>닫기</NM>
+						<STAT>ENABLE</STAT>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_progress">
+				<Contents>
+					<colinfo id="MSG" size="256" type="STRING"/>
+					<colinfo id="STEP" size="256" type="INT"/>
+					<record>
+						<MSG></MSG>
+						<STEP/>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_input">
+				<Contents>
+					<colinfo id="MENU_ID" size="256" type="STRING"/>
+					<record>
+						<MENU_ID></MENU_ID>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuLog">
+				<Contents>
+					<colinfo id="USER_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENU_ID" size="256" summ="default" type="STRING"/>
+					<record>
+						<MENU_ID></MENU_ID>
+						<USER_ID></USER_ID>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_winButtonTemp">
+				<Contents>
+					<colinfo id="HANDLE" size="256" type="STRING"/>
+					<colinfo id="URL" size="256" type="STRING"/>
+					<colinfo id="POS_LEFT" size="256" type="DECIMAL"/>
+					<colinfo id="MENU_NM" size="256" type="STRING"/>
+					<colinfo id="MENU_ID" size="256" type="STRING"/>
+					<colinfo id="IMG_ID" size="256" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<Progressbar BkColor="default" Enable="FALSE" Height="16" Id="pb_service" Left="664" Max="100" Origin="Horizontal" Step="10" TabOrder="1" Top="8" Visible="FALSE" Width="311"></Progressbar>
+		<Image Height="34" Id="Image2" ImageID="bottom_bg1" Left="2" TabOrder="2" Top="32" Width="12"></Image>
+		<Image FillType="STRETCH" Height="34" Id="Image3" ImageID="bottom_bg2" Left="8" TabOrder="3" Top="32" Width="1256"></Image>
+		<Image Height="22" Id="Image5" ImageID="message" Left="40" TabOrder="4" Top="36" Width="80"></Image>
+		<Static BKColor="white" Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="20" Id="messageBox" Left="128" TabOrder="5" Top="36" VAlign="Middle" Width="552"></Static>
+		<Static Align="Right" Height="13" Id="Static1" Left="1120" TabOrder="6" Top="42" Width="144"></Static>
+		<Image Height="34" Id="Image4" ImageID="bottom_bg3" Left="1264" TabOrder="7" Top="32" Width="8"></Image>
+		<Static Height="13" Id="Static2" Left="800" TabOrder="8" Top="42" Width="53"></Static>
+		<Static Height="13" Id="Static3" Left="992" TabOrder="9" Top="42" Width="66"></Static>
+		<Image Color="white" Enable="FALSE" FillType="STRETCH" Height="24" Id="Image1" ImageID="bot_tab1" Left="122" TabOrder="10" Text="window02" Top="3" Visible="FALSE" Width="113"></Image>
+		<Image Color="white" Enable="FALSE" FillType="STRETCH" Height="24" Id="Image0" ImageID="bot_tab2" Left="3" TabOrder="11" Top="3" Visible="FALSE" Width="114"></Image>
+		<MSIE Bottom="25" Height="15" Id="MSIE0" Left="81" Right="109" Top="10" Visible="FALSE" Width="28"></MSIE>
+		<File Bottom="59" Height="24" Id="File0" Left="8" Right="32" TabOrder="12" Top="35" Width="24"></File>
+	</Form>
+	<Script><![CDATA[#include "script::Mi_common.js";
+#include "script::lib_script_common.js";
+
+var nBtnWidth = 127;
+var nBtnHeight = 24;
+var nBtnPosTop = 3;
+var nBtnPosLeft = 5;
+var nMaxWinCnt = 10;
+var sMainForm = "Common::Content.xml";
+
+var sMenuUrlColNm = "INIT_URL"; // sUrlColNm
+var sMenuNmColNm = "MENU_NAME";
+var sMenuIdColNm = "MENU_ID";
+
+//var sActImgId = "bot_win2_dis2";
+//var sDisImgId = "bot_win2";
+
+var sActImgId = "bot_tab1";
+var sDisImgId = "bot_tab2";
+
+var nRow;
+var nCloseHandle;
+var sUrl;
+
+function Bottom_OnLoadCompleted(obj)
+{
+    G_bottomFrameOnLoad = "Y";
+    setTime();	
+}
+
+function _fcSetActHandle(handle) {
+
+    G_actHandle = handle;
+}
+
+
+function fcOpenMDI(url, paramFlag, menuNm) {
+
+    if(paramFlag==null) {
+
+        paramFlag = false;
+    }
+
+    var sOrgnUrl = url;
+
+	nRow = ds_winButton.FindRow("URL", sOrgnUrl);
+
+	if(nRow==-1) {//보여준 메뉴를 다시 클릭했을때 else로 빠저나간다.
+
+        if(ds_winButton.RowCount()==nMaxWinCnt) {
+
+			//Active를 해줄 이유가 없음
+			//_fcSetActWin(ds_winButton.GetColumn(0, "HANDLE"));
+            //_fcCloseWin(ds_winButton.GetColumn(0, "HANDLE"));
+            //this.SetTimer(1009, 100);    화면이 바낀걸 막아준다.
+
+            sUrl = url;
+            alert("동시에 열수 있는 창 수는 " + nMaxWinCnt + "개로 제한됩니다.");
+            return ;
+
+        } else {
+        	fcOpenWindow(url, menuNm);
+		}
+	}else {
+
+        if(paramFlag) {
+            fcOpenWindowMdi(url, nRow);
+
+        } else {
+            var nHandle = ds_winButton.GetColumn(nRow, "HANDLE");
+
+            if(G_actHandle!=nHandle) {
+            
+                _fcSetActHandle(nHandle);
+
+                fcSetActWindow(nHandle);
+			}
+
+        }
+	} 
+}
+
+function fcOpenWindowMdi(url, rnum) {
+
+    //trace("Window Handle : " + url + " [ in fcOpenWindowMdi() ]");
+
+    _fcReLoadWin(ds_winButton.GetColumn(rnum, "HANDLE"));
+    
+}
+
+
+function fcOpenWindow(url, menuNm) {
+
+    //trace("Window Handle : " + url + " [ in fcOpenWindow() ]");
+
+    var sOrgnUrl = url;
+
+    var menuRow = G_ds_menu.FindRow(sMenuUrlColNm, sOrgnUrl);
+    G_ds_menu.row = menuRow;
+
+    var sMenuNm = menuNm;
+    var sMenuId = G_ds_menu.GetColumn(menuRow, sMenuIdColNm);
+
+	var sArg = "sTarget=" + quote(url);
+	sArg += " sTitle=" + quote(sMenuNm);
+	sArg += " sMenuId=" + quote(sMenuId);
+
+	if(sMenuId == null){
+		sMenuId = global.FrameLeft.btnMenuId;
+	}
+	
+	// 메뉴로그 저장
+	saveMenuLog(G_ds_user.GetColumn(0,"USER_ID"),sMenuId);
+        
+    //C/S 프로그램 경우 하단 컨트롤 버튼 표시 않되도록 한다. - 프린터 세션 관련
+	//향후 C/S 프로그램 추가시 메뉴 아이디를 추가해야 한다. - 2011.03.10
+	/*
+	if(sMenuId==61) { //PLM
+		CSPopupLoad_PLM(16);
+	}
+	*/
+	var nHandle = NewWindow(sOrgnUrl, sMainForm, sArg, 1056, 624, "OpenStyle=normal Instance=Single border=true Title=true");
+
+	if(nHandle==-1) { // Is trick?
+		//alert("Handle : " + nHandle + "   /   CloseHandle : " + nCloseHandle);
+		nHandle = nCloseHandle;
+	}
+	nRow = ds_winButton.AppendRow(); // 열린 창 정보를 ds_winButton에 등록한다.
+
+	var nPosLeft = iif(nRow==0, nBtnPosLeft, ds_winButton.GetColumn(ds_winButton.lastrow-1, "POS_LEFT")+nBtnWidth);
+
+	ds_winButton.SetColumn(nRow, "HANDLE", nHandle);
+	//ds_winButton.SetColumn(nRow, "URL", url);
+	ds_winButton.SetColumn(nRow, "URL", sOrgnUrl);
+	ds_winButton.SetColumn(nRow, "MENU_NM", sMenuNm);
+	ds_winButton.SetColumn(nRow, "POS_LEFT", nPosLeft);
+	ds_winButton.SetColumn(nRow, "MENU_ID", sMenuId);
+	ds_winButton.SetColumn(nRow, "IMG_ID", _fcGetImgId(nHandle));
+	
+	_fcSetActHandle(nHandle);
+
+	_fcCreateImg(nHandle);
+	}
+}
+
+
+function fcCloseWindow(handle) {
+
+    //trace("Window Handle : " + handle + " [ in fcCloseWindow() ]");
+
+    nCloseHandle = handle;
+
+    _fcDelImg(handle);
+}
+
+function fcSetActWindow(handle) {
+
+    //trace("Window Handle : " + handle + " [ in fcSetActWindow() ]");
+	
+    _fcSetActWin(handle);
+
+    _fcSetActImg(handle);
+}
+
+function _fcGetImgId(handle) {
+
+    //trace("Window Handle : " + handle + " [ in _fcGetImgId() ]");
+
+    var sFormId = ds_winButton.GetColumn(ds_winButton.FindRow("HANDLE", handle), "URL");
+
+    var arrFormId = split(sFormId, "::");
+    
+    var sImgId = "img_" + replace(toUpper(arrFormId[1]), ".XML", "");
+
+    return sImgId;
+}
+
+//이미지버튼 생성
+function _fcCreateImg(handle) {
+
+    //trace("Window Handle : " + handle + " [ in _fcCreateImg() ]");
+
+    nRow = ds_winButton.FindRow("HANDLE", handle);
+
+	sAttrib = "Left=" + quote(ds_winButton.GetColumn(nRow, "POS_LEFT"));
+	sAttrib += " Top=" + quote(nBtnPosTop);
+	sAttrib += " Width=" + quote(nBtnWidth);
+	sAttrib += " Height=" + quote(nBtnHeight);
+	//sAttrib += " Border=" + quote("Flat");
+	sAttrib += " Color=" + quote("white");
+	sAttrib += " Static=" + quote("false");
+	sAttrib += " Text=" + quote(fcCutStr(ds_winButton.GetColumn(nRow, "MENU_NM"), 10));
+	sAttrib += " ToolTipText=" + quote(ds_winButton.GetColumn(nRow, "MENU_NM"));
+	sAttrib += " ImageID=" + quote(sDisImgId);
+	sAttrib += " OnClick=" + quote("Image_OnClick");
+	sAttrib += " OnRButtonDown=" + quote("Image_OnRButtonDown");
+	sAttrib += " FillType=" + quote("STRETCH");
+
+	create("Image", _fcGetImgId(handle), sAttrib);
+
+	_fcSetActImg(handle);
+}
+
+function _fcDelImg(handle) {
+
+    //trace("Window Handle : " + handle + " [ in _fcDelImg() ]");
+
+    var objImg = object(_fcGetImgId(handle));
+
+    if(isValid(objImg)) {
+
+        Destroy(objImg.ID);
+
+        nRow = ds_winButton.FindRow("HANDLE", handle);
+
+        for(var i=nRow+1; i<ds_winButton.RowCount(); i++) {
+
+            ds_winButton.SetColumn(i, "POS_LEFT", ds_winButton.GetColumn(i, "POS_LEFT")-nBtnWidth);
+
+            objImg = object(_fcGetImgId(ds_winButton.GetColumn(i, "HANDLE")));
+
+            objImg.Left = ds_winButton.GetColumn(i, "POS_LEFT");
+        }
+
+        ds_winButton.DeleteRow(nRow);
+    }
+}
+
+
+function _fcSetActImg(handle) {
+    //trace("Window Handle : " + handle + " [ in _fcSetActImg() ]");
+
+	var objImg;
+
+	for(var i=0; i<ds_winButton.RowCount(); i++) {
+
+		var nHandle = ds_winButton.GetColumn(i, "HANDLE");
+
+		if(nHandle==handle) {
+
+			objImg = object(_fcGetImgId(handle));
+			objImg.ImageID = sActImgId;
+			objImg.Color = "white";
+
+		} else {
+
+			objImg = object(_fcGetImgId(nHandle));
+			objImg.ImageID = sDisImgId;
+			objImg.Color = "black";
+		}
+	}
+}
+
+
+function _fcSetActWin(handle) {
+
+    //trace("Window Handle : " + handle + " [ in _fcSetActWin() ]");
+    var i_row;
+    var i_sUrl = "Minwon::MIN010L.xml";
+    var ndle;
+	
+	for(var i=0; i<global.windows.count; i++) {
+
+		var nHandle = global.windows[i].GetHandle(); // global.windows[i] 해당 폼을 리턴한다.
+
+		if(nHandle==handle) {
+
+            global.windows[i].SetFocus();
+
+            _fcSetActHandle(nHandle);	
+			
+			lFcCommSearchCall();  // 2008.05.16 lsy
+			
+            return null;
+		}
+	}
+
+}
+
+//새로 로드 
+function _fcReLoadWin(handle) {
+    //trace("Window Handle : " + handle + " [ in _fcReLoadWin() ]");
+
+    var nHandle;
+
+	for(var i=0; i<global.windows.count; i++) {
+
+		var nHandle = global.windows[i].GetHandle(); // global.windows[i] 해당 폼을 리턴한다.
+
+		if(nHandle==handle) {
+
+            global.windows[i].Reload();
+
+            return null;
+		}
+	}
+}
+
+//창 하나 닫기
+function _fcCloseWin(handle) {
+
+
+    //trace("Window Handle : " + handle + " [ in _fcCloseWin() ]");
+
+    var nHandle;
+
+	for(var i=0; i<global.windows.count; i++) {
+		var nHandle = global.windows[i].GetHandle(); // global.windows[i] 해당 폼을 리턴한다.
+		if(nHandle==handle) {
+            global.windows[i].Close();
+		}
+	}
+	
+}
+
+
+function Image_OnClick(obj,nX,nY)
+{
+
+    var nHandle = ds_winButton.GetColumn(ds_winButton.FindRow("IMG_ID", obj.ID), "HANDLE");
+
+    if(G_actHandle!=nHandle) {
+
+        _fcSetActHandle(nHandle);
+
+        fcSetActWindow(nHandle);
+    }
+    
+	bottomSet();    
+}
+
+
+function Image_OnRButtonDown(obj,nPosX,nPosY)
+{
+	TrackPopupMenu("ds_popMenu", "LEV", "ID", "NM", "STAT", "IMG", nPosX, nPosY-22, "fcPopMenu", obj, 0, 0);
+}
+
+
+function fcPopMenu(obj, menuId, row, col) {
+
+	//alert(obj.ID + " / " + row + " / " + col);
+
+	nCloseHandle = ds_winButton.GetColumn(ds_winButton.FindRow("IMG_ID",obj.ID), "HANDLE");
+
+	this.SetTimer(1001, 100);
+}
+
+
+function fcSetMsgBar(msg) {
+
+    ed_msg.Text = msg;
+
+    this.SetTimer(1000, 3000);
+}
+
+//모두 닫기
+function fcCloseAllWindow() {
+
+	for(var i=0; i<global.windows.count; i++) {
+
+		var nHandle = global.windows[i].GetHandle(); // global.windows[i] 해당 폼을 리턴한다.
+		
+		var nRtn = ds_winButton.FindRow("HANDLE", nHandle);
+
+        if(nRtn!=-1) {
+
+            global.windows[i].Close();
+        }
+	}
+}
+
+
+function Bottom_OnTimer(obj,nEventID)
+{
+
+	Static1.Text = gf_GetCurTime();	
+
+	if(nEventID==1000) {
+
+        ed_msg.Text = "";
+
+		this.KillTimer(nEventID);
+	
+	} else if(nEventID==1009) {
+
+		fcOpenWindow(sUrl);
+
+		sUrl = "";
+
+		this.KillTimer(nEventID);
+
+	} else if(nEventID==1001) {
+
+		//Active를 해줄 이유가 없음
+		//_fcSetActWin(nCloseHandle);
+		_fcCloseWin(nCloseHandle);
+
+		this.KillTimer(nEventID);
+
+	} else if(nEventID==1004) {
+
+		pb_service.StepIt();
+
+	} else if(nEventID==1005) {
+
+		pb_service.Pos = 0;
+
+		this.KillTimer(nEventID);
+	}
+}
+
+
+function fcGetActMenuId(handle) {
+
+	for(var i=0; i<ds_winButton.RowCount(); i++) {
+
+		if(handle==ds_winButton.GetColumn(i, "HANDLE")) {
+		
+			return ds_winButton.GetColumn(i, "MENU_ID");
+		}
+	}
+}
+
+
+function fcShowProgressBar() {
+
+	SetWaitCursor(true);
+	SetCapture();
+
+/*
+	grd_progress.Visible = true;
+	grd_progress.Enable = true;
+
+    ds_progress.SetColumn(0, "MSG", "");
+	ds_progress.SetColumn(0, "STEP", 0);
+*/
+}
+
+
+function fcHideProgressBar() {
+
+	ReleaseCapture();
+	SetWaitCursor(false);
+/*
+	grd_progress.Visible = false;
+	grd_progress.Enable = false;
+*/
+}
+
+
+function fcSetProgressMsg(msg) {
+
+    ds_progress.SetColumn(0, "MSG", msg);
+}
+
+function fcSetProgressBar(nPos) {
+
+	//pb_working.Visible = true;
+	//pb_working.Enable = true;
+	//pb_working.Pos = nPos;
+
+	ds_progress.SetColumn(0, "STEP", nPos);
+}
+
+
+function fcStartProgress() {
+
+    this.SetTimer(1004, 600);
+}
+
+function fcEndProgress() {
+
+	this.KillTimer(1004);
+
+	pb_service.Pos = 100;
+
+    this.SetTimer(1005, 100);
+}
+
+
+/*
+ * 문자열 길이가 maxLen 보다 클 경우 maxLen-1 크기로 자르고 "..."을 붙여서 돌려준다.
+ * 
+ * param str - 문자열
+ * param maxLen - 최대 크기
+ *
+ * return sRtn
+ */
+function fcCutStr(str, maxLen) {
+
+    var sRtn;
+    
+    if(length(str)>maxLen) {
+    
+        sRtn = mid(str, 0, maxLen-1) + "...";
+
+    } else {
+
+        sRtn = str;
+    }
+
+    return sRtn;
+}
+
+function grd_progress_OnFocus(obj)
+{
+	ed_msg.SetFocus();
+}
+
+//모두닫기버튼 클릭시
+function img_allClose_OnClick(obj,nX,nY)
+{
+	global.FrameBottom.fcCloseAllWindow();
+}
+
+
+function on_size(obj,nCx,nCy,nState)
+{
+	Static2.Left = nCx - 375 ;
+	Static2.Right = nCx - 275 ;
+	
+	Static3.Left = nCx - 255 ;
+	Static3.Right = nCx - 155 ;
+
+	Static1.Left = nCx - 164 ;
+	Static1.Right = nCx - 20 ;	
+}
+
+// 시간을 구하는 함수
+function gf_GetCurTime() {
+    intDay = GetDay(Today());
+	strDay = Decode( intDay, 0, "일", 1, "월", 2, "화", 3, "수", 4, "목", 5, "금", 6, "토" );
+    return ToString(getDate(),"@@@@-@@-@@ (" + strDay + ") @@:@@"); 
+}
+
+
+function setTime()
+{
+    SetTimer(1,1000);
+}
+
+function saveMenuLog(user_id,menu_id){
+
+	ds_menuLog.SetColumn(0,"USER_ID",user_id);
+	ds_menuLog.SetColumn(0,"MENU_ID",menu_id);
+
+	var sKind		= "saveMenuLog";						
+	var sMethodName = "service::system/setMenuLog";     			// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_menuLog=ds_menuLog:A";     				//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    										// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+}
+
+function logoutCheck()
+{
+	var strMessage = "";
+	var handle	;
+	var startCount ;
+	var allWinCount = 0;
+	
+	startCount = ds_winButton.rowcount;
+	ds_winButtonTemp.Copy("ds_winButton");
+
+	for(i=0;i<ds_winButtonTemp.rowcount;i++){
+
+		strMessage = "[" + ds_winButtonTemp.GetColumn(i,"MENU_NM") + "]을         \n종료하시겠습니까?";
+		if(Confirm(strMessage) == true){
+			handle = ds_winButtonTemp.GetColumn(i,"HANDLE");
+			_fcCloseWin(handle);
+			allWinCount++;
+		} 
+	}
+
+	if(startCount == allWinCount){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/*--------------------------------------------------------------
+ *  11.09.21 제환복 
+ * 메뉴호출 - 특정메뉴 새창으로 오픈..하단에 표시됨.
+ * 수정부분 fcOpenWindow1(url, paramFlag, menuNm);  
+----------------------------------------------------------------*/
+
+function fcOpenMDI1(url, paramFlag, menuNm) {
+
+    if(paramFlag==null) {
+
+        paramFlag = false;
+    }
+
+    var sOrgnUrl = url;
+
+	nRow = ds_winButton.FindRow("URL", sOrgnUrl);
+
+	if(nRow==-1) {//보여준 메뉴를 다시 클릭했을때 else로 빠저나간다.
+
+        if(ds_winButton.RowCount()==nMaxWinCnt) {
+
+			//Active를 해줄 이유가 없음
+			//_fcSetActWin(ds_winButton.GetColumn(0, "HANDLE"));
+            //_fcCloseWin(ds_winButton.GetColumn(0, "HANDLE"));
+            //this.SetTimer(1009, 100);    화면이 바낀걸 막아준다.
+
+            sUrl = url;
+            alert("동시에 열수 있는 창 수는 " + nMaxWinCnt + "개로 제한됩니다.");
+            return ;
+
+        } else {
+        	fcOpenWindow1(url, paramFlag, menuNm);
+		}
+	}else {
+
+        if(paramFlag) {
+            fcOpenWindowMdi(url, nRow);
+
+        } else {
+            var nHandle = ds_winButton.GetColumn(nRow, "HANDLE");
+
+            if(G_actHandle!=nHandle) {
+            
+                _fcSetActHandle(nHandle);
+
+                fcSetActWindow(nHandle);
+			}
+
+        }
+	} 
+}
+
+function fcOpenWindow1(url, paramFlag, menuNm) {
+
+    //trace("Window Handle : " + url + " [ in fcOpenWindow() ]");
+
+    var jisnoValue = paramFlag[0];
+    var compsValue = paramFlag[1];
+    var sOrgnUrl = url;
+	
+    var menuRow = G_ds_menu.FindRow(sMenuUrlColNm, sOrgnUrl);
+    G_ds_menu.row = menuRow;
+
+    var sMenuNm = menuNm;
+    var sMenuId = G_ds_menu.GetColumn(menuRow, sMenuIdColNm);
+
+	var sArg = "sTarget=" + quote(url);
+	sArg += " sTitle=" + quote(sMenuNm);
+	sArg += " sMenuId=" + quote(sMenuId);
+	sArg += " jisnoValue=" + quote(jisnoValue);
+	sArg += " compsValue=" + quote(compsValue);
+
+	if(sMenuId == null){
+		sMenuId = global.FrameLeft.btnMenuId;
+	}
+	
+	// 메뉴로그 저장
+	saveMenuLog(G_ds_user.GetColumn(0,"USER_ID"),sMenuId);
+    
+    
+	var nHandle = NewWindow(sOrgnUrl, sMainForm, sArg, 830, 645, "OpenStyle=normal Instance=Single border=true Title=true");
+
+	if(nHandle==-1) { // Is trick?
+
+		//alert("Handle : " + nHandle + "   /   CloseHandle : " + nCloseHandle);
+		nHandle = nCloseHandle;
+	}
+
+	nRow = ds_winButton.AppendRow(); // 열린 창 정보를 ds_winButton에 등록한다.
+
+	var nPosLeft = iif(nRow==0, nBtnPosLeft, ds_winButton.GetColumn(ds_winButton.lastrow-1, "POS_LEFT")+nBtnWidth);
+
+	ds_winButton.SetColumn(nRow, "HANDLE", nHandle);
+	//ds_winButton.SetColumn(nRow, "URL", url);
+	ds_winButton.SetColumn(nRow, "URL", sOrgnUrl);
+	ds_winButton.SetColumn(nRow, "MENU_NM", sMenuNm);
+	ds_winButton.SetColumn(nRow, "POS_LEFT", nPosLeft);
+	ds_winButton.SetColumn(nRow, "MENU_ID", sMenuId);
+	ds_winButton.SetColumn(nRow, "IMG_ID", _fcGetImgId(nHandle));
+
+	_fcSetActHandle(nHandle);
+
+	_fcCreateImg(nHandle);
+	}
+}
+
+]]></Script>
+</Window>

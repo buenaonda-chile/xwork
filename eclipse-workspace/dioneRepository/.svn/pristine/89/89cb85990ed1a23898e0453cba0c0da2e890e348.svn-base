@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="504" Id="Scaling" Left="8" OnLoadCompleted="Scaling_OnLoadCompleted" PidAttrib="7" Title="Scaling" TooltipFont=",0" Top="8" Ver="1.0" Width="744" WorkArea="true">
+		<XChart Bottom="448" Height="440" Id="XChart1" Left="24" MarkerShape="MarkerShape_Rect" NSeries="2" NValues="5" Right="728" Top="8" Width="704">
+			<_PersistData>&#13;&#10;/6xFCjQ630NGWDYA8vJNQ/9oYXJ0RlgsIP9WZXJzaW9uPf82LjIuMTM0Mv8uMCwgQ3VsdP91cmU9bmV1dP9yYWwsIFB1Yv9saWNL&#13;&#10;ZXlUb/9rZW49YTE4N/84ZTIwNTJjMP84ZGNlElNvZv90d2FyZUZYLlr59B/y8wAj8vAgXgR6aw0E8vABAf7/gQUqawUBawUCawYG&#13;&#10;pQSRBdUy8vAQ8vAD8vD7/4d/f4JlAXwCvwKRBQG/BUFyaWFs8vBBpG8P8vIFjgWsBQBGD1h/Ei5IaWdobCkQ/3RTZXR0aW5nZ3MQ&#13;&#10;CZMIRR8AB3YFzwEBAAgCHRMfWAWfLkF4aXOVAX0CAPECOhDy82UWKDjgAAUKRxULRxmeB88f3BmVAcCeA4UNbQ9/A40OjwUCDASb&#13;&#10;H60QDbEfYi90L+cf+R8oCy+dL8UlDloYD44FvAH68vFS+fQuQmFzZZAADxIPJA82DRd3H/wiDf8uSUdhbGxlcl95VHlwZZUBFDIl&#13;&#10;URH6DIk/lTgSlTUTjQdHCABLvwBxM/LwFeQt/Ec/+yMJLkxpbmUPSW5mb9sCvSzTA5UBSUKVP5cIAbgagQEWI0V9F4UnD0RlZmEY&#13;&#10;MP8uV2luZG93cw==&#13;&#10;</_PersistData>
+		</XChart>
+		<Button Font="Tahoma,8" Height="32" Id="Button1" Left="272" OnClick="Button1_OnClick" TabOrder="2" Text="Axes&#32;Titles" Top="457" Width="192"></Button>
+	</Form>
+	<Script><![CDATA[
+function Button1_OnClick(obj)
+{
+	XChart1.OpenData("COD_Values", 1, 9);
+
+	For(var i=0;i<9;i++)
+	{
+		XChart1.Value(0, i) = (Random(1,9)) * 10;
+	}
+	XChart1.CloseData("COD_Values");
+	
+	XChart1.AxisX.Title.Text = "X Axis Title";
+	XChart1.AxisY.Title.Text = "Y Axis Title";
+
+}
+
+
+
+
+function Scaling_OnLoadCompleted(obj)
+{	
+	Button1_OnClick(obj);
+}]]></Script>
+</Window>

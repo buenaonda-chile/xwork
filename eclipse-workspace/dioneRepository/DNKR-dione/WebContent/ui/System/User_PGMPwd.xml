@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="MRP_PasswordPGM별사용자권한조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_User_PGMPwd"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_User_PGMAuth_tree">
+				<Contents>
+					<colinfo id="lev" size="256" summ="default" type="STRING"/>
+					<colinfo id="menu_name" size="256" summ="default" type="STRING"/>
+					<colinfo id="menu_id" size="256" summ="default" type="STRING"/>
+					<colinfo id="menu_order" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Gubun">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>m1</code>
+						<code_name>영업관리</code_name>
+					</record>
+					<record>
+						<code>m2</code>
+						<code_name>생산관리</code_name>
+					</record>
+					<record>
+						<code>m3</code>
+						<code_name>자재관리</code_name>
+					</record>
+					<record>
+						<code>m4</code>
+						<code_name>품질관리</code_name>
+					</record>
+					<record>
+						<code>m5</code>
+						<code_name>인사급여</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="3" Top="31" Width="1060"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_User_PGMPwd" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="552" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1048" TabOrder="4" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="55"/>
+						<col width="184"/>
+						<col width="184"/>
+						<col width="97"/>
+						<col width="97"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="PGM명"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="부서명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="사용자명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="사용자&#32;ID"/>
+					</head>
+					<body>
+						<cell align="left" col="0" display="normal" expr="currow+1"/>
+						<cell align="left" col="1" colid="menu_name" display="normal"/>
+						<cell align="left" col="2" colid="DPCONM" display="normal"/>
+						<cell align="center" col="3" colid="KORNM" display="normal"/>
+						<cell align="center" col="4" colid="USER_ID" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="121" Style="static" TabOrder="5" Top="34" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="4" TabOrder="6" Text="사&#32;&#32;업&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="125" OnChanged="common_OnChanged" TabOrder="7" Top="37" Width="130"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="385" Style="static" TabOrder="8" Top="34" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="268" TabOrder="9" Text="MRP&#32;&#32;구분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="code" DataColumn="code_name" Height="19" Id="ComboBoxGubun" InnerDataset="ds_Gubun" Left="389" OnChanged="common_OnChanged" OnKeyDown="ComboBoxGubun_OnKeyDown" TabOrder="10" Top="37" Width="130"></Combo>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : User_PGMPwd.xml
+ * ● PROGRAM DESCRIPTION  : MRP_PGM별사용자권한조회 조회
+ * ● DATE WRITTEN         : 2011.08.17
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib3;
+var Lib2;
+var company;
+var comps;
+/*
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var Lib1 = 'PSRESLIB';
+var Lib2 = 'PSCDBLIB';
+var company = 'PS';
+var comps = 'C1';
+*/
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 
+	MainGrid.UserData = MainGrid.Height;
+	ComboBoxGubun.Index = 0;
+}
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		//sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Index=0;
+}
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053"); //상세화면 메시지
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.RowHeight = G_ds_design.GetColumn(0,"RowHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	
+	//displayDiv.Width = G_ds_design.GetColumn(0,"Width");
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getUser_PGMPwd(){
+	if(ComboBoxPlant.Value = "R1"){
+		alert("[알림]DIKR사업부는 조회할 수 없습니다.");
+		return;
+	}
+	switch(ComboBoxPlant.Value){
+		case "E1" : lib2="PSEDBLIB"; lib3="PSEDBLIB"; break;
+		case "C1" : lib2="PSCDBLIB"; lib3="PSCDBLIB"; break;
+		case "H1" : lib2="PSCDBLIB"; lib3="PSHDBLIB"; break;
+		case "S1" : lib2="PSCDBLIB"; lib3="PSSDBLIB"; break;
+		default : alert(setPopMessage("1016")); setMessage("1016");
+	}
+	var sabunlength = iif(ComboBoxPlant.Value == "E1","6","7");
+	company = iif(ComboBoxPlant.Value == "E1","PE","PS");
+	http.Sync = true;
+	var sKind		= "getUser_PGMPwd";
+	var sMethodName = "service::user/selectUser_PGMPwd.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_User_PGMPwd=ds_User_PGMPwd";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB3=" + quote(Lib3);
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " SLEN=" + quote(sabunlength);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += " COMP=" + quote(company);
+	sArgument += " GUB=" + quote(ComboBoxGubun.Value);
+	//var str = dialog("Common::PGMLOAD_MST.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else{
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "MRP_PasswordPGM별사용자권한조회";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|MRP_PasswordPGM별사용자권한조회";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_User_PGMPwd_tree.ClearData();
+	ds_User_PGMPwd_dept.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getUser_PGMPwd();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_User_PGMPwd.ClearData();
+}
+
+function ComboBoxGubun_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

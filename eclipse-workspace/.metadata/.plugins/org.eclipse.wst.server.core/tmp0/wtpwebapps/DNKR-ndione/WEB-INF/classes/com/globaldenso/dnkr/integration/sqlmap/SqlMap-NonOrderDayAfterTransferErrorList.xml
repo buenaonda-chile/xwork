@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.NonOrderDayAfterTransferErrorListDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="NonOrderDayAfterTransferErrorList" type="NonOrderDayAfterTransferErrorListDomain">
+   		<result property="comps" column="COMPS" />
+   		<result property="cusnm" column="CUSNM" />
+   		<result property="pyvnd" column="PYVND" />
+   		<result property="shpto" column="SHPTO" />
+   		<result property="pspno" column="PSPNO" />
+   		<result property="itdsc" column="ITDSC" />   		
+        <result property="plndt" column="PLNDT" />
+        <result property="basqy" column="BASQY" />
+        <result property="errnm" column="ERRNM" />
+        
+        <result property="typcd" column="TYPCD" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="NonOrderDayAfterTransferErrorList" parameterType="NonOrderDayAfterTransferErrorListDomain">
+		SELECT 
+			TRIM(B.CUSNM) AS CUSNM, A.PYVND, A.SHPTO, A.PSPNO, 
+			TRIM(C.ITDSC) AS ITDSC, A.PLNDT, A.BASQY, A.ERRNM
+		FROM(
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD1='1' THEN 'SHIPPING DOCUMENT MA ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD1='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD2='1' THEN 'SUBSTITUTION SHIPPING DOCUMENT MA ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD2='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD3='1' THEN 'PART NO. CROSS REFERENCE MA ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD3='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD4='1' THEN 'ITEM MASTER "A" ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD4='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD5='1' THEN 'SHIP TO MA ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD5='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD6='1' THEN 'EXPORT IMPORT SYSTEM ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD6='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD7='1' THEN 'SUPPLIED GODDS MA ERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD7='1'
+			UNION ALL
+			SELECT 
+				A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY,
+				CASE WHEN A.ERCD8='1' THEN 'INVENTORY M AERROR' ELSE '' END ERRNM
+			FROM PSZDBLIB.SPD158PF A
+			WHERE
+				A.ERCD8='1' ) A
+			LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+			LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PSPNO=C.ITNBR
+		WHERE
+		      'SqlMap-NonOrderDayAfterTransferErrorList.searchByCondition' = 'SqlMap-NonOrderDayAfterTransferErrorList.searchByCondition'
+		<if test="pyvnd != null and pyvnd !='' ">
+		  AND A.PYVND = #{pyvnd}
+		</if>	
+	  	<if test="plndt != null and plndt !='' ">
+	  	  AND A.PLNDT <![CDATA[>=]]> #{plndt}
+	  	</if> 
+		ORDER BY A.PYVND, A.SHPTO, A.PSPNO
+    </select>
+
+</mapper>

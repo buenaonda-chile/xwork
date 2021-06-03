@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="부품재고보유현황" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BHZE209Q">
+				<Contents>
+					<colinfo id="VNDNR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITNBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="SUPCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="JAGQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="STDAN" size="256" summ="default" type="STRING"/>
+					<colinfo id="JAGAM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITCLS" size="256" summ="default" type="STRING"/>
+					<colinfo id="UNMSR" size="256" summ="default" type="STRING"/>
+					<colinfo id="VNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLANN" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEQ" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="MOHTQ1" size="256" summ="default" type="STRING"/>
+					<colinfo id="MOHTQ2" size="256" summ="default" type="STRING"/>
+					<colinfo id="MOHTQ3" size="256" summ="default" type="STRING"/>
+					<colinfo id="CHLQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="SOYOM0" size="256" summ="default" type="STRING"/>
+					<colinfo id="BUJOK" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GUBUN">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODENAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE>0</CODE>
+						<CODENAME>0:전체</CODENAME>
+					</record>
+					<record>
+						<CODE>3</CODE>
+						<CODENAME>3:DCJ&#32;A&#32;PARTS</CODENAME>
+					</record>
+					<record>
+						<CODE>4</CODE>
+						<CODENAME>4:NON&#32;DCJ&#32;A&#32;PARTS</CODENAME>
+					</record>
+					<record>
+						<CODE>5</CODE>
+						<CODENAME>5:DCJ&#32;PARTS</CODENAME>
+					</record>
+					<record>
+						<CODE>6</CODE>
+						<CODENAME>6:NON&#32;DCJ&#32;PARTS</CODENAME>
+					</record>
+					<record>
+						<CODE>7</CODE>
+						<CODENAME>7:DCJ&#32;RAW&#32;MATERIAL</CODENAME>
+					</record>
+					<record>
+						<CODE>8</CODE>
+						<CODENAME>8:NON&#32;DCJ&#32;RAW&#32;MATERIAL</CODENAME>
+					</record>
+					<record>
+						<CODE>9</CODE>
+						<CODENAME>9:SUBSIDIARY&#32;MATERIAL</CODENAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SC008PR"></Dataset>
+		</Datasets>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_BHZE209Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="620" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" Font="Default,9" HeadBorder="Flat" HeadHeight="22" Height="524" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1048" RowHeight="20" TabOrder="1" TabStop="FALSE" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="45"/>
+						<col fix="left" width="100"/>
+						<col width="206"/>
+						<col width="46"/>
+						<col width="43"/>
+						<col width="43"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="82"/>
+						<col width="64"/>
+						<col width="95"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="90"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="순위"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품&#32;번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="품&#32;명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="단위"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="형태"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="분류"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="보세재고"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="사내재고"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="사급재고"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="합계재고"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="표준단가"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="조달"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="합계재고금액"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" text="출고량"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" text="M소요량"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" text="과부족"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" display="text" text="M1소요량"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="number" expr="currow+1"/>
+						<cell align="left" col="1" colid="ITNBR" display="normal"/>
+						<cell align="left" col="2" colid="ITDSC" display="normal"/>
+						<cell align="center" col="3" colid="UNMSR" display="normal"/>
+						<cell align="center" col="4" colid="ITTYP" display="normal"/>
+						<cell align="center" col="5" colid="ITCLS" display="normal"/>
+						<cell align="right" col="6" colid="BOSQY" display="number" Mask="#,##0"/>
+						<cell align="right" col="7" colid="MOHTQ1" display="number" Mask="#,##0"/>
+						<cell align="right" col="8" colid="MOHTQ2" display="number" Mask="#,##0"/>
+						<cell align="right" col="9" colid="MOHTQ_TOT" display="number" Mask="#,##0"/>
+						<cell align="right" col="10" colid="PRICE" display="number" Mask="#,##0"/>
+						<cell align="left" col="11" display="normal" expr='DECODE(SUPGU,&quot;01&quot;,&quot;현조국내&quot;,&quot;02&quot;,&quot;현조수입&quot;,&quot;03&quot;,&quot;일조수입&quot;,&quot;&quot;)'/>
+						<cell align="right" col="12" colid="AMT" display="number" Mask="#,##0"/>
+						<cell align="right" col="13" colid="CHLQY" display="number" Mask="#,##0"/>
+						<cell align="right" col="14" colid="M00QY" display="number" Mask="#,##0"/>
+						<cell align="right" col="15" colid="BUJQY" display="number" Mask="#,##0"/>
+						<cell align="right" col="16" colid="M10QY" display="number" Mask="#,##0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="64" Id="searchBar" TabOrder="1" Top="32" Width="1048"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1008" Right="1032" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1040" Right="1064" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="1" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="1" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="232" TabOrder="8" Text="순&#32;&#32;위&#32;&#32;수" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="351" Style="static" TabOrder="7" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="19" Id="cb_searchCodeName1" InnerDataset="ds_ComCode_PLNT" Left="124" TabOrder="10" Top="38" Width="90"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static8" Left="4" TabOrder="10" Text="담&#32;&#32;&#32;당&#32;&#32;&#32;자" Top="67" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="120" Style="static" TabOrder="11" Top="67" VAlign="Middle" Width="244"></Static>
+		<Edit Height="20" Id="ed_PLANN1" ImeMode="english" Left="124" MaxLength="5" Number="TRUE" OnChanged="common_OnChanged" TabOrder="12" Top="70" UpperOnly="TRUE" Width="56"></Edit>
+		<Static Height="13" Id="Static10" Left="183" TabOrder="14" Text="~" Top="74" Width="13"></Static>
+		<Edit Height="20" Id="ed_PLANN2" ImeMode="english" Left="197" MaxLength="5" Number="TRUE" OnKeyDown="ed_PLANN2_OnKeyDown" TabOrder="13" Top="70" UpperOnly="TRUE" Width="56"></Edit>
+		<Edit Align="RIGHT" AutoSelect="TRUE" Height="20" Id="ed_SEQ" Left="354" MaxLength="3" Number="TRUE" OnChanged="common_OnChanged" TabOrder="15" Text="100" Top="38" UpperOnly="TRUE" Width="90"></Edit>
+		<Static Height="20" Id="ID03061" Left="256" TabOrder="16" Text="(Enter&#32;KEY&#32;Press)" Top="70" VAlign="Middle" Width="104"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="464" TabOrder="19" Text="구&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;분" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="583" Style="static" TabOrder="18" Top="35" VAlign="Middle" Width="182"></Static>
+		<Combo CodeColumn="CODE" DataColumn="CODENAME" Editable="TRUE" Height="18" Id="cmb_CLSGU" INDEX="0" InnerDataset="ds_GUBUN" Left="587" OnChanged="common_OnChanged" Search="FILTEREDCASE" TabOrder="17" Top="38" Width="176"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : LEE S.K
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : BHZE209Q.xml
+ * ● PROGRAM DESCRIPTION  : 부품재고보유현황
+ * ● DATE WRITTEN         : 2013.12.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today();
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	//getMst040();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	
+	ed_PLANN1.SetFocus();
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통디자인 설정
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	//MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+}
+
+/********************************************************************** 
+ * 내용설명 : 사업부 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	cb_searchCodeName1.Value = comps;
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getBZZE401Q(){
+	if(length(trim(ed_SEQ.Value)) < 1){
+		alert(setPopMessage("2033"));  //[알림] 구분 코드를 입력해 주세요.
+		setMessage("2033");	
+		ed_SEQ.SetFocus();
+		return;
+	}
+	var p_PLA1,p_PLA2;
+	p_PLA1 = iif (length(trim(ed_PLANN1.Text)) == 0, '0', trim(ed_PLANN1.Text));
+	p_PLA2 = iif (length(trim(ed_PLANN2.Text)) == 0, '99999', trim(ed_PLANN2.Text));
+	
+
+	//사내창고
+	var sKind		= "getSC008PR";						
+	var sMethodName = "service::pscomlib/selectSC008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SC008PR=ds_SC008PR";
+	var sArgument   = "";
+		sArgument   += " DTANO='HAC'";      //HAC:사내창고        HAP:사급           HAR:중간창고           HAB:창고가능
+		sArgument   += " LIB1=" + quote(Lib1);	
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+	var arrHouseHACT = trim(ds_SC008PR.GetColumn(0,"CTLDT"));
+	var arrHouseHAC = "('";
+	for (var i=0 ; toNumber(length(arrHouseHACT)) > i ; i++){
+		if (i == length(arrHouseHACT)-1){
+			arrHouseHAC = arrHouseHAC+substr(arrHouseHACT,i,1) + "')";
+		}else{
+			arrHouseHAC = arrHouseHAC+substr(arrHouseHACT,i,1) + "','";
+		}
+	}
+	//사급창고
+	var sKind		= "getSC008PR";						
+	var sMethodName = "service::pscomlib/selectSC008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SC008PR=ds_SC008PR";
+	var sArgument   = "";
+		sArgument   += " DTANO='HAP'";      //HAC:사내창고        HAP:사급           HAR:중간창고           HAB:창고가능
+		sArgument   += " LIB1=" + quote(Lib1);	
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+	var arrHouseHAPT = trim(ds_SC008PR.GetColumn(0,"CTLDT"));
+	var arrHouseHAP = "('";
+	for (var i=0 ; toNumber(length(arrHouseHAPT)) > i ; i++){
+		if (i == length(arrHouseHAPT)-1){
+			arrHouseHAP = arrHouseHAP+substr(arrHouseHAPT,i,1) + "')";
+		}else{
+			arrHouseHAP = arrHouseHAP+substr(arrHouseHAPT,i,1) + "','";
+		}
+	}
+	
+	var sKind		= "getBHZE209Q";						
+	var sMethodName = "service::psimmlib/selectBHZE209Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BHZE209Q=ds_BHZE209Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@SEQNUM=" + quote(ed_SEQ.Value);
+	sArgument += "@PLANN1=" + quote(p_PLA1);
+	sArgument += "@PLANN2=" + quote(p_PLA1);
+	sArgument += "@HOUSE_HAC=" + quote(arrHouseHAC);  //사내창고
+	sArgument += "@HOUSE_HAP=" + quote(arrHouseHAP);  //사급창고
+	sArgument += "@CURYM=" + quote(substr(nowDate,0,6)); //현재년월
+	sArgument += "@D30PR=" + quote("F#D30PR");
+	sArgument += "@GUB=" + quote(cmb_CLSGU.Value);
+	var str = dialog("Common::PGMLOAD_IMM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "부품재고보유현황";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|부품재고보유현황";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getBZZE401Q"){
+		// 조회건수가 없을경우
+		if(ds_BZZE401Q.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell <= 8) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+		getBZZE401Q();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_BHZE209Q.ClearData();
+}
+
+function ed_PLANN2_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

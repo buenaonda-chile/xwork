@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PssalPCarOutDao">
+
+	<resultMap id="PssalPCarOut" type="PssalPCarOutDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="pyvnd2" column="PYVND2" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="carcd" column="CARCD" />
+        <result property="carnm" column="CARNM" />
+        <result property="jpyym" column="JPYYM" />
+        <result property="jpyym2" column="JPYYM2" />
+        <result property="mon4" column="MON4" />
+        <result property="mon5" column="MON5" />
+        <result property="mon6" column="MON6" />
+        <result property="mon7" column="MON7" />
+        <result property="mon8" column="MON8" />
+        <result property="mon9" column="MON9" />
+        <result property="mon10" column="MON10" />
+        <result property="mon11" column="MON11" />
+        <result property="mon12" column="MON12" />
+        <result property="mon1" column="MON1" />
+        <result property="mon2" column="MON2" />
+        <result property="mon3" column="MON3" />
+        <result property="pcost4" column="PCOST4" />
+        <result property="pcost5" column="PCOST5" />
+        <result property="pcost6" column="PCOST6" />
+        <result property="pcost7" column="PCOST7" />
+        <result property="pcost8" column="PCOST8" />
+        <result property="pcost9" column="PCOST9" />
+        <result property="pcost10" column="PCOST10" />
+        <result property="pcost11" column="PCOST11" />
+        <result property="pcost12" column="PCOST12" />
+        <result property="pcost1" column="PCOST1" />
+        <result property="pcost2" column="PCOST2" />
+        <result property="pcost3" column="PCOST3" />
+        <result property="jpsdt" column="JPSDT" />
+	</resultMap>
+
+	<select id="selectSMDE122Q_gridVal_Obj" resultMap="PssalPCarOut" parameterType="PssalPCarOutDomain">
+		SELECT 
+				  A.COMPS
+				, TRIM(A.PYVND) AS  PYVND
+				, TRIM(A.CUSNM) AS  CUSNM
+				, A.CARCD
+				, TRIM(A.CARNM) AS CARNM
+				, SUM(case when A.JPYYM=${jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+				, SUM(case when A.JPYYM=${jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+				, SUM(case when A.JPYYM=${jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+				, SUM(case when A.JPYYM=${jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+				, SUM(case when A.JPYYM=${jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+				, SUM(case when A.JPYYM=${jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+				, SUM(case when A.JPYYM=${jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+				, SUM(case when A.JPYYM=${jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+				, SUM(case when A.JPYYM=${jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+				, SUM(case when A.JPYYM=${jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon1
+				, SUM(case when A.JPYYM=${jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon2
+				, SUM(case when A.JPYYM=${jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon3
+				, SUM(case when A.JPYYM=${jpyym} ||'04' then JPSAM else 0 end) as pcost4
+				, SUM(case when A.JPYYM=${jpyym} ||'05' then JPSAM else 0 end) as pcost5
+				, SUM(case when A.JPYYM=${jpyym} ||'06' then JPSAM else 0 end) as pcost6
+				, SUM(case when A.JPYYM=${jpyym} ||'07' then JPSAM else 0 end) as pcost7
+				, SUM(case when A.JPYYM=${jpyym} ||'08' then JPSAM else 0 end) as pcost8
+				, SUM(case when A.JPYYM=${jpyym} ||'09' then JPSAM else 0 end) as pcost9
+				, SUM(case when A.JPYYM=${jpyym} ||'10' then JPSAM else 0 end) as pcost10
+				, SUM(case when A.JPYYM=${jpyym} ||'11' then JPSAM else 0 end) as pcost11
+				, SUM(case when A.JPYYM=${jpyym} ||'12' then JPSAM else 0 end) as pcost12
+				, SUM(case when A.JPYYM=${jpyym2} ||'01' then JPSAM else 0 end) as pcost1
+				, SUM(case when A.JPYYM=${jpyym2} ||'02' then JPSAM else 0 end) as pcost2
+				, SUM(case when A.JPYYM=${jpyym2} ||'03' then JPSAM else 0 end) as pcost3
+				
+		FROM(
+				SELECT 
+						  A.COMPS
+						, A.PYVND
+						, B.CUSNM
+						, A.CARCD
+						, C.MSTRM AS CARNM
+						, A.JPYYM
+						, G.QYEXT
+						, CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+						, CASE WHEN G.QYEXT IN ('M','Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+						
+						<!-- 
+						max(case when A.JPYYM=$JPYYM$ ||'04' then INT((JPSAM+500)/1000) else 0 end) as pcost4,
+						max(case when A.JPYYM=$JPYYM$ ||'05' then INT((JPSAM+500)/1000) else 0 end) as pcost5,
+						max(case when A.JPYYM=$JPYYM$ ||'06' then INT((JPSAM+500)/1000) else 0 end) as pcost6,
+						max(case when A.JPYYM=$JPYYM$ ||'07' then INT((JPSAM+500)/1000) else 0 end) as pcost7,
+						max(case when A.JPYYM=$JPYYM$ ||'08' then INT((JPSAM+500)/1000) else 0 end) as pcost8,
+						max(case when A.JPYYM=$JPYYM$ ||'09' then INT((JPSAM+500)/1000) else 0 end) as pcost9,
+						max(case when A.JPYYM=$JPYYM$ ||'10' then INT((JPSAM+500)/1000) else 0 end) as pcost10,
+						max(case when A.JPYYM=$JPYYM$ ||'11' then INT((JPSAM+500)/1000) else 0 end) as pcost11,
+						max(case when A.JPYYM=$JPYYM$ ||'12' then INT((JPSAM+500)/1000) else 0 end) as pcost12,
+						max(case when A.JPYYM=$JPYYM2$ ||'01' then INT((JPSAM+500)/1000) else 0 end) as pcost01,
+						max(case when A.JPYYM=$JPYYM2$ ||'02' then INT((JPSAM+500)/1000) else 0 end) as pcost02,
+						max(case when A.JPYYM=$JPYYM2$ ||'03' then INT((JPSAM+500)/1000) else 0 end) as pcost03
+						
+						CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY,
+						CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSAM) ELSE 0 END AS JPSAM
+						CASE WHEN G.QYEXT IN ('M','Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+						 -->
+					
+				FROM
+						${lib2}.SMD114LF A
+						LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+						LEFT OUTER JOIN (SELECT MSTRM,MSTCD FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+						LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+				WHERE
+						A.COMPS = #{comps}
+						AND A.JPYYM <![CDATA[>=]]> ${jpyym} ||'04'
+						AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+						AND A.PYVND BETWEEN #{pyvnd} AND #{pyvnd2}
+				GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM, A.CARCD, A.CARNM
+					
+			UNION ALL
+			
+			SELECT 
+					A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					, '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, 'C/M(금액)' AS CARNM
+					, SUM(case when A.JPYYM= ${jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM= ${jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon3
+					, SUM(case when A.JPYYM=${jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=${jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then JPSAM else 0 end) as pcost10
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then JPSAM else 0 end) as pcost1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then JPSAM else 0 end) as pcost2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then JPSAM else 0 end) as pcost3
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+							, A.PYVND
+							, B.CUSNM
+							, A.CARCD
+							, C.MSTRM AS CARNM
+							, A.JPYYM
+							, G.QYEXT
+							, CASE WHEN G.QYEXT IN ('Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+							, CASE WHEN G.QYEXT IN ('Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+							
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT MSTRM,MSTCD FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+								A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> ${jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			
+			UNION ALL
+			
+			SELECT 
+					  A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					, '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, 'M/M(금액)' AS CARNM
+					, SUM(case when A.JPYYM=${jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM=${jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon3
+					, SUM(case when A.JPYYM=${jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=${jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then JPSAM else 0 end) as pcost10
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then JPSAM else 0 end) as pcost1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then JPSAM else 0 end) as pcost2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then JPSAM else 0 end) as pcost3
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+							, A.PYVND
+							, B.CUSNM
+							, A.CARCD
+							, C.MSTRM AS CARNM
+							, A.JPYYM
+							, G.QYEXT
+							, CASE WHEN G.QYEXT IN ('M')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+							, CASE WHEN G.QYEXT IN ('M') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+					
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT MSTRM,MSTCD FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+							A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> ${jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			
+			UNION ALL
+			
+			SELECT 
+					  A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					,  '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, '전체(금액)' AS CARNM
+					, SUM(case when A.JPYYM=${jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM=${jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon3
+					, SUM(case when A.JPYYM=${jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=${jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=${jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=${jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=${jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=${jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=${jpyym} ||'10' then JPSAM else 0 end) as pcost10 
+					, SUM(case when A.JPYYM=${jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=${jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=${jpyym2} ||'01' then JPSAM else 0 end) as pcost1
+					, SUM(case when A.JPYYM=${jpyym2} ||'02' then JPSAM else 0 end) as pcost2
+					, SUM(case when A.JPYYM=${jpyym2} ||'03' then JPSAM else 0 end) as pcost3
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+						    , A.PYVND
+						    , B.CUSNM
+						    , A.CARCD
+						    , C.MSTRM AS CARNM
+						    , A.JPYYM
+						    , G.QYEXT
+						    , SUM(A.JPSQY) AS JPSQY, INT((SUM(A.JPSAM)+500)/1000) AS JPSAM
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT MSTRM,MSTCD FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+							A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> ${jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			ORDER BY PYVND ASC, CUSNM DESC
+	</select>
+<!-- 	<select id="selectSMDE122Q_gridVal_Obj" resultMap="PssalPCarOut" parameterType="PssalPCarOutDomain">
+		SELECT 
+				  A.COMPS
+				, TRIM(A.PYVND) AS  PYVND
+				, TRIM(A.CUSNM) AS  CUSNM
+				, A.CARCD, TRIM(A.CARNM) AS CARNM
+				, SUM(case when A.JPYYM=#{jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+				, SUM(case when A.JPYYM=#{jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+				, SUM(case when A.JPYYM=#{jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+				, SUM(case when A.JPYYM=#{jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+				, SUM(case when A.JPYYM=#{jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+				, SUM(case when A.JPYYM=#{jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+				, SUM(case when A.JPYYM=#{jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+				, SUM(case when A.JPYYM=#{jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+				, SUM(case when A.JPYYM=#{jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+				, SUM(case when A.JPYYM=#{jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon01
+				, SUM(case when A.JPYYM=#{jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon02
+				, SUM(case when A.JPYYM=#{jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon03
+				, SUM(case when A.JPYYM=#{jpyym} ||'04' then JPSAM else 0 end) as pcost4
+				, SUM(case when A.JPYYM=#{jpyym} ||'05' then JPSAM else 0 end) as pcost5
+				, SUM(case when A.JPYYM=#{jpyym} ||'06' then JPSAM else 0 end) as pcost6
+				, SUM(case when A.JPYYM=#{jpyym} ||'07' then JPSAM else 0 end) as pcost7
+				, SUM(case when A.JPYYM=#{jpyym} ||'08' then JPSAM else 0 end) as pcost8
+				, SUM(case when A.JPYYM=#{jpyym} ||'09' then JPSAM else 0 end) as pcost9
+				, SUM(case when A.JPYYM=#{jpyym} ||'10' then JPSAM else 0 end) as pcost10
+				, SUM(case when A.JPYYM=#{jpyym} ||'11' then JPSAM else 0 end) as pcost11
+				, SUM(case when A.JPYYM=#{jpyym} ||'12' then JPSAM else 0 end) as pcost12
+				, SUM(case when A.JPYYM=#{jpyym2} ||'01' then JPSAM else 0 end) as pcost01
+				, SUM(case when A.JPYYM=#{jpyym2} ||'02' then JPSAM else 0 end) as pcost02
+				, SUM(case when A.JPYYM=#{jpyym2} ||'03' then JPSAM else 0 end) as pcost03
+				
+		FROM(
+				SELECT 
+						  A.COMPS
+						, A.PYVND
+						, B.CUSNM
+						, A.CARCD
+						, C.MSTRM AS CARNM
+						, A.JPYYM
+						, G.QYEXT
+						, CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+						, CASE WHEN G.QYEXT IN ('M','Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+						
+						
+						max(case when A.JPYYM=$JPYYM$ ||'04' then INT((JPSAM+500)/1000) else 0 end) as pcost4,
+						max(case when A.JPYYM=$JPYYM$ ||'05' then INT((JPSAM+500)/1000) else 0 end) as pcost5,
+						max(case when A.JPYYM=$JPYYM$ ||'06' then INT((JPSAM+500)/1000) else 0 end) as pcost6,
+						max(case when A.JPYYM=$JPYYM$ ||'07' then INT((JPSAM+500)/1000) else 0 end) as pcost7,
+						max(case when A.JPYYM=$JPYYM$ ||'08' then INT((JPSAM+500)/1000) else 0 end) as pcost8,
+						max(case when A.JPYYM=$JPYYM$ ||'09' then INT((JPSAM+500)/1000) else 0 end) as pcost9,
+						max(case when A.JPYYM=$JPYYM$ ||'10' then INT((JPSAM+500)/1000) else 0 end) as pcost10,
+						max(case when A.JPYYM=$JPYYM$ ||'11' then INT((JPSAM+500)/1000) else 0 end) as pcost11,
+						max(case when A.JPYYM=$JPYYM$ ||'12' then INT((JPSAM+500)/1000) else 0 end) as pcost12,
+						max(case when A.JPYYM=$JPYYM2$ ||'01' then INT((JPSAM+500)/1000) else 0 end) as pcost01,
+						max(case when A.JPYYM=$JPYYM2$ ||'02' then INT((JPSAM+500)/1000) else 0 end) as pcost02,
+						max(case when A.JPYYM=$JPYYM2$ ||'03' then INT((JPSAM+500)/1000) else 0 end) as pcost03
+						
+						CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY,
+						CASE WHEN G.QYEXT IN ('M','Y')THEN SUM(A.JPSAM) ELSE 0 END AS JPSAM
+						CASE WHEN G.QYEXT IN ('M','Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+						
+					
+				FROM
+						${lib2}.SMD114LF A
+						LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+						LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+						LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+				WHERE
+						A.COMPS = #{comps}
+						AND A.JPYYM <![CDATA[>=]]> #{jpyym} ||'04'
+						AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+						AND A.PYVND BETWEEN #{pyvnd1} AND #{pyvnd2}
+				GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM, A.CARCD, A.CARNM
+					
+			UNION ALL
+			
+			SELECT 
+					A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					, '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, 'C/M(금액)' AS CARNM
+					, SUM(case when A.JPYYM= #{jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM= #{jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon03
+					, SUM(case when A.JPYYM=#{jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=#{jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then JPSAM else 0 end) as pcost10
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then JPSAM else 0 end) as pcost01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then JPSAM else 0 end) as pcost02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then JPSAM else 0 end) as pcost03
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+							, A.PYVND
+							, B.CUSNM
+							, A.CARCD
+							, C.MSTRM AS CARNM
+							, A.JPYYM
+							, G.QYEXT
+							, CASE WHEN G.QYEXT IN ('Y')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+							, CASE WHEN G.QYEXT IN ('Y') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+							
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+								A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> #{jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd1} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			
+			UNION ALL
+			
+			SELECT 
+					  A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					, '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, 'M/M(금액)' AS CARNM
+					, SUM(case when A.JPYYM=#{jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM=#{jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon03
+					, SUM(case when A.JPYYM=#{jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=#{jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then JPSAM else 0 end) as pcost10
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then JPSAM else 0 end) as pcost01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then JPSAM else 0 end) as pcost02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then JPSAM else 0 end) as pcost03
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+							, A.PYVND
+							, B.CUSNM
+							, A.CARCD
+							, C.MSTRM AS CARNM
+							, A.JPYYM
+							, G.QYEXT
+							, CASE WHEN G.QYEXT IN ('M')THEN SUM(A.JPSQY) ELSE 0 END AS JPSQY
+							, CASE WHEN G.QYEXT IN ('M') THEN INT((SUM(A.JPSAM)+500)/1000) ELSE 0 END AS JPSAM
+					
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+							A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> #{jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd1} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			
+			UNION ALL
+			
+			SELECT 
+					  A.COMPS
+					, TRIM(A.PYVND) AS  PYVND
+					,  '업체별합계' AS  CUSNM
+					, '수량' AS CARCD, '전체(금액)' AS CARNM
+					, SUM(case when A.JPYYM=#{jpyym} ||'04' then COALESCE(JPSQY,0) else 0 end) as mon4
+					, SUM(case when A.JPYYM=#{jpyym} ||'05' then COALESCE(JPSQY,0) else 0 end) as mon5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then COALESCE(JPSQY,0) else 0 end) as mon6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then COALESCE(JPSQY,0) else 0 end) as mon7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then COALESCE(JPSQY,0) else 0 end) as mon8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then COALESCE(JPSQY,0) else 0 end) as mon9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then COALESCE(JPSQY,0) else 0 end) as mon10
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then COALESCE(JPSQY,0) else 0 end) as mon11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then COALESCE(JPSQY,0) else 0 end) as mon12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then COALESCE(JPSQY,0) else 0 end) as mon01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then COALESCE(JPSQY,0) else 0 end) as mon02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then COALESCE(JPSQY,0) else 0 end) as mon03
+					, SUM(case when A.JPYYM=#{jpyym} ||'04' then JPSAM else 0 end) as pcost4
+					, SUM(case when A.JPYYM=#{jpyym} ||'05' then JPSAM else 0 end) as pcost5
+					, SUM(case when A.JPYYM=#{jpyym} ||'06' then JPSAM else 0 end) as pcost6
+					, SUM(case when A.JPYYM=#{jpyym} ||'07' then JPSAM else 0 end) as pcost7
+					, SUM(case when A.JPYYM=#{jpyym} ||'08' then JPSAM else 0 end) as pcost8
+					, SUM(case when A.JPYYM=#{jpyym} ||'09' then JPSAM else 0 end) as pcost9
+					, SUM(case when A.JPYYM=#{jpyym} ||'10' then JPSAM else 0 end) as pcost10 
+					, SUM(case when A.JPYYM=#{jpyym} ||'11' then JPSAM else 0 end) as pcost11
+					, SUM(case when A.JPYYM=#{jpyym} ||'12' then JPSAM else 0 end) as pcost12
+					, SUM(case when A.JPYYM=#{jpyym2} ||'01' then JPSAM else 0 end) as pcost01
+					, SUM(case when A.JPYYM=#{jpyym2} ||'02' then JPSAM else 0 end) as pcost02
+					, SUM(case when A.JPYYM=#{jpyym2} ||'03' then JPSAM else 0 end) as pcost03
+			
+			FROM(
+					SELECT 
+							  A.COMPS
+						    , A.PYVND
+						    , B.CUSNM
+						    , A.CARCD
+						    , C.MSTRM AS CARNM
+						    , A.JPYYM
+						    , G.QYEXT
+						    , SUM(A.JPSQY) AS JPSQY, INT((SUM(A.JPSAM)+500)/1000) AS JPSAM
+					FROM
+							${lib2}.SMD114LF A
+							LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+							LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF WHERE COMPS = #{comps} AND GRPCD='CAR') C ON A.CARCD=C.MSTCD
+							LEFT OUTER JOIN ${lib2}.MST100PF G ON A.COMPS=G.COMPS AND A.PSPNO=G.PRTNO
+					WHERE
+							A.COMPS = #{comps}
+							AND A.JPYYM <![CDATA[>=]]> #{jpyym} ||'04'
+							AND A.JPSDT <![CDATA[<=]]> #{jpsdt}
+							AND A.PYVND BETWEEN #{pyvnd1} AND #{pyvnd2}
+					GROUP BY A.COMPS, A.PYVND, B.CUSNM, A.CARCD, C.MSTRM,  A.JPYYM, G.QYEXT
+			) A
+			GROUP BY A.COMPS, A.PYVND, A.CUSNM
+			ORDER BY PYVND ASC, CUSNM DESC
+	</select> -->
+
+</mapper>

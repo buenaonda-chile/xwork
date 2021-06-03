@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="552" Id="ogm200_pop" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="설비선택" TooltipFont="Default,0" Top="8" Ver="1.0" Width="376" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm020ALL"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_pop"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_pop1">
+				<Contents>
+					<colinfo id="prtcd" size="256" summ="default" type="STRING"/>
+					<colinfo id="prtnm" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_pop2">
+				<Contents>
+					<colinfo id="lincd" size="256" summ="default" type="STRING"/>
+					<colinfo id="linnm" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="378"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="2" Top="8" Width="360"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="312" Right="336" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="344" Right="368" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="65" Id="searchBar" TabOrder="3" Top="31" Width="376"></Static>
+		<Combo CodeColumn="prtcd" DataColumn="prtnm2" Height="18" Id="cmbprtcd" InnerDataset="ds_ogm200_pop1" Left="96" OnChanged="common_OnChanged" TabOrder="2" Top="36" Width="120"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="1" TabOrder="5" Text="파&#32;트&#32;코&#32;드" Top="36" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="lincd" DataColumn="linnm2" Height="18" Id="cmblincd" InnerDataset="ds_ogm200_pop2" Left="96" OnChanged="common_OnChanged2" TabOrder="3" Top="64" Width="120"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static0" TabOrder="7" Text="라&#32;인&#32;코&#32;드" Top="64" VAlign="Middle" Width="92"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ogm200_pop" BKColor="white" BkColor2="white" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="552" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="lightgrey" HeadBorder="Flat" HeadHeight="22" Height="456" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnCellDBLClick="cell_doubleClick" Right="376" TabOrder="5" TabStop="FALSE" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="376">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="설비번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="설비명"/>
+					</head>
+					<body>
+						<cell align="left" bkcolor2="LIGHT3D" col="0" colid="mshno" display="normal"/>
+						<cell align="left" bkcolor2="LIGHT3D" col="1" colid="mshnm" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="26" Id="Button0" ImageID="closeBtn" Left="296" OnClick="Button0_OnClick" TabOrder="4" Text="닫기" Top="40" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm200_popxml
+ * ● PROGRAM DESCRIPTION  : 작업개시등록 설비조회
+ * ● DATE WRITTEN         : 2011.08.25
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+var prtcd;
+//var prtnm;
+
+function on_LoadCompleted(obj){
+	getogm200_pop1();
+	
+}
+/********************************************************************** 
+ * 내용설명 : 파트코드 조회
+ **********************************************************************/ 
+function getogm200_pop1(){
+	
+	var sKind		= "getOgm200_pop1";						
+	var sMethodName = "service::psogmlib/selectOgm200_pop1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_pop1=ds_ogm200_pop1";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //코드
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+
+}
+
+function Button0_OnClick(obj)
+{
+	Close();
+}
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	getogm200_pop2();
+}
+
+/********************************************************************** 
+ * 내용설명 : 라인코드 조회 
+ **********************************************************************/ 
+function getogm200_pop2(){
+
+	var sKind		= "getOgm200_pop2";						
+	var sMethodName = "service::psogmlib/selectOgm200_pop2.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_pop2=ds_ogm200_pop2";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRTCD=" + quote(cmbprtcd.Value); 
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+
+}
+	
+
+function common_OnChanged2(obj)
+{
+	getogm200_pop();
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+ 
+function getogm200_pop(){
+
+	var sKind		= "getOgm200_pop";						
+	var sMethodName = "service::psogmlib/selectOgm200_pop.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_pop=ds_ogm200_pop";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " LINCD=" + quote(cmblincd.Value); 
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+
+}
+
+function cell_doubleClick(obj)
+{
+	//txtmshno.Text = ds_ogm200_pop.mshno;			
+	//txtmshnm.Text = ds_ogm200_pop.mshnm;
+	txtmshno.Text = trim(ds_ogm200_pop.GetColumn(ds_ogm200_pop.currow,"MSHNO"));		
+	txtmshnm.Text = trim(ds_ogm200_pop.GetColumn(ds_ogm200_pop.currow,"MSHNM"));	
+	
+	txtmshnm.Enable = false;
+	txtmshno_chk();	
+	close();
+}
+]]></Script>
+</Window>

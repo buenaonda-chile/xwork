@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="경비예산&#32;절감&#32;목표수립" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset CanColumnChange="ds_MIZZ220_CanColumnChange" DataSetType="Dataset" Id="ds_MIZZ220" UseClientLayout="1">
+				<Contents>
+					<colinfo id="CATNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CATNM1" size="256" summ="default" type="STRING"/>
+					<colinfo id="CATNM2" size="256" summ="default" type="STRING"/>
+					<colinfo id="CATNM3" size="256" summ="default" type="STRING"/>
+					<colinfo id="MAGGB" size="256" summ="default" type="STRING"/>
+					<colinfo id="MATGB" size="256" summ="default" type="STRING"/>
+					<colinfo id="PERGB" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEQNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CFRDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="CTODT" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPACE1" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPACE2" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPACE3" size="256" summ="default" type="STRING"/>
+					<colinfo id="BIIGO" size="256" summ="default" type="STRING"/>
+					<colinfo id="GCD" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ229U_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Category">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents>
+					<colinfo id="CODE2" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_yyyy">
+				<Contents>
+					<colinfo id="yyyy" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ229U" OnColumnChanged="ds_MIZZ229U_OnColumnChanged"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GUB">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE>P0</CODE>
+						<CODE_NAME>년계획</CODE_NAME>
+					</record>
+					<record>
+						<CODE>P1</CODE>
+						<CODE_NAME>수정계획</CODE_NAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZ230"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST650PF"></Dataset>
+		</Datasets>
+		<Grid AreaSelect="TRUE" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_MIZZ229U" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="536" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="30" Height="392" Id="grd_Main" InputPanel="FALSE" Left="176" LineColor="#888888" MinWidth="100" OnHeadClick="MainGrid_OnHeadClick" Right="896" RowHeight="25" SelColor="black" TabOrder="-1" TabStop="true" Top="144" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="720">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="30"/>
+						<col fix="left" width="29"/>
+						<col fix="left" width="142"/>
+						<col width="110"/>
+						<col width="110"/>
+						<col width="58"/>
+						<col width="110"/>
+						<col width="110"/>
+					</columns>
+					<head>
+						<cell align="center" bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="NO" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" colspan="2" display="text" rowspan="2" text="항목명1"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" colspan="2" display="text" text="예산TX&#32;금액"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" rowspan="2" text="절감&#13;&#10;목표(%)"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" colspan="2" display="text" text="목표금액"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" row="1" text="전체"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" row="1" text="전체"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" row="1" text="관리가능"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" row="1" text="관리가능"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="MENU" col="0" color="#333333" display="normal" expr="row+1"/>
+						<cell align="left" bkcolor="MENU" checklength="Byte" col="1" colid="CATGR" color="#333333" display="normal" limit="40" TrimType="Both"/>
+						<cell align="left" bkcolor="MENU" checklength="Byte" col="2" colid="CATNM1" color="#333333" display="normal" limit="40" TrimType="Both"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="3" colid="CATAM" color="#333333" display="number" limit="1"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="4" colid="CATAM_Y" color="#333333" display="number" limit="1"/>
+						<cell align="right" checklength="Byte" col="5" colid="TARPE" color="#333333" display="normal" edit="integer" limit="2"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="6" color="#333333" combocol="CATAM" combotext="CATAM" display="number" expr="toNumber(CATAM)-toNumber(CATAM_Y)+(toNumber(CATAM_Y)*(100-toNumber(TARPE))/100)" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="7" color="#333333" combocol="CATAM" combotext="CATAM" display="number" expr="toNumber(CATAM_Y)*(100-toNumber(TARPE))/100" limit="8" LimitDec="0"/>
+					</body>
+					<summary>
+						<cell col="0" display="text"/>
+						<cell col="1" colspan="2" display="text" font="Default,10,Bold" text="TOTAL"/>
+						<cell align="right" col="3" display="number" expr="sum(&apos;CATAM&apos;)" font="Default,10,Bold"/>
+						<cell align="right" col="4" display="number" expr="sum(&apos;CATAM_Y&apos;)" font="Default,10,Bold"/>
+						<cell col="5" display="text"/>
+						<cell align="right" col="6" display="number" expr="fn_total2()" font="Default,10,Bold"/>
+						<cell align="right" col="7" display="number" expr="fn_total1()" font="Default,10,Bold"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="4" Top="30" Width="1060"></Static>
+		<Button Height="27" Id="btnSave" ImageID="sum_save" Left="976" OnClick="fn_Save" TabOrder="4" TabStop="FALSE" Text="Button2" Top="2" Visible="FALSE" Width="72"></Button>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="7" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="6" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="232" TabOrder="9" Text="년&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;도" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="348" Style="static" TabOrder="9" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="yyyy" DataColumn="yyyy" Height="19" Id="cmb_yyyy" InnerDataset="ds_yyyy" Left="352" OnChanged="common_OnChanged" TabOrder="10" Top="37" Width="88"></Combo>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="897" OnClick="fn_Search" TabOrder="12" TabStop="FALSE" Text="조회" Top="2" Visible="FALSE" Width="75"></Button>
+		<Static Border="None" BorderColor="#b4b4b4" Color="#333333" Font="굴림,10" Height="26" Id="Static0" Left="176" Style="static" TabOrder="13" Text="▶&#32;절감목표는&#32;관리가능한&#32;기초예산금액에&#32;적용됩니다." Top="114" VAlign="Middle" Width="720"></Static>
+		<Static Align="Right" Border="None" BorderColor="#b4b4b4" Color="#333333" Font="굴림,10,Bold" Height="26" Id="st_s1" Left="784" Style="static" TabOrder="14" Text="100%&#32;↓" Top="544" VAlign="Middle" VClip="Both" Width="112"></Static>
+		<Static Align="Right" Border="None" BorderColor="#b4b4b4" Color="#333333" Font="굴림,10,Bold" Height="26" Id="st_s2" Left="668" Style="static" TabOrder="15" Text="100%&#32;↓" Top="544" VAlign="Middle" VClip="Both" Width="112"></Static>
+		<Static Align="Right" Border="None" BorderColor="#b4b4b4" Color="#333333" Font="굴림,10,Bold" Height="26" Id="Static2" Left="380" Style="static" TabOrder="16" Text="예산TX금액&#32;대비" Top="544" VAlign="Middle" VClip="Both" Width="272"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="460" TabOrder="18" Text="상하반기&#32;구분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static7" Left="576" Style="static" TabOrder="19" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="CODE" DataColumn="CODE_NAME" Height="19" Id="cmb_CATGB" INDEX="0" InnerDataset="ds_GUB" Left="580" OnChanged="common_OnChanged" TabOrder="17" Top="37" Width="88"></Combo>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : LSK
+ * @@see
+ * ● SYSTEM NAME          : Denso Platform
+ * ● PROGRAM NO.          : MIZZ229U.xml
+ * ● PROGRAM DESCRIPTION  : 경비예산 저감목표 수립
+ * ● DATE WRITTEN         : 2016.06.23
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();	
+	SetYYYY13(substr(nowDate,0,4),ds_yyyy);
+	cmb_yyyy.Value = substr(nowDate,0,4);
+	getMIZZ229U();
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (조회,저장,excel)	
+	/*
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+	*/
+}
+
+function getComCode(){
+	setCompsName(ds_ComCode_PLNT);
+	//ds_ComCode_PLNT.InsertRow(0);
+	//ds_ComCode_PLNT.SetColumn(0,"CODE2","");
+	//ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	ComboBoxPlant.Value=comps;
+}
+
+function getCategory(){
+	
+	var sKind		= "getCategory";						
+	var sMethodName = "service::budget/getCategoryList"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_Category=ds_Category";
+	var sArgument   = "";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ds_Category.InsertRow(0);
+	ds_Category.SetColumn(0,"CD","");
+	ds_Category.SetColumn(0,"CDNM","[전체]");
+	cmb_Category.index = 0;	
+}
+
+function getDesign(){
+	//grd_Main.ToolTipText = setPopMessage("2053");
+	grd_Main.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	grd_Main.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	grd_Main.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	grd_Main.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	/*
+	grd_Main.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	grd_Main.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	grd_Main.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	grd_Main.Top = G_ds_design.GetColumn(0,"Top");                //64
+	//grd_Main.UserData = grd_Main.Height;
+	*/
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getMIZZ229U(){
+	var targetCATGB;
+	if(cmb_CATGB.Value == "P0") {
+		targetCATGB ="PA";
+	}else if(cmb_CATGB.Value == "P1") {
+		targetCATGB ="PB";
+	}else{
+		alert("[경고] System오류. "); 
+		return;
+	}
+	http.Sync = true;
+	var sKind		= "getMIZZ229U";						
+	var sMethodName = "service::budget/getMIZZ229UList";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MIZZ229U=ds_MIZZ229U";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += "@CATYY=" + quote(cmb_yyyy.Value);
+		sArgument += "@CATGB=" + quote(cmb_CATGB.Value);     //P0:상반기예산  P1:하반기예산 
+		sArgument += "@CATGB_TARGET=" + quote(targetCATGB);   //PA: 상반기예산 목표  PB:하반기예산  목표
+	var str = dialog("Common::PGMLOAD_SHIP.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	
+}
+/********************************************************************** 
+ * 내용설명 : 화면저장
+ **********************************************************************/ 
+function setMIZZ229U(){
+	if (ds_MIZZ229U.rowcount < 1){
+		alert("[경고] 저장할 데이타가 존재하지 않습니다. "); 
+		return;
+	}
+	
+	// 확정 유무 Check
+	if (!checkMIZ230()){
+		alert("[경고] 경비예산이 확정되어 진행할 수 없습니다. 확인바랍니다."); 
+		return;
+	}
+	
+	if (ComboBoxPlant.Value == ""){
+		if(confirm("사업부별 목표설정 및 DATA가 삭제됩니다. 작업하시겠습니까? ") == false) return;
+	}
+
+	var targetCATGB;
+	if(cmb_CATGB.Value == "P0") {
+		targetCATGB ="PA";
+	}else if(cmb_CATGB.Value == "P1") {
+		targetCATGB ="PB";
+	}else{
+		alert("[경고] System오류. "); 
+		return;
+	}
+	var sKind		= "setMIZZ229U";						
+	var sMethodName = "service::budget/setMIZZ229UList";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_MIZZ229U=ds_MIZZ229U";     //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet  = "ds_MIZZ229U_CHECK=ds_MIZZ229U_CHECK";     //자료 저장 시 보낼 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " CATYY=" + quote(cmb_yyyy.Value);
+		sArgument += " CATGB_SOURCE=" + quote(cmb_CATGB.Value);     //P0:상반기예산  P1:하반기예산 
+		sArgument += " CATGB_TARGET=" + quote(targetCATGB);   //PA: 상반기예산 목표  PB:하반기예산  목표
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_MIZZ229U_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_MIZZ229U_CHECK.GetRowCount();i++){
+			alert("항목코드 : " +ds_MIZZ229U_CHECK.GetColumn(i,"CATNO") + " = " + ds_MIZZ229U_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getMIZZ229U();  //error항목이 존재시에는 재조회
+		return;
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 확정Check
+ **********************************************************************/ 
+ function checkMIZ230(){
+	http.Sync = true;
+	var sKind		= "getMIZZ230";						
+	var sMethodName = "service::budget/getMIZZ230List";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MIZ230=ds_MIZ230";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " CATYY=" + quote(cmb_yyyy.Value);
+		sArgument += " CATGB=" + quote(cmb_CATGB.Value);   //P0:상반기예산  P1:하반기예산 
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	if(ds_MIZ230.rowcount > 0){
+		return false;
+	}else{
+		return true;
+	}
+ }
+ 
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "경비예산항목List";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "grd_Main|경비예산항목List";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function grd_Main_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_MIZZ229U.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getMIZZ229U();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setMIZZ229U();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.3");
+}
+
+function ds_MIZZ229U_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if(strColumnID == "TARPE"){
+		if(varNewValue==""){
+			ds_MIZZ229U.SetColumn(nRow,strColumnID,"0");
+		}
+	}
+}
+
+function fn_total1(){
+	var total,beforeAM;
+	for(var i=0;i<ds_MIZZ229U.GetRowCount();i++){
+		var column1 = toNumber(ds_MIZZ229U.GetColumn(i,"CATAM_Y"));
+		var column2 = toNumber(ds_MIZZ229U.GetColumn(i,"TARPE"));
+		total += (column1*(100-column2)/100);
+		beforeAM += column1;
+	}
+	st_s1.Text = ParseInt(100-(total/beforeAM*100)) + "% ↓";
+	return total;
+} 
+
+function fn_total2(){
+	var total,beforeAM;
+	for(var i=0;i<ds_MIZZ229U.GetRowCount();i++){
+		var column1 = toNumber(ds_MIZZ229U.GetColumn(i,"CATAM_Y"));
+		var column2 = toNumber(ds_MIZZ229U.GetColumn(i,"TARPE"));
+		var column3 = toNumber(ds_MIZZ229U.GetColumn(i,"CATAM"));
+		total += column3-column1+(column1*(100-column2)/100);
+		beforeAM += column3;
+	}
+	st_s2.Text = ParseInt(100-(total/beforeAM*100)) + "% ↓";
+	return total;
+} 
+
+/*
+function ed_DPTCD_OnChanged(obj,strText)
+{
+	if(length(trim(strText)) == 4){
+		var Lib9="";
+		if(ComboBoxPlant.Value == "E1"){
+			Lib9="PSEDBLIB";
+		}else if(ComboBoxPlant.Value == "K1"){
+			Lib9="PSMSTLIB";
+			return; // 향후 KR사용여부 확인
+		}else{
+			Lib9="PSCDBLIB";
+		}
+		var sKind		= "getMST650PFList";						
+		var sMethodName = "service::budget/getMST650PFList"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_MST650PF=ds_MST650PF";
+		var sArgument   = "";
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+			sArgument += " LIB9=" + quote(Lib9);
+			sArgument += " DPTCD=" + quote(strText);
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+		if(ds_MST650PF.rowcount > 0){
+			st_DPTCD = ds_MST650PF.GetColumn(0,"DPDPNM");
+			ds_MIZZ229.ClearData();
+			ds_MIZZ220.ClearData();
+			ds_MIZZ221.ClearData();
+		}else{
+			st_DPTCD = "";
+			alert("[경고] 부서코드를 확인바랍니다."); 
+			return;
+		}
+	}else{
+		st_DPTCD = "";
+	}
+}
+
+function ComboBoxPlant_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MST650PF.ClearData();
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+	ds_MIZZ229U.ClearData();
+}
+*/
+
+]]></Script>
+</Window>

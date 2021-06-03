@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-akatsuki-aop.xml
+ * 
+ * [JP] Akatsuki(Spring) の AOP 設定ファイルです。
+ * [EN] This is the configuration file of AOP for Akatsuki (Spring).
+ * 
+ * $ applicationContext-akatsuki-aop.xml 1496 2015-05-11 08:53:10Z 815372040074 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- [JP] AOP設定 =========================================================== -->
+    <!-- [EN] AOP configuration =========================================================== -->
+    <aop:config>
+        <aop:pointcut id="serviceAop"
+            expression="execution(* *..*Service.*(..))" />
+        <aop:pointcut id="daoAop"
+            expression="execution(* *..*Dao.*(..))" />
+
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="transactionInterceptor" />
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="serviceLoggingAdvice" />
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="daoLoggingAdvice" />
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="integrationLayerThrowsAdvice" />
+
+    </aop:config>
+
+    <!-- [JP] トランザクション設定 ============================================== -->
+    <!-- [EN] Transaction configuration ============================================== -->
+    <tx:advice id="transactionInterceptor"
+        transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- [JP] 既存トランザクションを使用する設定 (REQUIRED) -->
+            <!-- [EN] Configured to use the existing transaction (REQUIRED) -->
+            <tx:method name="create*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="update*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="delete*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="search*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="true"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="transact*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+
+            <!-- [JP] 新規トランザクションを使用する設定 (REQUIRES_NEW) -->
+            <!-- [EN] Configured to use the new transaction (REQUIRES_NEW) -->
+            <tx:method name="autonomousCreate*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousUpdate*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousDelete*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousSearch*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="true"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="autonomousTransact*" propagation="REQUIRES_NEW"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- [JP] Bean 定義 ========================================================= -->
+    <!-- [EN] Bean definition ========================================================= -->
+    <!-- [JP] Serviceログ出力 -->
+    <!-- [EN] Service log output -->
+    <bean id="serviceLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.ServiceLoggingInterceptor" />
+
+    <!-- [JP] Daoログ出力 -->
+    <!-- [EN] Dao log output -->
+    <bean id="daoLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.DaoLoggingInterceptor" />
+
+
+    <!-- [JP] Integrationレイヤの例外ハンドラ  -->
+    <!-- [EN] Integration layer exception handlers  -->
+    <bean id="integrationLayerThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.IntegrationLayerThrowsAdvice" />
+</beans>

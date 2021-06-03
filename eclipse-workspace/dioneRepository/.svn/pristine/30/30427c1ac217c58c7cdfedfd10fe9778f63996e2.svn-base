@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="장비조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm411"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_selectCnt">
+				<Contents>
+					<colinfo id="NO" size="256" summ="default" type="STRING"/>
+					<colinfo id="FIELDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="FIELDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="POSITION" size="256" summ="default" type="STRING"/>
+					<colinfo id="WIDTH" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_selectAll">
+				<Contents>
+					<colinfo id="NO" size="256" summ="default" type="STRING"/>
+					<colinfo id="FIELDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="FIELDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="POSITION" size="256" summ="default" type="STRING"/>
+					<colinfo id="WIDTH" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Operator">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>=</code>
+					</record>
+					<record>
+						<code>&lt;&gt;</code>
+					</record>
+					<record>
+						<code>&gt;</code>
+					</record>
+					<record>
+						<code>&lt;</code>
+					</record>
+					<record>
+						<code>&gt;=</code>
+					</record>
+					<record>
+						<code>&lt;=</code>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_logicalOperator">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>AND</code>
+					</record>
+					<record>
+						<code>OR</code>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_cmbsel">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODENM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="39" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="40" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="116" Id="searchBar" TabOrder="41" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="268" TabOrder="42" Text="교&#32;정&#32;분&#32;야" Top="37" VAlign="Middle" Width="120"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="43" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="37" VAlign="Middle" Width="120"></Static>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_ogm411" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="592" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="440" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="MainGrid_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1058" TabOrder="44" TabStop="true" Top="152" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default"></format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static7" Left="124" TabOrder="45" Top="37" Width="140"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static9" Left="388" TabOrder="46" Top="37" Width="254"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="644" TabOrder="47" Text="폐&#32;기&#32;여&#32;부" Top="37" VAlign="Middle" Width="120"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static12" Left="764" TabOrder="48" Top="37" Width="284"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="4" TabOrder="49" Text="검&#32;색&#32;조&#32;건" Top="118" VAlign="Middle" Width="120"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static2" Left="124" TabOrder="50" Top="118" Width="350"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static3" Left="544" TabOrder="51" Top="118" Width="350"></Static>
+		<Checkbox Height="19" Id="chk_group1" Left="400" TabOrder="2" Text="측정기" Top="41" Value="FALSE" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_group2" Left="480" TabOrder="3" Text="검사구" Top="41" Value="FALSE" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_group3" Left="560" TabOrder="4" Text="설&#32;&#32;비" Top="41" Value="FALSE" Width="80"></Checkbox>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="53" Id="Static4" Left="4" TabOrder="52" Text="조&#32;회&#32;항&#32;목" Top="64" VAlign="Middle" Width="120"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="53" Id="Static5" Left="124" TabOrder="53" Top="64" Width="924"></Static>
+		<Combo CodeColumn="FIELDCD" DataColumn="FIELDNM" Height="18" Id="cmb_field1" InnerDataset="ds_selectAll" Left="126" OnChanged="cmb_field1_OnChanged" TabOrder="28" Top="122" Width="113"></Combo>
+		<Combo CodeColumn="code" DataColumn="code" Height="18" Id="cmb_operatot1" InnerDataset="ds_Operator" Left="242" TabOrder="29" Top="122" Width="57"></Combo>
+		<Edit Height="20" Id="ed_where1" Left="304" OnKillFocus="ed_where1_OnKillFocus" TabOrder="54" Top="122" Width="101"></Edit>
+		<Combo CodeColumn="code" DataColumn="code" Height="18" Id="cmb_Lo" INDEX="0" InnerDataset="ds_logicalOperator" Left="482" TabOrder="31" Top="122" Width="57"></Combo>
+		<Combo CodeColumn="FIELDCD" DataColumn="FIELDNM" Height="18" Id="cmb_field2" InnerDataset="ds_selectAll" Left="550" OnChanged="cmb_field2_OnChanged" TabOrder="32" Top="122" Width="113"></Combo>
+		<Combo CodeColumn="code" DataColumn="code" Height="18" Id="cmb_operatot2" InnerDataset="ds_Operator" Left="666" TabOrder="33" Top="122" Width="57"></Combo>
+		<Edit Height="20" Id="ed_where2" Left="726" OnKillFocus="ed_where2_OnKillFocus" TabOrder="55" Top="122" Width="101"></Edit>
+		<Checkbox Height="19" Id="chk_Field1" Left="128" OnClick="chk_Field1_OnClick" TabOrder="6" Text="교정분야" TextMargin="2" Top="72" UserData="GROUP,left,60" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field2" Left="212" TabOrder="7" Text="관리번호" TextMargin="2" Top="69" UserData="MNGNO,left,80" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field3" Left="296" TabOrder="8" Text="장&#32;비&#32;명" TextMargin="2" Top="69" UserData="MNAME,left,200" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field4" Left="380" TabOrder="9" Text="제조회사" TextMargin="2" Top="69" UserData="MAKER,left,110" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field5" Left="464" TabOrder="10" Text="형&#32;&#32;&#32;&#32;식" TextMargin="2" Top="69" UserData="MTYPE,left,150" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field6" Left="548" TabOrder="11" Text="장비번호" TextMargin="2" Top="69" UserData="JNBNO,left,80" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field7" Left="632" TabOrder="12" Text="입고일자" TextMargin="2" Top="69" UserData="IPDAT,center,70" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field8" Left="716" TabOrder="13" Text="최종교정일" TextMargin="2" Top="69" UserData="RPDAT,center,70" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field9" Left="800" TabOrder="14" Text="교정번호" TextMargin="2" Top="69" UserData="REPNO,left,100" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field10" Left="884" TabOrder="15" Text="예정일자" TextMargin="2" Top="69" UserData="YEDAT,center,70" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field11" Left="968" TabOrder="16" Text="사용부서" TextMargin="2" Top="69" UserData="DPTCD,left,180" Width="72"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field12" Left="128" TabOrder="17" Text="폐기여부" TextMargin="2" Top="92" UserData="DISYN,center,60" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field13" Left="212" TabOrder="18" Text="폐기일자" TextMargin="2" Top="92" UserData="DIDAT,center,70" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field14" Left="296" TabOrder="19" Text="폐기사유" TextMargin="2" Top="92" UserData="DRESN,left,100" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field15" Left="380" TabOrder="20" Text="장비구분" TextMargin="2" Top="92" UserData="J_GUB,left,80" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field16" Left="464" TabOrder="21" Text="장비유형" TextMargin="2" Top="92" UserData="JKIND,left,120" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field17" Left="548" TabOrder="22" Text="교정구분" TextMargin="2" Top="92" UserData="G_GUB,left,80" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field18" Left="632" TabOrder="23" Text="교정주기" TextMargin="2" Top="92" UserData="GCYCL,left,60" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field19" Left="716" TabOrder="24" Text="취득금액" TextMargin="2" Top="92" UserData="GNAMT,right,80" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field20" Left="800" TabOrder="25" Text="기기사양" TextMargin="2" Top="92" UserData="JSPEC,left,120" Width="80"></Checkbox>
+		<Checkbox Height="19" Id="chk_Field21" Left="884" TabOrder="26" Text="자산번호" TextMargin="2" Top="92" UserData="ACCNO,left,100" Width="80"></Checkbox>
+		<Checkbox Height="20" Id="chk_Field22" Left="968" TabOrder="27" Text="비&#32;&#32;고" TextMargin="2" Top="92" UserData="CNOTE,left,200" Width="72"></Checkbox>
+		<Radio Border="None" Height="20" Id="rd_endYN" INDEX="0" Left="781" OnChanged="common_OnChanged" TabOrder="5" Top="41" Width="235">
+			<Contents>
+				<Layout height="20" left="10" text="전체" width="50"/>
+				<Layout code="N" height="20" left="80" text="사용" width="50"/>
+				<Layout code="Y" height="20" left="150" text="폐기" width="50"/>
+			</Contents>
+		</Radio>
+		<Combo CodeColumn="code" DataColumn="cdnm" Height="18" Id="cmb_where1" InnerDataset="ds_cmbsel" Left="304" OnKillFocus="cmb_where1_OnKillFocus" TabOrder="35" Top="122" Visible="FALSE" Width="168"></Combo>
+		<Combo CodeColumn="code" DataColumn="cdnm" Height="18" Id="cmb_where2" InnerDataset="ds_cmbsel" Left="725" OnKillFocus="cmb_where2_OnKillFocus" TabOrder="36" Top="122" Visible="FALSE" Width="168"></Combo>
+		<Calendar Dateformat="yyyy년MM월dd일" Height="20" Id="cal_where1" Left="304" LeftMargin="5" OnKillFocus="cal_where1_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="30" Top="122" Visible="FALSE" Width="120"></Calendar>
+		<Calendar Dateformat="yyyy년MM월dd일" Height="20" Id="cal_where2" Left="725" LeftMargin="5" OnKillFocus="cal_where2_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="34" Top="122" Visible="FALSE" Width="120"></Calendar>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="130" OnChanged="ComboBoxPlant_OnChanged" TabOrder="1" Top="41" Width="124"></Combo>
+		<Edit Height="21" Id="lblselfield1" Left="896" TabOrder="56" Top="120" Visible="FALSE" Width="62"></Edit>
+		<Edit Height="21" Id="lblselfield2" Left="960" TabOrder="57" Top="120" Visible="FALSE" Width="62"></Edit>
+		<Div Border="Flat" BorderColor="#888888" Height="32" Id="displayDiv" TabOrder="58" Text="Div0" Top="592" Width="1060">
+			<Contents>
+				<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="total_Static" TabOrder="1" Top="2" VAlign="Middle" Width="1056"></Static>
+			</Contents>
+		</Div>
+		<Button Height="21" Id="btn1" Left="904" OnClick="btn1_OnClick" TabOrder="37" Text="선택" Top="128" Visible="FALSE" Width="40"></Button>
+		<Button Height="21" Id="btn2" Left="968" OnClick="btn2_OnClick" TabOrder="38" Text="제거" Top="128" Visible="FALSE" Width="40"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm411xml
+ * ● PROGRAM DESCRIPTION  : 장비조회
+ * ● DATE WRITTEN         : 2012.01.19
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today();
+var ClassGB;
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	//SetYYYY(substr(nowDate,0,4),ds_yyyy);
+	//cmb_yyyy.Value = substr(nowDate,0,4);
+	//cmb_mm.Value = substr(nowDate,4,2);
+	getComCode(); //공장구분 선택
+	//SetHouse(Lib2); // 선택
+	//cb_searchHSCD.Index = 0;
+
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	MainGrid.UserData = MainGrid.Height;
+	fn_makerDataset();
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getOgm411(){
+	//교정분야
+	var CheckedCount1 = parseInt(chk_group1.Value)+parseInt(chk_group2.Value)+parseInt(chk_group3.Value);
+	var rvalue;
+	if (CheckedCount1 == 0){
+		rvalue = "('1','2','3')";
+	}else{		
+		rvalue = " (";
+		var checking = 0;
+		if (chk_group1.Value == 1){
+			checking = checking+1;
+			rvalue = rvalue+"'"+"1"+"'";
+		}
+		if (chk_group2.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"2"+"'";
+		}
+		if (chk_group3.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"3"+"'";
+		}
+		rvalue = rvalue+")";
+	}
+	
+	//폐기여부
+	var sDISYN = rd_endYN.Value;
+		
+	//검색조건선택
+	var rcondition;
+	var rcondition1;
+	var rcondition2;
+			
+	var len1 = length(lblselfield1.Text);
+	var len2 = length(lblselfield2.Text);
+	
+	if (len1 > 0){
+		if (length(cmb_field1.Value)==0 || length(cmb_operatot1.Text) == 0){
+			alert(setPopMessage("3057"));
+			return false;
+		}
+		else {
+			if (cmb_field1.Value == "IPDAT" || cmb_field1.Value == "DIDAT" || cmb_field1.Value == "GCYCL" || cmb_field1.Value == "GNAMT" ){
+				rcondition1 = "(A." + cmb_field1.Value +" "+ cmb_operatot1.Value +" "+ trim(lblselfield1.Text) + ")";
+			}else if (cmb_field1.Value == "RPDAT" || cmb_field1.Value == "YEDAT"){
+				rcondition1 = "(B." + cmb_field1.Value +" "+ cmb_operatot1.Value + " "+ trim(lblselfield1.Text) + ")";
+			}else{
+				if (cmb_operatot1.Value == "="){
+					if(cmb_field1.Value == "REPNO"){
+						rcondition1 = "(B." + cmb_field1.Value +" Like '"+ trim(lblselfield1.Text) + "%')";
+					}
+					else{
+						rcondition1 = "(A." + cmb_field1.Value +" Like '"+ trim(lblselfield1.Text) + "%')";				
+					}
+				}
+				else {
+					rcondition1 = "(A." + cmb_field1.Value +" "+ cmb_operatot1.Value + " '" + trim(lblselfield1.Text) + "')";
+			
+				}
+			}
+		}	
+	}
+	
+	if (len2 > 0){
+		if (length(cmb_field2.Value)==0 || length(cmb_operatot2.Text) == 0){
+			alert(setPopMessage("3057"));
+			return false;
+		}
+		else {
+			if (cmb_field2.Value == "IPDAT" || cmb_field2.Value == "DIDAT" || cmb_field2.Value == "GCYCL" || cmb_field2.Value == "GNAMT" ){
+				rcondition2 = "(A." + cmb_field2.Value +" "+ cmb_operatot2.Value +" "+ trim(lblselfield2.Text) + ")";
+			}else if (cmb_field2.Value == "RPDAT" || cmb_field2.Value == "YEDAT"){
+				rcondition2 = "(B." + cmb_field2.Value +" "+ cmb_operatot2.Value + " "+ trim(lblselfield2.Text) + ")";
+			}else{
+				if (cmb_operatot2.Value == "="){
+					if(cmb_field2.Value == "REPNO"){
+						rcondition2 = "(B." + cmb_field2.Value +" Like '"+ trim(lblselfield2.Text) + "%')";
+					}
+					else{
+						rcondition2 = "(A." + cmb_field2.Value +" Like '"+ trim(lblselfield2.Text) + "%')";				
+					}
+				}
+				else {
+					rcondition2 = "(A." + cmb_field2.Value +" "+ cmb_operatot2.Value + " '" + trim(lblselfield2.Text) + "')";
+			
+				}
+			}
+		}	
+	}
+
+	if ((len1 > 0) && (len2 > 0)){
+		rcondition = "(" + rcondition1 + cmb_Lo.Value + rcondition2 + ")";
+	}else if ((len1 > 0) && (len2 == 0)){
+		rcondition = rcondition1;
+	}else if ((len1 == 0) && (len2 > 0)){
+		rcondition = rcondition2;
+	}
+	
+	//조회항목선택
+	var Grd_Cellcnt = 0;
+	ds_selectCnt.ClearData();
+	for (var i=1; i<=22;i++){
+		var chk_Field = "chk_Field"+i;
+		var arr_UserData;
+		if (object(chk_Field).Value == true){
+			arr_UserData = split(object(chk_Field).UserData,',');
+			Grd_Cellcnt = Grd_Cellcnt + 1;
+			ds_selectCnt.InsertRow(Grd_Cellcnt-1);
+			ds_selectCnt.SetColumn(Grd_Cellcnt-1,"NO",i);
+			ds_selectCnt.SetColumn(Grd_Cellcnt-1,"FIELDNM",object(chk_Field).Text);
+			ds_selectCnt.SetColumn(Grd_Cellcnt-1,"FIELDCD",arr_UserData[0]);
+			ds_selectCnt.SetColumn(Grd_Cellcnt-1,"POSITION",arr_UserData[1]);
+			ds_selectCnt.SetColumn(Grd_Cellcnt-1,"WIDTH",arr_UserData[2]);
+		}
+	}
+	
+	//그리드 Contents 생성
+	MainGrid.contents = fn_makeGrdContents(MainGrid, Grd_Cellcnt);
+
+	//조회
+	var sKind		= "getOgm411";						
+	var sMethodName = "service::psogmlib/selectogm411.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm411=ds_ogm411";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB2=" + quote(lib2); //PSCDBLIB사용일경우 폐기사유, 장비구분유형 데이터 안나옴.
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@PGROUP=" + quote(rvalue); //교정분야
+	sArgument += "@PDISYN=" + quote(sDISYN); //폐기여부
+	sArgument += "@PWHERE=" + quote(rcondition); //검색조건 rcondition
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	get_TotalCount(); //total구하기
+}
+
+function fn_makerDataset(obj)
+{
+	ds_selectAll.InsertRow(0);
+	ds_selectAll.SetColumn(0,"NO","");
+	ds_selectAll.SetColumn(0,"FIELDNM","");
+	ds_selectAll.SetColumn(0,"FIELDCD","");
+	ds_selectAll.SetColumn(0,"POSITION","");
+	ds_selectAll.SetColumn(0,"WIDTH","");
+	for (var i=1; i<=22;i++){
+		var chk_Field = "chk_Field"+i;
+		var arr_UserData =split(object(chk_Field).UserData,',');
+		ds_selectAll.InsertRow(i);
+		ds_selectAll.SetColumn(i,"NO",i);
+		ds_selectAll.SetColumn(i,"FIELDNM",object(chk_Field).Text);
+		ds_selectAll.SetColumn(i,"FIELDCD",arr_UserData[0]);
+		ds_selectAll.SetColumn(i,"POSITION",arr_UserData[1]);
+		ds_selectAll.SetColumn(i,"WIDTH",arr_UserData[2]);
+	}
+	ds_selectAll.DeleteRow(1); //교정분야는 조건에서 제외
+	ds_selectAll.DeleteRow(11); //폐기여부는 조건에서 제외
+}
+
+function fn_makeGrdContents(obj, Cellcnt)
+{
+	var strContents = "";
+	strContents += "<contents>                                                ";
+	strContents += "	<format id='Default'>                                 "; 
+	strContents += "		<columns>                                         ";
+	strContents += "			<col width='30'/>                             ";
+	
+	for(var i=1; i<=Cellcnt; i++) {	
+		var FW = ds_selectCnt.GetColumn(i-1,"WIDTH");
+		strContents += "			<col width='"+ FW +"'/>                             ";
+	}
+	
+	strContents += "		</columns>                                        "; 
+	strContents += "		<head>                                            ";
+	strContents += "<cell bkcolor='#dfdfdf' col='0' display='text' text='No.'/>";
+	
+	for(var j=1; j<=Cellcnt; j++) {	
+		var FN = ds_selectCnt.GetColumn(j-1,"FIELDNM");
+		strContents += "			<cell bkcolor='#dfdfdf' col='"+ j +"' color='#002043' display='text' text='"+ FN +"'/> ";
+	}
+
+	strContents += "		</head>                                           ";
+	strContents += "		<body>                                            "; 	
+	strContents += "<cell align='center' col='0' colid='fix_col' display='text' expr='currow+1'/>";
+	
+	for(var k=1; k<=Cellcnt; k++) {	
+		var FC = ds_selectCnt.GetColumn(k-1,"FIELDCD");
+		var FP = ds_selectCnt.GetColumn(k-1,"POSITION");
+		
+		if (FC == "GNAMT"){
+			strContents += "			<cell align='"+ FP +"' col='"+ k +"' colid='"+ FC +"' display='number'/> ";
+		}else{
+			strContents += "			<cell align='"+ FP +"' col='"+ k +"' colid='"+ FC +"' display='text'/> ";
+		}
+	}
+
+	strContents += "		</body>                                           "; 
+	strContents += "	</format>                                             "; 
+	strContents += "</contents>	                                              "; 
+	
+	return strContents;
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "장비조회";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|장비조회";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOgm411();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_Ogm411")== false) return;
+	ds_ogm411.AddRow();
+}
+
+function fn_Delete()
+{
+	ds_ogm411.DeleteRow(ds_ogm411.currow);
+}
+
+function fn_Save()
+{
+	setOgm411();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_ogm411.DeleteAll();
+}
+
+function ComboBoxPlant_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_ogm411.DeleteAll();
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+function cmb_field1_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	cmb_operatot1.Index = 0;
+	if (strCode == "IPDAT" || strCode == "RPDAT" || strCode == "YEDAT" || strCode == "DIDAT"){
+	//if (strCode == "IPDAT" || strCode == "GCYCL" || strCode == "GNAMT" || strCode == "DIDAT"){
+		ed_where1.Text = "";
+		ed_where1.Visible = false;
+		cmb_where1.Value = "";
+		cmb_where1.Visible = false;
+		cal_where1.Value = "";
+		cal_where1.Visible=true;
+		lblselfield1.Text="";
+		//ed_where1.Number = true;
+		//ed_where1.Text = "0";
+	}else if(strCode == "DPTCD" || strCode == "DRESN" || strCode == "J_GUB" || strCode == "JKIND" || strCode == "G_GUB"){
+		//ed_where1.Number = false;
+		var strCodeval = ""; //코드값
+		ed_where1.Text = "";
+		ed_where1.Visible = false;
+		cmb_where1.Value = "";
+		cmb_where1.Visible = true;
+		cal_where1.Value = "";
+		cal_where1.Visible=false;
+		lblselfield1.Text="";
+		switch(strCode) //폐기여부사용안함.
+		{
+		case "DPTCD" : //부서코드
+			strCodeval ="";
+			getogmGauge_mst650();
+			break;
+		case "DRESN" : //폐기사유
+			strCodeval = "DRN";
+			getcmb_field(strCodeval);
+			break;
+		case "J_GUB" : //장비구분
+			strCodeval = "GAG";
+			getcmb_field(strCodeval);
+			break;
+		case "JKIND" : //장비유형
+			strCodeval = "GKN";
+			getcmb_field(strCodeval);
+			break;
+		case "G_GUB" : //교정구분
+			strCodeval ="";
+			//getcmb_field(strCodeval);
+			ds_cmbsel.InsertRow(0);
+			ds_cmbsel.SetColumn(0,"CODE","");
+			ds_cmbsel.SetColumn(0,"CODENM","");
+			ds_cmbsel.SetColumn(0,"CDNM","");
+			ds_cmbsel.InsertRow(1);
+			ds_cmbsel.SetColumn(1,"CODE","1");
+			ds_cmbsel.SetColumn(1,"CODENM","사내");
+			ds_cmbsel.SetColumn(1,"CDNM","1 | 사내");
+			ds_cmbsel.InsertRow(2);
+			ds_cmbsel.SetColumn(2,"CODE","2");
+			ds_cmbsel.SetColumn(2,"CODENM","사외");
+			ds_cmbsel.SetColumn(2,"CDNM","2 | 사외");
+			ds_cmbsel.InsertRow(3);
+			ds_cmbsel.SetColumn(3,"CODE","3");
+			ds_cmbsel.SetColumn(3,"CODENM","표준기(사외)");
+			ds_cmbsel.SetColumn(3,"CDNM","3 | 표준기(사외)");
+			break;
+		}
+	}else{
+		ed_where1.Text = "";
+		ed_where1.Number = false;
+		ed_where1.UpperOnly = true;
+		ed_where1.Visible = true;
+		cmb_where1.Value = "";
+		cmb_where1.Visible = false;
+		cal_where1.Value = "";
+		cal_where1.Visible = false;
+		lblselfield1.Text="";
+		if(strCode == "GCYCL" || strCode == "GNAMT"){
+			ed_where1.Number = true;
+			ed_where1.Text = "0";
+		}
+	}
+}
+
+function cmb_field2_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	cmb_operatot2.Index = 0;
+	if (strCode == "IPDAT" || strCode == "RPDAT" || strCode == "YEDAT" || strCode == "DIDAT"){
+	//if (strCode == "IPDAT" || strCode == "GCYCL" || strCode == "GNAMT" || strCode == "DIDAT"){
+		ed_where2.Text = "";
+		ed_where2.Visible = false;
+		cmb_where2.Value = "";
+		cmb_where2.Visible = false;
+		cal_where2.Value = "";
+		cal_where2.Visible=true;
+		lblselfield2.Text="";
+		//ed_where1.Number = true;
+		//ed_where1.Text = "0";
+	}else if(strCode == "DPTCD" || strCode == "DRESN" || strCode == "J_GUB" || strCode == "JKIND" || strCode == "G_GUB"){
+		//ed_where1.Number = false;
+		var strCodeval = ""; //코드값
+		ed_where2.Text = "";
+		ed_where2.Visible = false;
+		cmb_where2.Value = "";
+		cmb_where2.Visible = true;
+		cal_where2.Value = "";
+		cal_where2.Visible=false;
+		lblselfield2.Text="";
+		switch(strCode) //폐기여부사용안함.
+		{
+		case "DPTCD" : //부서코드
+			//strCodeval ="";
+			getogmGauge_mst650();
+			break;
+		case "DRESN" : //폐기사유
+			strCodeval = "DRN";
+			getcmb_field(strCodeval);
+			break;
+		case "J_GUB" : //장비구분
+			strCodeval = "GAG";
+			getcmb_field(strCodeval);
+			break;
+		case "JKIND" : //장비유형
+			strCodeval = "GKN";
+			getcmb_field(strCodeval);
+			break;
+		case "G_GUB" : //교정구분
+			strCodeval ="";
+			//getcmb_field(strCodeval);
+			ds_cmbsel.InsertRow(0);
+			ds_cmbsel.SetColumn(0,"CODE","");
+			ds_cmbsel.SetColumn(0,"CODENM","");
+			ds_cmbsel.SetColumn(0,"CDNM","");
+			ds_cmbsel.InsertRow(1);
+			ds_cmbsel.SetColumn(1,"CODE","1");
+			ds_cmbsel.SetColumn(1,"CODENM","사내");
+			ds_cmbsel.SetColumn(1,"CDNM","1 | 사내");
+			ds_cmbsel.InsertRow(2);
+			ds_cmbsel.SetColumn(2,"CODE","2");
+			ds_cmbsel.SetColumn(2,"CODENM","사외");
+			ds_cmbsel.SetColumn(2,"CDNM","2 | 사외");
+			ds_cmbsel.InsertRow(3);
+			ds_cmbsel.SetColumn(3,"CODE","3");
+			ds_cmbsel.SetColumn(3,"CODENM","표준시(사외)");
+			ds_cmbsel.SetColumn(3,"CDNM","3 | 표준시(사외)");
+			break;
+		}
+	}else{
+		ed_where2.Text = "";
+		ed_where2.Number = false;
+		ed_where2.UpperOnly = true;
+		ed_where2.Visible = true;
+		cmb_where2.Value = "";
+		cmb_where2.Visible = false;
+		cal_where2.Value = "";
+		cal_where2.Visible = false;
+		lblselfield2.Text="";
+		if(strCode == "GCYCL" || strCode == "GNAMT"){
+			ed_where2.Number = true;
+			ed_where2.Text = "0";
+		}
+	}
+}
+
+function chk_Field1_OnClick(obj,strValue)
+{
+	if (strValue != true) chk_Field1.Value = true;
+}
+/********************************************************************** 
+ * 내용설명 : cmb_field 변경
+ **********************************************************************/ 
+ /*
+function cmbFieldChage(cmbVal, strCode){
+alert(cmbVal + strCode);
+alert("ed_where"+cmbVal);
+	("cmb_operatot"+cmbVal).Index = 0;
+	if (strCode == "IPDAT" || strCode == "GCYCL" || strCode == "GNAMT" || strCode == "DIDAT"){
+		parses("ed_where"+cmbVal).Text = "";
+		("ed_where"+cmbVal).Visible = false;
+		("cmb_where"+cmbVal).Value = "";
+		("cmb_where"+cmbVal).Visible = false;
+		("cal_where"+cmbVal).Value = "";
+		("cal_where"+cmbVal).Visible=true;
+		//ed_where1.Number = true;
+		//ed_where1.Text = "0";
+	}else if(strCode == "DPTCD" || strCode == "DRESN" || strCode == "J_GUB" || strCode == "JKIND" || strCode == "G_GUB"){
+		//ed_where1.Number = false;
+		var strCodeval = ""; //코드값
+		("ed_where"+cmbVal).Text = "";
+		("ed_where"+cmbVal).Visible = false;
+		("cmb_where"+cmbVal).Value = "";
+		("cmb_where"+cmbVal).Visible = true;
+		("cal_where"+cmbVal).Value = "";
+		("cal_where"+cmbVal).Visible=false;
+		switch(strCode) //폐기여부사용안함.
+		{
+		case "DPTCD" : //부서코드
+			getogmGauge_mst650();
+			break;
+		case "DRESN" : //폐기사유
+			strCodeval = "DRN";
+			getcmb_field(strCodeval);
+			break;
+		case "J_GUB" : //장비구분
+			strCodeval = "GAG";
+			getcmb_field(strCodeval);
+			break;
+		case "JKIND" : //장비유형
+			strCodeval = "GKN";
+			getcmb_field(strCodeval);
+			break;
+		case "G_GUB" : //교정구분
+			strCodeval ="";
+			//getcmb_field(strCodeval);
+			ds_cmbsel.InsertRow(0);
+			ds_cmbsel.SetColumn(0,"CODE","");
+			ds_cmbsel.SetColumn(0,"CODENM","");
+			ds_cmbsel.SetColumn(0,"CDNM","");
+			ds_cmbsel.InsertRow(1);
+			ds_cmbsel.SetColumn(1,"CODE","1");
+			ds_cmbsel.SetColumn(1,"CODENM","사내");
+			ds_cmbsel.SetColumn(1,"CDNM","1 | 사내");
+			ds_cmbsel.InsertRow(2);
+			ds_cmbsel.SetColumn(2,"CODE","2");
+			ds_cmbsel.SetColumn(2,"CODENM","사외");
+			ds_cmbsel.SetColumn(2,"CDNM","2 | 사외");
+			ds_cmbsel.InsertRow(3);
+			ds_cmbsel.SetColumn(3,"CODE","3");
+			ds_cmbsel.SetColumn(3,"CODENM","표준시(사외)");
+			ds_cmbsel.SetColumn(3,"CDNM","3 | 표준시(사외)");
+			break;
+		}
+	}else{
+		("ed_where"+cmbVal).Text = "";
+		("ed_where"+cmbVal).Number = false;
+		("ed_where"+cmbVal).Visible = true;
+		("cmb_where"+cmbVal).Value = "";
+		("cmb_where"+cmbVal).Visible = false;
+		("cal_where"+cmbVal).Value = "";
+		("cal_where"+cmbVal).Visible = false;
+	}
+}
+*/
+/********************************************************************** 
+ * 내용설명 : cmb_field 
+ **********************************************************************/ 
+function getcmb_field(cmbselVal){
+
+    var sKind		= "getcmb_field";						
+	var sMethodName = "service::psogmlib/selectOgm411_cmbsel.do";   // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_cmbsel=ds_cmbsel";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		//sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB2=" + quote(lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " GRPCD=" + quote(cmbselVal); //사업부
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+
+/********************************************************************** 
+ * 내용설명 : 소속조회
+ **********************************************************************/ 
+function getogmGauge_mst650()
+{
+	var sKind		= "getMst650pf";						
+	var sMethodName = "service::psogmlib/selectOGMgauge_Mst650pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_cmbsel=ds_mst650pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+
+function cal_where1_OnKillFocus(obj)
+{
+	lblselfield1.Text = cal_where1.Value;
+}
+
+function ed_where1_OnKillFocus(obj)
+{
+	lblselfield1.Text = ed_where1.Text;		
+}
+
+function cmb_where1_OnKillFocus(obj)
+{
+	lblselfield1.Text = cmb_where1.Value;	
+}
+
+function cal_where2_OnKillFocus(obj)
+{
+	lblselfield2.Text = cal_where2.Value;
+}
+
+function ed_where2_OnKillFocus(obj)
+{
+	lblselfield2.Text = ed_where2.Text;		
+}
+
+function cmb_where2_OnKillFocus(obj)
+{
+	lblselfield2.Text = cmb_where2.Value;	
+}
+
+//Total 구하기
+function get_TotalCount()
+{
+	var psm_cnt = 0; //측정기항목count변수
+	var psg_cnt = 0; //검사구항목count변수
+	var pe_cnt = 0;  //설비항목count변수
+	var pe_pure_cnt = 0; //설비장비대수변수
+	var compare_value = ""; //설비장비대수를 구하기 위해 비교값으로 설정
+	
+	var rowcnt = ds_ogm411.GetRowCount();
+	for(var i = 0 ; i < rowcnt; i++)
+	{
+		var cur_group = trim(ds_ogm411.GetColumn(i,"GROUP"));
+		var cur_cell = trim(ds_ogm411.GetColumn(i,"MNGNO"));
+		if(cur_group == "측정기") //측정기인 경우
+		{
+			psm_cnt++;
+		}		
+		
+		//검사구의 항목수를 구한다.
+		if(cur_group == "검사구") //검사구인 경우
+		{
+			psg_cnt++;
+		}		
+	
+		if(cur_group == "설비") //설비인 경우
+		{
+			pe_cnt++;
+		
+			var cur_cell = substr(trim(ds_ogm411.GetColumn(i,"MNGNO")),0,6);
+		
+			if(trim(compare_value) != trim(cur_cell))
+			{
+				compare_value = cur_cell;
+				pe_pure_cnt++; //설비 count
+			}
+			else
+			{
+				continue;
+			}
+		}
+		
+	}
+	displayDiv.total_Static.Text ="측정기 항목수 : " + psm_cnt +" 개, 검사구 항목수: " + psg_cnt +" 개, 설비항목수: " + pe_cnt + " 개, 장비대수 : " + pe_pure_cnt + " 개 있습니다.";
+
+}
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function btn1_OnClick(obj)
+{
+	for (var i=1; i<=22;i++){
+		var chk_Field = "chk_Field"+i;
+		object(chk_Field).Value = 1;
+	}
+}
+
+function btn2_OnClick(obj)
+{
+	for (var i=2; i<=22;i++){
+		var chk_Field = "chk_Field"+i;
+		object(chk_Field).Value = 0;
+	}
+}
+]]></Script>
+</Window>

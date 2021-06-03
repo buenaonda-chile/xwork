@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderDayTransferWorkDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="OrderDayTransferWork" type="OrderDayTransferWorkDomain">
+        <result property="adsdt" column="ADSDT" />        
+        
+        <result property="comps" column="CONPS" />
+        <result property="typcd" column="TYPCD" />
+        <result property="pyvnd" column="PYVND" />        
+        <result property="pspno" column="PSPNO" />
+        <result property="plndt" column="PLNDT" />
+        <result property="basqy" column="BASQY" />
+        <result property="chgdt" column="CHGDT" />
+        <result property="duedt" column="DUEDT" />
+        <result property="orqty" column="ORQTY" />
+        <result property="alqty" column="ALQTY" />
+        <result property="shdqy" column="SHDQY" />
+        <result property="shpdt" column="SHPDT" />
+        <result property="corno" column="CORNO" />
+        <result property="plncd" column="PLNCD" />
+        			
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <resultMap id="NonOrderHostUp" type="NonOrderHostUpDomain">
+    	<result property="stplndt" column="STPLNDT" />
+    	<result property="enplndt" column="ENPLNDT" />
+    	
+		<result property="psvnd" column="PSVND" />
+		<result property="pscom" column="PSCOM" />
+		<result property="vndcd" column="VNDCD" />		
+		
+		<result property="prtno" column="PRTNO" />
+		<result property="cpdsc" column="CPDSC" />
+		<result property="cusno" column="CUSNO" />
+		<result property="cprtn" column="CPRTN" />
+		
+		<result property="prtgb" column="PRTGB" />
+		
+		<result property="comps" column="COMPS" />
+		<result property="typcd" column="TYPCD" />
+		<result property="pyvnd" column="PYVND" />
+		<result property="shpto" column="SHPTO" />
+		<result property="pspno" column="PSPNO" />
+		<result property="plndt" column="PLNDT" />
+		<result property="basqy" column="BASQY" />
+		<result property="ponum" column="PONUM" />
+		<result property="faccd" column="FACCD" />
+		<result property="yard" column="YARD" />
+		<result property="outqy" column="OUTQY" />
+		<result property="inpid" column="INPID" />
+		
+		<result property="period" column="PERIOD" />		
+		
+		<result property="tgubn" column="TGUBN" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchCigmaDate" resultMap="OrderDayTransferWork" parameterType="OrderDayTransferWorkDomain">
+		SELECT 
+			ADSDT
+		FROM 
+			${lib1}.SC000PR 
+		WHERE 
+		      'SqlMap-OrderDayTransferWork.searchCigmaDate' = 'SqlMap-OrderDayTransferWork.searchCigmaDate'
+    </select>
+
+	<!-- AND MAJMK = '일일수주갱신작업' -->
+ 	<select id="countMST040PF" resultType="java.lang.Integer" parameterType="OrderDayTransferWorkDomain">
+		SELECT 
+		      COUNT(*) CNT
+		 FROM 
+		      ${lib2}.MST040PF
+		WHERE
+		      'SqlMap-OrderDayTransferWorkDomain.countMST040PF' = 'SqlMap-OrderDayTransferWorkDomain.countMST040PF' 
+		   AND SUBSTR(MAJCD, 1, 6) = 'SPD159'
+		   
+		   AND COMPS = #{comps}
+		   AND SUBSTR(MAJCD, 7, 14) = REPEAT('0', 8-LENGTH('${pyvnd}')) || '${pyvnd}'
+		   AND MAJDT = #{plndt}
+    </select>
+    
+    <select id="procTrans" parameterType="HashMap" statementType="CALLABLE">
+        {CALL PSEOBJLIB.SPDZ159RC('${mi_parm}') }
+    </select>
+    
+    <select id="procTrans_backup" parameterType="HashMap" statementType="CALLABLE">
+        {CALL PSEOBJLIB.SPDE159RC('${mi_parm}') }
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="cigmaDataSearch" resultMap="OrderDayTransferWork" parameterType="OrderDayTransferWorkDomain">
+		SELECT 
+			A.COMPS, <!-- IT수정: A.TYPCD, -->
+			CASE WHEN A.TYPCD='AA' THEN '서열' WHEN A.TYPCD='BB' THEN '비서열' WHEN A.TYPCD='CC' THEN '확정오더' ELSE '' END AS TYPCD,  
+			A.PYVND, A.PSPNO, A.CHGDT, A.PLNDT, A.BASQY, 
+			B.DUEDT, B.ORQTY, B.ALQTY, B.SHDQY, B.SHPDT, B.CORNO, A.PLNCD
+		FROM 
+			PSZDBLIB.SVZ600PF A
+			LEFT OUTER JOIN ${lib1}.ED000PR B
+			ON A.PYVND = B.CUSNO AND A.CHGDT = B.LMNDT AND A.PSPNO = B.PRTNO AND A.PLNDT = B.SHPDT
+		WHERE 
+		      'SqlMap-OrderDayTransferWork.cigmaDataSearch' = 'SqlMap-OrderDayTransferWork.cigmaDataSearch'
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+		  AND A.CHGDT = #{chgdt}
+    </select>
+    
+    <!-- 재처리 작업일때 CIGMA일자 에 해당하는 데이터 삭제처리 
+    AND PLNDT <![CDATA[>=]]> #{plndt} -->
+ 	<select id="countHISTORY" resultType="java.lang.Integer" parameterType="OrderDayTransferWorkDomain">
+		SELECT 
+		      COUNT(*) CNT
+		 FROM 
+			  <if test='typcd.equals("BB")'>
+			  PSZDBLIB.SVZ611PF 
+			  </if>
+			  <if test='typcd.equals("CC")'>
+			  PSZDBLIB.SVZ612PF
+			  </if>
+		WHERE
+		      'SqlMap-OrderDayTransferWorkDomain.countHISTORY' = 'SqlMap-OrderDayTransferWorkDomain.countHISTORY' 
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}	      
+	      AND MAGDT = #{adsdt}
+    </select>
+    
+    <!-- 재처리 작업일때 CIGMA일자 에 해당하는 데이터 삭제처리 
+    AND PLNDT <![CDATA[>=]]> #{plndt} -->
+    <delete id="deleteHISTORY" parameterType="OrderDayTransferWorkDomain">
+		DELETE FROM 
+			<if test='typcd.equals("BB")'>
+			PSZDBLIB.SVZ611PF 
+			</if>
+			<if test='typcd.equals("CC")'>
+			PSZDBLIB.SVZ612PF
+			</if>
+		WHERE 
+			  'SqlMap-OrderDayTransferWork.deleteHISTORY' = 'SqlMap-OrderDayTransferWork.deleteHISTORY'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+	      AND MAGDT = #{adsdt}
+    </delete>
+    
+    <insert id="createHISTORY" parameterType ="OrderDayTransferWorkDomain">
+    	/* SqlMap-OrderDayTransferWork.createHISTORY */
+		INSERT INTO 
+			<if test='typcd.equals("BB")'>
+			PSZDBLIB.SVZ611PF
+			</if>
+			<if test='typcd.equals("CC")'>
+			PSZDBLIB.SVZ612PF
+			</if>
+       (       
+          COMPS, TYPCD, PYVND, SHPTO, PSPNO, PLNDT, BASQY, PONUM, FACCD, YARD, OUTQY,	
+          CHGDT, MAGDT,
+          INPID, INPDT, INPTM,
+          CHPID, CHPDT, CHGTM	
+        )
+		(SELECT A.COMPS, A.TYPCD, A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT, A.BASQY, A.PONUM, A.FACCD, A.YARD, A.OUTQY,	
+                A.CHGDT, '${adsdt}',
+                A.INPID, A.INPDT, A.INPTM, 
+                A.CHPID, A.CHPDT, A.CHGTM
+		   FROM 
+				<if test='typcd.equals("BB")'>
+				PSZDBLIB.SVZ601PF A 
+				</if>
+				<if test='typcd.equals("CC")'>
+				PSZDBLIB.SVZ602PF A
+				</if>
+          WHERE A.COMPS = #{comps}
+            AND A.TYPCD = #{typcd}
+            AND A.PYVND = #{pyvnd}
+            AND A.PLNDT <![CDATA[>=]]> #{plndt}
+	    )
+    </insert> 
+
+    <select id="selectSVZ600PF" resultMap="NonOrderHostUp" parameterType="OrderDayTransferWorkDomain">
+		select 
+		comps, pyvnd, pspno, plndt 
+		from PSZDBLIB.SVZ600PF 
+		where 
+			'SqlMap-OrderDayTransferWork.selectSVZ600PF' = 'SqlMap-OrderDayTransferWork.selectSVZ600PF'
+		AND PLNDT <![CDATA[>=]]> #{plndt} 
+		AND CHGDT = #{plndt} 
+		AND COMPS = #{comps} 
+		AND PYVND = #{pyvnd} 
+		group by comps, pyvnd, pspno, plndt 
+		having count(*) >= 2 
+    </select>
+        
+    <select id="selectSVZ600PF_2" resultMap="NonOrderHostUp" parameterType="OrderDayTransferWorkDomain">
+	    select 
+		 COMPS,TYPCD,PYVND,count(*) as SHPTO 
+		from PSZDBLIB.SVZ600PF
+		where
+		CHGDT = #{plndt} 
+		AND COMPS = #{comps} 
+		AND PYVND = #{pyvnd} 
+		GROUP BY COMPS,TYPCD,PYVND 
+		ORDER BY TYPCD
+    </select>
+    
+       <!-- 등록전 존재 체크 -->
+    <select id="searchSVZ613PF" resultType="java.lang.Integer" parameterType="OrderTransferMngDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ613PF
+        WHERE 
+             'SqlMap-OrderDayTransferWork.searchSVZ613PF' = 'SqlMap-OrderDayTransferWork.searchSVZ613PF'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PLNDT = #{plndt}
+    </select>
+    
+        <!-- 更新 SQL文（主キー） -->
+    <update id="updateSVZ613PF" parameterType="OrderTransferMngDomain">
+        UPDATE 
+               PSZDBLIB.SVZ613PF
+        SET
+            STCD1 = #{stcd1}
+          , STCD2 = #{stcd2}
+          , STCD3 = #{stcd3}
+          , MAGDT = #{magdt}
+          , MAGTM = #{magtm}
+        WHERE 
+              'SqlMap-OrderDayTransferWork.updateSVZ613PF' = 'SqlMap-OrderDayTransferWork.updateSVZ613PF'
+		  AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PLNDT = #{plndt}
+    </update>
+    
+        <!-- 登録 SQL文 -->
+    <insert id="createSVZ613PF" parameterType ="OrderTransferMngDomain">
+        INSERT INTO PSZDBLIB.SVZ613PF (
+                COMPS, PYVND, PLNDT, STCD1, STCD2, STCD3, MAGDT, MAGTM
+        ) values (
+                #{comps}, #{pyvnd}, #{plndt}, #{stcd1}, #{stcd2}, #{stcd3}, #{magdt}, #{magtm}
+        )
+    </insert>
+    
+    
+</mapper>

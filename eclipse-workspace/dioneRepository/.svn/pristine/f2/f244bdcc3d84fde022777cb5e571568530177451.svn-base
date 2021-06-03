@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.BkmkDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Bkmk" type="BkmkDomain">
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="menuCode" column="MENU_CODE" />
+        <result property="menuCodeNm" column="MENU_CODE_NM" />
+        <result property="menuSort" column="MENU_SORT" />
+        <result property="mcdIcon" column="MCD_ICON" />
+        <result property="mcdUrl" column="MCD_URI" />
+    </resultMap>
+
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Bkmk" parameterType="BkmkDomain">
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Bkmk" parameterType="BkmkDomain">
+    	SELECT A.EMP_NUMBER
+    		 , A.MENU_CODE
+    		 , FNC_GET_MENU_CODE_NM(MENU_CODE, #{langCmc }) AS MENU_CODE_NM
+    		 , A.MENU_SORT
+         	 , B.MCD_ICON
+         	 , B.MCD_URI
+    	  FROM BKMK_MENU A
+           	 , DNKR_MENU_CODE B
+    	 WHERE 'SqlMap-Bkmk.searchByCondition' = 'SqlMap-Bkmk.searchByCondition'
+           AND A.MENU_CODE = B.MCD_CODE
+    	 	<if test="empNumber != null and empNumber != ''">
+    	   AND EMP_NUMBER = #{empNumber}
+    	 	</if>
+    	 ORDER BY MENU_SORT
+    </select>
+    
+     <!-- 検索 SQL文（任意条件 件数取得） --> 
+    <select id="bkmkCount" resultType="java.lang.Integer" parameterType="BkmkDomain">
+    	SELECT COUNT(*)
+    	  FROM BKMK_MENU
+    	 WHERE 'SqlMap-Bkmk.bkmkCount' = 'SqlMap-Bkmk.bkmkCount'
+    	 	<if test="empNumber != null and empNumber != ''">
+    	   AND EMP_NUMBER = #{empNumber}
+    	 	</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="Bkmk" parameterType="BkmkDomain">
+    </select>
+   
+    <!-- 検索 SQL文（任意条件 件数取得） --> 
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="BkmkDomain">
+    	SELECT COUNT(*)
+    	  FROM BKMK_MENU
+    	 WHERE 'SqlMap-Bkmk.searchCount' = 'SqlMap-Bkmk.searchCount'
+    	 	<if test="empNumber != null and empNumber != ''">
+    	   AND EMP_NUMBER = #{empNumber}
+    	 	</if>
+    </select>
+    
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="BkmkDomain">
+    	insert into BKMK_MENU (
+                /* SqlMap-Bkmk.create */
+            <if test="empNumber != null">
+                EMP_NUMBER,
+            </if>
+            <if test="menuCode != null">
+                MENU_CODE,
+            </if>                 
+                MENU_SORT
+        ) values (            
+            <if test="empNumber != null">
+                #{empNumber },
+            </if> 
+            <if test="menuCode != null">
+                #{menuCode},
+            </if>           
+               NVL((SELECT MAX(MENU_SORT) + 1 FROM BKMK_MENU WHERE EMP_NUMBER = #{empNumber } ), 1)
+        )
+    </insert>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="BkmkDomain">
+    	update 
+                BKMK_MENU 
+        set 
+        		EMP_NUMBER = #{empNumber}
+           	<if test="menuSort != null"> 
+           		, MENU_SORT = #{menuSort }
+         	</if>
+        where 
+                ' SqlMap-Bkmk.update' = ' SqlMap-Bkmk.update'
+            and EMP_NUMBER = #{empNumber}
+        <if test="menuCode != null">
+          	and MENU_CODE = #{menuCode}	
+        </if> 
+    </update>
+    
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="BkmkDomain">
+    	delete from 
+                BKMK_MENU
+        where 
+                'SqlMap-Bkmk.delete' = 'SqlMap-Bkmk.delete'
+           and EMP_NUMBER = #{empNumber}
+           and MENU_CODE = #{menuCode }
+    </delete>
+    
+</mapper>

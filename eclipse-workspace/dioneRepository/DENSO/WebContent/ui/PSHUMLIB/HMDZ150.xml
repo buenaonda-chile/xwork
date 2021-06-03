@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="학력마스타" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset CanRowPosChange="ds_HMDZ150_CanRowPosChange" DataSetType="Dataset" Id="ds_HMDZ150" OnColumnChanged="ds_HMDZ150_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="DPSQNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPDPNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SCHCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADRCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="SCHNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="MAJCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="INDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="OUDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="GRDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="GRDCM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMDZ150_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD020PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SSCD">
+				<Contents>
+					<colinfo id="PCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="PCONT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BPCD">
+				<Contents>
+					<colinfo id="PCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="PCONT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MJCD">
+				<Contents>
+					<colinfo id="PCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="PCONT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GDCD">
+				<Contents>
+					<colinfo id="PCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="PCONT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="3" Top="30" Width="1060"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="4" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="ComboBoxPlant_OnChanged" TabOrder="5" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="6" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="7" Text="사&#32;번" Top="35" VAlign="Middle" Width="116"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_HMDZ150" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="552" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" Right="1048" SelColor="black" TabOrder="9" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="0"/>
+						<col width="0"/>
+						<col width="0"/>
+						<col width="70"/>
+						<col width="80"/>
+						<col width="120"/>
+						<col width="80"/>
+						<col width="150"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="140"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell align="center" bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="NO" Valign="Center"/>
+						<cell align="center" bkcolor="#dfdfdf" col="1" display="text" text="부서순서"/>
+						<cell align="center" bkcolor="#dfdfdf" col="2" display="text" text="부서코드"/>
+						<cell align="center" bkcolor="#dfdfdf" col="3" display="text" text="부서명"/>
+						<cell align="center" bkcolor="#dfdfdf" col="4" display="text" text="사번"/>
+						<cell align="center" bkcolor="#dfdfdf" col="5" display="text" text="성명"/>
+						<cell align="center" bkcolor="#dfdfdf" col="6" display="text" text="학력"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="소재지"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="전공" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="졸업"/>
+						<cell bkcolor="#dfdfdf" bkimagealign="left" col="10" color="#002043" display="text" text="졸업일"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="학교명"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="참조"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="normal" expr="row+1"/>
+						<cell align="center" checklength="Byte" col="1" colid="DPSQNO" display="normal" limit="2" LimitDec="0"/>
+						<cell align="center" checklength="Byte" col="2" colid="DPTCD" display="normal" limit="2" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="3" colid="DPDPNM" display="normal" limit="2" LimitDec="0"/>
+						<cell align="center" checklength="Byte" col="4" colid="SABUN" display="normal" limit="2" LimitDec="0"/>
+						<cell align="center" checklength="Byte" col="5" colid="KORNM" display="normal" limit="2" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="6" colid="SCHCD" combocol="PCODE" combodataset="ds_SSCD" combotext="PCONT" display="combo" edit="combo" limit="2" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="7" colid="ADRCD" combocol="PCODE" combodataset="ds_BPCD" combotext="PCONT" display="combo" edit="combo" limit="2" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="8" colid="MAJCD" combocol="PCODE" combodataset="ds_MJCD" combotext="PCONT" display="combo" edit="combo"/>
+						<cell align="left" checklength="Byte" col="9" colid="GRDCD" combocol="PCODE" combodataset="ds_GDCD" combotext="PCONT" display="combo" edit="combo" limit="12" LimitDec="0"/>
+						<cell align="center" checklength="Byte" col="10" colid="OUDAT" combotext="PCONT" display="date" edit="date" limit="2" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="11" colid="SCHNM" display="normal" edit="normal" limit="16" LimitDec="0"/>
+						<cell align="left" checklength="Byte" col="12" colid="GRDCM" display="normal" edit="normal" limit="8" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="340" TabOrder="11" Top="35" VAlign="Middle" Width="340"></Static>
+		<Edit CheckLength="Byte" Height="21" Id="ed_SABUN" Left="344" MaxLength="7" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_SABUN_OnCharChanged" OnKillFocus="ed_SABUN_OnKillFocus" TabOrder="10" Top="38" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Image Cursor="HAND" Height="17" Id="imgCODE" ImageID="ic_search" Left="544" OnClick="imgCODE_OnClick" Static="FALSE" TabOrder="8" Top="41" Width="15"></Image>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="671" OnClick="fn_Search" TabOrder="12" Text="조회" Top="67" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="754" OnClick="fn_Input" TabOrder="13" Text="추가" Top="67" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="835" OnClick="fn_Save" TabOrder="14" TabStop="FALSE" Text="Button2" Top="67" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="910" OnClick="fn_Delete" TabOrder="14" Text="Button1" Top="67" Visible="FALSE" Width="75"></Button>
+		<Static Height="14" Id="st_KORNM" Left="443" TabOrder="16" Top="40" Width="88"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="442" TabOrder="17" Top="56" Width="96"></Static>
+		<Button Height="24" Id="btnExcel" ImageID="sum_excel" Left="988" OnClick="fn_Excel" TabOrder="18" Text="추가" Top="67" Visible="FALSE" Width="70"></Button>
+		<Checkbox Height="18" Id="chK_CNDCD" Left="584" TabOrder="19" Text="퇴사자포함" Top="40" Value="FALSE" Width="80"></Checkbox>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="800" Style="static" TabOrder="21" Top="35" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="684" TabOrder="22" Text="조회구분" Top="35" VAlign="Middle" Width="116"></Static>
+		<Checkbox Height="18" Id="chk_LAST" Left="808" TabOrder="20" Text="최종학력" Top="40" Value="FALSE" Width="80"></Checkbox>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HMDZ150.xml
+ * ● PROGRAM DESCRIPTION  : 학력마스타 등록
+ * ● DATE WRITTEN         : 2016.06.16
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+//저장처리진행중
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();
+	getSSCD();	//학력코드
+	getBPCD();	//현적지코드
+	getMJCD();	//전공코드
+	getGDCD();	//졸업코드
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	ComboBoxPlant.SetFocus();
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 코드 
+ **********************************************************************/ 
+// 1. 학력코드
+function getSSCD(){
+
+	var sKind		= "getPCODE";						
+	var sMethodName = "service::pshumlib/selectPCODE.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SSCD=ds_PCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " PCODE=" + quote("SSCD%");	//PCODE
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+// 2. 현적지코드
+function getBPCD(){
+
+	var sKind		= "getPCODE";						
+	var sMethodName = "service::pshumlib/selectPCODE.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BPCD=ds_PCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " PCODE=" + quote("BPCD%");	//PCODE
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+// 3. 전공코드
+function getMJCD(){
+
+	var sKind		= "getPCODE";						
+	var sMethodName = "service::pshumlib/selectPCODE.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MJCD=ds_PCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " PCODE=" + quote("MJCD%");	//PCODE
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+// 4. 졸업코드
+function getGDCD(){
+
+	var sKind		= "getPCODE";						
+	var sMethodName = "service::pshumlib/selectPCODE.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_GDCD=ds_PCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " PCODE=" + quote("GDCD%");	//PCODE
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getHMDZ150(){
+		
+	var sKind		= "getHMDZ150";						
+	var sMethodName = "service::pshumlib/selectHMDZ150.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HMDZ150=ds_HMDZ150";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@LIB3=" + quote(Lib3);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);			
+		sArgument += "@SABUN=" + quote(ed_SABUN.Text);			
+		sArgument += "@CNDCD=" + quote(chK_CNDCD.Value);	//퇴사자포함여부
+		sArgument += "@SCHCD=" + quote(chk_LAST.Value);	//최종학력
+	var str = dialog("Common::PGMLOAD_HUM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	http.Sync = false;
+	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 저장
+ * 주요변수 : 
+ * 			
+ **********************************************************************/ 
+ 
+ function setHMDZ150(){
+ 
+ 	if(!validationChk()){
+		return;
+	}
+
+ 	if(ds_HMDZ150.GetRowType(ds_HMDZ150.currow)=="update" ||ds_HMDZ150.GetRowType(ds_HMDZ150.currow)=="insert" ){
+		if(!ds_HMDZ150_CanRowPosChange()){
+			return;
+		}
+	} 
+
+	var sKind		= "setHMDZ150";						
+	var sMethodName = "service::pshumlib/saveHMDZ150.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_HMDZ150=ds_HMDZ150:U";                      // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HMDZ150_CHECK=ds_HMDZ150_CHECK";							// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		//sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		//sArgument += " SABUN=" + quote(ed_SABUN.Text);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+ }
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_HMDZ150_CHECK.GetRowCount() > 0){			
+		for(var i=0;i<ds_HMDZ150_CHECK.GetRowCount();i++){		
+			alert("학력코드 : " +ds_HMDZ150_CHECK.GetColumn(i,"SCHCD") + " = " + ds_HMDZ150_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getHMDZ150();        //error항목이 존재시에는 재조회		
+		return;		
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+
+	var result = true;
+	ed_SABUN.BKColor="white";
+
+	if(length(trim(st_KORNM.Text)) == 0){
+		ed_SABUN.BKColor="paleturquoise";
+		alert("[알림]사번을 입력하세요.");	
+		//alert(setPopMessage("6120"));//[알림]사번을 입력하세요.
+		//setMessage("6120");
+		ed_SABUN.SetFocus();
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "학력마스타";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid| 학력마스타";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_HMDZ150.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getHMDZ150();
+}
+
+function fn_Input()
+{
+	if(!validationChk()){
+		return;
+	}
+	if(checkInsertCount("ds_HMDZ150")== false) {
+		return;
+	}
+	if(ds_HMDZ150.rowcount < 1) {
+		fn_Search();
+	}
+	ds_HMDZ150.AddRow();
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"SABUN",ed_SABUN.Text);
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"KORNM",st_KORNM.Text);
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"SCHCD",00);	//학력코드
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"ADRCD",00);	//소재지코드
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"MAJCD",00);	//전공코드
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"INDAT",0);	//입학일자(관리안함)
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"OUDAT",0);	//졸업일자	
+	ds_HMDZ150.SetColumn(ds_HMDZ150.currow,"GRDCD",00);	//졸업코드
+	
+	MainGrid.SetCellPos(1);
+	MainGrid.SetFocus();
+}
+
+function fn_Delete()
+{
+	if(ds_HMDZ150.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_HMDZ150.DeleteRow(ds_HMDZ150.currow);	//삭제		
+	alert(setPopMessage("1011"));	
+	setPopMessage("1011");
+}
+
+function fn_Save()
+{
+	setHMDZ150();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+/********************************************************************** 
+ * 내용설명 : 사용자 조회 
+ **********************************************************************/ 
+function imgCODE_OnClick(obj,nX,nY)
+{
+	var sTemp="zzzzzzzzzz";
+	var selectnumber = "H6";
+	var PAYCD = 3; //1이면 기능직 2이면 직반장 3이면 전체
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" +  sTemp + " " + "PAYCD=" + PAYCD,584,528);
+	if (length(rtn) != 0){
+		ed_SABUN.Text=rtn[0];
+		st_KORNM.Text=rtn[1];
+	}	
+}
+
+function ed_SABUN_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getHMD020PF";		
+	var sMethodName = "service::pscomlib/selectINSAMasterPopup.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_HMD020PF=ds_Select";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " LIB3=" + quote(Lib3);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument  += " SABUN=" + quote(ed_SABUN.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	if (ds_HMD020PF.GetRowCount() < 1){
+		alert(setPopMessage("4062")); //[확인] 사용자가 존재하지 않습니다.
+		setMessage("4062");
+		st_KORNM.Text = "";
+		ed_SABUN.SetFocus();
+		return;
+	}
+	st_KORNM.Text = ds_HMD020PF.GetColumn(0,"A2");	//이름
+	http.usewaitcursor = true;	
+}
+
+function ed_SABUN_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_KORNM.Text ="";
+}
+function ComboBoxPlant_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_HMDZ150.ClearData();
+
+	if(ComboBoxPlant.Value =="C1"){
+		Lib3="PSCDBLIB";
+	}else if(ComboBoxPlant.Value =="H1"){
+		Lib3="PSHDBLIB";
+	}else if(ComboBoxPlant.Value =="S1"){
+		Lib3="PSSDBLIB";
+	}
+	getSSCD();	//학력코드
+	getBPCD();	//현적지코드
+	getMJCD();	//전공코드
+	getGDCD();	//졸업코드
+}
+
+function ds_HMDZ150_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if (strColumnID == "OUDAT"){//졸업일자
+		if(length(trim(varNewValue))==0){
+			ds_HMDZ150.SetColumn(nRow,"OUDAT",0);
+		}
+	}
+}
+
+function ds_HMDZ150_CanRowPosChange(obj,nOldRow,nRow)
+{
+	http.usewaitcursor = false;
+
+	var p_SCHCD=ds_HMDZ150.GetColumn(ds_HMDZ150.currow,"SCHCD"); //학력코드
+	if(ds_HMDZ150.GetRowType(ds_HMDZ150.currow)=="update" ||ds_HMDZ150.GetRowType(ds_HMDZ150.currow)=="insert" ){
+		if(trim(p_SCHCD)=="0"){	
+			alert("[알림] 학력코드를 입력하세요.");
+			//alert(setPopMessage("6122")); //[경고] 교육완료일을 입력하세요.
+			//setMessage("6122");	
+			return false;
+		}
+	}
+	return true;
+	http.usewaitcursor = true;
+}
+]]></Script>
+</Window>

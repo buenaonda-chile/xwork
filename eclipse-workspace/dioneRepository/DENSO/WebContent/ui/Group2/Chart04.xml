@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="Chart04" Left="8" OnLoadCompleted="on_LoadCompleted" OnTimer="Chart04_OnTimer" PidAttrib="7" Title="전광판&#32;시간대별&#32;생산실적" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_chart">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_chartGubun">
+				<Contents>
+					<colinfo id="CODE1" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE1>1</CODE1>
+						<CODE_NAME>2차원&#32;막대</CODE_NAME>
+					</record>
+					<record>
+						<CODE1>2</CODE1>
+						<CODE_NAME>3차원&#32;막대</CODE_NAME>
+					</record>
+					<record>
+						<CODE1>3</CODE1>
+						<CODE_NAME>도넛</CODE_NAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<value>2공장2층</value>
+					</record>
+					<record>
+						<cd>2</cd>
+						<value>3공장2층&#32;외&#32;</value>
+					</record>
+					<record>
+						<cd>3</cd>
+						<value>전자공장</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_interval">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>10</cd>
+						<value>10</value>
+					</record>
+					<record>
+						<cd>20</cd>
+						<value>20</value>
+					</record>
+					<record>
+						<cd>30</cd>
+						<value>30</value>
+					</record>
+					<record>
+						<cd>40</cd>
+						<value>40</value>
+					</record>
+					<record>
+						<cd>50</cd>
+						<value>50</value>
+					</record>
+					<record>
+						<cd>60</cd>
+						<value>60</value>
+					</record>
+					<record>
+						<cd>정지</cd>
+						<value>정지</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list">
+				<Contents>
+					<colinfo id="CHK" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRSNM" size="256" summ="default" type="STRING"/>
+					<record>
+						<CHK></CHK>
+						<PROCS></PROCS>
+						<PRSNM></PRSNM>
+					</record>
+					<record>
+						<CHK></CHK>
+						<PROCS></PROCS>
+						<PRSNM></PRSNM>
+					</record>
+					<record>
+						<CHK></CHK>
+						<PROCS></PROCS>
+						<PRSNM></PRSNM>
+					</record>
+					<record>
+						<CHK></CHK>
+						<PROCS></PROCS>
+						<PRSNM></PRSNM>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" TabOrder="5" Top="32" Width="1057"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="3" TabOrder="5" Top="34" Width="1053"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static14" Left="774" TabOrder="29" Top="647" Width="82"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static10" Left="376" TabOrder="24" Top="34" Width="95"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="value" DisplayRowCnt="4" Height="21" Id="cmb_rowgb" ImeMode="none" INDEX="0" InnerDataset="ds_ppmi001mCode" Left="672" ResetIndex="FIRST" TabOrder="20" Top="648" Width="102"></Combo>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="590" TabOrder="21" Top="647" Width="82"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static6" Left="185" TabOrder="4" Top="34" Width="95"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static5" Left="191" Style="static" TabOrder="1" Text="생산년도" Top="39" VAlign="Middle" Width="85"></Static>
+		<Static BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="3" TabOrder="3" Top="34" Width="95"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static21" Left="9" Style="static" TabOrder="2" Text="사업장" Top="39" VAlign="Middle" Width="85"></Static>
+		<Combo Border="Flat" BorderColor="#888888" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="search_comps" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="101" ResetIndex="FIRST" TabOrder="7" Top="35" Width="83"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="8" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="8" Top="8" Width="1032"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_chart" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="1146" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="522" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="544" TabOrder="10" TabStop="true" Top="624" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="544">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+						<col width="39"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="생산실적"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="~09"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="~10"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="~11"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="~12"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="~14"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="~15"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="~16"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="~17"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="~18"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="~19"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="20~"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="PROCS" color="#333333" display="text"/>
+						<cell align="right" col="1" colid="SILTT" color="#333333" display="number"/>
+						<cell align="right" col="2" colid="SIL09" display="number"/>
+						<cell align="right" col="3" colid="SIL10" display="number"/>
+						<cell align="right" col="4" colid="SIL11" display="number"/>
+						<cell align="right" col="5" colid="SIL12" display="number"/>
+						<cell align="right" col="6" colid="SIL14" display="number"/>
+						<cell align="right" col="7" colid="SIL15" display="number"/>
+						<cell align="right" col="8" colid="SIL16" display="number"/>
+						<cell align="right" col="9" colid="SIL17" display="number"/>
+						<cell align="right" col="10" colid="SIL18" display="number"/>
+						<cell align="right" col="11" colid="SIL19" display="number"/>
+						<cell align="right" col="12" colid="SIL20" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<xChart Bottom="608" Chart3D="true" DataEditor="true" DoubleClick="xChart0_DoubleClick" Gallery="Gallery_Lines" Height="544" Highlighted="xChart0_Highlighted" Id="xChart0" Left="184" NSeries="2" NValues="5" Right="1056" SerLegBox="true" Top="64" View3DDepth="0" Width="872">
+			<_PersistData>&#13;&#10;/6xiUrZ130NGWDYA8vJNQ/9oYXJ0RlgsIP9WZXJzaW9uPf82LjIuMTM0Mv8uMCwgQ3VsdP91cmU9bmV1dP9yYWwsIFB1Yv9saWNL&#13;&#10;ZXlUb/9rZW49YTE4N/84ZTIwNTJjMP84ZGNlElNvZv90d2FyZUZYLlr59B/y8wAj8vAgXgR6aw0E8vABAf7/gQUqawUBawUCawYG&#13;&#10;pQSRCfUQ8vAD8vD7/39/4YJlAXwCvwKRBQEFQS9yaWFs8vBBbw/y8ukFjgWsBQBGD1gSLt9IaWdobCkQdFP/ZXR0aW5ncxDZCZMI&#13;&#10;RR8AB3YFAQHzAAgCHRMfWAUuQWd4aXOVAX0CAAI6EHzy82UWKDjgAApHFQELRxmeB88f3BmVAZ4DhQ0wbQ9/A40OjwUCDJsfrRAB&#13;&#10;DbEfYi90L+cf+R8LL50visUlDloYD44FvAHy8VI++fQuQmFzZQAPEg/kJA82DRd3H/wiDS5J/0dhbGxlcnlUV3lwZZUBFJQTEfoM&#13;&#10;1Ic/lToSlTUTjQYBDCNAS78AcTHy8hXkLUc//vsjCS5MaW5lSYduZm/bAr0s0wM6IUJQlT/UCbgagQEWI0UXhSffD0RlZmEYMC5X&#13;&#10;P2luZG93cw==&#13;&#10;</_PersistData>
+		</xChart>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="search_ordat" Left="284" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="36" Width="90"></Calendar>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" Left="1085" TabOrder="15" Top="38" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static2" Left="1107" Style="static" TabOrder="14" Text="공정코드" Top="43" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="53" Height="5" Id="Shape0" Left="1097" LineColor="#dceaf7" Right="1102" TabOrder="13" Top="48" Type="Ellipse" Width="5"></Shape>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="search_procsFrom" Left="1192" TabOrder="16" Text="A000" Top="40" Width="38"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static7" Left="1234" Style="static" TabOrder="17" Text="~" Top="43" VAlign="Middle" Width="8"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="search_procsTo" Left="1248" TabOrder="18" Text="Z999" Top="40" Width="38"></Edit>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static0" Left="606" Style="static" TabOrder="19" Text="공장선택" Top="652" VAlign="Middle" Width="50"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="15" Id="Static9" Left="381" Style="static" TabOrder="22" Text="주야구분" Top="40" VAlign="Middle" Width="85"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_daygu" ImeMode="none" INDEX="0" InnerDataset="ds_daygu" Left="474" ResetIndex="FIRST" TabOrder="23" Top="35" Width="90"></Combo>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static12" Left="566" TabOrder="26" Top="34" Width="95"></Static>
+		<Combo CodeColumn="cd" DataColumn="value" Height="21" Id="cmb_interval" InnerDataset="ds_interval" Left="665" OnChanged="cmb_interval_OnChanged" TabOrder="27" Text="정지" Top="35" Width="56"></Combo>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="17" Id="Static11" Left="571" Style="static" TabOrder="25" Text="리플레시&#32;타임" Top="38" VAlign="Middle" Width="85"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static13" Left="790" Style="static" TabOrder="28" Text="라인선택" Top="652" VAlign="Middle" Width="50"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="value" DisplayRowCnt="4" Height="21" Id="Combo0" ImeMode="none" INDEX="0" InnerDataset="ds_ppmi001mCode" Left="856" ResetIndex="FIRST" TabOrder="30" Top="648" Width="78"></Combo>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_list" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="544" Id="etcGrid" InputPanel="FALSE" Left="3" LineColor="#888888" MinWidth="100" Right="176" TabOrder="31" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="173">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="34"/>
+						<col width="56"/>
+						<col width="78"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="CHK"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="코드"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="공정명"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell col="1" colid="CHK" display="checkbox" edit="checkbox"/>
+						<cell align="left" col="2" colid="PROCS" display="text" LimitDec="0"/>
+						<cell align="left" col="3" colid="PRSNM" display="text" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : CHART.xml
+ * ● PROGRAM DESCRIPTION  : 제품별생산계획대 실적 발행
+ * ● DATE WRITTEN         : 2012.12.24
+----------------------------------------------------------------*/
+
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var CigmaLib = G_ds_user.GetColumn(0,"LIB1");
+var selected;
+
+function on_LoadCompleted(obj){	
+	getTitle();	
+	getComCode();
+	search_ordat.Value = today();	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	setTimer(1, 9999999999999999999999);
+	getList();
+	//getChartList();	
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");	
+	http.Sync 	= false;
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 그룹 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getList(){
+	var sKind		= "getOBSE04Group";						
+	var sMethodName = "service::psogmlib/selectOBSE04Group.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             					// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_list=DS_OBSE04Group";    						// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(search_comps.Value);			
+
+	//alert(sArgument);
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");		
+}
+
+function getChartList(){
+	/////////////////////////////
+	//alert(left(getDate() + (Timem() - toFloat(Time()+"000")), 10));
+	//alert(search_ordat.Value + '17');
+	
+	var selected = "";
+
+	for(var i =0; i < ds_list.getRowCount(); i++){
+		if(ds_list.getColumn(i,"CHK") == 1){
+			selected += "'" + ds_list.getColumn(i,"PROCS") + "',";
+		}
+	}		
+	/////////////////////////////
+
+	var sKind		= "getChartList";						
+	var sMethodName = "service::chart/selectChart04.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             		// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_chart=ds_chart";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";	
+	sArgument += " COMPS=" + quote(search_comps.Value);
+	sArgument += " ORDAT=" + quote(search_ordat.Value);
+	//sArgument += " ROWGB=" + quote(cmb_rowgb.Value);		
+	sArgument += " ROWGB=" + quote(left(selected, length(selected)-1));
+	
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);
+	//sArgument += " PROCS_TO=" + quote(search_procsTo.Text);	
+	
+	//alert(sArgument);
+	
+	XChart0.ClearData("ClearDataFlag_Data");
+	XChart0.ClearData("ClearDataFlag_Labels"); 
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+}
+
+function loadingChart(){	
+	xChart0.Titles[0].Text = "시간대별 생산실적 [공정별]";
+	
+	var chartCnt = ds_chart.rowCount();
+	xChart0.OpenData("COD_Values", chartCnt, 1);
+	// OpenData(COD, n1, n2) ==> COD : 키값, n1 : 시리즈수, n2 : 시리즈마다 데이터 수
+		
+	xChart0.LineWidth = 3;
+
+	for(var i=0;i<chartCnt;i++){		
+		//xChart0.Value(i, 0) = 0;
+		xChart0.Value(i, 0) = ds_chart.GetColumn(i, "F08T09F2030T2130");
+		
+		if(cd_daygu.Value = 'D'){		
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '10') {
+				xChart0.Value(i, 1) = ds_chart.GetColumn(i, "F09T10F2130T2300");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '11') {
+				xChart0.Value(i, 2) = ds_chart.GetColumn(i, "F10T11F23T00");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '12') {
+				xChart0.Value(i, 3) = ds_chart.GetColumn(i, "F11T12F00T02");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '13') {
+				xChart0.Value(i, 4) = ds_chart.GetColumn(i, "F13T14F02T04");
+			}		
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '14') {
+				xChart0.Value(i, 5) = ds_chart.GetColumn(i, "F14T15F04T05");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '15') {
+				xChart0.Value(i, 6) = ds_chart.GetColumn(i, "F15T16F05T06");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '16') {		
+				xChart0.Value(i, 7) = ds_chart.GetColumn(i, "F16T17F06T07");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '17') {
+				xChart0.Value(i, 8) = ds_chart.GetColumn(i, "F17T18F07T08");
+			}		
+			// 주간만
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '18') {
+				xChart0.Value(i, 9) = ds_chart.GetColumn(i, "F18T19");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '19') {
+				xChart0.Value(i, 10) = ds_chart.GetColumn(i, "F19T20");			
+			}
+			//xChart0.Value(i, 11) = ds_chart.GetColumn(i, "F20T21");	
+		} else {
+			xChart0.Value(i, 1) = ds_chart.GetColumn(i, "F09T10F2130T2300");			
+			xChart0.Value(i, 2) = ds_chart.GetColumn(i, "F10T11F23T00");			
+			xChart0.Value(i, 3) = ds_chart.GetColumn(i, "F11T12F00T02");
+			
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '02') {
+				xChart0.Value(i, 4) = ds_chart.GetColumn(i, "F13T14F02T04");
+			}		
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '04') {
+				xChart0.Value(i, 5) = ds_chart.GetColumn(i, "F14T15F04T05");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '05') {
+				xChart0.Value(i, 6) = ds_chart.GetColumn(i, "F15T16F05T06");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '06') {		
+				xChart0.Value(i, 7) = ds_chart.GetColumn(i, "F16T17F06T07");
+			}
+			if (left(getDate() + (Timem() - toFloat(Time()+"000")), 10) >= search_ordat.Value + '07') {
+				xChart0.Value(i, 8) = ds_chart.GetColumn(i, "F17T18F07T08");
+			}
+		}
+		xChart0.SerLeg(i) = ds_chart.GetColumn(i, "PROCS");
+	}
+	
+	xChart0.CloseData("COD_Values");
+	
+	if(cd_daygu.Value = 'D') {		
+		xChart0.Legend(0) = "08:00~";
+		xChart0.Legend(1) = "09:00~";
+		xChart0.Legend(2) = "10:00~";
+		xChart0.Legend(3) = "11:00~";	
+		xChart0.Legend(4) = "12:00~";		
+		xChart0.Legend(5) = "14:00~";
+		xChart0.Legend(6) = "15:00~";
+		xChart0.Legend(7) = "16:00~";
+		xChart0.Legend(8) = "17:00~";
+		xChart0.Legend(9) = "18:00~";
+		xChart0.Legend(10) = "19:00~20:30";		
+	} else {		
+		xChart0.Legend(0) = "20:30~";
+		xChart0.Legend(1) = "21:30~";
+		xChart0.Legend(2) = "23:00~";
+		xChart0.Legend(3) = "00:00~";	
+		xChart0.Legend(4) = "02:00~";
+		xChart0.Legend(5) = "04:00~";
+		xChart0.Legend(6) = "05:00~";
+		xChart0.Legend(7) = "06:00~";		
+		xChart0.Legend(8) = "07:00~08:00";		
+	}
+					
+	xChart0.AxisX.Gridlines = True;
+	xChart0.AxisY.Gridlines = True;
+
+	xChart0.AxisY.LabelsFormat.CustomFormat = "#,###%"; // 출력될 라벨 포멧	
+	//xChart0.DataEditor.
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){	
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	}else if(svcId=="getChartList"){
+		loadingChart();
+		/*
+		// 조회건수가 없을경우
+		if(ds_menuList.rowcount <= 0){	
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			//alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+		*/
+	// tran 성공	
+	}
+}
+
+
+
+// 아래 함수는 콩통함수 이므로 모든 화면에 필요
+
+function fn_Search()
+{
+	getChartList();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+
+function xChart0_DoubleClick(obj,sender,args)
+{
+	//XChart0.AxisX.notify = true;
+	//XChart0.AxisY.notify = true;
+   trace("Series=>"+args.SerLeg);
+   trace("Delta=>"+args.Delta);
+   trace("Handled=>"+args.Handled);
+   trace("HitType=>"+args.HitType);
+   trace("Object=>"+args.Object);
+   trace("Point=>"+args.Point);
+   trace("Series=>"+args.Series);
+
+	trace(xChart0.SerLeg[args.Series]);
+	//trace(xChart0.SerLegBox[args.Series]);
+	if (length(xChart0.SerLeg[args.Series]) > 0) {
+		dialog("psogmlib::OBSE02.xml","PROCS='"+xChart0.SerLeg[args.Series]+"'"+" ORDAT="+search_ordat.Value+" DAYGU="+cd_daygu.Value,1062,592);	
+	}
+}
+
+function xChart0_Highlighted(obj,sender,args)
+{
+	trace("series === " + args.series);
+	trace("point === " + xChart0.SerLeg[args.Series]);
+}
+
+function Chart04_OnTimer(obj,nEventID)
+{
+	getChartList();
+}
+
+function cmb_interval_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if (nNewIndex = 0) {
+		//alert("10");
+		setTimer(1, 10*1000);
+	} else if (nNewIndex = 1) {
+		//alert("20");
+		setTimer(1, 20*1000);
+	} else if (nNewIndex = 2) {
+		//alert("30");
+		setTimer(1, 30*1000);
+	} else if (nNewIndex = 3) {
+		//alert("40");
+		setTimer(1, 40*1000);
+	} else if (nNewIndex = 4) {
+		//alert("50");
+		setTimer(1, 50*1000);
+	} else if (nNewIndex = 5) {
+		//alert("60");
+		setTimer(1, 60*1000);
+	} else if (nNewIndex = 6) {
+		//alert("stop");
+		setTimer(1, 9999999999999999999999999999999);
+	}	
+}
+
+
+
+]]></Script>
+</Window>

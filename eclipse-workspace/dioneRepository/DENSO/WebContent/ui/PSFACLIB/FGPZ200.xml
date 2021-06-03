@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판택타임마스타" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGPZ200" OnColumnChanged="ds_FGPZ200_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITCLS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MANHR" size="256" summ="default" type="STRING"/>
+					<colinfo id="CYCTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FGPZ200_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_DAYGU">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM002PR"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="60" Id="searchBar" TabOrder="12" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="8" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FGPZ200" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="603" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="512" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="696" TabOrder="9" TabStop="true" Top="91" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="696">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="220"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="normal" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="형태"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="분류"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="공수"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="택트타임"/>
+					</head>
+					<body>
+						<cell align="right" checklength="Byte" col="0" display="normal" expr="row+1" limit="3" TrimType="Both" useime="false"/>
+						<cell align="left" checklength="Byte" col="1" colid="ITDSC" display="normal" limit="3" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="2" colid="ITTYP" display="normal" limit="8" TrimType="Both" useime="false"/>
+						<cell align="center" checklength="Byte" col="3" colid="ITCLS" display="normal" limit="6" TrimType="Both" useime="false"/>
+						<cell align="left" checklength="Byte" col="4" colid="PRTNO" display="normal" limit="8" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="5" colid="MANHR" display="number" limit="6" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="6" colid="CYCTM" display="number" edit="number" limit="4" LimitDec="1" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="727" OnClick="fn_Search" TabOrder="13" Text="조회" Top="98" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="810" OnClick="fn_Input" TabOrder="13" Text="추가" Top="98" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="891" OnClick="fn_Save" TabOrder="13" TabStop="FALSE" Text="Button2" Top="98" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="966" OnClick="fn_Delete" TabOrder="13" Text="Button1" Top="98" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="15" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="3" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="224" TabOrder="16" Text="작&#32;업&#32;공&#32;정" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="340" TabOrder="17" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="444" TabOrder="18" Text="주&#32;야&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="560" TabOrder="19" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="cd" DataColumn="cdnm" Height="18" Id="cmb_DAYGU" InnerDataset="ds_DAYGU" Left="564" OnChanged="common_OnChanged" TabOrder="5" Top="37" Width="88"></Combo>
+		<Edit CheckLength="Byte" Height="21" Id="ed_PROCS" Left="344" MaxLength="5" OnChanged="common_OnChanged" OnKillFocus="ed_PROCS_OnKillFocus" TabOrder="4" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="120" TabOrder="20" Top="64" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="340" TabOrder="21" Top="64" VAlign="Middle" Width="206"></Static>
+		<Edit CheckLength="Byte" Height="21" Id="ed_PASWD" Left="343" MaxLength="10" OnKeyDown="ed_PASWD_OnKeyDown" Password="TRUE" TabOrder="7" Top="67" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="224" TabOrder="22" Text="QC포함" Top="64" VAlign="Middle" Width="116"></Static>
+		<MaskEdit DecimalLen="1" DigitLen="4" Height="21" Id="ed_MANCT" Left="123" MaxLength="5" TabOrder="6" Top="67" Value="MaskEdit0" Width="88"></MaskEdit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="4" TabOrder="23" Text="작&#32;업&#32;인&#32;원" Top="64" VAlign="Middle" Width="116"></Static>
+		<Static Height="20" Id="ID03061" Left="435" TabOrder="24" Text="(Enter&#32;KEY&#32;Press)" Top="68" VAlign="Middle" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FGPZ200.xml
+ * ● PROGRAM DESCRIPTION  : 전광판택타임마스타
+ * ● DATE WRITTEN         : 2013.06.14
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.8"); //조회, 추가, 저장
+	getComCode(); //공장구분 선택
+	//ed_PROCS.Text="C-07";
+	//cmb_DAYGU.Value="D";
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false;
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getFGPZ200(){
+
+	if(!validationChk()){
+		return;
+	}
+	//alert(ed_PASWD.Text);
+	if(length(ed_MANCT.Text)!=0 && ed_PASWD.Text=="PSCM"){
+		if(confirm("공수재계산을 하시겠습니까?") == false) return ;
+		var sKind		= "setFGPZ200_CAL";						
+		var sMethodName = "service::psfaclib/saveFGPZ200_CAL.do";    // 서버에서 호출 될 Method 명
+		var sInDataSet  = "";               //자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "";  	   // 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			sArgument += " LIB1=" + quote(Lib1);
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+			sArgument += " PROCS=" + quote(ed_PROCS.Value); //작업공정
+			sArgument += " DAYGU=" + quote(cmb_DAYGU.Value); //주야구분		
+			sArgument += " MANCT=" + quote(ed_MANCT.Value); //작업인원		
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+	}
+	var sKind		= "getFGPZ200";						
+	var sMethodName = "service::psfaclib/selectFGPZ200.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FGPZ200=ds_FGPZ200";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@PROCS=" + quote(ed_PROCS.Value); //작업공정
+		sArgument += "@DAYGU=" + quote(cmb_DAYGU.Value); //주야구분
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/  
+function setFGPZ200(){
+
+
+	var sKind		= "setFGPZ200";						
+	var sMethodName = "service::psfaclib/saveFGPZ200.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_FGPZ200=ds_FGPZ200:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FGPZ200_CHECK=ds_FGPZ200_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_FGPZ200_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_FGPZ200_CHECK.GetRowCount();i++){
+			alert("품번 : " +ds_FGPZ200_CHECK.GetColumn(i,"PRTNO")+ " = " + ds_FGPZ200_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getFGPZ200();  //error항목이 존재시에는 재조회
+		return;
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	var procs = ed_PROCS.Text;
+	var daygu = cmb_DAYGU.Value;
+		ed_PROCS.BKColor="white";
+		cmb_DAYGU.BKColor="white";
+		
+	if (procs == ""){
+		ed_PROCS.BKColor="paleturquoise";
+		alert("[알림]작업공정을 입력하세요.");
+		//alert(setPopMessage("6016"));//[알림]작업공정을 입력하세요.
+		//setMessage("6016");
+		result = false;
+	}else if (length(daygu) == 0){
+		cmb_DAYGU.BKColor="paleturquoise";
+		alert("[알림]주야구분을 입력하세요.");
+		//alert(setPopMessage("2027"));//[알림] 주야구분을 선택하세요.
+		//setMessage("2027");
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FGPZ200.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "전광판택타임마스타";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|전광판택타임마스타";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != -1) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getFGPZ200();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	if(ds_FGPZ200.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_FGPZ200.DeleteRow(ds_FGPZ200.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setFGPZ200();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.8"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+//작업공정 CHECK
+function ed_PROCS_OnKillFocus(obj)
+{
+	if(length(trim(obj.Value)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getBM002PR";		
+	var sMethodName = "service::psfaclib/selectBM002PR.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM002PR=ds_BM002PR";
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PROCS=" + quote(obj.Value); //작업공정
+		sArgument += " FLAG=" + quote("PROCS");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_BM002PR.GetRowCount() < 1){
+		alert(setPopMessage("6016"));
+		setMessage("6016");	
+		ed_PROCS.SetFocus();
+		return;
+	}
+	http.usewaitcursor = true;		
+}
+
+
+function ds_FGPZ200_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if (strColumnID == "CYCTM"){
+		if(length(varNewValue)!=0){
+			if(length(ds_FGPZ200.GetColumn(nRow,"COMPS"))==0){
+				ds_FGPZ200.SetColumn(nRow, "COMPS", ComboBoxPlant.Value); // 사업부 설정
+				ds_FGPZ200.SetColumn(nRow, "DAYGU", cmb_DAYGU.Value); // 주야구분 설정
+				ds_FGPZ200.UpdateControl=false;
+				ds_FGPZ200.SetRowType(nRow,"insert");
+				ds_FGPZ200.UpdateControl=true;
+			}
+		}
+	}	
+}
+
+function ed_PASWD_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

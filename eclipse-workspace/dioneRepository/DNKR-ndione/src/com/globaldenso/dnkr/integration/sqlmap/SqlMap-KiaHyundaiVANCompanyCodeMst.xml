@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.KiaHyundaiVANCompanyCodeMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="KiaHyundaiVANCompanyCodeMst" type="KiaHyundaiVANCompanyCodeMstDomain">
+        <!-- 검색항목 -->
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+
+        <!-- DB항목 -->
+        <result property="vndcd" column="VNDCD" />
+        <result property="faccd" column="FACCD" />
+        <result property="facnm" column="FACNM" />
+        <result property="pscom" column="PSCOM" />
+        <result property="psvnd1" column="PSVND1" />
+
+        <!-- 입력이전항목 -->
+        <result property="oldVndcd" column="OLD_VNDCD" />
+        <result property="oldFaccd" column="OLD_FACCD" />
+        <result property="oldFacnm" column="OLD_FACNM" />
+        <result property="oldPscom" column="OLD_PSCOM" />
+        <result property="oldPsvnd1" column="OLD_PSVND1" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+	<!-- 사업부:마산 - SVM020PF -->
+	<!-- 검색 -->
+	<select id="searchByCondition" resultMap="KiaHyundaiVANCompanyCodeMst" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+		SELECT VNDCD, FACCD, FACNM, PSCOM, PSVND as  PSVND1, 
+			VNDCD as OLD_VNDCD, FACCD as OLD_FACCD, FACNM as OLD_FACNM, PSCOM as OLD_PSCOM, PSVND as OLD_PSVND1 
+		FROM PSZDBLIB.SVM020PF 
+		WHERE 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchByCondition' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchByCondition'
+		AND PSCOM = #{comps}
+		AND PSVND = #{pyvnd}
+	</select>
+
+    <!-- 등록,삭제전 존재 체크 -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM020PF
+        WHERE 
+             'SqlMap-KiaHyundaiVANCompanyCodeMst.searchCount' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchCount'
+		  AND VNDCD = #{vndcd}
+		  AND FACCD = #{faccd}
+		  AND FACNM = #{facnm}
+		  AND PSCOM = #{pscom}
+		  AND PSVND = #{psvnd1}
+    </select>
+    
+    
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="KiaHyundaiVANCompanyCodeMstDomain">
+        INSERT INTO PSZDBLIB.SVM020PF (
+                VNDCD, FACCD, FACNM, PSCOM, PSVND
+        ) values (
+                #{vndcd}, #{faccd}, #{facnm}, #{pscom}, #{psvnd1}
+        )
+    </insert>
+
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        UPDATE 
+               PSZDBLIB.SVM020PF
+        SET
+            VNDCD = #{vndcd}
+          , FACCD = #{faccd}
+          , FACNM = #{facnm}
+          , PSCOM = #{pscom}
+          , PSVND = #{psvnd1}
+        WHERE 
+              'SqlMap-KiaHyundaiVANCompanyCodeMst.update' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.update'
+		  AND VNDCD = #{oldVndcd}
+		  AND FACCD = #{oldFaccd}
+		  AND FACNM = #{oldFacnm}
+		  AND PSCOM = #{oldPscom}
+		  AND PSVND = #{oldPsvnd1}
+    </update>
+
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVM020PF
+        WHERE 
+              'SqlMap-KiaHyundaiVANCompanyCodeMst.delete' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.delete'
+		  AND VNDCD = #{vndcd}
+		  AND FACCD = #{faccd}
+		  AND FACNM = #{facnm}
+		  AND PSCOM = #{pscom}
+		  AND PSVND = #{psvnd1}
+    </delete>
+    
+    
+    <!-- 사업부:마산외(창원,화성) - SVM030PF -->
+    <!-- 검색 -->
+	<select id="searchByCondition030" resultMap="KiaHyundaiVANCompanyCodeMst" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+		SELECT VNDCD, SEQNO as FACCD, FACNM, PSCOM, PSVND as PSVND1, 
+			VNDCD as OLD_VNDCD, SEQNO as OLD_FACCD, FACNM as OLD_FACNM, PSCOM as OLD_PSCOM, PSVND as OLD_PSVND1 
+		FROM PSZDBLIB.SVM030PF
+		WHERE 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchByCondition030' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchByCondition030'
+		AND PSCOM = #{comps}
+		AND PSVND = #{pyvnd}
+	</select>
+
+    <!-- 등록,삭제전 존재 체크 -->
+    <select id="searchCount030" resultType="java.lang.Integer" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM030PF
+        WHERE 
+             'SqlMap-KiaHyundaiVANCompanyCodeMst.searchCount030' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.searchCount030'
+		  AND VNDCD = #{vndcd}
+		  AND SEQNO = #{faccd}
+		  AND FACNM = #{facnm}
+		  AND PSCOM = #{pscom}
+		  AND PSVND = #{psvnd1}
+    </select>
+    
+    
+    <!-- 登録 SQL文 -->
+    <insert id="create030" parameterType ="KiaHyundaiVANCompanyCodeMstDomain">
+        INSERT INTO PSZDBLIB.SVM030PF (
+                VNDCD, SEQNO, FACNM, PSCOM, PSVND
+        ) values (
+                #{vndcd}, #{faccd}, #{facnm}, #{pscom}, #{psvnd1}
+        )
+    </insert>
+
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update030" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        UPDATE 
+               PSZDBLIB.SVM030PF
+        SET
+            VNDCD = #{vndcd}
+          , SEQNO = #{faccd}
+          , FACNM = #{facnm}
+          , PSCOM = #{pscom}
+          , PSVND = #{psvnd1}
+        WHERE 
+              'SqlMap-KiaHyundaiVANCompanyCodeMst.update030' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.update030'
+		  AND VNDCD = #{oldVndcd}
+		  AND SEQNO = #{oldFaccd}
+		  AND FACNM = #{oldFacnm}
+		  AND PSCOM = #{oldPscom}
+		  AND PSVND = #{oldPsvnd1}
+    </update>
+
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete030" parameterType="KiaHyundaiVANCompanyCodeMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVM030PF
+        WHERE 
+              'SqlMap-KiaHyundaiVANCompanyCodeMst.delete030' = 'SqlMap-KiaHyundaiVANCompanyCodeMst.delete030'
+		  AND VNDCD = #{vndcd}
+		  AND SEQNO = #{faccd}
+		  AND FACNM = #{facnm}
+		  AND PSCOM = #{pscom}
+		  AND PSVND = #{psvnd1}
+    </delete>
+
+</mapper>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.EduUserDao">
+
+	<resultMap id="eduUserInfoMap"  type="java.util.HashMap" >
+		<result property="EDU_PK" 		column="EDU_PK" />
+		<result property="EDU_SUBJECT" 	column="EDU_SUBJECT" />
+		<result property="EDU_CONTENT" 	column="EDU_CONTENT" 	jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="START_DATE" 	column="START_DATE" />
+		<result property="TIME" 		column="TIME" />
+		<result property="ORG_ATT_NAME" column="ORG_ATT_NAME" />
+		<result property="ATT_NAME" 	column="ATT_NAME" />
+		<result property="INSTRUCTOR" 	column="INSTRUCTOR" />
+		<result property="DESCRIPTION_USE" 	column="DESCRIPTION_USE" />
+	</resultMap>
+	
+	<!-- 사용자 교육화면 정보 -->
+	<select id="getEduUser" resultMap="eduUserInfoMap" parameterType="java.util.Map">
+		SELECT   TE.PK     AS EDU_PK
+		       ,TE.SUBJECT AS EDU_SUBJECT
+		       ,TE.CONTENT AS EDU_CONTENT
+		       ,TO_CHAR(TE.START_DATE,'YYYY-MM-DD')
+		                  || ' ~ '
+		                  || TO_CHAR(TE.END_DATE,'YYYY-MM-DD') AS START_DATE
+		       ,TE.TIME                                        AS TIME
+		    <!--   ,(SELECT TAA.ORG_FILE_NAME
+		         FROM    TB_ATT TAA
+		         WHERE   TAA.EDU_PK  = TE.PK
+		         AND     TAA.USE_IMG = 'N'
+		         )
+		         AS ORG_ATT_NAME
+		       ,(SELECT TAA.FILE_NAME
+		         FROM    TB_ATT TAA
+		         WHERE   TAA.EDU_PK  = TE.PK
+		         AND     TAA.USE_IMG = 'N'
+		         )
+		                           AS ATT_NAME --> 
+		       ,TE.INSTRUCTOR      AS INSTRUCTOR
+		       ,TE.DESCRIPTION_USE AS DESCRIPTION_USE
+		       ,TE.DESCRIPT AS EDU_DESCRIPT
+		FROM     TB_EDU TE
+		WHERE    1     =1
+		AND      TE.PK = #{edu_pk}
+		ORDER BY EDU_PK
+	</select>
+	
+	<!--사용자 교육 첨부파일  - 첨부파일 List로 취득 -->
+	<select id="getFileDataList" parameterType="java.util.Map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" >
+        SELECT  PK
+	            ,EDU_PK
+	            ,FILE_NAME
+	            ,FILE_PATH
+	            ,FILE_SIZE
+	            ,FILE_EXT
+	            ,REG_DATE
+	            ,REG_USER
+	            ,MOD_DATE
+	            ,MOD_USER
+	            ,ORG_FILE_NAME
+	            ,DELETE_YN
+        FROM   TB_ATT
+        WHERE  1       = 1
+        AND    EDU_PK = #{edu_pk}
+        AND    DELETE_YN = 'N'
+    </select>
+	
+	<resultMap id="eduUserMap"  type="java.util.HashMap" >
+		<result property="PK" 			column="PK" />
+		<result property="EDU_PK" 		column="EDU_PK" />
+		<result property="USER_ID" 		column="USER_ID"/>
+		<result property="STATUS" 		column="STATUS" />
+		<result property="REG_DATE" 	column="REG_DATE" />
+		<result property="REG_USER" 	column="REG_USER" />
+		<result property="MOD_DATE" 	column="MOD_DATE" />
+		<result property="MOD_USER" 	column="MOD_USER" />
+		<result property="DESCRIPT" 	column="DESCRIPT" />
+	</resultMap>
+	
+	<!-- 참여자 정보 조회 -->
+	<select id="getEduUserInfo" resultMap="eduUserMap" parameterType="java.util.Map">
+		SELECT   PK
+				,EDU_PK
+				,USER_ID
+				,STATUS
+				,REG_DATE
+				,REG_USER
+				,MOD_DATE
+				,MOD_USER
+				,DESCRIPT
+		FROM   TB_EDU_USER
+		WHERE 1 = 1
+		<if test='edu_pk != null and !edu_pk.equalsIgnoreCase("")'>
+			AND EDU_PK = #{edu_pk}
+		</if> 
+		<if test='emp_id != null and !emp_id.equalsIgnoreCase("")'>
+			AND USER_ID = #{emp_id}
+		</if> 
+	</select>
+	
+	
+	
+	<!-- 교육에 따른 문제 리스트 -->
+	<select id="userQueList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT  PK
+		       ,EDU_PK
+		       ,SUBJECT
+		       ,ANSWER
+		FROM     TB_QUE
+		WHERE    EDU_PK = #{edu_pk}
+		ORDER BY PK
+	</select>
+	
+	<!-- 교육에 따른 문제 리스트 - 답안지 리스트 -->
+	<select id="userAnsList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="java.util.Map">
+		SELECT  ROW_NUMBER() OVER(PARTITION BY TA.QUE_PK ORDER BY TA.QUE_PK, TA.PK) NUM
+		       ,TA.PK
+		       ,TA.QUE_PK
+		       ,REPLACE(TA.SUBJECT, '@@', ',') AS SUBJECT	
+		FROM     TB_QUE TQ
+		       ,TB_ANS TA
+		WHERE    TQ.PK     = TA.QUE_PK
+		AND      TQ.EDU_PK = #{edu_pk}
+		ORDER BY QUE_PK
+		       , TA.PK
+	</select>
+	
+	<!-- 교육이수 답안지 제출 -->
+	<insert id="eduUserInsert" parameterType="java.util.Map">
+		INSERT
+		INTO   TB_EDU_USER
+		       (
+		             PK
+		            ,EDU_PK
+		            ,USER_ID
+		            ,REG_DATE
+		            ,REG_USER
+		            ,MOD_DATE
+		            ,MOD_USER
+		            ,DESCRIPT
+		       )
+		       VALUES
+		       (	 (SELECT NVL(MAX(PK),0)+1 FROM TB_EDU_USER)
+		            , #{edu_pk}
+		            , #{user_id}
+		            , SYSDATE
+		            , #{user_name}
+		            , SYSDATE
+		            , #{user_name}
+		            , #{p_descript}
+		       )
+	</insert>
+	
+	<resultMap id="eduAgreeMap"  type="java.util.HashMap" >
+		<result property="AGREE" 		column="AGREE" 	jdbcType="CLOB" 	javaType="java.lang.String" />
+		<result property="AGREE_TITLE" 	column="AGREE_TITLE" />
+	</resultMap>
+	
+	<!-- 동의서 내용  -->
+	<select id="getEduAgree" resultMap="eduAgreeMap" parameterType="java.util.Map">
+		SELECT AGREE
+			  ,AGREE_TITLE
+		FROM   TB_EDU A
+		WHERE  1  =1
+		AND    PK = #{edu_pk}
+	</select>
+	
+	<!-- 동의서 확인 -->
+	<update id="agreeConfirm" parameterType="java.util.Map">
+		UPDATE TB_EDU_USER
+		SET    STATUS  = 'Y'
+		WHERE  1       =1
+		AND    EDU_PK  = #{edu_pk}
+		AND    USER_ID = #{userId}
+	</update>
+	
+	<!-- 사용자 이미지 첨부파일 입력 -->
+	<insert id="eduUserAttchInsert" parameterType="java.util.Map">
+		INSERT
+		INTO   TB_ATT
+		       (
+		              PK
+		            ,EDU_PK
+		            ,FILE_NAME
+		            ,FILE_PATH
+		            ,FILE_SIZE
+		            ,FILE_EXT
+		            ,REG_DATE
+		            ,REG_USER
+		            ,MOD_DATE
+		            ,MOD_USER
+		            ,ORG_FILE_NAME
+		            ,USE_IMG
+		       )
+		       VALUES
+		       (	  (SELECT NVL(MAX(PK),0)+1 FROM TB_ATT)
+		            , #{edu_pk}
+		            , #{file_name}
+		            , #{file_path}
+		            , #{file_size}
+		            , #{file_ext}
+		            , SYSDATE
+		            , #{user_name}
+		            , SYSDATE
+		            , #{user_name}
+		            , #{org_file_name}
+		            , 'Y'
+		       )
+	</insert>
+	
+	<resultMap id="eduSelectListMap"  type="org.apache.commons.collections4.map.CaseInsensitiveMap" >
+    	<result property="CNT" 	column="CNT" />
+		<result property="PK" 	column="PK" />
+		<result property="SUBJECT" 	column="SUBJECT" />
+		<result property="TIME" 	column="TIME" />
+		<result property="START_DATE" 	column="START_DATE" />
+		<result property="REG_DATE" 	column="REG_DATE" />
+		<result property="REG_USER" 	column="REG_USER" />
+		<result property="MOD_DATE" column="MOD_DATE" />
+		<result property="MOD_USER" 	column="MOD_USER" />
+		<result property="DEPT" 		column="DEPT"  jdbcType="CLOB"  javaType="java.lang.String" />
+		<result property="INSTRUCTOR" 		column="INSTRUCTOR" />
+		<result property="DESCRIPTION_USE" 		column="DESCRIPTION_USE" />
+		<result property="EDU_USER_COMPLETION" 	column="EDU_USER_COMPLETION" />
+		<result property="STATUS_CNT" 		column="STATUS_CNT" />
+		<result property="STATUS" 		column="STATUS" />
+		<result property="PAGE" 		column="PAGE" />
+	</resultMap>
+	
+	<!-- 사용자 교육목록 -->
+	<select id="getEduSelectList" resultMap="eduSelectListMap" parameterType="java.util.Map">
+		SELECT T2.*
+		  FROM (SELECT T1.CNT
+		               , T1.PK
+		               , T1.SUBJECT
+		               , T1.TIME
+		               , T1.START_DATE
+		               , T1.REG_DATE
+		               , T1.REG_USER
+		               , T1.MOD_DATE
+		               , T1.MOD_USER
+		               , T1.DEPT
+		               , T1.INSTRUCTOR
+		               , T1.DESCRIPTION_USE
+		               , T1.EDU_USER_COMPLETION
+		               , T1.STATUS_CNT
+		               , CASE
+		                         WHEN T1.STATUS_CNT > 0
+		                         THEN '참여'
+		                         ELSE '미참여'
+		                 END AS STATUS
+		             , FLOOR((ROWNUM - 1) / #{pageSize} + 1 ) AS PAGE
+		          FROM 
+		          (
+					SELECT COUNT(*) OVER() AS CNT
+						 , A.PK
+	                     , A.SUBJECT
+	                     , A.TIME
+	                     , TO_CHAR(A.START_DATE,'YYYY-MM-DD') || ' ~ ' || TO_CHAR(A.END_DATE,'YYYY-MM-DD') AS START_DATE
+	                     , TO_CHAR(A.REG_DATE,'YYYY-MM-DD') AS REG_DATE
+	                     , A.REG_USER
+	                     , TO_CHAR(A.MOD_DATE,'YYYY-MM-DD') AS MOD_DATE
+					     , A.MOD_USER
+					     , A.DEPT
+					     , A.INSTRUCTOR
+					     , A.DESCRIPTION_USE
+					     , (SELECT COUNT(*) FROM TB_EDU_USER WHERE EDU_PK = A.PK) AS EDU_USER_COMPLETION
+					     ,(SELECT COUNT(*)
+							FROM   TB_EDU_USER
+							WHERE 1=1
+							AND STATUS = 'Y'
+							AND EDU_PK = A.PK
+							AND USER_ID = #{user_id}) AS STATUS_CNT
+					FROM TB_EDU A
+					WHERE 1=1
+					<!--  AND DEPT LIKE '%' || #{teamCode} || '%'-->
+						AND EMP_NUMBER LIKE '%' || (SELECT EMP_NUMBER FROM DNKR_EMP WHERE EMP_ID = #{user_id}) || '%'
+					<if test='p_subject != null and !p_subject.equalsIgnoreCase("")'>
+						AND SUBJECT LIKE '%' || #{p_subject} || '%'
+					</if> 
+					<if test="p_start_date != null and p_start_date !='' ">
+						AND START_DATE <![CDATA[>=]]> TO_DATE(#{p_start_date,jdbcType=VARCHAR},'YYYY-MM-DD')
+					</if>
+					<if test="p_end_date != null and p_end_date !='' ">
+						AND END_DATE <![CDATA[<]]>  TO_DATE(#{p_end_date,jdbcType=VARCHAR},'YYYY-MM-DD')+1
+					</if>
+					ORDER BY A.PK ASC
+					) T1
+				) T2
+		 WHERE PAGE = #{curPageNo}
+		 ORDER BY MOD_DATE DESC
+	</select>
+	
+</mapper>

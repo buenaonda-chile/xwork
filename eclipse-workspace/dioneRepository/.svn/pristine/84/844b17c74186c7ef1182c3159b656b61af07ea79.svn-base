@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="448" Id="SubFileSaveForm" Left="8" OnLoadCompleted="SubFileSaveForm_OnLoadCompleted" PidAttrib="7" Title="서브파일&#32;위치&#32;등록" Top="8" Ver="1.0" Width="736" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" Left="105" TabOrder="8" Top="30" Width="622"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static0" Left="1" TabOrder="7" Top="30" Width="106"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="738"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="12" Id="Static2" Left="41" TabOrder="1" Text="서브파일&#32;위치&#32;등록" Top="9" Width="341"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="1" TabOrder="2" Width="29"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_list" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="445" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="389" Id="Grid0" InputPanel="FALSE" LineColor="#b4b4b4" MinWidth="100" Right="728" TabOrder="4" TabStop="true" Top="56" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="728">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="89"/>
+						<col fix="left" width="92"/>
+						<col fix="left" width="65"/>
+						<col fix="left" width="65"/>
+						<col fix="left" width="92"/>
+						<col fix="left" width="71"/>
+						<col fix="left" width="73"/>
+						<col fix="left" width="103"/>
+						<col fix="left" width="73"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="스크린&#32;ID"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="컬럼시작"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="컬럼길이"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="컬럼높이"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="레코드시작"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="레코드길이"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="레코드높이"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="URL"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="구분"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="SCREEN_ID" display="normal" edit="normal"/>
+						<cell align="center" autosizing="none" col="1" colid="COLUMN_START" display="normal" edit="normal"/>
+						<cell align="right" autosizing="none" col="2" colid="COLUMN_LENGTH" display="number" edit="normal"/>
+						<cell align="right" autosizing="none" col="3" colid="COLUMN_COUNT" display="number" edit="normal"/>
+						<cell align="center" autosizing="none" col="4" colid="RECORD_START" display="normal" edit="normal"/>
+						<cell align="right" autosizing="none" col="5" colid="RECORD_LENGTH" display="number" edit="normal"/>
+						<cell align="right" autosizing="none" col="6" colid="RECORD_COUNT" display="number" edit="normal"/>
+						<cell align="right" autosizing="none" col="7" colid="RECORD_COUNT" display="normal" edit="normal"/>
+						<cell align="right" autosizing="none" col="8" colid="RECORD_COUNT" display="number" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="21" Id="Static38" Left="21" Style="static" TabOrder="5" Text="스크린ID" Top="32" VAlign="Middle" Width="70"></Static>
+		<Shape BKColor="#888888" Bottom="43" Height="5" Id="Shape1" Left="13" LineColor="#dceaf7" Right="18" TabOrder="6" Top="38" Type="Ellipse" Width="5"></Shape>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="SCROLLBAR" DisableBKColor="#eeeeee" Height="21" Id="Edit0" ImeMode="none" Left="108" MaxLength="15" TabOrder="9" Top="32" UpperOnly="TRUE" Width="205"></Edit>
+		<Button ButtonStyle="TRUE" Height="20" Id="btn_save" ImageID="btn_save" Left="674" OnClick="btn_save_OnClick" TabOrder="10" Top="32" Width="49"></Button>
+		<Button ButtonStyle="TRUE" Height="20" Id="btn_del" ImageID="btn_delete" Left="567" TabOrder="11" Top="32" Width="50"></Button>
+		<Button ButtonStyle="TRUE" Height="20" Id="btn_add" ImageID="btn_append" Left="621" OnClick="btn_add_OnClick" TabOrder="12" Top="32" Width="49"></Button>
+	</Form>
+	<Script><![CDATA[
+function SubFileSaveForm_OnLoadCompleted(obj)
+{
+	var subStr = "";
+	var sKind		= "GETSUBFILELIST";						
+	var sMethodName = "service::max5250/getSubFileList.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_list";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_list = ds_list";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " str=";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");
+}
+
+//추가
+
+function btn_add_OnClick(obj)
+{
+	ds_list.InsertRow(0);
+}
+//저장
+function btn_save_OnClick(obj)
+{
+	var subStr = "";
+	var sKind		= "SETSUBFILE";						
+	var sMethodName = "service::max5250/setSubFile.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_save = ds_list:U";                    // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    // 조회 후 돌려 받을 DataSet 명칭
+	var arg			= " str=";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");
+}
+
+function btn_del_OnClick(obj)
+{
+	
+}
+]]></Script>
+</Window>

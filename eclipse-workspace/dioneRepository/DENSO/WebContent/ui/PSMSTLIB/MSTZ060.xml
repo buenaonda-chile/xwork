@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="작업공정마스타등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MSTZ060" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROGR" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROSM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRONM" size="256" summ="default" type="STRING"/>
+					<colinfo id="HDEPT" size="256" summ="default" type="STRING"/>
+					<colinfo id="HDCPA" size="256" summ="default" type="STRING"/>
+					<colinfo id="HWMCT" size="256" summ="default" type="STRING"/>
+					<colinfo id="HRRAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="HSCPA" size="256" summ="default" type="STRING"/>
+					<colinfo id="HMCNT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MSTZ060_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM001PR"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="15" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="16" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="17" Text="공&#32;&#32;정&#32;&#32;코&#32;&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" TabOrder="18" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="3" Top="37" Width="88"></Combo>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="719" OnClick="fn_Search" TabOrder="18" Text="조회" Top="35" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="802" OnClick="fn_Input" TabOrder="18" Text="추가" Top="34" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="883" OnClick="fn_Save" TabOrder="19" TabStop="FALSE" Text="Button2" Top="34" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="958" OnClick="fn_Delete" TabOrder="19" Text="Button1" Top="34" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="340" TabOrder="21" Top="34" VAlign="Middle" Width="205"></Static>
+		<Edit AutoSelect="TRUE" CheckLength="Byte" Height="21" Id="ed_PROCS" ImeMode="none" Left="342" MaxLength="5" OnCharChanged="ed_PROCS_OnCharChanged" OnKeyDown="ed_PROCS_OnKeyDown" TabOrder="4" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_MSTZ060" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="480" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="264" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="704" TabOrder="22" TabStop="true" Top="216" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="704">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="70"/>
+						<col width="120"/>
+						<col width="150"/>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="70"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="공정그룹"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="공정약명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="공정원명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="생산부서"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="일생산능력"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="작업자수"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="가동율"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="토생산능력"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="기계대수"/>
+					</head>
+					<body>
+						<cell align="left" checklength="Byte" col="0" colid="PROGR" display="normal" edit="normal" expandsize="1616" limit="5" TrimType="Both" useime="false"/>
+						<cell align="left" checklength="Byte" col="1" colid="PROSM" display="normal" edit="normal" expandsize="1616" limit="12" TrimType="Both" useime="false"/>
+						<cell align="left" checklength="Byte" col="2" colid="PRONM" display="normal" edit="normal" expandsize="1616" limit="20" useime="false"/>
+						<cell align="center" checklength="Byte" col="3" colid="HDEPT" display="normal" edit="normal" expandsize="1616" limit="5" useime="false"/>
+						<cell align="right" checklength="Byte" col="4" colid="HDCPA" display="number" edit="number" expandsize="1616" limit="4" useime="false"/>
+						<cell align="right" checklength="Byte" col="5" colid="HWMCT" display="number" edit="number" expandsize="1616" limit="4" useime="false"/>
+						<cell align="right" checklength="Byte" col="6" colid="HRRAT" display="number" edit="number" expandsize="1616" limit="4" useime="false"/>
+						<cell align="right" checklength="Byte" col="7" colid="HSCPA" display="number" edit="number" expandsize="1616" limit="4" useime="false"/>
+						<cell align="right" checklength="Byte" col="8" colid="HMCNT" display="number" edit="number" expandsize="1616" limit="3" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="151" Id="inputBar" TabOrder="26" Top="61" Width="1058"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static14" Left="704" TabOrder="25" Text="공&#32;정&#32;원&#32;명" Top="70" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static15" Left="352" TabOrder="24" Text="공&#32;정&#32;약&#32;명" Top="70" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static16" Left="4" TabOrder="23" Text="공&#32;정&#32;그&#32;룹" Top="70" VAlign="Middle" Width="116"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="PROGR" Height="26" Id="ed_PROGR" Left="126" MaxLength="5" TabOrder="5" Top="70" UpperOnly="TRUE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="PROSM" Height="26" Id="ed_PROSM" Left="472" MaxLength="10" TabOrder="6" Top="72" UpperOnly="TRUE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="PRONM" Height="26" Id="ed_PRONM" Left="825" MaxLength="17" TabOrder="7" Top="70" UpperOnly="TRUE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="HDEPT" Height="26" Id="ed_HDEPT" Left="126" MaxLength="5" TabOrder="8" Top="102" UpperOnly="TRUE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="HDCPA" Height="26" Id="ed_HDCPA" Left="472" MaxLength="4" Number="TRUE" TabOrder="9" Top="104" UseIME="FALSE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="HWMCT" Height="26" Id="ed_HWMCT" Left="825" MaxLength="4" Number="TRUE" TabOrder="10" Top="102" UseIME="FALSE" Width="216"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="704" TabOrder="29" Text="작&#32;업&#32;자&#32;수" Top="102" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="352" TabOrder="28" Text="일&#32;생산능력" Top="102" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="27" Text="생&#32;산&#32;부&#32;서" Top="102" VAlign="Middle" Width="116"></Static>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="HSCPA" Height="26" Id="ed_HSCPA" Left="472" MaxLength="4" Number="TRUE" TabOrder="11" Top="134" UseIME="FALSE" Width="216"></Edit>
+		<Edit Align="RIGHT" BindDataset="ds_MSTZ060" CheckLength="Byte" Column="HMCNT" Height="26" Id="ed_HMCNT" Left="825" MaxLength="3" Number="TRUE" TabOrder="12" Top="134" UseIME="FALSE" Width="216"></Edit>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="704" TabOrder="32" Text="기&#32;계&#32;대&#32;수" Top="134" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="352" TabOrder="31" Text="토&#32;생산능력" Top="134" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="4" TabOrder="30" Text="가&#32;&#32;&#32;동&#32;&#32;&#32;율" Top="134" VAlign="Middle" Width="116"></Static>
+		<MaskEdit BindDataset="ds_MSTZ060" Column="HRRAT" Height="26" Id="ed_HRRAT" Left="126" MaxLength="4" TabOrder="33" Top="134" Value="MaskEdit0" Width="216"></MaskEdit>
+		<Static Height="18" Id="ID03061" Left="435" TabOrder="34" Text="(Enter&#32;KEY&#32;Press)" Top="39" VAlign="Middle" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : MSTZ060.xml
+ * ● PROGRAM DESCRIPTION  : 작업공정마스타등록
+ * ● DATE WRITTEN         : 2013.05.08
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //조회, 추가, 저장
+	getComCode(); //공장구분 선택
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	inputBar.Width = G_ds_design.GetColumn(0,"Width");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getMSTZ060(){
+
+	if(!validationChk()){
+		return;
+	}
+	
+	var sKind		= "getMSTZ060";						
+	var sMethodName = "service::psmstlib/selectMSTZ060.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MSTZ060=ds_MSTZ060";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		//sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@PROCS=" + quote(ed_PROCS.Text); //차종코드
+	var str = dialog("Common::PGMLOAD_MST.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+ 
+ //등록시 업체코드 존재유무 체크함. 없으면 동록불가.
+function setMSTZ060(){
+
+	if(length(trim(ed_PROCS.Text)) < 1){
+		alert(setPopMessage("2026"));  //[알림] 공정코드를 입력하세요.
+		setMessage("2026");	
+		ed_PROCS.SetFocus();
+		return;
+	}	
+	if(length(trim(ed_PROSM.Text)) < 1){
+		alert(setPopMessage("6001"));  //[알림]공정약명을 입력하세요.
+		setMessage("6001");	
+		ed_PROSM.SetFocus();
+		return;
+	}
+	if(length(trim(ed_PRONM.Text)) < 1){
+		alert(setPopMessage("6002"));  //[알림]공정원명을 입력하세요.
+		setMessage("6002");	
+		ed_PRONM.SetFocus();
+		return;
+	}
+	var sKind		= "setMSTZ060";						
+	var sMethodName = "service::psmstlib/saveMSTZ060.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_MSTZ060=ds_MSTZ060:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MSTZ060_CHECK=ds_MSTZ060_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_MSTZ060_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_MSTZ060_CHECK.GetRowCount();i++){
+			alert("CODE : " +ds_MSTZ060_CHECK.GetColumn(i,"PROCS") + " = " + ds_MSTZ060_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getMSTZ060();  //error항목이 존재시에는 재조회
+		return;
+	}
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		//getSalz101();  //error항목이 존재시에는 재조회
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+	var result = true;
+	var procs = ed_PROCS.Text;
+		ed_PROCS.BKColor="white";
+		
+	if (procs == "")
+	{
+		ed_PROCS.BKColor="paleturquoise";
+		//alert("[알림] 공정코드를 입력하세요.");
+		alert(setPopMessage("2026"));//[알림] 공정코드를 입력하세요.
+		setMessage("2026");	
+		result = false;
+	}	
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MSTZ060.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "작업공정마스타등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|작업공정마스타등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != -1) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getMSTZ060();
+}
+
+function fn_Input()
+{
+	if(!validationChk()){
+		return;
+	}
+	if(ds_MSTZ060.rowcount > 0 ){
+		//alert("[알림]등록은 1건만 가능합니다.");
+		alert(setPopMessage("4747"));//[알림]등록은 1건만 가능합니다.
+		setMessage("4747");
+		return;
+	}
+	else{
+		var sKind		= "getMSTZ060";						
+		var sMethodName = "service::psmstlib/selectMSTZ060.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_MSTZ060=ds_MSTZ060";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			//sArgument += "@LIB1=" + quote(Lib1);
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+			sArgument += " PROCS=" + quote(ed_PROCS.Text); //차종코드
+			http.Sync=true;
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync=false;
+		if(ds_MSTZ060.rowcount>0){
+			//alert("[경고] 이미 등록된 코드입니다. 다른 코드를 입력하세요!");
+			ds_MSTZ060.ClearData();
+			alert(setPopMessage("2533"));//[경고] 이미 등록된 코드입니다. 다른 코드를 입력하세요!
+			setMessage("2533");	
+			return;
+		}	
+		else{
+			var sKind		= "getBM001PR";						
+			var sMethodName = "service::pscomlib/selectBM001PR.do";    // 서버에서 호출 될 Method 명
+			var sInDataSet  = "";               //자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "ds_BM001PR=ds_BM001PR";  	   // 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+				sArgument += " LIB1=" + quote(Lib1);
+				sArgument += " PROCS=" + quote(ed_PROCS.Text); //공정코드
+			http.Sync=true;
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync=false;
+			if(ds_BM001PR.rowcount<1){
+				//alert("[알림] PROCESS MA에 미등록된 공정코드입니다.");
+				alert(setPopMessage("4746"));//[알림] PROCESS MA에 미등록된 공정코드입니다.
+				setMessage("4746");			
+				return;
+			}else{
+				ds_MSTZ060.AddRow();
+				ds_MSTZ060.SetColumn(ds_MSTZ060.currow,"COMPS",ComboBoxPlant.Value);
+				ds_MSTZ060.SetColumn(ds_MSTZ060.currow,"PROCS",ed_PROCS.Text);
+			}
+		}		
+	}
+}
+
+function fn_Delete()
+{
+	if(ds_MSTZ060.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_MSTZ060.DeleteRow(ds_MSTZ060.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setMSTZ060();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function ed_PROCS_OnCharChanged(obj,strPreText,strPostText)
+{
+	ds_MSTZ060.ClearData();
+}
+
+function ed_PROCS_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

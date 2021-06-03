@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="168" Id="screenPop" Left="8" OnLoadCompleted="screenPop_OnLoadCompleted" PidAttrib="7" Title="screenPop" TooltipFont=",0" Top="8" Ver="1.0" Width="416" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="column0" size="256" type="STRING"/>
+					<colinfo id="column1" size="256" type="STRING"/>
+					<record>
+						<column0>1</column0>
+						<column1>표준</column1>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>서브파일</column1>
+					</record>
+					<record>
+						<column0>3</column0>
+						<column1>팝업</column1>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static23" Left="40" TabOrder="4" Top="48" Width="356"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="40" TabOrder="3" Top="48" Width="106"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="40" TabOrder="8" Top="72" Width="356"></Static>
+		<Shape BKColor="#888888" Bottom="63" Height="5" Id="Shape12" Left="52" LineColor="#dceaf7" Right="57" TabOrder="1" Top="58" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="62" Style="static" TabOrder="2" Text="저장위치" Top="53" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="40" TabOrder="7" Top="72" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="87" Height="5" Id="Shape0" Left="52" LineColor="#dceaf7" Right="57" TabOrder="5" Top="82" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="62" Style="static" TabOrder="6" Text="파일명" Top="77" VAlign="Middle" Width="77"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="edt_screen" Left="148" MaxLength="20" TabOrder="11" Text="1111111" Top="74" Width="133"></Edit>
+		<Static Font="Default,9,Bold" Height="16" Id="Static2" Left="59" TabOrder="9" Text="다음을&#32;선택하시오" Top="26" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="40" TabOrder="10" Top="24" Width="17"></Image>
+		<Button ButtonStyle="TRUE" Height="21" Id="Button0" ImageID="btn_pop_txt_02" Left="344" OnClick="Button0_OnClick" TabOrder="12" Text="확인" Top="104" Width="48"></Button>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="file_path" Left="148" MaxLength="10" TabOrder="13" Top="50" Width="188"></Edit>
+		<FileDialog Bottom="32" Height="24" Id="FileDialog0" Left="4" Right="28" TabOrder="14" Top="8" Type="Dir" Width="24"></FileDialog>
+		<Button ButtonStyle="TRUE" Height="21" Id="btn_fd" ImageID="btn_pop_txt_02" Left="345" OnClick="btn_fd_OnClick" TabOrder="14" Text="파일" Top="50" Width="48"></Button>
+	</Form>
+	<Script><![CDATA[var screenName;
+function Button0_OnClick(obj)
+{
+	close(file_path.Text +"|" +edt_screen.Text);
+}
+
+
+
+function btn_fd_OnClick(obj)
+{
+	if(FileDialog0.Open("c:\\")){
+		file_path = FileDialog0.FilePath;
+	}
+}
+
+function screenPop_OnLoadCompleted(obj)
+{
+	file_path.Text = "C:\\";
+	edt_screen.Text = screenName;
+}
+]]></Script>
+</Window>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="FPMC109SM" Left="8" OnLoadCompleted="FPMC109SM_OnLoadCompleted" PidAttrib="7" Title="FPMC109SM" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="cd" size="256" type="STRING"/>
+					<colinfo id="cdnm" size="256" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>선택</cdnm>
+					</record>
+					<record>
+						<cd>C1</cd>
+						<cdnm>C1</cdnm>
+					</record>
+					<record>
+						<cd>E1</cd>
+						<cdnm>E1</cdnm>
+					</record>
+					<record>
+						<cd>H1</cd>
+						<cdnm>H1</cdnm>
+					</record>
+					<record>
+						<cd>S1</cd>
+						<cdnm>S1</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="272" TabOrder="5" Top="200" Width="220"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Dateformat="yyyy/MM" Height="21" Id="Calendar0" Left="380" SaturdayTextColor="blue" SpinStyle="1" SundayTextColor="red" TabOrder="1" Top="202" Width="104"></Calendar>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="272" TabOrder="4" Top="200" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="215" Height="5" Id="Shape0" Left="284" LineColor="#dceaf7" Right="289" TabOrder="2" Top="210" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="294" Style="static" TabOrder="3" Text="마감년월" Top="205" VAlign="Middle" Width="77"></Static>
+		<Static Font="Default,9,Bold" Height="16" Id="Static0" Left="291" TabOrder="6" Text="다음을&#32;선택하시오" Top="178" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="272" TabOrder="7" Top="176" Width="17"></Image>
+		<Button ButtonStyle="TRUE" Height="21" Id="Button0" ImageID="btn_pop_txt_02" Left="445" OnClick="Button0_OnClick" TabOrder="8" Text="확인" Top="232" Width="48"></Button>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" Left="-2" TabOrder="11" Width="800"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="12" Id="Static2" Left="41" TabOrder="9" Text="통합MRP&#32;&gt;&#32;메뉴8&#32;&gt;&#32;월생산&#32;계획&#32;마감" Top="9" Width="341"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="1" TabOrder="10" Width="29"></Image>
+	</Form>
+	<Script><![CDATA[var isAuth = false;
+function FPMC109SM_OnLoadCompleted(obj)
+{
+		if(!isAuth){
+			Calendar0.Enable =false;
+			Button0.Enable = false;
+		var str = dialog("Group1::BHZZ100CP.xml",300,300);
+		if(str == "1"){
+			
+			Calendar0.Enable =true;
+			Button0.Enable = true;
+		}
+	}
+}
+]]></Script>
+</Window>

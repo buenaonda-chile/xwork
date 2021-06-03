@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.ResearchDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.ResearchDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+        <id property="atchmnflId" column="ATCHMNFL_ID" javaType="java.lang.Long" />
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="manageNo" column="MANAGE_NO" javaType="java.lang.String" />
+		<result property="serviceDegree" column="SERVICE_DEGREE" javaType="java.lang.Long" />
+		<result property="researchDegree" column="RESEARCH_DEGREE" javaType="java.lang.Long" />
+		<result property="researchDate" column="RESEARCH_DATE" javaType="java.lang.String" />
+		<result property="researchNm" column="RESEARCH_NM" javaType="java.lang.String" />
+		<result property="researchNmS" column="RESEARCH_NM_S" javaType="java.lang.String" />
+		<result property="researchType" column="RESEARCH_TYPE" javaType="java.lang.String" />
+		<result property="cdsdResearchYn" column="CDSD_RESEARCH_YN" javaType="java.lang.Long" />
+		<result property="cdsdCd" column="CDSD_CD" javaType="java.lang.String" />
+		<result property="officeCity" column="OFFICE_CITY" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="officeCd" column="OFFICE_CD" javaType="java.lang.String" />
+		<result property="researchCont" column="RESEARCH_CONT" javaType="java.lang.String" />
+		<result property="researchResult" column="RESEARCH_RESULT" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="investUid" column="INVEST_UID" javaType="java.lang.String" />
+		<result property="investDate" column="INVEST_DATE" javaType="java.sql.Date" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="requestUser" column="REQUEST_USER" javaType="java.lang.String" />
+
+      <association property="atchmnflItem" column="ATCHMNFL_ID"
+                   javaType="com.globaldenso.dicas.business.dto.AtchmnflDto"
+                   select="com.globaldenso.dicas.business.dao.AtchmnflDao.searchUseFileByKey"/>
+
+  </resultMap>
+
+  <sql id="select_01">
+
+	SELECT * FROM
+    (SELECT
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,RESEARCH_DEGREE
+		,TO_CHAR(RESEARCH_DATE,'yyyy-MM-dd') AS RESEARCH_DATE
+		,RESEARCH_NM
+		,RESEARCH_NM_S
+		,RESEARCH_TYPE
+		,CDSD_RESEARCH_YN
+		,CDSD_CD
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_CD
+		, REPLACE(RESEARCH_CONT, chr(10), '\r\n') as RESEARCH_CONT
+
+		,RESEARCH_RESULT
+		,AUTOINSERT
+		,INVEST_UID
+		,INVEST_DATE
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,(SELECT SD_APPOINT FROM TB_DC_CONSULTING WHERE MANAGE_NO = A.MANAGE_NO AND ROWNUM=1) AS SD_APPOINT
+    	,(SELECT FST_NM FROM TB_CM_USER WHERE ACCT_ID = A.RESEARCH_NM_S) AS REQUEST_USER
+
+    FROM TB_DC_RESEARCH_MASTER A
+    )
+
+  </sql>
+
+  <sql id="where_01">
+	  <if test="criteria.manageNo != null and criteria.manageNo != ''">
+		  AND MANAGE_NO = #{criteria.manageNo}
+		  AND RESEARCH_DEGREE = (
+                                  SELECT MAX(RESEARCH_DEGREE) AS RESEARCH_DEGREE
+                                    FROM TB_DC_RESEARCH_MASTER
+                                   WHERE 1=1
+                                     AND MANAGE_NO = #{criteria.manageNo}
+                                  )
+	  </if>
+
+	  <if test="criteria.sdAppoint != null and criteria.sdAppoint != ''">
+		  AND SD_APPOINT = #{criteria.sdAppoint}
+	  </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.ResearchDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+	<select id="searchByConditionFile" resultMap="codeMap" parameterType="String">
+		SELECT ID
+              , ATCHMNFL_ID
+		  FROM TB_DC_COMM_RESULT_ATCHMNFL
+		 WHERE ID = (SELECT MIN(ID)
+		   			    FROM TB_DC_RESULT_MASTER
+					   WHERE MANAGE_NO = #{manageNo}
+					  )
+	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.ResearchDomain">
+
+    INSERT INTO TB_DC_RESEARCH_MASTER (
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,RESEARCH_DEGREE
+		,RESEARCH_DATE
+		,RESEARCH_NM
+		,RESEARCH_NM_S
+		,RESEARCH_TYPE
+		,CDSD_RESEARCH_YN
+		,CDSD_CD
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_CD
+		,RESEARCH_CONT
+		,RESEARCH_RESULT
+		,AUTOINSERT
+		,INVEST_UID
+		,INVEST_DATE
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,UPPER(#{vinno})
+		,#{manageNo}
+		,#{serviceDegree}
+		,#{researchDegree}
+		,TO_DATE(#{researchDate},'yyyy-MM-dd')
+		,#{researchNm}
+		,#{researchNmS}
+		,#{researchType}
+		,#{cdsdResearchYn}
+		,#{cdsdCd}
+		,#{officeCity}
+		,#{officeNm}
+		,#{officeCd}
+		,#{researchCont}
+		,#{researchResult}
+		,#{autoinsert}
+		,#{investUid}
+		,#{investDate}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_RESEARCH_MASTER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.ResearchDomain">
+
+    UPDATE TB_DC_RESEARCH_MASTER SET
+		VINNO = UPPER(#{vinno})
+		,MANAGE_NO = #{manageNo}
+		,SERVICE_DEGREE = #{serviceDegree}
+		,RESEARCH_DEGREE = #{researchDegree}
+		,RESEARCH_DATE = TO_DATE(#{researchDate},'yyyy-MM-dd')
+		,RESEARCH_NM = #{researchNm}
+		,RESEARCH_NM_S = #{researchNmS}
+		,RESEARCH_TYPE = #{researchType}
+		,CDSD_RESEARCH_YN = #{cdsdResearchYn}
+		,CDSD_CD = #{cdsdCd}
+		,OFFICE_CITY = #{officeCity}
+		,OFFICE_NM = #{officeNm}
+		,OFFICE_CD = #{officeCd}
+		,RESEARCH_CONT = #{researchCont}
+		,RESEARCH_RESULT = #{researchResult}
+		,AUTOINSERT = #{autoinsert}
+		,INVEST_UID = #{investUid}
+		,INVEST_DATE = #{investDate}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.ResearchDomain">
+
+    DELETE FROM TB_DC_RESEARCH_MASTER
+    WHERE ID = #{id}
+
+  </delete>
+
+	<select id="searchByConditionCostApprInfo" resultMap="codeMap" parameterType="String">
+
+		SELECT
+			MANAGE_NO
+		FROM TB_DC_RESULT_MASTER
+		WHERE MANAGE_NO= #{manageNo}
+		  AND SUBMISSION = '1'
+
+	</select>
+
+</mapper>

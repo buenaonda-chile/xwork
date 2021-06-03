@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LnPrfrmncIndxTrgtDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="lnPrfrmncIndxTrgt" type="LnPrfrmncIndxTrgtDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRODUCT_NO" />
+        <result property="prdtNm" column="PRODUCT_NM" />    
+            
+        <result property="apr" column="apr"/>
+        <result property="may" column="may" />
+        <result property="jun" column="jun" />
+        <result property="july" column="july" />
+        <result property="aug" column="aug" />
+        <result property="sep" column="sep" />
+        <result property="oct" column="oct" />
+        <result property="nov" column="nov" />
+        <result property="dec" column="dec" />
+        <result property="jan" column="jan" />
+        <result property="feb" column="feb" />
+        <result property="mar" column="mar" />
+        <result property="ttl" column="TTL" />
+                             
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        
+        <result property="modDate" column="MOD_DATE" />  
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+                               
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    
+    <select id="searchByCondition" resultMap="lnPrfrmncIndxTrgt" parameterType="LnPrfrmncIndxTrgtDomain">
+    
+	with SET_A AS (
+	            select case when A.CLS_CODE IS NULL then B.cls_code else A.cls_code end CLS_CODE,
+	            case when A.line_code IS NULL then B.line_code else A.line_code end LINE_CODE,
+	    N.LINE_NM,
+	       A.IEM,
+	            DEC(B.JAN,15,2) AS JAN,
+	            DEC(B.FEB,15,2) AS FEB,
+	            DEC(B.MAR,15,2) AS MAR,
+	            DEC(A.APR,15,2) AS APR,
+	            DEC(A.MAY,15,2) AS MAY,
+	            DEC(A.JUN,15,2) AS JUN,
+	            DEC(A.JULY,15,2) AS JULY,
+	            DEC(A.AUG,15,2) AS AUG,
+	            DEC(A.SEP,15,2) AS SEP,
+	            DEC(A.OCT,15,2) AS OCT,
+	            DEC(A.NOV,15,2) AS NOV,
+	            DEC(A.DEC,15,2) AS DEC
+		from
+		(
+			(
+			    select cls_code, loc_code, line_code, iem, apr, may, jun, july, aug, sep, oct, nov, dec
+			    from pszdblib.FHP120PF /*생산지수년계획등록*/
+			    where 1=1
+			        and IEM = 4
+			        and CLS_CODE = #{clsCode}
+	                and LOC_CODE = #{locCode}
+	                and YEAR = substr('${repym}',1,4)
+			    order by cls_code, loc_code, line_code
+			) AS A
+			full outer join
+		    (
+		        select cls_code, loc_code, line_code, jan, feb, mar
+			    from pszdblib.FHP120PF /*생산지수년계획등록*/
+			    where 1=1
+			        and IEM = 4
+			        and CLS_CODE = #{clsCode}
+	                and LOC_CODE = #{locCode}
+	                and YEAR = INT(substr('${repym}',1,4))-1
+		        order by cls_code, loc_code, line_code
+	        ) AS B on A.line_code = B.line_code
+			left outer join PSZDBLIB.FHP010PF N on A.line_code = N.line_code or B.line_code = N.line_code
+		)
+	)
+	select * from SET_A
+	order by  cls_code, line_code
+		
+    </select>
+    
+    <select id="searchMonthOneByCondition" resultMap="lnPrfrmncIndxTrgt" parameterType="LnPrfrmncIndxTrgtDomain">	
+		SELECT LINE_CODE
+	 <if test="month != null and month == '04'" >		
+			,APR AS TTL	    
+	 </if>
+	 <if test="month != null and month == '05'" >	
+			,MAY AS TTL	    
+	 </if>
+	 <if test="month != null and month == '06'" >		
+			,JUN AS TTL	    
+	 </if>
+	 <if test="month != null and month == '07'" >		
+			,JULY AS TTL	    
+	 </if>	 	 		  
+	 <if test="month != null and month == '08'" >		
+			,AUG AS TTL	    
+	 </if>		  
+	 <if test="month != null and month == '09'" >		
+			,SEP AS TTL	    
+	 </if>		  
+	 <if test="month != null and month == '10'" >		
+			,OCT AS TTL	    
+	 </if>
+	 <if test="month != null and month == '11'" >		
+			,NOV AS TTL	    
+	 </if>
+	 <if test="month != null and month == '12'" >	
+			,DEC AS TTL	    
+	 </if>
+	 <if test="month != null and month == '01'" >		
+			,JAN AS TTL	    
+	 </if>	 	 	 
+	 <if test="month != null and month == '02'" >		
+			,FEB AS TTL	    
+	 </if>	
+	 <if test="month != null and month == '03'" >	
+			,MAR AS TTL	    
+	 </if>		
+ 	FROM pszdblib.FHP120PF 
+	WHERE CLS_CODE = #{clsCode} 
+	AND LOC_CODE = #{locCode}
+	AND YEAR = substr('${repym}',1,4)	
+	AND IEM = '4' 
+	 		    
+    </select>      
+
+</mapper>

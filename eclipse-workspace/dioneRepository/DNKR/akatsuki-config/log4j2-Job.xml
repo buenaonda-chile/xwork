@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    log4j2-Job.xml
+    
+ [JP]    各種ジョブの Log4j 設定ファイルです。(バッチ用 準本/本番環境向け)
+ [JP]    AI-JB は複数のプロセスが同時に実行されるため、Socket Server を経由します。
+ [JP]
+ [JP]    また、同時にジョブ単位のログを出力するため、標準出力も行っています。
+ [JP]
+ [JP]    初期設定では、Socket Server は同一サーバ上(localhost) で起動していることを
+ [JP]    想定した設定になっています。
+ [JP]    必要に応じて設定を変更してください。
+    
+ [EN]    It is Log4j configuration file of various jobs. 
+ [EN]    (For semi-production environment / production environment for batch)
+ [EN]    Because multiple processes are executed at the same time, AI-JB is through the Socket Server.
+ [EN]
+ [EN]    Moreover, in order to output a log of the job units at the same time, are also the standard output.
+ [EN]
+ [EN]    By default, Socket Server has been configured as the assumption 
+ [EN]    that running on (localhost) on the same server.
+ [EN]    Please change the settings as necessary.
+    
+    $ log4j2-Job.xml 1650 2015-06-03 08:43:08Z 815372040074 $
+    
+    Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<Configuration>
+
+    <!-- ========================================================== Appender -->
+    <Appenders>
+        <!-- [JP] ソケットサーバ出力 -->
+        <!-- [EN] Output socket server -->
+        <!-- [JP] 別途 Socket サーバーの起動が必要です -->
+        <!-- [EN] Socket server you need to activate a separate -->
+        <Socket name="socket" host="localhost" port="5150" reconnectionDelay="30000">
+            <SerializedLayout />
+        </Socket>
+
+        <!-- [JP] アプリケーションログ (標準出力) -->
+        <!-- [EN] Application Log (standard output) -->
+        <Console name="app_stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY" />
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL" />
+            </Filters>
+        </Console>
+
+        <!-- [JP] システムログ (標準出力) -->
+        <!-- [EN] System log (standard output) -->
+        <Console name="sys_stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] [%C{1}.%M] %m%n" />
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </Console>
+    </Appenders>
+
+    <!-- ============================================================ Logger -->
+    <Loggers>
+        <!-- [JP] アプリ基盤 -->
+        <!-- [EN] Application Development Infrastructure -->
+        <Logger name="com.globaldenso.ai" level="INFO" additivity="false">
+            <AppenderRef ref="socket" />
+            <AppenderRef ref="app_stdout" />
+            <AppenderRef ref="sys_stdout" />
+        </Logger>
+
+        <!-- [JP] Spring Framework トランザクション情報出力 -->
+        <!-- [EN] Spring Framework transaction information output -->
+        <Logger name="org.springframework.transaction" level="INFO" additivity="false">
+            <AppenderRef ref="socket" />
+            <AppenderRef ref="app_stdout" />
+            <AppenderRef ref="sys_stdout" />
+        </Logger>
+
+        <!-- ============================================================== Root -->
+        <Root level="ERROR">
+            <AppenderRef ref="socket" />
+            <AppenderRef ref="sys_stdout" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PsogmMachineDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="PsogmMachine" type="PsogmMachineDomain">
+        <result property="comps" column="COMPS" />
+        <result property="group" column="GROUP" />
+        <result property="mngno" column="MNGNO" />
+        <result property="mname" column="MNAME" />
+        <result property="maker" column="MAKER" />
+        <result property="mtype" column="MTYPE" />
+        <result property="jnbno" column="JNBNO" />
+        <result property="ipdat" column="IPDAT" />
+        <result property="rpdat" column="RPDAT" />
+        <result property="repno" column="REPNO" />
+        <result property="yedat" column="YEDAT" />
+        <result property="dptcd" column="DPTCD" />
+        <result property="disyn" column="DISYN" />
+        <result property="didat" column="DIDAT" />
+        <result property="dresn" column="DRESN" />
+        <result property="j_gub" column="J_GUB" />
+        <result property="gcycl" column="GCYCL" />
+        <result property="gnamt" column="GNAMT" />
+        <result property="jspec" column="JSPEC" />
+        <result property="accno" column="ACCNO" />
+        <result property="cnote" column="CNOTE" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+        <result property="pwhere" column="PWHERE" />
+    </resultMap>
+    
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="CommonDb2" type="CommonDb2Domain">
+        <result property="code" column="MSTCD" />
+        <result property="codeNm" column="MSTSM" />
+        <result property="cdNm" column="CDNM" />
+        <result property="comps" column="COMPS" />
+        <result property="grpcd" column="GRPCD" />
+        <result property="grpcd" column="GRPCD" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="selectogm411" resultMap="PsogmMachine" parameterType="PsogmMachineDomain">
+        SELECT
+			(
+				CASE A.GROUP 
+					WHEN '1' THEN '측정기' 
+					WHEN '2' THEN '검사구' 
+					WHEN '3' THEN '설비' 
+				END
+			) AS GROUP,
+				A.MNGNO AS MNGNO,
+				A.MNAME AS MNAME,
+				A.MAKER AS MAKER,
+				A.MTYPE AS MTYPE,
+				A.JNBNO AS JNBNO,
+				SUBSTR(CHAR(A.IPDAT),1,4) || '-' || SUBSTR(CHAR(A.IPDAT),5,2) || '-' || SUBSTR(CHAR(A.IPDAT),7,2) AS IPDAT,
+			(	
+				CASE B.RPDAT 
+					WHEN 0 THEN '' 
+						ELSE SUBSTR(CHAR(B.RPDAT),1,4) || '-' || SUBSTR(CHAR(B.RPDAT),5,2) || '-' || SUBSTR(CHAR(B.RPDAT),7,2) 
+				END
+			) AS RPDAT,
+			(
+				CASE A.GROUP 
+					WHEN '3' THEN B.REPNO 
+						ELSE (CASE TRIM(B.REPNO) 
+					WHEN '' THEN B.REPNO ELSE SUBSTR(B.REPNO,1,6) || '-' || SUBSTR(B.REPNO,7,9) END) 
+				END
+			) AS REPNO,
+			(
+				CASE B.YEDAT WHEN 0 THEN '' 
+					ELSE SUBSTR(CHAR(B.YEDAT),1,4) || '-' || SUBSTR(CHAR(B.YEDAT),5,2) || '-' || SUBSTR(CHAR(B.YEDAT),7,2) 
+				END
+			) AS YEDAT,
+				C.DPDPNM AS DPTCD,A.DISYN AS DISYN,
+			(
+				CASE A.DIDAT WHEN 0 THEN '' 
+					ELSE SUBSTR(CHAR(A.DIDAT),1,4) || '-' || SUBSTR(CHAR(A.DIDAT),5,2) || '-' || SUBSTR(CHAR(A.DIDAT),7,2) 
+				END
+			) AS DIDAT,
+				D.MSTRM AS DRESN, 
+				E.MSTRM AS J_GUB, 
+			(
+				CASE A.GROUP 
+					WHEN '1' THEN F1.MSTRM 
+					WHEN '2' THEN F2.MSTRM 
+					WHEN '3' THEN F3.MSTRM 
+				END
+			) AS JKIND,
+			(
+				CASE A.G_GUB 
+					WHEN '1' THEN '사내' 
+					WHEN '2' THEN '사외' 
+					WHEN '3' THEN '표준기(사외)' 
+				END
+			) AS G_GUB,
+				A.GCYCL AS GCYCL,
+				A.GNAMT AS GNAMT,
+				A.JSPEC AS JSPEC,
+				A.ACCNO AS ACCNO,
+				A.CNOTE AS CNOTE
+		FROM 
+			${lib2}.TME010PF AS A
+		LEFT OUTER JOIN 
+			${lib2}.TME100PF AS B
+		ON A.COMPS = B.COMPS
+		AND A.GROUP = B.GROUP
+		AND A.MNGNO = B.MNGNO
+		AND B.RPDAT = (SELECT MAX(RPDAT) FROM ${lib2}.TME100PF WHERE COMPS = A.COMPS AND GROUP = A.GROUP AND MNGNO = A.MNGNO)
+		LEFT OUTER JOIN 
+			${lib2}.MST650PF AS C
+		ON A.COMPS = C.DPCOMP
+		AND A.DPTCD = C.DPCODE
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS D
+		ON A.COMPS = D.COMPS
+		AND D.GRPCD = 'DRN'
+		AND A.DRESN = D.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS E
+		ON A.COMPS = E.COMPS
+		AND E.GRPCD = 'GAG'
+		AND A.J_GUB = E.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F1
+		ON A.COMPS = F1.COMPS
+		AND F1.GRPCD = 'GK1'
+		AND A.JKIND = F1.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F2
+		ON A.COMPS = F2.COMPS
+		AND F2.GRPCD = 'GK2'
+		AND A.JKIND = F2.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F3
+		ON A.COMPS = F3.COMPS
+		AND F3.GRPCD = 'GK3'
+		AND A.JKIND = F3.MSTCD
+		WHERE
+			'SqlMap-PsogmMachine.selectogm411' = 'SqlMap-PsogmMachine.selectogm411' 
+			and A.COMPS = #{comps}
+			and A.GROUP in ${group}
+		<if test = "disyn != null and disyn != ''">
+			and A.DISYN = #{disyn}
+		</if>
+		<if test = "pwhere != null and pwhere != ''">
+			and ${pwhere}
+		</if>
+		
+			and a.mngno <![CDATA[<]]> '99'
+	
+		order by a.group, a.mngno
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="selectogm411ForPaging" resultMap="PsogmMachine" parameterType="PsogmMachineDomain">
+    	select
+    			GROUP
+    		  , MNGNO
+    		  , MNAME
+    		  , MAKER
+    		  , MTYPE
+    		  , JNBNO
+    		  , IPDAT
+    		  , RPDAT
+    		  , REPNO
+    		  , YEDAT
+    		  , DPTCD
+    		  , DISYN
+    		  , DIDAT
+    		  , DRESN
+    		  , J_GUB
+    		  , JKIND
+    		  , G_GUB
+    		  , ROW_NUM
+	    from (
+	    	select 
+				(
+					CASE A.GROUP 
+						WHEN '1' THEN '측정기' 
+						WHEN '2' THEN '검사구' 
+						WHEN '3' THEN '설비' 
+					END
+				) AS GROUP
+					, A.MNGNO AS MNGNO
+					, A.MNAME AS MNAME
+					, A.MAKER AS MAKER
+					, A.MTYPE AS MTYPE
+					, A.JNBNO AS JNBNO
+					, SUBSTR(CHAR(A.IPDAT),1,4) || '-' || SUBSTR(CHAR(A.IPDAT),5,2) || '-' || SUBSTR(CHAR(A.IPDAT),7,2) AS IPDAT,
+				(	
+					CASE B.RPDAT 
+						WHEN 0 THEN '' 
+							ELSE SUBSTR(CHAR(B.RPDAT),1,4) || '-' || SUBSTR(CHAR(B.RPDAT),5,2) || '-' || SUBSTR(CHAR(B.RPDAT),7,2) 
+					END
+				) AS RPDAT,
+				(
+					CASE A.GROUP 
+						WHEN '3' THEN B.REPNO 
+							ELSE (CASE TRIM(B.REPNO) 
+						WHEN '' THEN B.REPNO ELSE SUBSTR(B.REPNO,1,6) || '-' || SUBSTR(B.REPNO,7,9) END) 
+					END
+				) AS REPNO,
+				(
+					CASE B.YEDAT WHEN 0 THEN '' 
+						ELSE SUBSTR(CHAR(B.YEDAT),1,4) || '-' || SUBSTR(CHAR(B.YEDAT),5,2) || '-' || SUBSTR(CHAR(B.YEDAT),7,2) 
+					END
+				) AS YEDAT
+					, C.DPDPNM AS DPTCD
+					, A.DISYN AS DISYN,
+				(
+					CASE A.DIDAT WHEN 0 THEN '' 
+						ELSE SUBSTR(CHAR(A.DIDAT),1,4) || '-' || SUBSTR(CHAR(A.DIDAT),5,2) || '-' || SUBSTR(CHAR(A.DIDAT),7,2) 
+					END
+				) AS DIDAT,
+					D.MSTRM AS DRESN, 
+					E.MSTRM AS J_GUB, 
+				(
+					CASE A.GROUP 
+						WHEN '1' THEN F1.MSTRM 
+						WHEN '2' THEN F2.MSTRM 
+						WHEN '3' THEN F3.MSTRM 
+					END
+				) AS JKIND,
+				(
+					CASE A.G_GUB 
+						WHEN '1' THEN '사내' 
+						WHEN '2' THEN '사외' 
+						WHEN '3' THEN '표준기(사외)' 
+					END
+				) AS G_GUB
+					, A.GCYCL AS GCYCL
+					, A.GNAMT AS GNAMT
+					, A.JSPEC AS JSPEC
+					, A.ACCNO AS ACCNO
+					, A.CNOTE AS CNOTE
+					, row_number() over (order by a.group, a.mngno) ROW_NUM
+			FROM 
+				${lib2}.TME010PF AS A
+			LEFT OUTER JOIN 
+				${lib2}.TME100PF AS B
+			ON A.COMPS = B.COMPS
+			AND A.GROUP = B.GROUP
+			AND A.MNGNO = B.MNGNO
+			AND B.RPDAT = (SELECT MAX(RPDAT) FROM ${lib2}.TME100PF WHERE COMPS = A.COMPS AND GROUP = A.GROUP AND MNGNO = A.MNGNO)
+			LEFT OUTER JOIN 
+				${lib2}.MST650PF AS C
+			ON A.COMPS = C.DPCOMP
+			AND A.DPTCD = C.DPCODE
+			LEFT OUTER JOIN 
+				${lib2}.MST050PF AS D
+			ON A.COMPS = D.COMPS
+			AND D.GRPCD = 'DRN'
+			AND A.DRESN = D.MSTCD
+			LEFT OUTER JOIN 
+				${lib2}.MST050PF AS E
+			ON A.COMPS = E.COMPS
+			AND E.GRPCD = 'GAG'
+			AND A.J_GUB = E.MSTCD
+			LEFT OUTER JOIN 
+				${lib2}.MST050PF AS F1
+			ON A.COMPS = F1.COMPS
+			AND F1.GRPCD = 'GK1'
+			AND A.JKIND = F1.MSTCD
+			LEFT OUTER JOIN 
+				${lib2}.MST050PF AS F2
+			ON A.COMPS = F2.COMPS
+			AND F2.GRPCD = 'GK2'
+			AND A.JKIND = F2.MSTCD
+			LEFT OUTER JOIN 
+				${lib2}.MST050PF AS F3
+			ON A.COMPS = F3.COMPS
+			AND F3.GRPCD = 'GK3'
+			AND A.JKIND = F3.MSTCD
+			WHERE
+				'SqlMap-PsogmMachine.selectogm411' = 'SqlMap-PsogmMachine.selectogm411' 
+				<!-- and A.COMPS = #{comps} -->
+			<if test="groupList != null">
+				and A.GROUP in 
+				<foreach collection="groupList" item="group" index="" separator="," open="(" close=")">
+					#{group}
+				</foreach>
+			</if>
+			<if test = "disyn != null and disyn != ''">
+				and A.DISYN = #{disyn}
+			</if>
+			<if test = "pwhere != null and pwhere != ''">
+				#{pwhere}
+			</if>
+			
+				and a.mngno <![CDATA[<]]> '99'
+				) AS G
+		   where 
+               G.ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+				
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="PsogmMachineDomain">
+    	select
+    	 count(*)
+    	FROM 
+			${lib2}.TME010PF AS A
+		LEFT OUTER JOIN 
+			${lib2}.TME100PF AS B
+		ON A.COMPS = B.COMPS
+		AND A.GROUP = B.GROUP
+		AND A.MNGNO = B.MNGNO
+		AND B.RPDAT = (SELECT MAX(RPDAT) FROM ${lib2}.TME100PF WHERE COMPS = A.COMPS AND GROUP = A.GROUP AND MNGNO = A.MNGNO)
+		LEFT OUTER JOIN 
+			${lib2}.MST650PF AS C
+		ON A.COMPS = C.DPCOMP
+		AND A.DPTCD = C.DPCODE
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS D
+		ON A.COMPS = D.COMPS
+		AND D.GRPCD = 'DRN'
+		AND A.DRESN = D.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS E
+		ON A.COMPS = E.COMPS
+		AND E.GRPCD = 'GAG'
+		AND A.J_GUB = E.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F1
+		ON A.COMPS = F1.COMPS
+		AND F1.GRPCD = 'GK1'
+		AND A.JKIND = F1.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F2
+		ON A.COMPS = F2.COMPS
+		AND F2.GRPCD = 'GK2'
+		AND A.JKIND = F2.MSTCD
+		LEFT OUTER JOIN 
+			${lib2}.MST050PF AS F3
+		ON A.COMPS = F3.COMPS
+		AND F3.GRPCD = 'GK3'
+		AND A.JKIND = F3.MSTCD
+		WHERE
+			'SqlMap-PsogmMachine.selectogm411' = 'SqlMap-PsogmMachine.selectogm411' 
+		
+		<if test = "disyn != null and disyn != ''">
+			and A.DISYN = #{disyn}
+		</if>
+		<if test = "pwhere != null and pwhere != ''">
+			#{pwhere}
+		</if>
+    </select>
+    
+    
+    <select id="selectOgm411_cmbsel"  resultMap="CommonDb2" parameterType="CommonDb2Domain">
+		select 
+			A.MSTCD as MSTCD, A.MSTSM as MSTSM, A.MSTCD || ' | ' || A.MSTSM as CDNM
+		from 
+			${lib2}.mst050pf as A
+		where 
+				A.COMPS = #{comps}
+		<if test = "grpcd != null and grpcd != ''">
+			and A.GRPCD = #{grpcd}
+		</if>
+</select>
+    
+</mapper>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="용차사용&#32;운반비&#32;신청서" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ113R"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="1" Top="32" Width="1048"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="4" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" Style="static" TabOrder="5" Top="34" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="cb_searchCodeName1" InnerDataset="ds_VComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="6" Top="37" Width="130"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static2" Left="383" Style="static" TabOrder="7" Top="34" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="266" TabOrder="8" Text="발&#32;행&#32;번&#32;호" Top="34" VAlign="Middle" Width="116"></Static>
+		<Edit Height="22" Id="ed_LNTNO_F" Left="387" MaxLength="6" Number="TRUE" OnChanged="ed_LNTNO_F_OnChanged" TabOrder="9" Top="36" Width="50"></Edit>
+		<Edit Height="22" Id="ed_LNTNO_T" Left="464" MaxLength="6" Number="TRUE" OnChanged="common_OnChanged" TabOrder="10" Top="36" Width="50"></Edit>
+		<Static Align="Center" Height="15" Id="Static0" Left="444" TabOrder="11" Text="~" Top="39" VAlign="Middle" Width="14"></Static>
+		<Ubi Bottom="616" Height="552" Id="ubi0" Right="1048" Top="64" Width="1048">
+			<_PersistData>&#13;&#10;/6xHkC8P/wAAAQBQbAAAdw05APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 이상건
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SLTZ113R
+ * ● PROGRAM DESCRIPTION  : 월판매생산계획대실적 현황
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+/*
+var Lib1 = 'PSRESLIB';
+var Lib2 = 'PSCDBLIB';
+var company = 'PS';
+var comps = 'H1';
+*/
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();	
+	getComCode();
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 		
+	ed_LNTNO_F.SetFocus();
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	/*
+	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	*/
+	ubi0.Width = G_ds_design.GetColumn(0,"Width");
+	ubi0.Top = G_ds_design.GetColumn(0,"Top");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+	
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");
+
+	cb_searchCodeName1.Value = comps;
+}
+
+/********************************************************************** 
+ * 내용설명 : 발행
+ * 주요변수 : 
+ **********************************************************************/ 
+ function prtSLTZ113R()
+ {
+	if(length(ed_LNTNO_F.Text)<1){
+		alert(setPopMessage("4004"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("4004");	
+		return;
+	}
+	if(length(ed_LNTNO_T.Text)<1){
+		alert(setPopMessage("4004"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("4004");	
+		return;
+	}
+	http.Sync 	= true;
+	var sKind		= "getSLTZ113R";						
+	var sMethodName = "service::pssallib/selectSLTZ113R.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SLTZ113R=ds_SLTZ113R";
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " LIB1=" + quote(Lib1);
+	sArgument += " COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += " LNTNO_F=" + quote(ed_LNTNO_F.Text);
+	sArgument += " LNTNO_T=" + quote(ed_LNTNO_T.Text);
+	//sArgument += " GROUP=" + quote(ComboBoxClass.Value);      
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync	= false;
+	
+	ubi0.setJrfFileDir(G_baseURL+"/ui/PSSALLIB/REPORT/");
+	//C:\eclipse\workspace\DENSO\WebContent
+	//ubi0.setJrfFileDir("C:/eclipse/workspace/DENSO/WebContent"+"/ui/PSSALLIB/REPORT/");
+	ubi0.setJrfFileName("SLTZ113R.jrf");
+	ubi0.SetDataset("ds_SLTZ113R", "ds_SLTZ113R");	
+//	ubi0.SetArgument("DHCODE", search_dhcode.Text+"("+search_dhcode.Value+")");
+//	ubi0.SetArgument("WRKDT", parent.search_wrkdt.Text);	
+//	ubi0.SetArgument("CURRENT_TIME", substr(Getdate(),8,2)+":"+substr(Getdate(),10,2)+":"+substr(Getdate(),12,2));
+	ubi0.Retrieve();
+}
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSLTZ113R()
+{
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = substr(ca_plnym.Value,0,6)+"월판매생산계획대실적LIST";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|월판매생산계획대실적LIST";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+ 
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	prtSLTZ113R();
+
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	prtSLTZ113R();
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strOldText,strNewText)
+{
+	ds_SLTZ113R.ClearData();
+}
+
+function ed_LNTNO_F_OnChanged(obj,strText)
+{
+	ds_SLTZ113R.ClearData();
+	ed_LNTNO_T.Text = strText;
+}
+]]></Script>
+</Window>

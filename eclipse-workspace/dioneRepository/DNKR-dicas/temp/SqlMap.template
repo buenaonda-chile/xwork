@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.$name$Dao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.$name$Dto">
+$dbParam$
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+$column$
+    FROM $table$
+
+  </sql>
+
+  <sql id="where_01">
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.$name$Domain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.$keyValue$
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.$key$
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT($key$) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.$name$Domain">
+
+    INSERT INTO $table$ (
+$column$
+    ) VALUES (
+$values$
+    )
+
+    <selectKey resultType="long" keyProperty="$lKey$" order="BEFORE">
+      SELECT $seq$.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.$name$Domain">
+
+    UPDATE $table$ SET
+$updateValue$
+    WHERE $keyValue$
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.$name$Domain">
+
+    DELETE FROM $table$
+    WHERE $keyValue$
+
+  </delete>
+
+
+</mapper>

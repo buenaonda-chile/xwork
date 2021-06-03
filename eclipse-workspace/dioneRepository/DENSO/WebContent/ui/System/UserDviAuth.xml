@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="192" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="디바이스" TooltipFont="Default,0" Top="8" Ver="1.0" Width="336" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_device">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnm>사용</cdnm>
+					</record>
+					<record>
+						<cd>0</cd>
+						<cdnm>미사용</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="335"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_device" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="188" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="158" Id="menuGrd2" InputPanel="FALSE" Left="2" LineColor="#888888" MinWidth="100" OnHeadDBLClick="allCehck" Right="331" TabOrder="1" TabStop="true" Top="30" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="329">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="150"/>
+						<col width="71"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="디바이스&#32;ID"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사용유무"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="DBS_ID" display="normal" SuppressAlign="Middle"/>
+						<cell align="center" col="1" colid="USE_YN" combocol="cd" combodataset="ds_status" combotext="cdnm" display="combo" edit="combo" SuppressAlign="Middle"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Cursor="HAND" Height="20" Id="Button3" ImageID="comBtn_save" Left="272" OnClick="fn_save" TabOrder="2" Text="검색" Top="4" Width="51"></Button>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_user" Left="40" TabOrder="3" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="5" Text="디바이스&#32;정보" Top="8" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : UserDviAuth.xml
+ * ● PROGRAM DESCRIPTION  : 디바이스 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+
+#include "script::lib_script_common.js";
+
+
+
+function on_LoadCompleted(obj)
+{
+
+	title_user.Value = USER_ID;
+
+	http.Sync 	= true;
+	var sKind		= "getDevice";		
+	var sMethodName = "service::user/selectDevice.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_device=ds_device";
+	var sArgument   = "";
+		sArgument   += " USER_ID=" + quote(USER_ID);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		
+
+}
+
+var chkStatus = 0;
+function allCehck(obj,nCell,nX,nY,nPivotIndex)
+{
+	chkStatus = 1 - chkStatus;
+	for(i=0;i<ds_menuAuth.rowcount;i++){
+		ds_menuAuth.SetColumn(i,"USER_YN",chkStatus) ;
+	}
+}
+
+
+function fn_save(obj)
+{
+	var sKind		= "setDevice";						
+	var sMethodName = "service::user/deviceSave.do";
+	var sInDataSet  = "ds_device=ds_device:A";
+	var sOutDataSet = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+}
+
+
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd == 0){
+		alert(setPopMessage("2005"));	// 20110103l-koowgnojeel, 2005 == 처리 되었습니다.
+		Close();
+	}
+}
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="OBMZ190_POP" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="부서선택" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_DPCODE_POP" UseClientLayout="1">
+				<Contents>
+					<colinfo id="DPCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPCODPNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SELCODE" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="0" TabStop="FALSE" Width="530"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="0" Top="8" Width="416"></Static>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_DPCODE_POP" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="582" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="518" Id="MainGrid_POP" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="MainGrid_POP_OnCellDblClick" Right="520" TabOrder="4" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="520">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="41"/>
+						<col width="120"/>
+						<col width="250"/>
+						<col width="50"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="부서코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="부서명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="선택"/>
+					</head>
+					<body>
+						<cell align="right" checklength="Byte" col="0" display="text" expr="currow+1" SuppressAlign="Middle"/>
+						<cell align="left" checklength="Byte" col="1" colid="DPCODE" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" checklength="Byte" col="2" colid="DPCODPNM" display="normal"/>
+						<cell align="left" autosizing="none" checklength="Byte" col="3" colid="SELCODE" display="checkbox" edit="checkbox"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="5" Top="30" Width="523"></Static>
+		<Button Height="26" Id="btn_CLOSE" ImageID="closeBtn" Left="448" OnClick="btn_CLOSE_OnClick" TabOrder="0" Text="닫기" Top="32" Width="75"></Button>
+		<Button Height="26" Id="btn_SELECT" ImageID="btn2_sele2" Left="368" OnClick="btn_SELECT_OnClick" TabOrder="6" Text="닫기" Top="32" Width="75"></Button>
+		<Button Cursor="HAND" Height="25" Id="btn_Cancel" ImageID="btn2_indi2" Left="278" OnClick="fn_Cancel" TabOrder="7" Text="검색" Top="32" Width="85"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : JDEZ001Q_POP1.xml
+ * ● PROGRAM DESCRIPTION  : JDE경비예산조회-다중부서코드선택
+ * ● DATE WRITTEN         : 2019.10.21
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var Lib4 = "CLTDTA";
+
+
+//var GBOBJ_FR="91100";	//계정코드(FROM)
+//var GBOBJ_TO="92590";	//계정코드(TO)
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getJDEZ001Q_POP1();
+	
+}
+/********************************************************************** 
+ * 내용설명 : 부서코드 조회
+ **********************************************************************/ 
+function getJDEZ001Q_POP1(){
+	
+	
+	var sKind		= "getJDEZ001Q_POP1";						
+	var sMethodName = "service::dwhlib/selectJdeF0902_DP.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_DPCODE_POP=ds_DPCODE";
+	var sArgument   = "";
+		sArgument += " LIB4=" + quote(Lib4);
+		sArgument += " GBFY=" + quote(substr(cmb_GBFY.Value,2,2)); //계획년(19)
+		sArgument += " GBOBJ_FR=" + quote(GBOBJ_FR); //계정코드(FROM)
+		sArgument += " GBOBJ_TO=" + quote(GBOBJ_TO); //계정코드(TO)
+		sArgument += " NotGBOBJ_FR=" + quote(NotGBOBJ_FR); //제외계정코드(FROM)
+		sArgument += " NotGBOBJ_TO=" + quote(NotGBOBJ_TO); //제외계정코드(TO)
+	http.Sync 	= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+function btn_CLOSE_OnClick(obj)
+{
+	Close();
+}
+
+function btn_SELECT_OnClick(obj)
+{
+	var arrReturn  =  Array();
+	var arrDept = Array();
+	var arrDeptName = Array();
+	var arrDeptSize=0;
+	var rltDept="('";
+	//var rltDeptName="('";
+	var rltDeptName="";
+
+	for(i=0; i<ds_DPCODE_POP.rowcount; i++){
+		var selChk=ds_DPCODE_POP.GetColumn(i,"SELCODE");
+		var selCode=ds_DPCODE_POP.GetColumn(i,"DPCODE");
+		//var selCodeName=ds_DPCODE_POP.GetColumn(i,"DPNAME");
+		var selCodeName=ds_DPCODE_POP.GetColumn(i,"DPCODPNM");
+		if(selChk=true){
+			arrDept[arrDeptSize] = selCode;
+			arrDeptName[arrDeptSize] = selCodeName;
+			arrDeptSize++;
+		}
+	}	
+	for(i=0; i<length(arrDept); i++){
+		if (i == length(arrDept)-1){
+			rltDept = rltDept+arrDept[i]+ "')";
+			//rltDeptName = rltDeptName+arrDeptName[i]+ "')";
+			rltDeptName = rltDeptName+arrDeptName[i];
+		}else{
+			rltDept = rltDept+arrDept[i] + "','";
+			//rltDeptName = rltDeptName+arrDeptName[i] + "','";
+			rltDeptName = rltDeptName+arrDeptName[i] + ",";
+		}
+	}
+	arrReturn[0] = rltDept;
+	arrReturn[1] = rltDeptName;
+	//trace(arrReturn[0]);
+	//trace(arrReturn[1]);
+	close(arrReturn);
+}
+
+function MainGrid_POP_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	btn_SELECT_OnClick();
+}
+function fn_Cancel(obj)
+{
+	for(i=0; i<ds_DPCODE_POP.rowcount; i++){
+		ds_DPCODE_POP.SetColumn(i,"SELCODE","0");
+	}	
+}
+]]></Script>
+</Window>

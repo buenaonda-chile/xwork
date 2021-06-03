@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderDayBeforeTransferErrorListDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="OrderDayBeforeTransferErrorList" type="OrderDayBeforeTransferErrorListDomain">
+   		<result property="comps" column="COMPS" />
+        <result property="chldt" column="CHLDT" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="pspno" column="PSPNO" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="errnm" column="ERRNM" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="OrderDayBeforeTransferErrorList" parameterType="OrderDayBeforeTransferErrorListDomain">
+		SELECT 
+			A.CHLDT, A.PYVND, A.PSPNO, TRIM(B.CUSNM) AS CUSNM, TRIM(C.ITDSC) AS ITDSC, A.ERRNM
+		FROM(
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.CUSNO IS NULL THEN 'SHIPPING DOCUMENT MA ERROR' ELSE '' END AS ERRNM, 'ERCD1' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.EM004PR B ON A.PYVND=B.CUSNO
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.CUSNO IS NOT NULL THEN 'SUBSTITUTION SHIPPING DOCUMENT MA ERROR' ELSE '' END AS ERRNM, 'ERCD2' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.EM005PR B ON A.PYVND=B.CUSNO
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			<!-- EDATM이 CHLDT보다 작은 것으로 조건으로 함.
+			CHLDT는 조건 CHLDT이므로 PARAM CHLDT로 대체함
+			 -->
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.PRTNO IS NULL THEN 'PART NO. CROSS REFERENCE MA ERROR' ELSE '' END AS ERRNM, 'ERCD3' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN
+				(SELECT Y.*
+				FROM ${lib1}.EM000PR Y
+				WHERE Y.EDATM = (SELECT MAX(X.EDATM)
+				FROM ${lib1}.EM000PR X			
+				WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]> #{chldt}) 		
+				) B ON A.PYVND=B.CUSNO AND A.PSPNO=B.PRTNO
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.ITNBR IS NULL THEN 'ITEM MASTER "A" ERROR' ELSE '' END AS ERRNM, 'ERCD4' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.CUSNO IS NULL THEN 'SHIP TO MA ERROR' ELSE '' END AS ERRNM, 'ERCD5' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.EM003PR B ON A.PYVND=B.CUSNO AND B.SHPNO=0
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.CUSNO IS NOT NULL THEN 'EXPORT IMPORT SYSTEM ERROR' ELSE '' END AS ERRNM, 'ERCD6' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.EM021PR B ON A.PYVND=B.CUSNO AND B.SHPNO=0
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO,
+			CASE WHEN B.CONNO IS NOT NULL AND C.SPRTN IS NOT NULL THEN '' ELSE A.ERRNM END AS ERRNM, 'ERCD7' AS ERCD
+			FROM (
+				SELECT A.COMPS, A.CHLDT, A.PYVND, A.PSPNO, B.ITNBR, B.ITCLS, B.ITTYP, SUBSTR(B.ITCLS,1,1) AS TA, SUBSTR(B.ITCLS,2,1) AS T2,  B.SAFLG,
+				CASE WHEN ((B.ITTYP BETWEEN '1' AND '2') AND (SUBSTR(B.ITCLS,1,1) BETWEEN 'A' AND 'Z') AND SUBSTR(B.ITCLS,2,1) ='1') OR B.SAFLG=1
+				THEN '' ELSE 'SUPPLIED GODDS MA ERROR' END AS ERRNM, 'ERCD7' AS ERCD
+				FROM PSZDBLIB.SPD142PF A, ${lib1}.BM008PR B
+			WHERE
+				A.CHLDT = #{chldt}
+  			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+				AND A.PSPNO=B.ITNBR
+			) A
+			<!--
+			RECCL 체인을 위해 CUSMAS추가함. 맞는지 확인필요 COMNO=RECCL
+			-->  
+			LEFT OUTER JOIN ${lib1}.CUSMAS D ON A.PYVND=D.CUSNO 
+			LEFT OUTER JOIN ${lib1}.EM040PR B ON A.PYVND=B.CONNO 
+			LEFT OUTER JOIN 
+					(SELECT Y.RECCL, Y.CONNO, Y.SPCOD, Y.SPRTN
+						FROM ${lib1}.BM030LR0 Y 
+						GROUP BY Y.RECCL, Y.CONNO, Y.SPCOD, Y.SPRTN
+					) C ON D.COMNO=C.RECCL AND A.PYVND=C.CONNO AND B.SPCOD=C.SPCOD AND A.PSPNO=C.SPRTN
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.ITNBR IS NULL THEN 'INVENTORY MA ERROR' ELSE '' END AS ERRNM, 'ERCD8' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN ${lib1}.HM000PR B ON A.PSPNO=B.ITNBR AND B.HOUSE='1'
+			WHERE
+				A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+				
+			UNION ALL
+			SELECT A.CHLDT, A.PYVND, A.PSPNO, 
+			CASE WHEN B.PSPNO IS NOT NULL THEN '수주갱신 ITEM 제어마스타등록' ELSE '' END AS ERRNM, 'ERCD9' AS ERCD
+			FROM PSZDBLIB.SPD142PF A
+			LEFT OUTER JOIN PSZDBLIB.SVZ040PF B ON B.COMPS=#{comps} AND A.PYVND=B.PYVND AND B.SHPNO=0 AND A.PSPNO=B.PSPNO
+			WHERE
+				  A.CHLDT = #{chldt}
+			    <if test="pyvnd != null and pyvnd !='' ">	
+			    AND A.PYVND = #{pyvnd}	
+			    </if>
+			    AND A.COMPS = #{comps}
+			) A
+			LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+			LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PSPNO=C.ITNBR
+		WHERE 
+		      'SqlMap-OrderDayBeforeTransferErrorList.searchByCondition' = 'SqlMap-OrderDayBeforeTransferErrorList.searchByCondition'
+		  AND A.ERRNM !=''
+    </select>
+
+</mapper>

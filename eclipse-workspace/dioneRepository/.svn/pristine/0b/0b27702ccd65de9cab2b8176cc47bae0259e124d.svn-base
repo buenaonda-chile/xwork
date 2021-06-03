@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncMtReprtPptDao">
+	
+	<resultMap id="SalPlnPerfmncMtReprtPpt" type="SalPlnPerfmncMtReprtPptDomain">
+		<result property="maker" column="MAKER" />
+		<result property="pcosty" column="P_COST_Y" />
+		<result property="pcostm" column="P_COST_M" />
+		<result property="pcosts" column="P_COST_S" />
+	</resultMap>
+	
+	<select id="searchByMaker" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	
+		select 
+			A.endcnm as maker,
+			(A.P_COST_Y / 10000000) AS P_COST_Y, 
+			(B.P_COST_M / 10000000) AS P_COST_M,
+			(C.P_COST_S / 10000000) AS P_COST_S
+		from
+			(SELECT 
+			B.endcnm, 
+			SUM(A.MONQY) AS P_QTY_Y, 
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+			FROM ${lib2}.SPY200PF A,
+			PSZDBLIB.SPZ100PF B,
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			and A.plnym = #{dumcb} --계획년월
+			GROUP BY B.endcnm) A,
+			(SELECT
+			B.endcnm, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+			FROM ${lib2}.SPM110PF A, 
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNYM = #{dumcb} --계획년월
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY B.endcnm) B,
+			(SELECT
+			B.endcnm,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A,
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY B.endcnm) C
+		where
+			A.endcnm = B.endcnm
+			and B.endcnm = C.endcnm
+
+	</select>
+
+	<select id="searchByMakerComps" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+		
+		select 
+			A.endcnm as maker,
+			(A.P_COST_Y / 10000000) AS P_COST_Y, 
+			(B.P_COST_M / 10000000) AS P_COST_M,
+			(C.P_COST_S / 10000000) AS P_COST_S
+		from
+			(SELECT 
+			'1' AS endcnm, 
+			SUM(A.MONQY) AS P_QTY_Y, 
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+			FROM ${lib2}.SPY200PF A,
+			PSZDBLIB.SPZ100PF B,
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+			AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+			AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			and A.plnym = #{dumcb} --계획년월
+			GROUP BY '1') A,
+			(SELECT
+			'1' AS endcnm,
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+			FROM ${lib2}.SPM110PF A, 
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNYM = #{dumcb} --계획년월
+			AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+			AND A.PLTCD IN #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY '1') B,
+			(SELECT
+			'1' AS endcnm,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A,
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+			AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY '1') C
+		where
+			A.endcnm = B.endcnm
+			and B.endcnm = C.endcnm
+		
+	</select>
+	
+	<select id="searchByMakerCompsSum" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">			
+			
+		select 
+			A.endcnm as maker,
+			(A.P_COST_Y / 10000000) AS P_COST_Y, 
+			(B.P_COST_M / 10000000) AS P_COST_M,
+			(C.P_COST_S / 10000000) AS P_COST_S
+		from
+			(SELECT 
+			'1' AS endcnm, 
+			SUM(A.MONQY) AS P_QTY_Y, 
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+			FROM ${lib2}.SPY200PF A,
+			PSZDBLIB.SPZ100PF B,
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+			AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+			AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			AND A.PLNYM <![CDATA[>=]]> #{sdumcb}
+				AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+			GROUP BY '1') A,
+			(SELECT
+			'1' AS endcnm, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+			FROM ${lib2}.SPM110PF A, 
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNYM <![CDATA[>=]]> #{sdumcb}
+				AND A.PLNYM <![CDATA[<=]]> #{dumcb} --계획년월
+			AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+			AND A.PLTCD IN #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY '1') B,
+			(SELECT
+			'1' AS endcnm, 
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A,
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) <![CDATA[>=]]> #{sdumcb}
+				AND SUBSTR(A.JPSDT, 1,6) <![CDATA[<=]]> #{dumcb} --계획년월
+			AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			GROUP BY '1') C
+		where
+			A.endcnm = B.endcnm
+			and B.endcnm = C.endcnm			
+			
+	</select>
+	
+	<select id="searchByITME" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	
+		select 
+		A.PRDCD as maker,
+		A.P_COST_Y,
+		B.P_COST_M,
+		C.P_COST_S
+		from
+		(select 
+		PRDCD,
+		P_COST_Y
+		from
+		(SELECT
+		A.PRDCD, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+		AND A.PLNYM = #{dumcb} --계획년월
+		AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 			
+		GROUP BY A.PRDCD) A
+		order by P_COST_Y desc
+		fetch first 6 row only) A,
+		(select 
+		PRDCD,
+		P_COST_M
+		from
+		(SELECT
+		A.PRDCD,   
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM = #{dumcb} --계획년월
+		AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 			
+		GROUP BY A.PRDCD) B
+		order by P_COST_M desc
+		fetch first 6 row only) B,
+		(select 
+		PRDCD,
+		P_COST_S
+		from
+		(SELECT
+		A.PRDCD,  
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+		AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성		
+		GROUP BY A.PRDCD) C
+		order by P_COST_S desc
+		fetch first 6 row only) C
+		where
+		A.PRDCD = B.PRDCD
+		AND B.PRDCD = C.PRDCD
+
+	</select>
+	
+	
+	<select id="searchByITMEComps" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+		
+		select 
+		A.PRDCD as maker,
+		A.P_COST_Y,
+		B.P_COST_M,
+		C.P_COST_S
+		from
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+		AND A.PLNYM = #{dumcb} --계획년월
+		AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 		
+		GROUP BY '1') A,
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM = #{dumcb} --계획년월
+		AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD IN #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 		
+		GROUP BY '1') B,
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+		AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성		
+		GROUP BY '1') C
+		where
+		A.PRDCD = B.PRDCD
+		AND B.PRDCD = C.PRDCD
+		
+	</select>
+	
+	<select id="searchByITMECompsSum" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+
+		select 
+		A.PRDCD as maker,
+		A.P_COST_Y,
+		B.P_COST_M,
+		C.P_COST_S
+		from
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+		AND A.PLNYM <![CDATA[>=]]> #{sdumcb}
+		AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+		AND A.COMPS = #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD = #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 		
+		GROUP BY '1') A,
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM <![CDATA[>=]]> #{sdumcb}
+		AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+		AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성
+		AND A.PLTCD IN #{comps} --C1:창원, S1:화성, H1:홍성, A1:마산 		
+		GROUP BY '1') B,
+		(SELECT
+		'1' AS PRDCD, 
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) <![CDATA[>=]]> #{sdumcb}
+		AND SUBSTR(A.JPSDT, 1,6) <![CDATA[<=]]> #{dumcb} --계획년월
+		AND A.COMPS IN #{comps} --C1:창원, S1:화성, H1:홍성		
+		GROUP BY '1') C
+		where
+		A.PRDCD = B.PRDCD
+		AND B.PRDCD = C.PRDCD
+
+	</select>
+</mapper>

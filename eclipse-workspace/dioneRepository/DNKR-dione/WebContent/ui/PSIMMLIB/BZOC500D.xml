@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="301" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="부품출고확인(제조)&#32;상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="449" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_BZOC500D">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="274" Id="searchBar" Left="-3" TabOrder="4" Top="27" Width="452"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="3" TabOrder="7" Top="80" Width="91"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="227" TabOrder="10" Top="80" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" TabOrder="1" Width="451"></Image>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_info" Left="40" TabOrder="2" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="3" Top="8" Width="104"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static1" Left="25" Style="static" TabOrder="6" Text="PROCS" Top="85" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="94" Height="5" Id="Shape0" Left="15" LineColor="#dceaf7" Right="20" TabOrder="5" Top="89" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="249" Style="static" TabOrder="9" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="85" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="94" Height="5" Id="Shape1" Left="239" LineColor="#dceaf7" Right="244" TabOrder="8" Top="89" Type="Ellipse" Width="5"></Shape>
+		<Static Height="14" Id="st_SLPNO" Left="103" TabOrder="11" Top="85" Width="110"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static22" Left="101" TabOrder="12" Top="101" Width="115"></Static>
+		<Static Height="14" Id="st_PRTNO" Left="327" TabOrder="13" Top="85" Width="110"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static24" Left="325" TabOrder="14" Top="101" Width="115"></Static>
+		<Static Font="굴림,18,Bold" Height="29" Id="Static25" Left="4" TabOrder="15" Text="CIGMA부품출고" Top="38" Width="278"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_BZOC500D" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="296" ColSelect="TRUE" ColSizing="TRUE" Enable="FALSE" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="187" Id="MainGrid" InputPanel="FALSE" Left="2" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="440" TabOrder="16" TabStop="true" Top="109" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="438">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="마감일자"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="마감시간"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="출고일자"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="수량"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="작업자"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' checklength="Byte" col="0" colid="PDTZ6" display="normal" expr='substr(Lpad(PDTZ6,&quot;&#32;&quot;,8),0,4)+&quot;/&quot;+substr(Lpad(PDTZ6,&quot;&#32;&quot;,8),4,2)+&quot;/&quot;+substr(Lpad(PDTZ6,&quot;&#32;&quot;,8),6,2)' limit="1" TrimType="Both" useime="false"/>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' checklength="Byte" col="1" colid="PRCT6" display="normal" expr='substr(Lpad(PRCT6,&quot;0&quot;,6),0,2)+&quot;:&quot;+substr(Lpad(PRCT6,&quot;0&quot;,6),2,2)+&quot;:&quot;+substr(Lpad(PRCT6,&quot;0&quot;,6),4,2)' limit="1" TrimType="Both" useime="false"/>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' checklength="Byte" col="2" colid="TRNDT" display="date" limit="1" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' checklength="Byte" col="3" colid="TRQTY" display="number" limit="1" TrimType="Both" useime="false"/>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' checklength="Byte" col="4" colid="LINID" display="normal" limit="1" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : BZOC500D.xml
+ * ● PROGRAM DESCRIPTION  : 부품출고확인(제조)-상세
+ * ● DATE WRITTEN         : 2014.11.26
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+function on_LoadCompleted(obj)
+{
+	getTitle();	
+	getDesign();
+	st_SLPNO.Text=P_SLPNO;
+	st_PRTNO.Text=P_PRTNO;
+	getBZOC500D();
+	//gFcOnTopButtonColor("0"); //조회, 추가, 저장
+
+}
+
+function getDesign(){
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = "White";
+	MainGrid.SelColor="Black";
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");	
+}
+
+function getBZOC500D(){
+
+	var sKind		= "getBZOC500D";						
+	var sMethodName = "service::psimmlib/selectBZOC500D.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_BZOC500D=ds_BZOC500D";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@TRNDT=" + quote(P_TRNDT); //마감일자
+		sArgument += "@PRTNO=" + quote(P_PRTNO); //품번
+		sArgument += "@SLPNO=" + quote(P_SLPNO); //PROCD
+	var str = dialog("Common::PGMLOAD_IMM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}	
+}
+
+function menu_OnFocus(obj)
+{
+	//gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+]]></Script>
+</Window>

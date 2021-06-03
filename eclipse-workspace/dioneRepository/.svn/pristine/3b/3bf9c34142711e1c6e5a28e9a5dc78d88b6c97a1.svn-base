@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="년간&#32;생산계획&#32;공수분석&#32;작업" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCod">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>PE</code>
+						<code_name>DNPE</code_name>
+					</record>
+					<record>
+						<code>PS</code>
+						<code_name>DNPS</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_PLNGB">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>Y1</cd>
+						<cdnm>기본</cdnm>
+					</record>
+					<record>
+						<cd>Y2</cd>
+						<cdnm>하반기,&#32;수정</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST040PF"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="red" Color="MENU" Font="Default,10,Bold" Height="64" Id="st_Msg" Left="256" TabOrder="5" Text="년&#32;판매계획이동&#32;작업중입니다.......&#32;&#13;&#10;&#13;&#10;장시간&#32;화면이&#32;멈추어&#32;있거나&#32;이상발생시&#32;정보관리팀으로&#32;연락바랍니다." Top="392" VAlign="Middle" Visible="FALSE" Width="552"></Static>
+		<Div Height="276" Id="Div0" Left="231" TabOrder="3" Text="Div0" Top="108" Width="596">
+			<Contents>
+				<Static Align="Center" Font="Default,12,Bold" Height="31" Id="Static0" Left="100" TabOrder="0" Text="◆&#32;년간&#32;생산계획&#32;공수분석&#32;작업&#32;◆" Top="32" VAlign="Middle" Width="361"></Static>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="156" TabOrder="1" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="101" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="274" Style="static" TabOrder="9" Top="101" VAlign="Middle" Width="136"></Static>
+				<Combo CodeColumn="code" DataColumn="code_name" Enable="FALSE" Height="19" Id="ComboBoxPlant" InnerDataset="ds_ComCod" Left="278" TabOrder="2" Top="104" Width="130"></Combo>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="156" TabOrder="3" Text="기&#32;준&#32;년&#32;도" Top="133" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static13" Left="274" Style="static" TabOrder="4" Top="133" VAlign="Middle" Width="136"></Static>
+				<Calendar Dateformat="yyyy" Height="19" Id="cal_PLNYM" Left="278" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="5" Top="136" Value="TODAY" Width="130"></Calendar>
+				<Button Cursor="HAND" Height="28" Id="btn_process" ImageID="btn2_closing2" Left="264" OnClick="setFPYC210C" TabOrder="8" Top="216" Width="75"></Button>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static1" Left="153" TabOrder="6" Text="계&#32;획&#32;구&#32;분" Top="164" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static2" Left="274" Style="static" TabOrder="11" Top="165" VAlign="Middle" Width="136"></Static>
+				<Combo CodeColumn="cd" DataColumn="cdnm" Height="19" Id="cmb_PLNGB" INDEX="0" InnerDataset="ds_PLNGB" Left="278" TabOrder="7" Top="168" Width="130"></Combo>
+			</Contents>
+		</Div>
+		<WTA_RemoteCall Bottom="602" Height="34" Id="WTA_RemoteCall0" Left="16" Right="256" Top="568" Visible="FALSE" Width="240"></WTA_RemoteCall>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FPYC210C.xml
+ * ● PROGRAM DESCRIPTION  : 년간 생산계획 공수분석 작업
+ * ● DATE WRITTEN         : 2013.08.27
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var pgmLib = "*LIBL";
+var pgmName = "FPYC210RC";
+var param = "";
+var exeTime = 1200;
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	//getMst040();
+	//Div0.st_beforYM.Text = substr(ds_MST040PF.GetColumn(0,"MJINT"),0,4)+"-"+substr(ds_MST040PF.GetColumn(0,"MJINT"),4,2);
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 		
+	
+	//st_Msg.Visible = false;
+	Div0.cal_PLNYM.SetFocus();
+	//Div0.cal_PLNYM.Value=20140101;
+	//Div0.cmb_PLNGB.Value=2;
+}
+
+function getComCode(){
+
+/*
+	http.Sync=true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+*/
+	if (comps == "E1"){
+		Div0.ComboBoxPlant.Value="PE";
+	}else{
+		Div0.ComboBoxPlant.Value="PS";
+	}
+
+}
+
+function getMst040()
+{
+	var sKind		= "getMST040PF";						
+	var sMethodName = "service::pscomlib/selectMST040PF.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MST040PF=ds_MST040PF";   					// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(Div0.ComboBoxPlant.Value);//사업부
+		sArgument += " MAJCD=" + quote("FPY220PF"+Div0.cmb_PLNGB.Value);//MAJCD
+	http.Sync 		= true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 		= false;
+}
+
+/********************************************************************** 
+ * 내용설명 : 생성
+ * 주요변수 : 
+ **********************************************************************/ 
+function setFPYC210C(){
+//============================================
+	if(length(trim(Div0.ComboBoxPlant.Value)) < 1){
+		//alert("[알림] 사업부를 선택하세요.");
+		alert(setPopMessage("2041"));  //[알림] 사업부를 선택하세요.
+		setMessage("2041");	
+		return;
+	}
+	if(length(trim(Div0.cal_PLNYM.Value)) < 8){
+		//alert("[알림] 기준년도을 입력해 주세요.);
+		alert(setPopMessage("6048"));  //[알림] 기준년도을 입력해 주세요.
+		setMessage("6048");	
+		Div0.cal_PLNYM.SetFocus();
+		return;
+	}
+	
+	if(length(trim(Div0.cmb_PLNGB.Value)) < 1){
+		//alert("[확인] 계획구분을 선택하세요.");
+		alert(setPopMessage("6042"));  //[알림]계획구분을 선택하세요.
+		setMessage("6042");	
+		Div0.cmb_PLNGB.SetFocus();
+		return;
+	}
+	if(confirm(substr(Div0.cal_PLNYM.Value,0,4)+"년 " +"생산계획 공수분석작업입니다. 작업하시겠습니까? ") == false) return;
+
+	getMst040();
+	if(ds_MST040PF.GetColumn(0,"MJINT") >= substr(Div0.cal_PLNYM.Value,0,4)){
+		alert("[알림] 이미 마감되었습니다.");
+		//alert(setPopMessage("5014")); //[알림] 이미 마감되었습니다.
+		//setMessage("5014");	
+		return;
+	}
+	/* 삭제 : 2019.11.27 NEWDIONE로 SSO관리전환
+	//as400 USERID Get
+	http.Sync = true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::user/selectSsoAccount.do";   	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " USER_ID="    + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	sArgument += " INOUT_GUBN=" + quote("I");	
+	sArgument += " COMPANY="    + quote(company);
+	sArgument += " SYSTEM_SEQ=" + quote("4");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_ssoaccount.GetRowCount() < 1){
+		alert(setPopMessage("1014"));
+		setMessage("1014");	
+		return;
+	}	
+	*/
+	//사업부별 공통ID(as400 USERID)로 실행
+	var iDget = getRemotecallID(comps);
+	if (iDget != "ERROR"){
+		callUser = iDget;
+		callPass = iDget;
+	}else{
+		alert(setPopMessage("1444"));
+		setMessage("1444");	
+		return;
+	}
+
+
+	//리모트콜 실행(FPYC210rc용)
+	param = Div0.cmb_PLNGB.Value + substr(Div0.cal_PLNYM.Value,0,4)+"04" + (parseInt(substr(Div0.cal_PLNYM.Value,0,4))+1)+"03"+substr(Div0.cal_PLNYM.Value,0,4)+Div0.ComboBoxPlant.Value;
+	for(i=length(param)+1;i<=40;i++){
+		param += " ";
+	}
+	param += callUser;		
+	for(j=1;j<=10-length(callUser);j++){
+		param += " ";
+	}
+	param += '000';
+
+	st_Msg.Visible = true;
+	Div0.Enable = false;
+	SetWaitCursor(true);
+	SetCapture();
+	
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",exeTime);	
+	
+	// 연결 (접속아이피 , 아이디, 비밀번호)	
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(pgmLib,pgmName,param,pgmSize);
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			ReleaseCapture();
+			SetWaitCursor(false);
+			st_Msg.Visible = false;
+			if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "999") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;
+
+/*		
+				var sKind		= "setmst040";						
+				var sMethodName = "service::pscomlib/updateMST040.do";     		// 서버에서 호출 될 Method 명
+				var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+				var sOutDataSet = "";    		 								// 조회 후 돌려 받을 DataSet 명칭
+				var sArgument   = "";
+					sArgument += " LIB2=" + quote(Lib2);
+					sArgument += " COMPS=" + quote(Div0.ComboBoxPlant.Value);//사업부
+					sArgument += " MAJCD=" + quote("FPY220PF"+Div0.cmb_PLNGB.Value);//MAJCD
+					sArgument += " MJINT=" + quote(substr(Div0.cal_PLNYM.Value,0,4));
+					sArgument += " MAJMK=" + quote("DIONE "+G_ds_user.GetColumn(0,"USER_ID"));
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+*/	
+				//마감history에 저장
+				var sKind		= "setmst049";						
+				var sMethodName = "service::pscomlib/saveMST049.do";     		// 서버에서 호출 될 Method 명
+				var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+				var sOutDataSet = "";    		 								// 조회 후 돌려 받을 DataSet 명칭
+				var sArgument   = "";
+				sArgument += " LIB2=" + quote(Lib2);
+				sArgument += " COMPS=" + quote(Div0.ComboBoxPlant.Value);
+				sArgument += " PGSRC=" + quote("FPYC210C");
+				sArgument += " PGMNM=" + quote("년간 생산계획 공수분석 작업");
+				sArgument += " PDATE=" + quote(substr(Div0.cal_PLNYM.Value,0,4));
+				sArgument += " JOBID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+				sArgument += " BIGO1=" + quote("FPY220PF"+Div0.cmb_PLNGB.Value);
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+				
+				alert(setPopMessage("1001")); //  정상적으로 처리가 완료되었습니다.	
+				setMessage("1001");	
+				
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "888") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				var ruser = trim(substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,10));
+				var rcount = toNumber(substr(WTA_RemoteCall0.RC_GetReturnParm(1),60,2))-1;
+				alert("사용자("+ruser+")외 "+rcount+"명이 사용중입니다. 작업이 불가능 합니다.");
+				//alert(setPopMessage("1008"));	// 현재 시스템에 락이 걸렸습니다. 전산관리자에게 문의하세요.
+				//setMessage("1008");
+				return false;
+			} else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "777") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("1002")); //[경고] 처리 중 오류가 발생하였습니다.
+				setMessage("1002");	
+				return false;
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "666") {
+				alert(WTA_RemoteCall0.RC_GetReturnParm(1));
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("4020")); //[확인] 마감년월을 확인바랍니다.
+				setMessage("4020");	
+				return false;
+			}else {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("1015")); //[경고] AS400 CL 처리 중 오류가 발생하였습니다.
+				setMessage("1015");	
+				return false;
+			}
+		}else{
+			var bstrErrorMessage = WTA_RemoteCall0.bstrErrorMessage;
+			WTA_RemoteCall0.RC_Disconnect();	//연결종료
+			ReleaseCapture();
+			SetWaitCursor(false);
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		var ulErrorCode = WTA_RemoteCall0.ulErrorCode;
+		WTA_RemoteCall0.RC_Disconnect();	//연결종료
+		ReleaseCapture();
+		SetWaitCursor(false);
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + ulErrorCode);
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- svcId	Transaction 고유 ID
+ * 			- rtnCd 	에러코드
+ * 			- rtnMsg 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		ReleaseCapture();
+		SetWaitCursor(false);
+		alert(setPopMessage("5008"));  //[오류] 마감처리는 진행되었으나 마감년월을 관리마스타(MST040PF)에 저장 실패. 
+		setMessage("5008");
+	}else{
+		ReleaseCapture();
+		SetWaitCursor(false);
+		st_Msg.Visible = false;
+		alert(setPopMessage("1001")); //[알림] 정상적으로 처리가 완료되었습니다.
+		setMessage("1001");
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+]]></Script>
+</Window>

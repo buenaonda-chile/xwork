@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.ProdctIndctBaseLineDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="prodctIndctBaseLine" type="ProdctIndctBaseLineDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="partCode" column="PART_CODE" />
+        <result property="teamCode" column="TEAM_CODE" />
+        <result property="lcodeGb" column="LCODE_GB" />
+        <result property="workStle" column="WORK_STLE" />
+        <result property="prdtCode1" column="PRDT_CODE1" />
+        <result property="prdtCode2" column="PRDT_CODE2" />
+        <result property="prdtCode3" column="PRDT_CODE3" />
+        <result property="prdtNm1" column="PRDT_NM1" />
+        <result property="prdtNm2" column="PRDT_NM2" />
+        <result property="prdtNm3" column="PRDT_NM3" />        
+        <result property="ifCode" column="IF_CODE" />
+        <result property="ifType" column="IF_TYPE" />        
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+        <result property="oldLineCode" column="OLD_LINE_CODE" />
+          
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="prodctIndctBaseLine" parameterType="ProdctIndctBaseLineDomain">
+		SELECT 
+			 CLS_CODE
+			,TRIM(LINE_CODE) AS LINE_CODE
+			,TRIM(LINE_NM) AS LINE_NM
+			,LOC_CODE
+			,TRIM(PART_CODE) AS PART_CODE
+			,TRIM(WORK_STLE) AS WORK_STLE
+			,TRIM(PRDT_CODE1) AS PRDT_CODE1
+			,(SELECT DISTINCT RTRIM(PRDT_NM) FROM PSZDBLIB.FHP040PF WHERE PRDT_CODE = A.PRDT_CODE1 AND (substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2)) BETWEEN START_DE AND END_DE ) AS PRDT_NM1
+			,TRIM(PRDT_CODE2) AS PRDT_CODE2
+			,(SELECT DISTINCT RTRIM(PRDT_NM) FROM PSZDBLIB.FHP040PF WHERE PRDT_CODE = A.PRDT_CODE2 AND (substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2)) BETWEEN START_DE AND END_DE ) AS PRDT_NM2
+			,TRIM(PRDT_CODE3) AS PRDT_CODE3
+			,(SELECT DISTINCT RTRIM(PRDT_NM) FROM PSZDBLIB.FHP040PF WHERE PRDT_CODE = A.PRDT_CODE3 AND (substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2)) BETWEEN START_DE AND END_DE ) AS PRDT_NM3			
+			,TRIM(IF_CODE) AS IF_CODE
+			,TRIM(IF_TYPE) AS IF_TYPE			
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(LINE_CODE) AS OLD_LINE_CODE			
+		FROM   PSZDBLIB.FHP010PF A
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE like '%' || '${clsCode}' || '%'
+		</if> 
+		<if test='lineCode != null and !lineCode.equalsIgnoreCase("")'>
+			AND LINE_CODE like '%' || '${lineCode}' || '%'
+		</if> 		
+		<if test='lineNm != null and !lineNm.equalsIgnoreCase("")'>
+			AND LINE_NM like '%' || '${lineNm}' || '%'
+		</if> 
+		ORDER BY LINE_CODE
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="ProdctIndctBaseLineDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP010PF
+        WHERE CLS_CODE = #{clsCode}
+        AND LINE_CODE = #{lineCode}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="ProdctIndctBaseLineDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP010PF
+        WHERE CLS_CODE = #{clsCode}
+        AND LINE_CODE = #{oldLineCode}
+    </select>        
+        
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount3" resultType="java.lang.Integer" parameterType="ProdctIndctBaseLineDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP010PF
+        WHERE CLS_CODE = #{clsCode}
+        AND LOC_CODE = #{locCode}
+        AND IF_TYPE = #{ifType}        
+    </select>
+            
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="ProdctIndctBaseLineDomain">
+        INSERT INTO  PSZDBLIB.FHP010PF (
+				 CLS_CODE
+				,LINE_CODE
+				,LINE_NM
+				,LOC_CODE
+				,PART_CODE
+				,WORK_STLE
+				,PRDT_CODE1
+		<if test='prdtCode2 != null and !prdtCode2.equalsIgnoreCase("")'>				
+				,PRDT_CODE2
+		</if>		
+		<if test='prdtCode3 != null and !prdtCode3.equalsIgnoreCase("")'>		
+				,PRDT_CODE3
+		</if>					
+				,IF_CODE
+				,IF_TYPE				
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{lineCode}
+               ,#{lineNm}
+               ,#{locCode}
+               ,#{partCode}
+               ,#{workStle}
+               ,#{prdtCode1}
+		<if test='prdtCode2 != null and !prdtCode2.equalsIgnoreCase("")'>	               
+               ,#{prdtCode2}
+        </if>       
+		<if test='prdtCode3 != null and !prdtCode3.equalsIgnoreCase("")'>		        
+               ,#{prdtCode3}
+        </if>        
+               ,#{ifCode}
+               ,#{ifType}               
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="ProdctIndctBaseLineDomain">
+        UPDATE 
+               PSZDBLIB.FHP010PF
+        SET
+			  LINE_CODE = #{lineCode}        
+			 ,LINE_NM = #{lineNm}
+			 ,LOC_CODE = #{locCode}
+			 ,PART_CODE = #{partCode}
+			 ,WORK_STLE = #{workStle}
+			 ,PRDT_CODE1 = #{prdtCode1}
+			 ,PRDT_CODE2 = #{prdtCode2}
+			 ,PRDT_CODE3 = #{prdtCode3}
+			 ,IF_CODE = #{ifCode}    
+			 ,IF_TYPE = #{ifType}    			 
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND   LINE_CODE = #{oldLineCode}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="ProdctIndctBaseLineDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP010PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LINE_CODE = #{lineCode}
+    </delete>
+    
+    
+
+</mapper>

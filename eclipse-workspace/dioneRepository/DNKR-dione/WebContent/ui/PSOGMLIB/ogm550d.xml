@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="428" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="시간대별내제품생산실적_상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Ogm550D"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_QRTime"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="3" Top="32" Width="1058"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" TabOrder="1" Width="1058"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="800"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="793" TabOrder="4" Text="주&#32;야&#32;구&#32;분" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="1" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="36" VAlign="Middle" Width="92"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Ogm550D" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="424" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="30" Height="360" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1058" TabOrder="6" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="36"/>
+						<col width="64"/>
+						<col width="110"/>
+						<col width="150"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="text" expr="currow+1"/>
+						<cell align="center" col="1" colid="PROCS" display="normal"/>
+						<cell align="left" col="2" colid="PSPNO" display="normal"/>
+						<cell align="left" col="3" colid="ITDSC" display="normal"/>
+						<cell align="right" col="4" colid="A1" display="number"/>
+						<cell align="right" col="5" colid="A2" display="number"/>
+						<cell align="right" col="6" colid="A3" display="number"/>
+						<cell align="right" col="7" colid="A4" display="number"/>
+						<cell align="right" col="8" colid="A5" display="number"/>
+						<cell align="right" col="9" colid="A6" display="number"/>
+						<cell align="right" col="10" colid="A7" display="number"/>
+						<cell align="right" col="11" colid="A8" display="number"/>
+						<cell align="right" col="12" colid="A9" display="number"/>
+						<cell align="right" col="13" colid="A10" display="number"/>
+						<cell align="right" col="14" colid="A11" display="number"/>
+						<cell align="right" col="15" colid="A12" display="number"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="4" display="text" expr='&quot;TOTAL&#32;&#32;&#32;&#32;&#32;&#32;&quot;+rowcount()+&quot;건&quot;' font="Default,9,Bold"/>
+						<cell align="right" col="4" display="number" expr='SUM(&quot;A1&quot;)'/>
+						<cell align="right" col="5" display="number" expr='SUM(&quot;A2&quot;)'/>
+						<cell align="right" col="6" display="number" expr='SUM(&quot;A3&quot;)'/>
+						<cell align="right" col="7" display="number" expr='SUM(&quot;A4&quot;)'/>
+						<cell align="right" col="8" display="number" expr='SUM(&quot;A5&quot;)'/>
+						<cell align="right" col="9" display="number" expr='SUM(&quot;A6&quot;)'/>
+						<cell align="right" col="10" display="number" expr='SUM(&quot;A7&quot;)'/>
+						<cell align="right" col="11" display="number" expr='SUM(&quot;A8&quot;)'/>
+						<cell align="right" col="12" display="number" expr='SUM(&quot;A9&quot;)'/>
+						<cell align="right" col="13" display="number" expr='SUM(&quot;A10&quot;)'/>
+						<cell align="right" col="14" display="number" expr='SUM(&quot;A11&quot;)'/>
+						<cell align="right" col="15" display="number" expr='SUM(&quot;A12&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDN" Left="888" TabOrder="7" Top="36" VAlign="Middle" Width="36"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblClass" Left="96" TabOrder="8" Top="36" VAlign="Middle" Width="48"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="164" TabOrder="9" Text="창&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;고" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblHOUSE" Left="260" TabOrder="10" Top="36" VAlign="Middle" Width="23"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static25" Left="292" TabOrder="11" Text="Dev&#32;&#32;&#32;&#32;ID" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDEBNM" Left="412" TabOrder="12" Top="36" VAlign="Middle" Width="98"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static29" Left="556" TabOrder="13" Text="전&#32;표&#32;일&#32;자" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDATE" Left="652" TabOrder="14" Top="36" VAlign="Middle" Width="120"></Static>
+		<Static Border="Flat" Height="17" Id="st_time1" Left="392" TabOrder="15" Text="Static0" Visible="FALSE" Width="360"></Static>
+		<Static Border="Flat" Height="17" Id="st_time2" Left="392" TabOrder="16" Text="Static0" Top="16" Visible="FALSE" Width="312"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDEVID" Left="388" TabOrder="17" Top="36" VAlign="Middle" Width="23"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm550D.xml
+ * ● PROGRAM DESCRIPTION  : 시간대별제품생산실적상세
+ * ● DATE WRITTEN         : 2012.01.02
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var startTime = "";
+var endTime = "";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	if (COMPS == "C1"){
+		lblClass.Text = "PS 창원";
+	}else if (COMPS == "H1"){
+		lblClass.Text = "PS 홍성";
+	}else if (COMPS == "S1"){
+		lblClass.Text = "PS 화성";
+	}else{
+		lblClass.Text = COMPS;
+	}
+	//lblClass.Text = COMPS;
+	lblHOUSE.Text = HOUSE;
+	lblDEVID.Text = DEVID;
+	lblDEBNM.Text = DEBNM;
+	lblDATE.Text = substr(SDATE,0,4)+"년 "+substr(SDATE,4,2)+"월 "+substr(SDATE,6,2)+"일";
+	lblDN.Text = DAYGU;
+	
+	GetTime(st_time1,st_time2,COMPS,DAYGU);
+	var cnt = ds_QRTime.GetRowCount();
+	arrTime = Array(cnt);
+	var arrTimeE;
+	for (var i=0 ; i<cnt ; i++){
+		arrTime[i] = ds_QRTime.GetColumn(i,"WRKST").substr(0,2) + ":" + ds_QRTime.GetColumn(i,"WRKST").substr(2,2) + "\n~" + ds_QRTime.GetColumn(i,"WRKED").substr(0,2) + ":" + ds_QRTime.GetColumn(i,"WRKED").substr(2,2) ;
+		MainGrid.SetCellProp("Head", i+4, "text", arrTime[i]);
+	}
+	
+	getogm550d();
+}
+
+function getDesign(){
+//	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+//	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+//	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+//	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+	/*
+	if(DAYGU == "D"){
+		MainGrid.SetCellProp("Head", 4, "text", "09:00\n~10:00");
+		MainGrid.SetCellProp("Head", 5, "text", "10:00\n~11:00");
+		MainGrid.SetCellProp("Head", 6, "text", "11:00\n~12:00");
+		MainGrid.SetCellProp("Head", 7, "text", "12:00\n~14:00");
+		MainGrid.SetCellProp("Head", 8, "text", "14:00\n~15:00");
+		MainGrid.SetCellProp("Head", 9, "text", "15:00\n~16:00");
+		MainGrid.SetCellProp("Head", 10, "text", "16:00\n~17:00");
+		MainGrid.SetCellProp("Head", 11, "text", "17:00\n~18:30");
+		MainGrid.SetCellProp("Head", 12, "text", "18:30\n~19:30");
+		MainGrid.SetCellProp("Head", 13, "text", "19:30\n~20:30");
+		MainGrid.SetCellProp("Head", 14, "text", "");
+		MainGrid.SetCellProp("Head", 15, "text", "");
+	}
+	if(DAYGU == "N"){
+		MainGrid.SetCellProp("Head", 4, "text", "20:30\n~21:30");
+		MainGrid.SetCellProp("Head", 5, "text", "21:30\n~22:30");
+		MainGrid.SetCellProp("Head", 6, "text", "22:30\n~23:30");
+		MainGrid.SetCellProp("Head", 7, "text", "23:30\n~01:00");
+		MainGrid.SetCellProp("Head", 8, "text", "01:00\n~02:00");
+		MainGrid.SetCellProp("Head", 9, "text", "02:00\n~03:00");
+		MainGrid.SetCellProp("Head", 10, "text", "03:00\n~04:00");
+		MainGrid.SetCellProp("Head", 11, "text", "04:00\n~05:00");
+		MainGrid.SetCellProp("Head", 12, "text", "05:00\n~06:00");
+		MainGrid.SetCellProp("Head", 13, "text", "06:00\n~07:00");
+		MainGrid.SetCellProp("Head", 14, "text", "07:00\n~08:00");
+		MainGrid.SetCellProp("Head", 15, "text", "08:00\n~09:00");
+	}
+	*/
+}
+
+function getOgm550d(){
+	var sTemp = "";
+	var sTemp2 = "";
+	var stime = st_time1.Text;
+	var etime = st_time2.Text;
+	//
+
+	var sKind		= "getOgm550d";						
+	var sMethodName = "service::psogmlib/selectOgm550D.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm550D=ds_ogm550D";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(COMPS); //사업부
+	sArgument += "@HOUSE=" + quote(HOUSE); //그룹
+	sArgument += "@DEVID=" + quote(DEVID); //그룹
+	sArgument += "@DAYGU=" + quote(DAYGU); //그룹
+	sArgument += "@TRNDT=" + quote(SDATE); //그룹
+	//1
+	sTemp = stime.substr(0,6);
+	sTemp2 = etime.substr(0,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST1=" + quote(startTime); //
+	sArgument += "@QRED1=" + quote(endTime); //
+	//2
+	sTemp = stime.substr(6,6);
+	sTemp2 = etime.substr(6,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST2=" + quote(startTime); //
+	sArgument += "@QRED2=" + quote(endTime); //
+	//3
+	sTemp = stime.substr(12,6);
+	sTemp2 = etime.substr(12,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST3=" + quote(startTime); //
+	sArgument += "@QRED3=" + quote(endTime); //
+	//4
+	sTemp = stime.substr(18,6);
+	sTemp2 = etime.substr(18,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST4=" + quote(startTime); //
+	sArgument += "@QRED4=" + quote(endTime); //
+	//5
+	sTemp = stime.substr(24,6);
+	sTemp2 = etime.substr(24,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST5=" + quote(startTime); //
+	sArgument += "@QRED5=" + quote(endTime); //
+	//6
+	sTemp = stime.substr(30,6);
+	sTemp2 = etime.substr(30,6);
+	divideTime("090000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST6=" + quote(startTime); //
+	sArgument += "@QRED6=" + quote(endTime); //
+	//7
+	sTemp = stime.substr(36,6);
+	sTemp2 = etime.substr(36,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST7=" + quote(startTime); //
+	sArgument += "@QRED7=" + quote(endTime); //
+	//8
+	sTemp = stime.substr(42,6);
+	sTemp2 = etime.substr(42,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST8=" + quote(startTime); //
+	sArgument += "@QRED8=" + quote(endTime); //
+	//9
+	sTemp = stime.substr(48,6);
+	sTemp2 = etime.substr(48,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST9=" + quote(startTime); //
+	sArgument += "@QRED9=" + quote(endTime); //
+	//10
+	sTemp = stime.substr(54,6);
+	sTemp2 = etime.substr(54,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST10=" + quote(startTime); //
+	sArgument += "@QRED10=" + quote(endTime); //
+	//11
+	sTemp = stime.substr(60,6);
+	sTemp2 = etime.substr(60,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST11=" + quote(startTime); //
+	sArgument += "@QRED11=" + quote(endTime); //
+	//12
+	sTemp = stime.substr(66,6);
+	sTemp2 = etime.substr(66,6);
+	divideTime("100000",sTemp,sTemp2,DAYGU);
+	sArgument += "@QRST12=" + quote(startTime); //
+	sArgument += "@QRED12=" + quote(endTime); //
+	
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+}
+
+function divideTime(sbase,sTemp,sTemp2,sDaygu){
+	var d2 = 240000;
+	if( sTemp < sbase && sDaygu == 'N' ){
+		startTime = d2 + toNumber(sTemp);
+	}else{
+		startTime = sTemp;
+	}
+	if( sTemp2 < sbase && sDaygu == 'N' ){
+		endTime = d2 + toNumber(sTemp2);
+	}else{
+		endTime =  sTemp2;
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+
+
+
+function menu_OnFocus(obj)
+{
+	
+}
+]]></Script>
+</Window>

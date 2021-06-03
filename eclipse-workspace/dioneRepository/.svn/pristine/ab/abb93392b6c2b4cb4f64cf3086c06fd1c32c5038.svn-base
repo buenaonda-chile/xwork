@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="124" Id="PGMPOPUP" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnTimer="form_OnTimer" PidAttrib="7" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="298" WorkArea="true">
+		<Image Height="125" Id="Image1" ImageID="image::waiting.gif" Left="-1" TabOrder="1" Top="-1" Width="304"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+function form_OnLoadCompleted(obj)
+{
+    
+    var sArgument_new ="";
+    
+    for(i=0;i<Length(sArgument);i++){
+		if(Substr(sArgument, i, 1) = "@"){
+			sArgument_new += " ";			
+		} else {
+			sArgument_new += Substr(sArgument, i, 1);						
+		}
+    }
+	
+	var sOutDataSet_new ="";
+	for(i=0;i<Length(sOutDataSet);i++){
+		if(Substr(sOutDataSet, i, 1) = "@"){
+			sOutDataSet_new += " ";			
+		} else {
+			sOutDataSet_new += Substr(sOutDataSet, i, 1);						
+		}
+	}
+	
+	SetWaitCursor(true); 
+	
+	http.Sync = false;
+	http.TimeOut=500;
+	Transaction(sKind, sMethodName, "", sOutDataSet_new, sArgument_new, "callback");
+	http.TimeOut=30;
+	SetTimer(1,100);
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		close("E");	
+	}else{
+		switch (svcId){
+			case "getCZZZ100" :
+				if(ds_CZZZ100.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getDWH" :
+				if(ds_DWH.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			}
+		close();
+	}
+}
+
+function form_OnTimer(obj,nEventID)
+{
+	KillTimer(1);
+} 
+]]></Script>
+</Window>

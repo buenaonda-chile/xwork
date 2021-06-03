@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.NonOrderHostUpListDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="NonOrderHostUpList" type="NonOrderHostUpListDomain">
+        <result property="comps" column="COMPS" />
+        <result property="typcd" column="TYPCD" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="shpto" column="SHPTO" />
+        <result property="pspno" column="PSPNO" />
+        <result property="ponum" column="PONUM" />
+		<result property="faccd" column="FACCD" />
+		<result property="yard" column="YARD" />
+		<result property="outqy" column="OUTQY" />
+		             
+        <result property="cusnm" column="CUSNM" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="mkpno" column="MKPNO" />
+        
+        <result property="plndt1" column="PLNDT1" />
+        <result property="plndt2" column="PLNDT2" />
+        <result property="plndt3" column="PLNDT3" />
+        <result property="plndt4" column="PLNDT4" />
+        <result property="plndt5" column="PLNDT5" />
+        <result property="plndt6" column="PLNDT6" />
+        <result property="plndt7" column="PLNDT7" />
+        <result property="plndt8" column="PLNDT8" />
+        <result property="plndt9" column="PLNDT9" />
+        <result property="plndt10" column="PLNDT10" />
+        <result property="plndt11" column="PLNDT11" />
+        <result property="plndt12" column="PLNDT12" />
+        <result property="plndt13" column="PLNDT13" />
+        <result property="plndt14" column="PLNDT14" />
+        <result property="plndt15" column="PLNDT15" />
+        <result property="plndt16" column="PLNDT16" />
+        <result property="plndt17" column="PLNDT17" />
+        <result property="plndt18" column="PLNDT18" />
+        <result property="plndt19" column="PLNDT19" />
+        <result property="plndt20" column="PLNDT20" />
+        <result property="plndt21" column="PLNDT21" />
+        <result property="plndt22" column="PLNDT22" />
+        <result property="plndt23" column="PLNDT23" />
+        <result property="plndt24" column="PLNDT24" />
+        <result property="plndt25" column="PLNDT25" />
+        <result property="plndt26" column="PLNDT26" />
+        <result property="plndt27" column="PLNDT27" />
+        <result property="plndt28" column="PLNDT28" />
+        <result property="plndt29" column="PLNDT29" />
+        <result property="plndt30" column="PLNDT30" />
+        <result property="plndt31" column="PLNDT31" />
+        
+        <result property="basqy1" column="BASRY1" />
+        <result property="basqy2" column="BASRY2" />
+        <result property="basqy3" column="BASRY3" />
+        <result property="basqy4" column="BASRY4" />
+        <result property="basqy5" column="BASRY5" />
+        <result property="basqy6" column="BASRY6" />
+        <result property="basqy7" column="BASRY7" />
+        <result property="basqy8" column="BASRY8" />
+        <result property="basqy9" column="BASRY9" />
+        <result property="basqy10" column="BASRY10" />
+        <result property="basqy11" column="BASRY11" />
+        <result property="basqy12" column="BASRY12" />
+        <result property="basqy13" column="BASRY13" />
+        <result property="basqy14" column="BASRY14" />
+        <result property="basqy15" column="BASRY15" />
+        <result property="basqy16" column="BASRY16" />
+        <result property="basqy17" column="BASRY17" />
+        <result property="basqy18" column="BASRY18" />
+        <result property="basqy19" column="BASRY19" />
+        <result property="basqy20" column="BASRY20" />
+        <result property="basqy21" column="BASRY21" />
+        <result property="basqy22" column="BASRY22" />
+        <result property="basqy23" column="BASRY23" />
+        <result property="basqy24" column="BASRY24" />
+        <result property="basqy25" column="BASRY25" />
+        <result property="basqy26" column="BASRY26" />
+        <result property="basqy27" column="BASRY27" />
+        <result property="basqy28" column="BASRY28" />
+        <result property="basqy29" column="BASRY29" />
+        <result property="basqy30" column="BASRY30" />
+        <result property="basqy31" column="BASRY31" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="NonOrderHostUpList" parameterType="NonOrderHostUpListDomain">
+		SELECT A.PYVND, A.CUSNM, A.FACCD, A.YARD, A.SHPTO, A.MKPNO, A.PSPNO, A.ITDSC, A.OUTQY
+		
+		       <foreach item="item" index="index" collection="dayList" >
+			   ,'${item}' AS PLNDT${index}
+    	       </foreach>
+    	 		
+		       <foreach item="item" index="index" collection="dayList" >
+			   ,SUM(CASE WHEN B.PSPNO = A.PSPNO AND B.PLNDT = '${item}' THEN B.BASQY END) AS BASQY${index}
+    	       </foreach>
+			   
+		FROM (
+		      SELECT
+		             A.COMPS, A.TYPCD, A.PYVND, TRIM(B.CUSNM) AS CUSNM, A.FACCD, A.YARD, 
+		             A.SHPTO, D.CPRTN AS MKPNO, A.PSPNO, TRIM(C.ITDSC) AS ITDSC, A.OUTQY
+		        FROM 
+			         <if test='typcd.equals("BB") and history.equals("Y")'>
+			         	PSZDBLIB.SVZ611PF A
+			         </if>
+			         <if test='typcd.equals("BB") and history.equals("N")'>
+			         	PSZDBLIB.SVZ601PF A
+			         </if>
+			         <if test='typcd.equals("CC") and history.equals("Y")'>
+			         	PSZDBLIB.SVZ612PF A
+			         </if>			         
+			         <if test='typcd.equals("CC") and history.equals("N")'>
+			         	PSZDBLIB.SVZ602PF A
+			         </if>
+					 LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO	
+					 LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PSPNO=C.ITNBR
+					 LEFT OUTER JOIN 
+						(
+						SELECT X.CUSNO, X.CPRTN, X.PRTNO, X.EDATM	
+						 FROM ${lib1}.EM000PR X 
+						WHERE X.EDATM = (SELECT MAX(Y.EDATM) FROM ${lib1}.EM000PR Y WHERE X.CUSNO=Y.CUSNO AND X.PRTNO=Y.PRTNO)
+						) D ON A.PYVND=D.CUSNO AND A.PSPNO=D.PRTNO
+		       WHERE
+				     A.COMPS = #{comps}  
+				 AND A.PYVND = #{pyvnd}
+	  	         AND A.PLNDT BETWEEN #{stPlndt} AND #{enPlndt}
+		   ) A
+		   LEFT OUTER JOIN 
+			(
+		     SELECT ROWNUMBER() OVER(PARTITION BY Z.PSPNO ORDER BY Z.PLNDT) AS ROWNUM,
+		            Z.COMPS, Z.TYPCD, Z.PYVND, Z.SHPTO, Z.PSPNO,
+		            Z.PLNDT, Z.BASQY
+		      FROM 
+			        <if test='typcd.equals("BB") and history.equals("Y")'>
+			        	PSZDBLIB.SVZ611PF Z
+			        </if>
+			        <if test='typcd.equals("BB") and history.equals("N")'>
+			        	PSZDBLIB.SVZ601PF Z
+			        </if>
+			        <if test='typcd.equals("CC") and history.equals("Y")'>
+			        	PSZDBLIB.SVZ612PF Z
+			        </if>			         
+			        <if test='typcd.equals("CC") and history.equals("N")'>
+			        	PSZDBLIB.SVZ602PF Z
+			        </if>                                                                 
+		     WHERE Z.COMPS = #{comps}
+		       AND Z.PYVND = #{pyvnd}
+	  	       AND Z.PLNDT BETWEEN #{stPlndt} AND #{enPlndt} 
+		    ORDER BY Z.COMPS, Z.TYPCD, Z.PYVND, Z.SHPTO, Z.PSPNO, Z.PLNDT
+		    ) B ON B.COMPS = A.COMPS AND B.TYPCD = A.TYPCD AND B.PYVND = A.PYVND AND B.SHPTO = A.SHPTO
+		WHERE 
+		      'SqlMap-NonOrderHostUpList.searchByCondition' = 'SqlMap-NonOrderHostUpList.searchByCondition'
+		GROUP BY A.PYVND, A.CUSNM, A.FACCD, A.YARD, A.SHPTO, A.MKPNO, A.PSPNO, A.ITDSC, A.OUTQY
+		ORDER BY A.PYVND, A.SHPTO, A.PSPNO
+    </select>
+    
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="UserList" Left="8" OnFocus="UserList_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="IF&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_MAIN">
+				<Contents>
+					<colinfo id="BUCD1" size="256" summ="default" type="STRING"/>
+					<colinfo id="KIBONP" size="256" summ="default" type="INT"/>
+					<colinfo id="SUDP" size="256" summ="default" type="INT"/>
+					<colinfo id="TX1" size="256" summ="default" type="INT"/>
+					<colinfo id="TX2" size="256" summ="default" type="INT"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_GUBUN">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="VAL" size="256" summ="default" type="STRING"/>
+					<record>
+						<CD>B</CD>
+						<VAL>생산직</VAL>
+					</record>
+					<record>
+						<CD>W</CD>
+						<VAL>관리직</VAL>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="1" Top="30" Width="1057"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="194" TabOrder="9" Top="32" Width="100"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="2" TabOrder="3" Top="32" Width="100"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="16" Style="static" TabOrder="2" Text="조&#32;회&#32;월" Top="37" VAlign="Middle" Width="75"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="4" Top="8" Width="1032"></Static>
+		<Calendar Dateformat="yyyy-MM" Height="22" Id="Calendar0" Left="112" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="6" Top="34" Width="72"></Calendar>
+		<FileDialog Bottom="572" Height="24" Id="FileDialog0" Left="224" Right="248" TabOrder="14" Top="548" Width="24"></FileDialog>
+		<Combo CodeColumn="CD" DataColumn="VAL" Height="22" Id="Combo0" InnerDataset="DS_GUBUN" Left="304" TabOrder="7" Top="33" Width="88"></Combo>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static0" Left="208" Style="static" TabOrder="8" Text="구&#32;&#32;분" Top="37" VAlign="Middle" Width="75"></Static>
+		<Grid AreaSelect="TRUE" AutoSelect="TRUE" BindDataset="DS_MAIN" BkColor2="default" BoldHead="true" Bottom="608" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="545" Id="MainGrid" InputPanel="FALSE" Left="4" LineColor="default" OnKeyDown="MainGrid_OnKeyDown" Right="1056" TabOrder="10" TabStop="true" Top="63" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1052">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="160"/>
+						<col width="159"/>
+						<col width="159"/>
+						<col width="160"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="부서코드"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="기본"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="수당"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="소득세"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="지방소득세"/>
+					</head>
+					<body>
+						<cell col="0" colid="BUCD1" display="text"/>
+						<cell col="1" colid="KIBONP" display="number"/>
+						<cell col="2" colid="SUDP" display="number"/>
+						<cell col="3" colid="TX1" display="number"/>
+						<cell col="4" colid="TX2" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="19" Id="Button0" Left="558" OnClick="fn_Search" TabOrder="11" Text="Button0" Top="40" Width="77"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HTME01.xml
+ * ● PROGRAM DESCRIPTION  : 정보관리팀 출퇴근 조회
+ * ● DATE WRITTEN         : 2012.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var CigmaLib = G_ds_user.GetColumn(0,"LIB1");
+var strSeparator = "	";
+
+var nowDate = today();
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	getTitle();	
+	getComCode();
+	Calendar0.Value = today();
+	Combo0.Value = "W";
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getHPIF(){
+	http.Sync = true;
+	var sKind		= "getHPIF";						
+	var sMethodName = "service::pshumlib/selectHPIF.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_MAIN=DS_MAIN";    						// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	
+	if(length(trim(Calendar0.Value)) == 0){
+		alert("조회월을 선택하세요!");	
+		Calendar0.SetFocus();
+		return;
+	}
+		
+	sArgument += "@YYYYMM=" + quote(LEFT(Calendar0.Value,6));
+	sArgument += "@SIGN=" + quote(Combo0.Value);
+			
+	dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument, 272, 64, "TitleBar=false");				
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	}else {
+		DS_MAIN.rowposition = -1;
+	}	
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getHPIF();
+}
+
+function fn_Input()
+{
+
+}
+
+function fn_Delete()
+{
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function setExcel()
+{
+	var fName   = '\\' + left(Calendar0.Value,6) + "_급여인터페이스";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|급여인터페이스";	
+	createExcelSheetS2(FileDialog0, fName, arrSheets);
+}
+
+function UserList_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	if(bCtrl == 1 && nChar == 67) {		
+		grd_fn_ClipboardCopy(obj, strSeparator);
+	}	
+}
+]]></Script>
+</Window>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdctSvcPsnlInputDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdctSvcPsnlInput" type="PrdctSvcPsnlInputDomain">
+        <result property="clsCode" column="CLS_CODE" />		<!-- 사업부코드 -->
+        <result property="locCode" column="LOC_CODE" />		<!-- 부서코드 -->
+        <result property="partCode" column="PART_CODE" />	<!-- 파트코드 -->
+        <result property="servcNo" column="SERVC_NO" />		<!-- 용역번호 -->
+        <result property="startDe" column="START_DE" />		<!-- 시작일 -->
+        <result property="endDe" column="END_DE" />			<!-- 종료일 -->
+        <result property="nm" column="NM" />				<!-- 성명 -->
+        <result property="refrn" column="REFRN" />			<!-- 참조 -->
+        <result property="regUser" column="REG_USER" />		<!-- 등록자 -->
+        <result property="regDate" column="REG_DATE" />		<!-- 등록일 -->
+        <result property="modUser" column="MOD_USER" />		<!-- 수정자 -->
+        <result property="modDate" column="MOD_DATE" />		<!-- 수정일 --> 
+        <result property="oldServcNo" column="OLD_SERVC_NO" />		<!--이전용역번호 -->               
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="PrdctSvcPsnlInput" parameterType="PrdctSvcPsnlInputDomain">
+		SELECT 
+			TRIM(CLS_CODE) AS CLS_CODE
+			,TRIM(LOC_CODE) AS LOC_CODE
+			,TRIM(SERVC_NO) AS SERVC_NO
+			,(SUBSTR(START_DE,1,4) || '-' || SUBSTR(START_DE,5,2) || '-' || SUBSTR(START_DE,7,2)) AS START_DE  
+			,(SUBSTR(END_DE,1,4) || '-' || SUBSTR(END_DE,5,2) || '-' || SUBSTR(END_DE,7,2)) AS END_DE  				
+			,TRIM(NM) AS NM
+			,TRIM(REFRN) AS REFRN 
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(SERVC_NO) AS OLD_SERVC_NO
+		FROM PSZDBLIB.FHP110PF
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if>
+		<if test='servcNo != null and !servcNo.equalsIgnoreCase("")'>
+			AND SERVC_NO = #{servcNo}
+		</if>
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+			AND LOC_CODE = #{locCode}
+		</if>		
+		ORDER BY SERVC_NO   
+    </select>
+    
+    <select id="searchByCondition2" resultMap="PrdctSvcPsnlInput" parameterType="PrdctSvcPsnlInputDomain">
+		SELECT 
+			TRIM(CLS_CODE) AS CLS_CODE
+			,TRIM(LOC_CODE) AS LOC_CODE
+			,TRIM(SERVC_NO) AS SERVC_NO
+			,(SUBSTR(START_DE,1,4) || '-' || SUBSTR(START_DE,5,2) || '-' || SUBSTR(START_DE,7,2)) AS START_DE  
+			,(SUBSTR(END_DE,1,4) || '-' || SUBSTR(END_DE,5,2) || '-' || SUBSTR(END_DE,7,2)) AS END_DE  				
+			,TRIM(NM) AS NM
+			,TRIM(REFRN) AS REFRN 
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(SERVC_NO) AS OLD_SERVC_NO
+		FROM PSZDBLIB.FHP110PF
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if>
+		<if test='servcNo != null and !servcNo.equalsIgnoreCase("")'>
+			AND SERVC_NO = #{servcNo}
+		</if>
+		<if test='partCode != null and !partCode.equalsIgnoreCase("")'>
+			AND LOC_CODE IN (SELECT DISTINCT LOC_CODE FROM PSZDBLIB.FHP010PF WHERE PART_CODE = #{partCode})  
+		</if>		
+		ORDER BY SERVC_NO   
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+  	<select id="searchCount" resultType="java.lang.Integer" parameterType="PrdctSvcPsnlInputDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP110PF
+        WHERE CLS_CODE = #{clsCode}
+     	AND   SERVC_NO = #{servcNo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+  	<select id="searchCount2" resultType="java.lang.Integer" parameterType="PrdctSvcPsnlInputDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP110PF
+        WHERE CLS_CODE = #{clsCode}
+     	AND   SERVC_NO = #{oldServcNo}
+    </select>    
+    
+   <!--  登録 SQL文 -->
+    <insert id="create" parameterType ="PrdctSvcPsnlInputDomain">
+        INSERT INTO  PSZDBLIB.FHP110PF (
+				 CLS_CODE
+				,LOC_CODE
+				,SERVC_NO
+				,START_DE
+				,END_DE
+				,NM
+				,REFRN
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{locCode}
+               ,#{servcNo}
+               ,#{startDe}
+               ,#{endDe}
+               ,#{nm}
+               ,#{refrn}
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="PrdctSvcPsnlInputDomain">
+        UPDATE 
+               PSZDBLIB.FHP110PF
+        SET
+        	  SERVC_NO = #{servcNo}	
+        	 ,START_DE = #{startDe}
+        	 ,LOC_CODE = #{locCode}
+        	 ,END_DE = #{endDe}
+			 ,NM = #{nm}
+			 ,REFRN = #{refrn}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND   SERVC_NO = #{oldServcNo}  
+    </update>
+
+   <!--  削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="PrdctSvcPsnlInputDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP110PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   SERVC_NO = #{servcNo}
+    </delete>
+    
+</mapper>

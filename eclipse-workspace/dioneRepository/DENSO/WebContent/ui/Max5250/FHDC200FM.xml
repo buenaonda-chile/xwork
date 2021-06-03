@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnKeyDown="fnc_OnKeyDown" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="autoConvert" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main" OnLoadCompleted="ds_main_OnLoadCompleted"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" TabOrder="16" Top="30" Width="798"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" TabOrder="15" Top="30" Width="106"></Static>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" Left="-1" TabOrder="13" Width="798"></Image>
+		<Button ButtonStyle="TRUE" Height="24" Id="btn_add" ImageID="2_btn" Left="744" OnClick="btn_add_OnClick" TabOrder="17" Text="Enter" Top="30" Width="53"></Button>
+		<Shape BKColor="#888888" Bottom="43" Height="5" Id="Shape1" Left="13" LineColor="#dceaf7" Right="18" TabOrder="14" Top="38" Type="Ellipse" Width="5"></Shape>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" TabOrder="12" Width="29"></Image>
+		<Static Height="20" Id="ID01002" Left="440" TabOrder="0" Text="FHDC200FM" Top="4" VAlign="Middle" Width="90"></Static>
+		<Static Height="20" Id="ID01023" Left="32" TabOrder="1" Text="&#32;【작업일보　총작업시간　관리】&#32;" Top="4" VAlign="Middle" Width="320"></Static>
+		<Static Height="20" Id="ID01070" Left="632" TabOrder="2" Text="2010/11/12" Top="3" VAlign="Middle" Width="92"></Static>
+		<Static Height="20" Id="ID02002" Left="32" TabOrder="3" Text="&#32;사업부&#32;&#32;&#32;:" Top="32" VAlign="Middle" Width="62"></Static>
+		<Static Height="20" Id="ID02014" Left="112" TabOrder="4" Text="C1" Top="32" VAlign="Middle" Width="20"></Static>
+		<Static Height="20" Id="ID02072" Left="744" TabOrder="5" Text="13:27:41" Top="3" VAlign="Middle" Width="48"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static6" Left="216" TabOrder="18" Top="30" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="44" Height="5" Id="Shape3" Left="228" LineColor="#dceaf7" Right="233" TabOrder="19" Top="39" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#888888" Bottom="44" Height="5" Id="Shape0" Left="500" LineColor="#dceaf7" Right="505" TabOrder="21" Top="39" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static0" Left="488" TabOrder="20" Top="30" Width="106"></Static>
+		<Static Height="20" Id="ID03002" Left="238" TabOrder="6" Text="&#32;부서코드&#32;:" Top="31" VAlign="Middle" Width="78"></Static>
+		<Static Height="20" Id="ID03048" Left="504" TabOrder="7" Text="&#32;작업일자&#32;:" Top="32" VAlign="Middle" Width="86"></Static>
+		<Static Height="20" Id="ID03060" Left="16" TabOrder="8" Text="20101112" Top="496" VAlign="Middle" Visible="FALSE" Width="80"></Static>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="21" Id="FD03014" Left="323" OnKeyDown="fnc_OnKeyDown" TabOrder="9" Top="32" Width="40"></Edit>
+		<Edit AutoSelect="TRUE" Border="Flat" BorderColor="#b4b4b4" Height="21" Id="FD03060" Left="596" OnKeyDown="fnc_OnKeyDown" TabOrder="10" Top="32" Width="80"></Edit>
+		<Shape BKColor="#888888" Bottom="45" Height="5" Id="Shape2" Left="496" LineColor="#dceaf7" Right="501" TabOrder="22" Top="40" Type="Ellipse" Width="5"></Shape>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24017_btn" ImageID="7_btn" Left="320" OnClick="ID24027_OnClick" TabOrder="23" Text="작업종료" Top="504" Width="115"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24033_btn" ImageID="7_btn" Left="440" OnClick="ID24033_OnClick" TabOrder="24" Text="코드조회" Top="504" Width="115"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24049_btn" ImageID="7_btn" Left="560" TabOrder="25" Text="상세입력" Top="504" Width="115"></Button>
+		<Button ButtonStyle="TRUE" Height="23" Id="ID24065_btn" ImageID="7_btn" Left="680" OnClick="ID24065_OnClick" TabOrder="26" Text="작업취소" Top="504" Width="115"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+}
+function sendField(){
+	MAX5250.SendToField("FD03014",FD03014.Text );
+	MAX5250.SendToField("FD03060",FD03060.Text );
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	form.SetFocus();
+	if(IsValid(btn_pgdn))
+	chkPage(replace(trim(max5250.GetString(22,67,12)),".","")); 
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+	ID01002.Text=ds_main.getColumn(0,"ID01002");
+		ID01002.Color=ds_main.getColumn(0,"ID01002_c");
+		ID01002.BkColor=ds_main.getColumn(0,"ID01002_b");
+		ID01002.Font=ds_main.getColumn(0,"ID01002_f");
+		ID01023.Text=ds_main.getColumn(0,"ID01023");
+		ID01023.Color=ds_main.getColumn(0,"ID01023_c");
+		ID01023.BkColor=ds_main.getColumn(0,"ID01023_b");
+		ID01023.Font=ds_main.getColumn(0,"ID01023_f");
+		ID01070.Text=ds_main.getColumn(0,"ID01070");
+		ID01070.Color=ds_main.getColumn(0,"ID01070_c");
+		ID01070.BkColor=ds_main.getColumn(0,"ID01070_b");
+		ID01070.Font=ds_main.getColumn(0,"ID01070_f");
+		ID02002.Text=ds_main.getColumn(0,"ID02002");
+		ID02002.Color=ds_main.getColumn(0,"ID02002_c");
+		ID02002.BkColor=ds_main.getColumn(0,"ID02002_b");
+		ID02002.Font=ds_main.getColumn(0,"ID02002_f");
+		ID02014.Text=ds_main.getColumn(0,"ID02014");
+		ID02014.Color=ds_main.getColumn(0,"ID02014_c");
+		ID02014.BkColor=ds_main.getColumn(0,"ID02014_b");
+		ID02014.Font=ds_main.getColumn(0,"ID02014_f");
+		ID02072.Text=ds_main.getColumn(0,"ID02072");
+		ID02072.Color=ds_main.getColumn(0,"ID02072_c");
+		ID02072.BkColor=ds_main.getColumn(0,"ID02072_b");
+		ID02072.Font=ds_main.getColumn(0,"ID02072_f");
+		ID03002.Text=ds_main.getColumn(0,"ID03002");
+		ID03002.Color=ds_main.getColumn(0,"ID03002_c");
+		ID03002.BkColor=ds_main.getColumn(0,"ID03002_b");
+		ID03002.Font=ds_main.getColumn(0,"ID03002_f");		
+		ID03048.Text=ds_main.getColumn(0,"ID03048");
+		ID03048.Color=ds_main.getColumn(0,"ID03048_c");
+		ID03048.BkColor=ds_main.getColumn(0,"ID03048_b");
+		ID03048.Font=ds_main.getColumn(0,"ID03048_f");
+		ID03060.Text=ds_main.getColumn(0,"ID03060");
+		ID03060.Color=ds_main.getColumn(0,"ID03060_c");
+		ID03060.BkColor=ds_main.getColumn(0,"ID03060_b");
+		ID03060.Font=ds_main.getColumn(0,"ID03060_f");
+		FD03014.Text=ds_main.getColumn(0,"FD03014");
+		FD03014.Color=ds_main.getColumn(0,"FD03014_c");
+		FD03014.BkColor=ds_main.getColumn(0,"FD03014_b");
+		FD03014.Font=ds_main.getColumn(0,"FD03014_f");
+		FD03060.Text=ds_main.getColumn(0,"FD03060");
+		FD03060.Color=ds_main.getColumn(0,"FD03060_c");
+		FD03060.BkColor=ds_main.getColumn(0,"FD03060_b");
+		FD03060.Font=ds_main.getColumn(0,"FD03060_f");
+	}
+}
+
+function fnc_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam){
+	if(nChar == 13){
+		sendColumn();
+		sendField();
+	}
+}
+
+//pf03
+function ID24027_OnClick(obj)
+{
+	
+	MAX5250.SendKeys("[PF03]");
+}
+//code
+function ID24033_OnClick(obj)
+{
+	MAX5250.SendKeys("[PF04]");
+}
+//
+
+function ID24049_OnClick(obj)
+{
+	MAX5250.SendKeys("[PF05]");
+}
+
+function ID24065_OnClick(obj)
+{
+	MAX5250.SendKeys("[PF12]");
+}
+
+function btn_add_OnClick(obj)
+{
+	sendField();
+}
+
+function ds_main_OnLoadCompleted(obj,nErrorCode,strErrorMsg,nReason)
+{
+	trace("== screen update==");
+	var data = "#b6b6b6; ";
+	Div5250.FD03060.BKColor = data;
+}
+]]></Script>
+</Window>

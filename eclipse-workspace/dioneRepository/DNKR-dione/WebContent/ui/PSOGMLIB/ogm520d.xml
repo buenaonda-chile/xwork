@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="428" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="일별제품생산실적_상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="828" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Ogm520D"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm011d2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm011d3"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="64" Id="searchBar" TabOrder="3" Top="32" Width="824"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" TabOrder="1" Width="824"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="800"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="760" Right="784" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="792" Right="816" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="1" TabOrder="4" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="236" TabOrder="5" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;명" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="596" TabOrder="6" Text="공&#32;정&#32;코&#32;드" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="1" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="36" VAlign="Middle" Width="92"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Ogm520D" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="424" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="328" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="824" TabOrder="8" TabStop="true" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="824">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="36"/>
+						<col width="91"/>
+						<col width="96"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="전표일자"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="작업지시번호"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="TAG&#32;번호"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="득의선코드"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="입고유형"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="이유코드"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="실적수량"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="text" expr="currow+1"/>
+						<cell align="center" col="1" colid="TRNDT" display="normal"/>
+						<cell align="center" col="2" colid="INSNO" display="normal"/>
+						<cell align="center" col="3" colid="SLPNO" display="normal"/>
+						<cell align="center" col="4" colid="PYVND" display="normal"/>
+						<cell align="center" col="5" colid="INPGU" display="normal"/>
+						<cell align="center" col="6" colid="RESON" display="normal"/>
+						<cell align="right" col="7" colid="PRTQY" display="number"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="7" display="text" expr='&quot;TOTAL&#32;&#32;&#32;&#32;&#32;&#32;&quot;+rowcount()+&quot;건&quot;' font="Default,9,Bold"/>
+						<cell align="right" col="7" display="number" expr='SUM(&quot;PRTQY&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblprtno" Left="96" TabOrder="9" Top="68" VAlign="Middle" Width="100"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblprtnm" Left="332" TabOrder="10" Top="68" VAlign="Middle" Width="227"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblPROCS" Left="692" TabOrder="11" Top="68" VAlign="Middle" Width="120"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblClass" Left="96" TabOrder="12" Top="36" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="236" TabOrder="13" Text="창&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;고" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblHOUSE" Left="332" TabOrder="14" Top="36" VAlign="Middle" Width="23"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static25" Left="364" TabOrder="15" Text="Dev&#32;&#32;&#32;&#32;ID" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDEVID" Left="460" TabOrder="16" Top="36" VAlign="Middle" Width="98"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static29" Left="596" TabOrder="17" Text="전&#32;표&#32;일&#32;자" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#dfdfdf" Height="20" Id="lblDATE" Left="692" TabOrder="18" Top="36" VAlign="Middle" Width="120"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm520D.xml
+ * ● PROGRAM DESCRIPTION  : 일별제품생산실적상세
+ * ● DATE WRITTEN         : 2012.01.02
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	if (COMPS == "C1"){
+		lblClass.Text = "PS 창원";
+	}else if (COMPS == "H1"){
+		lblClass.Text = "PS 홍성";
+	}else if (COMPS == "S1"){
+		lblClass.Text = "PS 화성";
+	}else{
+		lblClass.Text = COMPS;
+	}
+	//lblClass.Text = COMPS;
+	lblHOUSE.Text = HOUSE;
+	lblDEVID.Text = DEBNM;
+	lblDATE.Text = substr(SDATE,0,4)+"년 "+substr(SDATE,4,2)+"월 "+substr(SDATE,6,2)+"일";
+	lblprtno.Text = PSPNO;
+	lblprtnm.Text = ITDSC;
+	lblPROCS.Text = PROCS;
+	getOgm520d();
+}
+
+function getDesign(){
+//	MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+//	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+//	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+//	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getOgm520d(){
+	var sKind		= "getOgm520d";						
+	var sMethodName = "service::psogmlib/selectOgm520D.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_Ogm520D=ds_Ogm520D";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(COMPS); //사업부
+	sArgument += "@HOUSE=" + quote(HOUSE); //그룹
+	sArgument += "@DEVID=" + quote(DEVID); //그룹
+	sArgument += "@PSPNO=" + quote(PSPNO); //그룹
+	sArgument += "@PROCS=" + quote(PROCS); //그룹
+	sArgument += "@TRNDT=" + quote(SDATE); //그룹
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+
+
+
+function menu_OnFocus(obj)
+{
+	
+}
+]]></Script>
+</Window>

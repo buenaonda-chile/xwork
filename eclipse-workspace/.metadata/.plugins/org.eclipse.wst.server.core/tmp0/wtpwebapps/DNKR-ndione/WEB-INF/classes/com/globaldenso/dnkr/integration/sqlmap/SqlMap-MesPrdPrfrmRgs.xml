@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdPrfrmRgsDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="prdPrfrmRgs" type="PrdPrfrmRgsDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="productNo" column="PRODUCT_NO" />
+        <result property="productNm" column="PRODUCT_NM" />        
+        <result property="intType" column="INT_TYPE" />        
+        <result property="qy" column="QY" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+        <result property="ifCode" column="IF_CODE" />        
+        <result property="oldLineCode" column="OLD_LINE_CODE" />
+        <result property="oldProductNo" column="OLD_PRODUCT_NO" />                
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="prdPrfrmRgs" parameterType="PrdPrfrmRgsDomain">
+		SELECT
+			 A.LOT_CMF_6 AS IF_CODE
+    		,B.LINE_DESC AS LINE_NM
+    		,A.MAT_ID AS PRODUCT_NO
+    		,(SELECT MAT_DESC FROM MWIPMATDEF WHERE MAT_ID = A.MAT_ID) AS PRODUCT_NM
+    		,SUM(A.CREATE_QTY_1) QY
+    		,'I' AS INT_TYPE
+		FROM MWIPLOTSTS A, (SELECT * FROM MWIPLINDEF WHERE LINE_TYPE <![CDATA[<>]]> 'FINAL')  B
+		WHERE A.LOT_CMF_6 = B.LINE_ID
+		AND A.LAST_TRAN_CODE = 'ALT_TO_INV' 
+<!-- 		AND SUBSTR(A.LAST_TRAN_TIME,1,8) = '${opertDe}' -->
+		AND A.LAST_TRAN_TIME<![CDATA[>=]]> '${fromDate}' AND A.LAST_TRAN_TIME <![CDATA[<=]]> '${toDate}'
+		GROUP BY A.LOT_CMF_6,B.LINE_DESC, A.MAT_ID
+		ORDER BY A.LOT_CMF_6
+    </select>
+    
+</mapper>

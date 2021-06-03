@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="일생산계획등록(Non&#32;Dcj)" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset CanColumnChange="ds_FPMC100_CanColumnChange" DataSetType="Dataset" Id="ds_FPMC100" OnColumnChanged="ds_FPMC100_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPSS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLNYMS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDCDS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PSPNOS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PLTCDS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PFOTES" size="256" summ="default" type="STRING"/>
+					<colinfo id="PCOSTS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYSEQS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM0QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM1QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM2QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM3QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM4QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM5QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MM6QYS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MLDATS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MLTIMS" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="SUMMMQY" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST050PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SC003PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM008PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_EM001PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FPMC100_CHECK"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="8" Top="32" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="0" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="0" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="596" TabOrder="10" Text="계&#32;획&#32;년&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="712" TabOrder="10" Top="34" VAlign="Middle" Width="96"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" FocusIndex="0" Height="18" Id="cmb_PLNYM" Left="716" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="4" Top="38" Width="88"></Calendar>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="224" TabOrder="11" Text="제&#32;품&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="340" TabOrder="12" Top="34" VAlign="Middle" Width="240"></Static>
+		<Edit AutoSelect="TRUE" CheckLength="Byte" Height="20" Id="ed_PRDCD" Left="343" MaxLength="3" OnChanged="common_OnChanged" OnKillFocus="ed_PRDCD_OnKillFocus" TabOrder="3" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FPMC100" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="611" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="547" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" Right="1058" TabOrder="6" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="120"/>
+						<col width="200"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="M월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="M+1월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="M+2월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="M+3월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="M+4월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="M+5월&#32;계획"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="M+6월&#32;계획"/>
+					</head>
+					<body>
+						<cell align="left" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="0" colid="PSPNOS" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;regexprupper&apos;,&apos;none&apos;)" limit="15" RegExprFilter="[A-Z0-9-]" TrimType="Both" useime="false"/>
+						<cell align="left" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="1" colid="ITDSC" display="normal" limit="1" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="2" colid="MM0QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="3" colid="MM1QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="4" colid="MM2QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="5" colid="MM3QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="6" colid="MM4QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="7" colid="MM5QYS" display="number" edit="number" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;,4,&quot;tan&quot;)' checklength="Byte" col="8" colid="MM6QYS" display="number" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;none&apos;,&apos;number&apos;)" limit="7" LimitDec="0" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Height="15" Id="st_PRDNM" Left="442" TabOrder="15" Top="37" VAlign="Bottom" Width="116"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static9" Left="441" TabOrder="14" Top="56" Width="120"></Static>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="979" OnClick="fn_Delete" TabOrder="16" Text="Button1" Top="88" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="904" OnClick="fn_Save" TabOrder="18" TabStop="FALSE" Text="Button2" Top="88" Visible="FALSE" Width="72"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="823" OnClick="fn_Input" TabOrder="17" Text="추가" Top="88" Visible="FALSE" Width="75"></Button>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="740" OnClick="fn_Search" TabOrder="16" Text="조회" Top="88" Visible="FALSE" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FPMC100.xml
+ * ● PROGRAM DESCRIPTION  : 월 기본생산계획수정(TX등록)
+ * ● DATE WRITTEN         : 2013.10.07
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+/*
+수정시 MM1QYS~MM5QYS의 합이 0이면 업데이트안됨.
+등록시MM6QYS은 무조건 0임.
+컬럼 SUMMMQY는 MM1QYS~MM5QYS의 합 계산용임.
+*/
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //조회, 추가, 저장
+	getComCode(); //공장구분 선택
+ }
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+}
+function getSC003PR(yrmon){
+
+	var result = true;
+	var sKind		= "getSC003PR";						
+	var sMethodName = "service::pscomlib/selectSC003PR_1.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SC003PR=ds_SC003PR";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " YRMON=" + quote(yrmon); //계획년FR
+		sArgument += " PRMNO=" + quote("ABS"); //선택구분
+		sArgument += " CHKCNT=" + quote(4); //선택구분
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	
+	if (ds_SC003PR.rowcount < 1){
+		//alert("[알림]일자를 확인하세요.");
+		alert(setPopMessage("6029"));//[알림]일자를 확인하세요.
+		setMessage("6029");	
+		cmb_PLNYM.SetFocus();
+		result = false;
+	}
+		return result;
+
+}
+function getFPMC100(){
+
+	if(!validationChk()){
+		return;
+	}
+
+	var result = true;
+	var sKind		= "getFPMC100";						
+	var sMethodName = "service::psfaclib/selectFPMC100.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var	sOutDataSet = "ds_FPMC100=ds_FPMC100";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@PRDCD=" + quote(ed_PRDCD.Text); //제품코드
+		sArgument += "@PLNYM=" + quote(substr(cmb_PLNYM.Value,0,6)); //계획년월
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		result = false;
+	}
+	return result;
+}
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+ //등록시 업체코드 존재유무 체크함. 없으면 동록불가.
+function setFPMC100(){
+	//OR=|| AND=&&
+/*	
+	if(ds_FPMC100.GetRowType(ds_FPMC100.currow)=="update" || ds_FPMC100.GetRowType(ds_FPMC100.currow)=="insert" ){
+		if(!ds_FPMC100_CanRowPosChange()){
+			return;
+		}
+	}
+*/
+	var sKind		= "setSJTZ230";						
+	var sMethodName = "service::psfaclib/saveFPMC100.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_FPMC100=ds_FPMC100:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FPMC100_CHECK=ds_FPMC100_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+	
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	cmb_PLNYM.BKColor="white";
+		
+	if (length(st_PRDNM.Text)==0){
+		ed_PRDCD.BKColor="paleturquoise";
+		//alert("[알림]제품코드를 입력하세요.");//[알림]계획년월을 입력하세요.
+		alert(setPopMessage("6045"));//[알림]제품코드를 입력하세요.
+		setMessage("6045");
+		result = false;
+	}else if (cmb_PLNYM.Value == ""){
+		cmb_PLNYM.BKColor="paleturquoise";
+		//alert("[알림]계획년월을 입력하세요.");//[알림]계획년월을 입력하세요.
+		alert(setPopMessage("6015"));//[알림]계획년월을 입력하세요.
+		setMessage("6015");
+		result = false;
+	}
+	return result;
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_FPMC100_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_FPMC100_CHECK.GetRowCount();i++){
+			alert("품번 : " +ds_FPMC100_CHECK.GetColumn(i,"PSPNOS") + " = " + ds_FPMC100_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getFPMC100();  //error항목이 존재시에는 재조회
+		return;
+	}
+	if(rtnCd<0){// tran 실패
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else {
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FPMC100.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "월 기본생산계획수정(TX등록)";
+	var arrSheets  =  Array();  
+	
+	arrSheets[0]  = "MainGrid|월 기본생산계획수정(TX등록)";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 복사
+ **********************************************************************/ 
+function MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getFPMC100();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_FPMC100")== false) return;
+	if(ds_FPMC100.rowcount < 1) {
+		if(!getFPMC100()){
+			return;
+		}
+		if(ds_FPMC100.rowcount <1){
+			if(!getSC003PR(substr(cmb_PLNYM.Value,0,6))){
+				return;
+			}
+		}
+	}
+	ds_FPMC100.AddRow();
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"COMPSS",ComboBoxPlant.Value);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"PLNYMS",substr(cmb_PLNYM.Value,0,6));
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM0QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM1QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM2QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM3QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM4QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM5QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"MM6QYS",0);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"PRDCDS",ed_PRDCD.Text);
+	ds_FPMC100.SetColumn(ds_FPMC100.currow,"PYSEQS",0);
+}
+
+function fn_Delete()
+{
+	if(ds_FPMC100.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_FPMC100.DeleteRow(ds_FPMC100.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setFPMC100();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function cmb_PLNYM_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}			
+}
+
+function ed_PRDCD_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync=true;
+	var sKind		= "getMST050";		
+	var sMethodName = "service::pscomlib/selectMST050PF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST050PF=ds_MST050PF";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument  += " GRPCD=" + quote("PRD");
+		sArgument  += " MSTCD=" + quote(obj.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	if (ds_MST050PF.GetRowCount() < 1){
+		alert(setPopMessage("4023"));
+		setMessage("4023");	
+		obj.SetFocus();
+		return;
+	}
+	http.usewaitcursor = true;
+	st_PRDNM.Text=trim(ds_MST050PF.GetColumn(0,"MSTRM"));
+}
+//삭제 - 2019.09.25 최초등록일때만 칼렌다에 해당 년월일 등록되어 있는지 체크함. 
+function cmb_PLNYM_OnKillFocus(obj)
+{
+	if(length(trim(obj.Value)) < 1) return;
+
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getSC003PR";		
+	var sMethodName = "service::pscomlib/selectSC003PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SC003PR=ds_SC003PR";
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " PRMNO=" + quote("ABS"); //사업부
+		sArgument += " YRMON=" + quote(substr(obj.Value,0,6)); //계획년월
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_SC003PR.GetRowCount() < 1){
+		//alert("[알림]일자를 확인하세요.");
+		alert(setPopMessage("6029"));//[알림]일자를 확인하세요.
+		setMessage("6029");	
+		cmb_PLNYM.SetFocus();
+		return;
+	}
+	http.usewaitcursor = true;
+}
+function getITNBR(tval){
+
+	var sKind		= "getITNBR";		
+	var sMethodName = "service::pscomlib/selectBM008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM008PR=ds_BM008PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " ITNBR=" + quote(tval);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	if(ds_BM008PR.rowcount < 1){
+		return 0;	
+	}
+	else{
+		return 1;
+	}
+}
+function getEM001PR(tval){
+
+	var sKind		= "getEM001PR";		
+	var sMethodName = "service::pscomlib/selectEM001PR2.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_EM001PR=ds_EM001PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " PRTNO=" + quote(tval);
+		sArgument  += " TAXDT=" + quote(substr(cmb_PLNYM.Value,0,6)+"31");
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+function ds_FPMC100_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if(strColumnID == "PSPNOS"){
+		if(varNewValue != "" && varOldValue != varNewValue){
+/*		
+			if(ds_FPMC100.FindRow("PSPNOS", trim(varNewValue)) >= 0){
+				alert("[경고] 이미 등록된 자료입니다.");
+				//alert(setPopMessage("1520"));  //[경고] 이미 등록된 자료입니다.
+				//setMessage("1520");
+				ds_FPMC100.DeleteRow(nRow);
+				ds_FPMC100.SelectRow(ds_FPMC100.FindRow("PSPNOS",varNewValue));					
+				return false;
+			}
+*/			
+			var tval=getITNBR(varNewValue);
+			if(tval==0){
+				alert("[경고] Item Master에 미등록된 품번입니다.");
+				//alert(setPopMessage("1509")); //[경고] Item Master에 미등록된 품번입니다.
+				//setMessage("1509");
+				return false;
+			}else{
+				var tval=getEM001PR(varNewValue);
+			}
+		}
+	}
+}
+
+function ds_FPMC100_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if(strColumnID == "PSPNOS"){
+		if(varNewValue != "" && varOldValue != varNewValue){
+			ds_FPMC100.SetColumn(nRow,"ITDSC",trim(ds_BM008PR.GetColumn(0,"ITDSC")));
+			ds_FPMC100.SetColumn(nRow,"PLTCDS",trim(ds_BM008PR.GetColumn(0,"PACKC")));
+			ds_FPMC100.SetColumn(nRow,"PFOTES",trim(ds_EM001PR.GetColumn(0,"REASN")));
+			ds_FPMC100.SetColumn(nRow,"PCOSTS",trim(ds_EM001PR.GetColumn(0,"PRICE")));
+		}else{
+			ds_FPMC100.SetColumn(nRow,"ITDSC","");
+			ds_FPMC100.SetColumn(nRow,"PLTCDS","");
+			ds_FPMC100.SetColumn(nRow,"PFOTES","");
+			ds_FPMC100.SetColumn(nRow,"PCOSTS","");
+		}
+	}
+	if(strColumnID == "MM0QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM0QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);
+	}
+	if(strColumnID == "MM1QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM1QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);		
+	}
+	if(strColumnID == "MM2QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM2QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);
+	}
+	if(strColumnID == "MM3QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM3QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);
+	}
+	if(strColumnID == "MM4QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM4QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);
+	}
+	if(strColumnID == "MM5QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM5QYS",0);
+		}
+		var setMMQY=0;
+		for(i=0; i<6; i++){
+			setMMQY += parseInt(ds_FPMC100.GetColumn(nRow,"MM"+i+"QYS"));
+		}
+		ds_FPMC100.SetColumn(nRow,"SUMMMQY",setMMQY);
+	}
+	if(strColumnID == "MM6QYS"){
+		if(varNewValue == ""){
+			ds_FPMC100.SetColumn(nRow,"MM6QYS",0);
+		}
+	}
+}
+]]></Script>
+</Window>

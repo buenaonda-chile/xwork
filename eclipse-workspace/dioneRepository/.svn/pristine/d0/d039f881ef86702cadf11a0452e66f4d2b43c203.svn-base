@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="216" Id="contractPop" Left="8" OnLoadCompleted="contractPop_OnLoadCompleted" PidAttrib="7" Title="MIS" Top="8" Ver="1.0" Width="584" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_contract"></Dataset>
+		</Datasets>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_contract" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#94c1ea" Bottom="209" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="209" Id="grd_reservation" InputPanel="FALSE" LineColor="#94c1ea" MinWidth="100" OnCellDBLClick="grd_reservation_OnCellDblClick" Right="576" TabOrder="1" TabStop="true" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="576">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="118"/>
+						<col fix="left" width="118"/>
+						<col fix="left" width="118"/>
+						<col width="236"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dceaf7" col="0" color="#002043" display="text" text="계약번호"/>
+						<cell bkcolor="#dceaf7" col="1" color="#002043" display="text" text="광고주"/>
+						<cell bkcolor="#dceaf7" col="2" color="#002043" display="text" text="광고대행사"/>
+						<cell bkcolor="#dceaf7" col="3" color="#002043" display="text" text="계약기간"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="REGIST_NO" cursor="hand" display="text"/>
+						<cell align="center" col="1" colid="SALES_LAB_NM" color="#333333" display="text"/>
+						<cell align="center" col="2" colid="ORG_CUST_NO_NM" color="#333333" display="text"/>
+						<cell align="center" col="3" color="#333333" display="text" expr='REGIST_DATE_FROM.substr(0,4)+&quot;-&quot;+REGIST_DATE_FROM.substr(4,2)+&quot;-&quot;+REGIST_DATE_FROM.substr(6,2)+&#32;&quot;&#32;~&#32;&quot;&#32;+&#32;REGIST_DATE_TO.substr(0,4)+&quot;-&quot;+REGIST_DATE_TO.substr(4,2)+&quot;-&quot;+REGIST_DATE_TO.substr(6,2)'/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[function grd_reservation_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	
+	
+	if(TYPE == "SEARCH") {
+		parent.ed_registno.Value = ds_contract.GetColumn(ds_contract.row, "REGIST_NO");
+	} else {
+		parent.ed_registno2.Value = ds_contract.GetColumn(ds_contract.row, "REGIST_NO");
+	}
+
+	
+	Close();
+}
+
+function contractPop_OnLoadCompleted(obj)
+{
+
+	getContractList();
+}
+
+
+
+
+//계약목록 조회
+function getContractList()
+{	
+	var param = "";
+
+	Transaction(
+		"getContractList",								// Transaction ID
+		"service::advertisement/contractList.do",		// service
+		"",												// input Dataset
+		"ds_contract=ds_contract",						// output Dataset
+		param,											// parameter
+		"callBack"										// callback
+	);
+}
+
+//계약목록상세 조회 
+function getContractDtlList(regist_no)
+{	
+	var param = "";
+    param = " REGIST_NO=" + quote(regist_no);
+
+	Transaction(
+		"getContractDtlList",							// Transaction ID
+		"service::advertisement/contractDtlList.do",	// service
+		"",												// input Dataset
+		"ds_contractDtl=ds_contractDtl",				// output Dataset
+		param,											// parameter
+		"callBack"										// callback
+	);
+}
+
+//CallBack
+function callBack(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		alert(rtnMsg);
+		return;
+	}	
+	if(svcId == "getContractDtlList")
+	{
+		ds_reservationSel.Copy(ds_contractDtl);
+		close();
+	}
+	
+}]]></Script>
+</Window>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.DuplTypeOrderCodeMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="DuplTypeOrderCodeMst" type="DuplTypeOrderCodeMstDomain">
+        <result property="selchk" column="SELCHK" />
+        
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="mcrcd" column="MCRCD" />
+        <result property="msecd" column="MSECD" />
+        <result property="mcrc1" column="MCRC1" />
+        <result property="msec1" column="MSEC1" />
+        <result property="pspno" column="PSPNO" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="carnm" column="CARNM" />
+        <result property="cprtn" column="CPRTN" />
+        
+        <result property="oldMcrc1" column="OLD_MCRC1" />
+        <result property="oldMsec1" column="OLD_MSEC1" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="DuplTypeOrderCodeMst" parameterType="DuplTypeOrderCodeMstDomain">
+    	<if test='selchk.equals("1")'>
+        SELECT 											
+        	   A.COMPS, A.PYVND, A.MCRCD, A.MSECD, A.MCRC1, TRIM(A.MSEC1) AS MSEC1, TRIM(B.PSPNO) AS PSPNO,										
+        	   TRIM(G.ITDSC) AS ITDSC, TRIM(C.CUSNM) AS CUSNM, TRIM(E.MSTSM) AS CARNM, TRIM(F.CPRTN) AS CPRTN,
+        	   A.MCRC1 AS OLD_MCRC1, TRIM(A.MSEC1) AS OLD_MSEC1	
+        FROM 											
+        	 PSZDBLIB.SVZ080PF A
+        	 LEFT OUTER JOIN PSZDBLIB.SVM100PF B ON A.COMPS=B.COMPS AND A.PYVND=B.PYVND AND A.MCRCD=B.MCRCD AND A.MSECD = B.SEQCD
+        	 LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.PYVND=C.CUSNO
+        	 LEFT OUTER JOIN ${lib2}.MST100PF D ON B.COMPS=D.COMPS AND B.PSPNO=D.PRTNO
+        	 LEFT OUTER JOIN ${lib2}.MST050PF E ON D.COMPS=E.COMPS AND E.GRPCD='CAR' AND D.CARCD=E.MSTCD
+        	 LEFT OUTER JOIN  										
+        	 (SELECT Y.* 										
+        	  FROM ${lib1}.EM000PR Y 										
+        	  WHERE Y.EDATM = (SELECT MAX(X.EDATM) 										
+        		               FROM ${lib1}.EM000PR X									
+        		               WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO)									
+        	 ) F ON A.PYVND=F.CUSNO AND B.PSPNO=F.PRTNO										
+        	 LEFT OUTER JOIN ${lib1}.BM008PR G ON B.PSPNO=G.ITNBR										
+        WHERE 	
+              'SqlMap-DuplTypeOrderCodeMst.searchByCondition' = 'SqlMap-DuplTypeOrderCodeMst.searchByCondition'										
+          AND A.COMPS = #{comps}
+          AND A.PYVND = #{pyvnd}
+          AND A.MCRCD = #{mcrcd}
+          AND A.MSECD = #{msecd}
+        ORDER BY 
+                A.COMPS, A.PYVND, A.MCRCD, A.MSECD, A.MCRC1, TRIM(A.MSEC1) ASC
+		</if>
+		
+		<if test='selchk.equals("2")'>	
+        SELECT 											
+        	   B.COMPS, B.PYVND, B.MCRCD, B.SEQCD AS MSECD, '' AS MCRC1, '' AS MSEC1, 
+        	   TRIM(B.PSPNO) AS PSPNO, TRIM(G.ITDSC) AS ITDSC, TRIM(C.CUSNM) AS CUSNM, TRIM(E.MSTSM) AS CARNM, TRIM(F.CPRTN) AS CPRTN,
+        	   '' AS OLD_MCRC1, '' AS OLD_MSEC1	
+        FROM 											
+        	 PSZDBLIB.SVM100PF B
+        	 LEFT OUTER JOIN ${lib1}.CUSMAS C ON B.PYVND=C.CUSNO
+        	 LEFT OUTER JOIN ${lib2}.MST100PF D ON B.COMPS=D.COMPS AND B.PSPNO=D.PRTNO
+        	 LEFT OUTER JOIN ${lib2}.MST050PF E ON D.COMPS=E.COMPS AND E.GRPCD='CAR' AND D.CARCD=E.MSTCD
+        	 LEFT OUTER JOIN  										
+        	 (SELECT Y.* 										
+        	  FROM ${lib1}.EM000PR Y 										
+        	  WHERE Y.EDATM = (SELECT MAX(X.EDATM) 										
+        		               FROM ${lib1}.EM000PR X									
+        		               WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO)									
+        	 ) F ON B.PYVND=F.CUSNO AND B.PSPNO=F.PRTNO										
+        	 LEFT OUTER JOIN ${lib1}.BM008PR G ON B.PSPNO=G.ITNBR										
+        WHERE 	
+              'SqlMap-DuplTypeOrderCodeMst.searchByCondition' = 'SqlMap-DuplTypeOrderCodeMst.searchByCondition'										
+          AND B.COMPS = #{comps}
+          AND B.PYVND = #{pyvnd}
+          AND B.MCRCD = #{mcrcd}
+          AND B.SEQCD = #{msecd}
+		</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="DuplTypeOrderCodeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ080PF
+        WHERE 
+             'SqlMap-DuplTypeOrderCodeMst.searchCount' = 'SqlMap-DuplTypeOrderCodeMst.searchCount'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrcd}
+          AND MSECD = #{msecd}
+          AND MCRC1 = #{mcrc1}
+          AND MSEC1 = #{msec1}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="DuplTypeOrderCodeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ080PF
+        WHERE 
+             'SqlMap-DuplTypeOrderCodeMst.searchCount2' = 'SqlMap-DuplTypeOrderCodeMst.searchCount2'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrcd}
+          AND MSECD = #{msecd}
+          AND MCRC1 = #{oldMcrc1}
+          AND MSEC1 = #{oldMsec1}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountSVM100" resultType="java.lang.Integer" parameterType="DuplTypeOrderCodeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM100PF
+        WHERE 
+             'SqlMap-DuplTypeOrderCodeMst.searchCountSVM100' = 'SqlMap-DuplTypeOrderCodeMst.searchCountSVM100'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrc1}
+          AND SEQCD = #{msec1}
+    </select>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="DuplTypeOrderCodeMstDomain">
+        INSERT INTO PSZDBLIB.SVZ080PF (
+                /* SqlMap-DuplTypeOrderCodeMst.create */
+                COMPS, PYVND, MCRCD, MSECD, MCRC1, MSEC1
+        ) values (
+                #{comps}, #{pyvnd}, #{mcrcd}, #{msecd}, #{mcrc1}, #{msec1}
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="DuplTypeOrderCodeMstDomain">
+        UPDATE 
+               PSZDBLIB.SVZ080PF
+        SET
+            MCRC1 = #{mcrc1}
+          , MSEC1 = #{msec1}
+        WHERE 
+              'SqlMap-DuplTypeOrderCodeMst.update' = 'SqlMap-DuplTypeOrderCodeMst.update'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrcd}
+          AND MSECD = #{msecd}
+          AND MCRC1 = #{oldMcrc1}
+          AND MSEC1 = #{oldMsec1}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="DuplTypeOrderCodeMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVZ080PF
+        WHERE 
+              'SqlMap-DuplTypeOrderCodeMst.delete' = 'SqlMap-DuplTypeOrderCodeMst.delete'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND MCRCD = #{mcrcd}
+          AND MSECD = #{msecd}
+          AND MCRC1 = #{mcrc1}
+          AND MSEC1 = #{msec1}
+    </delete>
+
+</mapper>

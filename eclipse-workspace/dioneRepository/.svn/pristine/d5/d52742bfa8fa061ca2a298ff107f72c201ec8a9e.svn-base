@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderDayITEMMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="OrderDayITEMMst" type="OrderDayITEMMstDomain">
+    	<!-- 검색항목 -->
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        
+        <!-- 출력항목 -->
+		<result property="pspno" column="PSPNO" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="carcd" column="CARCD" />
+        <result property="carnm" column="CARNM" />
+        <result property="bdycd" column="BDYCD" />
+        <result property="bdynm" column="BDYNM" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="OrderDayITEMMst" parameterType="OrderDayITEMMstDomain">
+		SELECT A.COMPS, A.PYVND, A.SHPNO, TRIM(A.PSPNO) AS PSPNO,
+		   TRIM(B.CUSNM) AS CUSNM, TRIM(C.ITDSC) AS ITDSC, D.CARCD,
+		   TRIM(E.MSTSM) AS CARNM, D.BDYCD, TRIM(F.MSTSM) AS BDYNM
+		FROM
+		   PSZDBLIB.SVZ040PF A
+		   LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+		   LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PSPNO=C.ITNBR
+		   LEFT OUTER JOIN ${lib2}.MST100PF D ON A.COMPS=D.COMPS AND A.PSPNO=D.PRTNO
+		   LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+		      WHERE GRPCD='CAR') E ON A.COMPS=E.COMPS AND D.CARCD=E.MSTCD
+		   LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+		      WHERE GRPCD='BDY') F ON A.COMPS=F.COMPS AND D.BDYCD=F.MSTCD
+		WHERE
+			'SqlMap-OrderDayITEMMst.searchByCondition' = 'SqlMap-OrderDayITEMMst.searchByCondition'	
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+    </select>
+
+    <!-- 検索 SQL文（품번 존재 체크） -->
+    <select id="pspnoSearchCount" resultType="java.lang.Integer" parameterType="OrderDayITEMMstDomain">
+
+		SELECT 
+			COUNT(*) CNT 
+		FROM
+			${lib1}.EM000PR A
+			LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.CUSNO=B.CUSNO
+			LEFT OUTER JOIN ${lib1}.BM008PR C ON A.PRTNO=C.ITNBR
+			LEFT OUTER JOIN ${lib2}.MST100PF D ON D.COMPS=#{comps} AND A.PRTNO=D.PRTNO
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+				WHERE GRPCD='CAR') E ON E.COMPS=#{comps} AND D.CARCD=E.MSTCD
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF
+				WHERE GRPCD='BDY') F ON F.COMPS=#{comps} AND D.BDYCD=F.MSTCD
+		WHERE
+			A.PRTNO=#{pspno}
+			AND A.EDATM = (SELECT MAX(Y.EDATM) FROM ${lib1}.EM000PR Y 
+						WHERE A.CUSNO=Y.CUSNO AND A.PRTNO=Y.PRTNO)
+			AND A.CUSNO=#{pyvnd}
+    </select>
+        
+        
+    <!-- 検索 SQL文（등록되어 있는지 체크） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="OrderDayITEMMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ040PF
+        WHERE 
+             'SqlMap-OrderDayITEMMst.searchCount' = 'SqlMap-OrderDayITEMMst.searchCount'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+		  AND PSPNO = #{pspno}
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="OrderDayITEMMstDomain">
+        INSERT INTO PSZDBLIB.SVZ040PF (
+       			COMPS, PYVND, SHPNO, PSPNO
+        ) values (
+                #{comps}, #{pyvnd}, '0', #{pspno}
+        )
+    </insert>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="OrderDayITEMMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVZ040PF
+        WHERE 
+              'SqlMap-OrderDayITEMMst.delete' = 'SqlMap-OrderDayITEMMst.delete'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+		  AND PSPNO = #{pspno}
+
+    </delete>
+
+</mapper>

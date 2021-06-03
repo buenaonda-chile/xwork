@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="Content" Left="8" OnActivate="Content_OnActivate" OnLoadCompleted="Content_OnLoadCompleted" OnSize="fn_onSize" OnTimer="Content_OnTimer" OnUnloadCompleted="Content_OnUnloadCompleted" PidAttrib="7" scroll="false" Style="styGrid01" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1056" WorkArea="true">
+		<Div Height="1024" Id="div_content" TabOrder="1" Text="전체닫기" ToolTipText="전체닫기" Width="1056">
+			<Contents></Contents>
+		</Div>
+	</Form>
+	<Script><![CDATA[//#include "script::form_init.js";
+#include "script::formReSize.js";
+#include "script::lib_script_common.js";
+
+var sTarget;
+var sTitle;
+var sMenuId;
+var formLoadYn = "N";
+var timeLimit = 0;
+var closeYn = "N";
+var dsStr;
+
+//mainForm이 로딩이 끝났을때...
+function mainFormLoad()
+{	
+
+
+	killTimer(1); // == 0411  lsy
+	if(g_largeFormYn == "Y"){
+		g_largeFormYn = "N";
+		this.OnSize = "";
+		global.FrameLeft.visible = false;
+		global.FrameLeftClose.visible = true;
+		
+		this.div_content.right = this.width;
+		//this.div_btn.right = this.width;
+		//this.div_btn.fn_arrangeBtn();
+		//l_fn_resizeInit(1010,629);
+		l_fn_resizeInit(820,645);
+		//l_fn_resizeInit(780,478);
+	} else {
+		l_fn_resizeInit(820,645);
+		//l_fn_resizeInit(780,478);
+	}
+
+	if (isExistVar("sTitle") && div_content.Find("st_title")!=null) {
+		div_content.st_title.Value = sTitle;
+	}
+
+	// 검색범위 설정정보 화면에 반영
+	/*if ((object("div_content.ds_rowLimit"))!=null) {
+		var list_cnt = toInteger(G_ds_menu.GetColumn(G_ds_menu.row, "LIST_CNT"));
+		div_content.ds_rowLimit.SetColumn(0, "CD_CODE", list_cnt+1);
+		div_content.ds_rowLimit.SetColumn(0, "CD_NAME", list_cnt);
+		div_content.cb_rowLimit.Value = list_cnt+1;
+	}*/
+
+	if (G_ds_menu.GetColumn(G_ds_menu.row, "LIST_ALL_YN")=="Y") {
+		if (div_content.Find("st_rowLimit")!=null) {
+			div_content.st_rowLimit.Visible = true;
+		}
+		if (div_content.Find("cb_rowLimit")!=null) {
+			div_content.cb_rowLimit.Visible = true;
+		}
+	}
+	
+	// if(g_ds_formInfo.rowcount == 1){
+		// global.FormListFrame.fn_tab_focus(1);
+	// } else if(g_ds_formInfo.rowcount > 1){
+		// global.FormListFrame.fn_tab_focus(g_ds_formInfo.rowcount);
+	// }
+}
+
+//넘길 데이터가 있을시에 데이터를 로딩함...
+function dataLoading()
+{
+	trace("Content.xml: dataLoading == > init");
+	var dsTargetObj;
+	trace("Content.xml: dsStr == >" + dsStr);
+	if(dsStr != null && dsStr != ""){
+		var dsStrArr = array();
+		var dsTargetStrArr = array();
+		dsStrArr = split(dsStr,"^");
+		dsTargetStrArr = split(dsTargetStr,"^");
+		for(i=0;i<length(dsStrArr);i++){
+			dsTargetObj = div_content.object(dsTargetStrArr[i]);
+			dsTargetObj.loadXML(dsStrArr[i]);
+			
+			
+		}
+	}
+}
+
+function Content_OnLoadCompleted(obj)
+{
+	//lfn_form_init(obj);
+	this.SetTimer(10041, 389);
+
+	//trace("MDI open complete!");
+	//trace(sMenuId);
+
+    if(isExistVar("sTarget") && isExistVar("sTitle")) {
+
+        div_content.Url = sTarget;
+        obj.Title = sTitle;
+        
+
+    } else {
+
+        lFcAlert(L_COM_ALT_0002, "파라미터", "target/title");
+    }
+    
+    if( global.G_ds_menu.GetColumn(G_ds_menu.row,'USE_YN') == 'N' ){
+		// 사용권한에 따른 메세지 (현재는 미개발화면에 대해서 뿌림-차후 수정해야함)
+		alert(setPopMessage("2009"));	// 20110103l-koowgnojeel, 2009 == 현재 메뉴권한이 없습니다.
+		close();		
+		return;
+	}
+}
+
+
+function Content_OnActivate(obj)
+{
+    if(obj.GetHandle()!=G_actHandle)
+    {
+        global.FrameBottom.fcSetActWindow(obj.GetHandle());
+		//this.SetTimer(10043, 103); // 2007.08.24 창 Active 시 항상 최대화면 처리!
+	//	alert("Content_OnActivate:2");
+    }
+    else
+    {
+		if((sTitle == "SESSION1") || (sTitle == "SESSION2") ||
+			(sTitle == "SESSION3") || (sTitle == "SESSION4"))
+		{
+//			div_content.MAX5250.SetFocus();
+			div_content.MAX5250.SetWindowFocus();
+//			alert("Content_OnActivate:SetFocus1");
+		}
+		else
+		{
+			div_content.SetFocus();
+//			alert("Content_OnActivate:0");
+		}
+	}
+}
+
+
+function Content_OnUnloadCompleted(obj)
+{
+    global.FrameBottom.fcCloseWindow(obj.GetHandle());
+}
+
+
+function Content_OnTimer(obj,nEventID)
+{
+	timeLimit++;
+	/*
+	if(timeLimit == 600){
+		killTimer(1);
+		fn_makeProcPop("D");
+		alert("화면이 없습니다.");
+		closeYn = "Y";
+		close();
+	}
+	*/
+	if ( nEventID == 10041 )
+	{
+		killTimer(nEventID);
+		div_content.Visible = true;
+	}else{
+		//div_content.Visible = false;
+	}
+
+
+/*  => 4.11 lsy
+	if(nEventID==10041) {
+
+		//this.div_content.st_title.Text = sTitle;
+	}
+
+	if(nEventID==10043) {
+
+		this.MDIStatus = "Max";
+	}
+
+	this.KillTimer(nEventID);
+*/
+}
+
+//리사이즈 다시 등록할때...
+function fn_addResizeComp()
+{/*
+	if(g_ds_bpmData.rowCount() > 0){
+		//
+	} else {
+		l_fn_resizeInit(this.width,this.height);
+	}
+*/
+}
+
+function fn_onSize(obj,nCx,nCy,nState)
+{
+//	div_content.titleBar.right = nCx -5;
+//	div_content.searchBar.right = nCx -5;
+//	div_content.MainGrid.right = nCx -5;	
+	// AutoSizing을 위하여 추가
+	// 세션 추가될 경우 해당 세션에 대한 부분이 추가 되어야 한다.
+	if((sTitle == "SESSION1") || (sTitle == "SESSION2") ||
+		(sTitle == "SESSION3") || (sTitle == "SESSION4"))
+	{
+		div_content.Max5250.top = 0;
+		div_content.Max5250.left = 0;
+		if(nCy < div_content.Height)
+			div_content.Max5250.height = nCy;
+		else	
+			div_content.Max5250.height = div_content.Height;
+		if(nCx < div_content.Width)
+			div_content.Max5250.width =  nCx;
+		else
+			div_content.Max5250.width =  div_content.Width;						
+	}	
+	else
+	{
+		if(nState == "Maximize"){ //고정 창 크기 조절 부분
+			if(nCy > 624){
+				if (toInteger(div_content.MainGrid.UserData) != 0){
+					var gap = iif(toInteger(624-nCy)<0,toInteger(624-nCy)*(-1),toInteger(624-nCy));
+					if(nCy < div_content.Height)
+						div_content.MainGrid.height = toInteger(div_content.MainGrid.UserData)+gap;
+						//div_content.MainGrid.height = nCy - 95;
+					else	
+						div_content.MainGrid.height = div_content.height - 95;
+				}else {
+					div_content.MainGrid.height = nCy - 95;
+				}
+			}else{
+				if (toInteger(div_content.MainGrid.UserData) != 0)
+					div_content.MainGrid.height = toInteger(div_content.MainGrid.UserData)-toInteger(624-nCy);
+				else
+					div_content.MainGrid.height = nCy - 95;
+			}
+			
+			div_content.width = nCx;								
+			div_content.titleBar.right = nCx -5;
+			div_content.searchBar.right = nCx -5;
+			div_content.MainGrid.right = nCx -5;
+			//if(IsValidObject(div_content.displayBar))	div_content.displayBar.right = nCx -5;
+			//if(IsValidObject(div_content.displayBar)) {
+				div_content.displayDiv.top = div_content.titleBar.height+div_content.searchBar.height+div_content.MainGrid.height+5;
+				div_content.displayDiv.right = nCx -5;
+			//}
+		} else if(nState == "Restore"){ //내부 창 크기 조절 부분		
+			if(nCy > 624){
+				var gap = iif(toInteger(624-nCy)<0,toInteger(624-nCy)*(-1),toInteger(624-nCy));
+				if(nCy < div_content.Height)
+					div_content.MainGrid.height = toInteger(div_content.MainGrid.UserData)+gap;
+					//div_content.MainGrid.height = nCy - 80;
+				else	
+					div_content.MainGrid.height = div_content.height - 80;			
+			}else{
+				if (toInteger(div_content.MainGrid.UserData) != 0)
+					div_content.MainGrid.height = toInteger(div_content.MainGrid.UserData)-toInteger(624-nCy);
+				else
+					div_content.MainGrid.height = div_content.height - 95;
+				//div_content.MainGrid.height = nCy - 72; //552
+			}
+		
+			div_content.titleBar.right = nCx -5;
+			div_content.searchBar.right = nCx -5;
+			div_content.MainGrid.right = nCx -5;	
+			//if(length(Find("div_content.displayDiv").id) > 0){
+				div_content.displayDiv.top = div_content.titleBar.height+div_content.searchBar.height+div_content.MainGrid.height+5;
+				div_content.displayDiv.right = nCx -5;
+			//}
+		}
+	}
+}
+]]></Script>
+</Window>

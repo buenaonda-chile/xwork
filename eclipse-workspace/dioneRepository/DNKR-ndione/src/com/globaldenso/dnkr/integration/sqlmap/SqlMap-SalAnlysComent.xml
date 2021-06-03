@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalAnlysComentDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="SalAnlysComent" type="SalAnlysComentDomain">
+       	<result property="comps" column="COMPS" />
+        <result property="repym" column="REPYM" />
+        <result property="reprtse" column="REPRTSE" />
+        <result property="cmnitm" column="CMNITM" />
+		<result property="cmncn" column="CMNCN" />
+        <result property="regu" column="REGU" />
+		<result property="regd" column="REGD" />
+		<result property="modu" column="MODU" />
+		<result property="modd" column="MODD" />
+		
+		<result property="oldComps" column="OLD_COMPS" />
+        <result property="oldRepym" column="OLD_REPYM" />
+        <result property="oldReprtse" column="OLD_REPRTSE" />
+        <result property="oldCmnitm" column="OLD_CMNITM" />
+        <result property="oldCmncn" column="OLD_CMNCN" />
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+    </resultMap>
+  
+  <select id="searchByCondition" resultMap="SalAnlysComent" parameterType="SalAnlysComentDomain">
+		SELECT 
+              COMPS
+              , REPYM
+              , REPRTSE
+              , CMNITM
+              , CMNCN
+              , TRIM(COMPS) AS OLD_COMPS
+              , TRIM(REPYM) AS OLD_REPYM
+              , TRIM(REPRTSE) AS OLD_REPRTSE
+              , TRIM(CMNITM) AS OLD_CMNITM
+              , TRIM(CMNCN) AS OLD_CMNCN
+        FROM 
+             PSZDBLIB.SPZ130PF
+        WHERE
+        	'SqlMap-SalAnlysComent.searchByCondition' = 'SqlMap-SalAnlysComent.searchByCondition' 
+        <if test='comps != null and !comps.equalsIgnoreCase("")'>
+			AND COMPS like '%' || '${comps}' || '%'
+		</if> 
+		<if test='repym != null and !repym.equalsIgnoreCase("")'>
+			AND REPYM like '%' || '${repym}' || '%'
+		</if>
+		<if test='reprtse != null and !reprtse.equalsIgnoreCase("")'>
+			AND REPRTSE like '%' || '${reprtse}' || '%'
+		</if>
+        ORDER BY REPYM
+  </select>
+  
+  <!-- 検索 SQL文（任意条件 件数取得） -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="SalAnlysComentDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ130PF
+        WHERE COMPS = #{comps}
+     	AND   REPYM = #{repym}
+     	AND   REPRTSE = #{reprtse}
+     	AND   CMNITM = #{cmnitm}
+  </select>
+
+  <insert id="create" parameterType="SalAnlysComentDomain">
+    INSERT INTO PSZDBLIB.SPZ130PF (
+		COMPS
+		, REPYM
+		, REPRTSE
+		, CMNITM
+		, CMNCN
+		, REGU
+		, REGD
+    ) values (
+		#{comps}
+       ,#{repym}
+       ,#{reprtse}
+       ,#{cmnitm}
+       ,#{cmncn}
+       ,#{regu}
+       ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    )
+  </insert>
+
+	<!-- 検索 SQL文（任意条件 件数取得） -->
+  <update id="update" parameterType="SalAnlysComentDomain">
+   UPDATE
+    	PSZDBLIB.SPZ130PF  
+    SET
+		COMPS = #{comps}
+		, REPYM = #{repym}
+		, REPRTSE = #{reprtse}
+		, CMNITM = #{cmnitm}
+		, CMNCN = #{cmncn}
+		, MODU = #{modu}
+        , MODD = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    WHERE COMPS = #{oldComps}
+	AND REPYM = #{oldRepym}
+	AND REPRTSE = #{oldReprtse}
+	AND CMNITM = #{oldCmnitm}
+  </update>
+  
+<!-- 検索 SQL文（任意条件 件数取得） -->
+  <delete id="delete" parameterType="SalAnlysComentDomain">
+    DELETE
+    FROM
+    	PSZDBLIB.SPZ130PF
+    WHERE
+    	COMPS = #{comps}
+    AND REPYM = #{repym}
+    AND REPRTSE = #{reprtse}
+    AND CMNITM = #{cmnitm}
+  </delete>
+  
+<!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="SalAnlysComentDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ130PF
+        WHERE COMPS = #{oldComps}
+     	AND   REPYM = #{oldRepym}
+     	AND   REPRTSE = #{oldReprtse}
+     	AND   CMNITM = #{oldCmnitm}
+    </select> 
+
+</mapper>

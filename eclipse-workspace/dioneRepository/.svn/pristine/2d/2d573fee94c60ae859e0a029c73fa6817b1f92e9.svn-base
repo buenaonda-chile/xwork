@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.MenuDao">
+
+    <resultMap id="Menu" type="MenuDomain">
+        <result property="mcdCode" column="MCD_CODE" />
+        <result property="mcdIcon" column="MCD_ICON" />
+        <result property="mcdUse" column="MCD_USE" />
+        <result property="mcdSort" column="MCD_SORT" />
+        <result property="mcdRef" column="MCD_REF" />
+        <result property="mcdRefName" column="MCD_REF_NAME" />
+        <result property="mcdUrl" column="MCD_URI" />
+        <result property="mcdDepth" column="MCD_DEPTH" />
+        <result property="langCmc" column="CMC_CODE" />
+        <result property="mcdName" column="MCD_NAME" />
+        <result property="mcdNewWindow" column="MCD_NEW_WINDOW" />
+        <result property="mcdAddCert" column="MCD_ADD_CERT" />
+        <result property="mcdMobile" column="MCD_MOBILE" />
+        <result property="depthFullName" column="DEPTH_FULL_NAME" />
+    </resultMap>
+    
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Menu" parameterType="MenuDomain">
+        select 
+                A.MCD_CODE,
+                A.MCD_ICON,
+                A.MCD_USE,
+                A.MCD_SORT,
+                A.MCD_REF,
+                A.MCD_URI,
+                A.MCD_DEPTH,
+                A.MCD_NEW_WINDOW,
+                A.MCD_ADD_CERT,
+                A.MCD_MOBILE,
+                B.MCD_NAME
+        from 
+                DNKR_MENU_CODE A
+              , DNKR_MENU_CODE_NM B
+        where 
+                'SqlMap-Menu.searchByKey' = 'SqlMap-Menu.searchByKey'
+            and A.MCD_CODE = B.MCD_CODE            
+            and A.MCD_CODE = #{mcdCode}
+            <if test="langCmc != null and langCmc != ''">
+                and B.CMC_CODE = #{langCmc}
+            </if>
+            <if test="langCmc == null or langCmc == ''">
+                and B.CMC_CODE = 'en'
+            </if>
+            
+    </select>
+    
+      <!--  -->
+    <select id="searchByCondition" resultMap="Menu" parameterType="MenuDomain">
+        select 
+    		A.MCD_CODE,
+    		A.MCD_ICON,
+    		A.MCD_USE,
+    		A.MCD_SORT,
+    		A.MCD_REF,
+    		A.MCD_URI,
+    		A.MCD_DEPTH,
+    		A.MCD_NEW_WINDOW,
+    		A.MCD_ADD_CERT,
+    		A.MCD_MOBILE,
+    		B.MCD_NAME,
+    		(SELECT MCD_NAME FROM DNKR_MENU_CODE_NM WHERE MCD_CODE = A.MCD_REF AND CMC_CODE = B.CMC_CODE) AS MCD_REF_NAME
+   		from
+   			DNKR_MENU_CODE A,
+   			DNKR_MENU_CODE_NM B
+		where
+			'SqlMap-Menu.searchByCondition' = 'SqlMap-Menu.searchByCondition'
+			and A.MCD_CODE = B.MCD_CODE 
+		<if test="langCmc != null and langCmc != ''">
+			and B.CMC_CODE = #{langCmc}
+		</if>
+		<if test="mcdName != null and mcdName != ''">
+			and B.MCD_NAME like '%' || #{mcdName} || '%'
+		</if>	 
+	 	<if test="mcdRef != null and mcdRef != ''">
+            and A.MCD_REF = #{mcdRef}
+        </if>  
+        <if test="mcdUse != null and mcdUse != ''">
+            and A.MCD_USE = #{mcdUse}
+        </if>
+        <if test="mcdDepth != null and mcdDepth != ''">
+            and A.MCD_DEPTH = #{mcdDepth}
+        </if>
+        <if test="mcdMobile != null and mcdMobile != ''">
+            and A.MCD_MOBILE = #{mcdMobile}
+        </if>  
+		order by A.MCD_REF desc, A.MCD_SORT
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="CodeDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_MENU_CODE
+        where 
+                'SqlMap-Menu.searchCount' = 'SqlMap-Menu.searchCount'
+         <if test="cmcCode != null and cmcCode != ''">
+            and MCD_CODE = #{mcdCode}
+        </if>
+        <if test="cmcParentCode != null and cmcParentCode != ''">
+            and MCD_USE = #{cmcParentCode}
+        </if>
+        <if test="cmcType != null and cmcType != ''">
+            and MCD_SORT = #{cmcType}
+        </if>
+        <if test="cmcUseYN != null and cmcUseYN != ''">
+            and MCD_REF = #{cmcUseYN}
+        </if>
+        <if test="cnmLangCode != null and cnmLangCode != ''">
+            and CNM_LANG_CODE = #{cnmLangCode}
+        </if>
+        <if test="cmcRegdate != null and cmcRegdate != ''">
+            and CMC_REGDATE = #{cmcRegdate}
+        </if>
+        <if test="mcdMobile != null and mcdMobile != ''">
+            and A.MCD_MOBILE = #{mcdMobile}
+        </if>  
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchMcdCount" resultType="java.lang.Integer" parameterType="CodeDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_MENU_CODE
+        where 
+                'SqlMap-Menu.searchCount' = 'SqlMap-Menu.searchCount'
+         <if test="mcdCode != null and mcdCode != ''">
+            and MCD_CODE = #{mcdCode}
+        </if>
+        <if test="mcdUse != null and mcdUse != ''">
+            and MCD_USE = #{mcdUse}
+        </if>
+        <if test="mcdSort != null and mcdSort != ''">
+            and MCD_SORT = #{mcdSort}
+        </if>
+        <if test="mcdRef != null and mcdRef != ''">
+            and MCD_REF = #{mcdRef}
+        </if>
+        <if test="mcdUrl != null and mcdUrl != ''">
+            and MCD_URI = #{mcdUrl}
+        </if>
+        <if test="mcdDepth != null and mcdDepth != ''">
+            and MCD_DEPTH = #{mcdDepth}
+        </if>
+        <if test="mcdMobile != null and mcdMobile != ''">
+            and A.MCD_MOBILE = #{mcdMobile}
+        </if>  
+    </select>
+    
+        <!-- 検索 SQL文 -->
+    <select id="searchMaxMcdSort" resultType="java.lang.Integer" parameterType="MenuDomain">
+        select 
+                max(MCD_SORT)
+        from 
+                DNKR_MENU_CODE
+        where 
+                'SqlMap-Menu.searchSupetMenuMcdSort' = 'SqlMap-Menu.searchSupetMenuMcdSort'
+        	<if test="mcdDepth != 0">
+        		and MCD_DEPTH = #{mcdDepth}
+       		</if>
+       		<if test="mcdRef != null and mcdRef != ''">
+        		and MCD_REF = #{mcdRef}
+       		</if>  
+    </select>
+    
+    <!-- 検索 SQL文 -->
+    <select id="searchSupetMenuMcdSort" resultType="java.lang.Integer">
+        select 
+                max(MCD_SORT)
+        from 
+                DNKR_MENU_CODE
+        where 
+                'SqlMap-Menu.searchSupetMenuMcdSort' = 'SqlMap-Menu.searchSupetMenuMcdSort'
+        	and MCD_REF = 0 
+    </select>
+    
+    <select id="searchSuperMenuList" resultMap="Menu" parameterType="MenuDomain">
+        select 
+    		A.MCD_CODE,
+    		A.MCD_ICON,
+    		A.MCD_USE,
+    		A.MCD_SORT,
+    		A.MCD_REF,
+    		A.MCD_URI,
+    		A.MCD_DEPTH,
+    		A.MCD_NEW_WINDOW,
+    		A.MCD_ADD_CERT,
+    		A.MCD_MOBILE,
+    		B.MCD_NAME
+   		from
+   			DNKR_MENU_CODE A,
+   			DNKR_MENU_CODE_NM B
+		where
+			'SqlMap-Menu.searchSuperMenuList' = 'SqlMap-Menu.searchSuperMenuList'
+			and A.MCD_CODE = B.MCD_CODE
+			and A.MCD_REF = 0  
+		<if test="langCmc != null and langCmc != ''">
+			and B.CMC_CODE = #{langCmc}
+		</if>	   
+		<if test="mcdMobile != null and mcdMobile != ''">
+            and A.MCD_MOBILE = #{mcdMobile}
+        </if>  
+		order by A.MCD_SORT asc
+    </select>
+    
+    
+    <select id="searchAuthMenuList" resultMap="Menu" parameterType="MenuDomain">
+    select 
+                A.EMP_NUMBER EMP_NUMBER
+              , B.MCD_CODE MCD_CODE
+              , A.AUTH_NUM AUTH_NUM
+              , B.MCD_REF_NAME MCD_REF_NAME
+              /*
+              , (SELECT MCD_NAME FROM DNKR_MENU_CODE_NM WHERE MCD_CODE = DNKR_MENU_CODE.MCD_REF AND CMC_CODE = DNKR_MENU_CODE_NM.CMC_CODE) AS MCD_REF_NAME
+              */
+              , B.MCD_NAME MCD_NAME
+              , B.MCD_DEPTH MCD_DEPTH
+              , B.DEPTH_FULLNAME DEPTH_FULL_NAME
+        from 
+              ( select 
+              		  MCD_CODE
+              		, EMP_NUMBER
+              		, AUTH_NUM 
+             	from 
+             		DNKR_PRIVATE_AUTH 
+             	where 
+             		'SqlMap-PrivateAuth.searchByKey' = 'SqlMap-PrivateAuth.searchByKey'
+             	<if test="empNumber != null and empNumber != ''">	
+             		and EMP_NUMBER = #{empNumber}
+            	</if>	
+              ) A 
+        	RIGHT OUTER JOIN 
+    		  ( SELECT 
+    		  		MCD_CODE
+    		  	  , MCD_REF
+    		  	  ,(SELECT MCD_NAME FROM DNKR_MENU_CODE_NM WHERE MCD_CODE = C.MCD_REF AND CMC_CODE = C.CMC_CODE) AS MCD_REF_NAME
+    		  	  , MCD_DEPTH
+    		  	  , MCD_NAME
+    		  	  , LTRIM (SYS_CONNECT_BY_PATH (MCD_NAME, ' > '), ' > ') AS DEPTH_FULLNAME 
+        		FROM (
+            			select 
+            				  A.MCD_CODE MCD_CODE
+            				, A.MCD_USE MCD_USE
+            				, A.MCD_SORT MCD_SORT
+            				, A.MCD_REF MCD_REF
+            				, A.MCD_URI MCD_URI
+            				, A.MCD_DEPTH MCD_DEPTH
+            				, A.MCD_ICON MCD_ICON
+            				, A.MCD_NEW_WINDOW MCD_NEW_WINDOW
+            				, B.CMC_CODE CMC_CODE
+            				, B.MCD_NAME MCD_NAME 
+            			from 
+            				  DNKR_MENU_CODE A
+            				, DNKR_MENU_CODE_NM B 
+            			where 
+            					A.MCD_CODE = B.MCD_CODE 
+        				<if test="langCmc != null and langCmc != ''">
+            				and B.CMC_CODE=#{langCmc}
+            			</if>	
+            			) C
+        		 START WITH MCD_REF = 0 CONNECT BY PRIOR MCD_CODE = MCD_REF
+        	  )B
+        ON 
+            A.MCD_CODE = B.MCD_CODE 
+        ORDER BY 
+        	to_number(B.MCD_CODE) ASC
+    </select>    	
+        	
+    <select id="searchAuthMenuList2" resultMap="Menu" parameterType="MenuDomain">
+        select 
+    		C.MCD_CODE,
+    		C.MCD_REF,
+    		(SELECT MCD_NAME FROM DNKR_MENU_CODE_NM WHERE MCD_CODE = C.MCD_REF AND CMC_CODE = C.CMC_CODE) AS MCD_REF_NAME,
+    		C.MCD_DEPTH,
+    		C.MCD_NAME,
+    		C.MCD_MOBILE,
+    		C.MCD_NAME AS DEPTH_FULL_NAME
+    		<!-- LTRIM(SYS_CONNECT_BY_PATH(C.MCD_NAME, '/'), '/') AS DEPTH_FULL_NAME  -->
+   		from
+   			(
+   				select 
+   					A.MCD_CODE MCD_CODE,
+   					A.MCD_USE MCD_USE,
+   					A.MCD_SORT MCD_SORT,
+   					A.MCD_REF MCD_REF,
+   					A.MCD_URI MCD_URI,
+   					A.MCD_DEPTH MCD_DEPTH,
+   					A.MCD_ICON MCD_ICON,
+   					A.MCD_NEW_WINDOW MCD_NEW_WINDOW,
+   					A.MCD_ADD_CERT MCD_ADD_CERT,
+   					A.MCD_MOBILE MCD_MOBILE,
+   					B.CMC_CODE CMC_CODE,
+   					B.MCD_NAME MCD_NAME
+ 				from
+ 					DNKR_MENU_CODE A,
+ 					DNKR_MENU_CODE_NM B		
+				where 
+						A.MCD_CODE = B.MCD_CODE
+				<if test="langCmc == null or langCmc == ''">
+					and B.CMC_CODE = 'kr'	
+				</if>
+				<if test="langCmc != null and langCmc != ''">
+					and B.CMC_CODE = #{langCmc }
+				</if>
+   			) C
+   			<if test="mcdDepth != null and mcdDepth != ''">
+   				WHERE MCD_DEPTH > #{mcdDepth}
+   			</if>
+   		start with C.MCD_REF = '0' 
+   		connect by prior C.MCD_CODE = MCD_REF	
+    </select>
+	
+    <insert id="createMenu" parameterType ="MenuDomain">
+        insert into DNKR_MENU_CODE (
+                /* SqlMap-Menu.createMenu */
+            <if test="mcdCode != null">
+                MCD_CODE,
+            </if>
+            <if test="mcdIcon != null">
+                MCD_ICON,
+            </if>                 
+            <if test="mcdUse != null">
+                MCD_USE,
+            </if>
+            <if test="mcdSort != 0">
+                MCD_SORT,
+            </if>
+            <if test="mcdRef != null">
+                MCD_REF,
+            </if>
+            <if test="mcdRef == null">
+                MCD_REF,
+            </if>
+            <if test="mcdUrl != null">
+                MCD_URI,
+            </if>
+            <if test="mcdNewWindow != null">
+                MCD_NEW_WINDOW,
+            </if>
+             <if test="mcdAddCert != null">
+                MCD_ADD_CERT,
+            </if>
+            <if test="mcdMobile != null">
+                MCD_MOBILE,
+            </if>
+            	MCD_DEPTH
+        ) values (            
+            <if test="mcdCode != null">
+                DNKR_MENU_CODE_SEQ.NEXTVAL,
+            </if> 
+            <if test="mcdIcon != null">
+                #{mcdIcon},
+            </if>           
+            <if test="mcdUse != null">
+                #{mcdUse},
+            </if>
+            <if test="mcdSort != 0">
+                #{mcdSort},
+            </if>
+            <if test="mcdRef != null">
+                #{mcdRef},
+            </if>
+            <if test="mcdRef == null">
+                0,
+            </if>
+            <if test="mcdUrl != null">
+                #{mcdUrl},
+            </if>
+            <if test="mcdNewWindow != null">
+                #{mcdNewWindow},
+            </if>
+            <if test="mcdAddCert != null">
+                #{mcdAddCert},
+            </if>            
+            <if test="mcdMobile != null">
+                #{mcdMobile},
+            </if>
+            <if test="mcdDepth != 0">
+                #{mcdDepth}
+            </if>
+            <if test="mcdDepth == 0">
+                1
+            </if>
+        )
+    </insert>
+    
+	<insert id="createName" parameterType ="MenuDomain">
+        insert into DNKR_MENU_CODE_NM (
+                /* SqlMap-Menu.createName */
+            <if test="mcdCode != null">
+                MCD_CODE,
+            </if>           
+           <if test="langCmc != null">
+                CMC_CODE,
+            </if>
+            <if test="mcdName != null">
+                MCD_NAME
+            </if>
+        ) values (            
+            <if test="mcdCode != null">
+                DNKR_MENU_CODE_SEQ.CURRVAL,
+            </if>           
+           <if test="langCmc != null">
+                #{langCmc},
+            </if>
+            <if test="mcdName != null">
+                #{mcdName}
+            </if>
+        )
+    </insert>
+    
+    <update id="updateCode" parameterType="MenuDomain">
+        update 
+                DNKR_MENU_CODE 
+        set            
+            <if test="mcdSort != 0">
+                MCD_SORT = #{mcdSort},
+            </if>
+            <if test="mcdRef != null and mcdRef != ''">
+                MCD_REF = #{mcdRef},
+            </if>
+            <if test="mcdIcon != null">
+                MCD_ICON = #{mcdIcon},
+            </if>
+            <if test="mcdUrl != null">
+                MCD_URI = #{mcdUrl},
+            </if>
+            <if test="mcdNewWindow != null">
+                MCD_NEW_WINDOW = #{mcdNewWindow},
+            </if>
+            <if test="mcdAddCert != null">
+                MCD_ADD_CERT = #{mcdAddCert},
+            </if>
+            <if test="mcdMobile != null">
+                MCD_MOBILE = #{mcdMobile},
+            </if>
+            <if test="mcdDepth != 0">
+                MCD_DEPTH = #{mcdDepth},
+            </if>
+            <if test="mcdUse != null">
+                MCD_USE = #{mcdUse}
+            </if>
+            <if test="mcdUse == null">
+                MCD_USE = MCD_USE
+            </if>
+        where 
+                'SqlMap-Menu.updateCode' = 'SqlMap-Menu.updateCode'
+            and MCD_CODE = #{mcdCode}            
+    </update>
+    
+    <update id="updateName" parameterType="MenuDomain">
+        update 
+                DNKR_MENU_CODE_NM 
+        set 
+           MCD_NAME = #{mcdName} 
+        where 
+                'SqlMap-Menu.updateName' = 'SqlMap-Menu.updateName'
+            and MCD_CODE = #{mcdCode} 
+            and CMC_CODE = #{langCmc}           
+    </update>
+    
+    <!-- 새상위메뉴의 이동할 메뉴와  같은depth의 하위메뉴 sort 변경  -->
+    <update id="updateSortUp" parameterType="MenuDomain">
+        update 
+                DNKR_MENU_CODE 
+        set 
+           MCD_SORT = MCD_SORT + 1 
+        where 
+                'SqlMap-Menu.updateSortUp' = 'SqlMap-Menu.updateSortUp'
+            <if test="mcdRef != null">
+                and MCD_REF = #{mcdRef}
+            </if>
+            <if test="mcdDepth != null">
+                and MCD_DEPTH = #{mcdDepth}
+            </if>
+            <if test="mcdSort != null">
+                and MCD_SORT >= #{mcdSort}
+            </if>           
+    </update>
+    
+    <!-- 원래상위메뉴의 이동할 메뉴와  같은depth의 하위메뉴 sort 변경  -->
+    <update id="updateSortDown" parameterType="MenuDomain">
+        update 
+                DNKR_MENU_CODE 
+        set 
+           MCD_SORT = MCD_SORT - 1 
+        where 
+                'SqlMap-Menu.updateSortDown' = 'SqlMap-Menu.updateSortDown'
+            <if test="mcdRef != null">
+                and MCD_REF = #{mcdRef}
+            </if>
+            <if test="mcdDepth != null">
+                and MCD_DEPTH = #{mcdDepth}
+            </if>
+            <if test="mcdSort != null">
+                and MCD_SORT > #{mcdSort}
+            </if>           
+    </update>
+    
+     <update id="updateDepth" parameterType="MenuDomain">
+        update 
+                DNKR_MENU_CODE 
+        set 
+           		MCD_DEPTH = #{mcdDepth} 
+        where 
+                'SqlMap-Menu.updateDepth' = 'SqlMap-Menu.updateDepth'
+            and MCD_REF = #{mcdRef} 
+            and MCD_CODE != #{mcdRef}    
+    </update>
+    
+    <delete id="deleteName" parameterType="MenuDomain">
+        delete from 
+                DNKR_MENU_CODE_NM
+        where 
+                'SqlMap-Menu.deleteName' = 'SqlMap-Menu.deleteName'
+            and MCD_CODE = #{mcdCode}
+            
+            <!-- 硫붾돱肄붾뱶??젣???몄뼱蹂?紐낆묶???꾨? ??젣?댁빞?섎?濡??꾩슂?녿뒗??.. --> 
+            <!-- and CMC_CODE = #{langCmc} -->  
+    </delete>
+    
+    <delete id="deleteCode" parameterType="MenuDomain">
+        delete from 
+                DNKR_MENU_CODE
+        where 
+                'SqlMap-Menu.deleteCode' = 'SqlMap-Menu.deleteCode'
+           and MCD_CODE = #{mcdCode} 
+    </delete>
+    
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WrkrInfoBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="wrkrInfoBase" type="WrkrInfoBaseDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="locCode" column="LOC_CODE" />        
+        <result property="cpnCode" column="CPN_CODE" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+  
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="wrkrInfoBase" parameterType="WrkrInfoBaseDomain">
+		SELECT 
+			 CLS_CODE
+			,TRIM(EMP_NUMBER) AS EMP_NUMBER
+			,TRIM(LOC_CODE) AS LOC_CODE
+			,TRIM(CPN_CODE) AS CPN_CODE
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+		FROM PSZDBLIB.FHP070PF A
+		WHERE 1 =1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if> 		
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+			AND LOC_CODE = #{locCode}
+		</if> 
+		ORDER BY EMP_NUMBER
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="WrkrInfoBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP070PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}                 
+        AND EMP_NUMBER = #{empNumber}
+    </select>
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WrkrInfoBaseDomain">
+        INSERT INTO  PSZDBLIB.FHP070PF (
+				 CLS_CODE
+				,EMP_NUMBER
+				,LOC_CODE
+				,CPN_CODE
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{empNumber}
+               ,#{locCode}
+               ,#{cpnCode}               
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WrkrInfoBaseDomain">
+        UPDATE 
+               PSZDBLIB.FHP070PF
+        SET
+			  CPN_CODE = #{cpnCode}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMP_NUMBER = #{empNumber}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WrkrInfoBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP070PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMP_NUMBER = #{empNumber}
+    </delete>
+    
+    
+
+</mapper>

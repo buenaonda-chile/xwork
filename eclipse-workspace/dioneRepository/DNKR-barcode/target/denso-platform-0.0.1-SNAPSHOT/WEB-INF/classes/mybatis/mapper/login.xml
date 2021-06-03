@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.denso.mapper.LoginMapper">
+	<!-- 로그인 체크 -->
+	<select id="checkLogin" parameterType="string" resultType="java.util.HashMap">
+	 SELECT RTRIM(A.USER_ID) USER_ID,
+			RTRIM(A.USER_NAME) USER_NAME,
+			RTRIM(A.COMPANY) COMPANY,
+			RTRIM(A.PLANT_CD) PLANT_CD,
+			RTRIM(A.PASSWORD) PASSWORD,
+			RTRIM(B.CODE2) LIB1,
+			RTRIM(C.CODE2) LIB2,
+			RTRIM(D.CODE2) LIB3,
+			RTRIM(A.MENU_PW) MENU_PW,
+			TRIM(A.PWFC) PWFC,
+			TRIM(A.PWCP) PWCP,
+			Z.NOTICE_YN,
+			Z.CUT_YN,
+			Z.CHANGE_DAT
+  	   FROM PSZDBLIB.M_USR_TID A
+		INNER JOIN (SELECT 
+						USER_ID
+						, CASE WHEN DATE(CURRENT DATE) >= DATE(PW_DAT) + (INTEGER(PWCP) DAYS) - (INTEGER(PWBD) DAYS) THEN 'Y' ELSE 'N' END NOTICE_YN
+						, CASE WHEN DATE(CURRENT DATE) >= (DATE(PW_DAT) + INTEGER(PWCP) DAYS) THEN 'Y' ELSE 'N' END CUT_YN
+						, DATE(PW_DAT) + (INTEGER(PWCP)-1) DAYS CHANGE_DAT
+				   	FROM PSZDBLIB.M_USR_TID
+					) Z
+		 ON Z.USER_ID = A.USER_ID 					
+       LEFT OUTER JOIN PSZDBLIB.M_COM_CDE B
+         ON B.CLASS = 'LIB1'
+   	    AND B.CODE1 = A.COMPANY
+   	    AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE C
+         ON C.CLASS = 'LIB2'
+        AND C.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+	   LEFT OUTER JOIN PSZDBLIB.M_COM_CDE D
+         ON D.CLASS = 'LIB3'
+        AND D.CODE1 = A.PLANT_CD
+        AND B.USER_YN = '1'
+ 	  WHERE A.USER_ID = #{pData}
+ 	    AND A.STATUS = '1'
+	</select>
+	
+	<!-- 로그인 체크 -->
+	<select id="checkLoginHUM" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			BALCD,BSDAT,BEDAT,trim(NAYON) NAYON
+		FROM
+			${LIB3}.HMD250PF
+		WHERE
+			length(trim(translate('${SABUN}',' ','0123456789'))) = 0
+			AND SABUN = #{SABUN}
+			AND SUBSTR(BALCD,1,1) = '2'
+			AND (SELECT (YEAR(CURRENT DATE)*100+MONTH(CURRENT DATE))*100+DAY(CURRENT DATE) FROM SYSIBM.SYSDUMMY1) BETWEEN BSDAT AND BEDAT
+	</select>
+	
+	<!-- 로그인 History 정보 등록 -->
+	<insert id="insertLoginHistory" parameterType="java.util.HashMap">
+		INSERT INTO 
+			PSZDBLIB.M_USR_LOG 
+		VALUES
+			(#{USERID},
+			#{USERPASS},
+			substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2) ||
+			substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+			#{STATUS}
+		)
+	</insert>
+
+</mapper>

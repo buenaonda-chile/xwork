@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PaymentTypeBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PaymentTypeBase" type="PaymentTypeBaseDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="regu" column="REGU" />
+		<result property="regd" column="REGD" />
+		<result property="modu" column="MODU" />
+		<result property="modd" column="MODD" />
+		
+		<result property="oldPyvnd" column="OLD_PYVND" />
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" /> 
+    </resultMap>
+  
+  <select id="searchByCondition" resultMap="PaymentTypeBase" parameterType="PaymentTypeBaseDomain">
+		SELECT
+			COMPS
+			, PYVND
+			, TRIM(PYVND) AS OLD_PYVND
+		FROM
+			PSZDBLIB.SPZ120PF
+		WHERE
+			'SqlMap-PaymentTypeBase.searchByCondition' = 'SqlMap-PaymentTypeBase.searchByCondition'
+		<if test='comps != null and !comps.equalsIgnoreCase("") and !comps.equals("ALL")'>
+			AND COMPS = #{comps}
+		</if> 
+		<if test='pyvnd != null and !pyvnd.equalsIgnoreCase("")'>
+			AND PYVND like #{pyvnd} 
+		</if>
+		ORDER BY PYVND
+  </select>
+  
+  <!-- 検索 SQL文（任意条件 件数取得） -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="PaymentTypeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ120PF
+        WHERE
+        	'SqlMap-PaymentTypeBase.searchCount' = 'SqlMap-PaymentTypeBase.searchCount'
+        AND COMPS = #{comps}
+     	AND   PYVND = #{pyvnd}
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dnkr.domain.PaymentTypeBaseDomain">
+    INSERT INTO PSZDBLIB.SPZ120PF (
+    	/*'SqlMap-PaymentTypeBase.create' = 'SqlMap-PaymentTypeBase.create'*/
+		COMPS
+		, PYVND
+		, REGU
+		, REGD 
+    ) values (
+		#{comps}
+       ,#{pyvnd}
+       ,#{regu}
+       ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    )
+  </insert>
+
+	<!-- 検索 SQL文（任意条件 件数取得） -->
+  <update id="update" parameterType="com.globaldenso.dnkr.domain.PaymentTypeBaseDomain">
+    UPDATE
+    	PSZDBLIB.SPZ120PF  
+    SET
+		PYVND = #{pyvnd}
+		, MODU = #{modu}
+        , MODD = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    WHERE
+    'SqlMap-PaymentTypeBase.update' = 'SqlMap-PaymentTypeBase.update'
+    AND COMPS = #{comps}
+	AND PYVND = #{oldPyvnd}
+  </update>
+  
+<!-- 検索 SQL文（任意条件 件数取得） -->
+  <delete id="delete" parameterType="com.globaldenso.dnkr.domain.PaymentTypeBaseDomain">
+    DELETE
+    FROM
+    	PSZDBLIB.SPZ120PF
+    WHERE
+    'SqlMap-PaymentTypeBase.delete' = 'SqlMap-PaymentTypeBase.delete'
+    AND	COMPS = #{comps}
+    AND PYVND = #{pyvnd}
+  </delete>
+<!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="PaymentTypeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ120PF
+        WHERE
+        'SqlMap-PaymentTypeBase.searchCount2' = 'SqlMap-PaymentTypeBase.searchCount2'
+        AND COMPS = #{comps}
+        AND PYVND = #{oldPyvnd}
+    </select> 
+
+</mapper>

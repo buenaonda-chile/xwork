@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="Chart05" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월생산계획대실적집계표(작업공정별)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_report">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="7" Top="32" Width="1057"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="3" TabOrder="7" Top="34" Width="603"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" Left="403" TabOrder="11" Top="34" Width="106"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static6" Left="239" TabOrder="6" Top="34" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static5" Left="261" Style="static" TabOrder="2" Text="생산년월" Top="39" VAlign="Middle" Width="69"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="3" TabOrder="5" Top="34" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="49" Height="5" Id="Shape3" Left="251" LineColor="#dceaf7" Right="256" TabOrder="1" Top="44" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#888888" Bottom="48" Height="5" Id="Shape1" Left="15" LineColor="#dceaf7" Right="20" TabOrder="3" Top="43" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static21" Left="24" Style="static" TabOrder="4" Text="사업부" Top="40" VAlign="Middle" Width="69"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static2" Left="425" Style="static" TabOrder="10" Text="제품코드" Top="39" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="49" Height="5" Id="Shape0" Left="415" LineColor="#dceaf7" Right="420" TabOrder="9" Top="44" Type="Ellipse" Width="5"></Shape>
+		<Combo Border="Flat" BorderColor="#888888" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="search_comps" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="109" ResetIndex="FIRST" TabOrder="12" Top="35" Width="129"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="13" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="13" Top="8" Width="1032"></Static>
+		<MaskEdit Align="Left" Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="search_prtym" Left="347" Mask="####-##" MaxLength="6" TabOrder="15" Top="36" Type="STRING" Width="54"></MaskEdit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="search_prdcdFrom" Left="510" TabOrder="16" Text="A" Top="36" Width="38"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static7" Left="552" Style="static" TabOrder="17" Text="~" Top="39" VAlign="Middle" Width="8"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="search_prdcdTo" Left="566" TabOrder="18" Text="Z" Top="36" Width="38"></Edit>
+		<Ubi Bottom="584" Height="520" Id="Ubi_mediReport" Left="3" Right="1058" Top="64" Width="1055">
+			<_PersistData>&#13;&#10;/6y/5PB4/wAAAQAKbQAAd741APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김용일
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : Report06.xml
+ * ● PROGRAM DESCRIPTION  : 제품별생산계획대 실적 발행
+ * ● DATE WRITTEN         : 2010.11.24
+----------------------------------------------------------------*/
+
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var CigmaLib = G_ds_user.GetColumn(0,"LIB1");
+
+function on_LoadCompleted(obj){	
+	getTitle();	
+	getComCode();
+	//search_prtym = substr(today(), 0,6);
+	//임시
+	search_prtym = "201007";
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");	
+	http.Sync 	= false;
+}
+
+function getReportList(){
+	var sKind		= "getReportList";						
+	var sMethodName = "service::report/selectReport04.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_report=ds_report";    // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";	
+	
+	//sArgument += " COMPS=" + quote(search_comps.Value);
+	//임시
+	sArgument += " COMPS='C1'";
+	sArgument += " PRTYM=" + quote(search_prtym.Value);
+	sArgument += " PRDCD_FROM=" + quote(search_prdcdFrom.Text);	
+	sArgument += " PRDCD_TO=" + quote(search_prdcdTo.Text);	
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+function loadingReport(){
+	Ubi_mediReport.setJrfFileDir(G_baseURL+"/ui/Group2/report/");
+	Ubi_mediReport.setJrfFileName("rep4.jrf");
+	Ubi_mediReport.SetDataset("ds_report", "ds_report");
+	Ubi_mediReport.Retrieve();
+}
+
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getReportList"){
+		loadingReport();
+		// 조회건수가 없을경우
+		if(ds_menuList.rowcount <= 0){	
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}
+}
+
+
+
+
+// 아래 함수는 콩통함수 이므로 모든 화면에 필요
+
+function fn_Search()
+{
+	getReportList();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Help()
+{
+	
+}
+
+]]></Script>
+</Window>

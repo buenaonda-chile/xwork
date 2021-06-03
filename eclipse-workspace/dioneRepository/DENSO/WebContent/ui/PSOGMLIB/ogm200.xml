@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="ogm200" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="작업개시등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="JISNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="TIMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="JOBCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="KDOWN" size="256" summ="default" type="STRING"/>
+					<colinfo id="PADAT" size="256" summ="default" type="INT"/>
+					<colinfo id="PATIM" size="256" summ="default" type="INT"/>
+					<colinfo id="URDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="URTIM" size="256" summ="default" type="STRING"/>
+					<colinfo id="KSDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="KSTIM" size="256" summ="default" type="STRING"/>
+					<colinfo id="WATHR" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKM1" size="256" summ="default" type="STRING"/>
+					<colinfo id="SDPCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="HYOSN" size="256" summ="default" type="STRING"/>
+					<colinfo id="CNOTE" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200ALL"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_chk"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_method">
+				<Contents>
+					<colimtbPaDatnfo id="jobcd" size="256" summ="default" type="STRING"/>
+					<colinfo id="kogub" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm200_hmd020pf"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm_maxNum"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="560" Id="Static0" TabOrder="31" Top="64" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="17" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="19" Top="31" Width="1060"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="20" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="104" OnChanged="common_OnChanged" TabOrder="2" TabStop="FALSE" Top="36" Width="136"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="8" TabOrder="20" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="8" TabOrder="31" Text="지시&#32;&#32;&#32;&#32;&#32;No" Top="72" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="8" TabOrder="23" Text="설비&#32;&#32;&#32;&#32;&#32;No" Top="108" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static4" Left="8" TabOrder="24" Text="발&#32;생&#32;일&#32;시" Top="144" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="256" TabOrder="25" Text="의&#32;뢰&#32;일&#32;시" Top="144" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="504" TabOrder="26" Text="개&#32;시&#32;일&#32;시" Top="144" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="8" TabOrder="27" Text="현&#32;상&#32;파&#32;악" Top="220" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static8" Left="8" TabOrder="28" Text="비&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;고" Top="416" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static9" Left="504" TabOrder="29" Text="보&#32;전&#32;방&#32;법" Top="108" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static10" Left="8" TabOrder="30" Text="책&#32;&#32;&#32;임&#32;&#32;&#32;자" Top="181" VAlign="Middle" Width="92"></Static>
+		<Edit Enable="FALSE" Height="20" Id="txtjisno" Left="104" MaxLength="15" TabOrder="3" TabStop="FALSE" Top="72" UpperOnly="TRUE" Width="141"></Edit>
+		<Edit Height="20" Id="txtmshno" Left="104" MaxLength="10" OnKeyDown="txtmshno_OnKeyDown" OnKillFocus="txtmshno_OnKillFocus" TabOrder="4" Top="108" UpperOnly="TRUE" UseIME="FALSE" Width="143"></Edit>
+		<Edit Height="20" Id="txtmshnm" Left="304" MaxLength="15" Readonly="TRUE" TabOrder="18" TabStop="FALSE" Top="108" UpperOnly="TRUE" Width="192"></Edit>
+		<Edit Height="20" Id="txtwrkm1" Left="104" MaxLength="7" Number="TRUE" OnKeyDown="txtwrkm1_OnKeyDown" OnKillFocus="txtwrkm1_OnKillFocus" TabOrder="13" Top="181" UpperOnly="TRUE" UseIME="FALSE" Width="136"></Edit>
+		<Edit Enable="FALSE" Height="20" Id="txtkornm" Left="248" MaxLength="15" Readonly="TRUE" TabOrder="14" TabStop="FALSE" Top="181" UpperOnly="TRUE" Width="134"></Edit>
+		<Combo CodeColumn="jobcd" DataColumn="kogub" Height="18" Id="cmbjobcd" InnerDataset="ds_ogm200_method" Left="600" OnChanged="cmbjobcd_OnChanged" TabOrder="6" Top="109" Width="144"></Combo>
+		<Button Height="20" Id="Button0" Left="258" OnClick="ogm200_pop_OnClick" TabOrder="5" Text="▶" Top="108" Width="32"></Button>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="20" Id="mtbKsDat" Left="600" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="11" Top="144" Width="88"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="20" Id="mtbUrDat" Left="352" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="9" Top="144" Width="88"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="20" Id="mtbPaDat" Left="104" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="7" Top="144" Width="88"></Calendar>
+		<TextArea CheckLength="Byte" Height="180" Id="txtcnote" Left="104" MaxLength="60" OnKeyDown="txtcnote_OnKeyDown" OnKillFocus="txtcnote_OnKillFocus" TabOrder="16" Top="416" Width="940"></TextArea>
+		<TextArea CheckLength="Byte" Height="180" Id="txthyosn" Left="104" MaxLength="320" OnKeyDown="txthyosn_OnKeyDown" OnKillFocus="txthyosn_OnKillFocus" TabOrder="15" Top="220" Width="940"></TextArea>
+		<MaskEdit Align="Left" Height="20" Id="mtbKsTim" Left="688" Mask="##시##분" MaxLength="4" OnKillFocus="timeChk_OnKillFocus" TabOrder="12" Top="144" Type="STRING" Width="56"></MaskEdit>
+		<MaskEdit Align="Left" Height="20" Id="mtbUrTim" Left="440" Mask="##시##분" MaxLength="4" OnKillFocus="timeChk_OnKillFocus" TabOrder="10" Top="144" Type="STRING" Width="56"></MaskEdit>
+		<MaskEdit Align="Left" Height="20" Id="mtbPaTim" Left="192" Mask="##시##분" MaxLength="4" OnKillFocus="timeChk_OnKillFocus" TabOrder="8" Top="144" Type="STRING" Width="56"></MaskEdit>
+		<Edit Height="21" Id="lblKdown" Left="928" TabOrder="19" TabStop="FALSE" Top="91" Visible="FALSE" Width="121"></Edit>
+		<Edit Height="21" Id="lblsdpcd" Left="928" TabOrder="19" TabStop="FALSE" Top="112" Visible="FALSE" Width="121"></Edit>
+		<Edit Height="21" Id="lbljisno" Left="928" TabOrder="20" TabStop="FALSE" Top="72" Visible="FALSE" Width="121"></Edit>
+		<Button Height="26" Id="btnClear" ImageID="btn2_indi2" Left="954" OnClick="btnClear_OnClick" TabOrder="34" Text="표시클리어" Top="35" Width="85"></Button>
+		<Edit Height="21" Id="lbldptcd" Left="926" TabOrder="35" TabStop="FALSE" Top="138" Visible="FALSE" Width="121"></Edit>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm200.xml
+ * ● PROGRAM DESCRIPTION  : 작업개시등록
+ * ● DATE WRITTEN         : 2011.08.31
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today(); //날짜
+var nowTime = GetDate(); //시간
+var h=substr(nowTime,8,4); //시
+
+
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+var userNm = G_ds_user.GetColumn(0,"USER_NAME");
+
+var gmshnm;
+var	gprtcd;		
+var	gtimcd;
+var	WatHr;
+var PlantCd;  //지시no 입력시 사업부구분
+
+
+function on_LoadCompleted(obj){
+
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	mtbKsDat.Text =nowDate; //개시날짜
+
+	mtbKsTim.Text =h; //개시시각
+	txtwrkm1.Text =substr(userId,1,7); //책임자ID
+	txtkornm.Text =userNm; //책임자Nm
+	ogm200_jisno(); //지시no
+	getogm200_method();
+	gFcOnTopButtonColor("2.5"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+ 
+function getogm200(){
+	txtmshno_OnKeyDown(txtmshno,13,,,,,,);
+	WatHr="";
+	PlantCd="";
+	cmbjobcd.Value="";
+	lblKdown.Value="";
+	Padat="";
+	mtbPaTim.Value="";
+	UrDat="";
+	mtbUrTim.Value="";
+	WatHr="";
+	lblsdpcd.Value="";
+	txthyosn.Value="";
+	txtcnote.Value="";
+	lbljisno.Value="";
+	on_LoadCompleted();
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+function setogm200(){
+
+	txtmshno.BKColor= "white";
+	txtwrkm1.BKColor= "white";
+	cmbjobcd.BKColor= "white";
+	mtbPaDat.BKColor= "white";
+	mtbUrDat.BKColor= "white";
+	mtbPaTim.BKColor= "white";
+	mtbUrTim.BKColor= "white";
+	mtbKsTim.BKColor= "white";
+	txthyosn.BKColor= "white";	
+	
+	if(!chk_data()){ 
+		alert(setPopMessage("3000"));
+		return;
+	}
+	else {
+		if(!chkTimeData()){
+			return;			
+		}	
+		else{
+			if (length(trim(txtjisno.Text))!="0"){
+				alert("표시클리어 후 저장해주세요.");
+				return;
+			}
+			if(Confirm(setPopMessage("3001"))){
+			getogm_maxNum();
+			//alert("loop===>");
+			var Padat = mtbPaDat.Value;
+			if (Padat == "") Padat = "0";
+		
+			var UrDat = mtbUrDat.Value;
+			if (UrDat == "") UrDat = "0";
+
+			var sKind		= "setogm200";						
+			var sMethodName = "service::psogmlib/saveOGM200.do";     // 서버에서 호출 될 Method 명
+			var sInDataSet  = "";               //자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "";    							     // 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+			//sArgument += " JISNO=" + quote(PlantCd);
+			sArgument += " JISNO=" + quote(txtjisno.Text);
+			sArgument += " TIMCD=" + quote(gtimcd);
+			sArgument += " PRTCD=" + quote(gprtcd);
+			sArgument += " MSHNO=" + quote(txtmshno.Value);
+			sArgument += " JOBCD=" + quote(cmbjobcd.Value);
+			sArgument += " KDOWN=" + quote(lblKdown.Value);
+			sArgument += " PADAT=" + quote(Padat);
+			sArgument += " PATIM=" + quote(mtbPaTim.Value);
+			sArgument += " URDAT=" + quote(UrDat);				
+			sArgument += " URTIM=" + quote(mtbUrTim.Value);
+			sArgument += " KSDAT=" + quote(mtbKsDat.Value);
+			sArgument += " KSTIM=" + quote(mtbKsTim.Value);
+			sArgument += " WATHR=" + quote(WatHr);
+			sArgument += " WRKM1=" + quote(txtwrkm1.Value);
+			sArgument += " SDPCD=" + quote(lblsdpcd.Value);
+			sArgument += " DPTCD=" + quote(lbldptcd.Value);
+			sArgument += " HYOSN=" + quote(txthyosn.Value);
+			sArgument += " CNOTE=" + quote(txtcnote.Value);
+			http.Sync=true;
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+			http.Sync=false;
+			}
+			else{
+				return;
+			}
+		}
+	}
+}	
+
+
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="setogm200"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function chk_data(){
+ 
+	var ret = true;
+	var mshno = GetChild("txtmshno");
+
+	if(mshno.Text.Length==0){
+		mshno.BKColor= "paleturquoise";
+		ret = false;
+	}
+		
+	var wrkm1 = GetChild("txtwrkm1");
+	if(wrkm1.Text.Length==0){
+		wrkm1.BKColor= "paleturquoise";
+		ret = false;
+	}
+	
+	var jobcd = GetChild("cmbjobcd");
+	if(jobcd.Text.Length==0){
+		jobcd.BKColor= "paleturquoise";
+		ret = false;
+	}
+	
+	if(trim(cmbjobcd.Value) == "21" || trim(cmbjobcd.Value) == "22"){
+		var padat = GetChild("mtbPaDat");
+		if(mtbPaDat.Value.Length==0){
+			mtbPaDat.BKColor= "paleturquoise";
+			ret = false;
+		}
+	
+		var urdat = GetChild("mtbUrDat");
+		if(mtbUrDat.Value.Length==0){
+			mtbUrDat.BKColor= "paleturquoise";
+			ret = false;
+		}
+		
+		var patim = GetChild("mtbPaTim");
+		if(mtbPaTim.Value.Length==0){
+			mtbPaTim.BKColor= "paleturquoise";
+			ret = false;
+		}
+	
+		var urtim = GetChild("mtbUrTim");
+		if(mtbUrTim.Value.Length==0){
+			mtbUrTim.BKColor= "paleturquoise";
+			ret = false;
+		}
+	}
+		
+		var kstim = GetChild("mtbKsTim");
+		if(mtbKsTim.Value.Length==0){
+			mtbKsTim.BKColor= "paleturquoise";
+			ret = false;
+		}
+		
+		var hyosn = GetChild("txthyosn");
+		if(hyosn.Text.Length==0){
+			hyosn.BKColor= "paleturquoise";
+			ret = false;
+		}	
+			
+		return ret;
+}	
+/********************************************************************** 
+ * 내용설명 : 시각법칙 위반체크 및 수리대기시간체크
+ **********************************************************************/ 
+function chkTimeData(){
+	//jobcd 가 BM 일경우 시각법칙 위반체크 및 수리대기시간을 구한다.
+	//jobcd 가 PM,CM일 경우 시각체크 안함.
+	if(trim(cmbjobcd.Value) == "21" || trim(cmbjobcd.Value) == "22"){
+
+		if(length(trim(mtbPaDat.Value)) = 0 || length(trim(mtbPaTim.Value)) = 0 ){
+//		if(trim(mtbPaDat.Value) = "" || trim(mtbPaTim.Value) = "" ){
+			alert(setPopMessage("3002"));
+		return false;
+		}
+		if(length(trim(mtbUrDat.Value)) = 0 || length(trim(mtbUrTim.Value)) = 0 ){
+			alert(setPopMessage("3003"));
+		return false;
+		}
+
+		var PaValue = mtbPaDat.Value+mtbPaTim.Value;
+		var UrValue = mtbUrDat.Value+mtbUrTim.Value;
+
+		if(PaValue > UrValue)
+		{
+			alert(setPopMessage("3004"));
+			return false;
+		}
+		
+		if(trim(mtbKsDat.Value) == "" || trim(mtbKsTim.Value) == "")
+		{
+			alert(setPopMessage("3005"));
+			return false;
+		}
+	
+
+		var KsValue = mtbKsDat.Value + mtbKsTim.Value;
+		
+		if(KsValue < UrValue)
+		{
+			alert(setPopMessage("3006"));
+			return false;
+		}
+//		T("KS="+KsValue);
+//		T("Ur="+UrValue);
+//		T("Pa="+PaValue);
+	
+		//수리대기시간을 구한다.
+//		var WatHr = GetWatHr("20"+mtbKsDat.Value,MakeTimeValueTo4digit(mtbKsTim.Value),"20"+mtbUrDat.Value,MakeTimeValueTo4digit(mtbUrTim.Value));
+		WatHr = GetWatHr(mtbKsDat.Value,mtbKsTim.Value,mtbUrDat.Value,mtbUrTim.Value);
+		if(WatHr < 0)
+		{
+			alert(setPopMessage("3013"));
+			return false;
+		}
+	}
+	else
+	{
+		var WatHr = 0;
+	}
+	return true;
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+	var result = true;
+	if(!chk_data()){
+		alert(setPopMessage("3000"));
+		result = false;
+	}
+	else {
+		if(!chkTimeData())
+			result = false;		
+	}	
+	return result;
+}	
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+ /*----------------------------------------------
+저장
+ 
+function setExcel()
+{
+	var fName   = "작업개시등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|Maker관리";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+*/
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_ogm200.DeleteAll();
+	//ds_ogm200ALL.DeleteAll();
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOgm200();
+}
+
+function fn_Input()
+{
+	//if(checkInsertCount("ds_ogm200")== false) return;
+	//ds_ogm200.AddRow();
+}
+
+function fn_Delete()
+{
+	//ds_ogm200.DeleteRow(ds_ogm200.currow);
+}
+
+function fn_Save()
+{
+	setogm200();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.5"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+/********************************************************************** 
+ * 내용설명 : 설비No 체크
+ **********************************************************************/ 
+ 
+
+
+/********************************************************************** 
+ * 내용설명 : 설비No 입력시 asc code 체크
+ **********************************************************************/ 
+function chk_mshno(mshno)
+{
+	var msg = "";
+	for(var i = 0 ; i < mshno.length; i++){
+		var ch =Asc(mshno.CharAt(i));
+
+		switch(i)
+		{
+			case 0:
+			case 1:
+				if((ch < 48) || (ch > 57 && ch < 65) || (ch > 90 && ch < 97) || (ch > 122))
+				{	
+					gmshnm="";
+					gprtcd="";	
+					gtimcd="";
+					txtmshno.Text="";
+					txtmshnm.Text="";
+					msg = "1,2번째자리에는 숫자 또는 영문자가 와야 합니다";
+					return msg;
+				}
+				break;
+			case 2:
+				if((ch != 32 && ch < 65) || (ch > 90 && ch < 97) || (ch > 122))   
+				{
+					gmshnm="";
+					gprtcd="";	
+					gtimcd="";
+					txtmshno.Text="";
+					txtmshnm.Text="";
+					msg = "3번째자리에는 영문자나 공란이 와야 합니다.";
+					return msg;
+				}
+				break;
+			case 3:
+				if(ch != 32)
+				{
+					gmshnm="";
+					gprtcd="";	
+					gtimcd="";
+					txtmshno.Text="";
+					txtmshnm.Text="";
+					msg = "4번째자리는 공란이 와야 합니다.";
+					return msg;
+				}
+				break;
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				if(ch < 48 || ch > 57)
+				{
+					gmshnm="";
+					gprtcd="";	
+					gtimcd="";
+					txtmshno.Text="";
+					txtmshnm.Text="";
+					msg = "5 ~ 8번째짜리까지는 숫자가 와야 합니다.";
+					return msg;
+				}
+				break;
+			case 8:
+			case 9:
+				if((ch != 32 && ch < 48) || (ch  > 57 ))
+				{
+					gmshnm="";
+					gprtcd="";	
+					gtimcd="";
+					txtmshno.Text="";
+					txtmshnm.Text="";
+					msg = "8 ~ 10번째자리까지는 공란이나 숫자가 와야 합니다";
+					return msg;
+				}
+				break;
+			}
+		}
+	return msg;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+ 
+function GetPrtcdTimcdByMshno(comps,mshno)
+{
+	http.Sync = true;
+	var sKind		= "getOgm200_chk";						
+	var sMethodName = "service::psogmlib/selectOgm200_chk.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_chk=ds_ogm200_chk";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " MSHNO=" + quote(trim(txtmshno.value)); //설비No
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+
+/********************************************************************** 
+ * 내용설명 : 보전방법조회
+ **********************************************************************/ 
+ 
+function getogm200_method()
+{
+	var sKind		= "getogm200_method";						
+	var sMethodName = "service::psogmlib/selectOgm200_method.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_method=ds_ogm200_method";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+
+
+
+/********************************************************************** 
+ * 내용설명 : 설비조회 Popup창 생성
+ **********************************************************************/ 
+ 	
+function ogm200_pop_OnClick(obj)
+{
+	var str = dialog("psogmlib::ogm200_pop.xml","설비선택",300,300,"TitleBar=false");
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 보전방법 선택시 시각 및 lblKdown 데이터 입력
+ **********************************************************************/ 
+function cmbjobcd_OnChanged(obj)
+{
+//alert(cmbjobcd.Value);
+	if(trim(cmbjobcd.Value) == "21" || trim(cmbjobcd.Value) == "22"){
+		//모든시각입력 가능하게...
+		mtbPaDat.Enable = true;
+		mtbPaTim.Enable = true;
+		mtbUrDat.Enable = true;
+		mtbUrTim.Enable = true;
+		if (trim(cmbjobcd.Value) == "21")   //기능저하 처리부분
+			lblKdown.Value = "100";
+		else { // 22 사후수리일때
+				//lblKdown.Value = "";
+				lblKdown.Value = "0";
+			}	
+	}		
+	else{
+		//개시시각과 완료시각만 가능하게 한다..
+		mtbPaDat.Enable = false;
+		mtbPaTim.Enable = false;
+		mtbUrDat.Enable = false;
+		mtbUrTim.Enable = false;
+		mtbPaDat.Value="";
+		mtbPaTim.Value="";
+		mtbUrDat.Value="";
+		mtbUrTim.Value="";
+		WatHr=0;
+		if(trim(cmbjobcd.Value) != "21" || trim(cmbjobcd.Value) != "22")		{
+			lblKdown.Value = "0";
+		}
+		else		{
+			//lblKdown.Value = "";
+			lblKdown.Value = "0";
+		}
+		//PopJobCd.visible = false; 필요없음.
+	}
+}
+
+
+
+/********************************************************************** 
+ * 내용설명 : 책임자 조회
+ **********************************************************************/ 
+ 
+function getogm200_hmd020pf(sabun) 
+{
+	var sKind		= "getogm200_hmd020pf";						
+	var sMethodName = "service::psogmlib/selectOgm200_hmd020pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm200_hmd020pf=ds_ogm200_hmd020pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " LIB3=" + quote(Lib3);
+		sArgument += " SABUN=" + sabun; //사번
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+
+/********************************************************************** 
+ * 내용설명 : 시각체크 함수 object로 데이터를 받아 공통으로 사용함.
+ **********************************************************************/ 
+ 
+function timeChk_OnKillFocus(obj){
+//alert(obj.Value);
+	if(length(trim(obj.Value)) != 0){
+		var mtb = substr(obj.Text,0,2)+ substr(obj.Text,3,2);
+
+		obj.Value = ReplaceToZero(mtb);
+		var patim = trim(obj.Value);
+
+		var hour = patim.substr(0,2);
+		var min = patim.substr(2,2);
+
+		if((hour < 00 || hour > 24) || (min < 00 || min > 60)){
+			alert(setPopMessage("3014"));
+			obj.setfocus();
+			obj.Value="";
+		}	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 시각체크 _를 0으로 치환함..
+ **********************************************************************/ 
+function ReplaceToZero(value)
+{	
+	var r=replace(value,"_","0");
+	return(r);
+}
+
+/********************************************************************** 
+ * 내용설명 : 수리대기시간 구함.
+ **********************************************************************/ 
+function GetWatHr(KsDate,KsTime,UrDate,UrTime)
+{
+var GuGan_Start;
+var GuGan_End;
+var GuGan1_Start;
+var GuGan1_End;
+var GuGan2_Start;
+var GuGan2_End;
+			
+	var KsDateValue = KsDate;
+	var KsTimeValue = KsTime;
+	var UrDateValue = UrDate;
+	var UrTimeValue = UrTime;
+	
+	var EndTimeOfDay = "2359";
+	
+	
+	var loopCnt = GetDateDif(KsDate,UrDate);
+	if (loopCnt > 0)
+	{
+		 GuGan1_Start = UrTimeValue;
+		 GuGan1_End = EndTimeOfDay ;
+		 GuGan2_Start = "000";
+		 GuGan2_End = KsTimeValue;	
+	}
+	else
+	{
+		GuGan1_Start = UrTimeValue;
+		GuGan1_End = KsTimeValue;	
+	}
+
+	var DiffValue = 0;
+	
+	for (var index =0; index <= loopCnt; index++)
+	{
+		if((index % 2) == 0)
+		{
+			GuGan_Start = GuGan1_Start;
+			GuGan_End = GuGan1_End;
+		}
+		if ((index % 2) == 1)
+		{
+			GuGan_Start = GuGan2_Start;
+			GuGan_End = GuGan2_End;
+		}
+		if (index > 1)  //하루이상일 경우 하루종일치의 식사시간감안
+		{
+			DiffValue += 140;
+		}
+		if (ParseInt(GuGan_Start) <= 1300 && ParseInt(GuGan_End) >= 1400)
+			DiffValue += 60;
+		if (ParseInt(GuGan_Start) <= 1800 && ParseInt(GuGan_End) >= 1830)
+			DiffValue += 30;
+		if (ParseInt(GuGan_Start) <= 0 && ParseInt(GuGan_End) >= 30)
+			DiffValue += 30;
+		if (ParseInt(GuGan_Start) <= 730 && ParseInt(GuGan_End) >= 750) 
+			DiffValue += 20;
+	}
+	
+	var a = GetDateDif(KsDate,UrDate) * 1440;
+//alert("a==="+a);	
+	var b =  DiffValue;
+//alert("b==="+b);	
+//	if(KsTime.length == 4)
+		var c = ParseInt(KsTime.substr(0,2))*60+ParseInt(KsTime.substr(2,2));
+//		alert("c+++++z="+c);
+//	if(UrTime.length == 4)
+		var d = ParseInt(UrTime.substr(0,2)) * 60 + ParseInt(UrTime.substr(2,2));
+//	else
+//		var d = ParseInt(UrTime.substr(0,1)) * 60 + ParseInt(UrTime.substr(2,2));
+		
+	var Waits_h = ((a+c) - (b+ d))/60;
+//alert("Waits_h"+Waits_h);
+//alert("numFor===" + Round(Waits_h,'1'));
+//	return (Waits_h.toFixed(1));
+	//return (Round(Waits_h,'1'));
+	return (Round(Waits_h,1));
+
+	//return (NumFormat(Waits_h,'1'));
+
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : 날짜사이의 차이 일수를 구하는 함수
+ **********************************************************************/ 
+function GetDateDif(Date1,Date2)
+{
+	//두날짜사이의 차이 일수를 구하는 함수
+	//조건 : Date1 > Date2가 될것
+	if(Date1 == Date2)
+		return 0;
+	else
+	{
+		var DateU=DateTime(Date1.substr(0,4),Date1.substr(4,2),Date1.substr(6,2));
+		var DateL=DateTime(Date2.substr(0,4),Date2.substr(4,2),Date2.substr(6,2));
+
+	var loopCnt=DateU-DateL;
+//alert(loopCnt);
+	return loopCnt;
+	}
+	/*
+		var span = _GetDateTimeSpan(-1,0,0,0);
+		var loopCnt = 0;
+		do
+		{
+			DateU.Plus(span);
+			++loopCnt;
+			var Value1 = _ConvertDateToString(DateU);
+			var Value2 = _ConvertDateToString(DateL);
+		} while (Value1 != Value2)
+		return loopCnt;
+	}
+	*/
+}
+
+function setogm200_chk() {
+
+	if(Confirm(setMessage("3001"))==true){
+		if(txtjisno.Value != "") //지시번호가 있는경우 클리어하고 저장할것 메시지 표시
+			{
+				alert(setPopMessage("3017"));
+				return;
+			}
+		}	
+}
+
+
+function ogm200_jisno(){
+		if(length(txtjisno.Value) == 0)
+			{
+				switch(substr(ComboBoxPlant.Value,0,1))
+				{
+					case "C" :
+						PlantCd = "PC";
+						break;
+					case "H" :
+						PlantCd = "PH";
+						break;
+					case "S" :
+						PlantCd = "PS";
+						break;
+					//ke 추가(2017.01.09)
+					case "E" :
+						PlantCd = "PE";
+						break;
+				}
+			
+		return;
+		}
+}
+
+
+function txtmshno_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar != 13)
+		return;
+	cmbjobcd.SetFocus();
+}
+function txtmshno_OnKillFocus(obj)
+{
+	if(length(txtmshno.Text)==0){
+		return;
+	}
+	txtmshno_chk();
+}
+
+/********************************************************************** 
+ * 내용설명 : 설비번호 확인
+ **********************************************************************/ 
+ function txtmshno_chk(){
+ 
+ 		if(trim(txtmshno.Text) != ""){
+ 		/*
+		var chk = chk_mshno(trim(txtmshno.Text));
+		if(chk != ""){
+			alert(chk);
+			return;
+		}
+		*/
+		//var ret = GetPrtcdTimcdByMshno(comps,trim(txtmshno.text));
+		GetPrtcdTimcdByMshno(comps,trim(txtmshno.text));
+		if(ds_ogm200_chk.GetColCount()==0){
+			alert(setPopMessage("2526"));
+			gmshnm="";
+			gprtcd="";	
+			gtimcd="";
+			txtmshno.Text="";
+			txtmshnm.Text="";
+		}else{
+			gmshnm = ds_ogm200_chk.GetColumn(0,"mshnm");
+			gprtcd = ds_ogm200_chk.GetColumn(0,"prtcd");
+			gtimcd = ds_ogm200_chk.GetColumn(0,"timcd");
+//alert("선택gtimcd==="+gtimcd);
+//alert("선택gprtcd==="+gprtcd);			
+			txtmshnm.Text = gmshnm; 
+			//cmbjobcd.Focus();
+		}
+	}
+	else{
+		alert(setPopMessage("3019"));
+	}
+} 
+/********************************************************************** 
+ * 내용설명 : 책임자 확인 OnKeyDown
+ **********************************************************************/ 
+function txtwrkm1_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar != 13)
+	return;
+	txthyosn.SetFocus();
+//txtkornm.text =""; //초기화
+
+}
+
+/********************************************************************** 
+ * 내용설명 : jisno MAX구하기
+ **********************************************************************/ 
+function getogm_maxNum()
+{
+	var sKind		= "getogm_maxNum";						
+	var sMethodName = "service::psogmlib/selectOgm_maxNum.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm_maxNum=ds_ogm_maxNum";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " PLTCD=" + quote(PlantCd); //사업부
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	txtjisno.Text = PlantCd+(parseInt(trim(ds_ogm_maxNum.GetColumn(0,"autonum")))+1);
+	updateOgm_maxNum();
+}
+//자동체번 테이블에서 max값으로 레코드 저장후 수정된 max값(max+1)을 update해주는 함수
+function updateOgm_maxNum()
+{
+	var sKind		= "insert_next_maxvalue";						
+	var sMethodName = "service::psogmlib/updateOgm_maxNum.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " PLTCD=" + quote(PlantCd); //사업부
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+
+function btnClear_OnClick(obj)
+{
+	txtjisno.Text="";
+	txtmshno.Text="";
+	txtmshnm.Text="";
+	mtbPaDat.Text="";
+	mtbPaTim.Text="";
+	mtbUrDat.Text="";
+	mtbUrTim.Text="";
+	mtbKsDat.Text=nowDate;
+	mtbKsTim.Text=h;
+	lbljisno.Text="";
+	lblKdown.Text="";
+	lblsdpcd.Text="";
+	cmbjobcd.Value="";
+	txtwrkm1.Text =substr(userId,1,7); //책임자ID
+	txtkornm.Text =userNm; //책임자Nm
+	txthyosn.Text="";
+	txtcnote.Text="";
+
+	txtmshno.BKColor= "white";
+	txtwrkm1.BKColor= "white";
+	cmbjobcd.BKColor= "white";
+	mtbPaDat.BKColor= "white";
+	mtbUrDat.BKColor= "white";
+	mtbPaTim.BKColor= "white";
+	mtbUrTim.BKColor= "white";
+	mtbKsTim.BKColor= "white";
+	txthyosn.BKColor= "white";	
+}
+
+function txthyosn_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	var hyosnLength = txthyosn.Text; 
+	if(length(hyosnLength) > 400){  
+		alert("글자수는 400자로 제한됩니다.!");  
+		txthyosn.Text = substr(hyosnLength,0,399);  
+		txthyosn.SetFocus();
+	}  
+}
+
+
+function txtcnote_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	var cnoteLength = txtcnote.Text; 
+	if(length(cnoteLength) > 80){  
+		alert("글자수는 80자로 제한됩니다.!");  
+		txtcnote.Text = substr(cnoteLength,0,79);  
+		txtcnote.SetFocus();
+	}  
+}
+
+
+function txtcnote_OnKillFocus(obj)
+{
+	chkbyte_db2(obj);
+}
+
+function txthyosn_OnKillFocus(obj)
+{
+	chkbyte_db2(obj);
+}
+
+//DB2에서 한글입력시 양쪽에 1byte씩생성됨, 두글자입력시6byte, 한글자입력시 4Byte
+function chkbyte_db2(obj){
+	
+	var chkbyte = 0;
+	var msgVal = obj.Text;
+	var temval = ""; //이전글자 urlEncode값저장.
+	var ch = "";
+	for(var i = 0 ; i < msgVal.length; i++){
+			temval = ch;
+			ch =Asc(msgVal.CharAt(i));
+
+		if(i == (msgVal.length)-1){ //마지막글자인 경우 처리내역
+			if( length(urlEncode(ch)) > 4){//한글일경우
+				if(length(urlEncode(temval)) > 4){//이전글자가 한글이면3바이트
+					chkbyte +=3;
+				}
+				else {//한글이 아닌경우 한글양족에 1바이트씩 총 4바이트
+					chkbyte +=4;
+				}
+			}
+			else{//한글이 아닌경우
+				if(length(urlEncode(temval)) > 4){ //이전이 한글이면 2바이트
+					chkbyte +=2;
+				}
+				else { //이전이 한글이 아니면 1바이트
+					chkbyte++;
+				}
+			}
+		
+		}
+		else{//일반입력시 처리
+			if( length(urlEncode(ch)) > 4){ //한글일경우
+				if(length(urlEncode(temval)) > 4){//이전에도 한글이면 2바이트
+					chkbyte +=2;
+				}
+				else { //이전에 한글이아닌경우 공백으로 1바이트가 추가됨.
+					chkbyte +=3;
+				}
+			}
+			else{//한글이 아닌경우
+				if(length(urlEncode(temval)) > 4){//이전글자가 한글이면 2바이트
+					chkbyte +=2;
+				}
+				else {// 이전글자 및 입력글자 둘다 한글이 아니면 1바이트
+					chkbyte++;
+				}
+			}
+		}
+		if(chkbyte > obj.MaxLength){
+			//alert("total==="+chkbyte);
+			//alert("입력범위"+ obj.MaxLength+"Byte 를 초과했습니다. 초과된 부분은 삭제합니다.");
+			alert(setPopMessage("2561"));
+			var dcVal=substr(obj.Text,0,i);
+			obj.Text = dcVal;
+			break;	
+		}
+	}
+}
+
+function txtwrkm1_OnKillFocus(obj)
+{
+	if(length(txtwrkm1.Text)==0){
+		txtkornm.text ="";
+		return;
+	}
+	getogm200_hmd020pf(trim(txtwrkm1.Text));
+	if(ds_ogm200_hmd020pf.GetColCount()!=0){
+		txtkornm.Text = ds_ogm200_hmd020pf.GetColumn(0,"KORNM");
+	}	
+	else{
+		alert(setPopMessage("3015"));
+		txtwrkm1.Text="";
+		txtkornm.text ="";
+	}
+	lblsdpcd.value = ds_ogm200_hmd020pf.GetColumn(0,"SDPCD");
+	lbldptcd.value = ds_ogm200_hmd020pf.GetColumn(0,"DPTCD");// 20130130
+		
+/*
+	if(txtwrkm1.Text != ""){
+		getogm200_hmd020pf(trim(txtwrkm1.Text));
+		if(ds_ogm200_hmd020pf.GetColCount()!=0){
+			txtkornm.Text = ds_ogm200_hmd020pf.GetColumn(0,"KORNM");
+		}	
+		else{
+			alert(setPopMessage("3015"));
+			txtwrkm1.Text="";
+			txtkornm.text ="";
+		}
+	lblsdpcd.value = ds_ogm200_hmd020pf.GetColumn(0,"SDPCD");
+	}
+	
+	else {
+		alert(setPopMessage("3016"));
+	}
+*/
+	
+}
+]]></Script>
+</Window>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.TopCustTypeMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="TopCustTypeMst" type="TopCustTypeMstDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="carcd" column="CARCD" />
+        <result property="bdycd" column="BDYCD" />
+            
+        <result property="comps1" column="COMPS1" />
+        <result property="pyvnd1" column="PYVND1" />
+        <result property="carcd1" column="CARCD1" />
+        <result property="bdycd1" column="BDYCD1" />
+        <result property="comps2" column="COMPS2" />
+        <result property="pyvnd2" column="PYVND2" />
+        <result property="carcd2" column="CARCD2" />
+        <result property="bdycd2" column="BDYCD2" />
+        
+        <result property="oldComps2" column="OLD_COMPS2" />
+        <result property="oldPyvnd2" column="OLD_PYVND2" />
+        <result property="oldCarcd2" column="OLD_CARCD2" />
+        <result property="oldBdycd2" column="OLD_BDYCD2" />
+        
+        <result property="tflag" column="TFLAG" />
+        <result property="tval" column="TVAL" />
+        <result property="mstsm" column="MSTSM" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="TopCustTypeMst" parameterType="TopCustTypeMstDomain">
+		SELECT
+			COMPS1, PYVND1, CARCD1, BDYCD1, COMPS2, PYVND2, CARCD2, BDYCD2,
+			COMPS2 AS OLD_COMPS2, PYVND2 AS OLD_PYVND2, CARCD2 AS OLD_CARCD2, BDYCD2 AS OLD_BDYCD2
+		FROM 
+			PSZDBLIB.SVZ505PF A 
+		WHERE 
+		      'SqlMap-TopCustTypeMst.searchByCondition' = 'SqlMap-TopCustTypeMst.searchByCondition'	
+		  AND COMPS1 = #{comps}
+		  AND PYVND1 = #{pyvnd}
+		  AND CARCD1 = #{carcd}
+		  AND BDYCD1 = #{bdycd}
+		ORDER BY PYVND2, CARCD2
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="TopCustTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ505PF
+        WHERE 
+             'SqlMap-TopCustTypeMst.searchCount' = 'SqlMap-TopCustTypeMst.searchCount'
+		  AND COMPS1 = #{comps1}
+		  AND PYVND1 = #{pyvnd1}
+		  AND CARCD1 = #{carcd1}
+		  AND BDYCD1 = #{bdycd1}
+		  AND COMPS2 = #{comps2}
+		  AND PYVND2 = #{pyvnd2}
+		  AND CARCD2 = #{carcd2}
+		  AND BDYCD2 = #{bdycd2}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="TopCustTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ505PF
+        WHERE 
+             'SqlMap-TopCustTypeMst.searchCount2' = 'SqlMap-TopCustTypeMst.searchCount2'
+		  AND COMPS1 = #{comps1}
+		  AND PYVND1 = #{pyvnd1}
+		  AND CARCD1 = #{carcd1}
+		  AND BDYCD1 = #{bdycd1}
+		  AND COMPS2 = #{oldComps2}
+		  AND PYVND2 = #{oldPyvnd2}
+		  AND CARCD2 = #{oldCarcd2}
+		  AND BDYCD2 = #{oldBdycd2}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountCUSNO" resultType="java.lang.Integer" parameterType="TopCustTypeMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             ${lib1}.CUSMAS1
+        WHERE 
+             'SqlMap-TopCustTypeMst.searchCountCUSNO' = 'SqlMap-TopCustTypeMst.searchCountCUSNO'										
+          AND CUSNO = #{pyvnd}
+	</select>
+	
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountMST050" resultMap="TopCustTypeMst" parameterType="TopCustTypeMstDomain">
+        SELECT 
+               MSTSM
+        FROM 
+             ${lib2}.MST050PF
+        WHERE 
+             'SqlMap-TopCustTypeMst.searchCountMST050' = 'SqlMap-TopCustTypeMst.searchCountMST050'										
+          AND COMPS = #{comps}
+          
+		<if test='tflag.equals("CAR")'>
+		  AND GRPCD = 'CAR'
+		  AND MSTCD = #{tval}
+		</if>
+		<if test='tflag.equals("BDY")'>
+		  AND GRPCD = 'BDY'
+		  AND MSTCD = #{tval}
+		</if>
+	</select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="TopCustTypeMstDomain">
+        INSERT INTO PSZDBLIB.SVZ505PF (
+                /* SqlMap-TopCustTypeMst.create */
+                COMPS1, PYVND1, CARCD1, BDYCD1, COMPS2, PYVND2, CARCD2, BDYCD2
+        ) values (
+                #{comps1}, #{pyvnd1}, #{carcd1}, #{bdycd1}, #{comps2}, #{pyvnd2}, #{carcd2}, #{bdycd2}
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="TopCustTypeMstDomain">
+        UPDATE 
+               PSZDBLIB.SVZ505PF
+        SET
+            COMPS2 = #{comps2}
+          , PYVND2 = #{pyvnd2}
+          , CARCD2 = #{carcd2}
+          , BDYCD2 = #{bdycd2}
+        WHERE 
+              'SqlMap-TopCustTypeMst.update' = 'SqlMap-TopCustTypeMst.update'
+		  AND COMPS1 = #{comps1}
+		  AND PYVND1 = #{pyvnd1}
+		  AND CARCD1 = #{carcd1}
+		  AND BDYCD1 = #{bdycd1}
+		  AND COMPS2 = #{oldComps2}
+		  AND PYVND2 = #{oldPyvnd2}
+		  AND CARCD2 = #{oldCarcd2}
+		  AND BDYCD2 = #{oldBdycd2}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="TopCustTypeMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVZ505PF
+        WHERE 
+              'SqlMap-TopCustTypeMst.delete' = 'SqlMap-TopCustTypeMst.delete'
+		  AND COMPS1 = #{comps1}
+		  AND PYVND1 = #{pyvnd1}
+		  AND CARCD1 = #{carcd1}
+		  AND BDYCD1 = #{bdycd1}
+		  AND COMPS2 = #{comps2}
+		  AND PYVND2 = #{pyvnd2}
+		  AND CARCD2 = #{carcd2}
+		  AND BDYCD2 = #{bdycd2}
+    </delete>
+
+</mapper>

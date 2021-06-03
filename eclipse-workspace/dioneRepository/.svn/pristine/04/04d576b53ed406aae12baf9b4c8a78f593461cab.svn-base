@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="박스코드정보마스타" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset CanRowPosChange="ds_FACC110_CanRowPosChange" DataSetType="Dataset" Id="ds_FACC110" UseClientLayout="1">
+				<Contents>
+					<colinfo id="BXCOMP" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXBXCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXWDTH" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXLNTH" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXHIHT" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXADID" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXADTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXCHID" size="256" summ="default" type="STRING"/>
+					<colinfo id="BXCHTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FACC110_CHECK"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="4" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="6" Top="8" Width="1032"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FACC110" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="605" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="544" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="529" TabOrder="6" TabStop="true" Top="61" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="529">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="60"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="BOX코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="가로"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="세로"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="높이"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="row+1"/>
+						<cell align="center" checklength="Byte" col="1" colid="BXBXCD" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;uppernum&apos;,&apos;none&apos;)" limit="4" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="2" colid="BXWDTH" display="number" edit="number" limit="5" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="3" colid="BXLNTH" display="number" edit="number" limit="5" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="4" colid="BXHIHT" display="number" edit="number" limit="5" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="727" OnClick="fn_Search" TabOrder="6" Text="조회" Top="34" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button2" ImageID="btn2_add2" Left="810" OnClick="fn_Input" TabOrder="7" Text="추가" Top="34" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="891" OnClick="fn_Save" TabOrder="8" TabStop="FALSE" Text="Button2" Top="34" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="966" OnClick="fn_Delete" TabOrder="8" Text="Button1" Top="34" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="11" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="10" Top="37" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="340" TabOrder="14" Top="34" VAlign="Middle" Width="210"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="13" Text="BOX&#32;&#32;&#32;&#32;코드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" CheckLength="Byte" Height="21" Id="ed_BXBXCD" ImeMode="none" Left="342" MaxLength="4" OnCharChanged="ed_BXBXCD_OnCharChanged" OnKeyDown="ed_BXBXCD_OnKeyDown" TabOrder="12" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Static Height="18" Id="ID03061" Left="439" TabOrder="15" Text="(Enter&#32;KEY&#32;Press)" Top="39" VAlign="Middle" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FACC110.xml
+ * ● PROGRAM DESCRIPTION  : 박스코드정보마스타
+ * ● DATE WRITTEN         : 2013.06.05
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //조회, 추가, 저장
+	getComCode(); //공장구분 선택
+	//ed_BXBXCD.Text="PA32";
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getFACC110(){
+
+	var sKind		= "getFACC110";						
+	var sMethodName = "service::psfaclib/selectFACC110.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FACC110=ds_FACC110";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		//sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@BXBXCD=" + quote(ed_BXBXCD.Text); //BOX코드
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/  
+function setFACC110(){
+
+	if(ds_FACC110.GetRowType(ds_FACC110.currow)=="update" ||ds_FACC110.GetRowType(ds_FACC110.currow)=="insert" ){
+		if(!ds_FACC110_CanRowPosChange()){
+			return;
+		}
+	} 
+
+	var sKind		= "setFACC110";						
+	var sMethodName = "service::psfaclib/saveFACC110.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_FACC110=ds_FACC110:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FACC110_CHECK=ds_FACC110_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " SUSER=" + quote(userId); //사용자
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_FACC110_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_FACC110_CHECK.GetRowCount();i++){
+			alert("BOX코드 : " +ds_FACC110_CHECK.GetColumn(i,"BXBXCD") + " = " + ds_FACC110_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getFACC110();  //error항목이 존재시에는 재조회
+		return;
+	}// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FACC110.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "박스코드정보마스타";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|박스코드정보마스타";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != -1) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getFACC110();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_FACC110")== false) return;
+	if(ds_FACC110.rowcount < 1) fn_Search();  
+	ds_FACC110.AddRow();
+	ds_FACC110.SetColumn(ds_FACC110.currow,"BXCOMP",ComboBoxPlant.Value);
+	ds_FACC110.SetColumn(ds_FACC110.currow,"BXADID",userId);
+}
+
+function fn_Delete()
+{
+	if(ds_FACC110.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_FACC110.DeleteRow(ds_FACC110.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setFACC110();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+function ds_FACC110_CanRowPosChange(obj,nOldRow,nRow)
+{
+	var result=true;
+	if(ds_FACC110.GetRowType(ds_FACC110.currow)=="update" ||ds_FACC110.GetRowType(ds_FACC110.currow)=="insert" ){
+		var bxcd=ds_FACC110.GetColumn(ds_FACC110.currow,"BXBXCD");
+		var wdth=ds_FACC110.GetColumn(ds_FACC110.currow,"BXWDTH");
+		var lnth=ds_FACC110.GetColumn(ds_FACC110.currow,"BXLNTH");
+		var hiht=ds_FACC110.GetColumn(ds_FACC110.currow,"BXHIHT");
+
+		if(length(bxcd)!=0){
+			if(length(wdth)==0 || wdth<1){
+				alert(setPopMessage("6007"));//[알림]가로길이를 입력하세요.
+				setMessage("6007");
+				result=false;
+			}else if(length(lnth)==0 || lnth<1){
+				alert(setPopMessage("6008"));//[알림]세로길이를 입력하세요.
+				setMessage("6008");
+				result=false;
+			}else if(length(hiht)==0 || hiht<1){
+				alert(setPopMessage("6009"));//[알림]높이를 입력하세요.
+				setMessage("6009");
+				result=false;
+			}
+		}		
+	return result;		
+	}
+}
+
+function ed_BXBXCD_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+
+function ed_BXBXCD_OnCharChanged(obj,strPreText,strPostText)
+{
+	ds_FACC110.ClearData();
+}
+]]></Script>
+</Window>

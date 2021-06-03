@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="경비예산&#32;계획대실적&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT">
+				<Contents>
+					<colinfo id="CODE2" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_yyyy">
+				<Contents>
+					<colinfo id="yyyy" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ239Q1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_GUB">
+				<Contents>
+					<colinfo id="CODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="CODE_NAME" size="256" summ="default" type="STRING"/>
+					<record>
+						<CODE>P0</CODE>
+						<CODE_NAME>년계획</CODE_NAME>
+					</record>
+					<record>
+						<CODE>P1</CODE>
+						<CODE_NAME>수정계획</CODE_NAME>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST650PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MIZZ239Q1_C"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="34" Id="searchBar" TabOrder="4" Top="30" Width="1060"></Static>
+		<Button Height="24" Id="btnExcel" ImageID="sum_excel" Left="981" OnClick="fn_Excel" TabOrder="4" Text="추가" Top="2" Visible="FALSE" Width="70"></Button>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="897" OnClick="fn_Search" TabOrder="4" Text="조회" Top="2" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="6" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="7" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="ComboBoxPlant_OnChanged" TabOrder="6" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static2" Left="232" TabOrder="9" Text="년&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="348" Style="static" TabOrder="9" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="460" TabOrder="11" Text="상하반기&#32;구분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static5" Left="576" Style="static" TabOrder="12" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="CODE" DataColumn="CODE_NAME" Height="19" Id="cmb_CATGB" INDEX="0" InnerDataset="ds_GUB" Left="580" OnChanged="cmb_CATGB_OnChanged" TabOrder="13" Top="37" Width="88"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static9" Left="688" TabOrder="14" Text="부&#32;서&#32;선&#32;택" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static10" Left="804" Style="static" TabOrder="15" Top="34" VAlign="Middle" Width="96"></Static>
+		<Edit Height="19" Id="ed_DPTCD" Left="808" MaxLength="4" Number="TRUE" OnChanged="ed_DPTCD_OnChanged" TabOrder="16" Top="38" Width="88"></Edit>
+		<Static Height="18" Id="st_DPTCD" Left="906" TabOrder="17" Top="39" VAlign="Middle" Width="150"></Static>
+		<Pie Height="2" Id="Pie0" Left="906" LineColor="SCROLLBAR" TabOrder="18" Top="58" Width="149"></Pie>
+		<Grid AreaSelect="TRUE" AutoEnter="TRUE" AutoFitEndLine="Hide" BindDataset="ds_MIZZ239Q1" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="614" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="552" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="MainGrid_OnHeadClick" Right="1056" SelColor="black" TabOrder="19" TabStop="true" Top="62" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="30"/>
+						<col fix="left" width="117"/>
+						<col fix="left" width="63"/>
+						<col fix="left" width="96"/>
+						<col fix="left" width="120"/>
+						<col fix="left" width="131"/>
+						<col fix="left" width="45"/>
+						<col fix="left" width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="162"/>
+					</columns>
+					<head>
+						<cell align="center" bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="NO" Valign="Center"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="계정명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="항목코드"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="항목명1"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="항목명2"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="항목명3"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="누적금액"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="4월금액"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="5월금액"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="6월금액"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="7월금액"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="8월금액"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" text="9월금액"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" text="10월금액"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" text="11월금액"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" display="text" text="12월금액"/>
+						<cell bkcolor="#dfdfdf" col="17" color="#002043" display="text" text="1월금액"/>
+						<cell bkcolor="#dfdfdf" col="18" color="#002043" display="text" text="2월금액"/>
+						<cell bkcolor="#dfdfdf" col="19" color="#002043" display="text" text="3월금액"/>
+						<cell bkcolor="#dfdfdf" col="20" color="#002043" display="text" text="합계"/>
+					</head>
+					<body>
+						<cell align="right" col="0" color="#333333" display="normal" expr="row+1" rowspan="2"/>
+						<cell align="left" checklength="Byte" col="1" colid="GMDL01" color="#333333" display="normal" limit="6" LimitDec="0" rowspan="2"/>
+						<cell align="center" checklength="Byte" col="2" colid="CATNO" color="#333333" display="normal" limit="6" LimitDec="0" rowspan="2"/>
+						<cell align="left" checklength="Byte" col="3" colid="CATNM1" color="#333333" display="normal" limit="40" rowspan="2" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="4" colid="CATNM2" color="#333333" display="normal" limit="40" rowspan="2"/>
+						<cell align="left" checklength="Byte" col="5" colid="CATNM3" color="#333333" display="normal" limit="40" rowspan="2"/>
+						<cell align="center" bkcolor="MENU" checklength="Byte" col="6" color="#333333" display="normal" limit="8" LimitDec="0" text="계획"/>
+						<cell align="center" bkcolor="LIGHT3D" checklength="Byte" col="6" color="#333333" display="normal" limit="13" LimitDec="0" row="1" text="실적"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="7" color="#333333" display="number" expr='subTotal(&quot;P0&quot;,row)' limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="8" colid="P0_AMT04" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="9" colid="P0_AMT05" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="10" colid="P0_AMT06" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="11" colid="P0_AMT07" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="12" colid="P0_AMT08" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="13" colid="P0_AMT09" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="14" colid="P0_AMT10" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="15" colid="P0_AMT11" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="16" colid="P0_AMT12" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="17" colid="P0_AMT01" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="18" colid="P0_AMT02" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="19" colid="P0_AMT03" color="#333333" display="number" limit="8" LimitDec="0"/>
+						<cell align="right" bkcolor="MENU" checklength="Byte" col="20" color="#333333" display="number" expr="toNumber(P0_AMT04)+toNumber(P0_AMT05)+toNumber(P0_AMT06)+toNumber(P0_AMT07)+toNumber(P0_AMT08)+toNumber(P0_AMT09)+toNumber(P0_AMT10)+toNumber(P0_AMT11)+toNumber(P0_AMT12)+toNumber(P0_AMT01)+toNumber(P0_AMT02)+toNumber(P0_AMT03)" limit="20"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="7" color="#333333" display="number" expr='subTotal(&quot;A0&quot;,row)' limit="13" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="8" colid="AMT04" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="9" colid="AMT05" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="10" colid="AMT06" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="11" colid="AMT07" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="12" colid="AMT08" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="13" colid="AMT09" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="14" colid="AMT10" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="15" colid="AMT11" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="16" colid="AMT12" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="17" colid="AMT01" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="18" colid="AMT02" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="19" colid="AMT03" color="#333333" display="number" limit="9" LimitDec="0" row="1"/>
+						<cell align="right" bkcolor="LIGHT3D" checklength="Byte" col="20" color="#333333" display="number" expr="toNumber(AMT04)+toNumber(AMT05)+toNumber(AMT06)+toNumber(AMT07)+toNumber(AMT08)+toNumber(AMT09)+toNumber(AMT10)+toNumber(AMT11)+toNumber(AMT12)+toNumber(AMT01)+toNumber(AMT02)+toNumber(AMT03)" limit="20" row="1"/>
+					</body>
+					<summary>
+						<cell col="0" display="text" rowspan="3"/>
+						<cell align="right" col="1" colspan="5" display="text" font="Default,12,Bold" rowspan="3" text="Total&#32;&#32;"/>
+						<cell align="center" col="6" display="text" text="계획"/>
+						<cell align="right" col="7" display="number" expr='subTotalSUM(&quot;P0&quot;,row)'/>
+						<cell align="right" col="8" display="number" expr="SUM(&apos;P0_AMT04&apos;)"/>
+						<cell align="right" col="9" display="number" expr="SUM(&apos;P0_AMT05&apos;)"/>
+						<cell align="right" col="10" display="number" expr="SUM(&apos;P0_AMT06&apos;)"/>
+						<cell align="right" col="11" display="number" expr="SUM(&apos;P0_AMT07&apos;)"/>
+						<cell align="right" col="12" display="number" expr="SUM(&apos;P0_AMT08&apos;)"/>
+						<cell align="right" col="13" display="number" expr="SUM(&apos;P0_AMT09&apos;)"/>
+						<cell align="right" col="14" display="number" expr="SUM(&apos;P0_AMT10&apos;)"/>
+						<cell align="right" col="15" display="number" expr="SUM(&apos;P0_AMT11&apos;)"/>
+						<cell align="right" col="16" display="number" expr="SUM(&apos;P0_AMT12&apos;)"/>
+						<cell align="right" col="17" display="number" expr="SUM(&apos;P0_AMT01&apos;)"/>
+						<cell align="right" col="18" display="number" expr="SUM(&apos;P0_AMT02&apos;)"/>
+						<cell align="right" col="19" display="number" expr="SUM(&apos;P0_AMT03&apos;)"/>
+						<cell align="right" col="20" display="number" expr="sum(&apos;P0_AMT04&apos;)+sum(&apos;P0_AMT05&apos;)+sum(&apos;P0_AMT06&apos;)+sum(&apos;P0_AMT07&apos;)+sum(&apos;P0_AMT08&apos;)+sum(&apos;P0_AMT09&apos;)+sum(&apos;P0_AMT10&apos;)+sum(&apos;P0_AMT11&apos;)+sum(&apos;P0_AMT12&apos;)+sum(&apos;P0_AMT01&apos;)+sum(&apos;P0_AMT02&apos;)+sum(&apos;P0_AMT03&apos;)"/>
+						<cell align="center" col="6" display="text" row="1" text="실적"/>
+						<cell align="right" col="7" display="number" expr='subTotalSUM(&quot;A0&quot;,row)' row="1"/>
+						<cell align="right" col="8" display="number" expr="SUM(&apos;AMT04&apos;)" row="1"/>
+						<cell align="right" col="9" display="number" expr="SUM(&apos;AMT05&apos;)" row="1"/>
+						<cell align="right" col="10" display="number" expr="SUM(&apos;AMT06&apos;)" row="1"/>
+						<cell align="right" col="11" display="number" expr="SUM(&apos;AMT07&apos;)" row="1"/>
+						<cell align="right" col="12" display="number" expr="SUM(&apos;AMT08&apos;)" row="1"/>
+						<cell align="right" col="13" display="number" expr="SUM(&apos;AMT09&apos;)" row="1"/>
+						<cell align="right" col="14" display="number" expr="SUM(&apos;AMT10&apos;)" row="1"/>
+						<cell align="right" col="15" display="number" expr="SUM(&apos;AMT11&apos;)" row="1"/>
+						<cell align="right" col="16" display="number" expr="SUM(&apos;AMT12&apos;)" row="1"/>
+						<cell align="right" col="17" display="number" expr="SUM(&apos;AMT01&apos;)" row="1"/>
+						<cell align="right" col="18" display="number" expr="SUM(&apos;AMT02&apos;)" row="1"/>
+						<cell align="right" col="19" display="number" expr="SUM(&apos;AMT03&apos;)" row="1"/>
+						<cell align="right" col="20" display="number" expr="sum(&apos;AMT04&apos;)+sum(&apos;AMT05&apos;)+sum(&apos;AMT06&apos;)+sum(&apos;AMT07&apos;)+sum(&apos;AMT08&apos;)+sum(&apos;AMT09&apos;)+sum(&apos;AMT10&apos;)+sum(&apos;AMT11&apos;)+sum(&apos;AMT12&apos;)+sum(&apos;AMT01&apos;)+sum(&apos;AMT02&apos;)+sum(&apos;AMT03&apos;)" row="1"/>
+						<cell align="center" col="6" display="text" row="2" text="차이"/>
+						<cell align="right" col="7" display="number" expr="subTotalCHA()" row="2"/>
+						<cell align="right" col="8" display="number" expr="SUM(&apos;P0_AMT04&apos;)-SUM(&apos;AMT04&apos;)" row="2"/>
+						<cell align="right" col="9" display="number" expr="SUM(&apos;P0_AMT05&apos;)-SUM(&apos;AMT05&apos;)" row="2"/>
+						<cell align="right" col="10" display="number" expr="SUM(&apos;P0_AMT06&apos;)-SUM(&apos;AMT06&apos;)" row="2"/>
+						<cell align="right" col="11" display="number" expr="SUM(&apos;P0_AMT07&apos;)-SUM(&apos;AMT07&apos;)" row="2"/>
+						<cell align="right" col="12" display="number" expr="SUM(&apos;P0_AMT08&apos;)-SUM(&apos;AMT08&apos;)" row="2"/>
+						<cell align="right" col="13" display="number" expr="SUM(&apos;P0_AMT09&apos;)-SUM(&apos;AMT09&apos;)" row="2"/>
+						<cell align="right" col="14" display="number" expr="SUM(&apos;P0_AMT10&apos;)-SUM(&apos;AMT10&apos;)" row="2"/>
+						<cell align="right" col="15" display="number" expr="SUM(&apos;P0_AMT11&apos;)-SUM(&apos;AMT11&apos;)" row="2"/>
+						<cell align="right" col="16" display="number" expr="SUM(&apos;P0_AMT12&apos;)-SUM(&apos;AMT12&apos;)" row="2"/>
+						<cell align="right" col="17" display="number" expr="SUM(&apos;P0_AMT01&apos;)-SUM(&apos;AMT01&apos;)" row="2"/>
+						<cell align="right" col="18" display="number" expr="SUM(&apos;P0_AMT02&apos;)-SUM(&apos;AMT02&apos;)" row="2"/>
+						<cell align="right" col="19" display="number" expr="SUM(&apos;P0_AMT03&apos;)-SUM(&apos;AMT03&apos;)" row="2"/>
+						<cell align="right" col="20" display="number" expr="(sum(&apos;P0_AMT04&apos;)+sum(&apos;P0_AMT05&apos;)+sum(&apos;P0_AMT06&apos;)+sum(&apos;P0_AMT07&apos;)+sum(&apos;P0_AMT08&apos;)+sum(&apos;P0_AMT09&apos;)+sum(&apos;P0_AMT10&apos;)+sum(&apos;P0_AMT11&apos;)+sum(&apos;P0_AMT12&apos;)+sum(&apos;P0_AMT01&apos;)+sum(&apos;P0_AMT02&apos;)+sum(&apos;P0_AMT03&apos;))-(sum(&apos;AMT04&apos;)+sum(&apos;AMT05&apos;)+sum(&apos;AMT06&apos;)+sum(&apos;AMT07&apos;)+sum(&apos;AMT08&apos;)+sum(&apos;AMT09&apos;)+sum(&apos;AMT10&apos;)+sum(&apos;AMT11&apos;)+sum(&apos;AMT12&apos;)+sum(&apos;AMT01&apos;)+sum(&apos;AMT02&apos;)+sum(&apos;AMT03&apos;))" row="2"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Calendar Dateformat="yyyy-MM" Height="19" Id="cal_YYMM" Left="352" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="20" Top="37" Value="TODAY" Width="88"></Calendar>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : LSK
+ * @@see
+ * ● SYSTEM NAME          : Denso Platform
+ * ● PROGRAM NO.          : MIZZ239Q1.xml
+ * ● PROGRAM DESCRIPTION  : 경비예산 증감현황
+ * ● DATE WRITTEN         : 2016.06.23
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();	
+
+	//cal_YYMM.Value = substr(nowDate,0,6);
+
+	gFcOnTopButtonColor("1"); 
+	
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "9999";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+}
+
+function getComCode(){
+	setCompsName(ds_ComCode_PLNT);
+	//ds_ComCode_PLNT.InsertRow(0);
+	//ds_ComCode_PLNT.SetColumn(0,"CODE2","");
+	//ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	ComboBoxPlant.Value=comps;
+}
+
+function getCategory(){
+	
+	var sKind		= "getCategory";						
+	var sMethodName = "service::budget/getCategoryList"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_Category=ds_Category";
+	var sArgument   = "";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ds_Category.InsertRow(0);
+	ds_Category.SetColumn(0,"CD","");
+	ds_Category.SetColumn(0,"CDNM","[전체]");
+	cmb_Category.index = 0;	
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	//MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	//MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getMIZZ239Q1(){
+	
+	MainGrid.SetCellProp("Head", 7, "text", "~ " + substr(cal_YYMM.Value,4,2)+"월 누계");
+	var tyyyy = toNumber(substr(cal_YYMM.Value,0,4));
+	var mm = toNumber(substr(cal_YYMM.Value,4,2));
+	var yyyy;
+	if (mm<04){
+		yyyy = tyyyy-1;
+	}else{
+		yyyy = tyyyy;
+	}
+	var groupcomp;
+	var LIB99;
+	if(ComboBoxPlant.Value == "E1"){
+		groupcomp = "PE"; LIB99="CLTDTAE";
+	}else if(ComboBoxPlant.Value == "C1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "H1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "S1"){
+		groupcomp = "PS"; LIB99="CLTDTAS";
+	}else if(ComboBoxPlant.Value == "R1"){
+		groupcomp = "KR"; LIB99="CLTDTAE";
+	}else{
+		groupcomp = "";
+	}
+	
+	http.Sync = true;
+	var sKind		= "getMIZZ239Q1";						
+	var sMethodName = "service::budget/getMIZZ239Q1List";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_MIZZ239Q1=ds_MIZZ239Q1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument += " CATYY=" + quote(yyyy);
+		sArgument += " CATGB=" + quote(cmb_CATGB.Value);      //P0:상반기예산  P1:하반기예산 
+		sArgument += " DPTCD=" + quote(ed_DPTCD.Text);  // 부서코드
+		sArgument += " GRCOM=" + quote(groupcomp);
+		sArgument += " LIB99=" + quote(LIB99);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	
+	/*
+	var str = dialog("Common::PGMLOAD_SHIP.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	*/
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName;
+	if(cmb_CATGB.Value == "P0"){
+		fName   = "년계 계획대실적_"+substr(cal_YYMM.Value,0,6);
+	}else{
+		fName   = "수계 계획대실적_"+substr(cal_YYMM.Value,0,6);
+	}
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|계획대실적";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	alert(nCell);
+	//if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_MIZZ239Q1.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getMIZZ239Q1();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setMIZZ239Q1();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1");
+}
+
+function ed_DPTCD_OnChanged(obj,strText)
+{
+	if(length(trim(strText)) == 4){
+		var Lib9="";
+		if(ComboBoxPlant.Value == "E1"){
+			Lib9="PSEDBLIB";
+		}else if(ComboBoxPlant.Value == "R1"){
+			Lib9="PSRDBLIB";
+		}else{
+			Lib9="PSCDBLIB";
+		}
+		var sKind		= "getMST650PFList";						
+		var sMethodName = "service::budget/getMST650PFList"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_MST650PF=ds_MST650PF";
+		var sArgument   = "";
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+			sArgument += " LIB9=" + quote(Lib9);
+			sArgument += " DPTCD=" + quote(strText);
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+		if(ds_MST650PF.rowcount > 0){
+			st_DPTCD = ds_MST650PF.GetColumn(0,"DPDPNM");
+			ds_MIZZ239Q1.ClearData();
+		}else{
+			st_DPTCD = "";
+			alert("[경고] 부서코드를 확인바랍니다."); 
+			return;
+		}
+	}else{
+		st_DPTCD = "";
+	}
+}
+
+function ComboBoxPlant_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MST650PF.ClearData();
+	if(ComboBoxPlant.Value == "E1"){
+		ed_DPTCD.Text = "1700";
+	}else if(ComboBoxPlant.Value == "C1"){
+		ed_DPTCD.Text = "3004";
+	}else if(ComboBoxPlant.Value == "H1"){
+		ed_DPTCD.Text = "3286";
+	}else if(ComboBoxPlant.Value == "S1"){
+		ed_DPTCD.Text = "2204";
+	}else{
+		ed_DPTCD.Text = "9999";
+	}
+	ed_DPTCD_OnChanged(ed_DPTCD,ed_DPTCD.Text);
+	ds_MIZZ239Q1.ClearData();
+}
+function cmb_CATGB_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MIZZ239Q1.ClearData();
+}
+
+function cmb_yyyy_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_MIZZ239Q1.ClearData();
+}
+
+function subTotal(gub,row){
+	var retv = 0;
+	//var row = ds_MIZZ239Q1.currow;
+	var t04 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT04")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT04")));
+	var t05 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT05")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT05")));
+	var t06 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT06")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT06")));
+	var t07 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT07")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT07")));
+	var t08 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT08")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT08")));
+	var t09 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT09")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT09")));
+	var t10 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT10")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT10")));
+	var t11 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT11")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT11")));
+	var t12 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT12")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT12")));
+	var t01 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT01")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT01")));
+	var t02 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT02")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT02")));
+	var t03 = iif(gub="P0",toNumber(ds_MIZZ239Q1.GetColumn(row,"P0_AMT03")),toNumber(ds_MIZZ239Q1.GetColumn(row,"AMT03")));
+	switch (substr(cal_YYMM.Value,4,2)){
+	case "04":
+		retv=t04;break;
+	case "05":
+		retv=t04+t05;break;
+	case "06":
+		retv=t04+t05+t06;break;
+	case "07":
+		retv=t04+t05+t06+t07;break;
+	case "08":
+		retv=t04+t05+t06+t07+t08;break;
+	case "09":
+		retv=t04+t05+t06+t07+t08+t09;break;
+	case "10":
+		retv=t04+t05+t06+t07+t08+t09+t10;break;
+	case "11":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11;break;
+	case "12":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12;break;
+	case "01":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01;break;
+	case "02":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02;break;
+	case "03":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02+t03;break;
+	}
+	return retv;
+} 
+function subTotalSUM(gub,row){
+	var retv = 0;
+	//var row = ds_MIZZ239Q1.currow;
+	var t04 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT04")),toNumber(ds_MIZZ239Q1.sum("AMT04")));
+	var t05 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT05")),toNumber(ds_MIZZ239Q1.sum("AMT05")));
+	var t06 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT06")),toNumber(ds_MIZZ239Q1.sum("AMT06")));
+	var t07 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT07")),toNumber(ds_MIZZ239Q1.sum("AMT07")));
+	var t08 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT08")),toNumber(ds_MIZZ239Q1.sum("AMT08")));
+	var t09 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT09")),toNumber(ds_MIZZ239Q1.sum("AMT09")));
+	var t10 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT10")),toNumber(ds_MIZZ239Q1.sum("AMT10")));
+	var t11 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT11")),toNumber(ds_MIZZ239Q1.sum("AMT11")));
+	var t12 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT12")),toNumber(ds_MIZZ239Q1.sum("AMT12")));
+	var t01 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT01")),toNumber(ds_MIZZ239Q1.sum("AMT01")));
+	var t02 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT02")),toNumber(ds_MIZZ239Q1.sum("AMT02")));
+	var t03 = iif(gub="P0",toNumber(ds_MIZZ239Q1.sum("P0_AMT03")),toNumber(ds_MIZZ239Q1.sum("AMT03")));
+	switch (substr(cal_YYMM.Value,4,2)){
+	case "04":
+		retv=t04;break;
+	case "05":
+		retv=t04+t05;break;
+	case "06":
+		retv=t04+t05+t06;break;
+	case "07":
+		retv=t04+t05+t06+t07;break;
+	case "08":
+		retv=t04+t05+t06+t07+t08;break;
+	case "09":
+		retv=t04+t05+t06+t07+t08+t09;break;
+	case "10":
+		retv=t04+t05+t06+t07+t08+t09+t10;break;
+	case "11":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11;break;
+	case "12":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12;break;
+	case "01":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01;break;
+	case "02":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02;break;
+	case "03":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02+t03;break;
+	}
+	return retv;
+}
+
+function subTotalCHA(){
+	var retv = 0;
+	//var row = ds_MIZZ239Q1.currow;
+	var t04 = toNumber(ds_MIZZ239Q1.sum("P0_AMT04")) - toNumber(ds_MIZZ239Q1.sum("AMT04"));
+	var t05 = toNumber(ds_MIZZ239Q1.sum("P0_AMT05")) - toNumber(ds_MIZZ239Q1.sum("AMT05"));
+	var t06 = toNumber(ds_MIZZ239Q1.sum("P0_AMT06")) - toNumber(ds_MIZZ239Q1.sum("AMT06"));
+	var t07 = toNumber(ds_MIZZ239Q1.sum("P0_AMT07")) - toNumber(ds_MIZZ239Q1.sum("AMT07"));
+	var t08 = toNumber(ds_MIZZ239Q1.sum("P0_AMT08")) - toNumber(ds_MIZZ239Q1.sum("AMT08"));
+	var t09 = toNumber(ds_MIZZ239Q1.sum("P0_AMT09")) - toNumber(ds_MIZZ239Q1.sum("AMT09"));
+	var t10 = toNumber(ds_MIZZ239Q1.sum("P0_AMT10")) - toNumber(ds_MIZZ239Q1.sum("AMT10"));
+	var t11 = toNumber(ds_MIZZ239Q1.sum("P0_AMT11")) - toNumber(ds_MIZZ239Q1.sum("AMT11"));
+	var t12 = toNumber(ds_MIZZ239Q1.sum("P0_AMT12")) - toNumber(ds_MIZZ239Q1.sum("AMT12"));
+	var t01 = toNumber(ds_MIZZ239Q1.sum("P0_AMT01")) - toNumber(ds_MIZZ239Q1.sum("AMT01"));
+	var t02 = toNumber(ds_MIZZ239Q1.sum("P0_AMT02")) - toNumber(ds_MIZZ239Q1.sum("AMT02"));
+	var t03 = toNumber(ds_MIZZ239Q1.sum("P0_AMT03")) - toNumber(ds_MIZZ239Q1.sum("AMT03"));
+	switch (substr(cal_YYMM.Value,4,2)){
+	case "04":
+		retv=t04;break;
+	case "05":
+		retv=t04+t05;break;
+	case "06":
+		retv=t04+t05+t06;break;
+	case "07":
+		retv=t04+t05+t06+t07;break;
+	case "08":
+		retv=t04+t05+t06+t07+t08;break;
+	case "09":
+		retv=t04+t05+t06+t07+t08+t09;break;
+	case "10":
+		retv=t04+t05+t06+t07+t08+t09+t10;break;
+	case "11":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11;break;
+	case "12":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12;break;
+	case "01":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01;break;
+	case "02":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02;break;
+	case "03":
+		retv=t04+t05+t06+t07+t08+t09+t10+t11+t12+t01+t02+t03;break;
+	}
+	return retv;
+}]]></Script>
+</Window>

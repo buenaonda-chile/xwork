@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spread Validation Demo</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link href="./css/gc.spread.sheets.css" rel="stylesheet" type="text/css" />
+  <script src="./js/jquery.js"></script>
+  <script src="./js/gc.spread.sheets.all.min.js"></script>
+  <script src="https://www.grapecity.com/spreadjs/demos/spread/source/data/data.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+  <div class="container p-3">
+    <div class="row border border-danger">
+      <div class="col w-100">
+        <div id="ss" style="width:100%;height:400px;"></div>
+      </div>
+    </div>
+    <div class="row mt-3 border border-dark">
+      <div class="col w-100">
+        <button id="btnValidation">Validation 적용</button>
+        <button id="btnInitValidation">Validation 초기화</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript">
+  function InputCellType(maxLength) {
+    this.maxLength = maxLength;
+  }
+  InputCellType.prototype = new GC.Spread.Sheets.CellTypes.Base();
+  InputCellType.prototype.paint = function (ctx, value, x, y, w, h, style, context) {
+    console.log("paint")
+    if (value) {
+      GC.Spread.Sheets.CellTypes.Base.prototype.paint.apply(this, [ctx, value, x, y, w, h, style, context]);
+    }
+  };
+
+  InputCellType.prototype.updateEditor = function (editorContext, cellStyle, cellRect, context) {
+    console.log("updateEditor");
+    if (editorContext) {
+      $(editorContext).width(cellRect.width);
+      $(editorContext).height(25);
+    }
+  };
+
+  InputCellType.prototype.createEditorElement = function (context) {
+    var div = document.createElement("div");
+    var $div = $(div);
+    $div.attr("gcUIElement", "gcEditingInput");
+    $div.css("background-color", "white");
+    $div.css("position", "absolute");
+    $div.css("overflow", "hidden");
+    $div.css("border", "2px #5292f7 solid");
+    var $input1 = $("<input type='text' maxlength='" + this.maxLength + "' class='w-100' style='font-size:12px;' />");
+    $div.append($input1);
+    return div;
+  };
+  InputCellType.prototype.getEditorValue = function (editorContext) {
+    console.log("getEditorValue");
+    if (editorContext && editorContext.children.length === 1) {
+      var input1 = editorContext.children[0];
+      var value = $(input1).val();
+      return value;
+    }
+  };
+  InputCellType.prototype.setEditorValue = function (editorContext, value) {
+    console.log("setEditorValue");
+    if (editorContext && editorContext.children.length === 1) {
+      if (value) {
+        var input1 = editorContext.children[0];
+        $(input1).val(value);
+      }
+    }
+  };
+  InputCellType.prototype.isReservedKey = function (e, context) {
+    //cell type handle tab key by itself
+    return (e.keyCode === GC.Spread.Commands.Key.tab && !e.ctrlKey && !e.shiftKey && !e.altKey);
+  };
+  InputCellType.prototype.isEditingValueChanged = function (oldValue, newValue, context) {
+    console.log("isEditingValueChanged")
+    if (newValue != oldValue) {
+      return true;
+    }
+    return false;
+  };
+
+  var spread = null;
+  var isValidation = false;
+  $(document).ready(function () {
+    // host the workbook control in a DIV element with id "ss"
+    spread = new GC.Spread.Sheets.Workbook(document.getElementById('ss'), {
+      sheetCount: 1
+    });
+
+    $("#btnValidation").click(function () {
+      if (!isValidation) {
+        setValidation();
+      }
+    });
+
+    $("#btnInitValidation").click(function () {
+      if (isValidation) {
+        initValidation();
+      }
+    });
+
+    initSpread();
+  });
+
+  var _cellType = new GC.Spread.Sheets.CellTypes.Text();
+  var _inputCellType = new InputCellType(10);
+
+  function initSpread() {
+
+    var sd = dataSource;
+    var sheet = spread.getActiveSheet();
+    sheet.defaults.rowHeight = 35;
+
+    if (sd.length > 0) {
+      sheet.setDataSource(sd);
+    }
+    sheet.setColumnWidth(0, 160);
+    sheet.setColumnWidth(1, 70);
+    sheet.setColumnWidth(2, 90);
+    sheet.setColumnWidth(3, 110);
+    sheet.setColumnWidth(4, 80);
+    sheet.setColumnWidth(6, 110);
+
+
+    for (var col = 0; col < sheet.getColumnCount(); col++) {
+      if (col == 1) {
+        sheet.setCellType(-1, col, _inputCellType);
+      } else {
+        sheet.setCellType(-1, col, _cellType);
+      }
+    }
+
+
+    if (!isValidation) {
+      setValidation();
+    }
+
+  }
+
+  var _dv = null;
+  function setValidation() {
+
+    spread.options.highlightInvalidData = true;
+
+    var sheet = spread.getActiveSheet();
+
+    /*
+     equalsTo= 0,
+     notEqualsTo= 1,
+     greaterThan= 2,
+     greaterThanOrEqualsTo= 3,
+     lessThan= 4,
+     lessThanOrEqualsTo= 5,
+     between= 6,
+     notBetween= 7
+    */
+    var min = 4, max = 10;
+
+
+    var dv = GC.Spread.Sheets.DataValidation.createTextLengthValidator(GC.Spread.Sheets.ConditionalFormatting.ComparisonOperators.between, "4", "10");
+    dv.showInputMessage(true);
+    _dv = dv;
+
+    // 공백여부 
+    dv.ignoreBlank(true);
+    dv.inputTitle("tip");
+    dv.inputMessage("Number of characters must be between 4 and 10");
+
+
+
+    // border 빨간색 
+    dv.highlightStyle({
+      type: GC.Spread.Sheets.DataValidation.HighlightType.icon,
+      color: "red",
+      position:
+        GC.Spread.Sheets.DataValidation.HighlightPosition.topLeft
+    });
+
+    // 두번째컬럼 Validation 적용
+    sheet.setDataValidator(-1, 1, -1, 1, dv, GC.Spread.Sheets.SheetArea.viewport);
+
+    // ValidationError
+    sheet.bind(GC.Spread.Sheets.Events.ValidationError, function (e, info) {
+      // forceApply= 0,discard= 1, retry= 2
+      info.validationResult =
+        GC.Spread.Sheets.DataValidation.DataValidationResult.retry;
+
+    });
+
+
+    isValidation = true;
+  }
+
+  function initValidation() {
+    _dv = null;
+    spread.options.highlightInvalidData = false;
+    var sheet = spread.getActiveSheet();
+    // 초기화
+    sheet.setDataValidator(-1, -1, -1, -1, null, GC.Spread.Sheets.SheetArea.viewport);
+
+    // ValidationError
+    sheet.bind(GC.Spread.Sheets.Events.ValidationError, null);
+
+    isValidation = false;
+  }
+
+
+</script>
+
+</html>

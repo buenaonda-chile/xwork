@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="216" Id="reservationPop" Left="8" OnLoadCompleted="reservationPop_OnLoadCompleted" PidAttrib="7" Title="MIS" ToolTipFont=",0" Top="8" Ver="1.0" Width="650" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_reservation">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_reservation" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#94c1ea" Bottom="209" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="209" Id="grd_reservation" InputPanel="FALSE" LineColor="#94c1ea" MinWidth="100" OnCellDBLClick="grd_reservation_OnCellDblClick" Right="648" TabOrder="1" TabStop="true" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="648">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="110"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="120"/>
+						<col width="180"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dceaf7" col="0" color="#002043" display="text" text="예약번호"/>
+						<cell bkcolor="#dceaf7" col="1" color="#002043" display="text" text="광고주"/>
+						<cell bkcolor="#dceaf7" col="2" color="#002043" display="text" text="예약명"/>
+						<cell bkcolor="#dceaf7" col="3" color="#002043" display="text" text="광고대행사"/>
+						<cell bkcolor="#dceaf7" col="4" color="#002043" display="text" text="예약기간"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="RESERV_NO" cursor="hand" display="text"/>
+						<cell align="center" col="1" colid="ORG_CUST_NM" color="#333333" display="text"/>
+						<cell align="center" col="2" colid="TITLE" color="#333333" display="text"/>
+						<cell align="center" col="3" colid="SALES_LAB_NM" color="#333333" display="text"/>
+						<cell align="center" col="4" color="#333333" display="text" expr='RESERV_DATE_FROM.substr(0,4)+&quot;-&quot;+RESERV_DATE_FROM.substr(4,2)+&quot;-&quot;+RESERV_DATE_FROM.substr(6,2)+&#32;&quot;&#32;~&#32;&quot;&#32;+&#32;RESERV_DATE_TO.substr(0,4)+&quot;-&quot;+RESERV_DATE_TO.substr(4,2)+&quot;-&quot;+RESERV_DATE_TO.substr(6,2)'/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[var combo_type="";
+function grd_reservation_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{	
+	var confirm_count = ds_reservation.GetColumn(ds_reservation.row, "CONFIRM_COUNT");//심의 요청 여부
+	if(confirm_count==0){
+		alert(setPopMessage("2006"));	// 20110103l-koowgnojeel, 2006 == 광고물관리에 등록된 예약건입니다.
+		return;
+	}
+	var reg_data = ds_reservation.GetColumn(ds_reservation.row, "REG_DATA");//계약건으로 넘어가있는지 확인
+	if(reg_data>0){
+		alert(setPopMessage("2007"));	// 20110103l-koowgnojeel, 2007 == 계약으로 심의 요청 하시기 바랍니다.
+		return;
+	}
+
+	parent.advertisementEdit.edt_adCust.text = ds_reservation.GetColumn(ds_reservation.row, "ORG_CUST_NM");//광고주
+	parent.advertisementEdit.edt_reservNo.text = ds_reservation.GetColumn(ds_reservation.row, "RESERV_NO");//예약번호
+	
+	//예약 detail을 조회해서 출력
+	var reserv_no = ds_reservation.GetColumn(ds_reservation.row, "RESERV_NO");
+	getReservationDtlList(reserv_no);
+}
+
+function reservationPop_OnLoadCompleted(obj)
+{
+	//예약 목록 조회
+	getReservationList();
+	//grd_reservation.SetCellProp("head",0,"text","계약번호");
+}
+
+//예약목록 조회
+function getReservationList()
+{	
+	var param = "";
+
+	Transaction(
+		"getReservationList",							// Transaction ID
+		"service::advertisement/reservationList.do",	// service
+		"",												// input Dataset
+		"ds_reservation=ds_reservation",				// output Dataset
+		param,											// parameter
+		"callBack"										// callback
+	);
+}
+
+//예약목록상세 조회 
+function getReservationDtlList(reserv_no)
+{	
+	var param = "";
+    param = " RESERV_NO=" + quote(reserv_no);	
+    
+	Transaction(
+		"getReservationDtlList",						// Transaction ID
+		"service::advertisement/reservationDtlList.do",	// service
+		"",												// input Dataset
+		"ds_reservationDtl=ds_reservationDtl",			// output Dataset
+		param,											// parameter
+		"callBack"										// callback
+	);
+}
+
+//CallBack
+function callBack(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		alert(rtnMsg);
+		return;
+	}
+
+	if(svcId == "getReservationDtlList")
+	{
+		ds_reservationSel.Copy(ds_reservationDtl);
+		close();
+		
+	}
+	
+}]]></Script>
+</Window>

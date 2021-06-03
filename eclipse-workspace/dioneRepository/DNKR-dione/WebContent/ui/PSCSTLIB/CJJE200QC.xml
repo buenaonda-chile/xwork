@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="제조원가&#32;명세서" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM008PR"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CJJE200Q"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_EXCHANGE"></Dataset>
+		</Datasets>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_CJJE200Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="620" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" Font="Default,9" HeadBorder="Flat" HeadHeight="25" Height="524" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1056" RowHeight="20" SelColor="black" TabOrder="-1" TabStop="FALSE" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="92"/>
+						<col width="181"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="55"/>
+						<col width="45"/>
+						<col width="55"/>
+						<col width="40"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="45"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+						<col width="55"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="TY"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="CL"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="단위"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="소요량"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="통화"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="단가"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" expr='&quot;가단가\n구분&quot;' text="가단가구분"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="재료비"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="도장비"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" text="포장비"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" text="유상단가"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" text="유무상"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" display="text" text="공정"/>
+						<cell bkcolor="#dfdfdf" col="17" color="#002043" display="text" text="기계공수"/>
+						<cell bkcolor="#dfdfdf" col="18" color="#002043" display="text" text="사람공수"/>
+						<cell bkcolor="#dfdfdf" col="19" color="#002043" display="text" text="노무비"/>
+						<cell bkcolor="#dfdfdf" col="20" color="#002043" display="text" text="경비"/>
+						<cell bkcolor="#dfdfdf" col="21" color="#002043" display="text" text="제조원가"/>
+						<cell bkcolor="#dfdfdf" col="22" color="#002043" display="text" text="부대비용"/>
+					</head>
+					<body>
+						<cell align="center" col="0" display="normal" expr="CURROW+1"/>
+						<cell align="center" col="1" colid="LEVSQB" display="normal"/>
+						<cell align="left" col="2" colid="CINBRB" display="normal"/>
+						<cell align="left" col="3" colid="ITDSCB" display="normal"/>
+						<cell align="center" col="4" colid="ITTYPB" display="normal"/>
+						<cell align="center" col="5" colid="ITCLSB" display="normal"/>
+						<cell align="center" col="6" colid="UNMSRB" display="normal"/>
+						<cell align="right" col="7" colid="SQQTYB" display="number"/>
+						<cell align="center" col="8" colid="DANWAB" display="normal"/>
+						<cell align="right" col="9" colid="DANGAB" display="number"/>
+						<cell align="center" col="10" colid="CSTGUB" display="normal"/>
+						<cell align="right" col="11" colid="RETAMB" display="number"/>
+						<cell align="right" col="12" colid="SAMAMB" display="number"/>
+						<cell align="right" col="13" colid="PLTAMB" display="number"/>
+						<cell align="right" col="14" colid="UMSANB" display="number"/>
+						<cell align="center" col="15" colid="GUBUNB" display="normal"/>
+						<cell align="center" col="16" colid="PROCS" display="normal"/>
+						<cell align="right" col="17" colid="MCHTMB" display="number"/>
+						<cell align="right" col="18" colid="MANTMB" display="number"/>
+						<cell align="right" col="19" colid="MANAMB" display="number"/>
+						<cell align="right" col="20" colid="MCHAMB" display="number"/>
+						<cell align="right" col="21" colid="TOTAMB" display="number"/>
+						<cell align="right" col="22" colid="BGRATB" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="96" Id="searchBar" TabOrder="2" Width="1048"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="4" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1008" Right="1032" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1040" Right="1064" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="895" OnClick="fn_Search" TabOrder="5" Text="조회" Top="34" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="7" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="6" Top="37" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="340" TabOrder="10" Top="34" VAlign="Middle" Width="372"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="9" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="34" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" CheckLength="Byte" Height="21" Id="ed_ITNBR" ImeMode="none" Left="342" MaxLength="15" OnChanged="common_OnChanged" OnCharChanged="ed_ITNBR_OnCharChanged" OnKillFocus="ed_ITNBR_OnKillFocus" TabOrder="8" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="120"></Edit>
+		<Static Height="18" Id="ID03061" Left="719" TabOrder="11" Text="(Enter&#32;KEY&#32;Press)" Top="39" VAlign="Middle" Visible="FALSE" Width="104"></Static>
+		<Button Height="25" Id="btnExcel" ImageID="sum_excel" Left="976" OnClick="fn_Excel" TabOrder="13" Text="조회" Top="33" Visible="FALSE" Width="75"></Button>
+		<Static Height="19" Id="st_ITDSC" Left="466" TabOrder="15" Top="36" VAlign="Bottom" Width="216"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static7" Left="466" TabOrder="16" Top="55" Width="220"></Static>
+		<Image Cursor="HAND" Height="16" Id="img_ITNBR" ImageID="ic_search" Left="692" OnClick="img_ITNBR_OnClick" Static="FALSE" TabOrder="14" TabStop="FALSE" Top="39" Width="14"></Image>
+		<WTA_RemoteCall Bottom="610" Height="34" Id="WTA_RemoteCall0" Left="8" Right="248" Top="576" Visible="FALSE" Width="240"></WTA_RemoteCall>
+		<Static Align="Center" Height="18" Id="Static2" Left="9" TabOrder="18" Text="단&#32;&#32;&#32;&#32;위&#32;:&#32;" Top="65" VAlign="Middle" Width="64"></Static>
+		<Static Align="Center" BindDataset="ds_EXCHANGE" Column="UNMSR" Height="12" Id="st_UNMSR" Left="78" TabOrder="19" Top="69" VAlign="Middle" Width="56"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static4" Left="82" TabOrder="20" Top="83" Width="54"></Static>
+		<Static Align="Center" BindDataset="ds_EXCHANGE" Column="ITTYP" Height="12" Id="st_ITTYP" Left="214" TabOrder="22" Top="69" VAlign="Middle" Width="56"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static8" Left="218" TabOrder="23" Top="83" Width="54"></Static>
+		<Static Align="Center" Height="18" Id="Static9" Left="145" TabOrder="21" Text="T&#32;&#32;&#32;&#32;Y&#32;:&#32;" Top="65" VAlign="Middle" Width="64"></Static>
+		<Static Align="Center" BindDataset="ds_EXCHANGE" Column="ENGNO" Height="12" Id="st_ENGNO" Left="358" TabOrder="25" Top="69" VAlign="Middle" Width="88"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static12" Left="362" TabOrder="26" Top="83" Width="90"></Static>
+		<Static Align="Center" Height="18" Id="Static13" Left="289" TabOrder="24" Text="도면번호&#32;:" Top="65" VAlign="Middle" Width="64"></Static>
+		<Static Align="Right" BindDataset="ds_EXCHANGE" Column="RATE_UD" Height="12" Id="st_RATE_UD" Left="534" TabOrder="28" Top="69" VAlign="Middle" Width="56"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static15" Left="538" TabOrder="29" Top="83" Width="54"></Static>
+		<Static Align="Center" Height="18" Id="Static16" Left="465" TabOrder="27" Text="환&#32;&#32;율($)&#32;:&#32;" Top="65" VAlign="Middle" Width="64"></Static>
+		<Static Align="Right" BindDataset="ds_EXCHANGE" Column="RATE_JY" Height="12" Id="st_RATE_JY" Left="670" TabOrder="31" Top="69" VAlign="Middle" Width="56"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static18" Left="674" TabOrder="32" Top="83" Width="54"></Static>
+		<Static Align="Center" Height="18" Id="Static19" Left="601" TabOrder="30" Text="환&#32;&#32;율(￥)&#32;:&#32;" Top="65" VAlign="Middle" Width="64"></Static>
+		<Static Align="Right" BindDataset="ds_EXCHANGE" Column="RATE_EU" Height="12" Id="st_RATE_EU" Left="806" TabOrder="34" Top="69" VAlign="Middle" Width="56"></Static>
+		<Static BKColor="ACTIVECAPTION" Height="2" Id="Static21" Left="810" TabOrder="35" Top="83" Width="54"></Static>
+		<Static Align="Center" Height="18" Id="Static22" Left="737" TabOrder="33" Text="환&#32;&#32;율(EU)&#32;:&#32;" Top="65" VAlign="Middle" Width="70"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : LEE S.K
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : CJJE200Q.xml
+ * ● PROGRAM DESCRIPTION  : 제조원가 명세서
+ * ● DATE WRITTEN         : 2020.05.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var pgmLib = "*LIBL";
+var pgmName = "CJJE200RC";
+var param = "";
+var exeTime = 1200;
+
+var nowDate = today();
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	
+	//ed_ITNBR.Text="38000-029020K1";
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통디자인 설정
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	//MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	//MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //30
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+}
+
+/********************************************************************** 
+ * 내용설명 : 사업부 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getCJJE200Q(){
+
+	if(!validationChk()){
+		return;
+	}
+	
+	var sKind		= "getCJJE200Q";						
+	var sMethodName = "service::pscstlib/selectCJJE200Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_CJJE200Q=ds_CJJE200Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	//sArgument += "@ITNBR=" + quote(ed_ITNBR.Text);	//품번
+	var str = dialog("Common::PGMLOAD_CST.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/  
+function validationChk(){
+
+	var result = true;
+	ComboBoxPlant.BKColor="white";
+	ed_ITNBR.BKColor="white";
+	
+	if(length(trim(ComboBoxPlant.Value)) < 1){
+		alert("[알림] 지원하지 않는 시스템 입니다. 정보관리팀으로 문의하십시요.");
+		//alert(setPopMessage("1006"));  //[알림] 지원하지 않는 시스템 입니다. 정보관리팀으로 문의하십시요.
+		//setMessage("1006");	
+		result = false;
+	}
+	else if((ComboBoxPlant.Value != "E1")){
+		alert("[알림]마산공장만 사용가능한 프로그램입니다.");
+		result = false;
+	}
+	
+	else if(length(trim(ed_ITNBR.Text)) = 0){
+		ed_ITNBR.BKColor="paleturquoise";
+		alert("[확인] 품번을 입력하세요.");
+		//alert(setPopMessage("4020"));//[확인] 마감년월을 확인바랍니다.
+		//setMessage("4020");
+		ed_ITNBR.SetFocus();
+		result = false;
+	}
+		
+	return result;
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "제조원가 명세서";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|제조원가 명세서";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getCJJE200Q"){
+		// 조회건수가 없을경우
+		if(ds_CJJE200Q_A.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell <= 9) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	//getCJJE200Q();
+	getCJJE200RC();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_CJJE200Q.ClearData();
+	ds_EXCHANGE.ClearData();
+	ds_BM008PR.ClearData();
+}
+
+function ed_ITNBR_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_ITDSC.Text = "";
+}
+
+function ed_ITNBR_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+		
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectBM008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM008PR=ds_BM008PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " ITNBR=" + quote(ed_ITNBR.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_BM008PR.rowcount < 1){
+		ed_ITNBR.Text="";
+		alert(setPopMessage("1501"));
+		ed_ITNBR.SetFocus();
+		//setMessage("1501");	
+		return;
+	}
+	st_ITDSC.Text=ds_BM008PR.GetColumn(0,"ITDSC");
+	getExchange();	//환율정보 가져오기
+	http.usewaitcursor = true;	
+}
+
+function img_ITNBR_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_ITNBR.Text);	
+	if (length(trim(ed_ITNBR.Text)) == 0) sTemp="zzzzzzzzzz";	
+	var selectnumber = "A1";	
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);	
+	if (length(rtn) != 0){	
+		ed_ITNBR.Text = rtn[0];
+		st_ITDSC.Text = rtn[1];
+		getExchange();	//환율정보 가져오기
+	}	
+}
+
+/********************************************************************** 
+ * 내용설명 : 품목 기본정보조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getExchange(){
+
+	var sKind		= "getExchange";						
+	var sMethodName = "service::pscstlib/selectCJJE200Q_exchange.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_EXCHANGE=ds_EXCHANGE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		//sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " ITNBR=" + quote(ed_ITNBR.Text);	//품번
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+/********************************************************************** 
+ * 내용설명 : 마감
+ * 주요변수 : 
+ **********************************************************************/ 
+function getCJJE200RC(){
+	
+	var result = true;
+	
+	if(!validationChk()){
+		return;
+	}
+	
+	//st_Msg.Visible = true;
+	//Div0.Enable = false;
+	SetWaitCursor(true);
+	SetCapture();
+
+	//사업부별 공통ID(as400 USERID)로 실행
+	var iDget = getRemotecallID(comps);
+	if (iDget != "ERROR"){
+		callUser = iDget;
+		callPass = iDget;
+	}else{
+		alert(setPopMessage("1444"));
+		setMessage("1444");	
+		return;
+	}
+	
+	//리모트콜 실행(FPYZ209rc용)
+	param = ComboBoxPlant.Value + ed_ITNBR.Text;
+	for(i=length(param)+1;i<=40;i++){
+		param += " ";
+	}
+	param += callUser;		
+	for(j=1;j<=10-length(callUser);j++){
+		param += " ";
+	}
+	param += '000';
+
+	//st_Msg.Visible = true;
+	//Div0.Enable = false;
+	SetWaitCursor(true);
+	SetCapture();
+	
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",exeTime);	
+	
+	// 연결 (접속아이피 , 아이디, 비밀번호)	
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(pgmLib,pgmName,param,pgmSize);
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			ReleaseCapture();
+			SetWaitCursor(false);
+			//st_Msg.Visible = false;
+			if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "999") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;		
+				//alert(setPopMessage("1001")); //  정상적으로 처리가 완료되었습니다.	
+				//setMessage("1001");	
+				getCJJE200Q();	//조회호출
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "888") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;
+				var ruser = trim(substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,10));
+				var rcount = toNumber(substr(WTA_RemoteCall0.RC_GetReturnParm(1),60,2))-1;
+				alert("사용자("+ruser+")외 "+rcount+"명이 사용중입니다. 작업이 불가능 합니다.");
+				//alert(setPopMessage("1008"));	// 현재 시스템에 락이 걸렸습니다. 전산관리자에게 문의하세요.
+				//setMessage("1008");
+				return false;
+			} else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "777") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;
+				alert(setPopMessage("1002")); //[경고] 처리 중 오류가 발생하였습니다.
+				setMessage("1002");	
+				return false;
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "666") {
+				alert(WTA_RemoteCall0.RC_GetReturnParm(1));
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;
+				alert(setPopMessage("4020")); //[확인] 마감년월을 확인바랍니다.
+				setMessage("4020");	
+				return false;
+			}else {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				//Div0.Enable = true;
+				alert(setPopMessage("1015")); //[경고] AS400 CL 처리 중 오류가 발생하였습니다.
+				setMessage("1015");	
+				return false;
+			}
+		}else{
+			var bstrErrorMessage = WTA_RemoteCall0.bstrErrorMessage;
+			WTA_RemoteCall0.RC_Disconnect();	//연결종료
+			ReleaseCapture();
+			SetWaitCursor(false);
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		var ulErrorCode = WTA_RemoteCall0.ulErrorCode;
+		WTA_RemoteCall0.RC_Disconnect();	//연결종료
+		ReleaseCapture();
+		SetWaitCursor(false);
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + ulErrorCode);
+	}
+}
+
+]]></Script>
+</Window>

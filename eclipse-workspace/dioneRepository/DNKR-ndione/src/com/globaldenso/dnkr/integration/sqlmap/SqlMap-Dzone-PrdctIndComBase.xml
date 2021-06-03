@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdctIndComBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdctIndComBase" type="PrdctIndComBaseDomain">
+        <result property="comps" column="COMPS" />
+        <result property="code" column="CODE" />
+        <result property="name" column="NAME" />
+        
+        <result property="cdBizarea" column="CD_BIZAREA" />        
+        <result property="nmKor" column="NM_KOR" />        
+        <result property="noEmp" column="NO_EMP" />        
+        <result property="cdIncom" column="CD_INCOM" />  
+        <result property="deptCdMap" column="DEPT_CD_MAP" />                                      
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+    </resultMap>
+ 
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchDeptMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 cd_dept_map AS CODE
+			,nm_dept AS NAME
+		FROM V_Z_DNKA_MA_DEPT_ST
+		WHERE 1 =1
+		<if test="comps != null and comps != ''">		
+			AND CD_COMPS = #{comps}
+		</if>		
+		<if test="deptCdMap != null and deptCdMap != ''">		
+			AND cd_dept_map = #{deptCdMap}
+		</if> 
+    </select>   
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchEmpMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 CD_BIZAREA
+			,NM_KOR
+			,NO_EMP
+			,CD_INCOM
+			,DEPT_CD_MAP			
+		FROM V_Z_DNKA_MA_EMP
+		WHERE 1 =1
+		<if test="cdBizarea != null and cdBizarea != ''">		
+			AND CD_BIZAREA = #{cdBizarea}
+		</if>
+		<if test="deptCdMap != null and deptCdMap != ''">		
+			AND DEPT_CD_MAP = #{deptCdMap}
+		</if> 		 
+		AND (CD_INCOM = '001' OR CD_INCOM = '002') 		
+    </select>           
+</mapper>

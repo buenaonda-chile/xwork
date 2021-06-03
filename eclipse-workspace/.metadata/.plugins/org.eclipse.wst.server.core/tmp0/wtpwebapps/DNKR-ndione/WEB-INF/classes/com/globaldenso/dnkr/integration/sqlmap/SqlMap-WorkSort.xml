@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WorkSortDao">
+	
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="WorkSort" type="WorkSortDomain">
+        <result property="workCode" column="WORK_TYPE_CD" />
+        <result property="teamCode" column="TEAM_CODE" />
+        <result property="workTypeNm" column="WORK_TYPE_NM" />
+        <result property="workTypeEnNm" column="WORK_TYPE_EN_NM" />
+        <result property="workTypeJaNm" column="WORK_TYPE_JA_NM" />
+        <result property="uppWorkCode" column="UPP_WORK_TYPE_CD" />
+        <result property="aprvEmpNum" column="EMP_NUMBER" />
+        <result property="workLv" column="WORK_TYPE_LVL" />
+        <result property="workSort" column="WORK_TYPE_SORT" />
+        <result property="useYn" column="WORK_TYPE_USE" />
+        <result property="langCmc" column="LANG_CMC" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+    
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="WorkSort" parameterType="WorkSortDomain">
+        select 
+                WORK_TYPE_CD
+            <if test="langCmc != null and langCmc == 'kr'">
+              , WORK_TYPE_NM
+           	</if>
+           	<if test="langCmc != null and langCmc == 'en'">
+              , WORK_TYPE_EN_NM WORK_TYPE_NM
+           	</if>
+           	<if test="langCmc != null and langCmc == 'ja'">
+              , WORK_TYPE_JA_NM WORK_TYPE_NM
+           	</if>
+              , WORK_TYPE_EN_NM
+              , WORK_TYPE_JA_NM
+              , UPP_WORK_TYPE_CD
+              , WORK_TYPE_LVL
+              , WORK_TYPE_SORT
+              , WORK_TYPE_USE
+        from 
+                DNKR_WORK_TYPE
+        where 
+                'SqlMap-WorkSort.searchByKey' = 'SqlMap-WorkSort.searchByKey'
+            and WORK_TYPE_CD = #{workCode}
+        
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="WorkSort"
+        parameterType="WorkSortDomain">
+        select 
+                WORK_TYPE_CD
+            <if test="langCmc == null or langCmc == ''">
+              , WORK_TYPE_NM
+           	</if>
+            <if test="langCmc != null and langCmc == 'kr'">
+              , WORK_TYPE_NM
+           	</if>
+           	<if test="langCmc != null and langCmc == 'en'">
+              , WORK_TYPE_EN_NM WORK_TYPE_NM
+           	</if>
+           	<if test="langCmc != null and langCmc == 'ja'">
+              , WORK_TYPE_JA_NM WORK_TYPE_NM
+           	</if>
+              , WORK_TYPE_EN_NM
+              , WORK_TYPE_JA_NM
+              , UPP_WORK_TYPE_CD
+              , WORK_TYPE_LVL
+              , WORK_TYPE_SORT
+              , WORK_TYPE_USE
+        from 
+                DNKR_WORK_TYPE
+        where 
+                'SqlMap-WorkSort.searchByCondition' = 'SqlMap-WorkSort.searchByCondition'
+        <if test="workCode != null and workCode != ''">
+            and WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="teamCode != null and teamCode != ''">
+            and TEAM_CODE = #{teamCode}
+        </if>
+        <if test="workTypeNm != null and langCmc != null and langCmc == 'kr'">
+            and WORK_TYPE_NM like '%' || #{workTypeNm} || '%'
+        </if>
+        <if test="workTypeNm != null and langCmc != null and langCmc == 'en'">
+            and WORK_TYPE_EN_NM like '%' || #{workTypeNm} || '%'
+        </if>
+        <if test="workTypeNm != null and langCmc != null and langCmc == 'ja'">
+            and WORK_TYPE_JA_NM like '%' || #{workTypeNm} || '%'
+        </if>
+        <if test="uppWorkCode != null and uppWorkCode != ''">
+            and UPP_WORK_TYPE_CD = #{uppWorkCode}
+        </if>
+        <if test="workLv != null and workLv != ''">
+            and WORK_TYPE_LVL = #{workLv}
+        </if>
+        <if test="workSort != null and workSort != ''">
+            and WORK_TYPE_SORT = #{workSort}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            and WORK_TYPE_USE = #{useYn}
+        </if>
+        order by 
+                WORK_TYPE_CD asc, WORK_TYPE_SORT asc
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="WorkSort"
+        parameterType="WorkSortDomain">
+        select 
+                WORK_TYPE_CD
+              , WORK_TYPE_NM
+              , WORK_TYPE_EN_NM
+              , WORK_TYPE_JA_NM
+              , UPP_WORK_TYPE_CD
+              , WORK_TYPE_LVL
+              , WORK_TYPE_SORT
+              , WORK_TYPE_USE
+        from (
+            select
+                    WORK_TYPE_CD
+              	  , WORK_TYPE_NM
+              	  , WORK_TYPE_EN_NM
+              	  , WORK_TYPE_JA_NM
+              	  , UPP_WORK_TYPE_CD
+              	  , WORK_TYPE_LVL
+              	  , WORK_TYPE_SORT
+              	  , WORK_TYPE_USE
+                  , row_number() over (order by WORK_TYPE_CD desc WORK_TYPE_SORT asc) ROW_NUM
+            from 
+                    DNKR_WORK_TYPE
+            where 
+                    'SqlMap-WorkSort.searchByConditionForPaging' = 'SqlMap-WorkSort.searchByConditionForPaging'
+            <if test="workCode != null and workCode != ''">
+            	and WORK_TYPE_CD = #{workCode}
+	        </if>
+	        <if test="workTypeNm != null and workTypeNm != ''">
+	            and WORK_TYPE_NM = #{workTypeNm}
+	        </if>
+	        <if test="workTypeEnNm != null and workTypeEnNm != ''">
+	            and WORK_TYPE_EN_NM = #{workTypeEnNm}
+	        </if>
+	        <if test="workTypeJaNm != null and workTypeJaNm != ''">
+	            and WORK_TYPE_JA_NM = #{workTypeJaNm}
+	        </if>
+	        <if test="uppWorkCode != null and uppWorkCode != ''">
+	            and UPP_WORK_TYPE_CD = #{uppWorkCode}
+	        </if>
+	        <if test="workLv != null and workLv != ''">
+	            and WORK_TYPE_LVL = #{workLv}
+	        </if>
+	        <if test="workSort != null and workSort != ''">
+	            and WORK_TYPE_SORT = #{workSort}
+	        </if>
+	        <if test="useYn != null and useYn != ''">
+	            and WORK_TYPE_USE = #{useYn}
+	        </if>
+	        )
+	    where 
+            	ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+        
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchWorkConfirmList" resultMap="WorkSort"
+        parameterType="WorkSortDomain">
+        select 
+                WORK_TYPE_CD
+              , EMP_NUMBER
+        from 
+                DNKR_WORK_APRV
+        where 
+                'SqlMap-WorkSort.searchWorkConfirmList' = 'SqlMap-WorkSort.searchWorkConfirmList'
+        <if test="workCode != null and workCode != ''">
+            and WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and EMP_NUMBER = #{aprvEmpNum}
+        </if>
+    </select>
+    
+    
+        <!-- 検索 SQL文（任意条件） -->
+    <select id="searchWorkConfirm" resultMap="WorkSort"
+        parameterType="WorkSortDomain">
+        select 
+                WORK_TYPE_CD
+              , EMP_NUMBER
+        from 
+                DNKR_WORK_APRV
+        where 
+                'SqlMap-WorkSort.searchWorkConfirm' = 'SqlMap-WorkSort.searchWorkConfirm'
+        <if test="workCode != null and workCode != ''">
+            and WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and EMP_NUMBER = #{aprvEmpNum}
+        </if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="WorkSortDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_WORK_TYPE
+        where 
+                'SqlMap-WorkSort.searchCount' = 'SqlMap-WorkSort.searchCount'
+        	<if test="workCode != null and workCode != ''">
+            	and WORK_TYPE_CD = #{workCode}
+	        </if>
+	        <if test="workTypeNm != null and workTypeNm != ''">
+	            and WORK_TYPE_NM = #{workTypeNm}
+	        </if>
+	        <if test="workTypeEnNm != null and workTypeEnNm != ''">
+	            and WORK_TYPE_EN_NM = #{workTypeEnNm}
+	        </if>
+	        <if test="workTypeJaNm != null and workTypeJaNm != ''">
+	            and WORK_TYPE_JA_NM = #{workTypeJaNm}
+	        </if>
+	        <if test="uppWorkCode != null and uppWorkCode != ''">
+	            and UPP_WORK_TYPE_CD = #{uppWorkCode}
+	        </if>
+	        <if test="workLv != null and workLv != ''">
+	            and WORK_TYPE_LVL = #{workLv}
+	        </if>
+	        <if test="workSort != null and workSort != ''">
+	            and WORK_TYPE_SORT = #{workSort}
+	        </if>
+	        <if test="useYn != null and useYn != ''">
+	            and WORK_TYPE_USE = #{useYn}
+	        </if>
+    </select>
+    
+     <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchMaxWorkCodeNum" resultType="java.lang.String" parameterType="WorkSortDomain">
+        select 
+                max(WORK_TYPE_CD)
+        from 
+                DNKR_WORK_TYPE
+        where 
+                'SqlMap-Code.searchCount' = 'SqlMap-Code.searchCount'           	
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WorkSortDomain">
+        insert into DNKR_WORK_TYPE (
+                /* SqlMap-WorkSort.create */
+	        <if test="workTypeNm != null">
+	            WORK_TYPE_NM,
+	        </if>
+	        <if test="workTypeNm != null">
+	            WORK_TYPE_EN_NM,
+	        </if>
+	        <if test="workTypeNm != null">
+	            WORK_TYPE_JA_NM,
+	        </if>
+	        <if test="uppWorkCode != null">
+	            UPP_WORK_TYPE_CD,
+	        </if>
+	        <if test="workLv != 0">
+	            WORK_TYPE_LVL,
+	        </if>
+	        <if test="workSort != 0">
+	            WORK_TYPE_SORT,
+	        </if>
+	        <if test="useYn != null">
+	            WORK_TYPE_USE,
+	        </if>
+	        <if test="teamCode != null">
+	            TEAM_CODE,
+	        </if>
+	        <if test="workCode != null">
+            	WORK_TYPE_CD
+	        </if>
+        ) values (
+            <if test="workTypeNm != null">
+	            #{workTypeNm},
+	        </if>
+	        <if test="workTypeNm != null">
+	            #{workTypeNm},
+	        </if>
+	        <if test="workTypeNm != null">
+	            #{workTypeNm},
+	        </if>
+	        <if test="uppWorkCode != null">
+	            #{uppWorkCode},
+	        </if>
+	        <if test="workLv != 0">
+	            #{workLv},
+	        </if>
+	        <if test="workSort != 0">
+	            #{workSort},
+	        </if>
+	        <if test="useYn != null">
+	            #{useYn},
+	        </if>
+	        <if test="teamCode != null">
+	            #{teamCode},
+	        </if>
+	        <if test="workCode != null">
+            	#{workCode}
+	        </if>
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WorkSortDomain">
+        update 
+                DNKR_WORK_TYPE 
+        set
+            <if test="workTypeNm != null and langCmc == 'kr'">
+	            WORK_TYPE_NM = #{workTypeNm},
+	        </if>
+	        <if test="workTypeNm != null and langCmc == 'en'">
+	            WORK_TYPE_EN_NM = #{workTypeEnNm},
+	        </if>
+	        <if test="workTypeNm != null and langCmc == 'ja'">
+	            WORK_TYPE_JA_NM = #{workTypeJaNm},
+	        </if>
+	        <if test="uppWorkCode != null">
+	            UPP_WORK_TYPE_CD = #{uppWorkCode},
+	        </if>
+	        <if test="workLv != 0">
+	            WORK_TYPE_LVL = #{workLv},
+	        </if>
+	        <if test="workSort != 0">
+	            WORK_TYPE_SORT = #{workSort},
+	        </if>
+	        <if test="useYn != null">
+	            WORK_TYPE_USE = #{useYn}
+	        </if>
+	        <if test="useYn == null">
+	            WORK_TYPE_USE = WORK_TYPE_USE
+	        </if>
+        where 
+                'SqlMap-WorkSort.update' = 'SqlMap-WorkSort.update'
+            and WORK_TYPE_CD = #{workCode}
+    </update>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createSetAprvEmp" parameterType ="WorkSortDomain">
+        insert into DNKR_WORK_APRV (
+                /* SqlMap-WorkSort.createSetAprvEmp */
+	        <if test="workCode != null">
+	            WORK_TYPE_CD,
+	        </if>
+	        <if test="aprvEmpNum != null">
+	            EMP_NUMBER
+	        </if>
+        ) values (
+            <if test="workCode != null">
+	            #{workCode},
+	        </if>
+	        <if test="aprvEmpNum != null">
+	            #{aprvEmpNum}
+	        </if>
+        )
+    </insert>
+
+    <!-- 更新 SQL文（主キー） -->
+    <!-- <update id="updateSetAprvEmp" parameterType="WorkSortDomain">
+        update 
+                DNKR_WORK_APRV 
+        set
+            <if test="aprvEmpNum != null and aprvEmpNum != ''">
+	            EMP_NUMBER = #{aprvEmpNum},
+	        </if>
+        where 
+                'SqlMap-WorkSort.update' = 'SqlMap-WorkSort.update'
+            and WORK_TYPE_CD = #{workCode}
+    </update> -->
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WorkSortDomain">
+        delete from 
+                DNKR_WORK_TYPE
+        where 
+                'SqlMap-WorkSort.delete' = 'SqlMap-WorkSort.delete'
+            and WORK_TYPE_CD = #{workCode}
+    </delete>
+    
+     <!-- 削除 SQL文（主キー） -->
+    <delete id="deleteAprvEmp" parameterType="WorkSortDomain">
+        delete from 
+                DNKR_WORK_APRV
+        where 
+                'SqlMap-WorkSort.deleteAprvEmp' = 'SqlMap-WorkSort.deleteAprvEmp'
+            and WORK_TYPE_CD = #{workCode}
+    </delete>
+    
+    
+
+</mapper>

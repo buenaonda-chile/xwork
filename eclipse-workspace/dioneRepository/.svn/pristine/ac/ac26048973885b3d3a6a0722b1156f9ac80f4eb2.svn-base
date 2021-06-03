@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="ogm213" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="주요라인&#32;고장실적" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm213"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="56" Id="Static0" TabOrder="8" Top="64" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="5" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="6" Top="31" Width="1060"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="104" TabOrder="2" Top="37" Width="120"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="8" TabOrder="9" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="36" VAlign="Middle" Width="92"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Height="18" Id="cmbWnDatS" Left="328" LeftMargin="10" OnKillFocus="cmbWnDatS_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="37" Width="80"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Height="18" Id="cmbWnDatE" Left="440" LeftMargin="10" OnKillFocus="cmbWnDatE_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="4" Top="37" Width="80"></Calendar>
+		<Static Font="굴림,9" Height="16" Id="Static15" Left="416" TabOrder="9" Text="~" Top="40" Width="24"></Static>
+		<Grid BindDataset="ds_ogm213" BkColor2="default" BoldHead="true" Bottom="618" Enable="true" EndLineColor="default" HeadHeight="22" Height="498" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnCellDBLClick="MainGrid_OnCellDblClick" OnHeadClick="MainGrid_OnHeadClick" Right="1060" TabOrder="8" TabStop="FALSE" Top="120" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1060">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="244"/>
+						<col width="107"/>
+						<col width="90"/>
+						<col width="90"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="라인명"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="정지시간"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="정지건수"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="BM공수"/>
+					</head>
+					<body>
+						<cell bkcolor2="LIGHT3D" col="0" colid="linnm" display="text"/>
+						<cell bkcolor2="LIGHT3D" col="1" colid="sum_stphr" display="number"/>
+						<cell bkcolor2="LIGHT3D" col="2" colid="cnt_stphr" display="number"/>
+						<cell bkcolor2="LIGHT3D" col="3" colid="sum_tothr" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="232" TabOrder="11" Text="검&#32;색&#32;기&#32;간" Top="36" VAlign="Middle" Width="92"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="41" Id="Static6" Left="8" TabOrder="12" Top="71" Width="1040"></Static>
+		<Edit Align="CENTER" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="20" Id="txttothr" Left="720" TabOrder="7" TabStop="FALSE" Top="80" Width="104"></Edit>
+		<Static Align="Center" Font="굴림,9" Height="20" Id="Static3" Left="816" LineSpacing="5" TabOrder="13" Text="H" Top="81" VAlign="Middle" Width="40" WordWrap="TRUE"></Static>
+		<Edit Align="CENTER" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="20" Id="txtnocnt" Left="488" TabOrder="6" TabStop="FALSE" Top="80" Width="104"></Edit>
+		<Edit Align="CENTER" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="20" Id="txtstphr" Left="256" TabOrder="5" TabStop="FALSE" Top="80" Width="104"></Edit>
+		<Static Align="Center" Font="굴림,9" Height="20" Id="Static9" Left="584" LineSpacing="5" TabOrder="17" Text="건" Top="81" VAlign="Middle" Width="40" WordWrap="TRUE"></Static>
+		<Static Align="Center" Font="굴림,9" Height="20" Id="Static11" Left="352" LineSpacing="5" TabOrder="18" Text="H" Top="81" VAlign="Middle" Width="40" WordWrap="TRUE"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="624" TabOrder="19" Text="BM공수" Top="80" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static4" Left="392" TabOrder="20" Text="정지건수" Top="80" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="160" TabOrder="21" Text="정지시간" Top="80" VAlign="Middle" Width="92"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm213.xml
+ * ● PROGRAM DESCRIPTION  : 주요라인고장실적
+ * ● DATE WRITTEN         : 2011.10.24
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today(); //날짜
+var nowTime = GetDate(); //시간
+var h=substr(nowTime,8,4); //시
+
+
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+var userNm = G_ds_user.GetColumn(0,"USER_NAME");
+
+
+
+var stdate= addMonth(nowdate,-1); //현재날짜 - 1개월
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	MainGrid.UserData = MainGrid.Height;
+
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+//	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){	
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+/********************************************************************** 
+ * 내용설명 : 조회
+ **********************************************************************/ 
+ function getOgm213()
+{
+	if(!validationChk())
+		return;
+	var sKind		= "getOgm213";						
+	var sMethodName = "service::psogmlib/selectOgm213.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm213=ds_ogm213";
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@WNDATS=" + quote(cmbWnDatS.Value); //검색기간START
+		sArgument += "@WNDATE=" + quote(cmbWnDatE.Value); //검색기간END
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	if (str == 'T'){  //정상조회
+		getOgm213_sum();
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}	
+	
+}
+/********************************************************************** 
+ * 내용설명 : 선택라인 합계구하기
+ **********************************************************************/ 
+function getOgm213_sum(){
+	var sum_stphr=0;
+	var cnt_nocnt=0;
+	var sum_tothr=0;
+
+	for (var i=0;i<ds_ogm213.GetRowCount();i++)
+	{
+		sum_stphr = sum_stphr+ parseFloat(ds_ogm213.getColumn(i,"SUM_STPHR"));
+		cnt_nocnt = cnt_nocnt+ parseInt(ds_ogm213.getColumn(i,"CNT_STPHR"));
+		sum_tothr = sum_tothr+ parseFloat(ds_ogm213.getColumn(i,"SUM_TOTHR"));
+	}
+	txtstphr.Text = NumFormat(sum_stphr,1);
+	txtnocnt.Text = cnt_nocnt;
+	txttothr.Text = NumFormat(sum_tothr,1);
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="getOgm213"){
+	// 조회건수가 없을경우
+		if(ds_ogm213.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+		// tran 성공	
+	}else if(svcId=="setOgm211"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "주요라인고장실적";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|주요라인고장실적";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 데이터셋 상태 체크
+ **********************************************************************/ 
+function ds_ogm213_OnRowPosChanged(obj,nOldRow,nRow){
+	//로우타입 insert만 ED박스 enable
+	if(ds_gm211.GetRowType(ds_ogm213.currow)=="insert"){
+		ed_maker.Enable=true;
+	}else{
+		ed_maker.Enable=false;
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+	var result = true;
+
+	var PaValue = cmbWnDatS.Value;
+	var UrValue = cmbWnDatE.Value;
+	if (PaValue == "" || UrValue == "")
+	{
+		alert(setPopMessage("3048"));
+		result = false;
+	}
+	else if(PaValue > UrValue)
+	{
+		alert(setPopMessage("3049"));
+		result =false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOgm213();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_ogm200")== false) return;
+	ds_ogm213.AddRow();
+}
+
+function fn_Delete()
+{
+	ds_ogm213.DeleteRow(ds_ogm213.currow);
+}
+
+function fn_Save()
+{
+	setogm213();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+function MainGrid_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var comps1=ComboBoxPlant.Value;
+	//var wndats=cmbWnDatS.Value; //검색기간START
+	//var wndate=cmbWnDatE.Value; //검색기간END
+	//var linnm=trim(ds_ogm213.linnm);
+	//var stphr=trim(ds_ogm213.sum_stphr);
+	//var stpcnt=trim(ds_ogm213.cnt_stphr);
+	//var lincd=trim(ds_ogm213.lincd);
+	//var str = dialog("psogmlib::ogm215.xml","comps1="+comps1+" "+"stphr="+stphr+" "+"stpcnt="+stpcnt+" "+"lincd="+lincd+" "+"wndates="+wndats+" "+"wndatee="+wndate+" ",300,300,"TitleBar=false");
+	var str = dialog("psogmlib::ogm215.xml","comps1="+comps1+" ",300,300,"TitleBar=false");
+
+}
+
+
+function cmbWnDatS_OnKillFocus(obj)
+{
+	var sdate=substr(cmbWnDatS.Value,0,6)+"01";
+	cmbWnDatS.Value=sdate;	
+}
+
+function cmbWnDatE_OnKillFocus(obj)
+{
+	var edate = substr(cmbWnDatE.Value,0,6);
+	var ldate = addMonth(edate+"01", +1); //현재월01일 +1개월
+	var vdate = addDate(ldate, -1);
+	cmbWnDatE.Value=vdate;
+}
+
+
+
+]]></Script>
+</Window>

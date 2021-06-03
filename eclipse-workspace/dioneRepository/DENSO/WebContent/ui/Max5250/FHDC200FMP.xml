@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="448" Id="form" Left="8" OnKeyDown="fnc_OnKeyDown" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="autoConvert" TooltipFont="Default,0" Top="8" Ver="1.0" Width="376" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" TabOrder="11" Top="29" Width="374"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" TabOrder="10" Top="29" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="43" Height="5" Id="Shape1" Left="13" LineColor="#dceaf7" Right="18" TabOrder="9" Top="38" Type="Ellipse" Width="5"></Shape>
+		<Static Height="20" Id="ID04021" Left="8" TabOrder="0" Text="&#32;사업부&#32;:" Top="32" VAlign="Middle" Width="90"></Static>
+		<Static Height="20" Id="ID04032" Left="134" TabOrder="1" Text="C1" Top="31" VAlign="Middle" Width="20"></Static>
+		<Static Height="20" Id="ID23042" Left="8" TabOrder="2" Text="&#32;&#32;&#32;&#32;&#32;More.." Top="424" VAlign="Middle" Visible="FALSE" Width="110"></Static>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="21" Id="FD04032" Left="107" OnKeyDown="fnc_OnKeyDown" TabOrder="3" Top="31" Width="20"></Edit>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" BindDataset="ds_column_p" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="419" CellMoving="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="362" Id="MainGrid" InputPanel="FALSE" LineColor="#b4b4b4" MinWidth="100" OnCellDBLClick="MainGrid_OnCellDblClick" OnKeyDown="fnc_OnKeyDown" Right="373" RowHeight="21" ScrollCell="true" TabOrder="5" TabStop="true" Top="57" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="373">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="60"/>
+						<col width="265"/>
+						<col width="265"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="Sel"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="CODE"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="부　서　명"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="COLUMN_01" display="normal" edit="normal"/>
+						<cell align="left" col="1" colid="COLUMN_02" display="normal" edit="normal"/>
+						<cell align="left" col="2" colid="COLUMN_03" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" TabOrder="7" Width="374"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="ID01028" Left="32" TabOrder="6" Text="부서조회" Top="8" Width="284"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="1" TabOrder="8" Width="29"></Image>
+		<Button Height="21" Id="btn_pgup" ImageID="icon_up" Left="320" OnClick="btn_pgup_OnClick" TabOrder="13" Text="Button0" Top="424" Visible="FALSE" Width="24"></Button>
+		<Button Height="21" Id="btn_pgdn" ImageID="icon_down" Left="346" OnClick="btn_pgdn_OnClick" TabOrder="12" Text="Button0" Top="424" Visible="FALSE" Width="24"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(0,"COLUMN_01"),1);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(1,"COLUMN_01"),2);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(2,"COLUMN_01"),3);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(3,"COLUMN_01"),4);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(4,"COLUMN_01"),5);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(5,"COLUMN_01"),6);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(6,"COLUMN_01"),7);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(7,"COLUMN_01"),8);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(8,"COLUMN_01"),9);
+	Max5250.SendToColumn("COLUMN_01",ds_column_p.getColumn(9,"COLUMN_01"),10);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(0,"COLUMN_02"),1);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(1,"COLUMN_02"),2);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(2,"COLUMN_02"),3);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(3,"COLUMN_02"),4);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(4,"COLUMN_02"),5);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(5,"COLUMN_02"),6);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(6,"COLUMN_02"),7);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(7,"COLUMN_02"),8);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(8,"COLUMN_02"),9);
+	Max5250.SendToColumn("COLUMN_02",ds_column_p.getColumn(9,"COLUMN_02"),10);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(0,"COLUMN_03"),1);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(1,"COLUMN_03"),2);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(2,"COLUMN_03"),3);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(3,"COLUMN_03"),4);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(4,"COLUMN_03"),5);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(5,"COLUMN_03"),6);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(6,"COLUMN_03"),7);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(7,"COLUMN_03"),8);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(8,"COLUMN_03"),9);
+	Max5250.SendToColumn("COLUMN_03",ds_column_p.getColumn(9,"COLUMN_03"),10);
+}
+function sendField(){
+	MAX5250.SendToField("FD04032",FD04032.Text );
+	
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	form.SetFocus();
+	if(IsValid(btn_pgdn))
+		chkPagePop(page,23,41); 
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+		ID04021.Text=ds_main.getColumn(0,"ID04021");
+		ID04032.Text=ds_main.getColumn(0,"ID04032");
+		ID06022.Text=ds_main.getColumn(0,"ID06022");
+		ID06026.Text=ds_main.getColumn(0,"ID06026");
+		ID06031.Text=ds_main.getColumn(0,"ID06031");
+		ID07022.Text=ds_main.getColumn(0,"ID07022");
+		ID08023.Text=ds_main.getColumn(0,"ID08023");
+		ID08026.Text=ds_main.getColumn(0,"ID08026");
+		ID08031.Text=ds_main.getColumn(0,"ID08031");
+		ID09023.Text=ds_main.getColumn(0,"ID09023");
+		ID09026.Text=ds_main.getColumn(0,"ID09026");
+		ID09031.Text=ds_main.getColumn(0,"ID09031");
+		ID10023.Text=ds_main.getColumn(0,"ID10023");
+		ID10026.Text=ds_main.getColumn(0,"ID10026");
+		ID10031.Text=ds_main.getColumn(0,"ID10031");
+		ID11023.Text=ds_main.getColumn(0,"ID11023");
+		ID11026.Text=ds_main.getColumn(0,"ID11026");
+		ID11031.Text=ds_main.getColumn(0,"ID11031");
+		ID12023.Text=ds_main.getColumn(0,"ID12023");
+		ID12026.Text=ds_main.getColumn(0,"ID12026");
+		ID12031.Text=ds_main.getColumn(0,"ID12031");
+		ID13023.Text=ds_main.getColumn(0,"ID13023");
+		ID13026.Text=ds_main.getColumn(0,"ID13026");
+		ID13031.Text=ds_main.getColumn(0,"ID13031");
+		ID14023.Text=ds_main.getColumn(0,"ID14023");
+		ID14026.Text=ds_main.getColumn(0,"ID14026");
+		ID14031.Text=ds_main.getColumn(0,"ID14031");
+		ID15023.Text=ds_main.getColumn(0,"ID15023");
+		ID15026.Text=ds_main.getColumn(0,"ID15026");
+		ID15031.Text=ds_main.getColumn(0,"ID15031");
+		ID16023.Text=ds_main.getColumn(0,"ID16023");
+		ID16026.Text=ds_main.getColumn(0,"ID16026");
+		ID16031.Text=ds_main.getColumn(0,"ID16031");
+		ID17023.Text=ds_main.getColumn(0,"ID17023");
+		ID17026.Text=ds_main.getColumn(0,"ID17026");
+		ID17031.Text=ds_main.getColumn(0,"ID17031");
+		ID18023.Text=ds_main.getColumn(0,"ID18023");
+		ID18026.Text=ds_main.getColumn(0,"ID18026");
+		ID18031.Text=ds_main.getColumn(0,"ID18031");
+		ID19023.Text=ds_main.getColumn(0,"ID19023");
+		ID19026.Text=ds_main.getColumn(0,"ID19026");
+		ID19031.Text=ds_main.getColumn(0,"ID19031");
+		ID20023.Text=ds_main.getColumn(0,"ID20023");
+		ID20026.Text=ds_main.getColumn(0,"ID20026");
+		ID20031.Text=ds_main.getColumn(0,"ID20031");
+		ID21023.Text=ds_main.getColumn(0,"ID21023");
+		ID21026.Text=ds_main.getColumn(0,"ID21026");
+		ID21031.Text=ds_main.getColumn(0,"ID21031");
+		ID22023.Text=ds_main.getColumn(0,"ID22023");
+		ID22026.Text=ds_main.getColumn(0,"ID22026");
+		ID22031.Text=ds_main.getColumn(0,"ID22031");
+		ID23042.Text=ds_main.getColumn(0,"ID23042");
+		FD04032.Text=ds_main.getColumn(0,"FD04032");
+		FD08023.Text=ds_main.getColumn(0,"FD08023");
+		FD09023.Text=ds_main.getColumn(0,"FD09023");
+		FD10023.Text=ds_main.getColumn(0,"FD10023");
+		FD11023.Text=ds_main.getColumn(0,"FD11023");
+		FD12023.Text=ds_main.getColumn(0,"FD12023");
+		FD13023.Text=ds_main.getColumn(0,"FD13023");
+		FD14023.Text=ds_main.getColumn(0,"FD14023");
+		FD15023.Text=ds_main.getColumn(0,"FD15023");
+		FD16023.Text=ds_main.getColumn(0,"FD16023");
+		FD17023.Text=ds_main.getColumn(0,"FD17023");
+		FD18023.Text=ds_main.getColumn(0,"FD18023");
+		FD19023.Text=ds_main.getColumn(0,"FD19023");
+		FD20023.Text=ds_main.getColumn(0,"FD20023");
+		FD21023.Text=ds_main.getColumn(0,"FD21023");
+		FD22023.Text=ds_main.getColumn(0,"FD22023");
+		
+	}
+}
+function fnc_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam){
+	if(nChar == 13){
+		sendColumn();
+		sendField();
+	}
+}
+
+//page down
+function btn_pgdn_OnClick(obj)
+{	
+	page += 1;
+	chkPagePop(page,23,41); 
+	MAX5250.SendKeys("[PDN]");
+	
+}
+
+function btn_pgup_OnClick(obj)
+{
+	page -= 1;
+	chkPagePop(page,23,41); 
+	MAX5250.SendKeys("[PUP]");
+	
+	
+}
+
+
+function MainGrid_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	codePopupClick(nRow);
+}
+
+function Button0_OnClick(obj)
+{
+	sendField();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PssallibDao">
+
+    <resultMap id="Pssallib" type="PssallibDomain">
+        <result property="comps" column="COMPS" />
+        <result property="jpnno" column="JPNNO" />
+        <result property="slpno" column="SLPNO" />
+        <result property="jpsdt" column="JPSDT" />
+        <result property="jpsdt2" column="JPSDT" />
+        <result property="jptdt1" column="JPTDT" />
+        <result property="jptdt2" column="JPTDT" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="shpto" column="SHPTO" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="shpnm" column="SHPNM" />
+        <result property="carcd" column="CARCD" />
+        <result property="mstsm" column="MSTSM" />
+        <result property="pspno" column="PSPNO" />
+        <result property="cprtn" column="CPRTN" />
+        <result property="unmsr" column="UNMSR" />
+        <result property="jpsqy" column="JPSQY" />
+        <result property="pcost" column="PCOST" />
+        <result property="pfote" column="PFOTE" />
+        <result property="curcd" column="CURCD" />
+        <result property="pcsum" column="PCSUM" />
+        <result property="trknos" column="TRKNOS" />
+        <result property="trknoe" column="TRKNOE" />
+        <result property="prcdt" column="PRCDT" />
+        <result property="dyes" column="DYES" />
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />
+    </resultMap>
+   
+   <select id="selectSMDZ123P" resultMap="Pssallib" parameterType="PssallibDomain">
+        select 
+              A.COMPS
+            , TRIM(A.JPNNO) AS JPNNO
+            , TRIM(A.SLPNO) AS SLPNO
+            , A.JPSDT, A.PYVND
+            , A.SHPTO
+            , TRIM(B.CUSNM) AS CUSNM 
+            , TRIM(C.SHPNM) AS SHPNM 
+        <if test="comps == 'E1'">
+            , TRIM(D.CARCD) AS CARCD
+        </if>
+        <if test="comps != 'E1'">
+        	, TRIM(D.PRDCD) AS CARCD
+		</if>
+			,TRIM(E.MSTSM) AS MSTSM
+			, A.PSPNO
+			, TRIM(F.CPRTN) AS CPRTN
+			, G.UNMSR
+			, A.JPSQY
+			, A.PCOST
+			, A.PFOTE
+			, A.CURCD
+			, (A.JPSQY * A.PCOST) AS PCSUM
+		from ${lib2}.SMD110PF A
+		LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+		LEFT OUTER JOIN ${lib1}.EM003PR C ON A.PYVND=C.CUSNO AND A.SHPTO=C.SHPNO
+		LEFT OUTER JOIN ${lib2}.MST100PF D  ON A.COMPS=D.COMPS AND A.PSPNO=D.PRTNO 
+		<if test="comps == 'E1'">
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF 
+		WHERE COMPS=#{comps} AND GRPCD='CAR') E ON D.CARCD=E.MSTCD
+		</if>
+		<if test="comps != 'E1'">
+		LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF 
+		WHERE COMPS=#{comps} AND GRPCD='PRD') E ON D.PRDCD=E.MSTCD
+		</if>
+		LEFT OUTER JOIN 
+				(SELECT Y.* FROM ${lib1}.EM000PR Y WHERE	Y.EDATM = 
+					(SELECT MAX(X.EDATM) FROM ${lib1}.EM000PR X 
+					WHERE Y.CUSNO=X.CUSNO AND Y.PRTNO=X.PRTNO AND X.EDATM <![CDATA[<=]]>  #{jpsdt2})
+				) F ON A.PYVND=F.CUSNO AND A.PSPNO=F.PRTNO
+		LEFT OUTER JOIN ${lib1}.BM008PR G ON A.PSPNO = G.ITNBR
+		where
+			A.PYVND BETWEEN #{pyvnd} AND #{pyvnd2}
+			AND A.JPNNO BETWEEN #{jpnno} AND #{jpnno2}
+			AND A.JPSDT BETWEEN #{jpsdt} AND #{jpsdt2}
+			AND A.SATYP != '61'
+		<if test="jptdt1 != null and jptdt1 != ''">
+			and A.JPTDT BETWEEN #{jptdt1} AND #{jptdt2}
+		</if>
+		<if test="dyes != null and dyes != ''">
+			and A.PCOST = 0
+		</if>
+		ORDER BY PYVND, JPNNO, JPSDT, SLPNO
+   </select>
+   
+   <!--  -->   
+   <select id="selectSMDZ123P_CHK" resultMap="Pssallib" parameterType="PssallibDomain">
+   	 SELECT 
+			  A.COMPS
+			, A.PRCDT
+			, A.PRCMK
+			, A.PAYMK
+			, A.ACCMK
+			, A.DAYMK
+			, A.BRDCD
+			, B.MAJCD
+			, B.MAJDT
+			, C.TRKNOS
+			, C.TRKNOE
+	FROM 
+			${lib2}.MST090PF A 
+		LEFT OUTER JOIN ${lib2}.MST040PF B ON A.COMPS=B.COMPS AND B.MAJCD ='SMD110PFMAGAM'
+		LEFT OUTER JOIN 
+			(
+				SELECT 
+					  COMPS
+					, JPSDT
+					, MIN(JPNNO) AS TRKNOS
+					, MAX(JPNNO) AS TRKNOE 
+				FROM 
+					${lib2}.SMD112LF 
+				WHERE 
+					COMPS = #{comps}
+				AND JPSDT BETWEEN #{jpsdt} AND #{jpsdt2}
+				GROUP BY COMPS, JPSDT
+			) C 
+		ON A.COMPS = C.COMPS 
+		AND A.PRCDT = C.JPSDT
+	WHERE 
+		A.COMPS = #{comps}
+		AND A.PRCDT BETWEEN #{jpsdt} AND #{jpsdt2}
+	ORDER BY A.COMPS, A.PRCDT DESC
+   </select>
+    
+</mapper>

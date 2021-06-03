@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.MainRePartDao">
+
+    <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.MainRePartDto">
+        <result property="partType" column="PART_TYPE" javaType="java.lang.String" />
+        <result property="partTypeNm" column="PART_TYPE_NM" javaType="java.lang.String" />
+        <result property="cnt" column="CNT" javaType="java.lang.Long" />
+    </resultMap>
+
+    <sql id="select_01">
+      	SELECT B.INQUIRY_GUBUN AS PART_TYPE
+	    ,	   C.CODE_KO_NM AS PART_TYPE_NM
+	    ,      COUNT(*) AS CNT
+	    FROM (
+		  SELECT B.*
+		  FROM (SELECT ROW_NUMBER() OVER(PARTITION BY A.VINNO, A.MANAGE_NO, A.SERVICE_DEGREE
+		               ORDER BY A.REPAIR_DATE DESC, A.RESULT_DEGREE DESC) LAST_SEQ,
+		               A.*
+		          FROM TB_DC_RESULT_MASTER A
+		       ) B
+		 WHERE B.LAST_SEQ = 1
+	   ) RTN
+	   INNER JOIN TB_DC_SERVICE_MASTER B
+	      ON B.MASTER_ID  = RTN.VINNO
+	        AND B.MANAGE_NO = RTN.MANAGE_NO
+	          AND B.SERVICE_DEGREE = RTN.SERVICE_DEGREE
+	   LEFT OUTER JOIN TB_CM_CODE C
+	       ON C.GRP_CD = 'CAQPD'
+	         AND C.CODE_CD = B.INQUIRY_GUBUN
+	   WHERE 0 = 0
+	    AND  TO_CHAR(RTN.RECALL_REQ_DATE,'YYYYMMDD') &gt; '20170101'
+	    AND  RTN.RECEIVE_DATE IS NULL
+       GROUP BY B.INQUIRY_GUBUN , C.CODE_KO_NM
+    </sql>
+
+    <sql id="select_02">
+        SELECT B.INQUIRY_GUBUN AS PART_TYPE
+             ,	   C.CODE_KO_NM AS PART_TYPE_NM
+             ,      COUNT(*) AS CNT
+        FROM (
+                 SELECT B.*
+                 FROM (SELECT ROW_NUMBER() OVER(PARTITION BY A.VINNO, A.MANAGE_NO, A.SERVICE_DEGREE
+                                           ORDER BY A.REPAIR_DATE DESC, A.RESULT_DEGREE DESC) LAST_SEQ,
+                              A.*
+                       FROM TB_DC_RESULT_MASTER A
+                      ) B
+                 WHERE B.LAST_SEQ = 1
+             ) RTN
+                 INNER JOIN TB_DC_SERVICE_MASTER B
+                            ON B.MASTER_ID  = RTN.VINNO
+                                AND B.MANAGE_NO = RTN.MANAGE_NO
+                                AND B.SERVICE_DEGREE = RTN.SERVICE_DEGREE
+                 LEFT OUTER JOIN TB_CM_CODE C
+                                 ON C.GRP_CD = 'CAQPD'
+                                     AND C.CODE_CD = B.INQUIRY_GUBUN
+        WHERE 0 = 0
+          AND  TO_CHAR(RTN.RECALL_REQ_DATE,'YYYYMMDD') &gt; '20170101'
+          AND  RTN.RECEIVE_DATE IS NULL
+          AND  B.RECEIPT_NM = #{keyValue}
+        GROUP BY B.INQUIRY_GUBUN , C.CODE_KO_NM
+    </sql>
+
+    <sql id="where_00">
+       AND AA.PART_TYPE = #{keyValue}
+    </sql>
+    <sql id="where_01">
+       AND AA.PART_TYPE = #{inquiryGubun}
+    </sql>
+
+    <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.MainRePartDomain">
+
+        SELECT AA.*
+        FROM (
+        <include refid="select_01"/>
+        ) AA
+        <where>
+            <include refid="where_01"/>
+        </where>
+    </select>
+
+    <select id="searchByString" resultMap="codeMap" parameterType="String">
+
+        SELECT AA.*
+        FROM (
+        <include refid="select_01"/>
+        ) AA
+        <where>
+            <include refid="where_00"/>
+        </where>
+    </select>
+
+    <select id="searchByString1" resultMap="codeMap" parameterType="String">
+
+        SELECT AA.*
+        FROM (
+        <include refid="select_02"/>
+        ) AA
+        WHERE AA.PART_TYPE = '01'
+    </select>
+
+    <select id="searchByString2" resultMap="codeMap" parameterType="String">
+
+        SELECT AA.*
+        FROM (
+        <include refid="select_02"/>
+        ) AA
+        WHERE AA.PART_TYPE = '02'
+    </select>
+
+    <select id="searchByString3" resultMap="codeMap" parameterType="String">
+
+        SELECT AA.*
+        FROM (
+        <include refid="select_02"/>
+        ) AA
+        WHERE AA.PART_TYPE = '03'
+    </select>
+
+</mapper>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="SVZE051Q" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="업체차종서열제외마스타&#32;등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SVME300" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYVND" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKCAR" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEYNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEYCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="column0" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SVME300_CHECK"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="2" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="2" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="266" TabOrder="2" Text="업&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;체" Top="34" VAlign="Middle" Width="116"></Static>
+		<Grid AreaSelect="true" AutoFitEndLine="Hide" BindDataset="ds_SVME300" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="605" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="544" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" Right="1058" TabOrder="2" TabStop="true" Top="61" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="144"/>
+						<col width="150"/>
+						<col width="141"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="서열"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="번호"/>
+					</head>
+					<body>
+						<cell col="0" colid="MKCAR" display="text" edit="uppernumchar" limit="2"/>
+						<cell col="1" colid="SEYNO" display="text" edit="uppernumchar" limit="3"/>
+						<cell col="2" colid="SEYCD" display="text" edit="uppernumchar" limit="4"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="122" TabOrder="8" Top="34" VAlign="Middle" Width="136"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="384" TabOrder="9" Top="34" VAlign="Middle" Width="398"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="1" Top="37" Width="128"></Combo>
+		<Edit AutoSelect="TRUE" Height="21" Id="ed_PYVND" Left="388" MaxLength="8" Number="TRUE" OnChanged="ed_PYVND_OnChanged" OnCharChanged="ed_PYVND_OnCharChanged" OnKillFocus="ed_PYVND_OnKillFocus" TabOrder="2" Top="37" UseIME="FALSE" Width="128"></Edit>
+		<Static Height="19" Id="st_PYVND" Left="528" TabOrder="11" Top="36" VAlign="Bottom" Width="216"></Static>
+		<Image Cursor="HAND" Height="16" Id="imgMaker" ImageID="ic_search" Left="754" OnClick="imgMaker_OnClick" Static="FALSE" TabOrder="13" Top="39" Width="14"></Image>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static13" Left="528" TabOrder="12" Top="55" Width="220"></Static>
+		<Button Height="25" Id="Button6" ImageID="btn2_delete2" Left="961" OnClick="fn_Delete" TabOrder="17" Text="Button1" Top="79" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button5" ImageID="sum_save" Left="886" OnClick="fn_Save" TabOrder="16" TabStop="FALSE" Text="Button2" Top="78" Visible="FALSE" Width="72"></Button>
+		<Button Height="26" Id="Button4" ImageID="btn2_add2" Left="808" OnClick="fn_Input" TabOrder="15" Text="추가" Top="79" Visible="FALSE" Width="75"></Button>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="732" OnClick="fn_Search" TabOrder="14" Text="조회" Top="79" Visible="FALSE" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 김정현
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SVME300.xml
+ * ● PROGRAM DESCRIPTION  : 업체차종서열제외마스타 등록
+ * ● DATE WRITTEN         : 2013.01.10
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); 				//공장구분 선택
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getSVME300(){
+
+	if(!validationChk()){
+		return;
+	}		
+		
+	var sKind		= "getSVME300";						
+	var sMethodName = "service::pssallib/selectSVME300.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SVME300=ds_SVME300";    					// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); 			//사업부
+	sArgument += "@PYVND=" + quote(ed_PYVND.Text); 				//업체	
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}		
+}
+
+ //등록시 업체코드 존재유무 체크함. 없으면 동록불가.
+function setSVME300(){
+	
+	if(length(trim(st_PYVND.Text)) < 1){
+		alert(setPopMessage("4674"));  //[알림]업체를 입력하세요.
+		setMessage("4674");	
+		ed_PYVND.SetFocus();
+		return;
+	}	
+	var sKind		= "setSVME300";						
+	var sMethodName = "service::pssallib/saveSVME300.do";     			// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_SVME300=ds_SVME300:U";               		//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SVME300_CHECK=ds_SVME300_CHECK";  		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if (ds_SVME300_CHECK.GetRowCount() > 0){
+		for(var i=0;i<ds_SVME300_CHECK.GetRowCount();i++){
+			alert("차종 : " +ds_SVME300_CHECK.GetColumn(i,"MKCAR") 
+			+ ", 서열 : " +ds_SVME300_CHECK.GetColumn(i,"SEYNO") 
+			+ ", 번호 : " +ds_SVME300_CHECK.GetColumn(i,"SEYCD")
+			+ " = " + ds_SVME300_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getSVME300();  //error항목이 존재시에는 재조회
+		return;
+	}
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+
+	var result = true;
+	var pyvndVal = st_PYVND.Text;
+	ed_PYVND.BKColor="white";
+
+	if (pyvndVal == "" )
+	{
+		ed_PYVND.BKColor="paleturquoise";
+		alert(setPopMessage("2516"));//[경고] 필수입력항목입니다. (업체번호)
+		setMessage("2516");	
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SVME300.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = '\\' + "업체차종서열제외마스타 등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|업체차종서열제외마스타 등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getSVME300();
+}
+
+function fn_Input()
+{
+	if(!validationChk()){
+		return;
+	}	
+	if(checkInsertCount("ds_SVME300")== false) return;
+	if(ds_SVME300.rowcount < 1) fn_Search();
+	ds_SVME300.AddRow();
+	ds_SVME300.SetColumn(ds_SVME300.currow, "COMPS", ComboBoxPlant.Value);
+	ds_SVME300.SetColumn(ds_SVME300.currow, "PYVND", ed_PYVND.Text);
+}
+
+function fn_Delete()
+{
+	if(ds_SVME300.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_SVME300.DeleteRow(ds_SVME300.currow);	//삭제		
+	alert(setPopMessage("1011"));				//[알림] 화면에서만 제거되었습니다. 저장하시면 삭제됩니다.		
+}
+
+function fn_Save()
+{
+	setSVME300();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+/****************************************************************** 
+ * 내용설명 : 구분 값이 0,1이 아닐경우 이동불가
+ **********************************************************************/ 
+ 
+function imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_PYVND.Text);
+	if (length(trim(ed_PYVND.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_PYVND.Text = rtn[0];
+		st_PYVND.Text = rtn[1];
+	}
+}
+
+function ed_PYVND_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_PYVND.Text = "";
+}
+
+function ed_PYVND_OnChanged(obj,strText)
+{
+	ds_SVME300.ClearData();
+}
+
+function ed_PYVND_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_PYVND.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("4671"));
+		setMessage("4671");	
+		ed_PYVND.SetFocus();
+		return;
+	}
+	st_PYVND.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;	
+}
+]]></Script>
+</Window>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-miyabi-aop.xml
+ *
+ * [JP] 雅(Spring) の AOP 設定ファイルです。
+ * [EN] This is the configuration file of the AOP Miyabi(Spring).
+ *
+ * $ applicationContext-miyabi-aop.xml 1780 2015-07-06 01:57:09Z 100011308867 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- Multipart configuration for MultipartFilter with commons-fileupload -->
+    <bean id="filterMultipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000"/>
+    </bean>
+
+    <!-- [JP] AOP設定 =========================================================== -->
+    <!-- [EN] AOP configuration =========================================================== -->
+    <aop:config>
+        <!--aop:pointcut id="serviceAop"
+            expression="execution(* *..*Service.*(..))
+            and !target(org.springframework.format.support.DefaultFormattingConversionService)" /-->
+
+        <aop:pointcut id="serviceAop"
+            expression="execution(* *..*service.*Service.*(..))" />
+        <aop:pointcut id="daoAop"
+            expression="execution(* *..*Dao.*(..))" />
+
+        <!-- searchCount 検索件数処理 AOP  -->
+        <aop:pointcut id="daoAopSearchCount" expression="execution(int *..*Dao.searchCount*(..)) and !execution(int com.globaldenso.ai.library..*Dao.searchCount*(..))" />
+
+        <!-- update 更新処理 AOP -->
+        <aop:pointcut id="daoAopUpdate" expression="execution(int *..*Dao.update*(..)) and !execution(int com.globaldenso.ai.library..*Dao.update*(..))" />
+        <!-- delete 削除処理 AOP -->
+        <aop:pointcut id="daoAopDelete" expression="execution(int *..*Dao.delete*(..)) and !execution(int com.globaldenso.ai.library..*Dao.delete*(..))" />
+
+
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="transactionInterceptor" />
+        <aop:advisor pointcut-ref="serviceAop"
+            advice-ref="serviceLoggingAdvice" />
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="daoLoggingAdvice" />
+        <!--aop:advisor pointcut-ref="daoAop"
+            advice-ref="integrationLayerThrowsAdvice" /-->
+        <aop:advisor pointcut-ref="daoAop"
+            advice-ref="uniqueConstraintViolationThrowsAdvice" />
+
+        <!-- searchCount 検索件数処理 AOP -->
+        <aop:advisor pointcut-ref="daoAopSearchCount" advice-ref="searchCountLimitAdvice" />
+
+        <!-- update 更新処理 AOP -->
+        <aop:advisor pointcut-ref="daoAopUpdate" advice-ref="noDataAffectedAdvice" />
+        <!-- delete 削除処理 AOP -->
+        <aop:advisor pointcut-ref="daoAopDelete" advice-ref="noDataAffectedAdvice" />
+
+    </aop:config>
+
+    <!-- [JP] トランザクション設定 ============================================== -->
+    <!-- [EN] Transaction settings ============================================== -->
+    <tx:advice id="transactionInterceptor"
+        transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="transact*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="create*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="update*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="delete*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="search*" propagation="REQUIRED"
+                isolation="READ_COMMITTED" read-only="true"
+                rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- [JP] Bean 定義 ========================================================= -->
+    <!-- [EN] Bean definition ========================================================= -->
+    <!-- [JP] Service ログ出力 -->
+    <!-- [EN] Service log output -->
+    <bean id="serviceLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.ServiceLoggingInterceptor" />
+
+    <!-- [JP] Dao ログ出力 -->
+    <!-- [EN] Dao log output -->
+    <bean id="daoLoggingAdvice"
+        class="com.globaldenso.ai.core.logging.DaoLoggingInterceptor" />
+
+    <!-- [JP] Integration レイヤの例外ハンドラ  -->
+    <!-- [EN] Integration layer exception handlers  -->
+    <!--bean id="integrationLayerThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.IntegrationLayerThrowsAdvice" /-->
+        
+    <bean id="uniqueConstraintViolationThrowsAdvice"
+        class="com.globaldenso.ai.core.exception.UniqueConstraintViolationThrowsAdvice" />
+
+    <!-- searchCount 検索条件処理 AOP  -->
+    <bean id="searchCountLimitAdvice" class="com.globaldenso.ai.sample.aop.SearchCountLimitAdvice" />
+
+    <!-- update 更新処理 AOP  -->
+    <bean id="noDataAffectedAdvice" class="com.globaldenso.ai.sample.aop.NoDataAffectedAdvice" />
+
+
+</beans>

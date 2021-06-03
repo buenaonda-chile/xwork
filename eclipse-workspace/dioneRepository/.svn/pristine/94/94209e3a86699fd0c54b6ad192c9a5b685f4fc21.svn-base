@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="코드관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset CanColumnChange="ds_ogm050_CanColumnChange" DataSetType="Dataset" Id="ds_ogm050" OnRowPosChanged="ds_ogm050_OnRowPosChanged"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm050_dchk"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CodeClass">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code_name>PGL&#32;부품구분</code_name>
+						<code1>PGL</code1>
+					</record>
+					<record>
+						<code_name>PGR&#32;부품타입</code_name>
+						<code1>PGR</code1>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="3" Top="31" Width="1060"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="505" TabOrder="4" Text="코&#32;&#32;&#32;&#32;&#32;&#32;&#32;드" Top="36" VAlign="Middle" Width="92"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ogm050" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="544" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="480" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1058" TabOrder="5" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="101"/>
+						<col width="100"/>
+						<col width="150"/>
+						<col width="150"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="코드분류"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="코&#32;&#32;드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="약명(부품타입)"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="원&#32;&#32;명"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="GRPCD" display="normal"/>
+						<cell align="left" col="1" colid="MSTCD" display="normal"/>
+						<cell align="left" col="2" colid="MSTSM" display="normal"/>
+						<cell align="left" col="3" colid="MSTRM" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="100" OnChanged="common_OnChanged" TabOrder="6" Top="36" Width="120"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static0" Left="4" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="36" VAlign="Middle" Width="92"></Static>
+		<Edit Height="20" Id="ed_mstcd" Left="600" MaxLength="3" OnChanged="common_OnChanged" TabOrder="8" Top="36" UpperOnly="TRUE" UseIME="FALSE" Width="72"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="257" TabOrder="9" Text="코&#32;드&#32;분&#32;류" Top="36" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="code1" DataColumn="CODE_NAME" Height="18" Id="cb_grpcd" INDEX="0" InnerDataset="ds_CodeClass" Left="352" OnChanged="common_OnChanged" TabOrder="10" Top="36" Width="120"></Combo>
+		<Div Border="Flat" BorderColor="#888888" Height="67" Id="displayDiv" TabOrder="11" Text="Div0" Top="552" Width="1058">
+			<Contents>
+				<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static11" Left="64" TabOrder="1" Text="코드분류" Top="20" VAlign="Middle" Width="92"></Static>
+				<Edit AutoSelect="TRUE" BindDataset="ds_ogm050" Column="GRPCD" Enable="FALSE" Height="20" Id="ed_grpcd" Left="159" MaxLength="6" TabOrder="2" Top="20" UpperOnly="TRUE" Width="92"></Edit>
+				<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static4" Left="270" TabOrder="5" Text="코드" Top="20" VAlign="Middle" Width="92"></Static>
+				<Edit AutoSelect="TRUE" BindDataset="ds_ogm050" Column="MSTCD" Enable="FALSE" Height="20" Id="ed_mstcd1" Left="364" MaxLength="3" TabOrder="6" Top="20" UpperOnly="TRUE" UseIME="FALSE" Width="92"></Edit>
+				<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="486" TabOrder="4" Text="코드약명" Top="20" VAlign="Middle" Width="92"></Static>
+				<Edit BindDataset="ds_ogm050" CheckLength="Byte" Column="MSTSM" Height="20" Id="Edit8" Left="580" MaxLength="6" TabOrder="3" Top="20" Width="92"></Edit>
+				<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="710" TabOrder="8" Text="코드원명" Top="20" VAlign="Middle" Width="92"></Static>
+				<Edit BindDataset="ds_ogm050" CheckLength="Byte" Column="MSTRM" Height="20" Id="Edit2" Left="805" MaxLength="18" TabOrder="7" Top="20" Width="172"></Edit>
+			</Contents>
+		</Div>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm050.xml
+ * ● PROGRAM DESCRIPTION  : 코드관리
+ * ● DATE WRITTEN         : 2011.08.17
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	//setClass(ComboBoxClass,ds_Class); //분류지정(1:예비품, 2:비품, 3:식자재)
+	cb_grpcd.Index = 0;
+	getComCode(); //공장구분 선택
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	MainGrid.UserData = MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053"); //상세화면 메시지
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.RowHeight = G_ds_design.GetColumn(0,"RowHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	
+	displayDiv.Width = G_ds_design.GetColumn(0,"Width");
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getogm050(){
+	//var group = ComboBoxClass.Value;
+	
+	var sKind		= "getOgm050";						
+	var sMethodName = "service::psogmlib/selectOGM050.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ogm050=ds_ogm050";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@GRPCD=" + quote(cb_grpcd.Value);       //코드분류
+	sArgument += "@MSTCD=" + quote(ed_mstcd.Value);      //코드
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+function setogm050(){
+	var idnum = substr(G_ds_user.GetColumn(0,"USER_ID"),1,7);
+	if(!validationChk()) return;
+	var sKind		= "setogm050";						
+	var sMethodName = "service::psogmlib/OGM050Save.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ogm050=ds_ogm050:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							     // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += " GRPCD=" + quote(displayDiv.ed_grpcd.Value);       //코드분류
+	sArgument += " ADUSR=" + quote(idnum);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="setogm050"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+/********************************************************************** 
+ * 내용설명 : 중복 체크
+ **********************************************************************/ 
+function duplicateChk(){
+	http.Sync 	= true;
+	var sKind		= "getogm050_dchk";						
+	var sMethodName = "service::psogmlib/selectOGM050_dchk.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_OGM050_dchk=ds_OGM050_dchk";
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += " GRPCD=" + quote(displayDiv.ed_grpcd.Value);       //코드분류
+	sArgument += " MSTCD=" + quote(displayDiv.ed_mstcd1.Value);      //코드	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if(ds_OGM050_dchk.rowcount() > 0){
+		alert(setPopMessage("2039"));	// 2039 == 중복된data가 존재합니다..
+		setMessage("2039");
+		return false;
+	}
+	return true;	
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크 (notnull,중복)
+ **********************************************************************/ 
+function ds_ogm050_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if( strColumnID == "MSTCD" ){
+		if( length(varNewValue) == 0 ){
+			alert(setPopMessage("2507"));
+			setMessage("2507");
+			return false;
+		}
+		else{
+			if(!duplicateChk()){         //중복check
+				displayDiv.ed_mstcd1.SetFocus();
+				return false;  
+				}
+			return true;
+		}
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 데이터셋 상태 체크
+ **********************************************************************/ 
+function ds_ogm050_OnRowPosChanged(obj,nOldRow,nRow){
+	//로우타입 insert만 ED박스 enable
+	if(ds_ogm050.GetRowType(ds_ogm050.currow)=="insert"){
+		displayDiv.ed_mstcd1.Enable=true;
+	}else{
+		displayDiv.ed_mstcd1.Enable=false;
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+	for(var i=0; i<ds_ogm050.rowcount(); i++){
+		if(length(trim(ds_ogm050.GetColumn(i, "GRPCD")))==0){
+			alert(setPopMessage("2507"));
+			setMessage("2507");
+			ds_ogm050.row = i;
+			return false;
+		}
+		if(length(trim(ds_ogm050.GetColumn(i, "MSTCD")))==0){
+			alert(setPopMessage("2507"));
+			setMessage("2507");
+			ds_ogm050.row = i;
+			return false;
+		}
+	}
+	return true;
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "코드관리";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|코드관리";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	//ds_ogm050.DeleteAll();
+	//ds_ogm050_dchk.DeleteAll();
+	ds_ogm050.ClearData();
+	ds_ogm050_dchk.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOgm050();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_ogm050")== false) return;
+	ds_ogm050.AddRow();
+	ds_ogm050.SetColumn(ds_ogm050.Row, "GRPCD", cb_grpcd.value); // default값 설정
+	displayDiv.ed_mstcd1.SetFocus();
+}
+
+function fn_Delete()
+{
+	ds_ogm050.DeleteRow(ds_ogm050.currow);
+	alert(setPopMessage("1011"));
+	setMessage("1011");
+}
+
+function fn_Save()
+{
+	setogm050();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+]]></Script>
+</Window>

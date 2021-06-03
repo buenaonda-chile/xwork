@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-miyabi-scan.xml
+ *
+ * [JP] 雅(Spring) の Scan 設定ファイルです。
+ * [EN] This is the configuration file of the Scan Miyabi(Spring).
+ *
+ * $ applicationContext-miyabi-scan.xml 1754 2015-07-03 00:30:51Z 815372040074 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+    
+    <!-- [JP] @Service/@Repository 検索パスの設定 -->
+    <!-- [EN] @Service/@Repository Scan Path Setting -->
+    <!-- [JP] Tomcat起動時に検索、Bean生成させるためspring-configと分離させました -->
+    <!-- [EN] This configuration is devided from spring-config.xml -->
+    <!-- [EN]  for scaning and bean-creating at the time of Tomcat startup -->
+    <context:component-scan base-package="
+        com.globaldenso.ai.sample.business.service,
+        com.globaldenso.ai.sample.integration.dao,    
+        com.globaldenso.dnkr.business.service,    
+        com.globaldenso.dnkr.integration.dao,
+        com.globaldenso.ai.library
+        " />
+    
+</beans>

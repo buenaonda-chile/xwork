@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.StEmpAbsTotStaDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="StEmpAbsTotSta" type="StEmpAbsTotStaDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="partCode" column="PART_CODE" />
+        <result property="shiftWorkNm" column="SHIFT_WORK_NM" />
+        <result property="hr1" column="HR1" />
+        <result property="hr2" column="HR2" />
+        <result property="hr3" column="HR3" />
+        <result property="hr4" column="HR4" />
+        <result property="hr5" column="HR5" />
+        <result property="hr6" column="HR6" />
+        <result property="hr7" column="HR7" />
+        <result property="hr8" column="HR8" />
+        <result property="hr9" column="HR9" />
+        <result property="hrTot" column="HR_TOT" />
+        
+        
+    </resultMap>
+
+	
+    <!-- 작업신청집계현황 -->
+    <select id="searchByCondition" resultMap="StEmpAbsTotSta" parameterType="StEmpAbsTotStaDomain">
+    	SELECT MAX(A.CLS_CODE) AS CLS_CODE
+		    , (SELECT MAX(TT.PART_CODE) AS PART_CODE FROM PSZDBLIB.FHP010PF TT
+		            	WHERE TT.CLS_CODE=#{clsCode} AND TT.LOC_CODE=A.LOC_CODE GROUP BY TT.LOC_CODE) AS PART_CODE
+		    , A.LOC_CODE AS LOC_CODE
+		    , MAX(CASE WHEN B.SE='G' THEN TRIM(B.CODE_NM) ELSE '' END) AS SHIFT_WORK_NM
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 60) THEN 1
+		           ELSE 0 END
+		        ) AS HR1
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 120) THEN 1
+		           ELSE 0 END
+		        ) AS HR2
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 180) THEN 1
+		           ELSE 0 END
+		        ) AS HR3
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 240) THEN 1
+		           ELSE 0 END
+		        ) AS HR4
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 360) THEN 1
+		           ELSE 0 END
+		        ) AS HR6
+		    , SUM(CASE WHEN (B.SE ='A' AND B.OVERTIME_M = 480) THEN 1
+		           ELSE 0 END
+		        ) AS HR8
+		    , SUM(CASE WHEN B.SE ='A' THEN 1
+		           ELSE 0 END
+		        ) AS HR_TOT
+		FROM PSZDBLIB.FHP080PF A, PSZDBLIB.FHP020PF B
+		WHERE 1=1
+		AND A.OPERT_DE = Replace(CHAR(DATE('${opertDe}'), iso), '-', '')
+		AND A.CLS_CODE = #{clsCode}  
+		AND A.CLS_CODE = B.CLS_CODE
+		AND B.SE IN('A','G')
+		AND (A.WORK_CODE2 = B.CODE OR A.WORK_CODE1 = B.CODE)
+		AND A.WORK_CODE2 BETWEEN '10' AND '30'
+		GROUP BY A.WORK_CODE1, A.LOC_CODE
+		ORDER BY A.LOC_CODE, A.WORK_CODE1
+    </select>
+    
+
+</mapper>

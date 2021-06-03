@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="440" Id="Chart03Pop" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="업체별&#32;판매실적&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="760" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuth">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="762"></Image>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_user" Left="40" TabOrder="1" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="3" Text="기간별&#32;점유율" Top="8" Width="104"></Static>
+		<xChart Bottom="437" Chart3D="true" Gallery="Gallery_Doughnut" Height="389" Id="xChart0" LegendBox="true" MultipleColors="true" NSeries="2" NValues="5" PointLabelAlign="LabelAlign_Center" PointLabels="true" Right="757" ToolBar="true" Top="48" View3DDepth="10" Width="757">
+			<_PersistData>&#13;&#10;/6yB7hSq30NGWDYA8vJNQ/9oYXJ0RlgsIP9WZXJzaW9uPf82LjIuMTM0Mv8uMCwgQ3VsdP91cmU9bmV1dP9yYWwsIFB1Yv9saWNL&#13;&#10;ZXlUb/9rZW49YTE4N/84ZTIwNTJjMP84ZGNlElNvZv90d2FyZUZYLlr59B/y8wAj8vAgXgR6aw0E8vABAf7/gQUqawUBawUCawYG&#13;&#10;pQSRBdUK8vAQ8vAD8vD7/4d/f4JlAXwCvwKRBQG/BUFyaWFs8vBBpG8P8vIFjgWsBQBGD1h/Ei5IaWdobCkQ/3RTZXR0aW5nZ3MQ&#13;&#10;CZMIRR8AB3YFzwEBAAgCHRMfWAWfLkF4aXOVAX0CAHECOhDy82UWKDjgtwIC8vILRxmeB88f3BmVAZ4DYIUNbQ9/A40OjwUCDJsf&#13;&#10;Aq0QDbEfYi90L+cf+R8LLxSdL8UlDloYD44FvAHy8X1S+fQuQmFzZQAPyBIPJA82DRd3H/wiDS7/SUdhbGxlcnmvVHlwZZUBFCwr&#13;&#10;EdQLFgIdHUg/LmI0T2K/agQuUGllUCEeEm42Mq8XMCcTgT69P8UrenE2FY0GFSkAS78AxRbFJRfkLUc/+yMJLv9MaW5lSW5mb4Db&#13;&#10;Ar0s0wM6IcYfjkVQIQHUuBqBARiORRmFJw9E92VmYRgwLldpbg9kb3dz&#13;&#10;</_PersistData>
+		</xChart>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static8" Left="682" TabOrder="5" Text="(단위&#32;:&#32;만원)" Top="32" Width="72"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : UserAuth.xml
+ * ● PROGRAM DESCRIPTION  : 사용자 권한 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var chartGubun;
+
+function on_LoadCompleted(obj){
+	loadingChart();		
+}
+function loadingChart(){		
+	xChart0.OpenData("COD_Values", 1, 12);
+
+	xChart0.Value(0, 0) = ds_chart.Sum("JPSAM_04");			
+	xChart0.Value(0, 1) = ds_chart.Sum("JPSAM_05");			
+	xChart0.Value(0, 2) = ds_chart.Sum("JPSAM_06");			
+	xChart0.Value(0, 3) = ds_chart.Sum("JPSAM_07");			
+	xChart0.Value(0, 4) = ds_chart.Sum("JPSAM_08");			
+	xChart0.Value(0, 5) = ds_chart.Sum("JPSAM_09");			
+	xChart0.Value(0, 6) = ds_chart.Sum("JPSAM_10");			
+	xChart0.Value(0, 7) = ds_chart.Sum("JPSAM_11");			
+	xChart0.Value(0, 8) = ds_chart.Sum("JPSAM_12");			
+	xChart0.Value(0, 9) = ds_chart.Sum("JPSAM_01");			
+	xChart0.Value(0, 10) = ds_chart.Sum("JPSAM_02");			
+	xChart0.Value(0, 11) = ds_chart.Sum("JPSAM_03");							
+	
+	xChart0.CloseData("COD_Values");
+		
+	if(chartGubun==1){	//2D 막대
+		xChart0.Gallery = "Gallery_Bar";
+		xChart0.View3DDepth = 0;
+	}else if(chartGubun==2){	//3D 막대
+		xChart0.Gallery = "Gallery_Bar";
+		xChart0.View3DDepth = 50;
+	}else if(chartGubun==3){	//도넛
+		xChart0.Gallery = "Gallery_Doughnut";
+		xChart0.View3DDepth = 50;
+	}
+	
+	xChart0.AxisX.Gridlines = True;
+	xChart0.AxisY.Gridlines = True;
+	
+	xChart0.Legend(0) = "4월";
+	xChart0.Legend(1) = "5월";
+	xChart0.Legend(2) = "6월";
+	xChart0.Legend(3) = "7월";
+	xChart0.Legend(4) = "8월";
+	xChart0.Legend(5) = "9월";
+	xChart0.Legend(6) = "10월";
+	xChart0.Legend(7) = "11월";
+	xChart0.Legend(8) = "12월";
+	xChart0.Legend(9) = "1월";
+	xChart0.Legend(10) = "2월";
+	xChart0.Legend(11) = "3월";
+
+	xChart0.AxisY.LabelsFormat.CustomFormat = "#,###"; // 출력될 라벨 포멧	
+}]]></Script>
+</Window>

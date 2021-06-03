@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="BHZZ100SM" Left="8" OnLoadCompleted="BHZZ100SM_OnLoadCompleted" PidAttrib="7" Title="BHZZ100SM" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_report_currow">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_report_temp">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Ubi Bottom="583" Height="552" Id="Ubi_mediReport" Left="8" Right="792" Top="31" Width="784">
+			<_PersistData>&#13;&#10;/6wX5esu/wAAAQAHUQAAdw05APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="801"></Image>
+		<Static Color="#333333" Font="돋움,9" Height="16" Id="Static0" Left="152" TabOrder="3" Text="유상사급&#32;세금계산서&#32;발행" Top="8" Width="200"></Static>
+	</Form>
+	<Script><![CDATA[
+
+
+function BHZZ100SM_OnLoadCompleted(obj)
+{
+	Ubi_mediReport.setJrfFileDir(G_baseURL+"/ui/Group2/report/");
+	Ubi_mediReport.setJrfFileName("rep3.jrf");
+	
+	ds_report_temp.Copy(ds_report);	
+	var currow = ds_report.currow;
+	ds_report_temp.Filter("currow="+currow);
+	
+	ds_report_currow.CopyF(ds_report_temp);	
+	Ubi_mediReport.SetDataset("ds_report", "ds_report_currow");	
+	
+	var comps = ds_report_currow.GetColumn(0, "COMPS");
+	ds_provider.Filter("COMPS='"+COMPS+"'");	
+	
+	Ubi_mediReport.SetArgument("VENDERNO", ds_provider.GetColumn(0, "VENDERNO"));
+	Ubi_mediReport.SetArgument("COMPANY", ds_provider.GetColumn(0, "COMPANY"));
+	Ubi_mediReport.SetArgument("UPTAE", ds_provider.GetColumn(0, "UPTAE"));
+	Ubi_mediReport.SetArgument("UPJONG", ds_provider.GetColumn(0, "UPJONG"));
+	Ubi_mediReport.SetArgument("CEONAME", ds_provider.GetColumn(0, "CEONAME"));
+	Ubi_mediReport.SetArgument("ADDRESS", ds_provider.GetColumn(0, "ADDRESS"));
+	
+	Ubi_mediReport.Retrieve();
+}
+]]></Script>
+</Window>

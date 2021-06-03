@@ -1,0 +1,131 @@
+package $package$;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.globaldenso.ai.core.bundle.MessageSources;
+import com.globaldenso.ai.core.exception.ApplicationException;
+import com.globaldenso.ai.core.exception.IntegrationLayerException;
+import com.globaldenso.dnkr.domain.$name$Domain;
+import com.globaldenso.dnkr.integration.dao.$name$Dao;
+
+/**
+* [KR]  <br>
+ *
+ * @author $Author$
+ * @version $Revision$
+ */
+@Service("$lName$Service")
+public class $name$ServiceImpl implements $name$Service {
+	
+	/**
+     * [KR] Dao 필드<br>
+     * [EN] A field of $name$Dao.<br>
+     */
+    @Autowired
+    private $name$Dao $lName$Dao;
+    
+    
+    
+    /**
+     * [EN] Default constructor.<br>
+     * [JP] デフォルトコンストラクタ。<br>
+     */
+    public $name$ServiceImpl() {
+        // no process
+    }
+    
+    
+    /**
+     * [EN] Set $name$Dao.<br>
+     * [JP] <br>
+     * 
+     */
+    public void set$name$Dao($name$Dao $lName$Dao) {
+        this.$lName$Dao = $lName$Dao;
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#searchByKey($name$Domain)
+     */
+    public $name$Domain searchByKey($name$Domain domain) throws ApplicationException {
+        return $lName$Dao.searchByKey(domain);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#searchByCondition($name$Domain)
+     */
+    public List<$name$Domain> searchByCondition($name$Domain domain) throws ApplicationException {
+        return $lName$Dao.searchByCondition(domain);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#searchByConditionForPaging($name$Domain)
+     */
+    public List<$name$Domain> searchByConditionForPaging($name$Domain domain) throws ApplicationException {
+        return $lName$Dao.searchByConditionForPaging(domain);
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#create($name$Domain)
+     */
+    public void create($name$Domain domain) throws ApplicationException {
+        try {
+        	$lName$Dao.create(domain);
+        } catch (ApplicationException e) {
+            if (IntegrationLayerException.UNIQUE_CONSTRAINT_VIOLATION_CODE.equals(e.getCode())) {
+                throw new ApplicationException(
+                    "SMPL-E8-0004", 
+                    MessageSources.getInstance().value("info.employee"));
+            } else {
+                throw e;
+            }
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#update($name$Domain)
+     */
+    public int update($name$Domain domain) throws ApplicationException {
+    	return $lName$Dao.update(domain);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#delete($name$Domain)
+     */
+    public int delete($name$Domain domain) throws ApplicationException {
+    	return $lName$Dao.delete(domain);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.globaldenso.dnkr.business.service.$name$Service#delete(List)
+     */
+    public int delete(List<$name$Domain> domainList) throws ApplicationException {
+        int deleteCount = 0;
+        for ($name$Domain delDomain: domainList) {
+            deleteCount += delete(delDomain);
+        }
+        return deleteCount;
+    }
+    
+    
+	
+}

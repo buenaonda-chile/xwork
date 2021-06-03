@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.denso.mapper.CodeMapper">
+
+	<resultMap id="codeResultMap" type="com.denso.model.CodeCategory">
+		<id property="groupCode" column="groupCode" />
+		<collection property="codeDetailList" ofType="com.denso.model.CodeDetail" javaType="java.util.ArrayList" >
+			<id property="groupCode" column="groupCode" />
+			<id property="code" column="code"/>
+			<result property="codeName" column="codeName" />
+			<result property="codeDate" column="codeDate" />
+		</collection>
+	</resultMap>
+	
+	<sql id="tblCommonBaseSql">
+		SELECT 
+			GROUP_CODE as groupCode, 
+			CODE as code, 
+			CODE_NAME as codeName, 
+			CODE_DATE as codeDate 
+		FROM TBL_COMMON
+	</sql>
+	
+	<select id="findOne" parameterType="String" resultType="com.denso.model.CodeDetail">
+		<include refid="tblCommonBaseSql"/>
+		WHERE CODE=#{code}
+		ORDER BY GROUP_CODE, CODE_NAME
+	</select>
+	
+	<select id="findAll" parameterType="com.denso.param.CodeInqueryParam" resultMap="codeResultMap">
+		<include refid="tblCommonBaseSql"/>
+		WHERE 1=1
+		<if test="!@org.springframework.util.StringUtils@isEmpty(groupCode)">AND GROUP_CODE=#{groupCode}</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(code)">AND CODE=#{code}</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(codeName)">AND CODE_NAME LIKE '%' || #{codeName} || '%'</if>
+		ORDER BY GROUP_CODE, CODE_NAME
+	</select>
+	
+	<select id="productfindAll" parameterType="String" resultType="tblProduct">
+		SELECT code, name FROM TBL_PRODUCT
+	</select>
+	
+	<select id="categoryfindAll" parameterType="com.denso.param.CodeInqueryParam" resultType="com.denso.model.CodeDetail">
+		<include refid="tblCommonBaseSql"/>
+		WHERE GROUP_CODE = 
+				(
+				SELECT 
+					GROUP_CODE 
+				 FROM TBL_COMMON 
+				 WHERE PRODUCT_CODE = #{productCode} 
+				 AND ENCODING=#{encodingType} 
+				 AND ROWNUM =1 
+				)
+		ORDER BY GROUP_CODE, CODE_NAME
+	</select>
+
+</mapper>

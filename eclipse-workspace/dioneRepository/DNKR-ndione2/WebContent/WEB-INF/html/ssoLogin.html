@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE></TITLE>
+<meta http-equiv="Content-Type" content="text/html">
+<object id="CASCheck" width=0% height=0% classid="../bin/Miracom.SmartWeb.MainUI.dll#Miracom.SmartWeb.MainUI.CASCheck"></object>
+
+<script language="JavaScript" type="text/javascript">
+	var Request = function(){
+		this.getParameter = function (name){
+			var rtnval = "";
+			var nowAddress = unescape(location.href);
+			var parameters = (nowAddress.slice(nowAddress.indexOf("?")+1,nowAddress.length)).split("&");
+			for(var i = 0 ; i < parameters.length ; i++){
+				var varName = parameters[i].split("=")[0];
+				if(varName.toUpperCase() == name.toUpperCase()){
+					rtnval = parameters[i].split("=")[1];
+					break;
+				}
+			}
+			return rtnval;
+		}
+	}
+	var request= new Request();	
+	try {
+	    if (CASCheck.CAS_STATUS != 'SUCCESS') {
+	        alert("Move to CAS Setup Page");
+	        location = '/install/CASpublish.htm';
+	    }
+	    else {
+	        var pUrl = request.getParameter('pUrl');
+		var rUrl=pUrl.replace(/!/gi,"=");
+		rUrl=rUrl.replace(/#/gi,"&");
+		location ="Smartweb/Login.aspx?"+rUrl;
+	    }
+	}
+	catch (ex) {
+	    
+	}
+</script>
+</HEAD>
+<BODY>
+</BODY>
+</HTML>

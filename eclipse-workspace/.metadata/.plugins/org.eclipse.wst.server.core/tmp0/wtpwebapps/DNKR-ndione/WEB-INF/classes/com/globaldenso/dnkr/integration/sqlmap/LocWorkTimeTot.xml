@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.MnhrCntrBaseBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="MnhrCntrBaseBase" type="MnhrCntrBaseBaseDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRDT_NO" />  
+        <result property="prdtNm" column="PRDT_NM" />         
+        <result property="locCode" column="LOC_CODE" /> 
+        <result property="drctHdcn" column="DRCT_HDCN" /> 
+        <result property="indrHdcn" column="INDR_HDCN" /> 
+        <result property="jmLabor" column="JM_LABOR" />                                 
+        <result property="prfrTime" column="PRFR_TIME" /> 
+        <result property="excTmRt" column="EXC_TM_RT" /> 
+        <result property="indTmRt" column="IND_TM_RT" /> 
+        <result property="excIndRt" column="EXC_IND_RT" /> 
+        <result property="mrgFct" column="MRG_FCT" />                  
+        <result property="sgmRgsArb" column="SGM_RGS_ARB" />                          
+        <result property="stdrLabor" column="STDR_LABOR" />
+        <result property="cycleTime" column="CYCLE_TIME" />
+        <result property="uph" column="UPH" />        
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+
+        <result property="oldLineCode" column="OLD_LINE_CODE" />       
+        <result property="oldPrdtNo" column="OLD_PRDT_NO" /> 
+        
+        <result property="year" column="YEAR" />         
+        <result property="fsHalf" column="FS_HALF" />         
+        <result property="oldYear" column="OLD_YEAR" />         
+        <result property="oldFsHalf" column="OLD_FS_HALF" />  
+
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="MnhrCntrBaseBase" parameterType="MnhrCntrBaseBaseDomain">
+		SELECT 
+			 TRIM(B.CLS_CODE) AS CLS_CODE  
+			,TRIM(B.LINE_CODE) AS LINE_CODE			
+			,TRIM(A.LINE_NM) AS LINE_NM 			
+			,TRIM(B.PRDT_NO) AS PRDT_NO 
+			,TRIM(C.ITDSC) AS PRDT_NM
+			,TRIM(B.LOC_CODE) AS LOC_CODE
+			,B.CYCLE_TIME
+			,B.DRCT_HDCN
+			,B.INDR_HDCN
+			,B.JM_LABOR
+			,B.PRFR_TIME
+			,double(ROUND((B.PRFR_TIME/B.JM_LABOR),5)) AS MRG_FCT	
+			,B.STDR_LABOR
+			,B.EXC_TM_RT
+			,B.IND_TM_RT
+			,B.EXC_IND_RT
+			,double(ROUND((B.STDR_LABOR / (1- B.EXC_IND_RT)),5))  AS SGM_RGS_ARB
+			,double(ROUND((3600/DOUBLE(B.CYCLE_TIME)),5)) AS UPH
+			,B.REG_USER
+			,B.REG_DATE
+			,B.MOD_USER
+			,B.MOD_DATE
+			,TRIM(B.LINE_CODE) AS OLD_LINE_CODE
+			,TRIM(B.PRDT_NO) AS OLD_PRDT_NO 
+			,B.YEAR
+			,B.FS_HALF
+			,B.YEAR AS OLD_YEAR
+			,B.FS_HALF AS OLD_FS_HALF		
+		FROM PSZDBLIB.FHP010PF A
+		INNER JOIN PSZDBLIB.FHP030PF B 
+		ON A.CLS_CODE = B.CLS_CODE 
+		AND A.LINE_CODE = B.LINE_CODE
+		INNER JOIN PERESLIB.BM008PR C
+		ON B.PRDT_NO = C.ITNBR	
+		WHERE B.CLS_CODE = #{clsCode}
+		AND B.YEAR = #{year}
+		AND B.FS_HALF = #{fsHalf}		
+		<if test='prdtNo != null and !prdtNo.equalsIgnoreCase("")'>
+			AND B.PRDT_NO like '%' || '${prdtNo}' || '%'
+		</if> 
+		<if test='prdtNm != null and !prdtNm.equalsIgnoreCase("")'>
+			AND C.ITDSC like '%' || '${prdtNm}' || '%'
+		</if> 								
+		ORDER BY LINE_CODE,PRDT_NO
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="MnhrCntrBaseBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}        
+		AND   LINE_CODE = '${lineCode}'
+		AND   PRDT_NO = '${prdtNo}'	        
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="MnhrCntrBaseBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}         
+		AND   LINE_CODE = '${oldLineCode}'
+		AND   PRDT_NO = '${oldPrdtNo}'		      
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="MnhrCntrBaseBaseDomain">
+        INSERT INTO  PSZDBLIB.FHP030PF (
+				 CLS_CODE
+				,LINE_CODE
+				,YEAR
+				,FS_HALF
+				,PRDT_NO
+				,LOC_CODE
+				,JM_LABOR
+				,STDR_LABOR
+				,CYCLE_TIME			
+				,DRCT_HDCN
+				,INDR_HDCN
+				,PRFR_TIME
+				,EXC_TM_RT
+				,IND_TM_RT
+				,EXC_IND_RT		
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{lineCode}
+               ,#{year}
+               ,#{fsHalf}                              
+               ,#{prdtNo}
+               ,#{locCode}               
+               ,#{jmLabor} 
+               ,#{stdrLabor}                
+               ,#{cycleTime}                               
+               ,#{drctHdcn}                 
+               ,#{indrHdcn}   
+               ,#{prfrTime}                   
+               ,#{excTmRt}                 
+               ,#{indTmRt} 
+               ,#{excIndRt}                                                                      
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="MnhrCntrBaseBaseDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = #{lineCode}
+        	,PRDT_NO = #{prdtNo}        	
+			,JM_LABOR = #{jmLabor}
+			,STDR_LABOR = #{stdrLabor}
+			,CYCLE_TIME = #{cycleTime}
+	 		,DRCT_HDCN = #{drctHdcn}
+			,INDR_HDCN = #{indrHdcn}
+			,PRFR_TIME = #{prfrTime}
+			,EXC_TM_RT = #{excTmRt}
+			,IND_TM_RT = #{indTmRt}
+			,EXC_IND_RT = #{excIndRt}
+        	,MOD_USER = #{modUser}
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{oldYear}        
+		AND   FS_HALF = #{oldFsHalf}          
+        AND   LINE_CODE = #{oldLineCode}
+        AND   PRDT_NO = #{oldPrdtNo}        
+    </update>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="updateTest" parameterType="MnhrCntrBaseBaseDomain">
+        UPDATE 
+            PSZDBLIB.FHP030PF
+        SET
+        	 LINE_CODE = '${lineCode}'
+        	,PRDT_NO = '${prdtNo}'        	
+			,JM_LABOR = '${jmLabor}'
+			,STDR_LABOR = '${stdrLabor}'
+			,CYCLE_TIME = '${cycleTime}'
+	 		,DRCT_HDCN = '${drctHdcn}'
+			,INDR_HDCN = '${indrHdcn}'
+			,PRFR_TIME = '${prfrTime}'
+			,EXC_TM_RT = '${excTmRt}'
+			,IND_TM_RT = '${indTmRt}'
+			,EXC_IND_RT = '${excIndRt}'
+        	,MOD_USER = '${modUser}'
+            ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = '${clsCode}'
+		AND   YEAR = '${oldYear}'        
+		AND   FS_HALF = '${oldFsHalf}'          
+        AND   LINE_CODE = '${oldLineCode}'
+        AND   PRDT_NO = '${oldPrdtNo}'        
+    </update>    
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="MnhrCntrBaseBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP030PF
+        WHERE CLS_CODE = #{clsCode}
+		AND   YEAR = #{year}        
+		AND   FS_HALF = #{fsHalf}          
+        AND   LINE_CODE = #{lineCode}
+        AND   PRDT_NO = #{prdtNo}   
+    </delete>
+    
+    
+
+</mapper>

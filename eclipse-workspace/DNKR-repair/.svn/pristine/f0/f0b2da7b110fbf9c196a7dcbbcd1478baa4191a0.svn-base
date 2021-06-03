@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.RoleDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.RoleDto">
+        <id property="roleCd" column="ROLE_CD" javaType="java.lang.String" />
+        <result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="roleNm" column="ROLE_NM" javaType="java.lang.String" />
+		<result property="etcCn" column="ETC_CN" javaType="java.lang.String" />
+		<result property="upperRoleCd" column="UPPER_ROLE_CD" javaType="java.lang.String" />
+        <result property="hasChildren" column="HAS_CHILDREN" javaType="java.lang.Boolean" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ROLE_CD
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ROLE_NM
+		,ETC_CN
+		,UPPER_ROLE_CD
+
+    FROM TB_CM_ROLE
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.roleNm != null and criteria.roleNm != ''">
+          AND ROLE_NM LIKE '%'||#{criteria.roleNm}||'%'
+      </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.RoleDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ROLE_CD = #{roleCd}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ROLE_CD
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ROLE_CD) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.RoleDomain">
+
+    INSERT INTO TB_CM_ROLE (
+		ROLE_CD
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ROLE_NM
+		,ETC_CN
+		,UPPER_ROLE_CD
+
+    ) VALUES (
+		#{roleCd}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+		,#{roleNm}
+		,#{etcCn}
+		,#{upperRoleCd}
+
+    )
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.RoleDomain">
+
+    UPDATE TB_CM_ROLE SET
+		UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,ROLE_NM = #{roleNm}
+		,ETC_CN = #{etcCn}
+		,UPPER_ROLE_CD = #{upperRoleCd}
+
+    WHERE ROLE_CD = #{roleCd}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.RoleDomain">
+
+    DELETE FROM TB_CM_ROLE
+    WHERE ROLE_CD = #{roleCd}
+
+  </delete>
+  	
+  	
+  <select id="searchByCondition2" resultMap="codeMap" parameterType="Map">
+    
+    select ROLE_CD,ROLE_NM, UPPER_ROLE_CD
+     from tb_cm_role
+      WHERE 1=1
+        AND ROLE_CD NOT IN (
+          'IS_AUTHENTICATED_FULLY',
+          'IS_AUTHENTICATED_REMEMBERED',
+          'IS_AUTHENTICATED_ANONYMOUSLY'
+        )
+     start with UPPER_ROLE_CD is null
+    connect by prior ROLE_CD = UPPER_ROLE_CD
+    ORDER SIBLINGS BY ROLE_NM
+    
+
+  </select>
+  	
+  
+  <select id="searchByCondition3" resultMap="codeMap" parameterType="Map">
+    
+     
+    
+    SELECT *
+    FROM (
+      SELECT ROWNUM AS RN, A.*
+      FROM (
+        SELECT
+            ROLE_CD
+            ,RGSTR_ID
+            ,RGST_DT
+            ,UPDTR_ID
+            ,UPDT_DT
+            ,ROLE_NM
+            ,ETC_CN
+            ,UPPER_ROLE_CD
+        FROM TB_CM_ROLE A
+
+        WHERE 1=1
+        AND ROLE_CD NOT IN (
+          'IS_AUTHENTICATED_FULLY',
+          'IS_AUTHENTICATED_REMEMBERED',
+          'IS_AUTHENTICATED_ANONYMOUSLY'
+        )
+        <!--<if test="criteria.roleCd != null and criteria.roleCd != ''">-->
+          <!--AND UPPER_ROLE_CD = #{criteria.roleCd}-->
+        <!--</if>-->
+        <!--<if test="criteria.roleCd == null or criteria.roleCd == ''">-->
+          <!--AND UPPER_ROLE_CD IS NULL-->
+        <!--</if>-->
+
+      ) A
+      ORDER BY A.ROLE_CD
+    ) AA
+
+    ORDER BY RN
+
+    </select>
+
+</mapper>

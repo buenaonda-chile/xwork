@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="88" Id="PGMPOPUP" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="PGMPOPUP" TooltipFont="Default,0" Top="8" Ver="1.0" Width="440" WorkArea="true">
+		<Image Height="48" Id="Image3" ImageID="popup_title" Left="19" TabOrder="3" Top="14" Width="398"></Image>
+		<Static Font="굴림,12,Bold" Height="24" Id="Static3" Left="102" TabOrder="1" Text="프로그램이&#32;실행중&#32;입니다." Top="29" Width="216"></Static>
+		<Image Height="16" Id="Image0" ImageID="title_ico" Left="84" TabOrder="2" Top="28" Width="17"></Image>
+		<WTA_RemoteCall Bottom="106" Height="10" Id="WTA_RemoteCall0" Right="10" Top="96" Width="10"></WTA_RemoteCall>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+function form_OnLoadCompleted(obj)
+{
+	http.Sync = true;
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",parent.exeTime);
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		//var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall("PSEOBJLIB","BHZZ100CP#","PS201008",103);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(parent.pgmLib, parent.pgmName, parent.param, pgmSize);
+		
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			//리턴 파라메타 값을 출력한다.
+			alert("성공=======>" + WTA_RemoteCall0.RC_GetReturnParm(1));
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	//연결종료
+	WTA_RemoteCall0.RC_Disconnect();
+	close();
+}
+
+]]></Script>
+</Window>

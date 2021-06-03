@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LgstTimeDstrRtBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="lgstTimeDstrRtBase" type="LgstTimeDstrRtBaseDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="lgsDstRt" column="LGS_DST_RT" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+  
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="lgstTimeDstrRtBase" parameterType="LgstTimeDstrRtBaseDomain">
+		SELECT 
+			 A.CLS_CODE
+			,A.LINE_CODE
+			,A.LINE_NM
+			,COALESCE(B.LGS_DST_RT,0) AS LGS_DST_RT
+			,B.REG_USER
+			,B.REG_DATE
+			,B.MOD_USER
+			,B.MOD_DATE
+		FROM PSZDBLIB.FHP010PF A
+		LEFT JOIN  PSZDBLIB.FHP060PF B 
+		ON A.CLS_CODE = B.CLS_CODE 
+		AND A.LINE_CODE = B.LINE_CODE
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			WHERE A.CLS_CODE like '%' || '${clsCode}' || '%'
+		</if> 
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="LgstTimeDstrRtBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP060PF
+        WHERE CLS_CODE = '${clsCode}'
+        AND LINE_CODE = '${lineCode}'
+    </select>
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="LgstTimeDstrRtBaseDomain">
+        INSERT INTO  PSZDBLIB.FHP060PF (
+				 CLS_CODE
+				,LINE_CODE
+				,LGS_DST_RT
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{lineCode}
+               ,#{lgsDstRt}
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="LgstTimeDstrRtBaseDomain">
+        UPDATE 
+               PSZDBLIB.FHP060PF
+        SET
+			  LGS_DST_RT = #{lgsDstRt}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND   LINE_CODE = #{lineCode}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="LgstTimeDstrRtBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP060PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LINE_CODE = #{lineCode}
+    </delete>
+    
+    
+
+</mapper>

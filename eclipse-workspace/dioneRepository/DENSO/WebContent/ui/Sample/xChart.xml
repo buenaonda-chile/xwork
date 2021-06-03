@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="598" Id="xChart" Left="8" OnLoadCompleted="xChart_OnLoadCompleted" PidAttrib="7" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1015" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_chart">
+				<Contents>
+					<colinfo id="gubun" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<gubun>total</gubun>
+						<value>245000</value>
+					</record>
+					<record>
+						<gubun>1</gubun>
+						<value>110000</value>
+					</record>
+					<record>
+						<gubun>2</gubun>
+						<value>110000</value>
+					</record>
+					<record>
+						<gubun>3</gubun>
+						<value>110000</value>
+					</record>
+					<record>
+						<gubun>4</gubun>
+						<value>75000</value>
+					</record>
+					<record>
+						<gubun>5</gubun>
+						<value>75000</value>
+					</record>
+					<record>
+						<gubun>6</gubun>
+						<value>75000</value>
+					</record>
+					<record>
+						<gubun>7</gubun>
+						<value>50000</value>
+					</record>
+					<record>
+						<gubun>8</gubun>
+						<value>50000</value>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<xChart Bottom="474" Chart3D="true" Height="408" Id="xChart0" Left="65" NSeries="2" NValues="5" Right="858" Top="66" Width="793">
+			<_PersistData>&#13;&#10;/6xruUwh30NGWDYA8vJNQ/9oYXJ0RlgsIP9WZXJzaW9uPf82LjIuMTM0Mv8uMCwgQ3VsdP91cmU9bmV1dP9yYWwsIFB1Yv9saWNL&#13;&#10;ZXlUb/9rZW49YTE4N/84ZTIwNTJjMP84ZGNlElNvZv90d2FyZUZYLlr59B/y8wAj8vAgXgR6aw0E8vABAf7/gQUqawUBawUCawYG&#13;&#10;pQSRBdUy8vAQ8vAD8vD7/4d/f4JlAXwCvwKRBQG/BUFyaWFs8vBBpG8P8vIFjgWsBQBGD1h/Ei5IaWdobCkQ/3RTZXR0aW5nZ3MQ&#13;&#10;CZMIRR8AB3YFzwEBAAgCHRMfWAWfLkF4aXOVAX0CAPECOhDy82UWKDjgAAUKRxULRxmeB88f3BmVAcCeA4UNbQ9/A40OjwUCDASb&#13;&#10;H60QDbEfYi90L+cf+R8oCy+dL8UlDloYD44FvAH68vFS+fQuQmFzZZAADxIPJA82DRd3H/wiDf8uSUdhbGxlcl95VHlwZZUBFDIl&#13;&#10;URH6DIk/lTgSlTUTjQaPAQgAS78AcTPy8BX45C1HP/sjCS5MaW4fZUluZm/bAr0s0wOSOiFClT+XCAG4GoEBFvojRReFJw9EZWZh&#13;&#10;/hgwLldpbmRvdwFz&#13;&#10;</_PersistData>
+		</xChart>
+	</Form>
+	<Script><![CDATA[
+function xChart_OnLoadCompleted(obj){
+	xChart0.OpenData("COD_Values", 1, 9);
+	
+	For(var i=0;i<9;i++)
+	{
+		xChart0.Value(0, i) = ds_chart.GetColumn(i,"value");   //value 값 설정
+	}
+	xChart0.CloseData("COD_Values");
+	
+	xChart0.Series[0].color = "#00AF50";
+	
+	xChart0.AxisX.Gridlines = True;
+	xChart0.AxisY.Gridlines = True;
+	
+	// 'In this case we are hardcoding the labels
+	// 'but it would be the same if the labels are retrieved from the database
+	/* X축 값설정 */
+	xChart0.Legend(0) = "TOTAL";
+	xChart0.Legend(1) = "공정1";
+	xChart0.Legend(2) = "공정2";
+	xChart0.Legend(3) = "공정3";
+	xChart0.Legend(4) = "공정4";
+	xChart0.Legend(5) = "공정5";
+	xChart0.Legend(6) = "공정6";
+	xChart0.Legend(7) = "공정7";
+	xChart0.Legend(8) = "공정8";
+
+	
+	
+	//XChart1.AxisY.LabelValue = 0.01;	                 // 소수점 2자리까지 표현
+    xChart0.AxisY.LabelsFormat.CustomFormat = "#,###"; // 출력될 라벨 포멧
+	// 'Use the LabelAngle property to show the labels vertically
+	//XChart1.AxisX.LabelAngle = 90;
+	
+}
+]]></Script>
+</Window>

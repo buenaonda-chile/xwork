@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="BHZE215SM" Left="8" OnLoadCompleted="BHZE215SM_OnLoadCompleted" PidAttrib="7" Title="BHZE215SM" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="cd" size="256" type="STRING"/>
+					<colinfo id="cdnm" size="256" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>선택</cdnm>
+					</record>
+					<record>
+						<cd>C1</cd>
+						<cdnm>C1</cdnm>
+					</record>
+					<record>
+						<cd>E1</cd>
+						<cdnm>E1</cdnm>
+					</record>
+					<record>
+						<cd>H1</cd>
+						<cdnm>H1</cdnm>
+					</record>
+					<record>
+						<cd>S1</cd>
+						<cdnm>S1</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="240" TabOrder="9" Top="216" Width="300"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static23" Left="240" TabOrder="5" Top="192" Width="300"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="CDnm" Height="21" Id="cb_buso" ImeMode="none" INDEX="0" InnerDataset="Dataset0" Left="347" ResetIndex="FIRST" TabOrder="1" Top="193" Width="90"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="240" TabOrder="4" Top="192" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="207" Height="5" Id="Shape12" Left="252" LineColor="#dceaf7" Right="257" TabOrder="2" Top="202" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="262" Style="static" TabOrder="3" Text="사업부" Top="197" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="240" TabOrder="8" Top="216" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="231" Height="5" Id="Shape0" Left="252" LineColor="#dceaf7" Right="257" TabOrder="6" Top="226" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="262" Style="static" TabOrder="7" Text="순위수" Top="221" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="240" TabOrder="13" Top="240" Width="300"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="240" TabOrder="12" Top="240" Width="106"></Static>
+		<Shape BKColor="#888888" Bottom="255" Height="5" Id="Shape1" Left="252" LineColor="#dceaf7" Right="257" TabOrder="10" Top="250" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static9" Left="262" Style="static" TabOrder="11" Text="협력업체" Top="245" VAlign="Middle" Width="77"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="Edit1" Left="348" MaxLength="6" TabOrder="14" Top="242" Width="85"></Edit>
+		<Static Font="Default,9,Bold" Height="16" Id="Static2" Left="259" TabOrder="15" Text="다음을&#32;선택하시오" Top="170" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="240" TabOrder="16" Top="168" Width="17"></Image>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="Edit0" Left="452" MaxLength="6" TabOrder="17" Top="242" Width="85"></Edit>
+		<Static Height="13" Id="Static0" Left="437" TabOrder="18" Text="~" Top="247" Width="8"></Static>
+		<Edit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="Edit2" Left="348" MaxLength="3" TabOrder="19" Top="218" Width="85"></Edit>
+		<Button ButtonStyle="TRUE" Height="21" Id="Button0" ImageID="btn_pop_txt_02" Left="491" OnClick="Button0_OnClick" TabOrder="20" Text="확인" Top="270" Width="48"></Button>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" TabOrder="23" Width="800"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="Static3" Left="42" TabOrder="21" Text="통합MRP&#32;&gt;&#32;메뉴10&#32;&gt;&#32;외주부품&#32;재고현황" Top="8" Width="294"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" Left="3" TabOrder="22" Width="29"></Image>
+	</Form>
+	<Script><![CDATA[var isAuth = false;
+function BHZE215SM_OnLoadCompleted(obj)
+{
+		if(!isAuth){
+		cb_buso.Enable = false;
+		BHZE215SM.Enable = false;
+		Edit0.Enable =false;
+		Edit1.Enable =false;
+		Edit2.Enable =false;
+		var str = dialog("Group1::BHZZ100CP.xml",300,300);
+		if(str == "1"){
+			cb_buso.Enable = true;			
+			BHZE215SM.Enable = true;
+			Edit0.Enable =true;
+			Edit1.Enable =true;
+			Edit2.Enable =true;
+		}
+	}
+}
+]]></Script>
+</Window>

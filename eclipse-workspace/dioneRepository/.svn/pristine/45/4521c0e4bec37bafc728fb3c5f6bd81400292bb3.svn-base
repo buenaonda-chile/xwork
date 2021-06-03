@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="656" Id="FPMC109SM" Left="8" OnLoadCompleted="onLoadCompleted" PidAttrib="7" Title="FPMC109SM" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>전체</cdnm>
+					</record>
+					<record>
+						<cd>PS</cd>
+						<cdnm>PS</cdnm>
+					</record>
+					<record>
+						<cd>PE</cd>
+						<cdnm>PE</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_maxDate"></Dataset>
+		</Datasets>
+		<Image Height="620" Id="Image3" ImageID="pgm_img" TabOrder="9" Top="32" Width="1050"></Image>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="72" TabOrder="6" Top="104" Width="220"></Static>
+		<Static Font="Default,9,Bold" Height="16" Id="Static0" Left="91" TabOrder="1" Text="다음을&#32;입력하시오" Top="74" Width="128"></Static>
+		<Image Height="16" Id="Image1" ImageID="title_ico" Left="72" TabOrder="2" Top="72" Width="17"></Image>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="72" TabOrder="5" Top="104" Width="106"></Static>
+		<Shape BKColor="#b4b4b4" Bottom="119" Height="5" Id="Shape0" Left="84" LineColor="#dceaf7" Right="89" TabOrder="3" Top="114" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="94" Style="static" TabOrder="4" Text="마감년월" Top="109" VAlign="Middle" Width="77"></Static>
+		<Button ButtonStyle="TRUE" Height="23" Id="Button0" ImageID="2_btn" Left="240" OnClick="Button0_OnClick" TabOrder="7" Text="실행" Top="136" Width="52"></Button>
+		<WTA_RemoteCall Bottom="634" Height="10" Id="WTA_RemoteCall0" Right="10" Top="624" Width="10"></WTA_RemoteCall>
+		<MaskEdit Border="Flat" BorderColor="SCROLLBAR" Color="#333333" Height="21" Id="ed_yyyymmdd" Left="180" Mask="####-##" MaxLength="8" TabOrder="10" Top="106" Type="STRING" Width="109"></MaskEdit>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="11" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="11" Top="8" Width="1032"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FPMC109SM.xml
+ * ● PROGRAM DESCRIPTION  : FPMC109SM
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var Company = G_ds_user.GetColumn(0,"COMPANY");
+
+
+
+
+var isAuth = false;
+var nowDate = today();
+var pgmLib = "*LIBL";
+var pgmName = "FPMC109CP#";
+var param = "";
+var exeTime = 1200;
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function onLoadCompleted(obj)
+{
+	getTitle();	
+
+	if(!isAuth){
+		//var str = dialog("Group1::BHZZ100CP.xml","",400,190,"TitleBar=ture");
+		
+		http.Sync = true;
+		var sKind		= "getMaxDate";						
+		var sMethodName = "service::sample/selectFPMC109MaxDate.do";     // 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             	// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_maxDate=ds_maxDate";    		// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		sArgument += " LIB=" + quote(Lib) + " COMPS=" + quote(Company);
+
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");		
+	
+	}
+	ed_yyyymmdd.text = ds_maxDate.GetColumn(0,"MAXDATE");	
+}
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 실행
+ * 주요변수 : 
+ **********************************************************************/ 
+function Button0_OnClick(obj)
+{
+	var rVal = isDate(ed_yyyymmdd.Value + 01);
+	if(rVal == false){
+		alert(setPopMessage("2008"));	// 20110103l-koowgnojeel, 2008 == 날짜 형식이 아닙니다.
+		return;
+	}
+
+	http.Sync = true;
+	param = "";	
+	param = ed_yyyymmdd.Value;
+	
+	for(i=length(param)+1;i<=90;i++){
+		param += " ";
+	}
+	param += callUser;
+
+	for(j=1;j<=10-length(callUser);j++){
+		param += " ";
+	}
+
+	// 화면 잠그기
+	var runLock = true;
+	
+	if(runLock == true) {
+		var str = dialog("Group1::PGMPOPUP.xml","",400,190,"TitleBar=false");
+		return ;
+	}
+
+	
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",exeTime);	
+	
+	// 연결 (접속아이피 , 아이디, 비밀번호)	
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(pgmLib,pgmName,param,pgmSize);
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),100,3) == "NB1") {
+				alert(setPopMessage("1008"));	// 20110103l-koowgnojeel, 1008 == 현재 시스템에 락이 걸렸습니다. 전산관리자에게 문의하세요.			
+				WTA_RemoteCall0.RC_Disconnect();
+				return false;
+			} else {
+				//리턴 파라메타 값을 출력한다.
+				alert(setPopMessage("1001") + "           \n[" + WTA_RemoteCall0.RC_GetReturnParm(1) + "]");	// 20110103l-koowgnojeel, 1001 == 정상적으로 처리가 완료되었습니다.
+			}			
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	//연결종료
+	WTA_RemoteCall0.RC_Disconnect();
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function add_class(obj)
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+
+}
+
+
+
+
+]]></Script>
+</Window>

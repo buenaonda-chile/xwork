@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WrknRcRnDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="wrknRcRn" type="WrknRcRnDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="workStle" column="WORK_STLE" />
+        <result property="group" column="GROUP" />      
+		<result property="order" column="ORDER" />
+		<result property="rcRn" column="RCRN" />
+		<result property="weekIntr" column="WEEK_INTR" />
+                
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        
+        <result property="oldOrder" column="OLD_ORDER" />
+        <result property="oldRcRn" column="OLD_RCRN" />
+        <result property="oldWorkStle" column="OLD_WORK_STLE" />
+        <result property="oldGroup" column="OLD_GROUP" />
+                              
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="wrknRcRn" parameterType="WrknRcRnDomain">
+		SELECT TRIM(A.GROUP) AS GROUP
+			 , TRIM(A.CLS_CODE) AS CLS_CODE
+		     , TRIM(A.ORDER) AS ORDER
+		     , TRIM(A.RCRN) AS RCRN
+		     , TRIM(A.WORK_STLE) AS WORK_STLE
+		     , A.REG_USER AS REG_USER, A.REG_DATE AS REG_DATE, A.MOD_USER AS MOD_USER, A.MOD_DATE AS MOD_DATE
+		     , TRIM(A.GROUP) AS OLD_GROUP
+		     , TRIM(A.ORDER) AS OLD_ORDER
+		     , TRIM(A.RCRN) AS OLD_RCRN
+		     , TRIM(A.WORK_STLE) AS OLD_WORK_STLE
+		FROM PSZDBLIB.FHP052PF A
+		WHERE 1=1
+		AND A.CLS_CODE = #{clsCode}
+		ORDER BY A.RCRN, A.ORDER, A.WORK_STLE, A.GROUP
+		
+    </select>
+    
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount3" resultType="java.lang.Integer" parameterType="WrknRcRnDomain">
+    	SELECT COUNT(1) AS CNT
+		FROM PSZDBLIB.FHP052PF A
+		WHERE 1=1
+		AND A.ORDER = #{order} 
+		AND A.RCRN = #{rcRn}
+		AND A.CLS_CODE = #{clsCode}  
+        
+    </select>
+    
+    <select id="searchCount4" resultType="java.lang.Integer" parameterType="WrknRcRnDomain">
+    	SELECT COUNT(1) AS CNT
+		FROM PSZDBLIB.FHP052PF A
+		WHERE 1=1
+		AND A.ORDER = #{order} 
+		AND A.RCRN = #{rcRn} 
+        AND A.WORK_STLE = #{workStle}
+        AND A.GROUP = #{group}
+        AND A.CLS_CODE = #{clsCode}
+    </select>
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WrknRcRnDomain">
+		INSERT INTO  PSZDBLIB.FHP052PF (
+				 GROUP
+				,CLS_CODE
+				,ORDER
+				,RCRN
+				,WORK_STLE
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{group}
+               ,#{clsCode}
+               ,#{order}
+               ,#{rcRn}
+               ,#{workStle}
+               ,#{regUser}
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WrknRcRnDomain">
+    	UPDATE PSZDBLIB.FHP052PF
+		SET GROUP = #{group}
+		    , ORDER = #{order}
+		    , RCRN = #{rcRn}
+		    , WORK_STLE = #{workStle}
+		    , MOD_USER = #{modUser}
+		    , MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+		WHERE ORDER = #{oldOrder}  
+		AND RCRN = #{oldRcRn}
+		AND CLS_CODE = #{clsCode}
+  
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WrknRcRnDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP052PF
+        WHERE ORDER = #{oldOrder}  
+		AND RCRN = #{oldRcRn}  
+		AND CLS_CODE = #{clsCode}
+    </delete>
+    
+    
+
+</mapper>

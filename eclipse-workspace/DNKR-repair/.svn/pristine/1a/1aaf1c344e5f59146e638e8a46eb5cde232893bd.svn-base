@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    log4j2-Server.xml
+    
+ [JP]    Log4j Socket Server 設定ファイルです。(バッチの複数プロセス対応)
+ [JP]
+ [JP]    本番/開発環境用の log4j 設定ファイルです。
+ [JP]
+ [JP]    AI-JB は複数のプロセスが同時に実行されるため、この Socket Server を経由して
+ [JP]    すべてのログを出力します。
+ [JP]    出力ファイルサイズ軽減のため、標準出力はしていないので注意してください。
+ [JP]
+ [JP]    システムログ( aijmSys.log )は JP1 監視対象のため、ログローテーションを行わ
+ [JP]    ない設定になっています。(変更不可)
+ [JP]    その他のログはローテーションを行う設定です。
+ [JP]    ローテーションのサイズ等はアプリごとで適切な値を設定してください。
+    
+ [EN]    This is a configuration file for Log4j Socket Server. (For multiple processes of the batch)
+ [EN]
+ [EN]    It is a log4j configuration file for the production environment / development machine.
+ [EN]
+ [EN]    Because multiple processes are executed at the same time, 
+ [EN]    AI-JB prints a log of all this through the Socket Server.
+ [EN]    Please note that in order to reduce output file size, does not have the standard output.
+ [EN]
+ [EN]    In order to JP1 monitor, system logging (aijmSys.log) is configured to not perform log rotation.
+ [EN]    (Do not change)
+ [EN]    Other logs are set to perform the rotation.
+ [EN]    Please set the appropriate value in each app, such as the size of the rotation.
+    
+    $ log4j2-Server.xml 1650 2015-06-03 08:43:08Z 815372040074 $
+    
+    Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<Configuration>
+
+    <!-- Appender ========================================================== -->
+    <Appenders>
+        <!-- [JP] AI-JB ジョブ アプリケーションログ (サイズローテーション) -->
+        <!-- [EN] AI-JB job application log (size rotation) -->
+        <RollingFile name="app_file_roll" fileName="D:/AIJM/logs/aijmApp.log" filePattern="D:/AIJM/logs/aijmApp.log.%i" append="true">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="30MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+            <Filters>
+                <ThresholdFilter level="DEBUG" onMatch="NEUTRAL" onMismatch="DENY" />
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL" />
+            </Filters>
+        </RollingFile>
+
+        <!-- [JP] AI-JB ジョブ システムログ (固定出力) -->
+        <!-- [EN] AI-JB job system log (fixed output) -->
+        <File name="sys_file_fix" fileName="D:/AIJM/logs/aijmSys.log" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] [%C{1}.%M] %m%n" />
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+
+        <!-- [JP] AI-JB ジョブ プロセスIDログ (固定出力) -->
+        <!-- [EN] AI-JB job log process ID (fixed output) -->
+        <File name="pid_file_fix" fileName="D:/AIJM/logs/aijmPid.log" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <!-- [JP] AI-JB Log Server ログ (固定出力) -->
+        <!-- [EN] AI-JB Log Server Log (fixed output) -->
+        <File name="logserver_file_fix" fileName="D:/AIJM/logs/aijmLogServer.log" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </File>
+    </Appenders>
+
+    <!-- ============================================================ Logger -->
+    <Loggers>
+        <!-- [JP] アプリ基盤 -->
+        <!-- [EN] Application Development Infrastructure -->
+        <Logger name="com.globaldenso.ai" level="INFO" additivity="false">
+            <AppenderRef ref="app_file_roll" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+
+        <!-- [JP] AI-JB プロセスID出力  -->
+        <!-- [EN] AI-JB output process ID  -->
+        <Logger name="com.globaldenso.ai.akatsuki.aijm.util.ProcessId" level="INFO" additivity="false">
+            <AppenderRef ref="pid_file_fix" />
+        </Logger>
+
+        <!-- [JP] AI-JB ログサーバ  -->
+        <!-- [EN] AI-JB log server  -->
+        <Logger name="com.globaldenso.ai.akatsuki.aijm.logserver.LogServer" level="INFO" additivity="false">
+            <AppenderRef ref="logserver_file_fix" />
+        </Logger>
+
+        <!-- [JP] Spring Framework トランザクション情報出力 -->
+        <!-- [EN] Spring Framework transaction information output -->
+        <Logger name="org.springframework.transaction" level="DEBUG" additivity="false">
+            <AppenderRef ref="app_file_roll" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+
+        <!-- ============================================================== Root -->
+        <Root level="ERROR">
+            <AppenderRef ref="sys_file_fix" />
+        </Root>
+    </Loggers>
+</Configuration>

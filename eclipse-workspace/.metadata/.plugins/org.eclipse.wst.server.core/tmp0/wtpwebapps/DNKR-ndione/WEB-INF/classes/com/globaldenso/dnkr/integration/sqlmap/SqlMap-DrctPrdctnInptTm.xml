@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.DrctPrdctnInptTmDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="drctPrdctnInptTm" type="DrctPrdctnInptTmDomain">
+        <result property="opertDe" column="OPERT_DE" />    
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="lineCode" column="LINE_CODE" />
+        <result property="lineNm" column="LINE_NM" />        
+        <result property="prdtNo" column="PRODUCT_NO" />
+        <result property="prdtNm" column="PRODUCT_NM" />    
+            
+        <result property="day" column="DAY" />
+        <result property="day1" column="DAY1" />
+        <result property="day2" column="DAY2" />
+        <result property="day3" column="DAY3" />
+        <result property="day4" column="DAY4" />
+        <result property="day5" column="DAY5" />
+        <result property="day6" column="DAY6" />
+        <result property="day7" column="DAY7" />
+        <result property="day8" column="DAY8" />
+        <result property="day9" column="DAY9" />
+        <result property="day10" column="DAY10" />
+        <result property="day11" column="DAY11" />
+        <result property="day12" column="DAY12" />
+        <result property="day13" column="DAY13" />
+        <result property="day14" column="DAY14" />
+        <result property="day15" column="DAY15" />
+        <result property="day16" column="DAY16" />
+        <result property="day17" column="DAY17" />
+        <result property="day18" column="DAY18" />
+        <result property="day19" column="DAY19" />
+        <result property="day20" column="DAY20" />
+        <result property="day21" column="DAY21" />
+        <result property="day22" column="DAY22" />
+        <result property="day23" column="DAY23" />
+        <result property="day24" column="DAY24" />
+        <result property="day25" column="DAY25" />
+        <result property="day26" column="DAY26" />
+        <result property="day27" column="DAY27" />
+        <result property="day28" column="DAY28" />
+        <result property="day29" column="DAY29" />
+        <result property="day30" column="DAY30" />
+        <result property="day31" column="DAY31" />
+        <result property="ttl" column="TTL" />
+                             
+        <result property="qy" column="QY" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        
+        <result property="modDate" column="MOD_DATE" />  
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+                               
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    
+    <select id="searchByCondition" resultMap="drctPrdctnInptTm" parameterType="DrctPrdctnInptTmDomain">
+    select A.loc_code, A.line_code,
+       MAX(TRIM(D.LINE_NM))    AS LINE_NM,
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '01' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY1",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '02' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY2",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '03' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY3",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '04' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY4",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '05' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY5",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '06' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY6",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '07' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY7",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '08' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY8",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '09' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY9",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '10' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY10",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '11' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY11",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '12' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY12",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '13' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY13",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '14' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY14",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '15' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY15",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '16' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY16",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '17' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY17",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '18' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY18",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '19' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY19",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '20' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY20",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '21' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY21",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '22' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY22",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '23' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY23",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '24' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY24",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '25' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY25",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '26' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY26",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '27' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY27",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '28' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY28",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '29' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY29",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '30' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY30",
+       DEC(SUM(case when substr(A.opert_de, 7, 8) = '31' then (COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0)) end),15,2) as "DAY31",
+       DEC(SUM((COALESCE(A.line_hr_mnt,0) - COALESCE(B.lose_hr_mnt,0))),15,2) AS TTL
+	from (
+	      (
+	          select AA.cls_code,
+	                 AA.loc_code,
+	                 AA.line_code,
+	                 AA.opert_de,
+	                 (SUM(AA.prsnl1) * SUM(AA.hr_mnt1)) +
+	                 (SUM(AA.prsnl2) * SUM(AA.hr_mnt2)) +
+	                 (SUM(AA.prsnl3) * SUM(AA.hr_mnt3)) +
+	                 (SUM(AA.prsnl4) * SUM(AA.hr_mnt4)) +
+	                 (SUM(AA.prsnl5) * SUM(AA.hr_mnt5)) +
+	                 (SUM(AA.prsnl6) * SUM(AA.hr_mnt6)) +
+	                 (SUM(AA.prsnl7) * SUM(AA.hr_mnt7)) +
+	                 (SUM(AA.prsnl8) * SUM(AA.hr_mnt8)) + 
+	                 SUM(AA.LGST_TIME) AS line_hr_mnt
+	          from pszdblib.FHP109PF AS AA /* 라인인원투입시간등록 */
+	          where substr(AA.opert_de, 1, 6) = #{repym}
+	            and AA.cls_code = #{clsCode}
+	            <if test="locCode != null and locCode != ''">
+	            and AA.loc_code = #{locCode}
+	            </if>
+                 group by AA.opert_de,AA.cls_code, AA.loc_code, AA.line_code
+	      ) AS A
+	      LEFT OUTER JOIN PSZDBLIB.FHP010PF D
+	                    ON A.LINE_CODE = D.LINE_CODE
+	      left outer join
+	      (
+
+	         select BB.opert_de,
+	                BB.cls_code,
+	                BB.loc_code,
+	                BB.line_code,
+	                sum(BB.hr_mnt) AS lose_hr_mnt
+	         from pszdblib.FHP130PF AS BB /* 손실/제외/간접시간등록 */
+	         where substr(BB.opert_de, 1, 6) = #{repym}
+	            and BB.cls_code = #{clsCode}
+	            <if test="locCode != null and locCode != ''">
+	            and BB.loc_code = #{locCode}
+	            </if>
+	            and BB.SE IN ('C','B')
+	         group by BB.opert_de,BB.cls_code, BB.loc_code, BB.line_code
+             ORDER BY OPERT_DE
+	      ) AS B on A.cls_code = B.cls_code and A.loc_code = B.loc_code and A.line_code = B.line_code and A.opert_de = B.opert_de
+	    )
+	group by A.loc_code, A.line_code
+	order by A.loc_code, A.line_code
+	    
+    </select>
+    
+   
+
+</mapper>

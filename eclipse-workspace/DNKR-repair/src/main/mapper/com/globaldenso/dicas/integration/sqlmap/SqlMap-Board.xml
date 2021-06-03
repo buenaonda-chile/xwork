@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dicas.business.dao.BoardDao">
+
+  <resultMap id="brdMap" type="com.globaldenso.dicas.business.dto.BoardDto">
+    <id property="seq" column="SEQ" javaType="java.lang.Long" />
+    <result property="ref" column="REF" javaType="java.lang.Long" />
+    <result property="parentSeq" column="PARENT_SEQ" javaType="java.lang.Long" />
+    <result property="lev" column="LEV" javaType="java.lang.Long" />
+    <result property="step" column="STEP" javaType="java.lang.Long" />
+    <result property="cntHit" column="CNT_HIT" javaType="java.lang.Long" />
+    <result property="cntReply" column="CNT_REPLY" javaType="java.lang.Long" />
+    <result property="hasAttach" column="HAS_ATTACH" javaType="java.lang.String" />
+    <result property="userId" column="USER_ID" javaType="java.lang.String" />
+    <result property="content" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+    <result property="name" column="NAME" javaType="java.lang.String" />
+    <result property="ipAddr" column="IP_ADDR" javaType="java.lang.String" />
+    <result property="subject" column="SUBJECT" javaType="java.lang.String" />
+    <result property="dept" column="DEPT" javaType="java.lang.String" />
+    <result property="email" column="EMAIL" javaType="java.lang.String" />
+    <result property="boardType" column="BOARD_TYPE" javaType="java.lang.String" />
+    <result property="password" column="PASSWORD" javaType="java.lang.String" />
+    <result property="etc" column="ETC" javaType="java.lang.String" />
+    <result property="delYn" column="DEL_YN" javaType="java.lang.String" />
+    <result property="regDate" column="REG_DATE" javaType="java.lang.String" />
+    <result property="regTime" column="REG_TIME" javaType="java.lang.String" />
+    <result property="modDate" column="MOD_DATE" javaType="java.lang.String" />
+    <result property="modTime" column="MOD_TIME" javaType="java.lang.String" />
+    <result property="noticeYn" column="NOTICE_YN" javaType="java.lang.String" />
+    <result property="startDate" column="START_DATE" javaType="java.sql.Date" />
+    <result property="endDate" column="START_DATE" javaType="java.sql.Date" />
+    <result property="category" column="CATEGORY" javaType="java.lang.String" />
+    <result property="sdYn" column="SD_YN" javaType="java.lang.String" />
+    <result property="createDate" column="CREATE_DATE" javaType="java.lang.String" />
+  </resultMap>
+
+  <resultMap id="brdRsMap" type="com.globaldenso.dicas.business.domain.BoardDomain">
+     <id property="seq" column="SEQ" javaType="java.lang.Long" />
+    <result property="ref" column="REF" javaType="java.lang.Long" />
+    <result property="parentSeq" column="PARENT_SEQ" javaType="java.lang.Long" />
+    <result property="lev" column="LEV" javaType="java.lang.Long" />
+    <result property="step" column="STEP" javaType="java.lang.Long" />
+    <result property="cntHit" column="CNT_HIT" javaType="java.lang.Long" />
+    <result property="cntReply" column="CNT_REPLY" javaType="java.lang.Long" />
+    <result property="hasAttach" column="HAS_ATTACH" javaType="java.lang.String" />
+    <result property="userId" column="USER_ID" javaType="java.lang.String" />
+    <result property="name" column="NAME" javaType="java.lang.String" />
+    <result property="ipAddr" column="IP_ADDR" javaType="java.lang.String" />
+    <result property="subject" column="SUBJECT" javaType="java.lang.String" />
+    <result property="dept" column="DEPT" javaType="java.lang.String" />
+    <result property="email" column="EMAIL" javaType="java.lang.String" />
+    <result property="boardType" column="BOARD_TYPE" javaType="java.lang.String" />
+    <result property="password" column="PASSWORD" javaType="java.lang.String" />
+    <result property="etc" column="ETC" javaType="java.lang.String" />
+    <result property="delYn" column="DEL_YN" javaType="java.lang.String" />
+    <result property="regDate" column="REG_DATE" javaType="java.lang.String" />
+    <result property="regTime" column="REG_TIME" javaType="java.lang.String" />
+    <result property="modDate" column="MOD_DATE" javaType="java.lang.String" />
+    <result property="modTime" column="MOD_TIME" javaType="java.lang.String" />
+    <result property="noticeYn" column="NOTICE_YN" javaType="java.lang.String" />
+    <result property="startDate" column="START_DATE" javaType="java.sql.Date" />
+    <result property="endDate" column="START_DATE" javaType="java.sql.Date" />
+    <result property="category" column="CATEGORY" javaType="java.lang.String" />
+    <result property="createDate" column="CREATE_DATE" javaType="java.lang.String" />
+    <result property="sdYn" column="SD_YN" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+        SELECT USER_ID AS USER_ID
+        ,      CONTENT AS CONTENT
+        ,      NAME AS NAME
+        ,      SUBJECT AS SUBJECT
+        ,      ETC
+        ,      SEQ
+        ,      NVL(CNT_HIT,0) AS CNT_HIT
+        ,      SD_YN
+        ,      RGST_DT
+        ,      CATEGORY
+        FROM   TB_DC_COMM_BOARD
+  </sql>
+
+  <sql id="select_02">
+        SELECT USER_ID AS USER_ID
+        ,      NAME AS NAME
+        ,      SUBJECT AS SUBJECT
+        ,      SEQ
+        ,      NVL(CNT_HIT,0) AS CNT_HIT
+        ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+        ,      CATEGORY
+        FROM   TB_DC_COMM_BOARD
+  </sql>
+
+  <sql id="select_03">
+        SELECT USER_ID AS USER_ID
+        ,      NAME AS NAME
+        ,      SUBJECT AS SUBJECT
+        ,      SEQ
+        ,      NVL(CNT_HIT,0) AS CNT_HIT
+        ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+        ,      CATEGORY
+        FROM   TB_DC_COMM_BOARD
+  </sql>
+
+  <sql id="where_01">
+    <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+        <if test="criteria.dateSearchOption == '01'">
+            <if test="criteria.subject != null and criteria.subject != ''">
+                AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+            </if>
+        </if>
+        <if test="criteria.dateSearchOption == '02'">
+            <if test="criteria.subject != null and criteria.subject != ''">
+                AND NAME  LIKE '%'||#{criteria.subject}||'%'
+            </if>
+        </if>
+        <if test="criteria.dateSearchOption == '03'">
+            <if test="criteria.content != null and criteria.content != ''">
+                AND DBMS_LOB.INSTR(CONTENT , ''||#{criteria.subject}||'') &gt; 0
+            </if>
+        </if>
+        <if test="criteria.dateSearchOption == null">
+            <if test="criteria.subject != null and criteria.subject != ''">
+                AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+            </if>
+        </if>
+    </if>
+    <if test="criteria.delYn != null and criteria.delYn != ''">
+      AND DEL_YN = #{criteria.delYn}
+    </if>
+    <if test="criteria.boardType != null and criteria.boardType != ''">
+      AND BOARD_TYPE = #{criteria.boardType}
+    </if>
+    <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+      AND SD_YN = #{criteria.sdYn}
+    </if>
+    <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+      AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+    </if>
+    <if test="criteria.category != null and criteria.category != ''">
+      AND CATEGORY = #{criteria.category}
+    </if>
+    AND NOTICE_YN = 'N'
+  </sql>
+
+  <select id="searchByKey" resultMap="brdMap" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+
+    SELECT *
+    FROM (
+        SELECT USER_ID AS USER_ID
+        ,      CONTENT AS CONTENT
+        ,      NAME    AS NAME
+        ,      SUBJECT AS SUBJECT
+        ,      ETC
+        ,      SEQ
+        ,      BOARD_TYPE
+        ,      NOTICE_YN
+        ,      SD_YN
+        ,      PASSWORD
+        ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+        ,      CATEGORY
+        FROM   TB_DC_COMM_BOARD
+        WHERE  1=1
+    ) A
+    WHERE A.SEQ = #{seq}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="brdRsMap" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+    SELECT *
+    FROM (
+    SELECT ROWNUM AS RN, A.*
+    FROM (
+    <include refid="select_02" />
+    <where>
+      <include refid="where_01"/>
+    </where>
+     ORDER BY RGST_DT DESC NULLS LAST
+     ) A
+
+    ) AA
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+  </select>
+
+  <select id="searchByConditionNotice" resultMap="brdRsMap" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+      SELECT *
+      FROM (
+      SELECT  A.*
+      FROM (
+            SELECT USER_ID AS USER_ID
+            ,      NAME AS NAME
+            ,      '[공지] '||SUBJECT AS SUBJECT
+            ,      SEQ
+            ,      NVL(CNT_HIT,0) AS CNT_HIT
+            ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+            FROM   TB_DC_COMM_BOARD
+            WHERE  0 = 0
+            AND    NOTICE_YN = 'Y'
+              <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+                  <if test="criteria.dateSearchOption == '01'">
+                      <if test="criteria.subject != null and criteria.subject != ''">
+                          AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                      </if>
+                  </if>
+                  <if test="criteria.dateSearchOption == '02'">
+                      <if test="criteria.subject != null and criteria.subject != ''">
+                          AND NAME  LIKE '%'||#{criteria.subject}||'%'
+                      </if>
+                  </if>
+                  <if test="criteria.dateSearchOption == null">
+                      <if test="criteria.subject != null and criteria.subject != ''">
+                          AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                      </if>
+                  </if>
+              </if>
+              <if test="criteria.delYn != null and criteria.delYn != ''">
+                  AND DEL_YN = #{criteria.delYn}
+              </if>
+              <if test="criteria.boardType != null and criteria.boardType != ''">
+                  AND BOARD_TYPE = #{criteria.boardType}
+              </if>
+              <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+                  AND SD_YN = #{criteria.sdYn}
+              </if>
+              <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+                  AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+              </if>
+              <if test="criteria.category != null and criteria.category != ''">
+                  AND CATEGORY = #{criteria.category}
+              </if>
+          ORDER BY RGST_DT DESC NULLS LAST
+       ) A
+      ) AA
+
+  </select>
+
+  <select id="searchCount" resultType="int" parameterType="Map">
+    SELECT COUNT(*) AS CNT
+    FROM (
+        <include refid="select_02"/>
+        <where>
+          <include refid="where_01"/>
+        </where>
+    ) AA
+  </select>
+
+  <select id="searchMainList" resultMap="brdMap" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+        WITH TEST1 AS
+         (  SELECT
+             NULL RN, NULL USER_ID, NULL CONTENT, NULL NAME, NULL SUBJECT, NULL ETC, NULL SEQ, NULL REG_DATE, NULL CATEGORY
+             FROM DUAL)
+SELECT * FROM TEST1
+    </select>
+
+  <select id="searchMainList2" resultMap="brdMap" parameterType="String">
+        WITH TEST1 AS
+         (  SELECT
+             NULL RN, NULL USER_ID, NULL CONTENT, NULL NAME, NULL SUBJECT, NULL ETC, NULL SEQ, NULL REG_DATE, NULL CATEGORY
+             FROM DUAL)
+SELECT * FROM TEST1
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+
+    INSERT INTO TB_DC_COMM_BOARD (
+      SEQ,
+      REF,
+      PARENT_SEQ,
+      LEV,
+      STEP,
+      CNT_HIT,
+      CNT_REPLY,
+      HAS_ATTACH,
+      USER_ID,
+      CONTENT,
+      NAME,
+      IP_ADDR,
+      SUBJECT,
+      DEPT,
+      EMAIL,
+      BOARD_TYPE,
+      PASSWORD,
+      ETC,
+      DEL_YN,
+      REG_DATE,
+      REG_TIME,
+      MOD_DATE,
+      MOD_TIME,
+      NOTICE_YN,
+      START_DATE,
+      END_DATE,
+      CATEGORY,
+      SD_YN,
+      RGST_DT
+    ) VALUES (
+      #{seq},
+      #{ref},
+      #{parentSeq},
+      #{lev},
+      #{step},
+      #{cntHit},
+      #{cntReply},
+      #{hasAttach},
+      #{userId},
+      #{content},
+      #{name},
+      #{ipAddr},
+      #{subject},
+      #{dept},
+      #{email},
+      #{boardType},
+      #{password},
+      #{etc},
+      #{delYn},
+      #{regDate},
+      #{regTime},
+      #{modDate},
+      #{modTime},
+      #{noticeYn},
+      #{startDate},
+      #{endDate},
+      #{category},
+      #{sdYn},
+      SYSDATE
+    )
+
+    <selectKey resultType="long" keyProperty="seq" order="BEFORE">
+      SELECT SEQ_DC_COMM_BOARD.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+
+    UPDATE TB_DC_COMM_BOARD
+    SET MOD_DATE = #{modDate},
+        MOD_TIME = #{modTime},
+        REF = #{ref},
+        PARENT_SEQ = #{parentSeq},
+        LEV = #{lev},
+        STEP = #{step},
+        CNT_HIT = #{cntHit},
+        CNT_REPLY = #{cntReply},
+        HAS_ATTACH = #{hasAttach},
+        USER_ID = #{userId},
+        CONTENT = #{content},
+        NAME= #{name},
+        IP_ADDR = #{ipAddr},
+        SUBJECT = #{subject},
+        DEPT = #{dept},
+        EMAIL = #{email},
+        BOARD_TYPE = #{boardType},
+        PASSWORD = #{password},
+        ETC = #{etc},
+        DEL_YN = #{delYn},
+        NOTICE_YN = #{noticeYn},
+        START_DATE = #{startDate},
+        END_DATE = #{endDate},
+        CATEGORY = #{category},
+        SD_YN = #{sdYn},
+        UPDT_DT = SYSDATE
+    WHERE SEQ = #{seq}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+
+    DELETE FROM TB_DC_COMM_BOARD
+    WHERE SEQ = #{seq}
+
+  </delete>
+
+  <update id="upCount" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+        UPDATE TB_DC_COMM_BOARD
+        SET    CNT_HIT = NVL(CNT_HIT,0) +1
+        WHERE  SEQ = #{seq}
+    </update>
+
+    <select id="searchByConditionMobile" resultMap="brdRsMap" parameterType="com.globaldenso.dicas.business.domain.BoardDomain">
+        SELECT
+            *
+        FROM (
+            SELECT
+                ROWNUM AS RN, A.*
+            FROM (
+                SELECT USER_ID AS USER_ID
+                ,      NAME AS NAME
+                ,      '[공지] '||SUBJECT AS SUBJECT
+                ,      SEQ
+                ,      NVL(CNT_HIT,0) AS CNT_HIT
+                ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+                ,      CATEGORY
+                ,      RGST_DT
+                ,      NOTICE_YN
+                FROM   TB_DC_COMM_BOARD
+                WHERE  0 = 0
+                AND    NOTICE_YN = 'Y'
+                <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+                    <if test="criteria.dateSearchOption == '01'">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                    <if test="criteria.dateSearchOption == '02'">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND NAME  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                    <if test="criteria.dateSearchOption == null">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                </if>
+                <if test="criteria.delYn != null and criteria.delYn != ''">
+                    AND DEL_YN = #{criteria.delYn}
+                </if>
+                <if test="criteria.boardType != null and criteria.boardType != ''">
+                    AND BOARD_TYPE = #{criteria.boardType}
+                </if>
+                <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+                    AND SD_YN = #{criteria.sdYn}
+                </if>
+                <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+                    AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+                </if>
+                <if test="criteria.category != null and criteria.category != ''">
+                    AND CATEGORY = #{criteria.category}
+                </if>
+                UNION ALL
+
+                SELECT USER_ID AS USER_ID
+                ,      NAME AS NAME
+                ,      SUBJECT AS SUBJECT
+                ,      SEQ
+                ,      NVL(CNT_HIT,0) AS CNT_HIT
+                ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+                ,      CATEGORY
+                ,      RGST_DT
+                ,      NOTICE_YN
+                FROM   TB_DC_COMM_BOARD
+                WHERE  0=0
+                <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+                    <if test="criteria.dateSearchOption == '01'">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                    <if test="criteria.dateSearchOption == '02'">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND NAME  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                    <if test="criteria.dateSearchOption == '03'">
+                        <if test="criteria.content != null and criteria.content != ''">
+                            AND DBMS_LOB.INSTR(CONTENT , ''||#{criteria.subject}||'') &gt; 0
+                        </if>
+                    </if>
+                    <if test="criteria.dateSearchOption == null">
+                        <if test="criteria.subject != null and criteria.subject != ''">
+                            AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                        </if>
+                    </if>
+                </if>
+                <if test="criteria.delYn != null and criteria.delYn != ''">
+                    AND DEL_YN = #{criteria.delYn}
+                </if>
+                <if test="criteria.boardType != null and criteria.boardType != ''">
+                    AND BOARD_TYPE = #{criteria.boardType}
+                </if>
+                <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+                    AND SD_YN = #{criteria.sdYn}
+                </if>
+                <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+                    AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+                </if>
+                <if test="criteria.category != null and criteria.category != ''">
+                    AND CATEGORY = #{criteria.category}
+                </if>
+                AND NOTICE_YN = 'N'
+                ORDER BY NOTICE_YN DESC, RGST_DT DESC  NULLS LAST
+            ) A
+        ) AA
+        <if test="pageable != null">
+            WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+        </if>
+    </select>
+
+    <select id="searchCountMobile" resultType="int" parameterType="Map">
+        SELECT COUNT(*) AS CNT
+        FROM (
+            SELECT USER_ID AS USER_ID
+            ,      NAME AS NAME
+            ,      '[공지] '||SUBJECT AS SUBJECT
+            ,      SEQ
+            ,      NVL(CNT_HIT,0) AS CNT_HIT
+            ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+            ,      CATEGORY
+            ,      RGST_DT
+            FROM   TB_DC_COMM_BOARD
+            WHERE  0 = 0
+            AND    NOTICE_YN = 'Y'
+            <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+                <if test="criteria.dateSearchOption == '01'">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+                <if test="criteria.dateSearchOption == '02'">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND NAME  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+                <if test="criteria.dateSearchOption == null">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+            </if>
+            <if test="criteria.delYn != null and criteria.delYn != ''">
+                AND DEL_YN = #{criteria.delYn}
+            </if>
+            <if test="criteria.boardType != null and criteria.boardType != ''">
+                AND BOARD_TYPE = #{criteria.boardType}
+            </if>
+            <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+                AND SD_YN = #{criteria.sdYn}
+            </if>
+            <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+                AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+            </if>
+            <if test="criteria.category != null and criteria.category != ''">
+                AND CATEGORY = #{criteria.category}
+            </if>
+            UNION ALL
+            SELECT USER_ID AS USER_ID
+            ,      NAME AS NAME
+            ,      SUBJECT AS SUBJECT
+            ,      SEQ
+            ,      NVL(CNT_HIT,0) AS CNT_HIT
+            ,      TO_CHAR(RGST_DT,'YYYY-MM-DD') AS CREATE_DATE
+            ,      CATEGORY
+            ,      RGST_DT
+            FROM   TB_DC_COMM_BOARD
+            WHERE  0=0
+            <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+                <if test="criteria.dateSearchOption == '01'">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+                <if test="criteria.dateSearchOption == '02'">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND NAME  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+                <if test="criteria.dateSearchOption == '03'">
+                    <if test="criteria.content != null and criteria.content != ''">
+                        AND DBMS_LOB.INSTR(CONTENT , ''||#{criteria.subject}||'') &gt; 0
+                    </if>
+                </if>
+                <if test="criteria.dateSearchOption == null">
+                    <if test="criteria.subject != null and criteria.subject != ''">
+                        AND SUBJECT  LIKE '%'||#{criteria.subject}||'%'
+                    </if>
+                </if>
+            </if>
+            <if test="criteria.delYn != null and criteria.delYn != ''">
+                AND DEL_YN = #{criteria.delYn}
+            </if>
+            <if test="criteria.boardType != null and criteria.boardType != ''">
+                AND BOARD_TYPE = #{criteria.boardType}
+            </if>
+            <if test="criteria.sdYn != null and (criteria.sdYn eq 'Y'.toString())">
+                AND SD_YN = #{criteria.sdYn}
+            </if>
+            <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+                AND SUBJECT LIKE '%'||#{criteria.searchKeyword}||'%'
+            </if>
+            <if test="criteria.category != null and criteria.category != ''">
+                AND CATEGORY = #{criteria.category}
+            </if>
+            AND NOTICE_YN = 'N'
+            ORDER BY RGST_DT DESC NULLS FIRST
+        ) AA
+    </select>
+
+</mapper>

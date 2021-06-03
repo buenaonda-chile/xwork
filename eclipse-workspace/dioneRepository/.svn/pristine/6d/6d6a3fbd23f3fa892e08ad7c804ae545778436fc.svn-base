@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.denso.mapper.BarcodeMapper">
+	<sql id="tblBoardBaseSql">
+		SELECT
+			CUSNO,
+			PROCS,
+			PRTNO,
+			PRCQY,
+			SPLITT
+		FROM
+		PSEDBLIB.FPW740PF
+	</sql>
+
+	<select id="findAllToPage" parameterType="map" resultType="map">
+		<include refid="tblBoardBaseSql"/>
+	</select>
+
+	<select id="selectFPQZ100Qlist_type1" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		DISTINCT PROCS
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+	ORDER BY 
+		PROCS
+	</select>
+	<select id="selectFPQZ100Qlist_type4" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		COLOR,PROCS,CUSNO,PRTNO,SPLITT,SEQNOT,SERNOT,LOTSZ,PRGGU,
+		REP01,USNCD,
+		SUM(ORCQY) AS I_ORCQY,
+		COUNT(*) AS I_COUNT,
+		MIN(CARNM) as I_CARNM,
+		SUM(CASE WHEN BOXCCT='*' THEN 1 ELSE 0 END) K_COUNT
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+		AND PROCS IN ${PROCS}
+		<if test="PRGGU != 0"> 
+			AND PRGGU = #{PRGGU}
+		</if>
+
+		<!-- 
+		<isNotEqual prepend="AND" property="PRGGU" compareValue="0">
+		PRGGU = #{PRGGU}
+		</isNotEqual>
+		 -->
+	GROUP BY
+		COLOR,PROCS,CUSNO,PRTNO,SPLITT,SEQNOT,SERNOT,LOTSZ,PRGGU,REP01,USNCD
+	ORDER BY 
+		COLOR,PROCS,CUSNO,PRTNO,SPLITT,SEQNOT,SERNOT,LOTSZ,PRGGU,REP01,USNCD
+	</select>
+	<select id="selectFPQZ100Qlist_detail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		*
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+		AND PROCS = #{PROCS}
+		AND PRTNO = #{PRTNO}
+		AND COLOR = #{COLOR}
+		AND CUSNO = ${CUSNO}
+		AND SPLITT = #{SPLITT}
+		AND SEQNOT = #{SEQNOT}
+		AND LOTSZ = ${LOTSZ}
+		AND PRGGU = #{PRGGU}
+		AND REP01 = #{REP01}
+		AND USNCD = #{USNCD}
+	ORDER BY 
+		PROCS,PRTNO
+	</select>
+	<select id="selectFPQC100Qlist_report" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		TRIM(REGNM) REGNM,
+		TRIM(FRERMG) FRERMG,
+		TRIM(CPDSC) CPDSC,
+		TRIM(CARNM) CARNM,
+		TRIM(MKLOC) MKLOC,
+		TRIM(CPRTN) CPRTN,
+		TRIM(BRDCD) BRDCD,
+		TRIM(REP01) REP01,
+		TRIM(USNCD) USNCD,
+		ORCQY,
+		TRIM(FRERMA) FRERMA,
+		TRIM(FRERMB) FRERMB,
+		TRIM(PROCST)||' '||TRIM(PRODYT)||' '||TRIM(SPLITT)||' '||TRIM(SEQNOT)||' '||
+		TRIM(SERNOT)||' '||TRIM(INSNOT)||' '||TRIM(CPRTNT)||' '||
+		TRIM(PRTNOT)||'       '||TRIM(PRGGU) AS SMCD,
+		TRIM(BARCDT) BARCDT, <!-- QRCODE -->
+		TRIM(FRERMJ) FRERMJ,TRIM(PRODYT) PRODYT,TRIM(INSNOT) INSNOT,  <!-- 동희XX 용으로 QR code를 하나 더 발행한다. -->
+		TRIM(MKFAC) MKFAC ,TRIM(FRERMC) FRERMC, TRIM(FRERMD) FRERMD,  <!-- 글로비스에서, RAPDOS에서 사용. -->
+		TRIM(FRERME) FRERME,TRIM(FRERMH) FRERMH,TRIM(FRERMI) FRERMI, TRIM(CTNNO) CTNNO, TRIM(WKARE) WKARE, TRIM(ORCQYT) ORCQYT, <!-- RAPDOS에서 사용. -->
+		CUSNO
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+		AND PROCS = #{PROCS}
+		AND PRTNO = #{PRTNO}
+		AND COLOR = #{COLOR}
+		AND CUSNO = ${CUSNO}
+		AND SPLITT = #{SPLITT}
+		AND SEQNOT = #{SEQNOT}
+		AND LOTSZ = ${LOTSZ}
+		AND PRGGU = #{PRGGU}
+		AND REP01 = #{REP01}
+		AND USNCD = #{USNCD}
+		<if test="PR_GU=='PRINT_D'"> AND MRPSQ = ${MRPSQ}</if>
+<!-- 		
+		<isEqual prepend="AND" property="PR_GU" compareValue="PRINT_D">
+		MRPSQ = $MRPSQ$
+		</isEqual>
+ -->		
+	ORDER BY 
+		PROCS,PRTNO
+	</select>
+	<select id="selectFPQE110Qlist_report" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		CUSNO,               <!--  업체　코드 -->
+		TRIM(PRTNO) PRTNO,   <!--  품　　　번 -->
+		TRIM(PROCS) PROCS,   <!--  공정　코드 -->
+		PNYMD,               <!--  지시　일자 -->
+		TRIM(CPRTN) CPRTN,   <!--  업체　품번 -->
+		TRIM(CPDSC) CPDSC,   <!--  업체　품명 -->
+		PRCQY,               <!--  지시　수량 -->
+		TRIM(RGNCD) RGNCD,   <!--  지역　코드 -->
+		TRIM(RGNNM) RGNNM,   <!--  지역　명칭 -->
+		TRIM(BXLCD) BXLCD,   <!--  식별표발행CD -->
+		TRIM(MKLOC) MKLOC,   <!--  납품　장소 -->
+		TRIM(MKALC) MKALC,   <!--  업체ＡＬＣ -->
+		TRIM(ECCID) ECCID,   <!--  ＥＣＣＩＤ -->
+		TRIM(COLOR) COLOR,   <!--  색상　코드 -->
+		TRIM(LBRCD) LBRCD,   <!--  라벨발행CD -->
+		TRIM(HMCCD) HMCCD,   <!--  HMC CODE -->
+		TRIM(PGSCD) PGSCD,   <!--  업체　공정 -->
+		TRIM(CARCD) CARCD,   <!--  풍성　차종 -->
+		TRIM(CARNM) CARNM,   <!--  차종　명칭 -->
+		TRIM(CWHCD) CWHCD,   <!--  풍성　차륜 -->
+		TRIM(BRDCD) BRDCD,   <!--  풍성일자코드 -->
+		TRIM(MLTCD) MLTCD,   <!--  업체일자코드 -->
+		TRIM(ITDSC) ITDSC,   <!--  풍성　품명 -->
+		LOTSZ,               <!--  QTY/CARTON -->
+		ORCQY,               <!--  수정분할량 -->
+		OROQY,               <!--  간판분할량 -->
+		TRIM(PRGGU) PRGGU,   <!--  발행　구분 -->
+		TRIM(CUSNM) CUSNM,   <!--  업　체　명 -->
+		TRIM(MKCRC) MKCRC,   <!--  업체　차종 -->
+		TRIM(MKFAC) MKFAC,   <!--  공　　　장 --> 
+		TRIM(EXPDP) EXPDP,   <!--  수　입　반 -->
+		TRIM(MKWHH) MKWHH,   <!--  ＷＨ　　　 -->
+		TRIM(MKADD) MKADD,   <!--  저장　주소 -->
+		TRIM(MKPRS) MKPRS,   <!--  공정　주소 -->
+		TRIM(DKD01) DKD01,   <!--  업체　공장 -->
+		TRIM(DKD02) DKD02,   <!--  업체수입반 -->
+		TRIM(DKD03) DKD03,   <!--  포장　라인 -->
+		TRIM(DKD04) DKD04,   <!--  오더　번호 -->
+		TRIM(REP01) REP01,   <!--  회수　여부 -->
+		TRIM(USNCD) USNCD,   <!--  유상　구분 -->
+		MRPSQ,               <!--  SEQ       NO -->
+		CRTDT,               <!--  DATA생성일 -->
+		TRIM(PTLCK) PTLCK,   <!--  PART LB FALG -->
+		TRIM(IDLCK) IDLCK,   <!--  ID   LB FALG -->
+		TRIM(COMPS) COMPS,   <!--  사업부 -->
+		TRIM(KNGUBT) KNGUBT, <!--  간판　종류 -->
+		TRIM(CPRTNT) CPRTNT, <!--  득의선품번 -->
+		TRIM(PRTNOT) PRTNOT, <!--  DNPE품　번 -->
+		TRIM(ORCQYT) ORCQYT, <!--  간판분할량 -->
+		TRIM(PROCST) PROCST, <!--  공정　코드 -->
+		TRIM(PRODYT) PRODYT, <!--  생산지시일 -->
+		TRIM(BUCKTT) BUCKTT, <!--  BUCKET번호 -->
+		TRIM(SPLITT) SPLITT, <!--  ORDER번호1 -->
+		TRIM(SEQNOT) SEQNOT, <!--  ORDER번호2 -->
+		TRIM(SERNOT) SERNOT, <!--  ORDER번호3 -->
+		TRIM(INSNOT) INSNOT, <!--  증가　번호 -->
+		TRIM(HDCNTT) HDCNTT, <!--  HEADER항수 -->
+		TRIM(BARCDT) BARCDT, <!--  BARCOD정보 -->
+		TRIM(BOXCCT) BOXCCT, <!--  단수　구분 -->
+		TRIM(LOCNOT) LOCNOT, <!--  제품LOCATI -->
+		TRIM(PROCST)||' '||TRIM(PRODYT)||' '||TRIM(SPLITT)||' '||TRIM(SEQNOT)||' '||
+		TRIM(SERNOT)||' '||TRIM(INSNOT)||' '||TRIM(CPRTNT)||' '||
+		TRIM(PRTNOT)||'       '||TRIM(PRGGU) AS SMCD
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+		AND PROCS = #{PROCS}
+		AND PRTNO = #{PRTNO}
+		AND COLOR = #{COLOR}
+		AND CUSNO = ${CUSNO}
+		AND SPLITT = #{SPLITT}
+		AND SEQNOT = #{SEQNOT}
+		AND SERNOT = #{SERNOT}
+		AND LOTSZ = ${LOTSZ}
+		AND PRGGU = #{PRGGU}
+		AND REP01 = #{REP01}
+		AND USNCD = #{USNCD}
+		<if test="PR_GU=='PRINT_D'"> AND MRPSQ = ${MRPSQ}</if>
+	ORDER BY 
+		PROCS,PRTNO
+	</select>
+	
+	<select id="selectFPQE140Qlist_type4" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		A.*,	
+		SUBSTR(B.PRSNM,1,1) AS PRSNMFIRST
+	FROM
+		${LIB2}.${TABLE} A
+		LEFT OUTER JOIN ${LIB2}.FGP100PF B ON A.PROCS = B.PROCS	
+	WHERE
+		A.COMPS = #{COMPS}
+		AND A.PNYMD = ${PNYMD} 
+		AND A.PROCS IN ${PROCS}
+		<if test="PRGGU != 0">AND A.PRGGU = #{PRGGU} </if>
+	ORDER BY 
+		A.PROCS,A.PRTNO
+	</select>
+	<select id="selectFPQE140QSeq_737PF_CHK" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT 
+		COALESCE(LSEQN,0) AS CNT 
+	FROM
+		${LIB2}.${TABLE}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO_CVT}
+		AND PNYMD = ${PNYMD}
+	</select>
+	<insert id="insertFPQE140QSeq_737PF" parameterType="java.util.HashMap">
+	INSERT INTO ${LIB2}.${TABLE}
+	VALUES	(#{PRTNO_CVT}, ${PNYMD}, ${LSEQN}, #{COMPS})
+	</insert>
+	<update id="updateFPQE140QSeq_737PF" parameterType="java.util.HashMap">
+	UPDATE 
+		${LIB2}.${TABLE}
+	SET
+		LSEQN = ${LSEQN}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO_CVT}
+		AND PNYMD = ${PNYMD}			
+	</update>
+	
+	<select id="selectFPQE150Qlist_type1" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		<if test="TABLE=='FPW760PF'"> DISTINCT PROCS </if>
+		<if test="TABLE!='FPW760PF'"> DISTINCT VNDNR AS PROCS </if>	
+	FROM
+		${LIB2}.${TABLE}
+	WHERE
+		COMPS = #{COMPS}
+		AND PNYMD = ${PNYMD}
+	ORDER BY
+		<if test="TABLE=='FPW760PF'"> PROCS </if>
+		<if test="TABLE!='FPW760PF'"> VNDNR </if>		
+	</select>
+	<select id="selectFPQE150Qlist_type4" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		A.CUSNO,A.PRTNO,
+		<if test="TABLE=='FPW760PF'"> A.PROCS, </if>
+		<if test="TABLE!='FPW760PF'"> A.VNDNR AS PROCS, </if>
+		A.PNYMD,A.CPRTN,A.CPDSC,A.RGNCD,A.RGNNM,A.BXLCD,A.MKLOC,A.MKALC,A.ECCID,A.COLOR,
+		A.LBRCD,A.HMCCD,A.PGSCD,A.CARCD,A.CARNM,A.CWHCD,A.BRDCD,A.MLTCD,A.ITDSC,A.LOTSZ,A.ORCQY,A.OROQY,A.PRGGU,
+		A.CUSNM,A.MKCRC,A.MKFAC,A.EXPDP,A.MKWHH,A.MKADD,A.MKPRS,A.DKD01,A.DKD02,A.DKD03,A.DKD04,A.REP01,A.COMPS,
+		A.USNCD,A.MRPD1,A.MRPD2,A.PRTNOU,A.CPRTNU,A.CONSQU,A.PLRMKU,A.PLPTNU, SUBSTR(B.PRSNM,1,1) AS PRSNMFIRST
+	FROM
+		${LIB2}.${TABLE} A
+		LEFT OUTER JOIN ${LIB2}.FGP100PF B ON A.PROCS = B.PROCS	
+	WHERE
+		A.COMPS = #{COMPS}
+		AND A.PNYMD = ${PNYMD}
+		<if test="TABLE=='FPW760PF'"> AND A.PROCS IN ${PROCS} </if>
+		<if test="TABLE!='FPW760PF'"> AND A.VNDNR IN ${PROCS} </if>
+		<if test="PRGGU != 0">AND A.PRGGU = #{PRGGU} </if>
+	ORDER BY
+		<if test="TABLE=='FPW760PF'"> A.PROCS,A.PRTNO </if>
+		<if test="TABLE!='FPW760PF'"> A.VNDNR,A.PRTNO </if>
+	</select>
+	<select id="selectFPQE150QSeq_767PF_CHK" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT 
+		COALESCE(LSEQN,0) AS CNT 
+	FROM
+		${LIB2}.${TABLE}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO_CVT}
+		AND PNYMD = ${PNYMD}
+	</select>
+	<insert id="insertFPQE150QSeq_767PF" parameterType="java.util.HashMap">
+	INSERT INTO ${LIB2}.${TABLE}
+	VALUES	(#{PRTNO_CVT}, ${PNYMD}, ${LSEQN}, #{COMPS})
+	</insert>
+	<update id="updateFPQE150QSeq_767PF" parameterType="java.util.HashMap">
+	UPDATE 
+		${LIB2}.${TABLE}
+	SET
+		LSEQN = ${LSEQN}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO_CVT}
+		AND PNYMD = ${PNYMD}			
+	</update>
+	
+	<select id="selectFPQC140Qlist_type4" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT
+		A.*, 0 AS ISIR
+	FROM
+		${LIB2}.${TABLE} A
+	WHERE
+		A.COMPS = #{COMPS}
+		AND A.PNYMD = ${PNYMD} 
+		AND A.PROCS IN ${PROCS}
+		<if test="PRGGU != 0">AND A.PRGGU = #{PRGGU} </if>
+	ORDER BY 
+		A.PROCS, A.PRTNO
+	</select>
+	<select id="selectFPQC140QSeq_737PF_CHK" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	SELECT 
+		COALESCE(LSEQN,0) AS CNT 
+	FROM
+		${LIB2}.${TABLE}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO}
+		AND PNYMD = ${PNYMD}
+	</select>
+	<insert id="insertFPQC140QSeq_737PF" parameterType="java.util.HashMap">
+	INSERT INTO ${LIB2}.${TABLE}
+	VALUES	(#{PRTNO}, ${PNYMD}, ${LSEQN}, #{COMPS})
+	</insert>
+	<update id="updateFPQC140QSeq_737PF" parameterType="java.util.HashMap">
+	UPDATE 
+		${LIB2}.${TABLE}
+	SET
+		LSEQN = ${LSEQN}
+	WHERE 
+		COMPS = #{COMPS}
+		AND PRTNO = #{PRTNO}
+		AND PNYMD = ${PNYMD}			
+	</update>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="26" Id="cci_top_close" Left="8" PidAttrib="7" Title="top_close" TooltipFont=",0" Top="8" Ver="1.0" Width="1024" WorkArea="true">
+		<Image Cursor="HAND" Height="11" Id="Image22" ImageID="img_downextend" Left="20" OnClick="Image22_OnClick" Static="FALSE" TabOrder="1" Top="13" Width="21"></Image>
+		<Button BKColor="#c8c1b7" Cursor="HAND" Font="굴림,9,Bold" Height="16" Id="Button8" Left="2" OnClick="Button8_OnClick" TabOrder="2" Text="↘" Top="8" Width="18"></Button>
+	</Form>
+	<Script><![CDATA[
+function Image22_OnClick(obj,nX,nY)
+{
+	global.FrameTop2.visible = true;
+	global.FrameTopClose.visible = false;
+}
+
+function Button8_OnClick(obj)
+{
+	if (G_ScreenSize=="N"){
+		//trace("1");
+		//전체열기
+		global.FrameTop2.visible = false;
+		global.FrameTopClose.visible = true;
+		global.FrameLeft.visible = false;
+		global.FrameLeftClose.visible = true;
+		
+		G_ScreenSize = "Y";
+	}else{
+		//trace("2");
+		//전체닫기
+		
+		global.FrameTop2.visible = true;
+		global.FrameTopClose.visible = false;
+		global.FrameLeft.visible = true;
+		global.FrameLeftClose.visible = false;
+		
+		G_ScreenSize = "N";
+	}
+}
+
+]]></Script>
+</Window>

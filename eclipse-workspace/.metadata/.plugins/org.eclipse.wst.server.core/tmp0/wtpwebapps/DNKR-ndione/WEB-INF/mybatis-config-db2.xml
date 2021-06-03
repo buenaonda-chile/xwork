@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * mybatis-config.xml
+ *
+ * AI-J3(MyBatis) の  設定ファイルです。
+ *
+ * $ mybatis-config.xml 1757 2015-07-03 05:43:12Z 10088DS00879 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<!DOCTYPE configuration PUBLIC
+    "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!-- [EN] Logger Implementation Definition -->
+    <!-- [JP] Logger実装定義 -->
+    <settings>
+        <!-- [JP] MyBatisのデフォルトLoggerはSLF4Jです -->
+        <!-- [EN] Default Logger of MyBatis is SLF4J -->
+        <setting name="logImpl" value="LOG4J2" />
+        <!-- JDBC type in the case that the field domain is null (Can not be changed) -->
+        <setting name="jdbcTypeForNull" value="NULL" />
+        <!-- Scope of local cache (Can not be changed) -->
+        <setting name="localCacheScope" value="STATEMENT" />
+    </settings>
+
+    <!-- [EN] Alias Definition of Domain -->
+    <!-- [JP] Domainの別名定義 -->
+    <typeAliases>
+    	<typeAlias alias="SsoAccountDb2Domain" type="com.globaldenso.dnkr.domain.db2.SsoAccountDb2Domain" />
+    	<typeAlias alias="CommonDb2Domain" type="com.globaldenso.dnkr.domain.db2.CommonDb2Domain" />
+    	<typeAlias alias="EmpDb2Domain" type="com.globaldenso.dnkr.domain.EmpDb2Domain" />
+ 	    <typeAlias alias="RelationDb2Domain" type="com.globaldenso.dnkr.domain.RelationDb2Domain" />
+    	<typeAlias alias="CodeDb2Domain" type="com.globaldenso.dnkr.domain.db2.CodeDb2Domain" />
+        <typeAlias alias="PsogmDomain" type="com.globaldenso.dnkr.domain.db2.PsogmDomain" />
+        <typeAlias alias="PsogmImprvDDomain" type="com.globaldenso.dnkr.domain.db2.PsogmImprvDDomain" />
+        <typeAlias alias="FileDb2Domain" type="com.globaldenso.dnkr.domain.db2.FileDb2Domain" />
+        <!-- <typeAlias alias="DataWareHouseDomain" type="com.globaldenso.dnkr.domain.DataWareHouseDomain" /> -->
+        <typeAlias alias="PsogmMachineDomain" type="com.globaldenso.dnkr.domain.PsogmMachineDomain" />
+        <typeAlias alias="PssallibDomain" type="com.globaldenso.dnkr.domain.PssallibDomain" />
+        <typeAlias alias="PsogmPerSearchDomain" type="com.globaldenso.dnkr.domain.PsogmPerSearchDomain" />
+        <typeAlias alias="PsogmMonPerformDb2Domain" type="com.globaldenso.dnkr.domain.db2.PsogmMonPerformDb2Domain" />
+        <typeAlias alias="MachineDb2Domain" type="com.globaldenso.dnkr.domain.db2.MachineDb2Domain" />
+        <typeAlias alias="PsogmProdStatusDb2Domain" type="com.globaldenso.dnkr.domain.db2.PsogmProdStatusDb2Domain" />
+        <typeAlias alias="PsfacDb2Domain" type="com.globaldenso.dnkr.domain.db2.PsfacDb2Domain" />
+        <typeAlias alias="PssalPCarOutDomain" type="com.globaldenso.dnkr.domain.db2.PssalPCarOutDomain" />
+        <typeAlias alias="SpareUnitDb2Domain" type="com.globaldenso.dnkr.domain.db2.SpareUnitDb2Domain" />
+        <typeAlias alias="OrderDb2Domain" type="com.globaldenso.dnkr.domain.db2.OrderDb2Domain" />
+        
+        <!-- 종합관리 - 경영관리 -->
+        <typeAlias alias="MaterialReceivingDomain" type="com.globaldenso.dnkr.domain.db2.MaterialReceivingDomain" />
+        <typeAlias alias="PurchasePriceDomain" type="com.globaldenso.dnkr.domain.db2.PurchasePriceDomain" />
+        <typeAlias alias="SalesPlanMaterialCostDomain" type="com.globaldenso.dnkr.domain.db2.SalesPlanMaterialCostDomain" />
+
+        <!-- 종합관리 - 재고관리 -->
+        <typeAlias alias="DataWarehouseFileDomain" type="com.globaldenso.dnkr.domain.db2.DataWarehouseFileDomain" />
+ 
+        <typeAlias alias="ProductStockShippingReceivingDomain" type="com.globaldenso.dnkr.domain.db2.ProductStockShippingReceivingDomain" />
+        <typeAlias alias="ProductInventoryDomain" type="com.globaldenso.dnkr.domain.db2.ProductInventoryDomain" />
+        <typeAlias alias="ImportInventoryDomain" type="com.globaldenso.dnkr.domain.db2.ImportInventoryDomain" />
+        <typeAlias alias="ImportInventoryPopDomain" type="com.globaldenso.dnkr.domain.db2.ImportInventoryPopDomain" />
+        <typeAlias alias="MaterialInventoryDomain" type="com.globaldenso.dnkr.domain.db2.MaterialInventoryDomain" />      
+        <typeAlias alias="MaterialCostByPeriodDomain" type="com.globaldenso.dnkr.domain.db2.MaterialCostByPeriodDomain" />
+
+        <!-- 종합관리 - 생산정보 -->
+         <typeAlias alias="MaterialWasteDomain" type="com.globaldenso.dnkr.domain.db2.MaterialWasteDomain" /> 
+         <typeAlias alias="SupplyShippingDomain" type="com.globaldenso.dnkr.domain.db2.SupplyShippingDomain" /> 
+         <typeAlias alias="WipReportDomain" type="com.globaldenso.dnkr.domain.db2.WipReportDomain" /> 
+         <typeAlias alias="ProductionRecordDomain" type="com.globaldenso.dnkr.domain.db2.ProductionRecordDomain" /> 
+         <typeAlias alias="ProductShippingReceivingDomain" type="com.globaldenso.dnkr.domain.db2.ProductShippingReceivingDomain" />
+         <typeAlias alias="DuplicationPartDomain" type="com.globaldenso.dnkr.domain.db2.DuplicationPartDomain" />
+         <typeAlias alias="HvacSpoolDomain" type="com.globaldenso.dnkr.domain.db2.HvacSpoolDomain" />
+         
+        <!-- 종합관리 - 판매정보 -->
+         <typeAlias alias="YearlyProductShippingDomain" type="com.globaldenso.dnkr.domain.db2.YearlyProductShippingDomain" /> 
+         <typeAlias alias="ShippingSalesDomain" type="com.globaldenso.dnkr.domain.db2.ShippingSalesDomain" /> 
+         <typeAlias alias="BusinessShippingMaterialDomain" type="com.globaldenso.dnkr.domain.db2.BusinessShippingMaterialDomain" /> 
+         <typeAlias alias="BusinessShippingDomain" type="com.globaldenso.dnkr.domain.db2.BusinessShippingDomain" /> 
+         <typeAlias alias="MonthlyShippingListDomain" type="com.globaldenso.dnkr.domain.db2.MonthlyShippingListDomain" /> 
+         <typeAlias alias="MonthlySalesPlanDomain" type="com.globaldenso.dnkr.domain.db2.MonthlySalesPlanDomain" /> 
+         <typeAlias alias="AccountSituationDomain" type="com.globaldenso.dnkr.domain.db2.AccountSituationDomain" /> 
+         <typeAlias alias="FakeSalesCheckListDomain" type="com.globaldenso.dnkr.domain.db2.FakeSalesCheckListDomain" /> 
+  	     
+        <typeAlias alias="StandardCostHistoryDomain" type="com.globaldenso.dnkr.domain.db2.StandardCostHistoryDomain" />
+        <typeAlias alias="CalculationMaterialDomain" type="com.globaldenso.dnkr.domain.db2.CalculationMaterialDomain" />
+        <typeAlias alias="MonthlySalesPerformanceDomain" type="com.globaldenso.dnkr.domain.db2.MonthlySalesPerformanceDomain" />
+        <typeAlias alias="CKDPurchaseHistoryDomain" type="com.globaldenso.dnkr.domain.db2.CKDPurchaseHistoryDomain" />
+        <typeAlias alias="MonthlyDivisionRatioDomain" type="com.globaldenso.dnkr.domain.db2.MonthlyDivisionRatioDomain" />
+        <typeAlias alias="MonthlyImportsProductDomain" type="com.globaldenso.dnkr.domain.db2.MonthlyImportsProductDomain" />
+        <typeAlias alias="ImportDressingHistoryDomain" type="com.globaldenso.dnkr.domain.db2.ImportDressingHistoryDomain" />
+        <typeAlias alias="ImportsTradeDomain" type="com.globaldenso.dnkr.domain.db2.ImportsTradeDomain" />
+        <typeAlias alias="OceanListDomain" type="com.globaldenso.dnkr.domain.db2.OceanListDomain" />
+        <typeAlias alias="OceanListSalesRevenueDomain" type="com.globaldenso.dnkr.domain.db2.OceanListSalesRevenueDomain" />
+        <typeAlias alias="DomesticPurchasePriceListDomain" type="com.globaldenso.dnkr.domain.db2.DomesticPurchasePriceListDomain" />
+        <typeAlias alias="MonthlyShipmentCheckDomain" type="com.globaldenso.dnkr.domain.db2.MonthlyShipmentCheckDomain" />
+        <typeAlias alias="DailyDepartmentCostDomain" type="com.globaldenso.dnkr.domain.db2.DailyDepartmentCostDomain" />
+        <typeAlias alias="QrPartListDomain" type="com.globaldenso.dnkr.domain.db2.QrPartListDomain" />
+        <typeAlias alias="AccountingJournalDomain" type="com.globaldenso.dnkr.domain.db2.AccountingJournalDomain" />
+        <typeAlias alias="JdeBudgetDomain" type="com.globaldenso.dnkr.domain.db2.JdeBudgetDomain" />
+        <typeAlias alias="ImportProgressDomain" type="com.globaldenso.dnkr.domain.db2.ImportProgressDomain" />
+
+        
+		<!-- 수주이관 -->
+		<typeAlias alias="ItemMasterDomain" type="com.globaldenso.dnkr.domain.ItemMasterDomain" />
+		<typeAlias alias="CustomerDomain" type="com.globaldenso.dnkr.domain.CustomerDomain" />
+        <typeAlias alias="DuplTypeOrderCodeMstDomain" type="com.globaldenso.dnkr.domain.DuplTypeOrderCodeMstDomain" />
+        <typeAlias alias="CustOrderTypeMstDomain" type="com.globaldenso.dnkr.domain.CustOrderTypeMstDomain" />
+        <typeAlias alias="TopCustTypeMstDomain" type="com.globaldenso.dnkr.domain.TopCustTypeMstDomain" />
+        <typeAlias alias="CustPartConstMstDomain" type="com.globaldenso.dnkr.domain.CustPartConstMstDomain" />
+        <typeAlias alias="CustTypeOrderExceptMstDomain" type="com.globaldenso.dnkr.domain.CustTypeOrderExceptMstDomain" />        
+        <typeAlias alias="CustOrderTypeHistMstViewDomain" type="com.globaldenso.dnkr.domain.CustOrderTypeHistMstViewDomain" />      
+        <typeAlias alias="CustOrderTypeMstViewDomain" type="com.globaldenso.dnkr.domain.CustOrderTypeMstViewDomain" />  
+        <typeAlias alias="CustPartConstMstViewDomain" type="com.globaldenso.dnkr.domain.CustPartConstMstViewDomain" />
+        <typeAlias alias="KiaHyundaiVANCompanyCodeMstDomain" type="com.globaldenso.dnkr.domain.KiaHyundaiVANCompanyCodeMstDomain" />
+        <typeAlias alias="OrderDayITEMMstDomain" type="com.globaldenso.dnkr.domain.OrderDayITEMMstDomain" />
+        <typeAlias alias="OrderHostUpDomain" type="com.globaldenso.dnkr.domain.OrderHostUpDomain" />
+        <typeAlias alias="OrderHostUpCheckListDomain" type="com.globaldenso.dnkr.domain.OrderHostUpCheckListDomain" />
+        <typeAlias alias="OrderDaySaleCreateDomain" type="com.globaldenso.dnkr.domain.OrderDaySaleCreateDomain" />
+        <typeAlias alias="OrderDayShipQtyCheckListDomain" type="com.globaldenso.dnkr.domain.OrderDayShipQtyCheckListDomain" />
+        <typeAlias alias="OrderDayBeforeTransferErrorListDomain" type="com.globaldenso.dnkr.domain.OrderDayBeforeTransferErrorListDomain" />        
+        <typeAlias alias="OrderDayTransferWorkDomain" type="com.globaldenso.dnkr.domain.OrderDayTransferWorkDomain" />
+        <typeAlias alias="OrderDayAfterTransferErrorListDomain" type="com.globaldenso.dnkr.domain.OrderDayAfterTransferErrorListDomain" />
+        <typeAlias alias="NonOrderHostUpDomain" type="com.globaldenso.dnkr.domain.NonOrderHostUpDomain" />
+        <typeAlias alias="NonOrderHostUpListDomain" type="com.globaldenso.dnkr.domain.NonOrderHostUpListDomain" />
+        <typeAlias alias="NonOrderDayAfterTransferErrorListDomain" type="com.globaldenso.dnkr.domain.NonOrderDayAfterTransferErrorListDomain" />
+        <typeAlias alias="NonOrderDayTransferWorkDomain" type="com.globaldenso.dnkr.domain.NonOrderDayTransferWorkDomain" />
+        <typeAlias alias="FileUploadParameterMstDomain" type="com.globaldenso.dnkr.domain.FileUploadParameterMstDomain" />
+		<typeAlias alias="BatchHistDomain" type="com.globaldenso.dnkr.domain.BatchHistDomain" />
+		<typeAlias alias="OrderTransferMngDomain" type="com.globaldenso.dnkr.domain.OrderTransferMngDomain" />
+
+        <typeAlias alias="OrderDaySaleCreateDomain" type="com.globaldenso.dnkr.domain.OrderDaySaleCreateDomain" />
+        <typeAlias alias="OrderDaySaleCreateDomain2" type="com.globaldenso.dnkr.domain.OrderDaySaleCreateDomain2" />
+        <typeAlias alias="OrderCalendarDomain" type="com.globaldenso.dnkr.domain.OrderCalendarDomain" />
+
+        <!-- 생산성지표(Start) --> 
+        <typeAlias alias="ProdctIndctBaseLineDomain" type="com.globaldenso.dnkr.domain.ProdctIndctBaseLineDomain" />        
+        <typeAlias alias="ProdctCodeBaseDomain" type="com.globaldenso.dnkr.domain.ProdctCodeBaseDomain" />    
+        <typeAlias alias="LgstTimeDstrRtBaseDomain" type="com.globaldenso.dnkr.domain.LgstTimeDstrRtBaseDomain" />
+        <typeAlias alias="MnhrCntrBaseBaseDomain" type="com.globaldenso.dnkr.domain.MnhrCntrBaseBaseDomain" />  
+        <typeAlias alias="PrdctIndComBaseDomain" type="com.globaldenso.dnkr.domain.PrdctIndComBaseDomain" />
+        <typeAlias alias="PrdctSvcPsnlInputDomain" type="com.globaldenso.dnkr.domain.PrdctSvcPsnlInputDomain"/>     
+        <typeAlias alias="WorkCodeBaseDomain" type="com.globaldenso.dnkr.domain.WorkCodeBaseDomain" />          
+		<typeAlias alias="WrknTimeBaseDomain" type="com.globaldenso.dnkr.domain.WrknTimeBaseDomain" /> 
+		<typeAlias alias="WrkrInfoBaseDomain" type="com.globaldenso.dnkr.domain.WrkrInfoBaseDomain" /> 
+		<typeAlias alias="StEmpAbsTrdDomain" type="com.globaldenso.dnkr.domain.StEmpAbsTrdDomain" /> 
+		<typeAlias alias="LnPrsInpTmDomain" type="com.globaldenso.dnkr.domain.LnPrsInpTmDomain" />  		  		  		       
+		<typeAlias alias="PrdPrfrmRgsDomain" type="com.globaldenso.dnkr.domain.PrdPrfrmRgsDomain" />  	
+		<typeAlias alias="PrdYrPlnCrtRgsDomain" type="com.globaldenso.dnkr.domain.PrdYrPlnCrtRgsDomain" />
+		<typeAlias alias="LosExcIndTmDomain" type="com.globaldenso.dnkr.domain.LosExcIndTmDomain" />
+		<typeAlias alias="PrdPrfByItmNmbDomain" type="com.globaldenso.dnkr.domain.PrdPrfByItmNmbDomain" />	
+		<typeAlias alias="DlyprPrfrmDomain" type="com.globaldenso.dnkr.domain.DlyprPrfrmDomain" />				
+		<typeAlias alias="StEmpAbsCnfDomain" type="com.globaldenso.dnkr.domain.StEmpAbsCnfDomain" />
+		<typeAlias alias="NmlMnHrStndrdTmDomain" type="com.globaldenso.dnkr.domain.NmlMnHrStndrdTmDomain" />
+		<typeAlias alias="StndrdTmDomain" type="com.globaldenso.dnkr.domain.StndrdTmDomain" />
+		<typeAlias alias="DrctPrdctnInptTmDomain" type="com.globaldenso.dnkr.domain.DrctPrdctnInptTmDomain" />
+		<typeAlias alias="MnRdctnIndxPrfrmncDomain" type="com.globaldenso.dnkr.domain.MnRdctnIndxPrfrmncDomain" />
+		<typeAlias alias="CstBsRtDomain" type="com.globaldenso.dnkr.domain.CstBsRtDomain" />
+		<typeAlias alias="LnPrfrmncIndxTrgtDomain" type="com.globaldenso.dnkr.domain.LnPrfrmncIndxTrgtDomain" />
+		
+		<typeAlias alias="LocWorkTimeTotDomain" type="com.globaldenso.dnkr.domain.LocWorkTimeTotDomain" />
+		<typeAlias alias="PrdPrfByLineDomain" type="com.globaldenso.dnkr.domain.PrdPrfByLineDomain" />
+		<typeAlias alias="PrdPrfByLocDomain" type="com.globaldenso.dnkr.domain.PrdPrfByLocDomain" />  													
+		
+		<typeAlias alias="WrknRcRnDomain" type="com.globaldenso.dnkr.domain.WrknRcRnDomain" />
+		<typeAlias alias="WrknScheduleDomain" type="com.globaldenso.dnkr.domain.WrknScheduleDomain" />
+		<typeAlias alias="StEmpAbsStaDomain" type="com.globaldenso.dnkr.domain.StEmpAbsStaDomain" />
+		<typeAlias alias="StEmpAbsTotStaDomain" type="com.globaldenso.dnkr.domain.StEmpAbsTotStaDomain" />
+		<typeAlias alias="HolidayAppointedDomain" type="com.globaldenso.dnkr.domain.HolidayAppointedDomain" />
+		<typeAlias alias="ApplnMailSettingDomain" type="com.globaldenso.dnkr.domain.ApplnMailSettingDomain" />
+		<typeAlias alias="DsptLvPlanDomain" type="com.globaldenso.dnkr.domain.DsptLvPlanDomain" />			
+				
+        <!-- 생산성지표(End) --> 		        
+        <typeAlias alias="MenuDomain" type="com.globaldenso.dnkr.domain.MenuDomain" />                              
+        <typeAlias alias="BatchDomain" type="com.globaldenso.dnkr.domain.BatchDomain" />
+        
+        <typeAlias alias="CustOrderDataMngDomain" type="com.globaldenso.dnkr.domain.CustOrderDataMngDomain" />
+        
+        
+          
+  		<!-- 판매계획 -->
+  		<typeAlias alias="FinlCustInfoBaseDomain" type="com.globaldenso.dnkr.domain.FinlCustInfoBaseDomain" />
+  		<typeAlias alias="FinlCustTypeBaseDomain" type="com.globaldenso.dnkr.domain.FinlCustTypeBaseDomain" />
+  		<typeAlias alias="PaymentTypeBaseDomain" type="com.globaldenso.dnkr.domain.PaymentTypeBaseDomain" />
+  		<typeAlias alias="SalAnlysComentDomain" type="com.globaldenso.dnkr.domain.SalAnlysComentDomain" />
+  		<typeAlias alias="SalAnlysViewDomain" type="com.globaldenso.dnkr.domain.SalAnlysViewDomain" />
+  		<typeAlias alias="SalPlnPerfmncWkReprtExlDomain" type="com.globaldenso.dnkr.domain.SalPlnPerfmncWkReprtExlDomain" />
+  		<typeAlias alias="SalPlnPerfmncMtReprtExlDomain" type="com.globaldenso.dnkr.domain.SalPlnPerfmncMtReprtExlDomain" />
+  		<typeAlias alias="SalPlnPerfmncMtReprtPptDomain" type="com.globaldenso.dnkr.domain.SalPlnPerfmncMtReprtPptDomain" />
+  		<typeAlias alias="SalPlanBaseDomain" type="com.globaldenso.dnkr.domain.SalPlanBaseDomain" />
+    </typeAliases>
+    
+
+    <mappers>
+        <!-- [EN] SsoAccountDb2 sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-SsoAccountDb2.xml" />
+        
+        <!-- [EN] EmpDb2 sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-EmpDb2.xml" />
+        
+        <!-- [EN] CodeDb2 sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-CodeDb2.xml" />
+        
+        <!-- [EN] RelationDb2 sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-RelationDb2.xml" />
+        
+        <!-- [EN] Psogm sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-Psogm.xml" />
+
+		<!-- [EN] Psogm Improve Detail sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PsogmImprvD.xml" />
+         		
+ 		<!-- [EN] Psogm Attached File sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PsogmAttachedFile.xml" />
+        
+        <!-- [EN] PsogmMachine sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PsogmMachine.xml" />
+        
+        <!-- [EN] Pssallib sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-Pssallib.xml" />
+     	
+     	<!-- [EN] PsogmPerSearch sqlMap -->
+        <!-- [JP]  -->
+     	<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PsogmPerSearch.xml" />
+     	
+     	<!-- [EN] PsogmMonPerform sqlMap -->
+        <!-- [JP]  -->
+     	<mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PsogmMonPerform.xml" />
+		
+		<!-- [EN] PsogmProdStatus sqlMap -->
+        <!-- [JP]  -->
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PsogmProdStatus.xml" />
+		
+		<!-- [EN] Psfac sqlMap -->
+        <!-- [JP]  -->
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-Psfac.xml" />
+		
+		<!-- [EN] PssalPCalOut sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-PssalPCalOut.xml" />
+        
+        <!-- [EN] Order sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-OrderDb2.xml" />
+        
+        <!-- [EN] DWH sqlMap -->
+        <!-- [JP]  -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-MgntInfo.xml" />
+        
+        <!-- [EN] JSON sqlMap -->
+        <!-- [JP]  -->
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-JsonDb2.xml" />
+         
+         
+         <!-- 수주이관 -->
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-Customer.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-ItemMaster.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-DuplTypeOrderCodeMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustOrderTypeMst.xml" />         
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-TopCustTypeMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustPartConstMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustTypeOrderExceptMst.xml" />         
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustOrderTypeHistMstView.xml" />         
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustOrderTypeMstView.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustPartConstMstView.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-KiaHyundaiVANCompanyCodeMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDayITEMMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderHostUp.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderHostUpCheckList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDaySaleCreate.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDayShipQtyCheckList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDayBeforeTransferErrorList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDayTransferWork.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderDayAfterTransferErrorList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-NonOrderHostUp.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-NonOrderHostUpList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-NonOrderDayAfterTransferErrorList.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-NonOrderDayTransferWork.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-FileUploadParameterMst.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-BatchHist.xml" />
+         <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-OrderTransferMng.xml" />
+         
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CustOrder.xml" />
+         
+         
+        <!-- 생산성지표 --> 
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-ProdctIndctBaseLine.xml" />         
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-ProdctCodeBase.xml" />    
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LgstTimeDstrRtBase.xml" /> 
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-MnhrCntrBaseBase.xml" />
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdctIndComBase.xml" />        
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdctSvcPsnlInput.xml" /> 
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-WorkCodeBase.xml" />                                                        
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-WrknTimeBase.xml" /> 
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-WrkrInfoBase.xml" />  
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-StEmpAbsTrd.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LnPrsInpTm.xml" /> 
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdPrfrmRgs.xml" />  	 		 		   		 		   
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdYrPlnCrtRgs.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LosExcIndTm.xml" />        
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LosExcIndTm.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdPrfByItmNmb.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-DlyprPrfrm.xml" /> 
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-StEmpAbsCnf.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-NmlMnHrStndrdTm.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-StndrdTm.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-DrctPrdctnInptTm.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-MnRdctnIndxPrfrmnc.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-CstBsRt.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LnPrfrmncIndxTrgt.xml" />
+		
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-LocWorkTimeTot.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdPrfByLine.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PrdPrfByLoc.xml" />
+		
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-WrknRcRn.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-WrknSchedule.xml" />		
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-StEmpAbsSta.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-StEmpAbsTotSta.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-HolidayAppointed.xml" />
+		
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-ApplnMailSetting.xml" />
+		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-DsptLvPlan.xml" />
+		
+		
+ 		<!-- 판매계획 -->    
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-FinlCustInfoBase.xml" />
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-FinlCustTypeBase.xml" />
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-PaymentTypeBase.xml" />
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalAnlysComent.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalAnlysView.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalPlnPerfmncMtReprtPpt.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalPlnPerfmncMtReprtExl.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalPlnPerfmncWkReprtExl.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalPlanBase.xml" />
+ 		<mapper resource="com/globaldenso/dnkr/integration/sqlmap/SqlMap-SalAnlysViewInfo.xml" />
+ 		
+ 		
+        <!-- 야간배치 -->
+        <mapper resource="com/globaldenso/dnkr/integration/sqlmap/db2/SqlMap-BatchCheck.xml" />         
+    </mappers>
+
+</configuration>

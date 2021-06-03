@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월&#32;판매계획대&#32;실적&#32;집계표&#32;상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SPMC128QD" UseClientLayout="1">
+				<Contents>
+					<colinfo id="PSPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYVND" size="256" summ="default" type="STRING"/>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PACKC" size="256" summ="default" type="STRING"/>
+					<colinfo id="MQ" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="PQ" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="M2" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="P2" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="RRATE" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="ARATE" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AreaSelect="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SPMC128QD" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="618" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="514" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1061" TabOrder="1" TabStop="true" Top="104" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1061">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="133"/>
+						<col width="196"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="100"/>
+						<col width="60"/>
+						<col width="60"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" rowspan="2" text="품명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" rowspan="2" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" rowspan="2" text="공장"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" rowspan="2" text="제품"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" rowspan="2" text="거래처"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" colspan="5" display="text" text="수량"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" colspan="5" display="text" text="금액"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" row="1" text="판매계획"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" row="1" text="판매실적"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" row="1" text="수량차이"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" row="1" text="달성율"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" row="1" text="정도율"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" row="1" text="판매계획금액"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" row="1" text="판매실적금액"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" row="1" text="금액차이"/>
+						<cell bkcolor="#dfdfdf" col="14" color="#002043" display="text" row="1" text="달성율"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" row="1" text="정도율"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="PSPNO" display="normal"/>
+						<cell align="left" col="1" colid="ITDSC" display="normal"/>
+						<cell align="center" col="2" colid="COMPS" display="normal"/>
+						<cell align="center" col="3" colid="PACKC" display="normal"/>
+						<cell align="center" col="4" colid="PRDCD" display="normal"/>
+						<cell align="center" col="5" colid="PYVND" display="normal"/>
+						<cell align="right" col="6" colid="MQ" display="number" Mask="#,##0"/>
+						<cell align="right" col="7" colid="PQ" display="number" Mask="#,##0"/>
+						<cell align="right" col="8" display="number" expr="MQ-PQ" Mask="#,##0"/>
+						<cell align="right" col="9" colid="RRATE" display="number" Mask="#,##0"/>
+						<cell align="right" col="10" display="number" expr="ABS(RRATE-100)" Mask="#,##0"/>
+						<cell align="right" col="11" colid="M2" display="number" Mask="#,##0"/>
+						<cell align="right" col="12" colid="P2" display="number" Mask="#,##0"/>
+						<cell align="right" col="13" display="number" expr="M2-P2" Mask="#,##0"/>
+						<cell align="right" col="14" colid="ARATE" display="number" Mask="#,##0"/>
+						<cell align="right" col="15" display="number" expr="ABS(ARATE-100)" Mask="#,##0"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" display="text" text="TOTAL"/>
+						<cell col="1" colspan="4" display="text" expr='rowcount()+&quot;건&quot;'/>
+						<cell align="right" col="5" display="number"/>
+						<cell align="right" col="6" display="text" expr='SUM(&quot;MQ&quot;)' Mask="#,##0"/>
+						<cell align="right" col="7" display="number" expr='SUM(&quot;PQ&quot;)' Mask="#,##0"/>
+						<cell align="right" col="8" display="number" expr='SUM(&quot;MQ&quot;)-SUM(&quot;PQ&quot;)' Mask="#,##0"/>
+						<cell align="right" col="9" display="number" expr='iif(SUM(&quot;PQ&quot;)==0&#32;||&#32;SUM(&quot;MQ&quot;)==0,0,SUM(&quot;PQ&quot;)*100/SUM(&quot;MQ&quot;)' Mask="#,##0.#0"/>
+						<cell align="right" col="10" display="number" expr='ABS(iif(SUM(&quot;PQ&quot;)==0&#32;||&#32;SUM(&quot;MQ&quot;)==0,0,SUM(&quot;PQ&quot;)*100/SUM(&quot;MQ&quot;))-100)' Mask="#,##0.#0"/>
+						<cell align="right" col="11" display="number" expr='SUM(&quot;M2&quot;)'/>
+						<cell align="right" col="12" display="number" expr='SUM(&quot;P2&quot;)'/>
+						<cell align="right" col="13" display="number" expr='SUM(&quot;M2&quot;)-SUM(&quot;P2&quot;)'/>
+						<cell align="right" col="14" display="number" expr='iif(SUM(&quot;P2&quot;)==0&#32;||&#32;SUM(&quot;M2&quot;)==0,0,SUM(&quot;P2&quot;)*100/SUM(&quot;M2&quot;)' Mask="#,##0.#0"/>
+						<cell align="right" col="15" display="number" expr='ABS(iif(SUM(&quot;P2&quot;)==0&#32;||&#32;SUM(&quot;M2&quot;)==0,0,SUM(&quot;P2&quot;)*100/SUM(&quot;M2&quot;))-100)' Mask="#,##0.#0"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1061"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Button Cursor="HAND" Height="20" Id="Button5" ImageID="comBtn_excel" Left="997" OnClick="setExcel" TabOrder="4" Text="검색" Top="4" Width="59"></Button>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="44" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="43" Width="24"></File>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#888888" Font="Default,9,Bold" Height="26" Id="Static0" Left="524" TabOrder="5" Text="선&#32;택&#32;제&#32;품" Top="66" VAlign="Middle" VClip="None" Width="116"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PRDCD_D" Left="640" MaxLength="10" TabOrder="6" Top="66" Width="136"></Edit>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PYVND_D" Left="900" MaxLength="10" TabOrder="7" Top="66" Width="136"></Edit>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" TabOrder="8" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static9" Left="262" TabOrder="9" Text="공&#32;장&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="524" TabOrder="10" Text="계&#32;획&#32;년&#32;월" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="784" TabOrder="11" Text="A/D" Top="34" VAlign="Middle" Width="116"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PLNYM_D" Left="640" MaxLength="10" TabOrder="12" Top="34" Width="136"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static7" TabOrder="13" Text="업&#32;체&#32;코&#32;드" Top="66" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static13" Left="262" TabOrder="14" Text="제&#32;품&#32;코&#32;드" Top="66" VAlign="Middle" Width="116"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PYVND_F_D" Left="116" MaxLength="10" TabOrder="15" Top="66" Width="60"></Edit>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PYVND_T_D" Left="192" MaxLength="10" TabOrder="16" Top="66" Width="60"></Edit>
+		<Static Align="Center" Height="15" Id="Static12" Left="177" TabOrder="17" Text="~" Top="72" VAlign="Middle" Width="14"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_prdcd_from_D" Left="378" MaxLength="10" TabOrder="18" Top="66" Width="60"></Edit>
+		<Static Align="Center" Height="15" Id="Static14" Left="439" TabOrder="20" Text="~" Top="72" VAlign="Middle" Width="14"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_prdcd_to_D" Left="454" MaxLength="10" TabOrder="19" Top="66" Width="60"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#888888" Font="Default,9,Bold" Height="26" Id="Static1" Left="784" TabOrder="21" Text="선택거래처" Top="66" VAlign="Middle" VClip="None" Width="116"></Static>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_COMPS_D" Left="116" MaxLength="10" TabOrder="22" Top="34" Width="136"></Edit>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_PLDCD_D" Left="378" MaxLength="10" TabOrder="23" Top="34" Width="136"></Edit>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" DisableBKColor="MENU" Enable="FALSE" Height="26" Id="ed_AD_D" Left="900" MaxLength="10" TabOrder="24" Top="34" Width="136"></Edit>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : 황규철
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI001.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+//var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();	
+	//getComCode();
+	//ed_syyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+    //fn_Align();
+    ed_COMPS_D.Text = COMPS;
+    ed_PLDCD_D.Text = PLTCD;
+    ed_PYVND_F_D.Text = PYVND1;
+    ed_PYVND_T_D.Text = PYVND2;
+    ed_prdcd_from_D.Text = PRDCD1;
+    ed_prdcd_to_D.Text = PRDCD2;
+    ed_AD_D.Text = MGMCD;
+    ed_PLNYM_D.Text = PLNYM; //left(PLNYM,2)+"/"+substr(PLNYM,2,2);
+    var rdogub_d = GUB;
+    if (GUB == "1" || GUB == "3"){
+		ed_PRDCD_D.Text = CODE;
+		ed_PYVND_D.Text = CODE1;
+	}else{
+		ed_PRDCD_D.Text = CODE1;
+		ed_PYVND_D.Text = CODE;
+	}
+	getSPMC128QD();
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getSPMC128QD(){
+	var sKind		= "getSPMC128QD";						
+	var sMethodName = "service::pssallib/selectSPMC128QD.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SPMC128QD=ds_SPMC128QD";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB1=" + quote(Lib1);
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(ed_COMPS_D.Value);//사업부
+	sArgument += " PLTCD=" + quote(ed_PLDCD_D.Value);//공장구분
+    sArgument += " PLNYM=" + quote(ed_PLNYM_D.Value); //계획년월 
+	sArgument += " PYVND1=" + quote(ed_PYVND_F_D.Value);
+	sArgument += " PYVND2=" + quote(ed_PYVND_T_D.Value);	
+	sArgument += " PRDCD1=" + quote(ed_prdcd_from_D.Value);
+	sArgument += " PRDCD2=" + quote(ed_prdcd_to_D.Value);
+    sArgument += " MGMCD=" + quote(ed_AD_D.Value); //denso,asmo구분
+    sArgument += " SELPRDCD=" + quote(ed_PRDCD_D.Value); //선택제품
+    sArgument += " SELPYVND=" + quote(ed_PYVND_D.Value); //
+    
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "월판매계획대실적집계표상세";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|월판매계획대실적집계표상세";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getSPMC128QD"){
+		// 조회건수가 없을경우
+		if(ds_SPMC128QD.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function Grid0_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+
+	// Ctrl + V
+	/*} else if(bCtrl == 1 && nChar == 86) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+
+	// Ctrl + Z
+	} else if(bCtrl == 1 && nChar == 90) {
+
+		// grd_Standard.AreaSelect = true;
+		grd_fn_CellReset(obj);*/
+	}
+}
+ 
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Align()
+{
+	Edit12.Align = "LEFT";
+	Edit13.Align = "LEFT";
+	Edit14.Align = "LEFT";
+	Edit15.Align = "LEFT";
+}
+
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSPMC128QD();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+]]></Script>
+</Window>

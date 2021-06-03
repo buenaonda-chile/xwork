@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dicas.business.dao.AtchmnflDao">
+
+  <resultMap id="atchmnflMap" type="com.globaldenso.dicas.business.dto.AtchmnflDto">
+    <id property="_id" column="ATCHMNFL_ID" javaType="java.lang.Long" />
+    <result property="atchmnflNm" column="ATCHMNFL_NM" javaType="java.lang.String" />
+    <result property="flstreNm" column="FLSTRE_NM" javaType="java.lang.String" />
+    <result property="flpth" column="FLPTH" javaType="java.lang.String" />
+    <result property="atchmnflSize" column="ATCHMNFL_SIZE" javaType="java.lang.Long" />
+    <result property="flext" column="FLEXT" javaType="java.lang.String" />
+    <result property="atchmnflUid" column="ATCHMNFL_UID" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT ATCHMNFL_ID,
+           ATCHMNFL_NM,
+           FLSTRE_NM,
+           FLPTH,
+           ATCHMNFL_SIZE,
+           FLEXT,
+           ATCHMNFL_UID,
+           DEL_YN
+    FROM TB_CM_ATCHMNFL
+
+  </sql>
+
+  <sql id="where_01">
+
+    <choose>
+      <when test="criteria.delYn != null and criteria.delYn != ''">
+        AND DEL_YN = #{criteria.delYn}
+      </when>
+      <otherwise>
+        AND DEL_YN = 'N'
+      </otherwise>
+    </choose>
+
+    <if test="criteria.atchmnflId != null">
+      AND ATCHMNFL_ID = #{criteria.atchmnflId}
+    </if>
+
+  </sql>
+
+  <!-- 検索 SQL文（主キー） -->
+  <select id="searchByKey" resultMap="atchmnflMap" parameterType="com.globaldenso.dicas.business.domain.CodeDomain">
+
+    SELECT *
+    FROM (
+      <include refid="select_01"/>
+    ) A
+    WHERE A.ATCHMNFL_ID = #{_id}
+
+  </select>
+
+  <select id="searchUseFileByKey" resultMap="atchmnflMap" parameterType="Long">
+
+    SELECT *
+    FROM (
+      <include refid="select_01"/>
+    ) A
+    WHERE A.ATCHMNFL_ID = #{_id}
+      AND A.DEL_YN = 'N'
+
+  </select>
+
+  <select id="searchByCondition" resultMap="atchmnflMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+      SELECT ROWNUM AS RN, A.*
+      FROM (
+        <include refid="select_01" />
+        <where>
+          <include refid="where_01"/>
+        </where>
+      ) A
+      ORDER BY A.ATCHMNFL_ID
+    ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+
+    ORDER BY RN
+
+  </select>
+
+  <select id="searchByCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ATCHMNFL_ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+    ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.AtchmnflDomain">
+
+    INSERT INTO TB_CM_ATCHMNFL (
+      ATCHMNFL_ID,
+      RGSTR_ID,
+      RGST_DT,
+      UPDTR_ID,
+      UPDT_DT,
+      ATCHMNFL_NM,
+      FLSTRE_NM,
+      FLPTH,
+      ATCHMNFL_SIZE,
+      FLEXT,
+      ATCHMNFL_UID,
+      DEL_YN
+    ) VALUES (
+      #{_id},
+      #{rgstrId},
+      #{rgstDt},
+      #{updtrId},
+      #{updtDt},
+      #{atchmnflNm},
+      #{flstreNm},
+      #{flpth},
+      #{atchmnflSize},
+      #{flext},
+      #{atchmnflUid},
+      #{delYn}
+    )
+
+    <selectKey resultType="long" keyProperty="_id" order="BEFORE">
+      SELECT SEQ_CM_ATCHMNFL.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.AtchmnflDomain">
+
+    UPDATE TB_CM_ATCHMNFL
+    SET UPDTR_ID = #{updtrId},
+        UPDT_DT = #{updtDt},
+        DEL_YN = #{delYn}
+    WHERE ATCHMNFL_ID = #{_id}
+
+  </update>
+
+</mapper>

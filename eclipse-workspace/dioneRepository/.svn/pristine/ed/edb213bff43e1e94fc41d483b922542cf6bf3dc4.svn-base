@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="생산&#32;일일근태등록" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset CanColumnChange="ds_FHDZ110_CanColumnChange" CanRowPosChange="ds_FHDZ110_CanRowPosChange" DataSetType="Dataset" Id="ds_FHDZ110" OnColumnChanged="ds_FHDZ110_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PESABN" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWKCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWKCR" size="256" summ="default" type="STRING"/>
+					<colinfo id="LEWTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="LTWTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="OTWTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SUPDP" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPJTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPYTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="WEEKMN" size="256" summ="default" type="DECIMAL"/>
+					<colinfo id="DHCOMP" size="256" summ="default" type="STRING"/>
+					<colinfo id="DHCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="STRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKHM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORGDP" size="256" summ="default" type="STRING"/>
+					<colinfo id="TMPWEEKMN" size="256" summ="default" type="DECIMAL"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_DPART" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST090PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD000PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD020PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD050PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_WRKTM"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OVERTIM"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD090PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_WEEKTM"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHDZ110_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD100PF_MAGAM"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BUCHK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_POPUP">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="0" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="8" Top="32" Width="1060"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static16" Left="824" TabOrder="9" Top="34" VAlign="Middle" Width="96"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_WRKDT" Left="829" OnChanged="common_OnChanged" OnKillFocus="cmb_WRKDT_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="5" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static13" Left="708" TabOrder="7" Text="작&#32;업&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="6" TabOrder="4" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static10" Left="122" TabOrder="6" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="2" Top="38" Width="88"></Combo>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoEnterType="Key" AutoFitEndLine="Hide" AutoSelect="TRUE" BindDataset="ds_FHDZ110" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="544" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" OnCellClick="MainGrid_OnCellClick" OnHeadClick="MainGrid_OnHeadClick" Right="1056" TabOrder="11" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="20"/>
+						<col width="40"/>
+						<col width="50"/>
+						<col width="120"/>
+						<col width="20"/>
+						<col width="40"/>
+						<col width="130"/>
+						<col width="20"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="70"/>
+						<col width="20"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="55"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="성명"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" colspan="2" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" colspan="4" display="text" text="근무코드"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" colspan="3" display="text" text="잔업"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="조퇴"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" text="지각"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" text="외출"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" colspan="2" display="text" text="지원부서"/>
+						<cell bkcolor="#dfdfdf" col="15" color="#002043" display="text" text="지원시간"/>
+						<cell bkcolor="#dfdfdf" col="16" color="#002043" display="text" text="WKTime"/>
+						<cell bkcolor="#dfdfdf" col="17" color="#002043" display="text" text="예외등록"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="0" colid="KORNM" display="normal" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="1" colid="PESABN" display="normal" edit="expr:iif(getRowType(currow)==&apos;insert&apos;,&apos;integer&apos;,&apos;none&apos;)" limit="7" TrimType="Both"/>
+						<cell bkimagealign="left" bkimageid="ic_search2" col="2" display="button"/>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="3" colid="WRKCD" display="normal" edit="normal" limit="2" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="4" colid="WRKTM" display="normal" TrimType="Both"/>
+						<cell align="left" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="5" colid="WRKNM" display="normal" TrimType="Both"/>
+						<cell bkimageid="ic_search2" col="6" display="button" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="7" colid="SWKCD" display="normal" edit="integer" TrimType="Both"/>
+						<cell align="left" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;white&quot;,2,&quot;white&quot;,3,&quot;white&quot;)' col="8" colid="SWKCR" display="normal" TrimType="Both"/>
+						<cell bkimageid="ic_search2" col="9" display="button" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="10" colid="LEWTM" display="normal" edit="integer" limit="3" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="11" colid="LTWTM" display="normal" edit="integer" limit="3" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="12" colid="OTWTM" display="normal" edit="integer" limit="3" TrimType="Both"/>
+						<cell align="center" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="13" colid="SUPDP" display="normal" edit="integer" limit="4" TrimType="Both"/>
+						<cell bkimageid="ic_search2" col="14" display="button" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="15" colid="SPJTM" display="normal" edit="integer" limit="3" TrimType="Both"/>
+						<cell align="right" bkcolor='expr:decode(rowlevel,0,&quot;white&quot;,1,&quot;lightcyan&quot;,2,&quot;lightgoldenrodyellow&quot;,3,&quot;lightcoral&quot;)' col="16" colid="WEEKMN" display="normal" TrimType="Both"/>
+						<cell bkimageid="ic_search2" col="17" display="button" TrimType="Both"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static2" Left="340" Style="static" TabOrder="13" Top="34" VAlign="Middle" Width="360"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="224" TabOrder="12" Text="부&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;서" Top="34" VAlign="Middle" Width="116"></Static>
+		<Edit Height="20" Id="ed_CODE" ImeMode="none" Left="344" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_CODE_OnCharChanged" OnKillFocus="ed_CODE_OnKillFocus" TabOrder="3" Top="37" Width="88"></Edit>
+		<Static Height="14" Id="st_CODE" Left="443" TabOrder="15" Top="39" Width="225"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgCODE" ImageID="ic_search" Left="670" OnClick="imgCODE_OnClick" Static="FALSE" TabOrder="14" Top="38" Width="20"></Image>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="442" TabOrder="16" Top="55" Width="230"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="506" OnClick="fn_Search" TabOrder="17" Text="조회" Top="59" Visible="FALSE" Width="75"></Button>
+		<Button Height="26" Id="Button4" ImageID="btn2_add2" Left="589" OnClick="fn_Input" TabOrder="18" Text="추가" Top="58" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button5" ImageID="sum_save" Left="669" OnClick="fn_Save" TabOrder="20" TabStop="FALSE" Text="Button2" Top="58" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button6" ImageID="btn2_delete2" Left="744" OnClick="fn_Delete" TabOrder="19" Text="Button1" Top="58" Visible="FALSE" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FHDZ110.xml
+ * ● PROGRAM DESCRIPTION  : 생산 일일근태등록
+ * ● DATE WRITTEN         : 2013.01.23
+ * 연관pgm                 :  1) FHDZ114Q
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var KORNM="";
+var	WRKTM="";
+var	WRKNM="";
+var	STRTM="";
+var	ENDTM="";
+var	WRKHM="";
+var	SUPDP="";
+var	SWKCD="";
+var	SWKCR="";
+var ORGDP="";
+var WRKTIME="";
+
+/*
+메세지코드 수정해야함.~~~~~~
+등록일때만 사용자 삭제가능.
+기타는 사용자 변경불가능
+마감미처리
+ C*------------------------------------------*                         
+ C*    WRITE-Magam   SUB        Routine      *                         
+ C*------------------------------------------*                         
+ C     $WRITMG       BEGSR                                             
+ C*< 확인등록 >                                                        
+ C                   EVAL      COMPS=DHCOMPC                           
+ C                   EVAL      MAJCD='FHD110PF'+DHCODEC                
+ C     MT040KY       CHAIN     MST040R1                           21   
+ C                   EVAL      MAJDT=WKDAT                             
+ C*                  EVAL      MAJDT=*DATE                             
+ C                   TIME                    MAJTM                     
+ C                   EVAL      MAJMK=' 일일근태확정작업 '              
+ C   21              WRITE     MST040R1                                
+ C  N21              UPDATE    MST040R1                                
+ CSR                 ENDSR                                             
+ C*------------------------------------------*                         
+
+*/
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); //공장구분 선택
+	MainGrid.UserData = MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getFHDZ110(){
+	
+	if(!validationChk()){
+		return;
+	}
+//1.마감처리 -> 등록시 마감여부 확인
+	http.Sync=true;
+	var sKind		= "getFHD100PF";		
+	var sMethodName = "service::psfaclib/selectFHD100_MAGAM.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FHD100PF_MAGAM=ds_FHD100PF_MAGAM";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " DPCODE=" + quote(ed_CODE.Text);
+		sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일자
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	if (ds_FHD100PF_MAGAM.GetRowCount() > 0){
+		//alert("[알림] 마감 처리가 진행된 날짜입니다.");
+		alert(setPopMessage("4697"));
+		setMessage("4697");	
+		return;
+	}
+		
+	cmb_WRKDT_OnKillFocus();	
+	var sKind		= "getFHDZ110";						
+	var sMethodName = "service::psfaclib/selectFHDZ110.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FHDZ110=ds_FHDZ110";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB1=" + quote(Lib1);
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@LIB3=" + quote(Lib3);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@CODE=" + quote(ed_CODE.Text); //사업부
+		sArgument += "@WRKDT=" + quote(cmb_WRKDT.Value); //사업부
+		sArgument += "@WEKSDT=" + quote(ds_WRKTM.GetColumn(0,"WEKSDT")); //월요일
+		sArgument += "@WEKEDT=" + quote(ds_WRKTM.GetColumn(0,"WEKEDT")); //금요일
+	
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //erro r발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+
+}
+
+/********************************************************************** 
+ * 내용설명 : 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+ function setFHDZ110(){
+
+	if(ds_FHDZ110.GetRowType(ds_FHDZ110.currow)=="update" ||ds_FHDZ110.GetRowType(ds_FHDZ110.currow)=="insert" ){
+		if(!ds_FHDZ110_CanRowPosChange()){
+			return;
+		}
+	} 
+	if(length(trim(st_CODE.Text)) < 1){
+		alert(setPopMessage("2544")); //[확인] 작업일자를 확인바랍니다.
+		setMessage("2544");	
+		ed_CODE.SetFocus();
+		return;
+	}	
+	if(cmb_WRKDT.Value == ""){
+		alert(setPopMessage("4061"));  //[경고] 필수입력항목입니다. (부서코드)
+		setMessage("4061");	
+		cmb_WRKDT.SetFocus();
+		return;
+	}
+
+//1.마감처리 -> 등록시 마감여부 확인
+	http.Sync=true;
+	var sKind		= "getFHD100PF";		
+	var sMethodName = "service::psfaclib/selectFHD100_MAGAM.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FHD100PF_MAGAM=ds_FHD100PF_MAGAM";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " DPCODE=" + quote(ed_CODE.Text);
+		sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일자
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	if (ds_FHD100PF_MAGAM.GetRowCount() > 0){
+		//alert("[알림] 마감 처리가 진행된 날짜입니다.");
+		alert(setPopMessage("4697"));
+		setMessage("4697");	
+		return;
+	}
+//trace(ds_FHDZ110.SaveXML());
+	var sKind		= "setFHDZ110";						
+	var sMethodName = "service::psfaclib/saveFHDZ110.do";
+	var sInDataSet  = "ds_FHDZ110=ds_FHDZ110:U";
+	var sOutDataSet = "ds_FHDZ110_CHECK=ds_FHDZ110_CHECK";
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		//sArgument += " LIB3=" + quote(Lib3);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+	var sKind		= "setmst040";						
+	var sMethodName = "service::pscomlib/saveMST040.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    		 								// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += " MAJCD=" + quote("FHD110PF"+ed_CODE.Text);
+	sArgument += " MAJDT=" + quote(cmb_WRKDT.Value);
+	sArgument += " MAJMK=" + quote("일일근태확정작업");
+	sArgument += " MJINT=" + quote(0);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+//trace(ds_FHDZ110.SaveXML());
+
+ }
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	ed_CODE.BKColor="white";	
+	cmb_WRKDT.BKColor="white";	
+
+	if(length(trim(st_CODE.Text)) < 1)
+	{
+		ed_CODE.BKColor="paleturquoise";
+		alert(setPopMessage("2544"));
+		//alert("[경고] 필수입력항목입니다. (부서코드)");
+		result =false;
+	}
+	else if(cmb_WRKDT.Value=="")
+	{
+		cmb_WRKDT.BKColor="paleturquoise";
+		alert(setPopMessage("4061"));
+		//alert("[확인] 작업일자를 확인바랍니다.");
+		result =false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	//trace(ds_SLTZ101_CHECK.SaveXML());
+	if (ds_FHDZ110_CHECK.GetRowCount() > 0){			
+		for(var i=0;i<ds_FHDZ110_CHECK.GetRowCount();i++){		
+			alert("사번 : " +ds_FHDZ110_CHECK.GetColumn(i,"PESABN") + ",작업 : " +ds_FHDZ110_CHECK.GetColumn(i,"WRKCD") + " = " + ds_FHDZ110_CHECK.GetColumn(i,"RTMSG"));
+		}
+		getFHDZ110();        //error항목이 존재시에는 재조회		
+		return;		
+	}	
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else 
+	{
+
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FHDZ110.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "생산 일일근태등록";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|생산 일일근태등록";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getFHDZ110();
+}
+
+function fn_Input()
+{/*
+	if(checkInsertCount("ds_FHDZ110")== false) return;
+	if(ds_FHDZ110.rowcount < 1) fn_Search();  
+	ds_FHDZ110.AddRow();
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"DHCOMP",ComboBoxPlant.Value);
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"DHCODE",ed_CODE.Text);
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"WRKDT",cmb_WRKDT.Value);
+*/
+	if(checkInsertCount("ds_FHDZ110")== false) return;
+	
+	if(!validationChk()){
+		return;
+	}
+	
+	if(ds_FHDZ110.rowcount < 1) fn_Search();  
+
+	if (ds_FHD100PF_MAGAM.rowcount > 0){
+		return;
+	}
+	if(ds_FHDZ110.rowcount < 1 ){
+		var sKind		= "getFHDZ110_ADD";		
+		var sMethodName = "service::psfaclib/selectFHDZ110_ADD.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_FHDZ110=ds_FHDZ110";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			sArgument += " LIB1=" + quote(Lib1);
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " LIB3=" + quote(Lib3);
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+			sArgument += " CODE=" + quote(ed_CODE.Text); //사업부
+			sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //사업부
+			sArgument += " WEKSDT=" + quote(ds_WRKTM.GetColumn(0,"WEKSDT")); //월요일
+			sArgument += " WEKEDT=" + quote(ds_WRKTM.GetColumn(0,"WEKEDT")); //금요일
+		http.Sync=true;
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+		for(i=0; i<ds_FHDZ110.rowcount; i++){
+			ds_FHDZ110.UpdateControl=false;
+			ds_FHDZ110.SetRowType(i,"insert");
+			ds_FHDZ110.UpdateControl=true;
+		}
+	}
+	ds_FHDZ110.AddRow();
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"DHCOMP",ComboBoxPlant.Value);
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"DHCODE",ed_CODE.Text);
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"WRKDT",cmb_WRKDT.Value);
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SPJTM",0);//주지원시간
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SPYTM",0);//야지원시간
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LEWTM",0);//조퇴
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LTWTM",0);//지각
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"OTWTM",0);//외출
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"WEEKMN",0);//주간잔업시간합계
+	ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"TMPWEEKMN",0);//당일잔업시간
+}
+
+function fn_Delete(){
+	if(ds_FHDZ110.rowcount < 1) return;			//삭제가 없으면 건너뛰기		
+	ds_FHDZ110.DeleteRow(ds_FHDZ110.currow);	//삭제		
+	alert(setPopMessage("1011"));	
+	setPopMessage("1011");
+}
+
+function fn_Save()
+{
+	setFHDZ110();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function imgCODE_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_CODE.Text);
+	if (length(trim(ed_CODE.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "F6";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_CODE.Text = rtn[0];
+		st_CODE.Text = rtn[1];
+	}		
+}
+
+function ed_CODE_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_CODE.Text = "";		
+}
+
+//MST650과FHD000PF 한번에 처리함.
+function ed_CODE_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getDPARTMST";		
+	var sMethodName = "service::pscomlib/selectDPARTMasterPopup.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_DPART=ds_Select";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument  += " DPCODE=" + quote(ed_CODE.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_DPART.GetRowCount() < 1){
+		alert(setPopMessage("4708"));
+		setMessage("4708");	
+		ed_CODE.SetFocus();
+		return;
+	}
+	st_CODE.Text=ds_DPART.GetColumn(0,"A2");
+	http.usewaitcursor = true;		
+}
+/*
+function ed_CODE_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getMST650";		
+	var sMethodName = "service::pscomlib/selectMST650.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST650PF=ds_MST650PF";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument  += " DPCODE=" + quote(ed_CODE.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_MST650PF.GetRowCount() < 1){
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+		ed_CODE.SetFocus();
+		return;
+	}
+	else{
+		var sKind		= "getFHD000";		
+		var sMethodName = "service::psfaclib/selectFHD000.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_FHD000PF=ds_FHD000PF";
+		var sArgument   = "";
+			sArgument  += " LIB2=" + quote(Lib2);
+			sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+			sArgument  += " CODE=" + quote(ed_CODE.Text);
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+		if (ds_FHD000PF.GetRowCount() < 1){
+			alert(setPopMessage("1002"));
+			setMessage("1002");	
+			ed_CODE.SetFocus();
+		return;
+		
+		}
+		st_CODE.Text=ds_MST650PF.GetColumn(0,"DPCONM");	
+	}
+	http.usewaitcursor = true;		
+}
+*/
+function cmb_WRKDT_OnKillFocus(obj)
+{
+	if(length(trim(cmb_WRKDT.Value)) < 1) return;
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getMST090PF";		
+	var sMethodName = "service::pscomlib/selectMST090PF.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_MST090PF=ds_MST090PF";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PRCDT=" + quote(cmb_WRKDT.Value); //작업일자
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_MST090PF.GetRowCount() < 1){
+		alert(setPopMessage("4061"));
+		setMessage("4061");	
+		cmb_WRKDT.SetFocus();
+		return;
+	}
+
+	//법정근로시간 : 달력마스터에 근무일이 등록되어 있으면 법정근로시간 확인
+	else{
+		//http.Sync 	= true;
+		var sKind		= "getWRKTM";		
+		var sMethodName = "service::psfaclib/selectMST090_WRKTM.do"; 
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_WRKTM=ds_WRKTM";
+		var sArgument   = "";
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+			sArgument += " PRCDT=" + quote(cmb_WRKDT.Value); //작업일자
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+		//http.Sync 	= false;
+	http.usewaitcursor = true;
+}
+
+function ds_FHDZ110_CanColumnChange(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	http.usewaitcursor = false;
+	if (strColumnID == "PESABN"){//작업자 확인
+
+		if(varNewValue!=""){
+			//중복Check ==> 초출 및 정상근무. 잔업 여러개 등록가능함
+/*			
+			if(ds_FHDZ110.FindRow("PESABN", trim(varNewValue)) >= 0){
+				alert("[경고] 이미 등록된 자료입니다.");  //[경고] 이미 등록된 자료입니다.
+				//alert(setPopMessage("1520"));  //[경고] 이미 등록된 자료입니다.
+				//setMessage("1520");	
+				return false;
+			}
+*/			
+			//인사마스터
+			http.Sync = true;
+			var sKind		= "getHMD020PF";		
+			var sMethodName = "service::pscomlib/selectINSAMasterPopup.do"; 
+			var sInDataSet  = "";
+			var sOutDataSet = "ds_HMD020PF=ds_Select";
+			var sArgument   = "";
+				sArgument  += " LIB2=" + quote(Lib2);
+				sArgument  += " LIB3=" + quote(Lib3);
+				sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+				sArgument  += " DPTCD=" + quote(ed_CODE.Text);
+				sArgument  += " SABUN=" + quote(varNewValue);
+				sArgument  += " PAYCD=" + quote(1);//1이면 기능직 2이면 직반장
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync = false;
+			if (ds_HMD020PF.GetRowCount() < 1){
+				//용역테이블 조회
+				http.Sync = true;
+				var sKind		= "getFHD010";		
+				var sMethodName = "service::psfaclib/selectFHD010.do"; 
+				var sInDataSet  = "";
+				var sOutDataSet = "ds_HMD020PF=ds_FHD010PF";
+				var sArgument   = "";
+					sArgument  += " LIB2=" + quote(Lib2);
+					sArgument  += " LIB3=" + quote(Lib3);
+					sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+					sArgument  += " DPTCD=" + quote(ed_CODE.Text);
+					sArgument  += " SABUN=" + quote(varNewValue);
+					sArgument  += " WRKDT=" + quote(cmb_WRKDT.Value);
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+				http.Sync = false;
+				
+				if (ds_HMD020PF.GetRowCount() < 1){
+					alert(setPopMessage("4062")); //[확인] 사용자가 존재하지 않습니다.
+					setMessage("4062");	
+					return false;
+				}
+			}
+			//else{ //휴직/파견계 조회
+				http.Sync = true;
+				var sKind		= "getFHD090";		
+				var sMethodName = "service::psfaclib/selectFHD090.do"; 
+				var sInDataSet  = "";
+				var sOutDataSet = "ds_FHD090PF=ds_FHD090PF";
+				var sArgument   = "";
+					sArgument  += " LIB2=" + quote(Lib2);
+					sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부);
+					sArgument  += " SABUN=" + quote(varNewValue);
+					sArgument  += " WRKDT=" + quote(cmb_WRKDT.Value);
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+				//주 잔업시간 조회등록시 확인위함.
+				var sKind		= "get_WEEKTM";		
+				var sMethodName = "service::psfaclib/selectWEEKTM.do"; 
+				var sInDataSet  = "";
+				var sOutDataSet = "ds_WEEKTM=ds_WEEKTM";
+				var sArgument   = "";
+					sArgument  += " LIB2=" + quote(Lib2);
+					sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부);
+					sArgument  += " CODE=" + quote(ed_CODE.Text); //사업부
+					sArgument  += " SABUN=" + quote(varNewValue);
+					sArgument  += " WRKDT=" + quote(cmb_WRKDT.Value);
+					sArgument  += " WEKSDT=" + quote(ds_WRKTM.GetColumn(0,"WEKSDT")); //월요일
+					sArgument  += " WEKEDT=" + quote(ds_WRKTM.GetColumn(0,"WEKEDT")); //금요일
+					sArgument  += " TABLE1=" + quote("FHD110PF");
+					sArgument  += " TABLE2=" + quote("FHD100PF");										
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+				http.Sync = false;	
+		//	}
+			KORNM=ds_HMD020PF.GetColumn(0,"A2");
+//alert(ds_HMD020PF.GetColumn(0,"DPTCD"));			
+			ORGDP=ds_HMD020PF.GetColumn(0,"DPTCD");
+			WRKTIME= ds_WEEKTM.GetColumn(0,"WEEKMN");
+			//9260808
+		}
+	}
+	if (strColumnID == "WRKCD"){//작업코드	
+
+		if(varNewValue!=""){
+			if(varNewValue=="29"){//작업코드 29는 토요일만사용가능 //rgp에는T 토요일은H 오전근무 T, 공휴일s, 평일-
+				if(ds_MST090PF.GetColumn(0,"PRCMK")!="T"){
+					alert(setPopMessage("4706")); //[알림]작업코드 29는 토요일만사용가능(오전근무)합니다.
+					setMessage("4706");	
+					return false;
+				}
+			}
+			http.Sync = true;
+			var sKind		= "getFHD050PF";		
+			var sMethodName = "service::pscomlib/selectJOBCodePopup.do"; 
+			var sInDataSet  = "";
+			var sOutDataSet = "ds_FHD050PF=ds_Select";
+			var sArgument   = "";
+				sArgument  += " LIB2=" + quote(Lib2);
+				sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부);
+				sArgument  += " JOBCD=" + quote(varNewValue);
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync = false;
+			if (ds_FHD050PF.GetRowCount() < 1){
+				alert(setPopMessage("4063")); //[확인] 작업코드가 존재하지 않습니다.
+				setMessage("4063");	
+				return false;
+			}
+			WRKTM=ds_FHD050PF.GetColumn(0,"A3");
+			WRKNM=ds_FHD050PF.GetColumn(0,"A2");
+			STRTM=ds_FHD050PF.GetColumn(0,"STRTM");
+			ENDTM=ds_FHD050PF.GetColumn(0,"ENDTM");
+			WRKHM=ds_FHD050PF.GetColumn(0,"JOBHM");
+		}
+	}
+	if (strColumnID == "SWKCD"){	//잔업코드	
+		if(varNewValue!=""){
+
+			http.Sync = true;
+			var sKind		= "getOVERTIME";		
+			var sMethodName = "service::pscomlib/selectOVERTIMEPopup.do"; 
+			var sInDataSet  = "";
+			var sOutDataSet = "ds_OVERTIM=ds_Select";
+			var sArgument   = "";
+				sArgument  += " LIB2=" + quote(Lib2);
+				sArgument  += " COMPS=" + quote(ComboBoxPlant.Value); //사업부);
+				sArgument  += " SWKCD=" + quote(varNewValue);
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync = false;
+			if (ds_OVERTIM.GetRowCount() < 1){
+				alert(setPopMessage("4063")); //[확인] 작업코드가 존재하지 않습니다.
+				setMessage("4063");	
+				return false;
+			}
+			SWKCD=ds_OVERTIM.GetColumn(0,"A1");
+			SWKCR=ds_OVERTIM.GetColumn(0,"A2");
+		}
+	}	
+	if (strColumnID == "SUPDP"){//지원부서	
+		if(varNewValue!=""){//FHD000PF AND MST650PF 한번에 처리함.(확인됨)
+			http.Sync = true;
+			var sKind		= "getDPARTMST";		
+			var sMethodName = "service::pscomlib/selectDPARTMasterPopup.do"; 
+			var sInDataSet  = "";
+			var sOutDataSet = "ds_DPART=ds_Select";
+			var sArgument   = "";
+				sArgument  += " LIB2=" + quote(Lib2);
+				sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+				sArgument  += " DPCODE=" + quote(varNewValue);
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync = false;
+			if (ds_DPART.GetRowCount() < 1){
+				alert(setPopMessage("4708")); //[알림]부서코드확인바랍니다.
+				setMessage("4708");	
+				return false;
+			}
+			SUPDP=ds_DPART.GetColumn(0,"A1");
+			if(SUPDP==ed_CODE.Text){ //지원부서와 부서코드 동일 경우
+				alert(setPopMessage("4698")); //[알림]지원부서코드가 부서코드와 동일합니다.
+				setMessage("4698");	
+				return false;
+			}
+		}
+	}
+	//지원시간은 지원부서 입력후 가능함.
+	if (strColumnID == "SPJTM" || strColumnID == "SPYTM"){//지원시간(주)//지원시간(야)
+		if(varNewValue!=""){
+			var vChk=ds_FHDZ110.GetColumn(nRow, "SUPDP");
+			if(length(vChk)<1){
+				if(varNewValue!=0){
+				alert(setPopMessage("4699")); //[알림]지원부서코드 입력 후 입력가능합니다.
+				setMessage("4699");	
+				return false;
+				}
+			}
+		}
+	}
+	/*
+	if (strColumnID == "SPYTM"){
+		if(varNewValue!=""){
+			var vChk=ds_FHDZ110.GetColumn(nRow, "SUPDP");
+			if(length(vChk)<1){
+				if(varNewValue!=0){
+				alert("지원부서코드 입력 후 입력가능합니다.");
+				return false;
+				}
+			}
+		}
+	}	
+	*/
+	http.usewaitcursor = true;
+}
+
+function ds_FHDZ110_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	http.usewaitcursor = false;
+	if (strColumnID == "PESABN"){
+		if(varNewValue!=""){
+			ds_FHDZ110.SetColumn(nRow, "KORNM", KORNM); // 거래처명 설정
+			ds_FHDZ110.SetColumn(nRow, "ORGDP", ORGDP); // 원부서 		
+			if(ds_FHD090PF.GetColumn(0,"JOBCD")=="91"){
+				alert(setPopMessage("4700")); //[알림]해당사번이 타부서 파견으로 등록되어있습니다.
+				setMessage("4700");	
+			}
+			/*
+			if(length(ds_FHDZ110.GetColumn(nRow,"WRKCD"))==0){
+				if(ds_MST090PF.GetColumn(0,"PRCMK")!="H" && ds_MST090PF.GetColumn(0,"PRCMK")!="S") {
+				//ds_FHDZ110.SetColumn(nRow, "WRKNM", "정상근무"); // 근무명
+				ds_FHDZ110.SetColumn(nRow, "WRKTM", 0); // 잔업시간I
+				ds_FHDZ110.SetColumn(nRow, "STRTM", 0); // 시작시간I
+				ds_FHDZ110.SetColumn(nRow, "ENDTM", 0); // 종료시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKCD", ds_FHD090PF.GetColumn(0,"JOBCD")); // WRKCD
+				ds_FHDZ110.SetColumn(nRow, "WRKHM", 0); // 작업시간I					
+				//ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", 0); // 작업일 잔업시간(임시용)
+				ds_FHDZ110.SetColumn(nRow, "WEEKMN", WRKTIME); // WRKTM
+				ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)	
+				}
+			//else추가필요	
+			}
+			*/
+			if(ds_MST090PF.GetColumn(0,"PRCMK")!="H" && ds_MST090PF.GetColumn(0,"PRCMK")!="S") {
+				if(length(ds_FHD090PF.GetColumn(0,"JOBCD"))==0){
+				ds_FHDZ110.SetColumn(nRow, "WRKCD","");
+				ds_FHDZ110.SetColumn(nRow, "WRKNM", "정상근무"); // 근무명
+				ds_FHDZ110.SetColumn(nRow, "WRKTM", 0); // 잔업시간I
+				ds_FHDZ110.SetColumn(nRow, "STRTM", 0); // 시작시간I
+				ds_FHDZ110.SetColumn(nRow, "ENDTM", 0); // 종료시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKHM", 0); // 작업시간I					
+				//ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", 0); // 작업일 잔업시간(임시용)
+				//ds_FHDZ110.SetColumn(nRow, "WEEKMN", WRKTIME); // WRKTM
+				ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)	
+				}else{
+					ds_FHDZ110.SetColumn(nRow, "WRKCD", ds_FHD090PF.GetColumn(0,"JOBCD")); // WRKCD
+					//ds_FHDZ110.SetColumn(nRow, "WEEKMN", WRKTIME); // WRKTM
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)	
+				}
+			}else{
+				ds_FHDZ110.SetColumn(nRow, "WRKCD","");
+				ds_FHDZ110.SetColumn(nRow, "WRKNM", "정상근무"); // 근무명
+				ds_FHDZ110.SetColumn(nRow, "WRKTM", 0); // 잔업시간I
+				ds_FHDZ110.SetColumn(nRow, "STRTM", 0); // 시작시간I
+				ds_FHDZ110.SetColumn(nRow, "ENDTM", 0); // 종료시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKHM", 0); // 작업시간I					
+			}
+			if(length(WRKTIME)==0){
+				ds_FHDZ110.SetColumn(nRow, "WEEKMN", 0); // WRKTM
+			}else{
+				ds_FHDZ110.SetColumn(nRow, "WEEKMN", WRKTIME); // WRKTM
+			}
+		}
+		else {
+			ds_FHDZ110.SetColumn(nRow, "KORNM", ""); // 거래처명 설정
+			ds_FHDZ110.SetColumn(nRow, "ORGDP", ""); // 원부서 
+			ds_FHDZ110.SetColumn(nRow, "WEEKMN", 0); // WRKTM
+			ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)	
+			ds_FHDZ110.SetColumn(nRow, "WRKCD",""); // 잔업코드초기화
+		}
+	}
+	if (strColumnID == "WRKCD"){
+		if(varNewValue!=""){
+			if(ds_MST090PF.GetColumn(0,"PRCMK")!="H" && ds_MST090PF.GetColumn(0,"PRCMK")!="S") {
+				ds_FHDZ110.SetColumn(nRow, "WRKTM", WRKTM); // 잔업시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKNM", WRKNM); // 근무명
+				ds_FHDZ110.SetColumn(nRow, "STRTM", STRTM); // 시작시간I
+				ds_FHDZ110.SetColumn(nRow, "ENDTM", ENDTM); // 종료시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKHM", WRKHM); // 작업시간I
+				//ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", WRKTM); // 작업일 잔업시간(임시용)
+				if(ds_MST090PF.GetColumn(0,"PRCMK")=="-" && ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "20" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <= "29"){
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", (parseInt(WRKTM)-480)/60); // 작업일 잔업시간(임시용)
+				}
+				else if(ds_MST090PF.GetColumn(0,"PRCMK")=="T" && ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "20" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="29"){
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", (parseInt(WRKTM)-240)/60); // 작업일 잔업시간(임시용)
+				}
+				else if((ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "10" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="19") ||(ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "30" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="89")) {
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", parseInt(WRKTM)/60); // 작업일 잔업시간(임시용)
+				}else{
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)		
+				}
+			}else{//else추가필요
+				ds_FHDZ110.SetColumn(nRow, "WRKTM", WRKTM); // 잔업시간I
+				//ds_FHDZ110.SetColumn(nRow, "WRKNM", ""); // 근 무명(2014.11.17)RPG소스에는 BLANK처리?
+				ds_FHDZ110.SetColumn(nRow, "WRKNM", WRKNM); // 근 무명
+				ds_FHDZ110.SetColumn(nRow, "STRTM", STRTM); // 시작시간I
+				ds_FHDZ110.SetColumn(nRow, "ENDTM", ENDTM); // 종료시간I
+				ds_FHDZ110.SetColumn(nRow, "WRKHM", WRKHM); // 작업시간I
+				//ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", WRKTM); // 작업일 잔업시간(임시용)
+				if(ds_MST090PF.GetColumn(0,"PRCMK")=="-" && ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "20" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <= "29"){
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", (parseInt(WRKTM)-480)/60); // 작업일 잔업시간(임시용)
+				}
+				else if(ds_MST090PF.GetColumn(0,"PRCMK")=="T" && ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "20" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="29"){
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", (parseInt(WRKTM)-240)/60); // 작업일 잔업시간(임시용)
+				}
+				else if((ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "10" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="19") ||(ds_FHDZ110.GetColumn(nRow,"WRKCD") >= "30" && ds_FHDZ110.GetColumn(nRow,"WRKCD") <="89")) {
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", parseInt(WRKTM)/60); // 작업일 잔업시간(임시용)
+				}else{
+					ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN",0); // 작업일 잔업시간(임시용)		
+				}
+			}
+		}
+		else {
+			ds_FHDZ110.SetColumn(nRow, "WRKNM", "정상근무"); // 근무명
+			ds_FHDZ110.SetColumn(nRow, "WRKTM", 0); // 잔업시간I
+			ds_FHDZ110.SetColumn(nRow, "STRTM", 0); // 시작시간I
+			ds_FHDZ110.SetColumn(nRow, "ENDTM", 0); // 종료시간I
+			ds_FHDZ110.SetColumn(nRow, "WRKHM", 0); // 작업시간I
+			ds_FHDZ110.SetColumn(nRow, "TMPWEEKMN", 0); // 작업일 잔업시간(임시용)
+		}
+	}
+	if (strColumnID == "SWKCD"){
+		if(varNewValue!=""){
+			ds_FHDZ110.SetColumn(nRow, "SWKCD", SWKCD); // 잔업코드
+			ds_FHDZ110.SetColumn(nRow, "SWKCR", SWKCR); // 잔업코드명
+		}		
+		else {
+			ds_FHDZ110.SetColumn(nRow, "SWKCR", ""); // 잔업코드명
+		}
+	}		
+	if (strColumnID == "SUPDP"){
+		if(varNewValue!=""){
+			ds_FHDZ110.SetColumn(nRow, "SUPDP", SUPDP); // 지원부서
+			//ds_FHDZ110.SetColumn(nRow, "SPJTM", 0); // 지원시간(주)
+			//ds_FHDZ110.SetColumn(nRow, "SPYTM", 0); // 지원시간(야)
+		}
+		else{ //지원부서가 null인경우 지원시간은 0
+			ds_FHDZ110.SetColumn(nRow, "SUPDP", ""); // 지원부서
+			ds_FHDZ110.SetColumn(nRow, "SPJTM", 0); // 지원시간(주)
+			ds_FHDZ110.SetColumn(nRow, "SPYTM", 0); // 지원시간(야)
+		
+		}
+	}
+	http.usewaitcursor = true;
+}
+
+function MainGrid_OnCellClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	if(ds_FHDZ110.GetRowType(nRow)=="insert"){
+		if(nCell == 2)
+		{
+			var sTemp="zzzzzzzzzz";
+			var selectnumber = "H6";
+			var PAYCD = 1; //1이면 기능직 2이면 직반장
+			//var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+			var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" +  sTemp + " " + "PAYCD=" + PAYCD,584,528);
+			if (length(rtn) != 0){
+				ds_FHDZ110.SetColumn(nRow,"PESABN",rtn[0]);
+			}		
+		}
+	}
+	if(nCell == 6)
+	{
+		var sTemp="zzzzzzzzzz";
+		var selectnumber = "K6";
+		var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+		if (length(rtn) != 0){
+			ds_FHDZ110.SetColumn(nRow, "WRKCD",rtn[0]);// 잔업시간I
+		}		
+	}
+	if(nCell == 9)
+	{
+		var sTemp="zzzzzzzzzz";
+		var selectnumber = "L6";
+		var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+		if (length(rtn) != 0){
+			ds_FHDZ110.SetColumn(nRow, "SWKCD",rtn[0]);// 잔업시간I
+		}		
+	}			
+	if(nCell == 14)
+	{
+		var sTemp="zzzzzzzzzz";
+		var selectnumber = "F6";
+		var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+		if (length(rtn) != 0){
+			ds_FHDZ110.SetColumn(nRow, "SUPDP",rtn[0]);// 지원부서	
+		}		
+	}
+	if(nCell == 17)
+	{
+		ds_POPUP.Copy(ds_FHDZ110); //공통팝업사용위함.
+		var rtn = dialog("psfaclib::FHDZ110_POPUP.xml","ROWNO=" + nRow,584,528);
+		if (length(rtn) != 0){
+			var chk1=rtn[5];
+			var chk2=rtn[6];
+			ds_FHDZ110.SetColumn(nRow, "STRTM",rtn[0]);// 시작　시간	
+			ds_FHDZ110.SetColumn(nRow, "ENDTM",rtn[1]);// 종료	
+			ds_FHDZ110.SetColumn(nRow, "WRKTM",rtn[2]);// 잔업　시간
+			ds_FHDZ110.SetColumn(nRow, "WRKHM",rtn[3]);// 작업　시분
+			ds_FHDZ110.SetColumn(nRow, "SUPDP",rtn[4]);// 지원부서
+			ds_FHDZ110.SetColumn(nRow, "SPJTM",rtn[5]);// 주간지원시간
+			ds_FHDZ110.SetColumn(nRow, "SPYTM",rtn[6]);// 야간지원시간
+			//지원시간을 null로 변경하였을 경우 지원시간은 0으로 전환
+			if(length(chk1)<1){
+				ds_FHDZ110.SetColumn(nRow, "SPJTM",0);// 주간지원시간	
+			}
+			if(length(chk2)<1){
+				ds_FHDZ110.SetColumn(nRow, "SPYTM",0);// 주간지원시간	
+			}
+		}	
+	}		
+}
+
+function ds_FHDZ110_CanRowPosChange(obj,nOldRow,nRow)
+{
+
+	http.usewaitcursor = false;
+
+	var cpesabn=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"PESABN"); //사번
+	var wrkcd=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"WRKCD"); //작업코드
+	var supdp=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"SUPDP"); //지원부서
+	var spjtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"SPJTM"); //지원시간(주)
+	var spytm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"SPYTM"); //지원시간(야)
+	var clewtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"LEWTM"); //조퇴
+	var cltwtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"LTWTM"); //지각
+	var cotwtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"OTWTM"); //외출
+	var cswkcd=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"SWKCD"); //특근코드
+	//var cstrtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"STRTM"); //시작시간
+	//var cendtm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"ENDTM"); //종료시간
+	//var cwrkhm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"WRKHM"); //작업시분
+	//var cwrktm=ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"WRKTM"); //잔업시간
+	//조,지,외 디폴트 value 0설정
+	if(clewtm=""){
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LEWTM",0);
+	}
+	if(cltwtm=""){
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LTWTM",0);
+	}
+	if(cotwtm=""){
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"OTWTM",0);
+	}	
+	if(wrkcd>="80"){ //작업코드가 80이상인경우 지원부서 입력불가
+		if(length(supdp)!=0){	
+			alert(setPopMessage("4701")); //[알림]작업코드가 80이상인경우 지원부서 입력불가능합니다.
+			setMessage("4701");	
+			return false;
+		}
+	}
+	if(wrkcd>="50" && wrkcd<="59"){ //작업코드가 50이상 59이하인 경우(특근) 조퇴,지각,외출 없슴
+		if(clewtm!=0 || cltwtm !=0 || cotwtm !=0){	
+			alert(setPopMessage("4702")); //[알림]작업코드가 50이상 59이하인 경우(특근) 조퇴,지각,외출 입력불가능합니다.
+			setMessage("4702");	
+			//1번. row변경 불가로 할 것인가 2번 0값을 줄것인가.
+			//1번
+			//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LEWTM",0);
+			//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LTWTM",0);
+			//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"OTWTM",0);
+			//2번
+			return false;
+		}
+	}	
+	if(wrkcd>="90"){ //작업코드가 90이상인 경우 모든값이 0임.
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"STRTM",0);
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"ENDTM",0);
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"WRKHM",0);
+		ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"WRKTM",0);
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SWKCD","");
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LEWTM",0);
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"LTWTM",0);
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"OTWTM",0);			
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SUPDP","");
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SPJTM",0);
+		//ds_FHDZ110.SetColumn(ds_FHDZ110.currow,"SPYTM",0);
+		
+		if(length(cswkcd) >1 ||clewtm!=0 || cltwtm !=0 || cotwtm !=0||length(supdp) >1 ||spjtm!=0||spytm!=0  ){	
+			alert(setPopMessage("4703")); //[알림]작업코드가 90이상인 경우 잔업코드, 조퇴, 지각, 외출, 지원부서, 지원시간 값이 0입니다.
+			setMessage("4703");	
+		return false;
+
+		}
+	}		
+	if(length(supdp)!=0){ //지원부서가 null 이 아닌경우 지원시간입력
+		if((length(spjtm)==0||spjtm<1)&&(length(spytm)==0||spytm<1)){
+			alert(setPopMessage("4707")); //[알림]지원시간을 입력하세요.
+			setMessage("4707");	
+			return false;
+		}
+	}
+	if(ds_FHDZ110.GetRowType(ds_FHDZ110.currow)=="update" ||ds_FHDZ110.GetRowType(ds_FHDZ110.currow)=="insert" ){
+		var duChk ="";
+		var duVal =0;
+		var manChk ="";
+		var week12 =0;
+		var weekmn =0;
+		if(length(ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"PESABN")) > 1){ 
+		//중복체크 -사번, 작업코드(현재의 data확인)
+			duChk = parseInt(ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"PESABN"))+"||"+ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"WRKCD");
+/*
+			for(i=0; i <ds_FHDZ110.GetRowCount(); i++){
+				if(ds_FHDZ110.currow==i){
+					i++;
+				}
+				if(duChk == ds_FHDZ110.GetColumn(i,"PESABN")+"||"+ds_FHDZ110.GetColumn(i,"WRKCD")){
+					alert("작업자의 동일한 근무코드가 존재합니다.");
+					return false;
+				}
+			}
+*/	
+			for(i=0; i <ds_FHDZ110.GetRowCount(); i++){
+				if(duChk == parseInt(ds_FHDZ110.GetColumn(i,"PESABN"))+"||"+ds_FHDZ110.GetColumn(i,"WRKCD")){
+					duVal++;
+				}
+				if(duVal > 1){
+					//alert("작업자의 동일한 근무코드가 존재합니다.");
+					alert(setPopMessage("4704")); //[알림]작업자의 동일한 근무코드가 존재합니다.
+					setMessage("4704");	
+					return false;
+				}	
+			}
+
+		//중복체크 - 타부서등록여부(FHD110확인)
+			http.Sync=true;
+			var sKind		= "getDUPBUCHK";						
+			var sMethodName = "service::psfaclib/selectFHDZ110_BUCHK.do";     		// 서버에서 호출 될 Method 명
+			var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "ds_BUCHK=ds_BUCHK";    				// 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+				sArgument += " LIB2=" + quote(Lib2);
+				sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+				sArgument += " CODE=" + quote(ed_CODE.Text); //부서코드
+				sArgument += " SABUN=" + quote(cpesabn); //사번
+				sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일
+				//sArgument += " WRKCD=" + quote(cwrkcd); //작업코드
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			http.Sync=false;
+			if (ds_BUCHK.GetRowCount() > 0){
+				alert(setPopMessage("4705")); //[알림]타부서에 등록된 작업자입니다.
+				setMessage("4705");	
+				return false;
+			}
+		//법정근무시간　주근무시간　주중 12 시간잔업금지
+			if(ds_MST090PF.GetColumn(0,"PRCMK")="-" || ds_MST090PF.GetColumn(0,"PRCMK")=="T"){
+				weekmn = parseInt(ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"WEEKMN")); //현작업자의 작업일 이전까지의 누적 잔업시간
+				manChk = parseInt(ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"PESABN")); //현재작업자
+				for(i=0; i <ds_FHDZ110.GetRowCount(); i++){
+					if(manChk == parseInt(ds_FHDZ110.GetColumn(i,"PESABN"))){ //동일작업자가 있으면 작업일의 작업시간 합계
+						week12 = parseInt(ds_FHDZ110.GetColumn(i,"TMPWEEKMN")); 
+						weekmn+=week12;
+					}
+				}
+				if(weekmn > 12){
+					alert("사번 "+manChk+"의 작업자의 주근무시간이 "+weekmn+ "시간으로 12시간을 초과합니다.");
+					return false;
+				}
+			}else{
+				weekmn = 0; //휴일작업시간 누계
+				manChk = parseInt(ds_FHDZ110.GetColumn(ds_FHDZ110.currow,"PESABN")); //현재작업자
+				for(i=0; i <ds_FHDZ110.GetRowCount(); i++){
+					if(manChk == parseInt(ds_FHDZ110.GetColumn(i,"PESABN"))){ //동일작업자가 있으면 작업일의 작업시간 합계
+						week12 = parseInt(ds_FHDZ110.GetColumn(i,"TMPWEEKMN")); 
+						weekmn+=week12;
+						
+					}
+				}
+				if(weekmn > 8){ //휴일잔업가능시간은 8시간
+					alert("사번 "+manChk+"의 작업자의 휴일근무시간이 "+weekmn+ "시간으로 8시간을 초과합니다.");
+					return false;
+				}			
+			
+			}
+			return true;
+		}
+	}
+	http.usewaitcursor = true;
+}
+]]></Script>
+</Window>

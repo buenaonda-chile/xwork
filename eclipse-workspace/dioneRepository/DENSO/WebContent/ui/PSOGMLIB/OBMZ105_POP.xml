@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="392" Id="OBMZ105_POP" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="설비매뉴얼&#32;및&#32;SOFT백업관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="728" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ105_ADD" OnColumnChanged="ds_OBMZ105_ADD_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF1" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF2" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF3" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF4" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF5" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF6" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWTF7" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT1" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT2" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT3" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT4" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT5" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT6" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWDT7" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN1" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN2" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN3" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN4" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN5" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN6" size="256" summ="default" type="STRING"/>
+					<colinfo id="SWFN7" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_uploadFile">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ105_ADD_CHECK"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CHKCD">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>－</cd>
+						<cdnm>없음</cdnm>
+					</record>
+					<record>
+						<cd>○</cd>
+						<cdnm>접수</cdnm>
+					</record>
+					<record>
+						<cd>Ⅹ</cd>
+						<cdnm>미접수</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="730"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="5" Top="8" Width="688"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="648" Right="672" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="680" Right="704" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="361" Id="searchBar" TabOrder="6" Top="31" Width="728"></Static>
+		<Button Height="26" Id="btnClose" ImageID="closeBtn" Left="640" OnClick="btnClose_OnClick" TabOrder="3" Text="닫기" Top="48" Width="75"></Button>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="36" Id="Static10" Left="2" TabOrder="7" Top="66" Width="256"></Static>
+		<Static Align="Center" Font="굴림,18,Bold" Height="24" Id="Static9" Left="8" TabOrder="7" Text="설비매뉴얼&#32;및&#32;SOFT백업관리" Top="37" Width="328"></Static>
+		<Edit Align="CENTER" CheckLength="Byte" Enable="FALSE" Height="26" Id="st_MSHNO" Left="123" MaxLength="15" TabOrder="4" TabStop="FALSE" Top="71" UpperOnly="TRUE" Width="130"></Edit>
+		<Button Height="26" Id="btnSave2" ImageID="sum_save" Left="554" OnClick="btnSave2_OnClick" TabOrder="2" Text="신규" Top="48" Width="75"></Button>
+		<CyHttpFile Height="24" Id="CyHttpFile0" Left="608" Width="24"></CyHttpFile>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_OBMZ105_ADD" BKColor="white" BkColor2="white" BkSelColor="white" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="368" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="lightgrey" HeadBorder="Flat" HeadHeight="25" Height="264" Id="Grid_SWLIST" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnCellDBLClick="Grid_SWLIST_OnCellDblClick" Right="720" RowHeight="20" SelColor="black" TabOrder="9" TabStop="FALSE" Top="104" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="720">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="항목"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="PLC"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="PC"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="ROBOT"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="서보및그외"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="설치드라이버"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="기계도면"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="전기도면"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="#dfdfdf" checklength="Byte" col="0" color="#002043" display="normal" font="Default,8,Bold" text="보유여부"/>
+						<cell align="center" checklength="Byte" col="1" colid="SWTF1" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="2" colid="SWTF2" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="3" colid="SWTF3" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="4" colid="SWTF4" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="5" colid="SWTF5" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="6" colid="SWTF6" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" checklength="Byte" col="7" colid="SWTF7" combocol="cd" combodataset="ds_CHKCD" combotext="cdnm" display="combo" edit="combo"/>
+						<cell align="center" bkcolor="#dfdfdf" bkcolor2="LIGHT3D" checklength="Byte" col="0" color="#002043" display="normal" font="Default,8,Bold" row="1" text="최종일"/>
+						<cell align="center" checklength="Byte" col="1" colid="SWDT1" display="expr:iif(SWDT1==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="2" colid="SWDT2" display="expr:iif(SWDT2==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="3" colid="SWDT3" display="expr:iif(SWDT3==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="4" colid="SWDT4" display="expr:iif(SWDT4==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="5" colid="SWDT5" display="expr:iif(SWDT5==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="6" colid="SWDT6" display="expr:iif(SWDT6==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" checklength="Byte" col="7" colid="SWDT7" display="expr:iif(SWDT7==&apos;0&apos;,&apos;text&apos;,&apos;date&apos;)" edit="date" row="1"/>
+						<cell align="center" bkcolor="#dfdfdf" bkcolor2="LIGHT3D" checklength="Byte" col="0" color="#002043" display="normal" font="Default,8,Bold" row="2" text="업로드"/>
+						<cell align="center" checklength="Byte" col="1" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="2" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="3" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="4" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="5" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="6" display="button" edit="button" row="2"/>
+						<cell align="center" checklength="Byte" col="7" display="button" edit="button" row="2"/>
+						<cell align="center" bkcolor="#dfdfdf" bkcolor2="LIGHT3D" checklength="Byte" col="0" color="#002043" display="normal" font="Default,8,Bold" row="3" text="다운로드"/>
+						<cell align="left" checklength="Byte" col="1" colid="SWFN1" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="2" colid="SWFN2" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="3" colid="SWFN3" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="4" colid="SWFN4" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="5" colid="SWFN5" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="6" colid="SWFN6" display="button" edit="button" row="3"/>
+						<cell align="left" checklength="Byte" col="7" colid="SWFN7" display="button" edit="button" row="3"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="7" TabOrder="10" Text="설비&#32;&#32;No" Top="71" VAlign="Middle" Width="116"></Static>
+		<Static Height="24" Id="Static154" Left="520" TabOrder="11" Text="※&#32;○&#32;:&#32;접수,&#32;Ⅹ&#32;:&#32;미접수,&#32;－&#32;:&#32;없음" Top="80" VAlign="Middle" Width="192"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog1" Left="576" Right="600" TabOrder="11" Type="Save" Width="24"></FileDialog>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBMZ105_POP.xml
+ * ● PROGRAM DESCRIPTION  : 설비매뉴얼 및 SOFT백업관리
+ * ● DATE WRITTEN         : 2017.01.20
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+#include "script::fileupdown.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var imgUPDOWNpath="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/bojen/";
+
+function on_LoadCompleted(obj){
+	getTitle();
+	st_MSHNO.Text=trim(ds_OBMZ105.GetColumn(ds_OBMZ105.currow,"MSHNO"));
+	getOBMZ105_POP();
+}
+
+/********************************************************************** 
+ * 내용설명 : 첨부파일이 있는지 검색
+ **********************************************************************/ 
+function getOBMZ105_POP(){
+	var sKind		= "getOBMZ105_POP";						
+	var sMethodName = "service::psogmlib/selectOBMZ105_ADD.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_OBMZ105_ADD=ds_OBMZ105_ADD";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " LINCD=" + quote(ds_OBMZ105.GetColumn(ds_OBMZ105.currow,"LINCD"));
+		sArgument += " MSHNO=" + quote(ds_OBMZ105.GetColumn(ds_OBMZ105.currow,"MSHNO"));
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync = false;
+}
+
+function btnSave2_OnClick(obj)
+{
+
+	var sKind		= "setOBMZ105_POP";						
+	var sMethodName = "service::psogmlib/saveOBMZ105_ADD.do"; 
+	var sInDataSet  = "ds_OBMZ105_ADD=ds_OBMZ105_ADD:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ105_ADD_CHECK=ds_OBMZ105_ADD_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync = false;
+
+	//저장시 파일이 업로드됨.
+	if(ds_uploadFile.rowcount >0){
+		if(!file_Upload()){
+				//ds_uploadFile.DeleteAll();
+				ds_uploadFile.ClearData();
+				FileDialog0.FileName= "";
+				alert("[알림]파일업로드중 오류가 발생하였습니다. 다시 시도해주시기 바랍니다.");
+				return false;
+		}
+		else {
+			FileDialog0.FileName= "";
+		}
+	}
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+
+	if(svcId=="getOBMZ105_POP"){
+	// tran 실패
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		}else{
+			if(ds_OBMZ105_ADD.rowcount<1){
+				alert(setPopMessage("1003"));
+				setMessage("1003");
+				ds_OBMZ105_ADD.AddRow();
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"COMPS",ComboBoxPlant.Value);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"LINCD",trim(ds_OBMZ105.GetColumn(ds_OBMZ105.currow,"LINCD")));
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"MSHNO",trim(ds_OBMZ105.GetColumn(ds_OBMZ105.currow,"MSHNO")));
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF1","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF2","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF3","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF4","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF5","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF6","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWTF7","Ⅹ");
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT1",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT2",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT3",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT4",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT5",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT6",0);
+				ds_OBMZ105_ADD.SetColumn(ds_OBMZ105_ADD.currow,"SWDT7",0);
+			}else{
+				alert(setPopMessage("1004"));
+				setMessage("1004");	
+			}
+		}
+	}
+	else if(svcId=="setOBMZ105_POP_del"){
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		// tran 성공	
+		}else{
+			alert(setPopMessage("1001"));
+			setMessage("1001");
+		}
+	}
+}
+
+function btnClose_OnClick(obj)
+{
+	close();
+}
+
+function ds_OBMZ105_ADD_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	//날짜 초기화
+	if(strColumnID == "SWDT1"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT1",0);
+		}
+	}
+	if(strColumnID == "SWDT2"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT2",0);
+		}
+	}
+	if(strColumnID == "SWDT3"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT3",0);
+		}
+	}
+	if(strColumnID == "SWDT4"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT4",0);
+		}
+	}
+	if(strColumnID == "SWDT5"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT5",0);
+		}
+	}
+	if(strColumnID == "SWDT6"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT6",0);
+		}
+	}
+	if(strColumnID == "SWDT7"){
+		if(length(trim(varNewValue))=0){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT7",0);
+		}
+	}
+	//보유여부가 접수가 아닌경우 날짜/파일명 삭제
+	if(strColumnID == "SWTF1"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT1",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN1","");
+		}
+	}
+	if(strColumnID == "SWTF2"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT2",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN2","");
+		}
+	}
+	if(strColumnID == "SWTF3"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT3",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN3","");
+		}
+	}
+	if(strColumnID == "SWTF4"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT4",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN4","");
+		}
+	}
+	if(strColumnID == "SWTF5"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT5",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN5","");
+		}
+	}
+	if(strColumnID == "SWTF6"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT6",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN6","");
+		}
+	}
+	if(strColumnID == "SWTF7"){
+		if(trim(varNewValue)!="○"){
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT7",0);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN7","");
+		}
+	}
+}
+
+function Grid_SWLIST_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//trace(nCell);
+	//업로드
+	if(nCell=17 || nCell=18 || nCell=19 || nCell=20 || nCell=21 || nCell=22 || nCell=23){
+		//trace(nCell);
+		FileDialog0.Filter = "ALL File(.*)|*.*";	
+		FileDialog0.Type = "OPEN";
+		if (!FileDialog0.Open()) {
+			alert(setPopMessage("1009"));	//  파일 선택 창을 여는데 실패하였습니다.
+			return;
+		} 
+		var file_name = FileDialog0.FileName;
+		var file_path = FileDialog0.FilePath;
+		var path = file_path + "\\" + file_name;
+		setMessageDirect(path);	
+		
+		var fType="";
+		if(nCell=17){
+			fType = "_PLC";	//PLC
+		}else if(nCell=18){
+			fType = "_PC";	//PC
+		}else if(nCell=19){
+			fType = "_ROB";	//ROBOT
+		}else if(nCell=20){
+			fType = "_ETC";	//서보및그외
+		}else if(nCell=21){
+			fType = "_DRV";	//설치드라이버
+		}else if(nCell=22){
+			fType = "_DRW_MC";	//기계도면
+		}else if(nCell=23){
+			fType = "_DRW_EL";	//전기도면
+		}
+		
+		var sFName = st_MSHNO.Text+fType+substr(file_name, indexOf(file_name,"."));
+		
+		if(nCell=17){//PLC
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN1",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT1",today());
+		}else if(nCell=18){//PC
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN2",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT2",today());
+		}else if(nCell=19){	//ROBOT
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN3",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT3",today());
+		}else if(nCell=20){	//서보및그외
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN4",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT4",today());
+		}else if(nCell=21){//설치드라이버
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN5",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT5",today());
+		}else if(nCell=22){	//기계도면
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN6",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT6",today());
+		}else if(nCell=23){	//전기도면
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWFN7",sFName);
+			ds_OBMZ105_ADD.SetColumn(nRow,"SWDT7",today());
+		}		
+		//trace(file_name+"===="+sFName);
+		//데이터셋에 로우 추가
+		ds_uploadFile.addRow();
+		//다이얼로그에서 선택한 파일의 경로명(파일명포함)을 데이터셋에 저장
+		ds_uploadFile.SetColumn(ds_uploadFile.row,"fullname", path);
+		//다이얼로그에서 선택한 파일명을 데이터셋에 저장
+		ds_uploadFile.SetColumn(ds_uploadFile.row,"filename", sFName);	
+		//END
+	}
+	//다운로드
+	if(nCell=25 || nCell=26 || nCell=27 || nCell=28 || nCell=29 || nCell=30 || nCell=31){
+		var p_FName="";
+		if(nCell=25){//PLC
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN1");
+			file_Download(p_FName);
+		}else if(nCell=26){//PC
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN2");
+			file_Download(p_FName);
+		}else if(nCell=27){	//ROBOT
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN3");
+			file_Download(p_FName);
+		}else if(nCell=28){	//서보및그외
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN4");
+			file_Download(p_FName);
+		}else if(nCell=29){//설치드라이버
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN5");
+			file_Download(p_FName);
+		}else if(nCell=30){	//기계도면
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN6");
+			file_Download(p_FName);
+		}else if(nCell=31){	//전기도면
+			p_FName=ds_OBMZ105_ADD.GetColumn(nRow,"SWFN7");
+			file_Download(p_FName);
+		}
+	}
+}
+//파일업로드
+function file_Upload(obj)
+{
+	var gImgPath ="Maintenance/";
+
+	if(ComboBoxPlant.Value =="E1"){
+		 gImgPath = gImgPath + "KE/";
+	}else if(ComboBoxPlant.Value =="C1"){
+		 gImgPath = gImgPath + "KAC/";
+	}else if(ComboBoxPlant.Value =="H1"){
+		 gImgPath = gImgPath + "KAH/";
+	}else if(ComboBoxPlant.Value =="S1"){
+		 gImgPath = gImgPath + "KAS/";
+	}
+	
+	var ret;
+	//파일선택 버튼을 이용해서 선택된 파일이 없는 경우 처리 생략
+	if(ds_uploadFile.rowcount != 0){
+		//데이터셋 로우 수 만큼 루프
+		for ( var i = 0 ; i < ds_uploadFile.rowcount ; i++ )
+		{
+			// 풀경로 취득
+			var file_url = ds_uploadFile.getColumn(i,"fullname");		
+			//로컬에서 선택한 파일명을 취득하여 변수에 설정
+			var str_param = ds_uploadFile.getColumn(i,"filename");
+			//업로드 할 서버 경로와 파일명
+			//var str_param_server = imgUPDOWNpath + str_param;
+			var str_param_server = imgUPDOWNpath + gImgPath + str_param;
+			//스크립트 파일의 함수 호출 
+			ret = gfn_FileWrite(CyHttpFile0, file_url, str_param_server, i, "prog_bar", CyHttpFile0);									
+			//호출함수 리턴값 처리
+			if ( ret[0] == "FAIL" )
+			{
+				alert(ret[1]);
+				break;
+			}
+		}
+	}
+	return true;	
+}
+
+function file_Download(obj)
+{
+	var gImgPath ="Maintenance/";
+	//다운로드 받을 파일명을 취득하여 변수에 설정(클릭한 로우의 파일)
+	var fName=obj;
+
+	var str_param ="";
+	if(ComboBoxPlant.Value =="E1"){
+		 gImgPath += "KE/";
+	}else if(ComboBoxPlant.Value =="C1"){
+		  gImgPath += "KAC/";
+	}else if(ComboBoxPlant.Value =="H1"){
+		 gImgPath += "KAH/";
+	}else if(ComboBoxPlant.Value =="S1"){
+		 gImgPath += "KAC/";
+	}
+	
+	var str_param =fName;
+	//다운로드 받을 파일이 저장되어있는 서버 경로와 파일명
+	var str_param_server = imgUPDOWNpath + gImgPath + str_param;
+	//-----------  다이얼로그창  설정------------------
+ 	FileDialog1.Filter = "ALL File(.*)|*.*";	
+   //다이얼로그창에 다운받을 파일명 설정
+	FileDialog1.FileName= str_param;
+    //다이얼로그창에 다운받을 기본경로 설정
+	FileDialog1.FilePath= "C:\\";
+	//다이얼로그창 버튼 SAVE로 설정
+	FileDialog1.Type = "SAVE";
+	//확장자가 없을 때 기본 확장자 설정
+	FileDialog1.AppendExtDefault = "TRUE";
+
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 처리 계속
+	if(FileDialog1.Open()){
+		//다운로드 받을 경로(로컬)
+		//var str_param_full = "C:/download/" + Dataset1.getColumn(nRow,"filename"); //다이얼로그창 미사용시(고정폴더)
+		var str_param_full = FileDialog1.FilePath + "\\" + FileDialog1.FileName;
+		//스크립트 파일의 함수 호출 
+		var file_size = CyHttpFile0.GetFileSizeLocal(str_param_server);
+		var ret = gfn_FileRead(CyHttpFile0, str_param_full, str_param_server, file_size, 1, "prog_bar", "");		
+		//호출함수 리턴값 처리
+		if ( ret[0] == "FAIL" ){
+			alert(ret[1]);
+		}else{
+			alert("[알림]파일이 정상적으로 PC에 저장되었습니다.");
+		}
+	}
+}]]></Script>
+</Window>

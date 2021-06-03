@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" OnTimer="UserList_OnTimer" PidAttrib="7" Title="전광판&#32;생산현황&#32;조회" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi001mCode">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<value>2공장2층,&#32;3공장2층&#32;외&#32;</value>
+					</record>
+					<record>
+						<cd>2</cd>
+						<value>3공장2층&#32;외,&#32;전자공장&#32;</value>
+					</record>
+					<record>
+						<cd>3</cd>
+						<value>전자공장,&#32;성형반</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_interval">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="value" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>20</cd>
+						<value>20</value>
+					</record>
+					<record>
+						<cd>30</cd>
+						<value>30</value>
+					</record>
+					<record>
+						<cd>40</cd>
+						<value>40</value>
+					</record>
+					<record>
+						<cd>50</cd>
+						<value>50</value>
+					</record>
+					<record>
+						<cd>60</cd>
+						<value>60</value>
+					</record>
+					<record>
+						<cd>정지</cd>
+						<value>정지</value>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_1">
+				<Contents>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRMAN" size="256" summ="default" type="STRING"/>
+					<colinfo id="QCMAN" size="256" summ="default" type="STRING"/>
+					<colinfo id="FSTQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="ATOQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRDQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="PER1" size="256" summ="default" type="STRING"/>
+					<colinfo id="PER2" size="256" summ="default" type="STRING"/>
+					<colinfo id="DAYGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CYCTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_2_Day">
+				<Contents>
+					<colinfo id="ORDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRNDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEQNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORQTY" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTQY_SUM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORQTY_MINUS_PRTQY_SUM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PER" size="256" summ="default" type="STRING"/>
+					<colinfo id="CYCTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="H8" size="256" summ="default" type="STRING"/>
+					<colinfo id="H9" size="256" summ="default" type="STRING"/>
+					<colinfo id="H10" size="256" summ="default" type="STRING"/>
+					<colinfo id="H11" size="256" summ="default" type="STRING"/>
+					<colinfo id="H12" size="256" summ="default" type="STRING"/>
+					<colinfo id="H14" size="256" summ="default" type="STRING"/>
+					<colinfo id="H15" size="256" summ="default" type="STRING"/>
+					<colinfo id="H16" size="256" summ="default" type="STRING"/>
+					<colinfo id="H17" size="256" summ="default" type="STRING"/>
+					<colinfo id="H18" size="256" summ="default" type="STRING"/>
+					<colinfo id="H19" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_3">
+				<Contents>
+					<colinfo id="STPSQ" size="256" summ="default" type="STRING"/>
+					<colinfo id="STRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ENDTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STMIN" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPRNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_4">
+				<Contents>
+					<colinfo id="DPTGU" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSLG" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CLSSM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSTPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSTFM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSTTO" size="256" summ="default" type="STRING"/>
+					<colinfo id="BSMIN" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPRNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_5">
+				<Contents>
+					<colinfo id="BADLG" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADMD" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADSM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PSPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="BADNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE02_2_Night">
+				<Contents>
+					<colinfo id="ORDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRNDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROCS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SEQNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORQTY" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTQY_SUM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORQTY_MINUS_PRTQY_SUM" size="256" summ="default" type="STRING"/>
+					<colinfo id="PER" size="256" summ="default" type="STRING"/>
+					<colinfo id="CYCTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="H20" size="256" summ="default" type="STRING"/>
+					<colinfo id="H21" size="256" summ="default" type="STRING"/>
+					<colinfo id="H23" size="256" summ="default" type="STRING"/>
+					<colinfo id="H00" size="256" summ="default" type="STRING"/>
+					<colinfo id="H02" size="256" summ="default" type="STRING"/>
+					<colinfo id="H04" size="256" summ="default" type="STRING"/>
+					<colinfo id="H05" size="256" summ="default" type="STRING"/>
+					<colinfo id="H06" size="256" summ="default" type="STRING"/>
+					<colinfo id="H07" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_DEPT">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="data" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>PR</cd>
+						<data>제조</data>
+					</record>
+					<record>
+						<cd>QC</cd>
+						<data>검사</data>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid BindDataset="DS_OBSE02_2_Day" BkColor2="default" BoldHead="true" Bottom="307" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="145" Id="Grid1_D" InputPanel="FALSE" Left="6" LineColor="default" Right="1043" TabOrder="22" TabStop="true" Top="162" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1037">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="92"/>
+						<col width="80"/>
+						<col width="56"/>
+						<col width="56"/>
+						<col width="56"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="56"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="82"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="지시번호"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="지시수량"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="실적수량"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="미달성&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="택트타임"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="08:30~"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="09:30~"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" text="10:30~"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" text="11:30~"/>
+						<cell bkcolor="#dfdfdf" col="12" display="text" text="12:30~"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text" text="14:10~"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text" text="15:10~"/>
+						<cell bkcolor="#dfdfdf" col="15" display="text" text="16:10~"/>
+						<cell bkcolor="#dfdfdf" col="16" display="text" text="17:10~"/>
+						<cell bkcolor="#dfdfdf" col="17" display="text" text="18:10~"/>
+						<cell bkcolor="#dfdfdf" col="18" display="text" text="19:10~21:10"/>
+					</head>
+					<body>
+						<cell bkcolor="yellow" col="0" colid="PRTNO" display="text"/>
+						<cell align="left" bkcolor="yellow" col="1" colid="CARNM" display="text"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="ORNO" display="text"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="ORQTY" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="PRTQY_SUM" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="5" colid="ORQTY_MINUS_PRTQY_SUM" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="6" colid="PER" color="blue" display="text"/>
+						<cell align="right" bkcolor="yellow" col="7" colid="CYCTM" display="text"/>
+						<cell align="right" bkcolor="yellow" col="8" colid="H8" display="text"/>
+						<cell align="right" bkcolor="yellow" col="9" colid="H9" display="text"/>
+						<cell align="right" bkcolor="yellow" col="10" colid="H10" display="text"/>
+						<cell align="right" bkcolor="yellow" col="11" colid="H11" display="text"/>
+						<cell align="right" bkcolor="yellow" col="12" colid="H12" display="text"/>
+						<cell align="right" bkcolor="yellow" col="13" colid="H14" display="text"/>
+						<cell align="right" bkcolor="yellow" col="14" colid="H15" display="text"/>
+						<cell align="right" bkcolor="yellow" col="15" colid="H16" display="text"/>
+						<cell align="right" bkcolor="yellow" col="16" colid="H17" display="text"/>
+						<cell align="right" bkcolor="yellow" col="17" colid="H18" display="text"/>
+						<cell align="right" bkcolor="yellow" col="18" colid="H19" display="text"/>
+					</body>
+					<summary>
+						<cell align="center" bkcolor="#dfdfdf" col="0" display="text" text="합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text"/>
+						<cell align="right" bkcolor="#dfdfdf" col="3" display="text" expr='sum(&quot;ORQTY&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="4" display="text" expr='sum(&quot;PRTQY_SUM&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="5" display="text" expr='sum(&quot;ORQTY_MINUS_PRTQY_SUM&quot;)'/>
+						<cell bkcolor="#dfdfdf" col="6" display="text"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text"/>
+						<cell align="right" bkcolor="#dfdfdf" col="8" display="text" expr='sum(&quot;H8&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="9" display="text" expr='sum(&quot;H9&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="10" display="text" expr='sum(&quot;H10&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="11" display="text" expr='sum(&quot;H11&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="12" display="text" expr='sum(&quot;H12&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="13" display="text" expr='sum(&quot;H14&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="14" display="text" expr='sum(&quot;H15&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="15" display="text" expr='sum(&quot;H16&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="16" display="text" expr='sum(&quot;H17&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="17" display="text" expr='sum(&quot;H18&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="18" display="text" expr='sum(&quot;H19&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="72" Id="st_1" TabOrder="20" Text="라인정보" Top="64" Width="1048"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="136" Id="st_5" Left="440" TabOrder="19" Text="불량내역" Top="320" Width="608"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="120" Id="st_4" TabOrder="18" Text="이상발생&#32;내역" Top="464" Width="1048"></Static>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="136" Id="st_3" TabOrder="17" Text="비가동시간&#32;내역" Top="320" Width="424"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="1" Top="30" Width="1047"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="202" TabOrder="12" Top="32" Width="85"></Static>
+		<Static BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static4" Left="4" TabOrder="3" Top="32" Width="100"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static3" Left="10" Style="static" TabOrder="2" Text="사&#32;업&#32;장" Top="37" VAlign="Middle" Width="90"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="105" ResetIndex="FIRST" TabOrder="4" Top="33" Width="90"></Combo>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="568" TabOrder="6" Top="32" Width="104"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="576" Style="static" TabOrder="5" Text="리플레시&#32;타임" Top="37" VAlign="Middle" Width="88"></Static>
+		<Static BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="385" TabOrder="8" Top="32" Width="86"></Static>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="393" Style="static" TabOrder="7" Text="주야구분" Top="37" VAlign="Middle" Width="70"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_daygu" ImeMode="none" INDEX="1" InnerDataset="ds_daygu" Left="474" OnChanged="cd_daygu_OnChanged" ResetIndex="FIRST" TabOrder="9" Top="33" Width="90"></Combo>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_syyyymmdd" Left="288" OnChanged="ed_syyyymmdd_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="10" Top="34" Width="90"></Calendar>
+		<Static Align="Center" Border="None" Color="#333333" Font="굴림,9,Bold" Height="19" Id="Static0" Left="209" Style="static" TabOrder="11" Text="작업일자" Top="37" VAlign="Middle" Width="70"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="13" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="13" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Combo CodeColumn="cd" DataColumn="value" Height="21" Id="cmb_interval" InnerDataset="ds_interval" Left="677" OnChanged="cmb_interval_OnChanged" TabOrder="15" Text="정지" Top="33" Width="56"></Combo>
+		<Grid BindDataset="DS_OBSE02_1" BkColor2="default" BoldHead="true" Bottom="131" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="46" Id="Grid0" InputPanel="FALSE" Left="6" LineColor="default" Right="1043" TabOrder="21" TabStop="true" Top="85" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1037">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="60"/>
+						<col width="80"/>
+						<col width="68"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="122"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="제조인원"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="검사인원"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="생산계획"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="생산능력"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" InputZeroTime="true" text="생산실적"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" InputZeroTime="true" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" InputZeroTime="true" text="실적/능력&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" InputZeroTime="true" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" InputZeroTime="true" text="최종생산품번"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" InputZeroTime="true" text="생산시간"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" InputZeroTime="true" text="택트타임"/>
+					</head>
+					<body>
+						<cell bkcolor="yellow" col="0" colid="PROCS" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="1" colid="PRMAN" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="QCMAN" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="FSTQY" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="ATOQY" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="5" colid="PRDQY" color="red" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="6" colid="PER1" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="7" colid="PER2" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="center" bkcolor="yellow" col="8" colid="DAYGU" display="text" InputZeroTime="true"/>
+						<cell align="left" bkcolor="yellow" col="9" colid="PRTNO" display="text" InputZeroTime="true"/>
+						<cell align="center" bkcolor="yellow" col="10" colid="ENDTM" display="normal" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="11" colid="CYCTM" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid BindDataset="DS_OBSE02_3" BkColor2="default" BoldHead="true" Bottom="450" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="109" Id="Grid2" InputPanel="FALSE" Left="6" LineColor="default" Right="416" TabOrder="23" TabStop="true" Top="341" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="410">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="80"/>
+						<col width="120"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="비가동번호"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="비가동시간"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="비가동원인"/>
+					</head>
+					<body>
+						<cell align="right" bkcolor="yellow" col="0" colid="STPSQ" display="text" InputZeroTime="true"/>
+						<cell align="left" bkcolor="yellow" col="1" colid="STRTM" color="blue" display="text" InputZeroTime="true" Mask="@@:@@:@@"/>
+						<cell align="left" bkcolor="yellow" col="2" colid="ENDTM" color="blue" display="text" InputZeroTime="true" Mask="@@:@@:@@"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="STMIN" color="blue" display="text" InputZeroTime="true"/>
+						<cell align="left" bkcolor="yellow" col="4" colid="SPRNM" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid BindDataset="DS_OBSE02_4" BkColor2="default" BoldHead="true" Bottom="580" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="92" Id="Grid3" InputPanel="FALSE" Left="6" LineColor="default" Right="1043" TabOrder="24" TabStop="true" Top="488" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1037">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="86"/>
+						<col width="198"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="부서"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="소분류"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" InputZeroTime="true" text="시작시간"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" InputZeroTime="true" text="종료시간"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" InputZeroTime="true" text="이상발생시간"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" InputZeroTime="true" text="이상발생원인"/>
+					</head>
+					<body>
+						<cell bkcolor="yellow" col="0" colid="DPTGU" combocol="cd" combodataset="DS_DEPT" combotext="data" display="combo" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="1" colid="CLSLG" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="2" colid="CLSMD" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="3" colid="CLSSM" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="BSTPS" display="text" InputZeroTime="true"/>
+						<cell align="left" bkcolor="yellow" col="5" colid="BSTFM" color="blue" display="text" InputZeroTime="true" Mask="@@:@@:@@"/>
+						<cell align="left" bkcolor="yellow" col="6" colid="BSTTO" color="blue" display="text" InputZeroTime="true" Mask="@@:@@:@@"/>
+						<cell align="right" bkcolor="yellow" col="7" colid="BSMIN" color="blue" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="8" colid="SPRNM" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid BindDataset="DS_OBSE02_5" BkColor2="default" BoldHead="true" Bottom="450" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="109" Id="Grid4" InputPanel="FALSE" Left="446" LineColor="default" Right="1040" TabOrder="25" TabStop="true" Top="341" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="594">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="85"/>
+						<col width="85"/>
+						<col width="85"/>
+						<col width="91"/>
+						<col width="56"/>
+						<col width="64"/>
+						<col width="111"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" InputZeroTime="true" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" InputZeroTime="true" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" InputZeroTime="true" text="소분류"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" InputZeroTime="true" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" InputZeroTime="true" text="불량수량"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" InputZeroTime="true" text="발생시간"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" InputZeroTime="true" text="불량원인"/>
+					</head>
+					<body>
+						<cell bkcolor="yellow" col="0" colid="BADLG" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="1" colid="BADMD" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="2" colid="BADSM" display="text" InputZeroTime="true"/>
+						<cell bkcolor="yellow" col="3" colid="PSPNO" display="text" InputZeroTime="true"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="BADQY" display="text" InputZeroTime="true"/>
+						<cell align="left" bkcolor="yellow" col="5" colid="BADTM" display="text" InputZeroTime="true" Mask="@@:@@:@@"/>
+						<cell bkcolor="yellow" col="6" colid="BADNM" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Border="Flat" BorderColor="INACTIVECAPTION" Color="black" Font="Default,9,Bold" Height="172" Id="st_2" TabOrder="16" Text="생산실적" Top="136" Width="1048"></Static>
+		<Grid AreaSelect="TRUE" BindDataset="DS_OBSE02_2_Night" BkColor2="default" BoldHead="true" Bottom="305" ColSelect="TRUE" Enable="true" EndLineColor="default" HeadHeight="25" Height="145" Id="Grid1_N" InputPanel="FALSE" Left="6" LineColor="default" Right="1043" TabOrder="26" TabStop="true" Top="160" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1037">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="92"/>
+						<col width="80"/>
+						<col width="56"/>
+						<col width="56"/>
+						<col width="56"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="56"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="82"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="지시번호"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="지시수량"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="실적수량"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="미달성&#32;수량"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="실적/계획&#32;%"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="택트타임"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="21:30~"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="22:30~"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" text="23:30~"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" text="00:00~"/>
+						<cell bkcolor="#dfdfdf" col="12" display="text" text="01:30~"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text" text="02:30~"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text" text="04:30~"/>
+						<cell bkcolor="#dfdfdf" col="15" display="text" text="05:30~"/>
+						<cell bkcolor="#dfdfdf" col="16" display="text" text="06:00~"/>
+						<cell bkcolor="#dfdfdf" col="17" display="text" text="07:00~08:00"/>
+					</head>
+					<body>
+						<cell bkcolor="yellow" col="0" colid="PRTNO" display="text"/>
+						<cell align="left" bkcolor="yellow" col="1" colid="CARNM" display="text"/>
+						<cell align="right" bkcolor="yellow" col="2" colid="ORNO" display="text"/>
+						<cell align="right" bkcolor="yellow" col="3" colid="ORQTY" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="4" colid="PRTQY_SUM" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="5" colid="ORQTY_MINUS_PRTQY_SUM" color="red" display="text"/>
+						<cell align="right" bkcolor="yellow" col="6" colid="PER" color="blue" display="text"/>
+						<cell align="right" bkcolor="yellow" col="7" colid="CYCTM" display="text"/>
+						<cell align="right" bkcolor="yellow" col="8" colid="H20" display="text"/>
+						<cell align="right" bkcolor="yellow" col="9" colid="H21" display="text"/>
+						<cell align="right" bkcolor="yellow" col="10" colid="H23" display="text"/>
+						<cell align="right" bkcolor="yellow" col="11" colid="H00" display="text"/>
+						<cell align="right" bkcolor="yellow" col="12" colid="H02" display="text"/>
+						<cell align="right" bkcolor="yellow" col="13" colid="H04" display="text"/>
+						<cell align="right" bkcolor="yellow" col="14" colid="H05" display="text"/>
+						<cell align="right" bkcolor="yellow" col="15" colid="H06" display="text"/>
+						<cell align="right" bkcolor="yellow" col="16" colid="H07" display="text"/>
+						<cell align="right" bkcolor="yellow" col="17" colid="H08" display="text"/>
+					</body>
+					<summary>
+						<cell align="center" bkcolor="#dfdfdf" col="0" display="text" text="합계"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text"/>
+						<cell align="right" bkcolor="#dfdfdf" col="3" display="text" expr='sum(&quot;ORQTY&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="4" display="text" expr='sum(&quot;PRTQY_SUM&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="5" display="text" expr='sum(&quot;ORQTY_MINUS_PRTQY_SUM&quot;)'/>
+						<cell bkcolor="#dfdfdf" col="6" display="text"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text"/>
+						<cell align="right" bkcolor="#dfdfdf" col="8" display="text" expr='sum(&quot;H20&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="9" display="text" expr='sum(&quot;H21&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="10" display="text" expr='sum(&quot;H23&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="11" display="text" expr='sum(&quot;H00&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="12" display="text" expr='sum(&quot;H02&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="13" display="text" expr='sum(&quot;H04&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="14" display="text" expr='sum(&quot;H05&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="15" display="text" expr='sum(&quot;H06&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="16" display="text" expr='sum(&quot;H07&quot;)'/>
+						<cell align="right" bkcolor="#dfdfdf" col="17" display="text" expr='sum(&quot;H08&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE02.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 상세조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+var sPROCS;
+var sORDAT;
+var sDAYGU;
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	
+	setTimer(1, 9999999999999999999999);	
+	
+	sORDAT = ORDAT;	
+	sDAYGU = DAYGU;
+	sPROCS = PROCS;
+	
+	/*
+	if (sDAYGU = 'D') {		
+		Grid1_D.Visible = true;
+		Grid1_N.Visible = false;
+	} else {
+		Grid1_D.Visible = false;
+		Grid1_N.Visible = true;
+	}
+	*/
+	
+	cd_daygu.Value = DAYGU;
+	ed_syyyymmdd.Value = ORDAT;	
+	
+	getOBSE02();
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+	
+	ds_ppmi001mCode.InsertRow(0);
+	ds_ppmi001mCode.SetColumn(0,"ROWGB","");
+	ds_ppmi001mCode.SetColumn(0,"ROWNM","[전체]");
+	//cmb_rowgb.index = 0;	
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-09-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE02(){
+	if (sDAYGU = 'D') {		
+		Grid1_D.Visible = true;
+		Grid1_N.Visible = false;
+	} else {
+		Grid1_D.Visible = false;
+		Grid1_N.Visible = true;
+	}
+
+	var sKind		= "getOBSE02_1";						
+	var sMethodName = "service::psogmlib/selectOBSE02_1.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE02_1=DS_OBSE02_1";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(cb_comp.Value);
+	sArgument += " ORDAT=" + quote(sORDAT);
+	sArgument += " PROCS=" + quote(sPROCS);
+	sArgument += " DAYGU=" + quote(sDAYGU);	
+
+	//http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+	
+	if (cd_daygu.Value = 'D') {
+			
+		var sKind		= "getOBSE02_2_Day";						
+		var sMethodName = "service::psogmlib/selectOBSE02_2_Day.do";  	// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "DS_OBSE02_2_Day=DS_OBSE02_2_Day";    		// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += "@COMPS=" + quote(cb_comp.Value);
+		sArgument += "@ORDAT=" + quote(sORDAT);
+		sArgument += "@PROCS=" + quote(sPROCS);
+		sArgument += "@DAYGU=" + quote(sDAYGU);	
+	
+		//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+		dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument, 272, 64, "TitleBar=false");	
+			
+	} else if (cd_daygu.Value = 'N')  {	
+			
+		var sKind		= "getOBSE02_2_Night";						
+		var sMethodName = "service::psogmlib/selectOBSE02_2_Night.do";	// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "DS_OBSE02_2_Night=DS_OBSE02_2_Night";    	// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		
+		sArgument += " LIB=" + quote(Lib);
+		sArgument += "@COMPS=" + quote(cb_comp.Value);
+		sArgument += "@ORDAT=" + quote(sORDAT);
+		sArgument += "@PROCS=" + quote(sPROCS);
+		sArgument += "@DAYGU=" + quote(sDAYGU);	
+	
+		//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+		dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument, 272, 64, "TitleBar=false");	
+	}
+	
+	var sKind		= "getOBSE02_3";						
+	var sMethodName = "service::psogmlib/selectOBSE02_3.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE02_3=DS_OBSE02_3";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(cb_comp.Value);
+	sArgument += " ORDAT=" + quote(sORDAT);
+	sArgument += " PROCS=" + quote(sPROCS);
+	sArgument += " DAYGU=" + quote(sDAYGU);	
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+		
+	var sKind		= "getOBSE02_4";						
+	var sMethodName = "service::psogmlib/selectOBSE02_4.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE02_4=DS_OBSE02_4";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(cb_comp.Value);
+	sArgument += " ORDAT=" + quote(sORDAT);
+	sArgument += " PROCS=" + quote(sPROCS);
+	sArgument += " DAYGU=" + quote(sDAYGU);	
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");	
+			
+	var sKind		= "getOBSE02_5";						
+	var sMethodName = "service::psogmlib/selectOBSE02_5.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE02_5=DS_OBSE02_5";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(cb_comp.Value);
+	sArgument += " ORDAT=" + quote(sORDAT);
+	sArgument += " PROCS=" + quote(sPROCS);
+	sArgument += " DAYGU=" + quote(sDAYGU);	
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");				
+} 	 	
+	
+				
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else {		
+		DS_OBSE02_1.rowposition = -1;
+		DS_OBSE02_2_Day.rowposition = -1;
+		DS_OBSE02_2_Night.rowposition = -1;		
+		DS_OBSE02_3.rowposition = -1;		
+		DS_OBSE02_5.rowposition = -1;	
+		
+		if(svcId=="getOBSE02_4") {			
+			DS_OBSE02_4.Sort("BSTFM", true);
+			DS_OBSE02_4.rowposition = -1;
+		}
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBSE02();
+}
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function UserList_OnTimer(obj,nEventID)
+{
+	//alert(TIME());
+	fn_Search();
+}
+
+function cmb_interval_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if (nNewIndex = 0) {		
+		setTimer(1, 20*1000);
+	} else if (nNewIndex = 1) {		
+		setTimer(1, 30*1000);
+	} else if (nNewIndex = 2) {		
+		setTimer(1, 40*1000);
+	} else if (nNewIndex = 3) {		
+		setTimer(1, 50*1000);
+	} else if (nNewIndex = 4) {		
+		setTimer(1, 60*1000);
+	} else if (nNewIndex = 5) {		
+		setTimer(1, 10000*100000*100000*10000);		
+	}
+		
+}
+
+
+function cd_daygu_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{	
+	//alert(cd_daygu.Value);
+	if (nNewIndex = 0) {
+		//alert("주");	
+		sDAYGU = 'D';			
+	} else if (nNewIndex = 1) {
+		//alert("야");
+		sDAYGU = 'N';		
+	}	
+}
+
+function ed_syyyymmdd_OnChanged(obj,strOldText,strNewText)
+{
+	//alert(strNewText);
+	sORDAT = strNewText;
+}
+]]></Script>
+</Window>

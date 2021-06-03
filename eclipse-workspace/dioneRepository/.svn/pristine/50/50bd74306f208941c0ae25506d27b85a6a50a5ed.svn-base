@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="424" Id="UserList" Left="8" PidAttrib="7" Title="사용자조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="640" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_selUser">
+				<Contents>
+					<colinfo id="COMPANY" size="256" summ="default" type="STRING"/>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPDPNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>E1</cd>
+						<cdnm>PE</cdnm>
+					</record>
+					<record>
+						<cd>C1</cd>
+						<cdnm>PS창원</cdnm>
+					</record>
+					<record>
+						<cd>S1</cd>
+						<cdnm>PS화성</cdnm>
+					</record>
+					<record>
+						<cd>H1</cd>
+						<cdnm>PS홍성</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-8" TabOrder="1" Width="648"></Image>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="2" Top="24" Width="640"></Static>
+		<Static Height="13" Id="Static0" Left="48" TabOrder="2" Top="136" Width="40"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_selUser" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="424" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="368" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="cell_doubleClick" OnHeadClick="Grid0_OnHeadClick" Right="640" TabOrder="4" TabStop="true" Top="56" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="640">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="100"/>
+						<col width="170"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="이름"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="부서명"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="COMPANY" combocol="cd" combodataset="ds_userCompany" combotext="cdnm" display="combo"/>
+						<cell align="center" col="1" colid="SABUN" display="normal"/>
+						<cell align="center" col="2" colid="KORNM" display="normal"/>
+						<cell align="center" col="3" colid="DPDPNM" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_sabun" Left="215" MaxLength="10" TabOrder="5" Top="29" Width="98"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_kornm" Left="379" MaxLength="10" TabOrder="6" Top="29" Width="98"></Edit>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="4" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="29" VAlign="Middle" Width="80"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="153" TabOrder="8" Text="사&#32;&#32;&#32;&#32;&#32;번" Top="29" VAlign="Middle" Width="60"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="316" TabOrder="9" Text="이&#32;&#32;&#32;&#32;&#32;름" Top="29" VAlign="Middle" Width="60"></Static>
+		<Button Cursor="HAND" Height="25" Id="btnsel" ImageID="btn2_search2" Left="482" OnClick="btnsel_OnClick" TabOrder="10" Text="조회" Top="28" Width="75"></Button>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_userCompany" ImeMode="none" INDEX="0" InnerDataset="ds_userCompany" Left="86" OnChanged="common_OnChanged" ResetIndex="FIRST" TabOrder="11" Top="28" Width="66"></Combo>
+		<Button Cursor="HAND" Height="25" Id="btnExit" ImageID="closeBtn" Left="560" OnClick="btnExit_OnClick" TabOrder="12" Text="닫기" Top="28" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[
+function getEmploy(){
+	var sKind		= "getEmploy";						
+	var sMethodName = "service::system/getEmployList";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_selUser=ds_selUser";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	//sArgument += "@LIB1=" + quote(Lib1);
+	//sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(cd_userCompany.Value);
+	sArgument += " SABUN=" + quote(ed_sabun.Text);
+	sArgument += " KORNM=" + quote(ed_kornm.Text);
+						 
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");		
+}
+
+
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex) 
+{
+	//ds_selUser.DeleteAll();
+	ds_selUser.ClearData();
+}
+
+function cell_doubleClick(obj){
+ 
+	var selcomps = ds_selUser.GetColumn(ds_selUser.currow,"COMPANY");
+	var selsabun = ds_selUser.GetColumn(ds_selUser.currow,"SABUN");
+	var selkornm = ds_selUser.GetColumn(ds_selUser.currow,"KORNM");
+	var seldpdpnm = ds_selUser.GetColumn(ds_selUser.currow,"DPDPNM");
+	
+		if(displayDiv.ed_user_id.Enable==false){
+			displayDiv.ed_user_name.Text = selkornm;
+			displayDiv.Edit0.Text = seldpdpnm;
+	
+			if(selcomps=="E1"){
+				displayDiv.cb_company.Value="PE";
+				displayDiv.cb_plant_cd.Value=selcomps;
+			}
+			else{
+				displayDiv.cb_company.Value="PS";
+				displayDiv.cb_plant_cd.Value=selcomps;
+				if(length(selsabun)!=7){
+					var selsabun_zero_addcnt = 7 - selsabun.length;
+					for(var i = 0 ; i < selsabun_zero_addcnt; i++)
+					{
+						selsabun = "0"+selsabun;
+					}
+				}
+			}
+		displayDiv.ed_tel_no1.Text = selsabun;	
+		}
+		else {
+			displayDiv.ed_user_name.Text = selkornm;
+			displayDiv.Edit0.Text = seldpdpnm;
+	
+			if(selcomps=="E1"){
+				displayDiv.cb_company.Value="PE";
+				displayDiv.cb_plant_cd.Value=selcomps;			
+			}
+			else{
+				displayDiv.cb_company.Value="PS";
+				displayDiv.cb_plant_cd.Value=selcomps;
+				if(length(selsabun)!=7){
+					var selsabun_zero_addcnt = 7 - selsabun.length;
+					for(var i = 0 ; i < selsabun_zero_addcnt; i++)
+					{
+						selsabun = "0"+selsabun;
+					}
+				}
+		
+			}
+			
+			displayDiv.ed_user_id.Text = substr(selcomps,0,1) + selsabun;
+			displayDiv.ed_tel_no1.Text = selsabun;
+			displayDiv.ed_password.Text = selsabun;
+			displayDiv.Edit1.Text = selsabun;
+			displayDiv.Combo0.Value="180";
+			displayDiv.Combo2.Value="20";
+			displayDiv.Combo1.Value="10";
+			for(i=0;i<ds_userList_dummy.rowcount; i++){
+				if(ds_userList_dummy.GetColumn(i,"USER_ID") == displayDiv.ed_user_id.Value) {
+					alert(setPopMessage("2048"));	// 20110103l-koowgnojeel, 2048 == 사용할 수 없는 아이디입니다.
+					displayDiv.ed_user_id.Text = "";
+					displayDiv.ed_user_name.Text = "";
+					displayDiv.Edit0.Text = "";
+					displayDiv.ed_tel_no1.Text = "";
+					displayDiv.ed_password.Text = "";
+					displayDiv.Edit1.Text = "";
+					displayDiv.cb_company.Value="";
+					displayDiv.cb_plant_cd.Value="";
+					displayDiv.Combo0.Value="60";
+					displayDiv.Combo2.Value="10";
+					displayDiv.Combo1.Value="0";
+				return;
+				}
+			}				
+		
+		}
+	Close();
+}
+
+
+function btnsel_OnClick(obj)
+{
+	getEmploy();
+}
+
+function btnExit_OnClick(obj)
+{
+	close();
+}
+]]></Script>
+</Window>

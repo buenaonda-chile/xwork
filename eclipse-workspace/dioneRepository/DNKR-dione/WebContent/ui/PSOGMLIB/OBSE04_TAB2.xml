@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="500" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;불량처리관리" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="850" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi006mTab2Code"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="DS_OBSE04_Tab2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AreaSelect="TRUE" AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="DS_OBSE04_Tab2" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="493" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="485" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="844" TabOrder="-1" TabStop="true" Top="8" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="844">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="44"/>
+						<col width="75"/>
+						<col width="96"/>
+						<col width="85"/>
+						<col width="89"/>
+						<col width="92"/>
+						<col width="55"/>
+						<col width="93"/>
+						<col width="174"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="구분"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="소분류"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="차종"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="불량수"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="발생시간"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="발생사유"/>
+					</head>
+					<body>
+						<cell align="right" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" edit="expr:iif(ds_ppmi006mTab2.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;combo&apos;,&#32;&apos;none&apos;&#32;)" LimitDec="0"/>
+						<cell align="left" col="2" colid="BADLG_NAME" display="normal"/>
+						<cell align="left" col="3" colid="BADMD_NAME" display="normal"/>
+						<cell align="left" col="4" colid="BADSM_NAME" display="normal"/>
+						<cell align="left" col="5" colid="MSTRM" display="text"/>
+						<cell align="left" col="6" colid="PSPNO" display="normal" edit="normal" LimitDec="0" RegExprFilter="[a-zA-Z0-9]"/>
+						<cell align="right" col="7" colid="BADQY" display="normal" edit="number"/>
+						<cell align="left" autosizing="none" col="8" colid="BADTM" display="text" edit="expr:iif(ds_ppmi006mTab2.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;normal&apos;,&#32;&apos;none&apos;&#32;)" Mask="##:##:##"/>
+						<cell align="left" col="9" colid="BADNM" color="#333333" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Shape BKColor="#888888" Bottom="79" Height="5" Id="Shape6" Left="15" LineColor="#dceaf7" Right="20" TabOrder="2" Top="74" Type="Ellipse" Width="5"></Shape>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 김정현
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBSE04_2.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2012.10.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+var procs = "" ;
+var ordat = "" ;
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function searchCode(obj)
+{
+	var arrReturn = dialog("Common::comFgp260pf.xml","" ,300,300);
+
+	for(i=0;i<length(arrReturn);i++)
+	{
+		var codes = split(arrReturn[i],"|");
+		// *
+		object("ed_code" + (i+1)).Column 	= codes[0];
+		object("ed_code" + (i+1)).value 	= codes[1];		
+	}   
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOBSE04Tab2(){
+
+	var sKind		= "getOBSE04Tab2";						
+	var sMethodName = "service::psogmlib/selectOBSE04_Tab2.do"; 			// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             					// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "DS_OBSE04_Tab2=DS_OBSE04_Tab2";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);		
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	}else {
+		DS_OBSE04_Tab2.rowposition = -1;		
+	}	
+
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+
+}
+
+function fn_Search()
+{
+
+}
+
+function fn_Input()
+{
+
+}
+
+function fn_Delete()
+{
+	
+}
+
+function fn_Save()
+{
+	
+}
+
+function fn_print()
+{
+
+}
+
+function fn_Excel()
+{
+
+}
+
+function fn_Help()
+{
+
+}]]></Script>
+</Window>

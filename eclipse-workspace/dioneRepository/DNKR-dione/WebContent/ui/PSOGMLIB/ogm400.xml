@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="OGM400" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="초기화면(교정대상)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGM400">
+				<Contents>
+					<colinfo id="count0" size="256" summ="default" type="STRING"/>
+					<colinfo id="count1" size="256" summ="default" type="STRING"/>
+					<colinfo id="count2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="40" Id="searchBar" TabOrder="0" Top="32" Width="1058"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="128" OnChanged="common_OnChanged" TabOrder="2" Top="41" Width="120"></Combo>
+		<Static BindDataset="ds_OGM010_dchk" Column="prtnm" Height="17" Id="txtprtnm" Left="224" TabOrder="2" Top="224" VAlign="Bottom" Width="230"></Static>
+		<Static BindDataset="ds_HMD020PF_INPUT" Column="KORNM" Height="17" Id="st_UseidNM_INPUT" Left="868" TabOrder="3" Top="429" VAlign="Bottom" Width="134"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="32" TabOrder="7" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="40" VAlign="Middle" Width="92"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="0" Top="8" Width="1032"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="542" Id="Static23" TabOrder="7" Top="80" Width="1058"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="SearchResultStatic0" Left="225" TabOrder="9" Top="249" VAlign="Middle" Width="510"></Static>
+		<Static BindDataset="ds_HMD020PF_INPUT" Column="KORNM" Height="17" Id="Static0" Left="892" TabOrder="10" Top="90" VAlign="Bottom" Width="134"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="SearchResultStatic1" Left="225" TabOrder="11" Top="304" VAlign="Middle" Width="510"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="SearchResultStatic2" Left="225" TabOrder="11" Top="358" VAlign="Middle" Width="510"></Static>
+		<Button Height="26" Id="ConfirmBtn0" Left="750" OnClick="displayDiv_Button0_OnClick" TabOrder="12" Text="확&#32;&#32;&#32;&#32;인" Top="248" Width="57"></Button>
+		<Button Height="26" Id="ConfirmBtn1" Left="750" OnClick="displayDiv_Button1_OnClick" TabOrder="13" Text="확&#32;&#32;&#32;&#32;인" Top="304" Width="57"></Button>
+		<Button Height="26" Id="ConfirmBtn2" Left="750" OnClick="displayDiv_Button2_OnClick" TabOrder="14" Text="확&#32;&#32;&#32;&#32;인" Top="358" Width="57"></Button>
+		<Static Align="Center" BindDataset="ds_OGM400" Border="Flat" BorderColor="MENU" Column="count1" Font="굴림,9,Bold" Height="22" Id="countStatic1" Left="398" TabOrder="16" Top="306" VAlign="Middle" Width="32"></Static>
+		<Static Align="Center" BindDataset="ds_OGM400" Border="Flat" BorderColor="MENU" Column="count2" Font="굴림,9,Bold" Height="22" Id="countStatic2" Left="415" TabOrder="17" Top="360" VAlign="Middle" Width="32"></Static>
+		<Static Height="17" Id="txtprtnm_INPUT" Left="231" TabOrder="18" Top="120" VAlign="Bottom" Width="200"></Static>
+		<Static Align="Center" BindDataset="ds_OGM400" Border="Flat" BorderColor="MENU" Column="count0" Font="굴림,9,Bold" Height="22" Id="countStatic0" Left="409" TabOrder="15" Top="251" VAlign="Middle" Width="32"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Kim JJ
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm400.xml
+ * ● PROGRAM DESCRIPTION  : 초기화면(계측기)
+ * ● DATE WRITTEN         : 2012-01-09
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+// 년월취득
+var nowDateYYYY = substr(today(),0,4);   //현재 년
+var nowDateMM = substr(today(),4,2);     //현재 월
+var nowDateYYYYPlusMM = substr(addMonth(today(), 1),0,4);   //다음달 년(2011년12월 경우 다음달은 2012년01월이 된다)
+var nowDateMMPlusMM = substr(addMonth(today(), 1),4,2);     // 다음달 월
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	//날짜를 포함한 문구 표시(대상수량은 제외)
+    SearchResultStatic0.Text = nowDateYYYY + " 년 " + nowDateMM + " 월" + "        대의 교정대상 장비가 있습니다.";
+    SearchResultStatic1.Text = nowDateYYYYPlusMM + " 년 " + nowDateMMPlusMM + " 월" + "        대의 교정예정대상 장비가 있습니다.";
+    SearchResultStatic2.Text = nowDateYYYY + " 년 " + nowDateMM + " 월" + " 현재        대의 교정 미실시 장비가 있습니다.";
+	//대상수량 취득
+	getogm400();
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	Width = G_ds_design.GetColumn(0,"Width");
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getogm400(){
+
+	var sKind		= "getOgm400";						
+	var sMethodName = "service::psogmlib/selectOGM400.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OGM400=ds_OGM400";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	
+	//trace("Lib2:" + Lib2);
+	//trace("Lib3:" + Lib3);
+	//trace("ComboBoxPlant.Value:" + ComboBoxPlant.Value);
+	//trace("nowDateYYYY + nowDateMM:" + nowDateYYYY + nowDateMM);
+	//trace("nowDateYYYYPlusMM + nowDateMMPlusMM:" + nowDateYYYYPlusMM + nowDateMMPlusMM);	
+	
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " LIB3=" + quote(Lib3);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += " YEDAT0=" + quote(nowDate); //현재 년월일
+	sArgument += " YEDAT1=" + quote(nowDateYYYY + nowDateMM); //현재 년월
+	sArgument += " YEDAT2=" + quote(nowDateYYYYPlusMM + nowDateMMPlusMM); //현재 년월 + 1개월
+	sArgument += " YEDAT3=" + quote(nowDate); //현재 년월일	
+    
+    //trace("sArgument:" + sArgument);
+    Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="insertOGM400"){
+		getOGM400();  //처리후 재조회
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 버튼클릭시 비표시 처리
+ **********************************************************************/ 
+function displayDiv_Button0_OnClick(obj)    //첫번째 확인버튼
+{
+	SearchResultStatic0.BorderColor = "White";
+	ConfirmBtn0.Visible = "false";	
+	SearchResultStatic0.text = "";
+	countStatic0.text = "";
+	count_close();
+}
+
+function displayDiv_Button1_OnClick(obj)    //두번째 확인버튼
+{
+	SearchResultStatic1.BorderColor = "White";
+	ConfirmBtn1.Visible = "false";	
+	SearchResultStatic1.text = "";
+	countStatic1.text = "";
+	count_close();
+}
+
+function displayDiv_Button2_OnClick(obj)   //세번째 확인버튼
+{
+	SearchResultStatic2.BorderColor = "White";
+	ConfirmBtn2.Visible = "false";	
+	SearchResultStatic2.text = "";
+	countStatic2.text = "";
+	count_close();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+
+}
+
+function fn_Input()
+{
+
+}
+
+function fn_Delete()
+{
+
+}
+
+function fn_Save()
+{
+
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	//setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function count_close(){
+
+	if(length(countStatic0.Text) ==0 && length(countStatic1.Text)==0 && length(countStatic2.Text)==0){
+		close();
+	}
+}
+]]></Script>
+</Window>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.OrderTransferMngDao">
+
+
+    <resultMap id="OrderTransferMng" type="OrderTransferMngDomain">
+        <!-- 검색항목 -->
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+		<result property="plndt" column="PLNDT" />
+        <!-- DB항목 -->
+        <result property="stcd1" column="STCD1" />
+        <result property="stcd2" column="STCD2" />
+        <result property="stcd3" column="STCD3" />
+        <result property="magdt" column="MAGDT" />
+		<result property="magtm" column="MAGTM" />
+
+    </resultMap>
+
+  <!-- 조회 -->
+  <select id="searchByCondition" resultMap="OrderTransferMng" parameterType="OrderTransferMngDomain">
+
+    SELECT <!-- COMPS, PYVND, PLNDT, STCD1, STCD2, STCD3, MAGDT, MAGTM -->
+	    COMPS, PYVND, PLNDT, 
+	    CASE WHEN STCD1='1'THEN '○' ELSE 'X' END STCD1,
+	    CASE WHEN STCD2='1'THEN '○' ELSE 'X' END STCD2,
+	    CASE WHEN STCD3='1'THEN '○' ELSE 'X' END STCD3,
+	    MAGDT, MAGTM
+    FROM PSZDBLIB.SVZ613PF
+    WHERE
+    	'SqlMap-OrderTransferMng.searchByCondition'='SqlMap-OrderTransferMng.searchByCondition'
+     <if test="comps != null and comps !='' ">	
+		and COMPS = #{comps}
+	 </if>
+     <if test="pyvnd != null and pyvnd !='' ">	
+		and PYVND = #{pyvnd}
+	 </if>
+	 	and PLNDT = #{plndt}
+	 ORDER BY COMPS, PYVND
+	 
+  </select>
+
+
+</mapper>

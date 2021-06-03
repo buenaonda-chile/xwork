@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PsogmPerSearchDao">
+
+	<resultMap id="PsogmPerSearchText" type="PsogmPerSearchDomain">
+        <result property="cnt_pm" column="cnt_pm" />
+        <result property="cnt_bm" column="cnt_bm" />
+        <result property="cnt_cm" column="cnt_cm" />
+        <result property="sum_pm" column="sum_pm" />
+        <result property="sum_bm" column="sum_bm" />
+        <result property="sum_cm" column="sum_cm" />
+        <result property="sum_pcost" column="sum_pcost" />
+        <result property="sum_scost" column="sum_scost" />
+        <result property="sum_stphr" column="sum_stphr" />
+        <result property="sum_janhr" column="sum_janhr" />
+    </resultMap>
+    
+	<resultMap id="PsogmPerSearchGrid" type="PsogmPerSearchDomain">
+        <result property="jisno" column="jisno" />
+        <result property="jobnm" column="jobnm" />
+        <result property="chonm" column="chonm" />
+        <result property="tothr" column="tothr" />
+        <result property="stphr" column="stphr" />
+        <result property="wndat" column="wndat" />
+        <result property="hyonm" column="hyonm" />
+        <result property="cause" column="cause" />
+        <result property="trunm" column="trunm" />
+        <result property="assnm" column="assnm" />
+        <result property="cpart" column="cpart" />
+        <result property="dpart" column="dpart" />
+    </resultMap>
+    
+    <select id="selectOgm312_textVal_Obj" parameterType="hashmap" resultType="hashmap">
+		select 
+			sum(case b.kogub when 'PM' then a.nocnt else 0 end) as cnt_pm,
+			sum(case b.kogub when 'BM' then a.nocnt else 0 end) as cnt_bm,
+			sum(case b.kogub when 'CM' then a.nocnt else 0 end) as cnt_cm,
+			sum(case b.kogub when 'PM' then a.tothr else 0 end) as sum_pm,
+			sum(case b.kogub when 'BM' then a.tothr else 0 end) as sum_bm,
+			sum(case b.kogub when 'CM' then a.tothr else 0 end) as sum_cm,
+			sum(a.pcost) as sum_pcost,
+			sum(a.scost) as sum_scost,
+			sum(a.stphr) as sum_stphr,
+			sum(a.janhr) as sum_janhr
+		from ${LIB2}.obj200pf as a
+		left outer join ${LIB2}.obc140pf as b
+		on a.comps = b.comps
+		and a.jobcd = b.jobcd
+		where 
+			a.comps = #{COMPS}
+		
+		<if test="MSHNO != null and MSHNO != ''">
+			and a.mshno = #{MSHNO}	 	
+		</if>
+			 and a.wndat between #{WNDATS} and #{WNDATE}
+			 and a.cmplt = '1'
+	</select>
+	
+	<select id="selectOgm312_textVal" parameterType="PsogmPerSearchDomain" resultMap="PsogmPerSearchText">
+		select 
+			sum(case b.kogub when 'PM' then a.nocnt else 0 end) as cnt_pm,
+			sum(case b.kogub when 'BM' then a.nocnt else 0 end) as cnt_bm,
+			sum(case b.kogub when 'CM' then a.nocnt else 0 end) as cnt_cm,
+			sum(case b.kogub when 'PM' then a.tothr else 0 end) as sum_pm,
+			sum(case b.kogub when 'BM' then a.tothr else 0 end) as sum_bm,
+			sum(case b.kogub when 'CM' then a.tothr else 0 end) as sum_cm,
+			sum(a.pcost) as sum_pcost,
+			sum(a.scost) as sum_scost,
+			sum(a.stphr) as sum_stphr,
+			sum(a.janhr) as sum_janhr
+		from ${LIB2}.obj200pf as a
+		left outer join ${LIB2}.obc140pf as b
+		on a.comps = b.comps
+		and a.jobcd = b.jobcd
+		where 
+			a.comps = #{COMPS}
+		
+		<if test="MSHNO != null and MSHNO != ''">
+			and a.mshno = #{MSHNO}	 	
+		</if>
+			 and a.wndat between #{WNDATS} and #{WNDATE}
+			 and a.cmplt = '1'
+	</select>
+	
+	<select id="selectOgm312_gridVal_Obj" parameterType="hashmap" resultType="hashmap">
+		select 
+		trim(a.jisno) as jisno,trim(b.jobnm) as jobnm,
+		a.tothr,a.stphr,trim(c.chonm) as chonm,
+		substring(char(a.wndat),1,4) || '-' || substring(char(a.wndat),5,2) || '-' ||  
+		substring(char(a.wndat),7,2) as wndat,
+		trim(d.hyonm) as hyonm,trim(e.cause) as cause,trim(f.trunm) as trunm,
+		trim(g.assnm) as assnm,trim(h.cpart) as cpart,trim(i.dpart) as dpart
+		
+		from ${LIB2}.obj200pf as a 
+	
+		left outer join ${LIB2}.obc140pf as b 
+		on a.comps = b.comps
+		and a.jobcd = b.jobcd
+		
+		left outer join ${LIB2}.obc160pf as c
+		on a.comps = c.comps 
+		and a.chocd = c.chocd
+		
+		left outer join ${LIB2}.obc180pf as d
+		on a.comps = d.comps
+		and a.hyocd = d.hyocd
+		
+		left outer join ${LIB2}.obc110pf as e
+		on a.comps = e.comps
+		and a.caucd = e.caucd
+		
+		left outer join ${LIB2}.obc090pf as f
+		on a.comps = f.comps
+		and a.trucd = f.trucd
+		
+		left outer join ${LIB2}.obc230pf as g
+		on a.comps = g.comps
+		and a.subas = g.subas
+		
+		left outer join ${LIB2}.obc060pf as h
+		on a.comps = h.comps
+		and a.comcd = h.comcd
+		
+		left outer join ${LIB2}.obc050pf as i
+		on a.comps = i.comps
+		and a.deccd = i.deccd
+	
+	where 
+		a.comps = #{COMPS}
+		<if test="MSHNO != null and MSHNO != ''">
+		and a.mshno = #{MSHNO}	 	
+		</if>
+		 and a.wndat between #{WNDATS} and #{WNDATE}
+		 and a.cmplt = '1'
+	</select>
+	
+	<select id="selectOgm312_gridVal" parameterType="PsogmPerSearchDomain" resultMap="PsogmPerSearchGrid">
+		select 
+		trim(a.jisno) as jisno,trim(b.jobnm) as jobnm,
+		a.tothr,a.stphr,trim(c.chonm) as chonm,
+		substring(char(a.wndat),1,4) || '-' || substring(char(a.wndat),5,2) || '-' ||  
+		substring(char(a.wndat),7,2) as wndat,
+		trim(d.hyonm) as hyonm,trim(e.cause) as cause,trim(f.trunm) as trunm,
+		trim(g.assnm) as assnm,trim(h.cpart) as cpart,trim(i.dpart) as dpart
+		
+		from ${LIB2}.obj200pf as a 
+	
+		left outer join ${LIB2}.obc140pf as b 
+		on a.comps = b.comps
+		and a.jobcd = b.jobcd
+		
+		left outer join ${LIB2}.obc160pf as c
+		on a.comps = c.comps 
+		and a.chocd = c.chocd
+		
+		left outer join ${LIB2}.obc180pf as d
+		on a.comps = d.comps
+		and a.hyocd = d.hyocd
+		
+		left outer join ${LIB2}.obc110pf as e
+		on a.comps = e.comps
+		and a.caucd = e.caucd
+		
+		left outer join ${LIB2}.obc090pf as f
+		on a.comps = f.comps
+		and a.trucd = f.trucd
+		
+		left outer join ${LIB2}.obc230pf as g
+		on a.comps = g.comps
+		and a.subas = g.subas
+		
+		left outer join ${LIB2}.obc060pf as h
+		on a.comps = h.comps
+		and a.comcd = h.comcd
+		
+		left outer join ${LIB2}.obc050pf as i
+		on a.comps = i.comps
+		and a.deccd = i.deccd
+	
+	where 
+		a.comps = #{COMPS}
+		<if test="MSHNO != null and MSHNO != ''">
+		and a.mshno = #{MSHNO}	 	
+		</if>
+		 and a.wndat between #{WNDATS} and #{WNDATE}
+		 and a.cmplt = '1'
+	</select>
+</mapper>

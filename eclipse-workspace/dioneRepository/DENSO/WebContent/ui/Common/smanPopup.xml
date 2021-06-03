@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="용역인원&#32;조회선택" TooltipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_Select">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMPrtno"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMMaker"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="8" Top="30" Width="523"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="3" TabOrder="7" Top="32" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="527"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Select" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="582" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="518" Id="menuGrd2" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="menuGrd2_OnCellDblClick" Right="524" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="524">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="41"/>
+						<col width="60"/>
+						<col width="70"/>
+						<col width="150"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사번"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="성명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="부서명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="시작일"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="종료일"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="PESABN" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="2" colid="KORNM" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="3" colid="DPCONM" display="normal"/>
+						<cell align="center" autosizing="none" col="4" colid="STRDT" display="date"/>
+						<cell align="center" autosizing="none" col="5" colid="ENDDT" display="date"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_info" Left="40" TabOrder="2" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="4" Top="8" Width="104"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="15" LineColor="#dceaf7" Right="20" TabOrder="5" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="25" Style="static" TabOrder="6" Text="찾&#32;기" Top="37" VAlign="Middle" Width="69"></Static>
+		<Edit Height="25" Id="ed_select" Left="96" TabOrder="9" Top="32" UpperOnly="TRUE" Width="152"></Edit>
+		<Image Cursor="HAND" Height="27" Id="imgQuery" ImageID="btn2_sear" Left="285" OnClick="imgQuery_OnClick" Static="FALSE" TabOrder="10" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgSelect" ImageID="btn2_sele" Left="365" OnClick="imgSelect_OnClick" Static="FALSE" TabOrder="11" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgClose" ImageID="btn2_out" Left="445" OnClick="imgClose_OnClick" Static="FALSE" TabOrder="12" Top="31" Width="75"></Image>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : smanPopup.xml
+ * ● PROGRAM DESCRIPTION  : 용역인원조회 팝업
+ * ● DATE WRITTEN         : 2014.06.12
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+function on_LoadCompleted(obj)
+{
+	ed_select.Text = CODE;
+	if (CODE == "zzzzzzzzzz") ed_select.Text="";
+	imgQuery_OnClick();
+	PESABN="";
+}
+//FHD010 용역마스타 + MST650PF 부서 조회
+function imgQuery_OnClick(obj,nX,nY)
+{
+	http.Sync 	= false;
+	var sKind		= "getSmanPopup";		
+	var sMethodName = "service::pscomlib/selectSmanPopup.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_Select=ds_Select";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(COMP);//사업부
+		sArgument  += " KORNM=" + quote(ed_select.Text);//이름
+		sArgument  += " PESABN=" + quote(PESABN);//사번
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+function imgSelect_OnClick(obj,nX,nY)
+{
+	var arrReturn  =  Array();
+	arrReturn[0]  = ds_Select.GetColumn(ds_Select.row,"PESABN");
+	arrReturn[1]  = ds_Select.GetColumn(ds_Select.row,"KORNM");
+	arrReturn[2]  = ds_Select.GetColumn(ds_Select.row,"DPCONM");
+	arrReturn[2]  = ds_Select.GetColumn(ds_Select.row,"STRDT");
+	arrReturn[2]  = ds_Select.GetColumn(ds_Select.row,"ENDDT");
+	close(arrReturn);
+}
+
+function menuGrd2_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	imgSelect_OnClick();
+}
+
+function imgClose_OnClick(obj,nX,nY)
+{
+	Close();
+}]]></Script>
+</Window>

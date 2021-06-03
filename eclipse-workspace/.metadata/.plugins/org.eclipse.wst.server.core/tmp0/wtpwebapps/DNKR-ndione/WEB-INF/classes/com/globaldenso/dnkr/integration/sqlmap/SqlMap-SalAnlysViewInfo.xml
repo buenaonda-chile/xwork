@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalAnlysViewInfoDao">
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="SalAnlysView" type="SalAnlysViewDomain">
+       	<result property="comps" column="COMPS" />
+       	<result property="pyvnd" column="PYVND" />
+        <result property="prdcd" column="PRDCD" />
+        <result property="prdnm" column="PRDNM" />
+        <result property="plngb" column="PLNGB" />
+		<result property="plnym" column="PLNYM" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+    </resultMap>
+  
+  <!-- 제품코드찾기 -->
+ <select id="searchByPrdcd" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT
+			COMPS,
+			PRDCD
+		FROM
+			${lib2}.SPY200PF
+		WHERE
+		'SqlMap-SalAnlysView.searchByPrdcd' = 'SqlMap-SalAnlysView.searchByPrdcd'
+		<if test='comps != null and !comps.equals("")'>
+		AND COMPS = #{comps}
+		</if>
+		AND PRDCD != ''
+		GROUP BY COMPS, PRDCD 
+		ORDER BY PRDCD
+ </select> 
+ 
+ <!-- 제품코드,명-->
+ <select id="searchByPrdcdNm" resultMap="SalAnlysView" parameterType="SalAnlysViewDomain">
+		SELECT 
+			TRIM(MSTCD) AS prdcd
+			,TRIM(MSTRM) AS prdnm
+		FROM
+			${lib2}.MST050PF
+		WHERE 'SqlMap-SalAnlysView.searchByPrdcdNm' = 'SqlMap-SalAnlysView.searchByPrdcdNm'
+			AND GRPCD = 'PRD'
+			AND COMPS = #{comps}
+			AND MSTCD != '$'  <!--제품코드중 '제품코드'는 리스트에서 제외 -->
+			
+			<!-- SELECT MSTCD AS prdcd ,MSTRM AS prdnm FROM PSCDBLIB.MST050PF WHERE COMPS = 'C1' AND  GRPCD = 'PRD' -->
+ </select>
+	
+</mapper>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.TrainingAppcntStatDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.TrainingAppcntStatDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		
+		<result property="eduDiv" column="EDU_DIV" javaType="java.lang.String" />
+		<result property="eduNm" column="EDU_NM" javaType="java.lang.String" />
+		<result property="eduDt" column="EDU_DT" javaType="java.lang.String" />
+		<result property="receiptEndDate" column="RECEIPT_END_DATE" javaType="java.lang.String" />
+		
+		<result property="eduCnt" column="EDU_CNT" javaType="java.lang.Long" />
+		<result property="traineeCnt" column="TRAINEE_CNT" javaType="java.lang.Long" />
+		
+  </resultMap>
+
+  <sql id="select_01">
+  select * from(
+  	select COUNT(ROW_CNT) AS EDU_CNT
+		  ,SUM(TRAINEE_CNT) AS TRAINEE_CNT
+		  ,EDU_DT
+		  ,RECEIPT_END_DATE
+		  ,EDU_DIV
+		  ,EDU_NM
+  	   from(
+	  select A.ID
+	  		,A.APPLY_ID
+	  		,ROWNUM	AS ROW_CNT
+	  		,(SELECT COUNT(ID) AS CNT FROM TB_ED_EDUCATION_SUB B WHERE B.APPLY_ID = A.APPLY_ID) AS TRAINEE_CNT
+            ,C.EDU_DIV
+            ,C.EDU_NM
+	  		,TO_CHAR(C.EDU_DT, 'YY-MM-DD HH24:MI') AS EDU_DT
+	  		,TO_CHAR(C.RECEIPT_END_DATE, 'YY-MM-DD') AS RECEIPT_END_DATE
+	    from TB_ED_EDUCATION_MASTER A
+	    join TB_ED_EDUCATION_INFO C ON C.ID = A.EDU_ITEM
+	   ) X
+	   group by EDU_DT, RECEIPT_END_DATE, EDU_DIV, EDU_NM
+	   ) Z
+  </sql>
+
+  <sql id="where_01">
+  
+	  <if test="criteria.eduDiv != null and criteria.eduDiv != ''">
+		  AND EDU_DIV = UPPER(#{criteria.eduDiv})
+	  </if>
+	  
+	  <if test="criteria.eduNm != null and criteria.eduNm != ''">
+		  AND EDU_NM = UPPER(#{criteria.eduNm})
+	  </if>
+
+  </sql>
+
+  <sql id="where_02">
+  
+	  <if test="criteria.eduDiv != null and criteria.eduDiv != ''">
+		  AND EDU_DIV = UPPER(#{criteria.eduDiv})
+	  </if>
+	  
+	  <if test="criteria.eduNm != null and criteria.eduNm != ''">
+		  AND EDU_NM = UPPER(#{criteria.eduNm})
+	  </if>
+
+  </sql>
+
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntStatDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+	  AND ROWNUM = 1
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+			  <include refid="where_01"/>
+          </where>
+	      ORDER BY EDU_DT DESC
+          ) A
+
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+
+	<select id="searchBySdCondition" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		ORDER BY EDU_DT DESC
+		) A
+
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY RN
+
+	</select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(EDU_CNT) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+	<select id="searchSdCount" resultType="int" parameterType="Map">
+
+		SELECT COUNT(EDU_CNT) AS CNT
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		) AA
+
+	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntStatDomain">
+
+    INSERT INTO TB_ED_EDUCATION_INFO(
+			 ID
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,EDU_DIV
+			,EDU_NM
+			,EDU_DT
+			,RECEIPT_END_DATE
+			,PERS_CNT
+			,ONOFF_YN
+			,USE_YN
+			,REMARK
+	)VALUES(
+			 #{id}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,#{eduDiv}
+			,#{eduNm}
+			,TO_DATE(#{eduDt}, 'YYYY-MM-DD HH24:MI')
+			,TO_DATE(#{receiptEndDate}, 'YYYY-MM-DD HH24:MI')
+			,#{persCnt}
+			,#{onoffYn}
+			,#{useYn}
+			,#{remark}
+	)
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_ED_EDUCATION_INFO.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntStatDomain">
+
+    UPDATE TB_ED_EDUCATION_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,EDU_DIV = #{eduDiv}
+		,EDU_NM = #{eduNm}
+		,EDU_DT = TO_DATE(#{eduDt}, 'YYYY-MM-DD HH24:MI')
+		,RECEIPT_END_DATE = TO_DATE(#{receiptEndDate}, 'YYYY-MM-DD HH24:MI')
+		,PERS_CNT = #{persCnt}
+		,ONOFF_YN = #{onoffYn}
+		,USE_YN = #{useYn}
+		,REMARK = #{remark}
+		
+ WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntStatDomain">
+
+    DELETE FROM TB_ED_EDUCATION_INFO
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

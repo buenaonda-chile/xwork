@@ -1,0 +1,960 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="632" Id="eKins_left" Left="8" OnLoadCompleted="eKins_left_OnLoadCompleted" OnSize="fn_onSize" OnTimer="form_OnTimer" PidAttrib="7" Style="sty_form" Title="Frame&#32;Left" TooltipFont="Default,0" Top="8" Ver="1.0" Width="224" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_Menu">
+				<Contents>
+					<colinfo id="MENUID" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENUNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENULVL" size="256" summ="default" type="STRING"/>
+					<colinfo id="UPMENUID" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRINTSEQ" size="256" summ="default" type="STRING"/>
+					<colinfo id="PROGID" size="256" summ="default" type="STRING"/>
+					<record>
+						<MENUID>A</MENUID>
+						<MENULVL>0</MENULVL>
+						<MENUNM>사용자관리</MENUNM>
+						<PRINTSEQ></PRINTSEQ>
+						<PROGID></PROGID>
+						<UPMENUID></UPMENUID>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_popMenu">
+				<Contents>
+					<colinfo id="LEV" size="256" summ="default" type="STRING"/>
+					<colinfo id="ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="NM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="IMG" size="256" summ="default" type="STRING"/>
+					<record>
+						<ID>1</ID>
+						<IMG></IMG>
+						<LEV>0</LEV>
+						<NM>즐겨찾기&#32;추가</NM>
+						<STAT>ENABLE</STAT>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuth"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_leftTopMenu"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mrpChk"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmenuLev"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mngflag"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="608" Id="Image3" ImageID="new_left_bg" Left="8" TabOrder="4" Top="8" Width="208"></Image>
+		<Div Height="256" Id="Div0" Left="12" TabOrder="7" Text="Div0" Top="8" Width="200">
+			<Contents></Contents>
+		</Div>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button11" ImageID="MES&#32;System" Left="16" OnClick="Button11_OnClick" OnMouseOut="Button11_OnMouseOut" OnMouseOver="Button11_OnMouseOver" TabOrder="29" Top="174" Width="189"></Button>
+		<Image Height="6" Id="Image1" ImageID="new_left_bg3" Left="8" LeftMargin="0" TabOrder="3" Top="2" Width="209"></Image>
+		<Image Height="9" Id="Image4" ImageID="leftBack_treeTop" Left="17" TabOrder="5" Top="320" Width="188"></Image>
+		<Image Height="9" Id="Image5" ImageID="leftBack_treeBottom" Left="17" TabOrder="6" Top="605" Width="188"></Image>
+		<Image Height="13" Id="Image0" ImageID="new_left_bg2" Left="8" TabOrder="8" Top="614" Width="207"></Image>
+		<Image FillType="STRETCH" Height="277" Id="Image6" ImageID="leftBack_treeMid" Left="17" TabOrder="9" Top="328" Width="188"></Image>
+		<TreeView BindDataset="G_ds_menu" Border="None" BorderColor="#b8b8b8" Expand="FALSE" Height="275" Id="TreeView0" ImageID="img_lefticon" InnerImageCount="8" Left="23" LevelColumn="LEV" OnClick="Tab_menu_OnClick" OnMouseOver="Tab_menu_tpg_main_TreeView0_OnMouseOver" RowHeight="18" TabOrder="2" TEXTColumn="MENU_NAME" Top="328" Width="179"></TreeView>
+		<Image Cursor="HAND" Height="32" Id="Image2" ImageID="menu_close" Left="208" OnClick="img_close_OnClick" Static="FALSE" TabOrder="1" Top="200" Width="7"></Image>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="Default,9,Bold" Height="21" Id="Button0" ImageID="dione_sum_display" Left="16" OnClick="Div0_Button2_OnClick" OnMouseOut="Button0_OnMouseOut" OnMouseOver="Button0_OnMouseOver" TabOrder="10" Top="36" Width="189"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button5" ImageID="dione_sum_SCM" Left="16" OnClick="Div0_Button5_OnClick" OnMouseOut="Button5_OnMouseOut" OnMouseOver="Button5_OnMouseOver" TabOrder="11" Top="82" Width="189"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button6" ImageID="dione_sum_pdm" Left="16" OnClick="Div0_Button6_OnClick" OnMouseOut="Button6_OnMouseOut" OnMouseOver="Button6_OnMouseOver" TabOrder="12" Top="198" Width="189"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button7" ImageID="dione_sum_K-sox" Left="16" OnClick="Div0_Button7_OnClick" OnMouseOut="Button7_OnMouseOut" OnMouseOver="Button7_OnMouseOver" TabOrder="13" Top="105" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button2" ImageID="dione_mrp" Left="16" OnClick="Div0_ButtonMrp_OnClick" OnMouseOut="Button2_OnMouseOut" OnMouseOver="Button2_OnMouseOver" TabOrder="14" Top="151" Width="189"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="Default,9,Bold" Height="21" Id="Button1" ImageID="dione_sum_printer" Left="16" OnClick="Div0_Button1_OnClick" OnMouseOut="Button1_OnMouseOut" OnMouseOver="Button1_OnMouseOver" TabOrder="15" Top="59" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button3" ImageID="dione_sum_FTA" Left="16" OnClick="Div0_Button3_OnClick" OnMouseOut="Button3_OnMouseOut" OnMouseOver="Button3_OnMouseOver" TabOrder="16" Top="128" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button4" ImageID="orderSystem" Left="16" OnClick="Div0_Button4_OnClick" OnMouseOut="Button4_OnMouseOut" OnMouseOver="Button4_OnMouseOver" TabOrder="17" Top="221" Width="189"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button8" ImageID="dione_sum_main" Left="17" OnClick="Div0_Button0_OnClick" OnMouseOut="Button8_OnMouseOut" OnMouseOver="Button8_OnMouseOver" TabOrder="18" Top="11" Width="93"></Button>
+		<Button Align="Left" AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button9" ImageID="dione_sum_favorites" Left="112" OnClick="Div0_Button8_OnClick" OnMouseOut="Button9_OnMouseOut" OnMouseOver="Button9_OnMouseOver" TabOrder="19" Top="11" Width="93"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="mrpbtn_71" ImageID="dione_mrp_sal" Left="16" OnClick="mrpbtn_71_OnClick" OnMouseOut="mrpbtn_71_OnMouseOut" OnMouseOver="mrpbtn_71_OnMouseOver" TabOrder="20" Top="36" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="mrpbtn_72" ImageID="dione_mrp_fac" Left="16" OnClick="mrpbtn_72_OnClick" OnMouseOut="mrpbtn_72_OnMouseOut" OnMouseOver="mrpbtn_72_OnMouseOver" TabOrder="21" Top="59" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button10" ImageID="dione_sum_불량유출방지System" Left="16" OnClick="Button10_OnClick" OnMouseOut="Button10_OnMouseOut" OnMouseOver="Button10_OnMouseOver" TabOrder="27" Top="244" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="mrpbtn_73" ImageID="dione_mrp_sim" Left="16" OnClick="mrpbtn_73_OnClick" OnMouseOut="mrpbtn_73_OnMouseOut" OnMouseOver="mrpbtn_73_OnMouseOver" TabOrder="22" Top="82" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="mrpbtn_75" ImageID="dione_mrp_insa" Left="16" OnClick="mrpbtn_75_OnClick" OnMouseOut="mrpbtn_75_OnMouseOut" OnMouseOver="mrpbtn_75_OnMouseOver" TabOrder="24" Top="128" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_76" ImageID="dione_sum_bin" Left="16" TabOrder="25" Top="151" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="mrpbtn_74" ImageID="dione_mrp_tqc" Left="16" OnClick="mrpbtn_74_OnClick" OnMouseOut="mrpbtn_74_OnMouseOut" OnMouseOver="mrpbtn_74_OnMouseOver" TabOrder="23" Top="105" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_79" ImageID="dione_sum_bin" Left="16" TabOrder="28" Top="244" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_80" ImageID="dione_sum_bin" Left="16" TabOrder="30" Top="174" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button12" ImageID="TQMS&#32;System" Left="16" OnClick="Button12_OnClick" OnMouseOut="Button12_OnMouseOut" OnMouseOver="Button12_OnMouseOver" TabOrder="31" Top="267" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="red" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="ssobtn_SPC" ImageID="SPC&#32;System" Left="16" OnClick="ssobtn_SPC_OnClick" OnMouseOut="ssobtn_SPC_OnMouseOut" OnMouseOver="ssobtn_SPC_OnMouseOver" TabOrder="33" Text="SPC" Top="198" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_77" ImageID="dione_sum_bin" Left="16" TabOrder="26" Top="198" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="Button13" ImageID="dione_sum_mold" Left="16" OnClick="Button13_OnClick" OnMouseOut="Button13_OnMouseOut" OnMouseOver="Button13_OnMouseOver" TabOrder="35" Top="290" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_81" ImageID="dione_sum_bin" Left="16" OnClick="mrpbtn_81_OnClick" TabOrder="32" Top="267" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="white" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="20" Id="mrpbtn_82" ImageID="dione_sum_bin" Left="16" TabOrder="36" Top="290" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="red" Cursor="HAND" Font="돋움,9,Bold" Height="21" Id="ssobtn_MOLD" ImageID="dione_sum_mold" Left="16" OnClick="ssobtn_MOLD_OnClick" OnMouseOut="ssobtn_MOLD_OnMouseOut" OnMouseOver="ssobtn_MOLD_OnMouseOver" TabOrder="37" Text="MOLD" Top="221" Visible="FALSE" Width="189"></Button>
+		<Button AutoDraw="FALSE" Color="red" Cursor="HAND" Enable="FALSE" Font="돋움,9,Bold" Height="21" Id="mrpbtn_78" ImageID="dione_sum_bin" Left="16" OnClick="ssobtn_PLM_OnClick" OnMouseOut="ssobtn_PLM_OnMouseOut" OnMouseOver="ssobtn_PLM_OnMouseOver" TabOrder="34" Text="PLM" Top="221" Visible="FALSE" Width="189"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::Mi_common.js";
+#include "script::lib_script_common.js";
+
+var treeType  = 1;
+var btnMenuId = "";
+
+function eKins_left_OnLoadCompleted(obj)
+{
+
+	var TOP_MENU =getTmenuLev(); //return 값을 변수로 사용함. 2012.04.09 제환복 추가
+	
+	// user정보, 메뉴권한, 메뉴리스트 등 정보를 가져온다.
+	fcGetMenuTree('1');
+	Div0.Button0.ImageStatus = "SELECT";
+
+	title_user.Value = USER_ID;
+
+	http.Sync 	= true;
+	var sKind		= "getUserAuth";		
+	var sMethodName = "service::user/menuAuth.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_menuAuth=ds_menuAuth";
+	var sArgument   = "";
+		sArgument   += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_Id"));
+		sArgument   += " TOP_MENU=" + quote(TOP_MENU);//추가
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	var sKind		= "getLeftTopMenu";		
+	var sMethodName = "service::login/selectLeftTopMenu.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_leftTopMenu=ds_leftTopMenu";
+	var sArgument   = "";
+		sArgument   += " COMPANY=" + quote(G_ds_user.GetColumn(0,"COMPANY"));
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	// 권택구 차장님 지시로 수정 함
+	// PS에서 PE메뉴 안보이게 가림.
+	if (G_ds_user.GetColumn(0,"COMPANY") == 'PS') {
+		//mrpbtn_77.Visible = true;
+		//mrpbtn_78.Visible = true;
+		mrpbtn_79.Visible = true;
+		mrpbtn_81.Visible = true;
+		mrpbtn_82.Visible = true;
+		ssobtn_SPC.Visible = true;	//SPC(KA) - 추가20140709
+		//ssobtn_PLM.Visible = true;	//PLM(KA) - 추가20140709
+        ssobtn_MOLD.Visible = true;	//MOLDKA) - 추가20151013
+		
+		
+		Button6.Visible = false;	//PDM(KE)
+		Button4.Visible = false;	//순서생산(KE)
+		Button10.Visible = false;	//공정누락방지(KE)
+		Button12.Visible = false;	//QMS(KE)
+		Button13.Visible = false;	//금형관리시스템(KE)
+	}
+	if (G_ds_user.GetColumn(0,"COMPANY") == 'KR') {
+		Button5.Visible = false;	//SCM
+		Button7.Visible = false;	// K-SOX
+		Button3.Visible = false;	// FTA
+		Button2.Visible = false;	// MRP
+		Button11.Visible = false;	// MES
+		
+		Button6.Visible = false;	//PDM(KE)
+		Button4.Visible = false;	//순서생산(KE)
+		Button10.Visible = false;	//공정누락방지(KE)
+		Button12.Visible = false;	//QMS(KE)
+		Button13.Visible = false;	//금형관리시스템(KE)
+		
+		Div0.Height = 72;
+		image4.top = 82;
+		image6.top = 90;
+		image6.Height = 514;
+		TreeView0.top = 90;
+		TreeView0.Height = 512;
+	}
+}
+
+
+function leftTopMenuAuthCheck(menu){
+	
+	for(i=0;i<ds_menuAuth.rowcount;i++){
+		if(ds_menuAuth.GetColumn(i,"MENU_ID") == menu){
+			if(ds_menuAuth.GetColumn(i,"USER_YN") == '1') {
+				return true;
+			} else {
+				if(menu=35||menu=36||menu=37||menu==51||menu==38||menu==10057) { //35,36,37,51 디스플레이 세션, 38,10057 프린터 세션
+					if(menu=35||menu==38) { 
+					//버튼 하나로 세션 권한 개수 만큼 창이 뜨기 때문에 디스플레이 세션1, 프린터 세션1 에 권한이 없을 경우 
+					//나머지 세션도 권한이 없다고 가정하고 메시지를 발생시킴, 이렇게 하지 않으면 
+					//디스플레이 세션 4번, 프린터 세션 2번 권한이 없다고 알림창이 뜨게 됨.
+						alert(setPopMessage("1007"));	// 20110103l-koowgnojeel, 1007 == 권한이 없습니다. 관리자에게 문의하세요.
+						return false;	
+					} else {
+						return false;								
+					}
+				} else {
+					alert(setPopMessage("1007"));	// 20110103l-koowgnojeel, 1007 == 권한이 없습니다. 관리자에게 문의하세요.
+					return false;				
+				}
+			}
+		}
+	}
+}
+
+
+//메뉴 클릭시 버튼 표시(ㅛㅛ)
+function tab_menu_OnClick(obj,nOldRow,nNewRow)
+{
+
+	//폴더명::파일명.XML뺀 
+	var sUrl = G_ds_menu.GetColumn(nNewRow, "INIT_URL");
+	var menuNm = G_ds_menu.GetColumn(nNewRow, "MENU_NAME");
+	var lev  = G_ds_menu.GetColumn(nNewRow,'LEV');
+
+	var str = checkMenuPassword(G_ds_menu.GetColumn(nNewRow, "MENU_ID"),G_ds_menu.GetColumn(nNewRow,'PW_CHECK'));
+
+
+	if(str != "1"){
+		return false ;
+	} else {
+
+		if(length(trim(sUrl)) > 0 ){
+			global.FrameBottom.fcOpenMDI(sUrl,"",menuNm);
+			bottomSet();
+		}	
+	}
+}
+
+function checkMenuPassword(menuId,pwCheck)
+{
+
+	var check = true ;
+
+	for(i=0;i<global.FrameBottom.ds_winButton.rowcount;i++)
+	{
+		if(global.FrameBottom.ds_winButton.GetColumn(i,"MENU_ID") == menuId)
+		{
+
+			check = false ;
+			break;
+		}
+	}
+	
+	if(pwCheck != "1")
+	{
+		check = false;
+	}
+	
+	var str = "";
+	
+	
+	if(check == true)
+	{
+		str = dialog("Group1::BHZZ100CP.xml","",400,190,"TitleBar=ture", 500,300);
+	} else {
+		str = "1";
+	}
+
+	return str;
+
+}
+
+
+function tab_menu_tpg_main_TreeView0_OnMouseOver(obj,nX,nY,nRow)
+{
+	obj.ToolTipText = ds_Menu.GetColumn(nRow, "MENUNM");
+}
+
+//왼쪽창 닫기
+function img_close_OnClick(obj,nX,nY)
+{
+	//GetTopWindow().div_content.width = 2000;
+	//GetTopWindow().div_content.titleBar.width = 1260;
+	//GetTopWindow().div_content.searchBar.width = 1260;	
+	//GetTopWindow().div_content.MainGrid.Right = 1260;
+
+	global.FrameLeft.visible = false;
+	global.FrameLeftClose.visible = true;
+
+}
+
+//모두닫기버튼 클릭시
+function img_allClose_OnClick(obj,nX,nY)
+{
+	global.FrameBottom.fcCloseAllWindow();
+}
+
+function tab_bookMark_OnClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//alert("aaaaaaaaaa");
+	//폴더명::파일명.XML뺀 
+	var sUrl = G_ds_menu.GetColumn(nRow, "INIT_URL");
+	var menuNm = G_ds_menu.GetColumn(nRow, "MENU_NAME");
+	var lev  = G_ds_menu.GetColumn(nRow,'LEV');
+	trace(sUrl);
+	trace(lev);
+
+	var str = checkMenuPassword(G_ds_menu.GetColumn(nRow, "MENU_ID"),G_ds_menu.GetColumn(nRow,'PW_CHECK'));
+
+	if(str != "1"){
+		return false ;
+	} else {
+
+		if(length(trim(sUrl)) > 0 ){
+			global.FrameBottom.fcOpenMDI(sUrl,"",menuNm);
+			bottomSet();
+		}	
+	}
+
+}
+
+function fn_onSize(obj,nCx,nCy,nState)
+{
+	TreeView0.Bottom = nCy - 24;
+	
+	Image3.Bottom = nCy -13;
+	Image6.Bottom = nCy -22;
+
+	Image5.Top = nCy - 22;
+	Image5.Bottom = nCy -13;	
+	
+	Image0.Top = nCy - 13;
+	Image0.Bottom = nCy;
+}
+
+function fcOpenPopMDI(menuId)
+{
+
+	if(ds_leftTopMenu.FindRow("MENU_ID", menuId) < 0){
+		alert(setPopMessage("1006"));
+		setMessage("1006");	
+	}
+
+	for(i=0;i<ds_leftTopMenu.rowcount;i++)
+	{
+		if(ds_leftTopMenu.GetColumn(i,"MENU_ID") == menuId)
+		{
+			var sUrl = ds_leftTopMenu.GetColumn(i,"INIT_URL");
+			var menuNm = ds_leftTopMenu.GetColumn(i,"MENU_NAME");
+			var lev  = ds_leftTopMenu.GetColumn(i,"LEV");
+			
+			if(length(trim(sUrl)) > 0 ){
+
+				if(ds_leftTopMenu.GetColumn(i,"POPUP_YN") == "Y")
+				{
+					if(ds_leftTopMenu.GetColumn(i,"POPUP_W") == "" || ds_leftTopMenu.GetColumn(i,"POPUP_H") == "" ){
+						var str = Open(sUrl,"",ds_leftTopMenu.GetColumn(i,"POPUP_W"),ds_leftTopMenu.GetColumn(i,"POPUP_H"),"Taskbar=true resize=true",210,90);
+					} else {
+						var str = Open(sUrl,"",ds_leftTopMenu.GetColumn(i,"POPUP_W"),ds_leftTopMenu.GetColumn(i,"POPUP_H"),"Taskbar=true resize=true AutoSize=false",210,90);
+					}
+					// 팝업세션 메뉴로그 저장
+					global.FrameBottom.saveMenuLog(G_ds_user.GetColumn(0,"USER_ID"),menuId);
+				} else {
+					global.FrameBottom.fcOpenMDI(sUrl,"",menuNm);
+				}
+			}				
+		}
+	}
+	
+	
+	
+}
+
+
+
+//  좌측 상단 메뉴 SESSION1~4
+function Div0_Button2_OnClick(obj)
+{	
+	setTimer(35,1500); //SESSION1
+	setTimer(36,3000); //SESSION2		
+	setTimer(51,4500); //SESSION3
+	setTimer(37,6000); //SESSION4		
+}
+//FTA
+function Div0_Button3_OnClick(obj)
+{
+	btnMenuId = '58';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+
+	fcOpenPopMDI(btnMenuId);
+}
+//순서생산
+function Div0_Button4_OnClick(obj)
+{
+	btnMenuId = '59';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+
+	fcOpenPopMDI(btnMenuId);	
+}
+/*
+function Div0_Button4_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	/*btnMenuId = '51'; //SESSION3
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);	
+}
+
+function Div0_Button9_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	/*btnMenuId = '37'; //SESSION4
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);	
+}
+*/
+function Div0_Button1_OnClick(obj)
+{
+	setTimer(38,1000); //PRINT SESSION1	
+	setTimer(10057,2000); //PRINT SESSION2
+}
+
+//SCM
+function Div0_Button5_OnClick(obj)
+{	
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '39';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+
+	fcOpenPopMDI(btnMenuId);
+}
+
+//PDM
+function Div0_Button6_OnClick(obj)
+{		
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '40';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+//K-SOX
+function Div0_Button7_OnClick(obj)
+{		
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '41';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+
+	fcOpenPopMDI(btnMenuId);
+}
+
+//금형 관리 시스템
+function Button13_OnClick(obj)
+{		
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '10977';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+//타이머
+function form_OnTimer(obj,nEventID)
+{
+	killTimer(nEventID);
+	
+	btnMenuId = nEventID;
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	fcOpenPopMDI(btnMenuId);
+	
+	/*
+    killTimer(1);
+
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '35';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	fcOpenPopMDI(btnMenuId);		
+    
+    killTimer(1);
+    
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '36';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	fcOpenPopMDI(btnMenuId);	
+
+    killTimer(1);	
+	
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '51';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	fcOpenPopMDI(btnMenuId);	
+	
+    killTimer(1);	
+	
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '37';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	fcOpenPopMDI(btnMenuId);	*/
+}
+
+function Div0_Button0_OnClick(obj)
+{
+	treeType = 1;
+	fcGetMenuTree('1');
+	TreeView0.ImageID = "img_lefticon";
+	
+	//추가 ==>메인메뉴버튼 클릭시 메뉴로 전환
+	Button0.Visible=true;
+	Button1.Visible=true;
+	Button5.Visible=true;
+	Button6.Visible=true;
+	Button7.Visible=true;
+	Button3.Visible=true;
+	Button4.Visible=true;
+	Button2.Visible=true;
+	// 불량유출방지 추가
+	Button10.Visible=true;
+	// MES SYSTEM 추가
+	Button11.Visible=true;
+	Button12.Visible=true;
+	// 금형관리시스템 SYSTEM 추가
+	Button13.Visible=true;
+	
+	mrpbtn_71.Visible=false;
+	mrpbtn_72.Visible=false;
+	mrpbtn_73.Visible=false;
+	mrpbtn_74.Visible=false;
+	mrpbtn_75.Visible=false;
+	mrpbtn_76.Visible=false;
+	mrpbtn_77.Visible=false;
+	mrpbtn_78.Visible=false;
+	// 불량유출방지 추가
+	mrpbtn_79.Visible=false;	
+	// MES SYSTEM 추가
+	mrpbtn_80.Visible=false;
+	mrpbtn_81.Visible=false;
+	// 금형관리시스템 SYSTEM 추가
+	mrpbtn_82.Visible=false;
+		
+	// 권택구 차장님 지시로 수정 함
+	// PS에서 PE메뉴 안보이게 가림.
+	if (G_ds_user.GetColumn(0,"COMPANY") == 'PS') {
+		//mrpbtn_77.Visible = true;	//SPC추가로 삭제
+		//mrpbtn_78.Visible = true;	//PLM추가로 삭제
+		mrpbtn_79.Visible = true;
+		mrpbtn_81.Visible = true;
+		mrpbtn_82.Visible = true;   //금형관리시스템(KE)	
+		ssobtn_SPC.Visible = true;	//SPC(KA) - 추가20140709
+		ssobtn_MOLD.Visible = true;	//PLM(KA) - 추가20140709
+		
+		Button6.Visible = false;	//PDM(KE)
+		Button4.Visible = false;	//순서생산(KE)
+		Button10.Visible = false;	//공정누락방지(KE)
+		Button12.Visible = false;	//QMS(KE)	
+		Button13.Visible = false;	//금형관리시스템(KE)	
+	}
+	if (G_ds_user.GetColumn(0,"COMPANY") == 'KR') {
+		Button5.Visible = false;	//SCM
+		Button7.Visible = false;	// K-SOX
+		Button3.Visible = false;	// FTA
+		Button2.Visible = false;	// MRP
+		Button11.Visible = false;	// MES
+		
+		Button6.Visible = false;	//PDM(KE)
+		Button4.Visible = false;	//순서생산(KE)
+		Button10.Visible = false;	//공정누락방지(KE)
+		Button12.Visible = false;	//QMS(KE)
+		Button13.Visible = false;	//금형관리시스템(KE)
+		
+		Div0.Height = 72;
+		image4.top = 82;
+		image6.top = 90;
+		image6.Height = 514;
+		TreeView0.top = 90;
+		TreeView0.Height = 512;
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2012-04-09
+ * 내용설명 : MRP메뉴관련 추가
+ * 주요변수 : Mrp관련메뉴 ID는 70번부터 79까지 사용
+ **********************************************************************/ 
+function Div0_ButtonMrp_OnClick(obj)
+{
+	//MRP시스템 활성화관리
+	//0 :정상, 8: 야간배치, 9:재고실사
+	getMngFlag();
+	if (ds_mngflag.GetColumn(0,"USER_YN") = 0) {
+		btnMenuId = '70'; //MRP 메뉴ID
+		if(leftTopMenuAuthCheck(btnMenuId) == false) return false ; //권한체크
+		
+		treeType = 1;
+		fcGetMenuTree('0'); //트리초기화
+		//TreeView0.ImageID = "img_lefticon2"; //tree Img(현재는 파랑/빨강 존재)
+			
+		//추가 ==>MRP버튼 클릭시 MRP메뉴로 전환
+		Button0.Visible=false;
+		Button1.Visible=false;
+		Button5.Visible=false;
+		Button6.Visible=false;
+		Button7.Visible=false;
+		Button3.Visible=false;
+		Button4.Visible=false;
+		Button2.Visible=false;
+		// 불량유출방지 추가
+		Button10.Visible=false;
+		Button11.Visible=false;
+		Button12.Visible=false;
+		Button13.Visible=false;     //금형관리시스템
+		ssobtn_SPC.Visible=false;	//SPC(KA) - 추가20140709
+		//ssobtn_PLM.Visible=false;	//PLM(KA) - 추가20140709
+		
+		mrpbtn_71.Visible=true;		//영업관리SYSTEN menueid = 71
+		mrpbtn_72.Visible=true;		//생산관리SYSTEN menueid = 72
+		mrpbtn_73.Visible=true;		//자재관리SYSTEN menueid = 73
+		mrpbtn_74.Visible=true;		//품질관리SYSTEN menueid = 10800
+		mrpbtn_75.Visible=true;		//인사급여SYSTEN menueid = 10813
+		mrpbtn_76.Visible=true;
+		mrpbtn_77.Visible=true;
+		mrpbtn_78.Visible=true;
+		
+		// 불량유출방지 추가
+		mrpbtn_79.Visible=true;		
+		mrpbtn_80.Visible=true;
+		mrpbtn_81.Visible=true;
+		mrpbtn_82.Visible=true;    //금형관리시스템
+		//TreeView0.Visible=false;
+		//TreeView1.Visible=true;
+	
+	}else if (ds_mngflag.GetColumn(0,"USER_YN") = 8) {
+		alert(setPopMessage("9997"));//[알림]야간배치진행중으로 사용불가능합니다.
+		setMessage("9997");
+		return;
+	}
+	else if (ds_mngflag.GetColumn(0,"USER_YN") = 9) {
+		alert(setPopMessage("9998"));//[알림]실사진행중으로 사용불가능합니다.
+		setMessage("9998");//[알림]실사진행중으로 사용불가능합니다.
+		return;
+	}
+}
+
+function mrpbtn_71_OnClick(obj)
+{
+	btnMenuId = '71'; //MRP 영업관리 메뉴ID
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	treeType = 1; //treeType이 1이 아닌건만 즐겨찾기에 추가됨.Image1_OnClick(obj,nX,nY)참조
+	fcGetMenuTree('m1'); //메뉴그룹ID 해당 ID만 호출 가능
+	TreeView0.ImageID = "img_lefticon"; //tree Img(현재는 파랑/빨강 존재)
+}
+
+function mrpbtn_72_OnClick(obj)
+{
+	btnMenuId = '72'; //MRP 생산관리 메뉴ID
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	treeType = 1; //treeType이 1이 아닌건만 즐겨찾기에 추가됨.Image1_OnClick(obj,nX,nY)참조
+	fcGetMenuTree('m2'); //메뉴그룹ID 해당 ID만 호출 가능
+	TreeView0.ImageID = "img_lefticon"; //tree Img(현재는 파랑/빨강 존재)	
+}
+
+function Div0_Button8_OnClick(obj)
+{
+	treeType = 2;
+	fcGetMenuTreeBookMark();
+	TreeView0.ImageID = "img_lefticon2";
+}
+
+function Button8_OnMouseOut(obj)
+{
+	Button8.ImageStatus = "pop";
+}
+
+function Button8_OnMouseOver(obj,nX,nY)
+{
+	Button8.ImageStatus = "select";				
+}
+
+function Button9_OnMouseOut(obj)
+{
+	Button9.ImageStatus = "pop";				
+}
+
+function Button9_OnMouseOver(obj,nX,nY)
+{
+	Button9.ImageStatus = "select";		
+	
+}
+
+function Button0_OnMouseOut(obj)
+{
+	Button0.ImageStatus = "pop";				
+}
+function Button0_OnMouseOver(obj,nX,nY)
+{
+	Button0.ImageStatus = "select";				
+}
+
+function Button1_OnMouseOut(obj)
+{
+	Button1.ImageStatus = "pop";				
+}
+function Button1_OnMouseOver(obj,nX,nY)
+{
+	Button1.ImageStatus = "select";				
+}
+
+function Button5_OnMouseOut(obj)
+{
+	Button5.ImageStatus = "pop";				
+}
+function Button5_OnMouseOver(obj,nX,nY)
+{
+	Button5.ImageStatus = "select";				
+}
+
+function Button6_OnMouseOut(obj)
+{
+	Button6.ImageStatus = "pop";				
+}
+function Button6_OnMouseOver(obj,nX,nY)
+{
+	Button6.ImageStatus = "select";				
+}
+
+function Button7_OnMouseOut(obj)
+{
+	Button7.ImageStatus = "pop";				
+}
+function Button7_OnMouseOver(obj,nX,nY)
+{
+	Button7.ImageStatus = "select";				
+}
+
+function Button13_OnMouseOut(obj)
+{
+	Button13.ImageStatus = "pop";				
+}
+function Button13_OnMouseOver(obj,nX,nY)
+{
+	Button13.ImageStatus = "select";				
+}
+
+function Button3_OnMouseOut(obj)
+{
+	Button3.ImageStatus = "pop";				
+}
+function Button3_OnMouseOver(obj,nX,nY)
+{
+	Button3.ImageStatus = "select";				
+}
+
+function Button4_OnMouseOut(obj)
+{
+	Button4.ImageStatus = "pop";				
+}
+function Button4_OnMouseOver(obj,nX,nY)
+{
+	Button4.ImageStatus = "select";				
+}
+
+function Button2_OnMouseOut(obj)
+{
+	Button2.ImageStatus = "pop";				
+}
+function Button2_OnMouseOver(obj,nX,nY)
+{
+	Button2.ImageStatus = "select";				
+}
+
+function Button7_OnMouseOut(obj)
+{
+	Button7.ImageStatus = "pop";				
+}
+function Button7_OnMouseOver(obj,nX,nY)
+{
+	Button7.ImageStatus = "select";				
+}
+
+function mrpbtn_71_OnMouseOut(obj)
+{
+	mrpbtn_71.ImageStatus = "pop";	
+}
+
+function mrpbtn_71_OnMouseOver(obj,nX,nY)
+{
+	mrpbtn_71.ImageStatus = "select";		
+}
+
+function mrpbtn_72_OnMouseOut(obj)
+{
+	mrpbtn_72.ImageStatus = "pop";
+}
+
+function mrpbtn_72_OnMouseOver(obj,nX,nY)
+{
+	mrpbtn_72.ImageStatus = "select";		
+}
+
+function Button10_OnMouseOver(obj,nX,nY)
+{
+	Button10.ImageStatus = "select";	
+}
+
+function Button10_OnMouseOut(obj)
+{
+	Button10.ImageStatus = "pop";
+}
+//공정누락방지
+function Button10_OnClick(obj)
+{	
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '10244';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);	
+}
+//MES
+function Button11_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '10705';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);	
+}
+
+function Button11_OnMouseOut(obj)
+{
+	Button11.ImageStatus = "pop";
+}
+
+function Button11_OnMouseOver(obj,nX,nY)
+{
+	Button11.ImageStatus = "select";
+	
+}
+//MRP 자재관리 
+function mrpbtn_73_OnClick(obj)
+{
+	btnMenuId = '73';	//MRP 자재관리  메뉴ID 73->10439
+	//확인필요
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	treeType = 1; //treeType이 1이 아닌건만 즐겨찾기에 추가됨.Image1_OnClick(obj,nX,nY)참조
+	fcGetMenuTree('m3'); //메뉴그룹ID 해당 ID만 호출 가능
+	TreeView0.ImageID = "img_lefticon"; //tree Img(현재는 파랑/빨강 존재)		
+}
+
+function mrpbtn_73_OnMouseOut(obj)
+{
+	mrpbtn_73.ImageStatus = "pop";
+}
+
+function mrpbtn_73_OnMouseOver(obj,nX,nY)
+{
+	mrpbtn_73.ImageStatus = "select";		
+}
+//QMS
+function Button12_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '10745';
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+function Button12_OnMouseOut(obj)
+{
+	Button12.ImageStatus = "pop";
+}
+
+function Button12_OnMouseOver(obj,nX,nY)
+{
+	Button12.ImageStatus = "select";	
+}
+
+//SPC
+function ssobtn_SPC_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '60'; //SPC
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+function ssobtn_SPC_OnMouseOut(obj)
+{
+	ssobtn_SPC.ImageStatus = "pop";
+}
+
+function ssobtn_SPC_OnMouseOver(obj,nX,nY)
+{
+	ssobtn_SPC.ImageStatus = "select";
+}
+
+//PLM
+function ssobtn_PLM_OnClick(obj)
+{
+	// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '61'; //PLM
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+function ssobtn_PLM_OnMouseOut(obj)
+{
+	ssobtn_PLM.ImageStatus = "pop";
+}
+
+function ssobtn_PLM_OnMouseOver(obj,nX,nY)
+{
+	ssobtn_PLM.ImageStatus = "select";
+}
+
+//추가:2014.11.17
+//품질관리SYSTEM
+function mrpbtn_74_OnClick(obj)
+{
+	btnMenuId = '10800';	//MRP 품질관리  메뉴ID
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	treeType = 1; //treeType이 1이 아닌건만 즐겨찾기에 추가됨.Image1_OnClick(obj,nX,nY)참조
+	fcGetMenuTree('m4'); //메뉴그룹ID 해당 ID만 호출 가능
+	TreeView0.ImageID = "img_lefticon"; //tree Img(현재는 파랑/빨강 존재)		
+}
+
+function mrpbtn_74_OnMouseOut(obj)
+{
+	mrpbtn_74.ImageStatus = "pop";
+}
+
+function mrpbtn_74_OnMouseOver(obj,nX,nY)
+{
+	mrpbtn_74.ImageStatus = "select";	
+}
+//추가:2015.01.16
+//인사급여SYSTEM
+function mrpbtn_75_OnClick(obj)
+{
+	btnMenuId = '10813';	//MRP 인사급여  메뉴ID
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	treeType = 1; //treeType이 1이 아닌건만 즐겨찾기에 추가됨.Image1_OnClick(obj,nX,nY)참조
+	fcGetMenuTree('m5'); //메뉴그룹ID 해당 ID만 호출 가능
+	TreeView0.ImageID = "img_lefticon"; //tree Img(현재는 파랑/빨강 존재)	
+}
+
+function mrpbtn_75_OnMouseOut(obj)
+{
+	mrpbtn_75.ImageStatus = "pop";
+}
+
+function mrpbtn_75_OnMouseOver(obj,nX,nY)
+{
+	mrpbtn_75.ImageStatus = "select";	
+}
+// 추가추가
+
+function ssobtn_MOLD_OnClick(obj)
+{
+		// 실제 메뉴아이디를 넣어주세요
+	btnMenuId = '10977'; // MOLD
+	if(leftTopMenuAuthCheck(btnMenuId) == false) return false ;
+	
+	fcOpenPopMDI(btnMenuId);
+}
+
+function ssobtn_MOLD_OnMouseOut(obj)
+{
+	ssobtn_MOLD.ImageStatus = "pop";
+}
+
+function ssobtn_MOLD_OnMouseOver(obj,nX,nY)
+{
+	ssobtn_MOLD.ImageStatus = "select";
+}
+]]></Script>
+</Window>

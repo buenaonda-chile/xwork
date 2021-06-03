@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="report">
+
+	<select id="selectReport01" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT		
+			A.DHCOMP,
+			A.DHCODE,		
+			A.WRKDT,
+			A.PESABN,
+			A.WRKCD,
+			CASE LENGTH(VARCHAR(A.STRTM))
+				WHEN 3 THEN SUBSTR(VARCHAR(A.STRTM), 1,1)||':'||SUBSTR(VARCHAR(A.STRTM), 2,2)
+				WHEN 4 THEN SUBSTR(VARCHAR(A.STRTM), 1,2)||':'||SUBSTR(VARCHAR(A.STRTM), 3,2) 
+				ELSE '' END STRTM,
+			CASE LENGTH(VARCHAR(A.ENDTM))
+				WHEN 3 THEN SUBSTR(VARCHAR(A.ENDTM), 1,1)||':'||SUBSTR(VARCHAR(A.ENDTM), 2,2)
+				WHEN 4 THEN SUBSTR(VARCHAR(A.ENDTM), 1,2)||':'||SUBSTR(VARCHAR(A.ENDTM), 3,2)
+				ELSE '' END ENDTM,
+			CASE LENGTH(VARCHAR(A.WRKHM))
+				WHEN 3 THEN SUBSTR(VARCHAR(A.WRKHM), 1,1)||':'||SUBSTR(VARCHAR(A.WRKHM), 2,2)
+				WHEN 4 THEN SUBSTR(VARCHAR(A.WRKHM), 1,2)||':'||SUBSTR(VARCHAR(A.WRKHM), 3,2)
+				ELSE '' END WRKHM,
+			A.SPJTM,		
+			A.SPYTM,		
+			A.SWKCD,		
+			A.SWKCR,		
+			A.MAGDT,		
+			B.SABUN,		
+			B.KORNM,		
+			B.JOGCD,		
+			B.DPTCD,
+			C.DPCONM
+		FROM 
+			PSCDBLIB.FHD100PF A,
+			PSCDBLIB.HMD020PF B,
+			PSCDBLIB.FHD105LF C
+		WHERE A.PESABN=B.SABUN AND A.DHCOMP=C.DHCOMP AND A.DHCODE=C.DHCODE AND A.WRKDT=C.WRKDT AND A.PESABN=C.PESABN AND A.WRKCD=C.WRKCD
+			<!-- 	
+			<isNotEmpty prepend="AND" property="DHCOMP">
+				DHCOMP = #DHCOMP#
+			</isNotEmpty>
+			 -->
+			<isNotEmpty prepend="AND" property="DHCODE">
+				A.DHCODE = #DHCODE#	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="WRKDT">
+				CAST(A.WRKDT AS VARCHAR(8)) = #WRKDT#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="SABUN">	
+				CAST(B.SABUN AS VARCHAR(7)) = #SABUN#
+			</isNotEmpty>
+
+	</select>
+	
+	<select id="selectReport02" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT *		
+		FROM PSCDBLIB.HMD020PF		
+		<dynamic prepend="WHERE">	
+			<isNotEmpty prepend="AND" property="DPTCD">
+				DPTCD = #DPTCD#	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SEXCD">
+				SEXCD = #SEXCD#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="SABUN">	
+				VARCHAR(SABUN) = #SABUN#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectReport02_1" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+		SELECT *		
+		FROM PSCDBLIB.$TABLE$		
+		WHERE VARCHAR(SABUN) = #SABUN#
+	</select>
+	
+	<select id="selectReport02_2" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+			DCPCD GUBUN,
+			DCPMN YMD,
+			DCP01 CONTENT,
+			DCPSY REASON	
+		FROM PSCDBLIB.HMD230PF
+		
+		UNION ALL
+		
+		SELECT
+			PRZCD GUBUN,
+			PRZMN YMD,
+			PRZ01 CONTENT,
+			PRZSY REASON
+		FROM PSCDBLIB.HMD240PF
+		WHERE VARCHAR(SABUN) = #SABUN#
+	</select>
+	
+	<select id="selectReport02_3" parameterClass="java.util.HashMap" resultClass="Integer">
+		SELECT max(BSDAT) LAST_BSDAT
+		FROM PSCDBLIB.HMD250PF
+		WHERE VARCHAR(SABUN) = #SABUN#
+	</select>
+	
+	<select id="selectReport03" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT	
+			A.COMPS,
+			A.PRDCD,
+			A.QTYTR,
+			A.TRAMT,
+			A.TRCST,
+			A.USMYM,
+			B.ABDC,
+			B.ABAN8,
+			C.WWMLNM,
+			C.WWGNNM,
+			C.WWMDNM,
+			D.ALADD1 || D.ALADD2 AS ALADD,
+			E.VIPNM
+		FROM PSCDBLIB.JHS140PF A, CLTDTAS.F0101LT B, CLTDTAS.F0111 C, CLTDTAS.F0116 D, PSCDBLIB.MST600PF E
+		WHERE 
+			COMPS = #COMPS# 
+			AND  SUBSTR(VARCHAR(DUEDTB),1,3) ||SUBSTRING(VARCHAR(PDTZ6B),1,3) = #PDTZ6B#
+			<isNotEmpty prepend="AND" property="PRSTY">
+				A.PRSTY = #PRSTY#
+			</isNotEmpty>	
+		
+			AND TRIM(A.CUVND) || TRIM(A.COMPS) = B.ABALKY
+			AND A.CUVND = E.VNDOR
+			AND B.ABAN8 = D.ALAN8
+			AND B.ABAN8 = C.WWAN8			
+	</select>
+	
+	<select id="selectReport03_1" resultClass="java.util.HashMap">
+		SELECT
+			CASE B.ABAN8 WHEN 1 THEN 'C1' WHEN 2 THEN 'H1' ELSE 'S1' END COMPS,
+			trim(B.ABDC) AS VENDERNO,		
+			trim(C.WWMLNM) AS COMPANY,		
+			trim(C.WWGNNM) AS UPTAE,		
+			trim(C.WWMDNM) AS UPJONG,		
+			trim(C.WWSLNM) AS CEONAME,		
+			trim(D.ALADD1 || D.ALADD2) AS ADDRESS
+		FROM CLTDTAS.F0101LT B, CLTDTAS.F0111 C, CLTDTAS.F0116 D		
+		WHERE B.ABAN8 IN (1,2,3)		
+			AND B.ABAN8 = C.WWAN8		
+			AND B.ABAN8 = D.ALAN8		
+	</select>
+	
+	<select id="selectReport04" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			A.PRDCD,	
+			SUM(A.PRTQY * B.PRICE) AS PRT_PRICE,
+			SUM(A.SILQY * B.PRICE) AS SIL_PRICE
+		FROM PSCDBLIB.FMD152PF A, PSRESLIB.EM001PR B
+		WHERE 
+			A.PYVND = B.CUSNO
+			AND A.PSPNO = B.PRTNO
+			AND VARCHAR(A.PRTYM) = SUBSTR(VARCHAR(B.LDUPD), 1, 6)			
+			<isNotEmpty prepend="AND" property="COMPS">
+				A.COMPS = #COMPS#	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRTYM">
+				VARCHAR(PRTYM) = #PRTYM#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="PRDCD_FROM">	
+				PRDCD <![CDATA[>=]]> #PRDCD_FROM#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PRDCD_TO">	
+				PRDCD <![CDATA[<=]]> #PRDCD_TO#
+			</isNotEmpty>		
+			AND A.SILQY <![CDATA[>=]]> 0
+		GROUP BY A.PRDCD
+	</select>
+
+	<select id="selectReport05" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT	
+			A.DAYGU,
+			A.PROCS,
+			B.PROSM,
+			E.PRTNO_CNT,
+			A.FSTQY,
+			A.ATOQY,
+			A.PRDQY,
+			CASE A.ATOQY WHEN 0 THEN 0.0 ELSE ROUND(A.PRDQY*100/A.ATOQY,  1) END AS PRD_PER,
+			D.JOBTM,
+			E.ORQTY,
+			C.PRTQY,
+			INTEGER(((D.ENDTM-D.STRTM)/10000*60)-D.JOBTM) AS NOJOBTM
+		FROM PSEDBLIB.FGP230PF A, PSEDBLIB.MST060PF B, PSEDBLIB.FGP170PF D, PSEDBLIB.FGP100PF F, 
+		(		
+			SELECT COMPS, PROCS, ORDAT, DAYGU, SUM(ORQTY*CYCTM) ORQTY, COUNT(*) PRTNO_CNT		
+			FROM PSEDBLIB.FGP210PF		
+			GROUP BY COMPS, PROCS, ORDAT, DAYGU		
+		) E,		
+		(		
+			SELECT COMPS, PROCS, TRNDT, DAYGU, SUM(PRTQY*CYCTM) PRTQY		
+			FROM PSEDBLIB.FGP220PF		
+			GROUP BY COMPS, PROCS, TRNDT, DAYGU		
+		) C		
+		WHERE A.COMPS = #COMPS#		
+			AND CAST(A.ORDAT AS VARCHAR(8))=#ORDAT#		
+			<isNotEmpty prepend="AND" property="PROCS">
+				A.PROCS = #PROCS#	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="DAYGU">
+				A.DAYGU = #DAYGU#	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="ROWGB">
+				CAST(F.ROWGB AS VARCHAR(2))=#ROWGB#
+			</isNotEmpty>			
+				
+			AND A.COMPS=B.COMPS		
+			AND A.PROCS=B.PROCS		
+			AND A.COMPS=C.COMPS		
+			AND A.PROCS=C.PROCS		
+			AND A.ORDAT=C.TRNDT		
+			AND A.DAYGU=C.DAYGU
+			AND A.COMPS=D.COMPS		
+			AND A.PROCS=D.PROCS		
+			AND A.ORDAT=D.JOBDT		
+			AND A.COMPS=E.COMPS		
+			AND A.PROCS=E.PROCS		
+			AND A.ORDAT=E.ORDAT
+			AND A.DAYGU=E.DAYGU
+			AND A.COMPS=F.COMPS
+			AND A.PROCS=F.PROCS			
+		ORDER BY A.DAYGU, A.PROCS
+	</select>
+	
+</sqlMap>

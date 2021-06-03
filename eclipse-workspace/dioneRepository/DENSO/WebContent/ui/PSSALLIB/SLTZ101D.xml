@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="264" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="용차&#32;박스수량&#32;수정" TooltipFont="Default,0" Top="8" Ver="1.0" Width="392" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ101D_BOX">
+				<Contents>
+					<colinfo id="JPSNOB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXQYB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXAMB" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SLTZ101D_BOX_SQ">
+				<Contents>
+					<colinfo id="INOUTB" size="256" summ="default" type="STRING"/>
+					<colinfo id="JPSNOB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXQYB" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOXAMB" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static Font="Default,9,Bold" Height="19" Id="Static0" Left="26" TabOrder="2" Text="용차&#32;박스수량&#32;수정" Top="28" VAlign="Middle" Width="119"></Static>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" BindDataset="ds_SLTZ101D_BOX_SQ" BkColor2="default" BoldHead="true" Bottom="224" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="24" Height="179" Id="Grid0" InputPanel="FALSE" Left="25" LineColor="default" MinWidth="100" Right="363" RowHeight="20" TabOrder="1" TabStop="true" Top="45" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="338">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="72"/>
+						<col width="94"/>
+						<col width="80"/>
+						<col width="108"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="입출구분"/>
+						<cell col="1" display="text" text="전표번호"/>
+						<cell col="2" display="text" text="박스수량"/>
+						<cell col="3" display="text" text="박스금액"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="MENU" col="0" colid="INOUTB" display="text" expr="iif(INOUTB==&apos;1&apos;,&apos;하행&apos;,&apos;상행&apos;)"/>
+						<cell bkcolor="MENU" col="1" colid="JPSNOB" display="text"/>
+						<cell col="2" colid="BOXQYB" display="number" edit="number" limit="5"/>
+						<cell bkcolor="MENU" col="3" colid="BOXAMB" display="number"/>
+					</body>
+					<summary>
+						<cell col="0" colspan="2" display="text" text="Total"/>
+						<cell align="right" col="2" display="text" expr='SUM(&quot;BOXQYB&quot;)'/>
+						<cell align="right" col="3" display="text" expr='SUM(&quot;BOXAMB&quot;)'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="chocolate" Font="Default,9,Bold" Height="27" Id="Static1" Left="26" TabOrder="3" Text="&#32;SPEED&#32;SENSOR&#32;BOX는&#32;4BOX를&#32;1BOX로&#32;수정할&#32;것" Top="228" VAlign="Middle" Width="335"></Static>
+		<Button Height="28" Id="btnConf" ImageID="sum_save" Left="304" OnClick="btnConf_OnClick" TabOrder="4" Text="Button0" Top="4" Width="71"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SLTZ101D.xml
+ * ● PROGRAM DESCRIPTION  : 용차사용 금액 등록
+ * ● DATE WRITTEN         : 2012.06.12
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+function form_OnLoadCompleted(obj)
+{
+	btnConf.SetFocus();
+	var z=0;
+	if(length(trim(displayDiv.ed_JPSNO1.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO1.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY1.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT1.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO2.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO2.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY2.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT2.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO3.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO3.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY3.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT3.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO4.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO4.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY4.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT4.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO5.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO5.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY5.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT5.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO6.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","2");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO6.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY6.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT6.Text);
+		z=z+1;
+	}
+	if(length(trim(displayDiv.ed_JPSNO7.Text)) > 0){
+		ds_SLTZ101D_BOX_SQ.InsertRow(z);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"INOUTB","1");
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"JPSNOB",displayDiv.ed_JPSNO7.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXQYB",displayDiv.ed_BOXQY7.Text);
+		ds_SLTZ101D_BOX_SQ.SetColumn(z,"BOXAMB",displayDiv.ed_BOXCT7.Text);
+		z=z+1;
+	}
+	/*
+	//trace(ds_SLTZ101D_BOX_SQ.SaveXML());
+	http.Sync = true;
+	var sKind		= "getSLTZ110";						
+	var sMethodName = "service::pssallib/selectSLTZ101_BOX1.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SLTZ101D_BOX=ds_SLTZ101D_BOX";
+	var sArgument   = "";
+	sArgument += " LIB1=" + quote(Lib1);
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " COMPS=" + quote(cb_searchCodeName1.Value);
+	sArgument += " PYVND=" + quote(Div0.Edit7.Text);
+	sArgument += " INOUT=" + quote(Div0.MaskEdit5.Value);
+	sArgument += " MKLOC=" + quote(Div0.MaskEdit8.Value );
+	sArgument += " JPSNO1=" + quote(Div0.ed_JPSNO1.Text);
+	sArgument += " JPSNO2=" + quote(Div0.ed_JPSNO2.Text);
+	sArgument += " JPSNO3=" + quote(Div0.ed_JPSNO3.Text);
+	sArgument += " JPSNO4=" + quote(Div0.ed_JPSNO4.Text);
+	sArgument += " JPSNO5=" + quote(Div0.ed_JPSNO5.Text);
+	sArgument += " JPSNO6=" + quote(Div0.ed_JPSNO6.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	var jpsno;
+	for (var i=0; i<ds_SLTZ101D_BOX_SQ.GetRowCount(); i++){
+		jpsno=ds_SLTZ101D_BOX_SQ.GetColumn(i,"JPSNOB");
+		for(var j=0; j<ds_SLTZ101D_BOX.GetRowCount(); j++){
+			if(jpsno == ds_SLTZ101D_BOX.GetColumn(j,"JPSNOB")){
+				ds_SLTZ101D_BOX_SQ.SetColumn(i,"BOXQYB",ds_SLTZ101D_BOX.GetColumn(j,"BOXQYB"));
+				ds_SLTZ101D_BOX_SQ.SetColumn(i,"BOXAMB",ds_SLTZ101D_BOX.GetColumn(j,"BOXAMB"));
+				break;
+			}
+		}
+	}
+	*/
+}
+
+function btnConf_OnClick(obj)
+{
+	close(ds_SLTZ101D_BOX_SQ.SaveXML());
+}
+]]></Script>
+</Window>

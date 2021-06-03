@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="MRP그룹권한" TooltipFont="Default,0" Top="8" Ver="1.0" Width="624" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menuMrpAuth">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuMrpGroup"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PWCP">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>전체</cdnm>
+					</record>
+					<record>
+						<cd>00</cd>
+						<cdnm>공통</cdnm>
+					</record>
+					<record>
+						<cd>PS</cd>
+						<cdnm>PS</cdnm>
+					</record>
+					<record>
+						<cd>PE</cd>
+						<cdnm>PE</cdnm>
+					</record>
+					<record>
+						<cd>0S</cd>
+						<cdnm>공통_PS</cdnm>
+					</record>
+					<record>
+						<cd>0E</cd>
+						<cdnm>공통_PE</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmenuLev"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mngcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>00</cd>
+						<cdnm>기본권한</cdnm>
+					</record>
+					<record>
+						<cd>U1</cd>
+						<cdnm>처리권한</cdnm>
+					</record>
+					<record>
+						<cd>M1</cd>
+						<cdnm>관리자권한</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="10" Top="30" Width="623"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="8" TabOrder="14" Top="32" Width="91"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="411" TabOrder="9" Top="32" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="623"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_menuMrpAuth" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="576" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="512" Id="menuGrd2" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="623" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="623">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="150"/>
+						<col width="185"/>
+						<col width="220"/>
+						<col width="55"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="대메뉴"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="중메뉴"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="소메뉴"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="메뉴권한"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="STEP1_NAME" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="STEP2_NAME" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="2" colid="STEP3_NAME" display="normal"/>
+						<cell align="center" bkcolor="lightcoral" col="3" colid="USER_YN" display="checkbox" edit="expr:setEditMod()" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Cursor="HAND" Height="25" Id="btn_SAVE" ImageID="sum_save" Left="546" OnClick="fn_Save" TabOrder="2" Text="검색" Top="1" Width="70"></Button>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_user" Left="40" TabOrder="3" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="5" Text="메뉴권한&#32;정보" Top="8" Width="104"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="MENU_FILTER" Color="#333333" DataColumn="MENU_NAME" Height="24" Id="cb_group" ImeMode="none" INDEX="0" InnerDataset="ds_menuMrpGroup" Left="502" OnChanged="companyChange" ResetIndex="FIRST" TabOrder="6" Top="32" Width="120"></Combo>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="423" LineColor="#dceaf7" Right="428" TabOrder="7" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="433" Style="static" TabOrder="8" Text="SYSTEM" Top="37" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape0" Left="20" LineColor="#dceaf7" Right="25" TabOrder="12" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static1" Left="30" Style="static" TabOrder="13" Text="사업부" Top="37" VAlign="Middle" Width="69"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Enable="FALSE" Height="24" Id="cmb_COMPS" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PWCP" Left="99" OnChanged="companyChange" ResetIndex="FIRST" TabOrder="11" Top="32" Width="88"></Combo>
+		<Button Cursor="HAND" Height="25" Id="btn_DEL" ImageID="btn2_delete2" Left="466" OnClick="fn_Delete" TabOrder="15" Text="검색" Top="1" Width="75"></Button>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" Left="197" TabOrder="18" Top="32" Width="91"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape1" Left="209" LineColor="#dceaf7" Right="214" TabOrder="16" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static4" Left="219" Style="static" TabOrder="17" Text="권한구분" Top="37" VAlign="Middle" Width="69"></Static>
+		<Button Cursor="HAND" Height="25" Id="btn_ADD" ImageID="btn2_sele2" Left="386" OnClick="fn_Add" TabOrder="19" Text="검색" Top="1" Width="75"></Button>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="24" Id="cmb_MNGCD" ImeMode="none" INDEX="0" InnerDataset="ds_mngcd" Left="288" OnChanged="cmb_MNGCD_OnChanged" ResetIndex="FIRST" TabOrder="20" Top="32" Width="112"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : UserAuth.xml
+ * ● PROGRAM DESCRIPTION  : MRP그룹권한관리
+ * ● DATE WRITTEN         : 2016.03.15
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+var btnVal="0";
+
+function on_LoadCompleted(obj)
+{
+	title_user.Value = USER_ID;
+
+	var sKind		= "getUserMrpAuthGroup";		
+	var sMethodName = "service::user/menuMrpGroup.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_menuMrpGroup=ds_menuMrpGroup";
+	var sArgument   = "";
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	
+	var TOP_MENU ="";
+	if(ds_menuMrpGroup.rowcount > 0 ){
+		TOP_MENU = "('";
+		for(i=0; i< ds_menuMrpGroup.rowcount; i++){
+			if(i == ds_menuMrpGroup.rowcount-1){
+				TOP_MENU = TOP_MENU+ds_menuMrpGroup.GetColumn(i,"TOP_MENU") + "')";
+			}else{
+				TOP_MENU = TOP_MENU+ds_menuMrpGroup.GetColumn(i,"TOP_MENU") + "','";
+			}
+		}
+	}
+
+	ds_menuMrpGroup.InsertRow(0);
+	ds_menuMrpGroup.SetColumn(0,"MENU_FILTER","");
+	ds_menuMrpGroup.SetColumn(0,"MENU_NAME","[전체]");
+	cb_group.index = 0;	
+	
+	var sKind		= "getUserMrpAuth";		
+	var sMethodName = "service::user/menuMrpAuth.do";  					
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_menuMrpAuth=ds_menuMrpAuth";
+	var sArgument   = "";
+		sArgument   += " USER_ID=" + quote(USER_ID);
+		sArgument   += " TOP_MENU=" + quote(TOP_MENU);//추가
+		sArgument   += " COMPS=" + quote(displayDiv.cb_company.Value);//추가(2017.06.22)
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	
+	//DIKR은 제외처리함.
+	if(displayDiv.cb_company.Value="PE"){
+		cmb_COMPS.value="0E";
+		companyChange();
+	}else if(displayDiv.cb_company.Value="PS"){
+		cmb_COMPS.value="0S";
+		companyChange();
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/  
+function setMenuMrpAuth(){
+
+	if(confirm("MRP 권한등록 작업을 하시겠습니까?") == false) return;
+
+	var sKind		= "setMenuMrpAuth";						
+	var sMethodName = "service::user/saveMenuMrpAuth.do";
+	var sInDataSet  = "ds_menuMrpAuth=ds_menuMrpAuth:U";
+	var sOutDataSet = "";
+	var sArgument   = "";
+		sArgument  += " BTNAUTH=" + quote(btnVal);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){	// tran 실패
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+		Close();
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2016-03-15
+ * 내용설명 : 전체 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+var chkStatus = 0;
+function allCehck(obj,nCell,nX,nY,nPivotIndex)
+{
+	chkStatus = 1 - chkStatus;
+	for(i=0;i<ds_menuMrpAuth.rowcount;i++){
+		ds_menuMrpAuth.SetColumn(i,"USER_YN",chkStatus) ;
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2016-03-15
+ * 내용설명 : 화면 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+
+function fn_Add(obj)
+{
+	btnVal="1";
+	if(cmb_MNGCD.Value !="00" && cb_group.Value==""){
+		alert("[알림]먼저 권한을 부여할 MRP SYSTEM을 선택해주세요.");
+		return;
+	}
+	if(cmb_COMPS.Value==""){
+		alert("[경고]사업부는 전체를 선택할 수 없습니다.");
+		return;
+	}
+	for(i=0;i<ds_menuMrpAuth.rowcount;i++){
+		if(cmb_MNGCD.Value="00"){	//기본
+			if(ds_menuMrpAuth.GetColumn(i,"MNGCD")=="00"){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+			}
+		}else if(cmb_MNGCD.Value="U1"){	//처리권한
+			if(ds_menuMrpAuth.GetColumn(i,"MNGCD")=="U1"){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+			}
+		}
+		/*
+		else if(cmb_MNGCD.Value="U2"){	//사용자2
+			if(ds_menuMrpAuth.GetColumn(i,"MNGCD")=="00" || ds_menuMrpAuth.GetColumn(i,"MNGCD")=="U2"){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+			}
+		}else if(cmb_MNGCD.Value="U3"){	//사용자3
+			if(ds_menuMrpAuth.GetColumn(i,"MNGCD")=="00" || ds_menuMrpAuth.GetColumn(i,"MNGCD")=="U3"){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+			}
+		}else if(cmb_MNGCD.Value="U4"){	//사용자4
+			if(ds_menuMrpAuth.GetColumn(i,"MNGCD")=="00" || ds_menuMrpAuth.GetColumn(i,"MNGCD")=="U4"){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+			}
+		
+		}
+		*/
+		else if(cmb_MNGCD.Value="M1"){	//관리자
+			ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+		}
+		
+		
+		/*
+		if(rdoggub.Value==1){
+			if(ds_menuMrpAuth.GetColumn(i,"PW_CHECK")==1){
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+				//ds_menuMrpAuth.SetColumn(i,"USER_YN","");
+			}else{
+				ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+			}
+		}else{
+			ds_menuMrpAuth.SetColumn(i,"USER_YN",1);
+		}
+		*/
+	}
+}
+
+function fn_Delete()
+{
+	btnVal="0";
+	if(cb_group.Value==""){
+		alert("[알림]먼저 권한을 부여할 MRP SYSTEM을 선택해주세요.");
+		return;
+	}
+	if(cmb_COMPS.Value==""){
+		alert("[경고]사업부는 전체를 선택할 수 없습니다.");
+		return;
+	}
+	for(i=0;i<ds_menuMrpAuth.rowcount;i++){
+		ds_menuMrpAuth.SetColumn(i,"USER_YN",0);
+	}
+}
+function fn_Save(obj)
+{
+	//allCehck();
+	setMenuMrpAuth();
+}
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2016-03-15
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd == 0){
+		alert(setPopMessage("2005"));
+		Close();
+	}
+}
+
+
+function companyChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cmb_COMPS.Value == ""){
+		if(cb_group.Value == ""){
+			ds_menuMrpAuth.UnFilter();
+		} else {
+			//ds_menuMrpAuth.Filter("STEP1_CODE=='" + cb_group.Value + "'" );
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "'" );
+		}
+	}else if(cmb_COMPS.Value == "00"){
+		if(cb_group.Value == ""){
+			ds_menuMrpAuth.Filter("COMPANY== '00'" );
+		} else {
+			//ds_menuMrpAuth.Filter("STEP1_CODE=='" + cb_group.Value + "' && (COMPANY== '00')");
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00')");
+		}
+	}else if(cmb_COMPS.Value == "0S"){
+		if(cb_group.Value == ""){
+			ds_menuMrpAuth.Filter("COMPANY== '00' || COMPANY== 'PS'" );
+		} else {
+			//ds_menuMrpAuth.Filter("STEP1_CODE=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS')");
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS')");
+		}
+	}else if(cmb_COMPS.Value == "0E"){
+		if(cb_group.Value == ""){
+			ds_menuMrpAuth.Filter("COMPANY== '00' || COMPANY== 'PE'" );
+		} else {
+			//ds_menuMrpAuth.Filter("STEP1_CODE=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE')");
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE')");
+		}
+	}else {
+		if(cb_group.Value == ""){
+			ds_menuMrpAuth.Filter("COMPANY=='" + cmb_COMPS.Value + "'" );
+		} else {
+			//ds_menuMrpAuth.Filter("STEP1_CODE=='" + cb_group.Value + "' && COMPANY=='" + cmb_COMPS.Value + "'");
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && COMPANY=='" + cmb_COMPS.Value + "'");
+		}
+	}
+	if(cmb_MNGCD.Value=="U1"){
+		if(cmb_COMPS.Value == "0S"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS') && MNGCD=='M1'");
+		}else if(cmb_COMPS.Value == "0E"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE') && MNGCD=='M1'");
+		}
+	}
+	 if(cmb_MNGCD.Value=="M1"){
+		if(cmb_COMPS.Value == "0S"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS')");
+		}else if(cmb_COMPS.Value == "0E"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE')");
+		}
+	}
+}
+
+
+function cmb_MNGCD_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cmb_MNGCD.Value="00"){
+		cb_group.Value="";
+		companyChange();
+	}else if(cmb_MNGCD.Value=="U1"){
+		if(cmb_COMPS.Value == "0S"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS') && MNGCD=='M1'");
+		}else if(cmb_COMPS.Value == "0E"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE') && MNGCD=='M1'");
+		}
+	}else if(cmb_MNGCD.Value=="M1"){
+		if(cmb_COMPS.Value == "0S"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PS')");
+		}else if(cmb_COMPS.Value == "0E"){
+			ds_menuMrpAuth.Filter("FILTER_NAME=='" + cb_group.Value + "' && (COMPANY== '00' || COMPANY== 'PE')");
+		}
+	}
+}
+
+function setEditMod(){
+	var setEdit="none";
+
+	if(cmb_MNGCD.Value=="U1"){
+		setEdit="checkbox";
+	}
+	return setEdit;
+}]]></Script>
+</Window>

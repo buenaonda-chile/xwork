@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.OfficeDetailDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.OfficeDetailDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="officeCd" column="OFFICE_CD" javaType="java.lang.String" />
+	  	<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="seq" column="SEQ" javaType="java.lang.Long" />
+		<result property="mechanic" column="MECHANIC" javaType="java.lang.String" />
+		<result property="mechanicTel" column="MECHANIC_TEL" javaType="java.lang.String" />
+		<result property="reprYn" column="REPR_YN" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="groupId" column="GROUP_ID" javaType="java.lang.String" />
+		<result property="officeDiv" column="OFFICE_DIV" javaType="java.lang.String" />
+		<result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,MAKER
+		,OFFICE_CD
+		,SEQ
+		,MECHANIC
+		,MECHANIC_TEL
+		,REPR_YN
+		,AUTOINSERT
+		,GROUP_ID
+		,OFFICE_DIV
+		,PART_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,(SELECT OFFICE_NM FROM TB_BA_OFFICE_MASTER WHERE OFFICE_CD = A.OFFICE_CD AND ROWNUM = 1) AS OFFICE_NM
+
+    FROM TB_BA_OFFICE_DETAIL A
+
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.officeCd != null and criteria.officeCd != ''">
+		  AND OFFICE_CD = #{criteria.officeCd}
+	  </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.OfficeDetailDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.OfficeDetailDomain">
+
+    INSERT INTO TB_BA_OFFICE_DETAIL (
+		ID
+		,MAKER
+		,OFFICE_CD
+		,SEQ
+		,MECHANIC
+		,MECHANIC_TEL
+		,REPR_YN
+		,AUTOINSERT
+		,GROUP_ID
+		,OFFICE_DIV
+		,PART_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{maker}
+		,#{officeCd}
+		,#{seq}
+		,#{mechanic}
+		,#{mechanicTel}
+		,#{reprYn}
+		,#{autoinsert}
+		,#{groupId}
+		,#{officeDiv}
+		,#{partDiv}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_OFFICE_DETAIL.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.OfficeDetailDomain">
+
+    UPDATE TB_BA_OFFICE_DETAIL SET
+		MAKER = #{maker}
+		,OFFICE_CD = #{officeCd}
+		,SEQ = #{seq}
+		,MECHANIC = #{mechanic}
+		,MECHANIC_TEL = #{mechanicTel}
+		,REPR_YN = #{reprYn}
+		,AUTOINSERT = #{autoinsert}
+		,GROUP_ID = #{groupId}
+		,OFFICE_DIV = #{officeDiv}
+		,PART_DIV = #{partDiv}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.OfficeDetailDomain">
+
+    DELETE FROM TB_BA_OFFICE_DETAIL
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="619" Id="SAMPLE" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="다운로드" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_list">
+				<Contents>
+					<colinfo id="title" size="256" summ="default" type="STRING"/>
+					<colinfo id="text" size="256" summ="default" type="STRING"/>
+					<colinfo id="date" size="256" summ="default" type="STRING"/>
+					<colinfo id="tableNm" size="256" summ="default" type="STRING"/>
+					<colinfo id="gridNm" size="256" summ="default" type="STRING"/>
+					<record>
+						<date></date>
+						<gridNm>GRD_TABLEA</gridNm>
+						<tableNm>TABLEA</tableNm>
+						<text>WIP&#32;REPORT&#32;DOWN</text>
+						<title>DWHC251CP</title>
+					</record>
+					<record>
+						<date></date>
+						<gridNm>GRD_TABLEB</gridNm>
+						<tableNm>TABLEX</tableNm>
+						<text>영업출하현황&#32;DOWN</text>
+						<title>DWHC107CP</title>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="40" TabOrder="1" Text="다운로드" Top="8" Width="910"></Static>
+		<Image Height="28" Id="Image3" ImageID="main_tit_icon" Left="1" TabOrder="2" Width="29"></Image>
+		<File Bottom="24" Height="24" Id="File" Left="1000" Right="1024" TabOrder="17" Width="24"></File>
+		<FileDialog Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1032" MultiSelect="TRUE" Right="1056" TabOrder="19" Type="Save" Width="24"></FileDialog>
+		<Grid AutoEnter="TRUE" BindDataset="ds_main" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="696" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="32" Id="GRD_TABLEB" InputPanel="FALSE" Left="8" LineColor="#b4b4b4" OnCellClick="onCellCilck" Right="320" ScrollCell="true" TabOrder="4" TabStop="true" Top="664" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="312">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="50"/>
+					</columns>
+					<body>
+						<cell align="center" col="0" colid="AKEY" display="normal"/>
+						<cell align="center" col="1" colid="ANAME" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFitEndLine="Hide" BindDataset="ds_list" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="608" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="576" Id="grd_board" InputPanel="FALSE" LineColor="#dfdfdf" OnCellClick="onCellCilck" Right="1056" TabOrder="5" TabStop="true" Top="32" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="INACTIVECAPTION" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="219"/>
+						<col width="530"/>
+						<col width="104"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="다운로드&#32;내역"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="설명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="처리년월"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="엑셀"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="텍스트"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="0" colid="title" display="normal"/>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="1" colid="text" combocol="code1" combodataset="ds_mdtp" combotext="code_name" display="normal"/>
+						<cell align="center" autosizing="none" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="2" colid="date" display="text" edit="normal" limit="6" LimitDec="0" Mask="####-##"/>
+						<cell align="center" bkcolor="lightsteelblue" col="3" combocol="code1" combodataset="ds_medi" combotext="code_name" display="text" text="다운로드"/>
+						<cell align="center" bkcolor="lightsteelblue" col="4" color="#333333" display="text" text="다운로드"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoEnter="TRUE" BindDataset="ds_main" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="656" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="32" Id="GRD_TABLEA" InputPanel="FALSE" Left="8" LineColor="#b4b4b4" OnCellClick="onCellCilck" Right="320" ScrollCell="true" TabOrder="6" TabStop="true" Top="624" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="312">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="50"/>
+					</columns>
+					<body>
+						<cell align="center" col="0" colid="AKEY" display="normal"/>
+						<cell align="center" col="1" colid="ANAME" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var returnMSG ;
+
+function on_LoadCompleted(obj)
+{
+	getTitle();
+}
+
+function onCellCilck(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var tableNm = ds_list.GetColumn(nRow,"tableNm");
+	var gridNm 	= ds_list.GetColumn(nRow,"gridNm");
+	var yyyymm  = ds_list.GetColumn(nRow,"date");
+
+	// 다운로드할 데이터셋 호출
+	getDataSet(tableNm,yyyymm);
+
+	// 엑셀파일 다운로드
+	if(nCell == 3)  saveExcel(gridNm);
+	
+	//  텍스트파일 다운로드
+	if(nCell == 4)  saveText(gridNm);	
+}
+
+
+function getDataSet(tableNm,yyyymm)
+{
+	ds_main.DeleteAll();
+	var Lib = "TESTA";
+	http.Sync 		= true;
+	var sKind		= "SEARCH00";						
+	var sMethodName = "service::sample/selectDownLoad.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_main=ds_main";
+	var arg			= " LIB=" + quote(Lib) + " TABLENM=" + quote(tableNm) + " YYYYMM=" + quote(yyyymm);
+	
+
+	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");	
+
+}
+
+
+function saveExcel(gridNm)
+{
+	//파일 선택
+	
+	FileDialog0.Filter = "ALL File(xls.*)|*.xls";
+	FileDialog0.Type = "SAVE";
+
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1010"));	// 20110103l-koowgnojeel, 1010 == 저장경로를 선택하는데 실패하였습니다.
+		return;
+	}
+		
+	var file_name = FileDialog0.FileName;
+	
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name + ".xls";
+	object(gridNm).SaveExcel(path,"sheet1","A1",false,true);
+	alert(returnMSG);
+}
+
+
+function saveText(gridNm)
+{
+	//파일 선택
+	FileDialog0.Filter = "ALL File(txt.*)|*.txt";
+	FileDialog0.Type = "SAVE";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1010"));	// 20110103l-koowgnojeel, 1010 == 저장경로를 선택하는데 실패하였습니다.
+		return;
+	}
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name + ".txt";
+	
+	file.FileName = path;
+	file.open("wt");
+	
+	var buff = "";
+	for(i=0; i<ds_main.rowcount; i++)
+	{
+		for(j=0; j<ds_main.colcount; j++)
+		{
+			//RPad(strString,strPadChar,nCount);
+			buff += ds_main.GetColumn(i,j);
+		}
+		buff += "\r\n";
+	}
+	file.Write(buff); 
+	alert(returnMSG);
+	/*
+	RPad(strString,strPadChar,nCount);
+	
+	▣ Parameters 
+	strString (String) : 원본 문자열. 
+	strPadChar (String) : 오른쪽에 채울 문자. 입력된 문자열의 첫 1글자만을 사용합니다. 
+	nCount (Integer) : 출력될 문자열의 길이. 
+	ex)Rpad("ab", "?", 4);	
+	*/
+}
+
+
+function fn_CallBack(sMethodName, ErrorCode, ErrorMSG) {
+	if(ErrorCode != 0)
+	{
+		returnMSG = ErrorMSG
+	} else {
+		returnMSG = "처리되었습니다.                 "
+	}
+}
+
+
+
+
+
+
+
+
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="928" Id="SVZE511_rep" Left="8" OnLoadCompleted="OnLoadCompleted" PidAttrib="7" Title="월업체별차종별개발비상각&#32;현황" TooltipFont="Default,0" Top="8" Ver="1.0" Width="768" WorkArea="true">
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" OnClick="titleBar_OnClick" TabOrder="1" Width="768"></Image>
+		<Ubi Bottom="928" Height="896" Id="Ubi0" Right="768" Top="32" Width="768">
+			<_PersistData>&#13;&#10;/6ynwcBV/wAAAQBgTwAAd5tcAPjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+		<Button Height="25" Id="repClose" ImageID="closeBtn" Left="664" OnClick="repClose" TabOrder="3" Text="닫기" Visible="FALSE" Width="75"></Button>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="8" TabOrder="4" Top="8" Width="744"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+
+function OnLoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	Ubi0.setJrfFileDir(G_baseURL+"ui/PSOGMLIB/report/");
+	//Ubi0.setJrfFileDir("http://10.74.139.50/ui/PSSALLIB/report/");
+	Ubi0.setJrfFileName("svze511_rep.jrf");
+	Ubi0.SetDataset("ds_SVZE511", "ds_SVZE511");	
+	Ubi0.SetArgument("SCOMPS",ComboBoxPlant.Value);
+	Ubi0.SetArgument("SPYV",ed_SUBSPYV.Text);
+	Ubi0.SetArgument("EPYV",ed_SUBEPYV.Text);
+	Ubi0.SetArgument("SCAR",ed_SUBSCAR.Text);
+	Ubi0.SetArgument("ECAR",ed_SUBECAR.Text);
+	Ubi0.SetArgument("SDATE",cmb_SDATE.Value);
+	Ubi0.SetArgument("PCHK",cmb_PCHK.Text);
+	Ubi0.Retrieve();
+}
+
+function getDesign(){	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+
+
+function repClose(obj)
+{
+	close();
+}
+]]></Script>
+</Window>

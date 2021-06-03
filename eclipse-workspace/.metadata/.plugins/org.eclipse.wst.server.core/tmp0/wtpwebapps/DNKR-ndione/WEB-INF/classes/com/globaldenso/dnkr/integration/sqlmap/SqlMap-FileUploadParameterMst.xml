@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.FileUploadParameterMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="FileUploadParameterMst" type="FileUploadParameterMstDomain">
+		<result property="tplid" column="TPLID" />
+		<result property="colno" column="COLNO" />
+		<result property="colmn" column="COLMN" />
+		<result property="comnt" column="COMNT" />
+		<result property="reqyn" column="REQYN" />
+		<result property="stype" column="STYPE" />
+		<result property="lengh" column="LENGH" />
+		
+		<result property="oldTplid" column="OLD_TPLID" />
+		<result property="oldColno" column="OLD_COLNO" />
+		<result property="oldColmn" column="OLD_COLMN" />
+		
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="FileUploadParameterMst" parameterType="FileUploadParameterMstDomain">
+		SELECT
+			TPLID, COLNO, COLMN, COMNT, REQYN, STYPE, LENGH,
+			
+			TPLID AS OLD_TPLID, COLNO AS OLD_COLNO, COLMN AS OLD_COLMN
+		FROM 
+			SVM900PF
+		WHERE 
+		      'SqlMap-FileUploadParameterMst.searchByCondition' = 'SqlMap-FileUploadParameterMst.searchByCondition'	
+		  AND TPLID = #{tplid}
+		ORDER BY TPLID, COLNO
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="FileUploadParameterMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             SVM900PF
+        WHERE 
+             'SqlMap-FileUploadParameterMst.searchCount' = 'SqlMap-FileUploadParameterMst.searchCount'
+		  AND TPLID = #{tplid}
+		  AND COLNO = #{colno}
+		  AND COLMN = #{colmn}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="FileUploadParameterMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             SVM900PF
+        WHERE 
+             'SqlMap-FileUploadParameterMst.searchCount2' = 'SqlMap-FileUploadParameterMst.searchCount2'
+		  AND TPLID = #{oldTplid}
+		  AND COLNO = #{oldColno}
+		  AND COLMN = #{oldColmn}
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="FileUploadParameterMstDomain">
+        INSERT INTO SVM900PF (
+                /* SqlMap-FileUploadParameterMst.create */
+                TPLID, COLNO, COLMN, COMNT, REQYN, STYPE, LENGH
+        ) values (
+                #{tplid}, #{colno}, #{colmn}, #{comnt}, #{reqyn}, #{stype}, #{lengh}
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="FileUploadParameterMstDomain">
+        UPDATE 
+               SVM900PF
+        SET
+            COLNO = #{colno}
+          , COLMN = #{colmn}
+          , COMNT = #{comnt}
+          , REQYN = #{reqyn}
+          , STYPE = #{stype}
+          , LENGH = #{lengh}
+        WHERE 
+              'SqlMap-FileUploadParameterMst.update' = 'SqlMap-FileUploadParameterMst.update'
+		  AND TPLID = #{oldTplid}
+		  AND COLNO = #{oldColno}
+		  AND COLMN = #{oldColmn}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="FileUploadParameterMstDomain">
+        DELETE 
+        FROM 
+             SVM900PF
+        WHERE 
+              'SqlMap-FileUploadParameterMst.delete' = 'SqlMap-FileUploadParameterMst.delete'
+		  AND TPLID = #{tplid}
+		  AND COLNO = #{colno}
+		  AND COLMN = #{colmn}
+    </delete>
+
+</mapper>

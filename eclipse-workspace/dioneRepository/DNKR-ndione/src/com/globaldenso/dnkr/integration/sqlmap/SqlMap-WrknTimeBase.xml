@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WrknTimeBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="wrknTimeBase" type="WrknTimeBaseDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="workStle" column="WORK_STLE" />
+        <result property="group" column="GROUP" />      
+        <result property="startTime" column="START_TIME" />                
+        <result property="endTime" column="END_TIME" />                        
+        <result property="refrn" column="REFRN" />
+        <result property="appstaDe" column="APPSTA_DE" />
+        <result property="appendDe" column="APPEND_DE" />        
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" />
+        <result property="oldWorkStle" column="OLD_WORK_STLE" />
+        <result property="oldGroup" column="OLD_GROUP" /> 
+        <result property="oldAppstaDe" column="OLD_APPSTA_DE" />
+        <result property="oldAppendDe" column="OLD_APPEND_DE" />                      
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="wrknTimeBase" parameterType="WrknTimeBaseDomain">
+		SELECT 
+			 CLS_CODE
+			,TRIM(WORK_STLE) AS WORK_STLE
+			,TRIM(GROUP) AS GROUP
+			,CASE 
+			WHEN 10 <![CDATA[>]]> START_TIME THEN '00' || ':0'||  SUBSTR(START_TIME,1,1)			
+			WHEN 60 <![CDATA[>]]> START_TIME THEN '00' || ':'||  SUBSTR(START_TIME,1,2)
+			WHEN 999 <![CDATA[<]]> START_TIME THEN TRIM(SUBSTR(START_TIME,1,2) || ':'||  SUBSTR(START_TIME,3,4))
+			ELSE TRIM('0' || SUBSTR(START_TIME,1,1) || ':'||  SUBSTR(START_TIME,2,3))
+			END START_TIME
+			,CASE 
+			WHEN 10 <![CDATA[>]]> END_TIME THEN '00' || ':0'||  SUBSTR(END_TIME,1,1)				
+			WHEN 60 <![CDATA[>]]> END_TIME THEN '00' || ':'||  SUBSTR(END_TIME,1,2)			
+			WHEN 999 <![CDATA[<]]> END_TIME THEN TRIM(SUBSTR(END_TIME,1,2) || ':'||  SUBSTR(END_TIME,3,4))
+			ELSE TRIM('0' || SUBSTR(END_TIME,1,1) || ':'||  SUBSTR(END_TIME,2,3))
+			END END_TIME
+			,(SUBSTR(APPSTA_DE,1,4) || '-' || SUBSTR(APPSTA_DE,5,2) || '-' || SUBSTR(APPSTA_DE,7,2)) AS APPSTA_DE  
+			,(SUBSTR(APPEND_DE,1,4) || '-' || SUBSTR(APPEND_DE,5,2) || '-' || SUBSTR(APPEND_DE,7,2)) AS APPEND_DE  									
+			,TRIM(REFRN) AS REFRN												
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(WORK_STLE) AS OLD_WORK_STLE
+			,TRIM(GROUP) AS OLD_GROUP
+			,APPSTA_DE AS OLD_APPSTA_DE
+			,APPEND_DE AS OLD_APPEND_DE 
+		FROM   PSZDBLIB.FHP050PF
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if> 
+		ORDER BY WORK_STLE,GROUP,APPSTA_DE
+		
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="WrknTimeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{workStle}
+        AND GROUP = #{group}  
+        AND APPSTA_DE = #{appstaDe}               
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="WrknTimeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{oldWorkStle}
+        AND GROUP = #{oldGroup}  
+        AND APPSTA_DE = #{oldAppstaDe}                
+    </select>    
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount3" resultType="java.lang.Integer" parameterType="ProdctCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{workStle}
+        AND GROUP = #{group}             
+        AND #{appstaDe} BETWEEN APPSTA_DE AND APPEND_DE
+        
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount4" resultType="java.lang.Integer" parameterType="ProdctCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{workStle}
+        AND GROUP = #{group}             
+        AND #{appendDe} BETWEEN APPSTA_DE AND APPEND_DE
+        
+    </select>  
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount5" resultType="java.lang.Integer" parameterType="ProdctCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{oldWorkStle}
+        AND GROUP = #{oldGroup} 
+        AND APPSTA_DE <![CDATA[<>]]> '${oldAppstaDe}'
+        AND APPEND_DE <![CDATA[<>]]> '${oldAppendDe}'        
+        AND #{appstaDe} BETWEEN APPSTA_DE AND APPEND_DE
+        
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount6" resultType="java.lang.Integer" parameterType="ProdctCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{oldWorkStle}
+        AND GROUP = #{oldGroup} 
+        AND APPSTA_DE <![CDATA[<>]]> '${oldAppstaDe}'
+        AND APPEND_DE <![CDATA[<>]]> '${oldAppendDe}'        
+        AND #{appendDe} BETWEEN APPSTA_DE AND APPEND_DE
+        
+    </select>            
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WrknTimeBaseDomain">
+        INSERT INTO  PSZDBLIB.FHP050PF (
+				 CLS_CODE
+				,WORK_STLE
+				,GROUP
+				,START_TIME
+				,END_TIME
+				,APPSTA_DE
+				,APPEND_DE									
+				,REFRN												
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{workStle}
+               ,#{group}
+               ,#{startTime}
+               ,#{endTime}
+               ,#{appstaDe}
+               ,#{appendDe}
+               ,#{refrn}               
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WrknTimeBaseDomain">
+        UPDATE 
+               PSZDBLIB.FHP050PF
+        SET
+              WORK_STLE = #{workStle}
+             ,GROUP = #{group}              
+			 ,START_TIME = #{startTime}
+			 ,END_TIME = #{endTime}
+			 ,APPSTA_DE = #{appstaDe}
+			 ,APPEND_DE = #{appendDe}
+			 ,REFRN = #{refrn}			 
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{oldWorkStle}
+        AND GROUP = #{oldGroup}  
+        AND APPSTA_DE = #{oldAppstaDe}      
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WrknTimeBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP050PF
+        WHERE CLS_CODE = #{clsCode}
+        AND WORK_STLE = #{workStle}
+        AND GROUP = #{group} 
+        AND APPSTA_DE = #{appstaDe}         
+    </delete>
+    
+    
+
+</mapper>

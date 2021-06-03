@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * web.xml
+ *
+ * $ web.xml 1854 2015-07-27 02:23:23Z 10088DS00879 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>dnkr</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+            /WEB-INF/applicationContext-miyabi-scan.xml,
+            /WEB-INF/applicationContext-miyabi-jdbc.xml,
+            /WEB-INF/applicationContext-miyabi-aop.xml,
+            /WEB-INF/spring-scheduler.xml
+        </param-value>
+  </context-param>
+  <context-param>
+    <param-name>siteMinderFilterEnabled</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>
+            com.globaldenso.ai.miyabi.filter.CharacterEncodingFilter
+        </filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>
+            org.springframework.web.multipart.support.MultipartFilter
+        </filter-class>
+  </filter>
+  <filter>
+    <filter-name>SiteMinderFilter</filter-name>
+    <filter-class>
+            com.globaldenso.dnkr.presentation.filter.SiteMinderFilter
+        </filter-class>
+    <init-param>
+      <param-name>exceptedURI</param-name>
+      <param-value>
+      	/logout.do,/WEB-INF/jsp/WZ0099Logout.jsp,/css/bootstrap.css,/css/font-awesome.css,/js/bootstrap.min.js,/js/jquery-2.1.3.min.js,/css/common.css,/css/login.css,/css/m/login.css,/css/defalut.css,/js/jquery-1.11.3.min.js,/js/login.js,/js/main.js,/img/login/radio-bnt.png,/img/login/radio-bnt_R.png,/img/login/logo-R.png,/img/login/id-icon.png,/img/login/pw-icon.png,/img/login-bg.jpg,/img/login/login-guide-close.png,/img/login-bg-e1.jpg,/img/login-bg-e2.jpg,/WAG005SurveyPaper/paperView.do,/WEB-INF/jsp/dnkr/system/WAG008SurveyPaperView.jsp,/WEB-INF/jsp/base/dnkrBase.jsp,/js/lib/assets/lib/ax5ui-toast/dist/ax5toast.css,/WEB-INF/jsp/error.jsp,/css/board.css,/css/layout.css,/css/main.css,/img/board/list-dedo.png,/js/lib/axisj/ui/arongi/page.css,/img/board/radio-deco.png,/WAG005SurveyPaper/create.do,/WAD009RelationPopSelect/init.do,/WEB-INF/jsp/base/dnkrPopBase.jsp,/js/lib/assets/lib/ax5ui-mask/dist/ax5mask.css,/js/lib/axisj/ui/arongi/AXJ.min.css,/js/lib/assets/lib/ax5ui-grid/dist/ax5grid.css,/css/commonGrid.css,/js/lib/assets/lib/bootstrap/dist/js/bootstrap.min.js,/js/lib/assets/lib/ax5core/dist/ax5core.min.js,/js/lib/assets/lib/ax5ui-grid/dist/ax5grid.js,/js/common.js,/js/commonGrid.js,/js/common_const.js,/js/lib/assets/lib/ax5ui-menu/dist/ax5menu.min.js/css/font-awesome.min.css,/css/jquery-ui.min.css,/js/lib/axisj/ui/arongi/AXJ.min.css,/js/lib/assets/lib/ax5ui-toast/dist/ax5toast.css,/js/lib/assets/lib/ax5ui-mask/dist/ax5mask.css,/js/lib/assets/lib/ax5ui-autocomplete/dist/ax5autocomplete.css,/js/lib/assets/lib/ax5ui-select/dist/ax5select.css,/js/lib/assets/lib/ax5ui-calendar/dist/ax5calendar.css,/js/lib/assets/lib/ax5ui-picker/dist/ax5picker.css,/js/lib/assets/lib/ax5ui-menu/dist/ax5menu.css,/js/lib/assets/lib/ax5ui-grid/dist/ax5grid.css,/css/jquery.mCustomScrollbar.css,/css/common.css,/css/layout.css,/js/lib/axisj/axicon/axicon.min.css,/css/pop.css,/js/lib/axisj/lib/AXConfig.js,/js/jquery.mCustomScrollbar.concat.min.js,/js/lib/axisj/dist/AXJ.min.js,/js/lib/axisj/lib/AXTab.js,/js/lib/assets/js/docs.js,/js/lib/assets/lib/ax5ui-toast/dist/ax5toast.min.js,/js/lib/assets/lib/ax5ui-mask/dist/ax5mask.min.js,/js/lib/assets/lib/ax5ui-autocomplete/dist/ax5autocomplete.min.js,/js/lib/assets/lib/ax5core/dist/ax5core.min.js,/js/lib/assets/lib/ax5ui-picker/dist/ax5picker.min.js,/js/lib/assets/lib/ax5ui-calendar/dist/ax5calendar.min.js,/js/lib/assets/lib/ax5ui-select/dist/ax5select.min.js,/js/lib/assets/lib/ax5ui-formatter/dist/ax5formatter.min.js,/js/commonPop.js,/js/admin/WAD009RelationPopSelect.js,/js/lib/assets/lib/ax5ui-mask/dist/ax5mask.min.js.map,/ajaxRelation/init.do,/WAO001PartListView/qrRead.do,/WAO001PartListView/ajaxPartNameSearch.do,/WAO001PartListView/ajaxQrPartPrint.do,/img/login/qr.png
+      </param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>DensoContextFilter</filter-name>
+    <filter-class>
+        com.globaldenso.ai.miyabi.filter.DensoContextFilter
+    </filter-class>
+  </filter>
+  <filter>
+    <filter-name>LogContextFilter</filter-name>
+    <filter-class>
+        com.globaldenso.ai.miyabi.filter.LogContextFilter
+    </filter-class>
+  </filter>
+  <filter>
+    <filter-name>RequestLoggingFilter</filter-name>
+    <filter-class>
+        com.globaldenso.ai.miyabi.filter.RequestLoggingFilter
+    </filter-class>
+    <init-param>
+      <param-name>ignoreServlets</param-name>
+      <param-value></param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>LocaleChangeFilter</filter-name>
+    <filter-class>
+            com.globaldenso.dnkr.presentation.filter.LocaleChangeFilter
+        </filter-class>
+    <init-param>
+      <param-name>targetURI</param-name>
+      <param-value>/locale.do</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>SiteMinderFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>DensoContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>LogContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>RequestLoggingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>LocaleChangeFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  <listener>
+    <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring-config.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+<servlet-name>UbiForm</servlet-name>
+<servlet-class>com.ubidcs.report.gateway.UbiForm</servlet-class>
+</servlet>
+<servlet>
+<servlet-name>UbiData</servlet-name>
+<servlet-class>com.ubidcs.report.gateway.UbiData</servlet-class>
+</servlet>
+<servlet>
+<servlet-name>UbiAdmin</servlet-name>
+<servlet-class>com.ubidcs.report.gateway.UbiAdmin</servlet-class>
+</servlet>
+<servlet>
+<servlet-name>UbiGateway</servlet-name>
+<servlet-class>com.ubidcs.report.gateway.UbiGateway</servlet-class>
+</servlet>
+<servlet>
+<servlet-name>UbiServer</servlet-name>
+<servlet-class>com.ubidcs.report.gateway.UbiServer</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>UbiForm</servlet-name>
+<url-pattern>/UbiForm</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>UbiData</servlet-name>
+<url-pattern>/UbiData</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>UbiAdmin</servlet-name>
+<url-pattern>/UbiAdmin</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>UbiGateway</servlet-name>
+<url-pattern>/UbiGateway</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>UbiServer</servlet-name>
+<url-pattern>/UbiServer</url-pattern>
+</servlet-mapping>
+  
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/WEB-INF/jsp/error.jsp</location>
+  </error-page>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://ai.globaldenso.com/customTag</taglib-uri>
+      <taglib-location>/tld/ai.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://ai.globaldenso.com/ai_sample/customTag</taglib-uri>
+      <taglib-location>/tld/sample.tld</taglib-location>
+    </taglib>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+      <scripting-invalid>false</scripting-invalid>
+      <include-prelude>/WEB-INF/jsp/base/prelude.jsp</include-prelude>
+      <include-coda>/WEB-INF/jsp/base/coda.jsp</include-coda>
+      <trim-directive-whitespaces>true</trim-directive-whitespaces>
+    </jsp-property-group>
+  </jsp-config>
+</web-app>

@@ -1,0 +1,2083 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PsogmDao">
+
+	<!-- 보전이력검색 조회 -->
+	<!-- 検索結果をMapで受け取る --> 
+    <resultMap id="Psogm" type="PsogmDomain">
+    	<result property="comps" column="COMPS" />
+        <result property="msh" column="MSH" />
+        <result property="mshno" column="MSHNO" />
+        <result property="mshnm" column="MSHNM" />
+        <result property="wrkm" column="WRKM" />
+        <result property="kornm" column="KORNM" />
+        <result property="jisno" column="JISNO" />
+        <result property="wndat" column="WNDAT" />
+        <result property="hyosn" column="HYOSN" />
+        <result property="hyosn2" column="HYOSN" />
+        <result property="hyosn3" column="HYOSN" />
+        <result property="wonin" column="WONIN" />
+        <result property="wonin2" column="WONIN" />
+        <result property="wonin3" column="WONIN" />
+        <result property="daech" column="DAECH" />
+        <result property="daech2" column="DAECH" />
+        <result property="daech3" column="DAECH" />
+        <result property="job" column="JOB" />
+        <result property="jobcd" column="JOBCD" />
+        <result property="jobnm" column="JOBNM" />
+        <result property="assy" column="ASSY" />
+        <result property="set" column="SET" />
+        <result property="hyo" column="HYO" />
+        <result property="cho" column="CYO" />
+        <result property="dec" column="DEC" />
+        <result property="dpart" column="DPART" />
+        <result property="stphr" column="STPHR" />
+        <result property="janhr" column="JANHR" />
+        <result property="kogub" column="KOGUB" />
+        <result property="padat" column="PADAT" />
+        <result property="urdat" column="URDAT" />
+        <result property="ksdat" column="KSDAT" />
+        <result property="wndat2" column="WNDAT2" />
+        <result property="prtcd" column="PRTCD" />
+        <result property="lincd" column="LINCD" />
+        <result property="timcd" column="TIMCD" />
+        <result property="dptcd" column="DPTCD" />
+        <result property="sdpcd" column="SDPCD" />
+        <result property="subas" column="SUBAS" />
+        <result property="comcd" column="COMCD" />
+        <result property="deccd" column="DECCD" />
+        <result property="chocd" column="CHOCD" />
+        <result property="hyocd" column="HYOCD" />
+        <result property="caucd" column="CAUCD" />
+        <result property="cause" column="ANDOR" />
+        <result property="trucd" column="TRUCD" />
+        <result property="trunm" column="TRUNM" />
+        <result property="andor" column="ANDOR" />
+        <result property="wndats" column="WNDATS" />
+        <result property="wndate" column="WNDATE" />
+        <result property="kdown" column="KDOWN" />
+        <result property="inocd" column="INOCD" />
+        <result property="inonm" column="INONM" />
+        <result property="emgcd" column="EMGCD" />
+        <result property="emgry" column="EMGRY" />
+        <result property="qorcd" column="QORCD" />
+        <result property="qornm" column="QORNM" />
+        <result property="assnm" column="ASSNM" />
+        <result property="assno" column="ASSNO" />
+        <result property="cpart" column="CPART" />
+        <result property="prtno" column="PRTNO" />
+        <result property="patim" column="PATIM" />
+        <result property="urtim" column="URTIM" />
+        <result property="kstim" column="KSTIM" />
+        <result property="wntim" column="WNTIM" />
+        <result property="wrkm2" column="WRKM2" />
+        <result property="sdpnm" column="SDPNM" />
+        <result property="sdpnm2" column="SDPNM2" />
+        <result property="kornm2" column="KORNM2" />
+        <result property="subcn" column="SUBCN" />
+        <result property="scost" column="SCOST" />
+        <result property="pcost" column="PCOST" />
+        <result property="repcd" column="REPCD" />
+        <result property="repnm" column="REPNM" />
+        <result property="effcd" column="EFFCD" />
+        <result property="effnm" column="EFFNM" />
+        <result property="ecost" column="ECOST" />
+        <result property="wathr" column="JWATHR" />
+        <result property="stphr" column="STPHT" />
+        <result property="wrkhr" column="WRKHR" />
+        <result property="bfrhr" column="BFRHR" />
+        <result property="tothr" column="TOTHR" />
+        <result property="cmplt" column="CMPLT" />
+        <result property="cnote" column="CNOTE" />
+        <result property="mnthr" column="MNTHR" />
+        <result property="teima" column="TEIMA" />
+        <result property="daesn" column="DAESN" />
+        <result property="chkan" column="CHKAN" />
+        <result property="imgbf" column="IMGBF" />
+        <result property="imgaf" column="IMGAF" />
+        <result property="maker" column="MAKER" />
+        <result property="price" column="PRICE" />
+        <result property="seqno" column="SEQNO" />
+    </resultMap>
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="RelationDb2" type="RelationDb2Domain">
+        <result property="lincd" column="LINCD" />
+        <result property="linnm" column="LINNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 보전방법 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="PsogmMaintenence" type="PsogmDomain">
+        <result property="jobcd" column="JOBCD" />
+        <result property="kogub" column="KOGUB" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 실시부서 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="PsogmSpecificDept" type="PsogmDomain">
+        <result property="sdpcd" column="SDPCD" />
+        <result property="sdpnm" column="SDPNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- SUB Assy -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="SubAssy" type="PsogmDomain">
+        <result property="subas" column="SUBAS" />
+        <result property="assnm" column="ASSNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 부품정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Knd" type="PsogmDomain">
+        <result property="kndcd" column="KNDCD" />
+        <result property="kndnm" column="KNDNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 부품정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Cho" type="PsogmDomain">
+        <result property="chocd" column="CHOCD" />
+        <result property="chonm" column="CHONM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 부품정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Parts" type="PsogmDomain">
+        <result property="kndcd" column="KNDCD" />
+        <result property="umhen" column="UMHEN" />
+        <result property="comcd" column="COMCD" />
+        <result property="cpart" column="CPART" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 현상정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Phenomenon" type="PsogmDomain">
+        <result property="hkind" column="HKIND" />
+        <result property="hkdnm" column="HKDNM" />
+        <result property="hyocd" column="HYOCD" />
+        <result property="hyonm" column="HYONM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 원인정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Cause" type="PsogmDomain">
+        <result property="ckind" column="CKIND" />
+        <result property="ckdnm" column="CKDNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 실원인정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="TrueCause" type="PsogmDomain">
+        <result property="tkind" column="TKIND" />
+        <result property="tkdnm" column="TKDNM" />
+        <result property="trucd" column="TRUCD" />
+        <result property="trunm" column="TRUNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 교환품목정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="ReplaceProduct" type="PsogmDomain">
+        <result property="prtnm" column="PRTNM" />
+        <result property="ptype" column="PTYPE" />
+        <result property="quaty" column="QUATY" />
+        <result property="amont" column="AMONT" />
+        <result property="jisno" column="JISNO" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 내외구분정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Inout" type="PsogmDomain">
+        <result property="inocd" column="INOCD" />
+        <result property="inonm" column="INONM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 우선도정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Emergence" type="PsogmDomain">
+        <result property="emgcd" column="EMGCD" />
+        <result property="emgry" column="EMGRY" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 우선도정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Quality" type="PsogmDomain">
+        <result property="qorcd" column="QORCD" />
+        <result property="qornm" column="QORNM" />
+        <result property="comps" column="COMPS" />
+    </resultMap>
+    
+    <!-- 효과구분정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Effect" type="PsogmDomain">
+        <result property="effcd" column="EFFCD" />
+        <result property="effnm" column="EFFNM" />
+    </resultMap>
+    
+    <!-- 효과구분정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="Relapse" type="PsogmDomain">
+        <result property="repcd" column="REPCD" />
+        <result property="repnm" column="REPNM" />
+    </resultMap>
+    
+    <!-- 예비품정보 -->
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="SpareUnitDb2" type="SpareUnitDb2Domain">
+        <result property="comps" column="COMPS" />
+        <result property="group" column="GROUP" />
+        <result property="prtno" column="PRTNO" />
+        <result property="prtnm" column="PRTNM" />
+        <result property="vndnr" column="VNDNR" />
+        <result property="vname" column="VNAME" />
+        <result property="maker" column="MAKER" />
+        <result property="maknm" column="MAKNM" />
+        <result property="model" column="MODEL" />
+        <result property="inpno" column="INPNO" />
+        <result property="indat" column="INDAT" />
+        <result property="indatfrom" column="INDAT" />
+        <result property="indatto" column="INDAT" />
+        <result property="punit" column="PUNIT" />
+        <result property="inqty" column="INQTY" />
+        <result property="icost" column="ICOST" />
+        <result property="iamt" column="IAMT" />
+        <result property="inuse" column="INUSE" />
+        <result property="kornm" column="KORNM" />
+        <result property="indid" column="INDID" />
+        <result property="jg" column="JG" />
+        <result property="pcost" column="PCOST" />
+        <result property="dioid" column="DIOID" />
+        <result property="mager" column="MAGER" />
+        <result property="adusr" column="ADUSR" />
+        <result property="code" column="CODE" />
+        <result property="name1" column="NAME1" />
+        <result property="name2" column="NAME2" />
+        <result property="lib2" column="LIB2" />
+    </resultMap>
+    
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="MachineDb2" type="MachineDb2Domain">
+        <result property="mshno" column="MSHNO" />
+        <result property="mshnm" column="MSHNM" />
+        <result property="comps" column="COMPS" />
+        <result property="prtcd" column="PRTCD" />
+        <result property="prtnm" column="PRTNM" />
+        <result property="timcd" column="TIMCD" />
+        <result property="timnm" column="TIMNM" />
+        <result property="indat" column="INDAT" />
+        <result property="lincd" column="LINCD" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+    
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="FileDb2" type="FileDb2Domain">
+        <result property="seqno" column="SEQNO" />
+        <result property="comps" column="COMPS" />
+        <result property="jisno" column="JISNO" />
+        <result property="ftype" column="FTYPE" />
+        <result property="siryo" column="SIRYO" />
+        <result property="filnm" column="FILNM" />
+        <result property="lib2" column="LIB2" />
+    </resultMap>
+
+
+	<!-- 라인정보 조회 -->
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="getogm313_cmbprtcd" resultMap="Psogm" parameterType="PsogmDomain">
+        select 
+			lincd ||' | '|| trim(linnm) as linnm, lincd
+			
+		from 
+			psedblib.obc030pf
+		where 
+		 	'SqlMap-Psogm.getogm303_cmbprtcd' = 'SqlMap-Psogm.getogm303_cmbprtcd'
+		<if test="comps != null and comps != ''">
+			and	COMPS = #{comps}
+		</if>
+			 order by LINCD
+			<!-- and LINCD > '99' order by LINCD -->
+    </select>
+    
+    <!-- 설비리스트 조회 -->
+    <select id="selectOgm200_pop" resultMap="MachineDb2" parameterType="MachineDb2Domain">
+    	select 
+			distinct A.MSHNO as MSHNO, trim(B.MSHNM) as MSHNM
+		from 
+			${lib2}.obc040pf as a, ${lib2}.obj100pf as b	
+		where 
+			'SqlMap-Psogm.selectOgm200_pop' = 'SqlMap-Psogm.selectOgm200_pop'
+			and A.COMPS = #{comps}
+			and A.COMPS = B.COMPS
+			and A.MSHNO = B.MSHNO
+			and A.LINCD = #{lincd}
+		order by A.MSHNO
+    </select>
+   
+    <!-- 설비번호에 따른 정보 조회 -->
+	<select id="selectOGM200_chk" resultMap="MachineDb2" parameterType="MachineDb2Domain">
+		select 
+				D.MSHNM as MSHNM
+			  , B.PRTCD as PRTCD
+			  , C.TIMCD as TIMCD
+			  , D.INDAT as INDAT
+			  , D.PRTNM as PRTNM
+			  , D.TIMNM as TIMNM
+		from 
+			${lib2}.obc040pf as A,
+			${lib2}.obc030pf as B,
+			${lib2}.obc270pf as C,
+			${lib2}.obj100pf as D
+		where 
+			'SqlMap-Psogm.selectOGM200_chk' = 'SqlMap-Psogm.selectOGM200_chk'
+			and	A.COMPS = #{comps}
+			and A.COMPS = B.COMPS
+			and A.MSHNO = #{mshno}
+			and A.LINCD = B.LINCD  
+			and B.MLINE = '1'
+			and B.COMPS = C.COMPS
+			and B.PRTCD = C.PRTCD
+			and A.COMPS = D.COMPS
+			and A.MSHNO = D.MSHNO	
+	</select>
+	
+	<!-- 보전방법 리스트 -->
+	<select id="selectOgm200_method" resultMap="PsogmMaintenence" parameterType="PsogmDomain">
+		select 
+				  jobcd
+				, jobcd ||'  '|| trim(jobnm) ||'  '|| trim(kogub) as kogub 
+		from 
+			${lib2}.obc140pf 
+		where 
+			'SqlMap-Psogm.selectOgm200_method' = 'SqlMap-Psogm.selectOgm200_method'
+			and comps = #{comps}
+			and jobcd &lt; '99'
+			and trim(jobnm) != ''
+		order by jobcd
+	</select>
+	
+	<!-- 실시부서 리스트 -->
+	<select id="selectOgm313_obc250pf" resultMap="PsogmSpecificDept" parameterType="PsogmDomain">
+		select 
+				  sdpcd ||' | '|| trim(sdpnm) as sdpnm
+				, sdpcd
+		from 
+				${lib2}.obc250pf 
+		where 
+				'SqlMap-Psogm.selectOgm313_obc250pf' = 'SqlMap-Psogm.selectOgm313_obc250pf'
+				and COMPS = #{comps}	
+	</select>
+	
+	<!-- SUB Assy 리스트 -->
+	<select id="selectOgm203_obc230pf" resultMap="SubAssy" parameterType="PsogmDomain">
+		select 
+				  subas
+				, subas ||'  '|| trim(assnm) as assnm
+		from 
+				${lib2}.obc230pf
+		where 
+				'SqlMap-Psogm.selectOgm203_obc230pf' = 'SqlMap-Psogm.selectOgm203_obc230pf'
+				and comps = #{comps}
+		order by subas
+	</select>
+	
+	<!-- 처치 정보 -->
+	<select id="selectOgm203_obc160pf" resultMap="Cho" parameterType="PsogmDomain">
+		select 
+				  chocd
+				, chocd ||'  '|| trim(chonm) as chonm
+		from 
+				${lib2}.obc160pf
+		where 
+				'SqlMap-Psogm.selectOgm203_obc160pf' = 'SqlMap-Psogm.selectOgm203_obc160pf'
+			and comps = #{comps}
+		order by chocd
+	</select>
+	
+	<!-- 셋트부품 - 부품분류 정보 -->
+    <select id="selectOgm203_obc220pf" resultMap="Knd" parameterType="PsogmDomain">
+		select  
+				  kndcd
+				, kndcd ||'  '|| trim(kndnm) as kndnm
+		from 
+				${lib2}.obc220pf
+		where 
+				'SqlMap-Psogm.selectOgm203_obc220pf' = 'SqlMap-Psogm.selectOgm203_obc220pf'
+			and comps = #{comps}
+		order by kndcd
+	</select>
+	
+	<!-- 셋트부품 - 부품분류 정보 (선택1, 선택2) -->
+	<select id="selectOgm203_obc060pf_01" resultMap="Parts" parameterType="PsogmDomain">
+		select 
+				distinct trim(umhen) as umhen 
+		<if test="umhen != null and umhen != ''">
+				, comcd
+				, trim(cpart) as cpart
+		</if>		
+		from 
+				${lib2}.obc060pf
+		where 
+				'SqlMap-Psogm.selectOgm203_obc060pf_01' = 'SqlMap-Psogm.selectOgm203_obc060pf_01'
+			and comps = #{comps}
+			and kndcd = #{kndcd}
+		<if test="umhen != null and umhen != ''">
+			and umhen = #{umhen}
+		</if>
+		order by umhen
+	</select>
+	
+	<!-- 단위부품  -->
+	<select id="selectOgm203_obc070pf" resultMap="Knd" parameterType="PsogmDomain">
+		select 
+				  kndcd
+				, kndcd ||'  '|| trim(kndnm) as kndnm
+		from  
+				${lib2}.obc070pf
+		where 
+				'SqlMap-Psogm.selectOgm203_obc070pf' = 'SqlMap-Psogm.selectOgm203_obc070pf'
+			and comps = #{comps}
+		order by kndcd
+	</select>
+	
+	<!-- 단위부품 선택1 > -->
+	<select id="selectOgm203_obc050pf_01" resultMap="Parts" parameterType="PsogmDomain">
+		select 
+				  distinct umhen 
+			<if test="umhen != null and umhen != ''">
+				, deccd comcd
+				, trim(dpart) as cpart
+			</if>	
+		from 
+				${lib2}.obc050pf
+		where 
+				comps = #{comps}
+			and kndcd = #{kndcd}
+		<if test="umhen != null and umhen != ''">
+			and umhen = #{umhen}
+		</if>
+		order by umhen
+	</select>
+	
+	<!-- 현상 -->
+	<select id="selectOgm203_obc190pf" resultMap="Phenomenon" parameterType="PsogmDomain">
+		select 
+				  hkind
+				, trim(hkdnm) as hkdnm 
+		from 
+				${lib2}.obc190pf
+		where 
+				comps = #{comps}
+		order by hkind
+	</select>
+	
+	<!-- 현상 선택 > -->
+	<select id="selectOgm203_obc180pf" resultMap="Phenomenon" parameterType="PsogmDomain">
+		select 
+				  a.hyocd as hyocd
+				, trim(b.hkdnm) as hkdnm
+				, trim(a.hyonm) as hyonm 
+		from 
+				  ${lib2}.obc180pf as a
+				, ${lib2}.obc190pf as b
+		where 
+			a.comps = #{comps}
+			and a.comps = b.comps
+			and a.hkind = b.hkind
+		<if test="hkind != null and hkind != '' and hkind != '99'">
+			and a.hkind = #{hkind}
+		</if>
+			and trim(a.hyocd) != '-'
+		order by a.hyocd
+	</select>
+	
+	<!-- 원인 -->
+	<select id="selectOgm203_obc120pf" resultMap="Cause" parameterType="PsogmDomain">
+		select 
+				  ckind
+				, trim(ckdnm) as ckdnm 
+		from 
+				${lib2}.obc120pf
+		where 
+				comps = #{comps}
+		order by ckind
+	</select>
+	
+	<!-- 원인 선택 > 원인정보 -->
+	<select id="selectOgm203_obc110pf" resultMap="Cause" parameterType="PsogmDomain">
+		select 
+				  a.caucd
+				, trim(b.ckdnm) as ckdnm
+				, trim(a.cause) as cause
+		from 
+				  ${lib2}.obc110pf as a
+				, ${lib2}.obc120pf as b
+		where 
+			a.comps = #{comps}
+			and a.comps = b.comps
+			and a.ckind = b.ckind
+		<if test="ckind != null and ckind != '' and ckind != '99'">
+			and a.ckind = #{ckind}
+		</if>
+		order by a.caucd
+	</select>
+	
+	<!-- 실원인 -->
+	<select id="selectOgm203_obc100pf" resultMap="TrueCause" parameterType="PsogmDomain">
+		select 
+				  tkind
+				, trim(tkdnm) as tkdnm 
+		from 
+				${lib2}.obc100pf
+		where 
+			comps = #{comps}
+	</select>
+	
+	<!-- 실원인 선택 > 실원인정보 -->
+	<select id="selectOgm203_obc090pf" resultMap="Cause" parameterType="PsogmDomain">
+		select 
+				  a.trucd
+				, trim(b.tkdnm) as tkdnm
+				, trim(a.trunm) as trunm
+		from 
+				${lib2}.obc090pf as a
+		left outer join ${lib2}.obc100pf as b
+				on a.comps = b.comps
+				and a.tkind = b.tkind
+		where 
+				a.comps = #{comps}
+		<if test="tkind != null and tkind != '' and tkind != '99'">
+			and a.tkind = #{tkind}
+		</if>
+			and trim(b.tkdnm) != ''
+		order by a.trucd	
+	</select>
+	
+	
+	<select id="selectOgm314_onload" resultMap="Psogm" parameterType="PsogmDomain">
+
+		
+		select 
+				  '설비' as msh
+				, a.mshno
+				, b.mshnm
+				, '책임자'as wrkm
+				, f.kornm
+				, substr(char(a.wndat),1,4) || '-' || substr(char(a.wndat),5,2)
+				|| '-' || substr(char(a.wndat),7,2) as wndat
+				, a.jisno
+				, trim(a.hyosn) as hyosn
+				, trim(a.wonin) as wonin
+				, trim(a.daech) as daech
+				, '보전방법' as job
+				, a.jobcd
+				, g.jobnm
+				, 'Assy분류' as Assy
+				, h.assnm,'셋트품' as set
+				, i.cpart,'현상' as hyo
+				, j.hyonm,'처치' as cho
+				, k.chonm,'분해' as dec
+				, l.dpart
+				, a.stphr as stphr
+				, a.janhr as janhr
+				, trim(g.kogub) as kogub
+				, a.padat || a.patim padat
+				, a.urdat || a.urtim as urdat
+				, a.ksdat || a.kstim as ksdat
+				, a.wndat || a.wntim as wndat2
+		from 
+				 ${lib2}.obj200pf as a
+			 left outer join ${lib2}.obj100pf as b on a.comps = b.comps and a.mshno = b.mshno
+			 left outer join ${lib2}.obc250pf as e on a.comps = e.comps and a.sdpcd = e.sdpcd
+			 left outer join ${lib3}.hmd020pf as f on a.wrkm1 = f.sabun
+			 left outer join ${lib2}.obc140pf as g on a.comps = g.comps and a.jobcd = g.jobcd 
+			 left outer join ${lib2}.obc230pf as h on a.comps = h.comps and a.subas = h.subas
+			 left outer join ${lib2}.obc060pf as i on a.comps = i.comps and a.comcd = i.comcd 
+			 left outer join ${lib2}.obc180pf as j on a.comps = j.comps and a.hyocd = j.hyocd 
+			 left outer join ${lib2}.obc160pf as k on a.comps = k.comps and a.chocd = k.chocd 
+			 left outer join ${lib2}.obc050pf as l on a.comps = l.comps and a.deccd = l.deccd 	
+		where 
+				'Psogm.selectOgm314_onload' = 'Psogm.selectOgm314_onload'
+			 and a.comps = #{comps}
+		<if test="prtcd != null and prtcd != ''">
+			 and a.prtcd = #{prtcd}
+		</if> 
+		<if test="lincd != null and lincd != ''">
+			and a.mshno in ( 
+							select 
+									c.mshno 
+							from 
+						 			${lib2}.obc040pf as c 
+						 	where 
+						 			c.comps = #{comps}
+						 		and c.lincd = #{lincd})
+		</if>
+		<if test="mshno != null and mshno != ''">
+			and b.mshno = #{mshno}
+		</if>
+		<if test="kogub != null and kogub != ''">
+			and g.kogub in #{kogub}
+		</if>
+		<if test="jobcd != null and jobcd != ''">
+			and a.jobcd = #{jobcd}
+		</if>
+		<if test="sdpcd != null and sdpcd != ''">
+			and e.sdpcd = #{sdpcd}
+		</if>
+		<if test="wrkm != null and wrkm != ''">
+			<!-- 도메인에 wrkm1을 추가하지 않고 wrkm으로 사용함(DB의 컬럼명은 wrkm1) -->
+			and a.wrkm1 = #{wrkm} 
+		</if>
+		<if test="subas != null and subas != ''">
+			and a.subas = #{subas}
+		</if>
+		<if test="comcd != null and comcd != ''">
+			and a.comcd = #{comcd}
+		</if>
+		<if test="deccd != null and deccd != ''">
+			and a.deccd = #{deccd}
+		</if>
+		<if test="chocd != null and chocd != ''">
+			and a.chocd = #{chocd}
+		</if>
+		<if test="hyocd != null and hyocd != ''">
+			and a.hyocd = #{hyocd}
+		</if>
+		<if test="caucd != null and caucd != ''">
+			and a.caucd = #{caucd}
+		</if>
+		<if test="trucd != null and trucd != ''">
+			and a.trucd = #{trucd}
+		</if>
+		<if test="andor == 'and'">
+			and (
+					a.hyosn = a.hyosn
+				<if test="hyosn != null and hyosn != ''">	
+					and a.hyosn like '%' || '${hyosn}' || '%'
+				</if>
+				<if test="hyosn2 != null and hyosn2 != ''">	
+					and a.hyosn like '%' || '${hyosn2}' || '%'
+				</if>	
+				<if test="hyosn3 != null and hyosn3 != ''">
+					and a.hyosn like '%' || '${hyosn3}' || '%'
+				</if>
+			) 
+			and (
+					a.wonin = a.wonin
+				<if test="wonin != null and wonin != ''">	
+					and a.wonin like '%' || '${wonin}' || '%'
+				</if>
+				<if test="wonin2 != null and wonin2 != ''">	
+					and a.wonin like '%' || '${wonin2}' || '%'
+				</if>	
+				<if test="wonin3 != null and wonin3 != ''">
+					and a.wonin like '%' || '${wonin3}' || '%'
+				</if>
+			)
+			and (
+					a.daech = a.daech
+				<if test="daech != null and daech != ''">
+					and a.daech like '%' || '${daech}' || '%'
+				</if>
+				<if test="daech2 != null and daech2 != ''">	
+					and a.daech like '%' || '${daech2}' || '%'
+				</if>	
+				<if test="daech3 != null and daech3 != ''">
+					and a.daech like '%' || '${daech3}' || '%'
+				</if>
+			)
+		</if>
+		
+		
+		<if test="andor == 'or'">
+			and (
+				<if test="hyosn != null and hyosn != ''">	
+					a.hyosn like '%' || '${hyosn}' || '%'
+				</if>
+				<if test="hyosn != null and hyosn != '' and ((hyosn2 != null and hyosn2 != '') or (hyosn3 != null and hyosn3 != ''))">
+					or
+				</if>
+				<if test="hyosn2 != null and hyosn2 != ''">	
+					a.hyosn like '%' || '${hyosn2}' || '%'
+				</if>	
+				<if test="hyosn2 != null and hyosn2 != '' and hyosn3 != null and hyosn3 != ''">
+					or
+				</if>
+				<if test="hyosn3 != null and hyosn3 != ''">
+					a.hyosn like '%' || '${hyosn3}' || '%'
+				</if>
+				
+				<if test="((hyosn != null and hyosn != '') or (hyosn2 != null and hyosn2 != '') or (hyosn3 != null and hyosn3 != '')) 
+					and ((wonin != null and wonin != '') or (wonin2 != null and wonin2 != '') or (wonin3 != null and wonin3 != '') 
+					or (daech != null and daech != '') or (daech2 != null and daech2 != '') or (daech3 != null and daech3 != ''))">
+					) 
+					and (
+				</if>
+			
+				<if test="wonin != null and wonin != ''">	
+					a.wonin like '%' || '${wonin}' || '%'
+				</if>
+				<if test="wonin != null and wonin != '' and ((wonin2 != null and wonin2 != '') or (wonin3 != null and wonin3 != ''))">
+					or
+				</if>
+				<if test="wonin2 != null and wonin2 != ''">	
+					a.wonin like '%' || '${wonin2}' || '%'
+				</if>	
+				<if test="wonin2 != null and wonin2 != '' and wonin3 != null and wonin3 != ''">
+					or
+				</if>
+				<if test="wonin3 != null and wonin3 != ''">
+					or a.wonin like '%' || '${wonin3}' || '%'
+				</if>
+				
+				<if test="(((wonin != null and wonin != '') or (wonin2 != null and wonin2 != '') or (wonin3 != null and wonin3 != '')) and ((daech != null and daech != '') or (daech2 != null and daech2 != '') or (daech3 != null and daech3 != '')))">
+					)
+					and (
+				</if>
+				
+				<if test="daech != null and daech != ''">
+					a.daech like '%' || '${daech}' || '%'
+				</if>
+				<if test="daech != null and daech != '' and ((daech2 != null and daech2 != '') or (daech3 != null and daech3 != ''))">
+					or
+				</if>
+				<if test="daech2 != null and daech2 != ''">	
+					a.daech like '%' || '${daech2}' || '%'
+				</if>
+				<if test="daech2 != null and daech2 != '' and daech3 != null and daech3 != ''">
+					or
+				</if>	
+				<if test="daech3 != null and daech3 != ''">
+					a.daech like '%' || '${daech3}' || '%'
+				</if>
+			)
+		</if>
+		
+		
+		<!-- <if test="andor == 'or'">
+			#{orhyosn} #{orwonin} #{ordeach}
+			$ORHYOSN$ $ORWONIN$ $ORDAECH$
+		</if> -->
+		<if test="wndats != null and wndats != '' and wndate != null and wndate != ''">
+			and a.wndat between #{wndats} and #{wndate}
+		</if>
+		and a.cmplt = '1'
+		order by a.wndat
+	</select>
+	
+	<!-- 지시No로 보전이력검색 조회 -->
+	<select id="selectOgm313_gms219" resultMap="Psogm" parameterType="PsogmDomain">
+		select  
+				  a.comps as comps
+				, a.jisno as jisno
+				, a.mshno as mshno
+				, b.mshnm as mshnm
+				, a.prtcd as prtcd
+				, a.timcd as timcd
+				, a.jobcd as jobcd
+				, c.jobnm as jobnm
+				, a.kdown as kdown
+				, a.inocd as inocd
+				, d.inout as inonm
+				, a.emgcd as emgcd
+				, e.emgry as emgry
+				, a.qorcd as qorcd
+				, f.qornm as qornm
+				, a.subas as subas
+				, g.assnm as assnm
+				, a.assno as assno
+				, a.comcd as comcd
+				, h.cpart as cpart
+				, a.deccd as deccd
+				, i.dpart as dpart
+				, a.prtno as prtno
+				, a.chocd as chocd
+				, j.chonm as chonm
+				, a.hyocd as hyocd
+				, k.hyonm as hyonm
+				, a.caucd as caucd
+				, l.cause as cause
+				, a.trucd as trucd
+				, m.trunm as trunm
+				, a.padat as padat
+				, a.patim as patim
+				, a.urdat as urdat
+				, a.urtim as urtim
+				, a.ksdat as ksdat
+				, a.kstim as kstim
+				, a.wndat as wndat
+				, a.wntim as wntim
+				, a.wrkm1 as wrkm
+				, n.kornm as kornm
+				, r.sdpnm as sdpnm
+				, a.wrkm2 as wrkm2
+				, o.kornm as kornm2
+				, s.sdpnm as sdpnm2
+				, a.sdpcd as sdpcd
+				, a.subcn as subcn
+				, a.scost as scost
+				, a.pcost as pcost
+				, a.repcd as repcd
+				, p.repnm as repnm
+				, a.effcd as effcd
+				, q.effnm as effnm
+				, a.ecost as ecost
+				, a.hyosn as hyosn
+				, a.wonin as wonin
+				, a.daech as daech
+				, a.janhr as janhr
+				, a.wathr as wathr
+				, a.stphr as stphr
+				, a.wrkhr as wrkhr
+				, a.bfrhr as bfrhr
+				, a.tothr as tothr
+				, a.cmplt as cmplt
+				, a.cnote as cnote
+		 from 
+		 		${lib2}.obj200pf as a 
+				left outer join ${lib2}.obj100pf as b
+				on a.comps = b.comps
+				and a.mshno = b.mshno
+				
+				left outer join ${lib2}.obc140pf as c
+				on a.comps = c.comps
+				and a.jobcd = c.jobcd
+				
+				left outer join ${lib2}.obc020pf as d
+				on a.comps = d.comps
+				and a.inocd = d.inocd
+				
+				left outer join ${lib2}.obc010pf as e
+				on a.comps = e.comps
+				and a.emgcd = e.emgcd
+				
+				left outer join ${lib2}.obc170pf as f
+				on a.comps = f.comps
+				and a.qorcd = f.qorcd
+				
+				left outer join ${lib2}.obc230pf as g
+				on a.comps = g.comps
+				and a.subas = g.subas
+				
+				left outer join ${lib2}.obc060pf as h
+				on a.comps = h.comps 
+				and a.comcd = h.comcd
+				
+				left outer join ${lib2}.obc050pf as i
+				on a.comps = i.comps
+				and a.deccd = i.deccd
+				
+				left outer join ${lib2}.obc160pf as j
+				on a.comps = j.comps
+				and a.chocd = j.chocd
+				
+				left outer join ${lib2}.obc180pf as k
+				on a.comps = k.comps
+				and a.hyocd = k.hyocd
+				
+				left outer join ${lib2}.obc110pf as l
+				on a.comps = l.comps
+				and a.caucd = l.caucd
+				
+				left outer join ${lib2}.obc090pf as m
+				on a.comps = m.comps
+				and a.trucd = m.trucd
+				
+				left outer join ${lib3}.hmd020pf as n
+				on a.wrkm1 = n.sabun
+				
+				left outer join ${lib3}.hmd020pf as o
+				on a.wrkm2 = o.sabun
+				
+				left outer join ${lib2}.obc150pf as p
+				on a.comps = p.comps
+				and a.repcd = p.repcd
+				
+				left outer join ${lib2}.obc200pf as q
+				on a.comps = q.comps
+				and a.effcd = q.effcd
+				
+				left outer join ${lib2}.obc250pf as r
+				on a.comps = r.comps
+				and a.sdpcd = r.sdpcd
+				
+				left outer join ${lib2}.obc250pf as s
+				on a.comps = s.comps
+				and a.sdpcd = s.sdpcd
+				
+		where 
+				a.comps = #{comps}
+				and a.jisno =#{jisno}
+	</select>
+	
+	<!-- 교환품목록 검색 -->
+	<select id="select_obj220pf_InqParts" resultMap="ReplaceProduct" parameterType="PsogmDomain">
+		select 
+				  trim(a.prtno) as prtno
+				, trim(a.prtnm) as prtnm
+				, trim(a.ptype) as ptype
+				, trim(a.maker) as maker
+				, a.quaty
+				, a.price
+				, a.amont 
+				, '0' as delchk
+				, a.seqno as seqno
+		from 
+			${lib2}.obj220pf as a
+		where 
+			a.comps = #{comps}
+			and trim(a.jisno) = #{jisno}
+	</select>
+	
+	<!-- 지시No 조회화면에서 리포팅툴을 위한 쿼리 -->
+	<select id="selectOgm203_rep" resultMap="ReplaceProduct" parameterType="PsogmDomain">
+		select  
+				  trim(a.jisno) as jisno
+				, trim(a.mshno) as mshno
+				, trim(u.linnm) as linnm
+				, trim(b.mshnm) as mshnm
+				, a.jobcd as jobcd
+				, trim(c.jobnm) as jobnm
+				, a.kdown as kdown
+				, trim(a.inocd) as inocd
+				, trim(d.inout) as inonm
+				, a.emgcd as emgcd
+				, trim(e.emgry) as emgry
+				, a.qorcd as qorcd
+				, trim(f.qornm) as qornm
+				, a.subas as subas
+				, trim(g.assnm) as assnm
+				, trim(a.assno) as assno
+				, a.comcd as comcd
+				, trim(h.cpart) as cpart
+				, a.deccd as deccd
+				, trim(i.dpart) as dpart
+				, trim(a.prtno) as prtno
+				, a.chocd as chocd
+				, trim(j.chonm) as chonm
+				, trim(a.hyocd) as hyocd
+				, trim(k.hyonm) as hyonm
+				, trim(a.caucd) as caucd
+				, trim(l.cause) as caunm
+				, trim(a.trucd) as trucd
+				, trim(m.trunm) as trunm
+				, substr(char(a.padat),1,4) || '년' || substr(char(a.padat),5,2) || '월' || substr(char(a.padat),7,2) || '일' as padat
+				, substr(a.patim,1,2) || '시' || substr(a.patim,3,2) || '분' as patim
+				, substr(char(a.urdat),1,4) ||  '년' || substr(char(a.urdat),5,2) || '월' || substr(char(a.urdat),7,2) || '일'  as urdat
+				, substr(a.urtim,1,2) || '시' || substr(a.urtim,3,2) || '분' as urtim
+				, substr(char(a.ksdat),1,4) ||  '년' || substr(char(a.ksdat),5,2) || '월' || substr(char(a.ksdat),7,2) || '일' as ksdat
+				, substr(a.kstim,1,2) || '시' || substr(a.kstim,3,2) || '분' as kstim
+				, substr(char(a.wndat),1,4) ||  '년' || substr(char(a.wndat),5,2) || '월' || substr(char(a.wndat),7,2) || '일' as wndat
+				, substr(a.wntim,1,2) || '시' || substr(a.wntim,3,2) || '분' as wntim
+				, a.wrkm1 as wrkm
+				, n.kornm as kornm
+				, r.sdpnm as sdpnm
+				, (case a.wrkm2 when 0 then ' ' else a.wrkm2 end) as wrkm2
+				, (case a.wrkm2 when 0 then '' else o.kornm end) as kornm2
+				, (case a.wrkm2 when 0 then '' else trim(s.sdpnm) end) as sdpnm2
+				, a.sdpcd as sdpcd
+				, a.subcn as subcn,a.scost as scost
+				, a.pcost as pcost
+				, trim(a.repcd) as repcd
+				, p.repnm as repnm
+				, trim(a.effcd) as effcd
+				, q.effnm as effnm
+				, a.ecost as ecost
+				<!-- , replace(replace(a.hyosn, chr(10), '<![CDATA[</br>]]>'), chr(13), '<![CDATA[</br>]]>') as hyosn
+				, replace(replace(a.wonin, chr(10), '<![CDATA[</br>]]>'), chr(13), '<![CDATA[</br>]]>') as wonin
+				, replace(replace(a.daech, chr(10), '<![CDATA[</br>]]>'), chr(13), '<![CDATA[</br>]]>') as daech -->
+				, trim(a.hyosn) as hyosn
+				, trim(a.wonin) as wonin
+				, trim(a.daech) as daech
+				, a.janhr as janhr
+				, a.wathr as wathr
+				, a.stphr as stphr
+				, a.mnthr as mnthr
+				, a.bfrhr as bfrhr
+				, a.tothr as tothr
+				, a.cmplt as cmplt
+				, a.cnote as cnote
+				, v.teima as teima
+				, v.daesn as daesn
+				, v.chkan as chkan
+				, '$IMGPATH$' || ifnull(trim(v.imgbf),'') as imgbf
+				, '$IMGPATH$' || ifnull(trim(v.imgaf),'') as imgaf
+		
+		from 
+				${lib2}.obj200pf as a 
+		
+			left outer join ${lib2}.obj100pf as b
+			on a.comps = b.comps
+			and a.mshno = b.mshno
+			
+			left outer join ${lib2}.obc140pf as c
+			on a.comps = c.comps
+			and a.jobcd = c.jobcd
+			
+			left outer join ${lib2}.obc020pf as d
+			on a.comps = d.comps
+			and a.inocd = d.inocd
+			
+			left outer join ${lib2}.obc010pf as e
+			on a.comps = e.comps
+			and a.emgcd = e.emgcd
+			
+			left outer join ${lib2}.obc170pf as f
+			on a.comps = f.comps
+			and a.qorcd = f.qorcd
+			
+			left outer join ${lib2}.obc230pf as g
+			on a.comps = g.comps
+			and a.subas = g.subas
+			
+			left outer join ${lib2}.obc060pf as h
+			on a.comps = h.comps 
+			and a.comcd = h.comcd
+			
+			left outer join ${lib2}.obc050pf as i
+			on a.comps = i.comps
+			and a.deccd = i.deccd
+			
+			left outer join ${lib2}.obc160pf as j
+			on a.comps = j.comps
+			and a.chocd = j.chocd
+			
+			left outer join ${lib2}.obc180pf as k
+			on a.comps = k.comps
+			and a.hyocd = k.hyocd
+			
+			left outer join ${lib2}.obc110pf as l
+			on a.comps = l.comps
+			and a.caucd = l.caucd
+			
+			left outer join ${lib2}.obc090pf as m
+			on a.comps = m.comps
+			and a.trucd = m.trucd
+			<!-- LIB확인필요 lib1 -->
+			left outer join ${lib3}.hmd020pf as n
+			on a.wrkm1 = n.sabun
+			<!-- LIB확인필요 lib1 -->
+			left outer join ${lib3}.hmd020pf as o
+			on a.wrkm2 = o.sabun
+			
+			left outer join ${lib2}.obc150pf as p
+			on a.comps = p.comps
+			and a.repcd = p.repcd
+			
+			left outer join ${lib2}.obc200pf as q
+			on a.comps = q.comps
+			and a.effcd = q.effcd
+			
+			left outer join ${lib2}.obc250pf as r
+			on a.comps = r.comps
+			and a.sdpcd = r.sdpcd
+			
+			left outer join ${lib2}.obc250pf as s
+			on a.comps = s.comps
+			and a.sdpcd = s.sdpcd
+			
+			left outer join ${lib2}.obc040pf as t
+			on a.comps = t.comps
+			and a.mshno = t.mshno
+			
+			left outer join ${lib2}.obc030pf as u
+			on t.comps = u.comps
+			and t.lincd = u.lincd
+			and a.prtcd = u.prtcd
+			
+			
+			left outer join ${lib2}.obj210pf as v
+			on a.comps = v.comps
+			and a.jisno = v.jisno
+		
+		where 
+			'Psogm.selectOgm203_rep' = 'Psogm.selectOgm203_rep'
+			and a.comps = #{comps}
+			and a.jisno = #{jisno}
+			and u.mline = '1'
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 내외구분정보 -->
+	<select id="selectOgm203_obc020pf" resultMap="Inout" parameterType="PsogmDomain">
+		select 
+				  inocd
+				, inocd ||'  '||trim(inout) as inonm
+		from 
+				${lib2}.obc020pf
+		where 
+				'Psogm.selectOgm203_obc020pf' = 'Psogm.selectOgm203_obc020pf'
+			and	comps = #{comps}
+		order by inocd
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 우선도정보 -->
+	<select id="selectOgm203_obc010pf" resultMap="Emergence" parameterType="PsogmDomain">
+
+		select 
+				  emgcd
+				, emgcd ||'  '||trim(emgry) as emgry
+		from 
+				${lib2}.obc010pf
+		where 
+				'Psogm.selectOgm203_obc010pf' = 'Psogm.selectOgm203_obc010pf'
+				and comps = #{comps}
+		order by emgcd
+	
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 품질확인정보 -->
+	<select id="selectOgm203_obc170pf" resultMap="Quality" parameterType="PsogmDomain">
+		select 
+				  qorcd
+				, qorcd ||'  '|| trim(qornm) as qornm
+		from 
+				${lib2}.obc170pf
+		where 
+				'Psogm.selectOgm203_obc170pf' = 'Psogm.selectOgm203_obc170pf'
+			and	comps = #{comps}
+		order by qorcd
+	
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 효과구분정보 -->
+	<select id="selectOgm203_obc210pf" resultMap="Effect" parameterType="PsogmDomain">
+		select 
+				  ekind as effcd
+				, trim(ekdnm) as effnm 
+		from 
+				${lib2}.obc210pf
+		where 
+				'Psogm.selectOgm203_obc210pf' = 'Psogm.selectOgm203_obc210pf'
+			and	comps = #{comps}
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 효과구분정보2 -->
+	<select id="selectOgm203_obc200pf" resultMap="Effect" parameterType="PsogmDomain">
+		select 
+				  effcd
+				, trim(effnm) as effnm 
+		from 
+				${lib2}.obc200pf
+		where 
+				'Psogm.selectOgm203_obc200pf' = 'Psogm.selectOgm203_obc200pf'
+			and comps = #{comps}
+			<!-- and ekind = #{ekind} -->
+			and ekind = #{effcd}
+		order by effcd
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 재발방지정보 -->
+	<select id="selectOgm203_obc150pf" resultMap="Relapse" parameterType="PsogmDomain">
+		select 
+				  trim(repcd) as repcd
+				, repcd ||'  '|| trim(repnm) as repnm
+		from 
+				${lib2}.obc150pf
+		where
+			'Psogm.selectOgm203_obc200pf' = 'Psogm.selectOgm203_obc200pf' 
+			and comps = #{comps}
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 예비품정보 -->
+	<select id="selectOGMPrtno" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				  prtno CODE
+				, prtnm NAME1
+				, model NAME2
+		from
+				${lib2}.ogm010pf
+		where
+				'Psogm.selectOGMPrtno' = 'Psogm.selectOGMPrtno'
+			and comps =#{comps}
+			and group = #{group}
+		<if test="prtno != null and prtno != ''">
+			and prtno like '%' || '${prtno}' || '%'
+		</if>
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 구입선(구입업체)정보 -->
+	<select id="selectOGMVndnr" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+			 	  vndnr code
+			 	, vname name1
+			 	, vname name2
+		from
+				${lib2}.ogm040pf
+		where
+				'Psogm.selectOGMVndnr' = 'Psogm.selectOGMVndnr'
+		<if test="vndnr != null and vndnr != ''">
+			and VNDNR like '%' || '${vndnr}' || '%'
+			or VNAME like '%' || '${vndnr}' || '%'
+		</if>
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - Maker 정보 -->
+	<select id="selectOGMMaker" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				  maker code
+				, maknm name1
+				, maknm name2
+		from
+				${lib2}.ogm020pf
+		where
+			'Psogm.selectOGMMaker' = 'Psogm.selectOGMMaker'
+			and	comps =#{comps}
+			and group = ${group}
+		<if test="maker != null and maker != ''">
+			and maker like '%' || '${maker}' || '%'
+			or maknm like '%' || '${maker}' || '%'
+		</if>
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 조회 정보 -->
+	<select id="selectOGM116" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		SELECT 
+				  A.INPNO
+				, A.INDAT
+				, A.PRTNO
+				, TRIM(B.PRTNM) AS PRTNM
+				, TRIM(B.MODEL) AS MODEL
+				, B.PUNIT
+				, A.VNDOR VNDNR
+				, TRIM(C.VNAME) AS VNAME
+				, A.INQTY
+				, A.ICOST
+				, IFNULL(A.INQTY, 0) * IFNULL(A.ICOST, 0) IAMT
+				, TRIM(A.INUSE) AS INUSE
+				, TRIM(D.KORNM) AS KORNM
+				, A.INDID
+				, DECIMAL(IFNULL(SIN.QTY ,0) - IFNULL(SOUT.QTY, 0) + IFNULL(SSIL.QTY, 0), 11, 0) JG
+				, B.PCOST
+		FROM 
+				${lib2}.OGM110PF A 
+		LEFT OUTER JOIN ${lib2}.OGM010PF B 
+			ON A.COMPS = B.COMPS 
+			AND A.GROUP = B.GROUP
+			AND A.PRTNO = B.PRTNO
+		LEFT OUTER JOIN PSRESLIB.VENNAM C
+			ON A.VNDOR = C.VNDNR
+		LEFT OUTER JOIN ${lib3}.HMD020PF D
+			ON A.INDID = D.SABUN
+		LEFT OUTER JOIN
+			(
+				SELECT 
+						  PRTNO
+						, SUM(INQTY) QTY
+				FROM 
+						${lib2}.OGM110PF
+				WHERE 
+						COMPS = #{comps} AND GROUP = #{group}
+				GROUP BY PRTNO
+			) SIN
+			ON A.PRTNO = SIN.PRTNO
+		LEFT OUTER JOIN
+			(
+				SELECT 
+						  PRTNO
+						, SUM(OUQTY) QTY
+				FROM 
+						${lib2}.OGM120PF
+				WHERE 
+						COMPS = #{comps} AND GROUP = #{group}
+				GROUP BY PRTNO
+			) SOUT
+			ON A.PRTNO = SOUT.PRTNO
+		LEFT OUTER JOIN
+			(
+				SELECT 
+						  PRTNO
+						, SUM(DIQTY) QTY
+				FROM 
+						${lib2}.OGM140PF
+				WHERE 
+						COMPS = #{comps} AND GROUP = #{group} AND DPTCD = ''
+				GROUP BY PRTNO
+			) SSIL
+			ON A.PRTNO = SSIL.PRTNO
+		WHERE 
+				'Psogm.selectOGM116' = 'Psogm.selectOGM116'
+			and A.COMPS = #{comps}
+			AND A.GROUP = #{group}
+			AND A.INGUB = '20'
+		<if test="indatfrom != null and indatfrom != ''">
+			and A.INDAT <![CDATA[>=]]> #{indatfrom}
+		</if>
+		<if test="indatto != null and indatto != ''">
+			and A.INDAT <![CDATA[<=]]> #{indatto}
+		</if>
+		<if test="prtno != null and prtno != ''">
+			and A.PRTNO = #{prtno}
+		</if>
+		<if test="vndnr != null and vndnr != ''">
+			and A.VNDOR = #{vndnr}
+		</if>
+		ORDER BY A.INDAT DESC, A.INPNO DESC
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - prtno2 등록부분 조회 정보 -->
+	<select id="selectOGM116_JG" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		SELECT 
+				  A.PRTNO
+				, A.PRTNM
+				, A.MODEL
+				, A.PUNIT
+				, DECIMAL( IFNULL(SIN.QTY, 0) - IFNULL(SOUT.QTY, 0) + IFNULL(SSIL.QTY, 0), 12, 0) JG
+				, DECIMAL(A.PCOST, 12, 0) PCOST
+				, A.VNDOR VNDNR
+				, V.VNAME
+				, DECIMAL(IFNULL(SIN.AMT,0) + IFNULL(SOUT.AMT,0) + ( IFNULL(SSIL.QTY, 0) * IFNULL(A.PCOST, 0) ), 12, 0) AMT 
+				, DECIMAL(A.POINT, 12,0) POINT
+				, DECIMAL(A.MINQY, 12, 0) MINQY
+				, DECIMAL(A.NCOST, 12,0) NCOST
+		FROM 
+				${lib2}.OGM010PF A
+		LEFT OUTER JOIN ${lib2}.OGM040PF V
+			ON A.VNDOR = V.VNDNR
+		LEFT OUTER JOIN
+			(
+				SELECT 
+						  PRTNO
+						, SUM(INQTY) QTY
+						, SUM(IFNULL(INQTY,0) * IFNULL(ICOST,0)) AMT
+				FROM 
+						${lib2}.OGM110PF
+				WHERE 
+						COMPS = #{comps}
+					AND GROUP = #{group}
+				GROUP BY PRTNO
+			) SIN
+			ON A.PRTNO = SIN.PRTNO
+		LEFT OUTER JOIN
+			(
+				SELECT 
+						  PRTNO
+						, SUM(OUQTY) QTY
+						, SUM(IFNULL(OUQTY,0) * IFNULL(OCOST,0)) AMT
+				FROM 
+						${lib2}.OGM120PF
+				WHERE 
+						COMPS = #{comps}
+					AND GROUP = #{group}
+				GROUP BY PRTNO
+			) SOUT
+			ON A.PRTNO = SOUT.PRTNO
+		LEFT OUTER JOIN
+			(
+			  	SELECT 
+						  PRTNO
+						, SUM(DIQTY) QTY
+				FROM 
+						${lib2}.OGM140PF
+				WHERE 
+						COMPS = #{comps}
+					AND GROUP = #{group}
+					AND IFNULL(DPTCD,'') = ''
+				GROUP BY PRTNO
+			) SSIL
+			ON A.PRTNO = SSIL.PRTNO
+		WHERE 
+			A.COMPS = #{comps}
+			AND A.GROUP = #{group}
+			AND A.PRTNO = #{prtno}
+			ORDER BY A.PRTNO
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 예비품/설비보전/계측기 관리자 권한확인  -->
+	<select id="selectmanagerYN" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				  dioid
+				, mager
+		from
+				${lib2}.obc301pf
+		where
+				comps =#{comps}
+			and group = #{group}
+		<if test="dioid != null and dioid != ''">
+			and DIOID = #{dioid}
+		</if>
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 입고일자체크 -->
+	<select id="selectcloseYN" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+			cldat INDAT
+		from
+			${lib2}.ogm030pf
+		where
+			comps = #{comps}
+			and group = #{group}
+		<if test="indat != null and indat != ''">
+			and cloym = #{indat}
+		</if>
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 등록완료체크(1:등록완료) -->
+	<select id="selectOgm203_cmplt"  resultType="java.lang.String" parameterType="PsogmDomain">
+		select 
+				cmplt  
+		from 
+				${lib2}.obj200pf
+		where 
+			comps = #{comps}
+			and jisno = #{jisno}
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 자재입고번호 구하기 max + 1 -->
+	<select id="selectOGM115_maxNumber" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				coalesce(max(decimal(inpno)), 0) + 1 INPNO
+		from 
+				${lib2}.ogm110pf
+		where 
+				COMPS = #{comps}
+			and	GROUP = #{group}
+	</select>
+	
+	<!-- 설비보전관리 > 신규이력등록 - jisno max + 1 -->
+	<select id="selectOgm_maxJisiNum" resultType="java.lang.String" parameterType="PsogmDomain">
+		select 
+			<!-- coalesce(max(decimal(seqno)), 0) + 1 as autonum -->
+			coalesce(max(decimal(seqno)), 0) + 1  
+		from 
+			${lib2}.obj010pf
+		where  
+			pltcd = #{comps}
+	</select>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 등록 -->
+	<!-- SqlMap-Psogm.insertOGM115 -->
+	<insert id="insertOGM115" parameterType="SpareUnitDb2Domain">
+		insert into ${lib2}.OGM110PF(
+				COMPS,
+				GROUP,
+				INPNO,
+				VNDOR,
+				PRTNO,
+				PUNIT,
+				INDAT,
+				INPYM,
+				INDID,
+				INGUB,
+				INQTY,
+				ICOST,
+				INUSE,
+				ORDNO,
+				ICNNO,
+				ADDAT,
+				ADTIM,
+				ADUSR,
+				CHDAT,
+				CHTIM,
+				CHUSR)
+		values(
+				#{comps},
+				#{group},
+				#{inpno},
+				#{vndnr},
+				#{prtno},
+				<!-- #{punit}, -->
+				'',
+				${indat},
+				<!-- #{inpym}, -->
+				substr(${indat}, 0, 7),
+				#{indid},
+				<!-- #{ingub}, //10:정상, 20:강제, 90:취소-->
+				'20',
+				#{inqty},
+				#{icost},
+				#{inuse},
+				<!-- #{ordno}, -->
+				' ',
+				<!-- #{icnno}, -->
+				' ',
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				#{adusr},
+				substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+				substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+				#{adusr})
+	</insert>
+	
+	<!-- 설비보전관리 > 신규이력등록 - 등록 -->
+	<insert id="insertOgm203" parameterType="PsogmDomain">
+		insert into ${lib2}.obj200pf (
+				comps, jisno,
+		<if test="timcd != null and timcd != ''">		 
+				timcd, 
+		</if>
+				prtcd, 
+				mshno,
+		<if test="dptcd != null and dptcd != ''">		 
+				dptcd,
+		</if>
+		<if test="sdpcd != null and sdpcd != ''">
+				sdpcd,
+		</if> 
+				jobcd, 
+				kdown, inocd, emgcd, qorcd, 
+				subas, assno, comcd, deccd, 
+				prtno, chocd, hyocd, caucd, 
+				trucd,
+		<if test="padat != null and padat != ''"> 
+				padat, 
+		</if>
+		<if test="patim != null and patim != ''"> 
+				patim, 
+		</if>
+		<if test="urdat != null and urdat != ''">
+				urdat, 
+		</if>
+		<if test="urtim != null and urtim != ''">
+				urtim, 
+		</if>
+		<if test="ksdat != null and ksdat != ''">
+				ksdat, 
+		</if>
+		<if test="kstim != null and kstim != ''">
+				kstim, 
+		</if>
+		<if test="wndat != null and wndat != ''">
+				wndat, 
+		</if>
+		<if test="wntim != null and wntim != ''">
+				wntim, 
+		</if>
+				wrkm1, 
+		<if test="wrkm2 != null and wrkm2 != ''">
+				wrkm2, 
+		</if>
+				subcn, 
+		<if test="scost != null and scost != ''">
+				scost, 
+		</if>
+		<if test="pcost != null and pcost != ''">
+				pcost, 
+		</if>
+				repcd, effcd,
+		<if test="ecost != null and ecost != ''"> 
+				ecost, 
+		</if>
+				hyosn, wonin, daech, 
+		<if test="janhr != null and janhr != ''">		
+				janhr, 
+		</if>
+		<if test="wathr != null and wathr != ''">
+				wathr,
+		</if>
+		<if test="stphr != null and stphr != ''"> 
+				stphr,
+		</if>
+		<if test="mnthr != null and mnthr != ''"> 
+				mnthr, 
+		</if>
+				bfrhr, wrkhr, tothr, cmplt,
+				nocnt,
+				cnote, addat, adtim, adusr
+		) values (
+				#{comps}, #{jisno},
+		<if test="timcd != null and timcd != ''"> 
+				#{timcd},
+		</if>	
+				#{prtcd}, 
+				#{mshno},
+		<if test="dptcd != null and dptcd != ''">
+				#{dptcd}, 
+		</if>
+		<if test="sdpcd != null and sdpcd != ''">
+				#{sdpcd}, 
+		</if>
+				#{jobcd}, 
+				#{kdown}, #{inocd}, #{emgcd}, #{qorcd}, 
+				#{subas}, #{assno}, #{comcd}, #{deccd},
+				#{prtno}, #{chocd}, #{hyocd}, #{caucd}, 
+				#{trucd}, 
+		<if test="padat != null and padat != ''">
+				${padat},
+		</if>
+		<if test="patim != null and patim != ''"> 
+				#{patim},
+		</if>
+		<if test="urdat != null and urdat != ''">
+				${urdat}, 
+		</if>
+		<if test="urtim != null and urtim != ''">
+				#{urtim}, 
+		</if>
+		<if test="ksdat != null and ksdat != ''">
+				${ksdat}, 
+		</if>
+		<if test="kstim != null and kstim != ''">
+				#{kstim}, 
+		</if>
+		<if test="wndat != null and wndat != ''">
+				${wndat}, 
+		</if>
+		<if test="wntim != null and wntim != ''">
+				#{wntim}, 
+		</if>
+				#{wrkm},
+		<if test="wrkm2 != null and wrkm2 != ''"> 
+				#{wrkm2}, 
+		</if>
+				#{subcn},
+		 <if test="scost != null and scost != ''">
+				#{scost}, 
+		</if>
+		<if test="pcost != null and pcost != ''">
+				#{pcost}, 
+		</if>
+				#{repcd}, #{effcd},
+		<if test="ecost != null and ecost != ''"> 
+				#{ecost}, 
+		</if>
+				#{hyosn}, #{wonin}, #{daech},
+	 	<if test="janhr != null and janhr != ''">
+				#{janhr}, 
+		</if>
+		<if test="wathr != null and wathr != ''">		
+				#{wathr},
+		</if>
+		<if test="stphr != null and stphr != ''"> 
+				#{stphr}, 
+		</if>
+		<if test="mnthr != null and mnthr != ''">
+				#{mnthr}, 
+		</if>
+				#{bfrhr}, #{wrkhr}, #{tothr}, #{cmplt},		 
+				1,
+				#{cnote}, #{addat}, #{adtim}, #{adusr}
+		)
+		
+		<!-- (
+				#{comps}, #{jisno}, #{timcd}, #{prtcd}, 
+				#{mshno}, #{dptcd}, #{sdpcd}, #{jobcd}, 
+				${kdown}, #{inocd}, #{emgcd}, #{qorcd}, 
+				#{subas}, #{assno}, #{comcd}, {deccd},
+				#{prtno}, #{chocd}, #{hyocd}, #{caucd}, 
+				#{trucd}, 
+				${padat}, 
+				#{patim}, 
+				${urdat}, 
+				#{urtim}, 
+				${ksdat}, 
+				#{kstim}, 
+				${wndat}, 
+				#{wntim}, 
+				${wrkm}, ${wrkm2}, #{subcn}, 
+				${scost}, ${pcost}, #{repcd}, #{effcd}, 
+				${ecost}, #{hyosn}, #{wonin}, #{daech}, 
+				${janhr}, ${wathr}, ${stphr}, ${mnthr}, 
+				${bfrhr}, ${wrkhr} ${tothr}, #{cmplt}, 
+				${nocnt}, #{cnote}, #{addat}, #{adtim}, #{adusr}
+		) -->	
+	</insert>
+	
+	<!-- 설비보전관리 > 강제입고등록 - 등록완료 후 업데이트 -->
+	<update id="updateOGM115_1" parameterType="SpareUnitDb2Domain">
+		update ${lib2}.OGM010PF set
+			PCOST = #{pcost},
+			NCOST = #{icost}
+		where 
+			COMPS = #{comps}
+			and	GROUP = #{group}
+			and PRTNO = #{prtno}
+	</update>
+	
+	<!-- 자동체번 테이블에서 max값으로 레코드 저장후 수정된 max값(max+1)을 update해주는 함수 -->
+	<update id="updateOgm_maxJisiNum" parameterType="PsogmDomain">
+		update ${lib2}.obj010pf 
+		set  
+			 	seqno = (
+			 				select 
+									max(decimal(seqno)+1) as autonum 
+							from 
+									${lib2}.obj010pf
+							where 
+									pltcd = #{comps}
+						)
+		where 
+				'Psomg.updateOgm_maxJisiNum' = 'Psomg.updateOgm_maxJisiNum' 
+				and pltcd = #{comps}
+	
+	</update>	
+	
+	<!-- 설비보전관리 > 신규이력등록 - 업데이트 -->
+	<update id="updateOgm203" parameterType="PsogmDomain">
+		update
+				${lib2}.obj200pf 
+		set  
+		<if test="timcd != null and timcd != ''">
+		 		timcd = #{timcd}, 
+ 		</if>
+		 		prtcd = #{prtcd}, 
+		 		mshno = #{mshno},
+		<if test="dptcd != null and dptcd != ''">		 
+		 		dptcd = #{dptcd}, 
+ 		</if>
+ 		<if test="sdpcd != null and sdpcd != ''">
+		 		sdpcd = #{sdpcd}, 
+ 		</if>
+		 		jobcd = #{jobcd},
+		 		kdown = #{kdown}, 
+		 		inocd = #{inocd}, 
+		 		emgcd = #{emgcd}, 
+		 		qorcd = #{qorcd}, 
+		 		subas = #{subas}, 
+		 		assno = #{assno}, 
+				comcd = #{comcd}, 
+				deccd = #{deccd}, 
+				prtno = #{prtno}, 
+				chocd = #{chocd}, 
+				hyocd = #{hyocd}, 
+				caucd = #{caucd}, 
+				trucd = #{trucd},
+		<if test="padat != null and padat != ''">
+				padat = ${padat}, 
+		</if>
+		<if test="patim != null and patim != ''">
+				patim = #{patim}, 
+		</if>
+		<if test="urdat != null and urdat != ''">
+				urdat = ${urdat}, 
+		</if>
+		<if test="urtim != null and urtim != ''">
+				urtim = #{urtim}, 
+		</if>
+		<if test="ksdat != null and ksdat != ''">
+				ksdat = ${ksdat}, 
+		</if>
+		<if test="kstim != null and kstim != ''">
+				kstim = #{kstim}, 
+		</if>
+		<if test="wndat != null and wndat != ''">
+				wndat = #{wndat},
+		</if> 
+		<if test="wntim != null and wntim != ''">
+				wntim = #{wntim}, 
+		</if>
+				wrkm1 = #{wrkm}, 
+		<if test="wrkm2 != null and wrkm2 != ''">
+				wrkm2 = #{wrkm2}, 
+		</if>
+				subcn = #{subcn}, 
+		<if test="scost != null and scost != ''">
+				scost = #{scost}, 
+		</if>
+		<if test="pcost != null and pcost != ''">
+				pcost = #{pcost}, 
+		</if>
+				repcd = #{repcd}, 
+				effcd = #{effcd},
+		<if test="ecost != null and ecost != ''"> 
+				ecost = #{ecost}, 
+		</if>
+				hyosn = #{hyosn}, 
+				wonin = #{wonin}, 
+				daech = #{daech}, 
+		<if test="janhr != null and janhr != ''">
+				janhr = #{janhr}, 
+		</if>
+		<if test="wathr != null and wathr != ''">
+				wathr = #{wathr}, 
+		</if>
+		<if test="stphr != null and stphr != ''">
+				stphr = #{stphr}, 
+		</if>
+		<if test="mnthr != null and mnthr != ''">
+				mnthr = #{mnthr}, 
+		</if>
+				bfrhr = #{bfrhr}, 
+				wrkhr = #{wrkhr}, 
+				tothr = #{tothr}, 
+				cmplt = #{cmplt}, 
+				cnote = #{cnote}, 
+				chdat = #{chdat}, 
+				chtim = #{chtim}, 
+				chusr = #{chusr}
+		 where 
+		 		'SqlMap-Psogm.updateOgm203' = 'SqlMap-Psogm.updateOgm203'
+		 	and	comps=#{comps}
+		 	and jisno=#{jisno}
+	
+	</update>
+	
+	<!-- OGM203 재발방지코드1인경우 동일내역있는가 확인 -->
+	<select id="selectOgm203_pepcdChk" resultMap="Psogm" parameterType="PsogmDomain">
+		select 
+				  a.comps
+				, a.jisno
+				, a.mshno
+				, b.mshnm as mshnm
+				, a.jobcd
+				, c.jobnm as jobnm
+				, a.padat as padat
+				, a.patim as patim
+				, a.urdat as urdat
+				, a.urtim as urtim
+				, a.ksdat as ksdat
+				, a.kstim as kstim
+				, a.wrkm1
+				, d.kornm as kornm
+				, a.sdpcd as sdpcd
+				, trim(a.hyosn) as hyosn
+				, trim(a.cnote) as cnote 
+		
+		from 
+				${lib2}.obj200pf a 
+			left outer join ${lib2}.obj100pf b
+			on a.comps = b.comps
+			and a.mshno = b.mshno
+		
+			left outer join ${lib2}.obc140pf c
+			on a.comps = b.comps
+			and a.jobcd = c.jobcd
+			
+			<!-- LIB확인필요 lib1 -->
+			left outer join ${lib3}.hmd020pf d
+			on a.wrkm1 = d.sabun
+		
+		where 
+				'SqlMap-Psogm.selectOgm203_pepcdChk' = 'SqlMap-Psogm.selectOgm203_pepcdChk'
+			and	a.comps = #{comps} 
+			and a.jisno = #{jisno}
+	</select>
+	
+	<!-- 재발방지 작업등록 -->
+	<insert id="insertOgm203_pepcd"  parameterType="PsogmDomain">
+		insert into ${lib2}.obj200pf (
+				/* SqlMap-psogm.insertOgm203_pepcd */
+				comps, 
+				jisno, 
+				timcd, 
+				prtcd, 
+				mshno, 
+				sdpcd, 
+				subas, 
+				assno, 
+				comcd, 
+				deccd, 
+				prtno, 
+		   		chocd, 
+		   		ksdat, 
+		   		kstim, 
+		   		wrkm1, 
+		   		hyosn, 
+		   		wonin, 
+		   		daech, 
+		   		cmplt, 
+		   		nocnt
+   		) values (
+   				#{comps}, 
+   				#{jisno},
+				#{timcd}, 
+				#{prtcd}, 
+				#{mshno}, 
+				#{sdpcd}, 
+				#{subas}, 
+				#{assno}, 
+				#{comcd}, 
+				#{deccd}, 
+				#{prtno}, 
+				#{chocd}, 
+				'${ksdat}', 
+				#{kstim}, 
+				'${wrkm}', 
+				#{hyosn}, 
+				#{wonin}, 
+				#{daech}, 
+				' ', 
+				'1'
+		)
+	</insert>
+	
+	<!-- 재발방지 작업등록 업데이트 -->
+	<update id="updateOgm203_pepcd" parameterType="PsogmDomain">
+		update 
+				${lib2}.obj200pf 
+	 	set  
+		 		timcd = #{timcd}, 
+		 		prtcd = #{prtcd}, 
+		 		mshno = #{mshno}, 
+		 		sdpcd = #{sdpcd}, 
+		 		subas = #{subas}, 
+		 		assno = #{assno}, 
+				comcd = #{comcd}, 
+				deccd = #{deccd}, 
+				prtno = #{prtno}, 
+				chocd = #{chocd}, 
+				ksdat = #{ksdat}, 
+				kstim = #{kstim},
+				wrkm1 = #{wrkm}, 
+				hyosn = #{hyosn}, 
+				wonin = #{wonin}, 
+				daech = #{daech}
+		 where 
+		 		'SqlMap-psogm.updateOgm203_pepcd' = 'SqlMap-psogm.updateOgm203_pepcd'
+		 	and	comps = #{comps}
+		 	and jisno = #{jisno}
+	
+	</update>
+	
+	<!-- 첨부파일 유무검색 -->
+	<select id="selectOgm219_obj230pf" resultMap="FileDb2" parameterType="FileDb2Domain">
+		select 
+				  trim(siryo) as siryo
+				, right(trim(filnm),3) as ftype
+				, trim(filnm) as filnm 
+				, '0' as delchk
+				, seqno
+		from 
+			${lib2}.obj230pf 
+		where 
+				'SqlMap-psogm.selectOgm219_obj230pf' = 'SqlMap-psogm.selectOgm219_obj230pf'
+			and comps = #{comps}
+			and jisno = #{jisno}
+	</select>
+	
+	<!-- 교환부품 조회 -->
+	<select id="selectOgm205_obj220pf" resultMap="Psogm" parameterType="PsogmDomain">
+		select 
+				  trim(a.prtno) as prtno
+				, trim(a.prtnm) as prtnm
+				, trim(a.ptype) as ptype
+				, trim(a.maker) as maker
+				, a.quaty as quaty
+				, a.price as price
+				, a.amont
+				, '0' as delchk
+				, a.seqno as seqno
+		from 	
+				${lib2}.obj220pf as a
+		where 
+				'SqlMap-psogm.selectOgm205_obj220pf' = 'SqlMap-psogm.selectOgm205_obj220pf'
+			and	a.comps = #{comps}
+			and trim(a.jisno) = #{jisno}
+	</select>
+
+	<!-- 교환부품 삭제 -->
+	<delete id="deleteOgm205_obj220pf" parameterType="PsogmDomain">
+		delete from 
+				${lib2}.obj220pf 
+		where 
+				'SqlMap-psogm.selectOgm205_obj220pf' = 'SqlMap-psogm.selectOgm205_obj220pf'
+			and comps=#{comps} 
+			and seqno=#{seqno}
+	</delete>
+	
+	<!-- 교환부품 등록 -->
+	<insert id="insertOgm205_obj220pf" parameterType="PsogmDomain">
+		insert into ${lib2}.obj220pf (
+				/* SqlMap-Psogm.insertOgm205_obj220pf */ 
+				comps, 
+				seqno, 
+				jisno,
+			<if test="prtno != null and prtno !=''"> 
+				prtno, 
+			</if>
+				prtnm,
+			<if test="ptype != null and ptype !=''"> 
+				ptype,
+			</if>
+			<if test="maker != null and maker !=''"> 
+				maker, 
+			</if>
+				quaty, 
+				price, 
+				amont
+		) values (
+				#{comps},
+				(select 
+						coalesce(max(decimal(seqno)), 0) + 1 as autonum
+				from 
+						${lib2}.obj220pf 
+				where 
+						comps = #{comps}
+				),
+				#{jisno},
+			<if test="prtno != null and prtno !=''">
+				#{prtno},
+			</if>
+				#{prtnm},
+			<if test="ptype != null and ptype !=''">
+				#{ptype},
+			</if>
+			<if test="maker != null and maker !=''">
+				#{maker},
+			</if>
+				#{quaty},
+				#{price},
+				#{amont}
+		)
+	</insert>
+	
+	<!-- 교환부품 업데이트 -->
+	<update id="updateOgm205_obj220pf" parameterType="PsogmDomain">
+		update 
+				${lib2}.obj220pf 
+		set 
+				quaty = #{quaty},
+				price = #{price},
+				amont = #{amont}
+		Where 
+				'SqlMap-psogm.updateOgm205_obj220pf' = 'SqlMap-psogm.updateOgm205_obj220pf'
+			and comps = #{comps}
+			and jisno = #{jisno}
+			and prtno = #{prtno}
+	</update>
+	
+	<!-- prtno로 예비품정보 가져오기 -->
+	<select id="selectOgm010pf" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				  trim(a.prtnm) prtnm
+				, trim(a.model) model
+				, trim(b.maknm) maknm
+				<!-- , a.pcost -->
+				, DECIMAL(A.PCOST, 12, 0) PCOST 
+		from 
+				${lib2}.ogm010pf as a
+		left outer join ${lib2}.ogm020pf as b
+			on a.comps = b.comps
+			and a.maker = b.maker
+		where 
+				'SqlMap-psogm.updateOgm205_obj220pf' = 'SqlMap-psogm.updateOgm205_obj220pf'
+			and a.comps = #{comps}
+			and a.prtno = #{prtno}
+	</select>
+	
+	<!-- 부품명이나 MAKER명으로 예비품정보 가져오기 -->
+	<select id="selectOgm205_pop" resultMap="SpareUnitDb2" parameterType="SpareUnitDb2Domain">
+		select 
+				  trim(a.prtno) prtno
+				, trim(a.prtnm) prtnm
+				, trim(a.model) model
+				, trim(b.maknm) maknm
+				, DECIMAL(a.pcost, 12, 0) pcost 
+		from 
+				${lib2}.ogm010pf as a
+			left outer join ${lib2}.ogm020pf as b
+			on a.comps = b.comps
+			and a.maker = b.maker
+		where 
+				'SqlMap-psogm.selectOgm205_pop' = 'SqlMap-psogm.selectOgm205_pop'
+			and	a.comps = #{comps}
+		<if test="prtnm != null and prtnm !=''">
+			and	a.prtnm LIKE '%' || '${prtnm}'  || '%'
+		</if>   	    
+		<if test="maker != null and maker != ''">
+			and b.maknm  LIKE '%' || '${maknm}' || '%'
+		</if>
+	</select>
+</mapper>

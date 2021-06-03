@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PsogmMonPerformDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="PsogmMonPerformDb2" type="PsogmMonPerformDb2Domain">
+        <result property="timnm" column="LINCD" />
+        <result property="prtnm" column="LINNM" />
+        <result property="startYearMon" column="COMPS" />
+        <result property="endYearMon" column="COMPS" />
+        <result property="cnt_jnbno_08" column="COMPS" />
+        <result property="cnt_jnbno_04" column="COMPS" />
+        <result property="cnt_jnbno_05" column="COMPS" />
+        <result property="cnt_jnbno_02" column="COMPS" />
+        <result property="cnt_jnbno_03" column="COMPS" />
+        <result property="cnt_jnbno_15" column="COMPS" />
+        <result property="cnt_jnbno_11" column="COMPS" />
+        <result property="cnt_jnbno_09" column="COMPS" />
+        <result property="cnt_jnbno_06" column="COMPS" />
+        <result property="cnt_jnbno_01" column="COMPS" />
+        <result property="cnt_jnbno_16" column="COMPS" />
+        <result property="cnt_jnbno_17" column="COMPS" />
+        <result property="cnt_jnbno_14" column="COMPS" />
+        <result property="cnt_jnbno_total" column="CNT_JNBNO_TOTAL" />
+        <result property="m4" column="M4" />
+        <result property="cnt_yedat_04" column="CNT_YEDAT_04" />
+        <result property="cnt_rpdat_04" column="CNT_RPDAT_04" />
+        <result property="m5" column="M5" />
+        <result property="cnt_yedat_05" column="CNT_YEDAT_05" />
+        <result property="cnt_rpdat_05" column="CNT_RPDAT_05" />
+        <result property="m6" column="M6" />
+        <result property="cnt_yedat_06" column="CNT_YEDAT_06" />
+        <result property="cnt_rpdat_06" column="CNT_RPDAT_06" />
+        <result property="m7" column="M7" />
+        <result property="cnt_yedat_07" column="CNT_YEDAT_07" />
+        <result property="cnt_rpdat_07" column="CNT_RPDAT_07" />
+        <result property="m8" column="M8" />
+        <result property="cnt_yedat_08" column="CNT_YEDAT_08" />
+        <result property="cnt_rpdat_08" column="CNT_RPDAT_08" />
+        <result property="m9" column="M9" />
+        <result property="cnt_yedat_09" column="CNT_YEDAT_09" />
+        <result property="cnt_rpdat_09" column="CNT_RPDAT_09" />
+        <result property="m10" column="M10" />
+        <result property="cnt_yedat_10" column="CNT_YEDAT_10" />
+        <result property="cnt_rpdat_10" column="CNT_RPDAT_10" />
+        <result property="m11" column="M11" />
+        <result property="cnt_yedat_11" column="CNT_YEDAT_11" />
+        <result property="cnt_rpdat_11" column="CNT_RPDAT_11" />
+        <result property="m12" column="M12" />
+        <result property="cnt_yedat_12" column="CNT_YEDAT_12" />
+        <result property="cnt_rpdat_12" column="CNT_RPDAT_12" />
+        <result property="m1" column="M1" />
+        <result property="cnt_yedat_01" column="CNT_YEDAT_01" />
+        <result property="cnt_rpdat_01" column="CNT_RPDAT_01" />
+        <result property="m2" column="M2" />
+        <result property="cnt_yedat_02" column="CNT_YEDAT_02" />
+        <result property="cnt_rpdat_02" column="CNT_RPDAT_02" />
+        <result property="m3" column="M3" />
+        <result property="cnt_yedat_03" column="CNT_YEDAT_03" />
+        <result property="cnt_rpdat_03" column="CNT_RPDAT_03" />
+        <result property="cnt_total" column="CNT_TOTAL" />
+        <result property="comps" column="COMPS" />
+        <result property="g_gub" column="G_GUB" />
+        <result property="strval" column="STRVAL" />
+        <result property="lib1" column="LIB1" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+   
+    <!-- 월별계획대실적 조회 -->
+	<select id="selectOgm401" resultMap="PsogmMonPerformDb2" parameterType="PsogmMonPerformDb2Domain">
+		select
+				  y.dpconm timnm
+				, x.dpdpnm prtnm
+				, cnt_jnbno_08
+				, cnt_jnbno_04
+				, cnt_jnbno_05
+				, cnt_jnbno_02
+				, cnt_jnbno_03
+				, cnt_jnbno_15
+				, cnt_jnbno_11
+				, cnt_jnbno_09
+				, cnt_jnbno_06
+				, cnt_jnbno_01
+				, cnt_jnbno_16
+				, cnt_jnbno_17
+				, cnt_jnbno_14
+				, cnt_jnbno_total
+				, m4
+				, cnt_yedat_04
+				, cnt_rpdat_04
+				, m5
+				, cnt_yedat_05
+				, cnt_rpdat_05
+				, m6
+				, cnt_yedat_06
+				, cnt_rpdat_06
+				, m7
+				, cnt_yedat_07
+				, cnt_rpdat_07
+				, m8
+				, cnt_yedat_08
+				, cnt_rpdat_08
+				, m9
+				, cnt_yedat_09
+				, cnt_rpdat_09
+				, m10
+				, cnt_yedat_10
+				, cnt_rpdat_10
+				, m11
+				, cnt_yedat_11
+				, cnt_rpdat_11
+				, m12
+				, cnt_yedat_12
+				, cnt_rpdat_12
+				, m1
+				, cnt_yedat_01
+				, cnt_rpdat_01
+				, m2
+				, cnt_yedat_02
+				, cnt_rpdat_02
+				, m3
+				, cnt_yedat_03
+				, cnt_rpdat_03
+				, cnt_rpdat_04 + cnt_rpdat_05 + cnt_rpdat_06 + cnt_rpdat_07 + cnt_rpdat_08 + cnt_rpdat_09 +
+					cnt_rpdat_10 + cnt_rpdat_11 + cnt_rpdat_12 + cnt_rpdat_01 + cnt_rpdat_02 + cnt_rpdat_03 as cnt_total
+		from
+			(
+				select 
+						  a.dptcd as dptcd
+						, d.dppat1
+						, d.dpsqno
+						, d.dpconm
+						, d.dpdpnm
+						, count(case c.mstcd when '08' then a.jnbno end) as cnt_jnbno_08
+						, count(case c.mstcd when '04' then a.jnbno end) as cnt_jnbno_04
+						, count(case c.mstcd when '05' then a.jnbno end) as cnt_jnbno_05
+						, count(case c.mstcd when '02' then a.jnbno end) as cnt_jnbno_02
+						, count(case c.mstcd when '03' then a.jnbno end) as cnt_jnbno_03
+						, count(case c.mstcd when '15' then a.jnbno end) as cnt_jnbno_15
+						, count(case c.mstcd when '10' then a.jnbno end) + count(case c.mstcd when '11' then a.jnbno end) as cnt_jnbno_11
+						, count(case c.mstcd when '09' then a.jnbno end) as cnt_jnbno_09
+						, count(case c.mstcd when '06' then a.jnbno end) as cnt_jnbno_06
+						, count(case c.mstcd when '01' then a.jnbno end) as cnt_jnbno_01
+						, count(case c.mstcd when '16' then a.jnbno end) as cnt_jnbno_16
+						, count(case c.mstcd when '17' then a.jnbno end) as cnt_jnbno_17
+						, count(case c.mstcd when '14' then a.jnbno end) as cnt_jnbno_14
+						, count(a.jnbno) as cnt_jnbno_total
+						, ${strval}      
+				from 
+					${lib2}.tme010pf as a   
+					left outer join ${lib2}.tme100pf as b   on a.comps = b.comps   and a.group = b.group   and a.mngno = b.mngno        
+					left outer join ${lib2}.mst050pf as c   on a.comps = c.comps   and a.j_gub = c.mstcd   and c.grpcd = 'GAG'
+					left outer join ${lib2}.mst650pf as d   on a.comps = d.dpcomp and a.dptcd = d.dpcode 
+				where 
+					a.comps = #{comps} and a.g_gub in (${g_gub}) and substr(char(b.yedat),1,6) between #{startYearMon} and #{endYearMon}
+				group by 
+					a.dptcd,d.dppat1,d.dpconm,d.dpdpnm,d.dpsqno
+		) x
+		left outer join (select * from ${lib2}.mst650pf where dpcomp=#{comps}) y 
+		on x.dppat1 = y.dpcode
+		order by
+			x.dpsqno
+	</select>
+    
+</mapper>

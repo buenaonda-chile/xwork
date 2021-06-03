@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustOrderTypeMstViewDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustOrderTypeMstView" type="CustOrderTypeMstViewDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="pspno" column="PSPNO" />
+        <result property="mcrcd" column="MCRCD" />
+        <result property="seqcd" column="SEQCD" />
+        <result property="seqno" column="SEQNO" />                
+        <result property="efffr" column="EFFFR" />
+        <result property="effto" column="EFFTO" />        
+        <result property="cprtn" column="CPRTN" />     
+        <result property="itdsc" column="ITDSC" />
+        <result property="mstsm" column="MSTSM" />
+        <result property="cusnm" column="CUSNM" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustOrderTypeMstView" parameterType="CustOrderTypeMstViewDomain">
+		SELECT									
+			A.COMPS, A.PYVND, A.PSPNO, A.MCRCD, A.SEQCD, A.SEQNO, A.EFFFR, A.EFFTO, B.CPRTN, C.ITDSC, E.MSTSM, F.CUSNM								
+		FROM									
+			PSZDBLIB.SVM100PF A								
+			LEFT OUTER JOIN								
+				(SELECT  L.CUSNO, L.PRTNO, L.EDATM, MIN(L.CPRTN) AS CPRTN							
+				 FROM ${lib1}.EM000PR L,							
+					(SELECT CUSNO, PRTNO, MAX(EDATM) AS EDATM						
+					 FROM ${lib1}.EM000PR 						
+					 WHERE EDATM <![CDATA[<=]]> DECIMAL(substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2))						
+					 GROUP BY CUSNO, PRTNO) M						
+				 WHERE L.CUSNO=M.CUSNO AND L.PRTNO=M.PRTNO AND L.EDATM=M.EDATM							
+				 GROUP BY L.CUSNO, L.PRTNO, L.EDATM) B ON A.PYVND=B.CUSNO AND A.PSPNO=B.PRTNO							
+			LEFT OUTER JOIN								
+				${lib1}.BM008PR C ON A.PSPNO=C.ITNBR							
+			LEFT OUTER JOIN								
+				${lib2}.MST100PF D ON A.COMPS=D.COMPS AND A.PSPNO=D.PRTNO							
+			LEFT OUTER JOIN								
+				${lib2}.MST050PF E ON A.COMPS=E.COMPS AND E.GRPCD='CAR' AND D.CARCD=E.MSTCD							
+			LEFT OUTER JOIN ${lib1}.CUSMAS1 F ON A.PYVND=F.CUSNO		
+		WHERE	
+		      'SqlMap-CustOrderTypeMstView.searchByCondition' = 'SqlMap-CustOrderTypeMstView.searchByCondition'								
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+		<if test="mcrcd != null and mcrcd !='' ">
+	      AND A.MCRCD <![CDATA[>=]]> #{mcrcd}
+		</if>	
+		ORDER BY									
+			A.COMPS, A.PYVND, A.MCRCD, A.SEQCD, A.SEQNO, A.PSPNO
+    </select>
+
+</mapper>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="메뉴관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menuList"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_EXSC"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuLevel">
+				<Contents>
+					<colinfo id="level" size="256" summ="default" type="STRING"/>
+					<colinfo id="level_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<level></level>
+						<level_name>대메뉴</level_name>
+					</record>
+					<record>
+						<level>0</level>
+						<level_name>1단&#32;메뉴</level_name>
+					</record>
+					<record>
+						<level>1</level>
+						<level_name>2단&#32;메뉴</level_name>
+					</record>
+					<record>
+						<level>2</level>
+						<level_name>3단&#32;메뉴</level_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_outsystem">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code1>Y</code1>
+						<code_name>사용</code_name>
+					</record>
+					<record>
+						<code1>N</code1>
+						<code_name>미사용</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_upMenuCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_topMenuCode"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_pwCheck">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code1>1</code1>
+						<code_name>확인</code_name>
+					</record>
+					<record>
+						<code1>0</code1>
+						<code_name>미확인</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_company">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>00</cd>
+						<cdnm>공통</cdnm>
+					</record>
+					<record>
+						<cd>PS</cd>
+						<cdnm>PS</cdnm>
+					</record>
+					<record>
+						<cd>PE</cd>
+						<cdnm>PE</cdnm>
+					</record>
+					<record>
+						<cd>KR</cd>
+						<cdnm>KR</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmenuLev"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mngcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm></cdnm>
+					</record>
+					<record>
+						<cd>00</cd>
+						<cdnm>기본</cdnm>
+					</record>
+					<record>
+						<cd>M1</cd>
+						<cdnm>권한</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="6" Top="31" Width="1053"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="3" TabOrder="11" Top="33" Width="91"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_menuList" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="586" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="522" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="1054" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1054">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="168"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="218"/>
+						<col width="70"/>
+						<col width="70"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="110"/>
+						<col width="108"/>
+						<col width="53"/>
+						<col width="46"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" rowspan="2" text="메뉴명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" rowspan="2" text="상위메뉴"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" rowspan="2" text="메뉴레벨"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" rowspan="2" text="메뉴경로"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" rowspan="2" text="메뉴순서"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" rowspan="2" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" colspan="2" display="text" text="권한구분"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" row="1" text="KE"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" row="1" text="KA"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" expr='&quot;메뉴\n그룹&quot;' rowspan="2" text="메뉴그룹"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" rowspan="2" text="최상위메뉴"/>
+						<cell bkcolor="#dfdfdf" col="11" color="#002043" display="text" rowspan="2" text="내/외부&#32;시스템"/>
+						<cell bkcolor="#dfdfdf" col="12" color="#002043" display="text" rowspan="2" text="PW확인"/>
+						<cell bkcolor="#dfdfdf" col="13" color="#002043" display="text" rowspan="2" text="사용"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="left" col="1" colid="MENU_NAME" display="normal" edit="normal"/>
+						<cell align="left" col="2" colid="UP_MENU" combocol="MENU_ID" combodataset="ds_upMenuCode" combotext="MENU_NAME" display="combo" edit="combo"/>
+						<cell align="center" col="3" colid="LEV" color="#333333" combocol="level" combodataset="ds_menuLevel" combotext="level_name" display="combo" edit="combo"/>
+						<cell align="left" col="4" colid="INIT_URL" color="#333333" display="normal" edit="normal"/>
+						<cell align="center" col="5" colid="MENU_ORDER" color="#333333" display="number" edit="masknumber" limit="4" Mask="#,###.##"/>
+						<cell align="center" col="6" colid="COMPANY" color="#333333" combocol="cd" combodataset="ds_company" combotext="cdnm" display="combo" edit="combo" limit="4"/>
+						<cell align="center" col="7" colid="MNGCD1" color="#333333" combocol="cd" combodataset="ds_mngcd" combodisplayrowcnt="6" combotext="cdnm" display="combo" edit="combo" limit="4"/>
+						<cell align="center" col="8" colid="MNGCD2" color="#333333" combocol="cd" combodataset="ds_mngcd" combodisplayrowcnt="6" combotext="cdnm" display="combo" edit="combo" limit="4"/>
+						<cell align="center" col="9" colid="TOP_MENU" color="#333333" display="normal" edit="normal"/>
+						<cell align="left" col="10" colid="MCODE" color="#333333" combocol="MENU_ID" combodataset="ds_topMenuCode" combotext="MENU_NAME" display="combo" edit="combo"/>
+						<cell align="left" autosizing="none" col="11" colid="SYSTEM_SEQ" combocol="system_seq" combodataset="ds_outsystem" combotext="sys_name" display="combo" edit="combo"/>
+						<cell align="center" autosizing="none" col="12" colid="PW_CHECK" combocol="code1" combodataset="ds_pwCheck" combotext="code_name" display="combo" edit="combo"/>
+						<cell align="center" col="13" colid="USE_YN" color="#333333" combocol="code1" combodataset="ds_status" combotext="code_name" display="combo" edit="combo"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="182" TabOrder="5" Top="33" Width="93"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="MENU_ID" Color="#333333" DataColumn="MENU_NAME" Height="24" Id="cb_group" ImeMode="none" INDEX="0" InnerDataset="ds_menuAuthGroup" Left="275" OnChanged="groupChange" ResetIndex="FIRST" TabOrder="2" Top="33" Width="308"></Combo>
+		<Shape BKColor="#888888" Bottom="47" Height="5" Id="Shape2" Left="194" LineColor="#dceaf7" Right="201" TabOrder="3" Top="42" Type="Ellipse" Width="7"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="204" Style="static" TabOrder="4" Text="대메뉴" Top="38" VAlign="Middle" Width="71"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="7" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="7" Top="8" Width="1032"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape3" Left="15" LineColor="#dceaf7" Right="20" TabOrder="9" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static18" Left="25" Style="static" TabOrder="10" Text="사업부" Top="37" VAlign="Middle" Width="69"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code1" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_COMP" Left="94" OnChanged="compChange" ResetIndex="FIRST" TabOrder="12" Top="34" Width="88"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : MenuList.xml
+ * ● PROGRAM DESCRIPTION  : 메뉴관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+
+	var TOP_MENU = getTmenuLev(); //return 값을 변수로 사용함. 2012.04.09 제환복 추가
+
+	http.Sync = true;
+
+	//Transaction("getUserAuthGroup", "service::user/menuAuthGroup.do", "", "ds_menuAuthGroup=ds_menuAuthGroup", "", "");	
+	Transaction("getUserAuthGroup", "service::user/menuAuthGroup.do", "", "ds_menuAuthGroup=ds_menuAuthGroup", " TOP_MENU=" + quote(TOP_MENU), "");	
+
+	ds_menuAuthGroup.InsertRow(0);
+	ds_menuAuthGroup.SetColumn(0,"MENU_ID","");
+	ds_menuAuthGroup.SetColumn(0,"MENU_NAME","[전체]");
+	cb_group.index = 0;		
+
+
+	Transaction("getUpMenuCode", "service::user/selectUpMenuCode.do", "", "ds_upMenuCode=ds_upMenuCode", "", "");	
+
+	ds_upMenuCode.InsertRow(0);
+	ds_upMenuCode.SetColumn(0,"MENU_ID","");
+	ds_upMenuCode.SetColumn(0,"MENU_NAME","[없음]");
+
+
+	Transaction("getTopMenuCode", "service::user/selectTopMenuCode.do", "", "ds_topMenuCode=ds_topMenuCode", "", "");	
+
+	ds_topMenuCode.InsertRow(0);
+	ds_topMenuCode.SetColumn(0,"MENU_ID","");
+	ds_topMenuCode.SetColumn(0,"MENU_NAME","[없음]");
+
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)			
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getMenuList(){
+	http.Sync = true;
+	var sKind		= "getMenuList";						
+	var sMethodName = "service::user/selectMenuList.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_menuList=ds_menuList";    			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument   += " COMP=" + quote(cb_comp.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync = true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::user/selectGroupOutSystem.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_outsystem=ds_outsystem";
+	var sArgument   = "";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync = false;
+	
+	//사업부
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync = false;
+	ds_ComCode_COMP.InsertRow(0);
+	ds_ComCode_COMP.SetColumn(0,"CODE1","");
+	ds_ComCode_COMP.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;		
+
+	//사업장
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	// ds_ComCode_PLNT.InsertRow(0);
+	// ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	// ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	// cb_PLNT.index = 0;
+
+}
+
+function compChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(cb_comp.Value);
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	// ds_ComCode_PLNT.InsertRow(0);
+	// ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	// ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	// cb_PLNT.index = 0;
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setMenuList(){
+	var sKind		= "setMenuList";						
+	var sMethodName = "service::user/saveMenuList.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_menuList=ds_menuList:U";     		//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    								// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getMenuList"){
+		// 조회건수가 없을경우
+		if(ds_menuList.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setMenuList"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+
+}
+
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 데이터 필터링
+ * 주요변수 : 
+ **********************************************************************/ 
+function groupChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(cb_group.Value == ""){
+		ds_menuList.UnFilter();
+	} else {
+		ds_menuList.Filter("MCODE=='" + cb_group.Value + "'");
+	}
+
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getMenuList();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_menuList")== false) return;
+	ds_menuList.AddRow();
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setMenuList();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+MainGrid.ExportExcelEx("menu_list");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

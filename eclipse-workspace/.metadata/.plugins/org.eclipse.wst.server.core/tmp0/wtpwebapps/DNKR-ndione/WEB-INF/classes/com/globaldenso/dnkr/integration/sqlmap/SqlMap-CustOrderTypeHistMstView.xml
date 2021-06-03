@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustOrderTypeHistMstViewDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustOrderTypeHistMstView" type="CustOrderTypeHistMstViewDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="pspno" column="PSPNO" />
+        <result property="gubcd" column="GUBCD" />
+        <result property="seqno1" column="SEQNO1" />
+        <result property="seqcd1" column="SEQCD1" />
+        <result property="mcrcd1" column="MCRCD1" />
+        <result property="efffr1" column="EFFFR1" />
+        <result property="effto1" column="EFFTO1" />
+        <result property="seqno2" column="SEQNO2" />
+        <result property="seqcd2" column="SEQCD2" />
+        <result property="mcrcd2" column="MCRCD2" />
+        <result property="efffr2" column="EFFFR2" />
+        <result property="effto2" column="EFFTO2" />
+        <result property="devnm2" column="DEVNM2" />
+        <result property="uptdt2" column="UPTDT2" />
+        <result property="upttm2" column="UPTTM2" />
+        <result property="usrid2" column="USRID2" />       
+        <result property="itdsc" column="ITDSC" />
+        <result property="cusnm" column="CUSNM" />
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustOrderTypeHistMstView" parameterType="CustOrderTypeHistMstViewDomain">
+		SELECT									
+			A.COMPS, A.PYVND, A.PSPNO, A.GUBCD, A.SEQNO1, A.SEQCD1, A.MCRCD1, A.EFFFR1, A.EFFTO1,								
+			A.SEQNO2, A.SEQCD2, A.MCRCD2, A.EFFFR2, A.EFFTO2, A.DEVNM2, A.UPTDT2, A.UPTTM2, A.USRID2,								
+			B.ITDSC, C.CUSNM								
+		FROM									
+			${lib2}.SVM200PF A								
+			LEFT OUTER JOIN ${lib1}.BM008PR B ON A.PSPNO=B.ITNBR								
+			LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.PYVND=C.CUSNO												
+		WHERE
+		      'SqlMap-CustOrderTypeHistMstView.searchByCondition' = 'SqlMap-CustOrderTypeHistMstView.searchByCondition'
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+	     <if test="pspno != null and pspno !='' ">	
+	   	  AND A.PSPNO <![CDATA[>=]]> #{pspno}	
+		 </if>
+	     <if test="gubcd != null and gubcd !='' ">
+	      AND A.GUBCD = #{gubcd}
+		 </if>									
+		ORDER BY									
+			A.COMPS, A.PYVND, A.PSPNO, A.UPTDT2, A.UPTTM2
+    </select>
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.$name$Dao">
+
+  
+  <sql id="select_01">
+
+    SELECT
+$column$
+    FROM $table$
+
+  </sql>
+
+  
+  <!-- ?? SQL?????? -->
+  <select id="searchByCondition" resultMap="com.globaldenso.dnkr.domain.$name$Domain" parameterType="com.globaldenso.dnkr.domain.$name$Domain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE 1=1
+      $keyValue$  
+  </select>
+  
+
+  <insert id="create" parameterType="com.globaldenso.dnkr.domain.$name$Domain">
+
+    INSERT INTO $table$ (
+$column$
+    ) VALUES (
+$values$
+    )
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dnkr.domain.$name$Domain">
+
+    UPDATE $table$ SET
+$updateValue$
+    WHERE 1=1 
+$keyValue$
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dnkr.domain.$name$Domain">
+
+    DELETE FROM $table$
+    WHERE 1=1
+$keyValue$
+
+  </delete>
+
+
+</mapper>

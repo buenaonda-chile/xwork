@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="615" Id="pdm" Left="8" OnLoadCompleted="OnLoadCompleted" OnSize="onSize" PidAttrib="7" Title="PDM&#32;System" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1053" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<WebBrowser Height="615" Id="web01" Silent="True" TabOrder="0" Width="1053" WindowClosing="web01_OnWindowClosing"></WebBrowser>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var USER_ID		= G_ds_user.GetColumn(0,"USER_ID");
+var SYSTEM_SEQ 	= "2";
+var ff;
+
+function OnLoadCompleted(obj)
+{
+    getTitle();
+	getSsoAccount();
+	//gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	web01.width = pdm.Width;
+	web01.height = pdm.height;	
+	
+	var url 	= ds_ssoaccount.GetColumn(0,"SYS_URL");
+	var url2 	= ds_ssoaccount.GetColumn(0,"SYS_URL2");
+	var sys_id 	= ds_ssoaccount.GetColumn(0,"SYSTEM_ID");
+	var sys_pw 	= ds_ssoaccount.GetColumn(0,"SYSTEM_PW");
+	var sys_gr 	= ds_ssoaccount.GetColumn(0,"SYSTEM_GRU");
+	
+	/*ff = 1;
+	g_session = JSESSIONID;*/
+	
+	if(ds_ssoaccount.GetColumn(0,"LOGIN_YN") == "Y")
+	{
+		web01.PageUrl = url + "?user_Id=" + sys_id + "&pwd=" + sys_pw;
+	} else {
+		web01.PageUrl = url2;
+	}	
+	
+	var str = dialog("Common::SSOLOAD.xml","menuId="+"40",256,48,"TitleBar=false");		
+	//web01.Run();
+}
+
+function onSize(obj,nCx,nCy,nState)
+{
+	web01.width = nCx;
+	web01.height = nCy;		
+}
+
+
+
+function getSsoAccount(){
+	http.Sync 		= true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::login/ssoAccounts.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";
+	var sArgument   = "";
+		sArgument 	+= " USER_ID=" + quote(USER_ID);
+		sArgument 	+= " SYSTEM_SEQ=" + quote(SYSTEM_SEQ);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	}else if(svcId=="getSsoAccount"){
+		// 조회건수가 없을경우
+		if(ds_ssoaccount.rowcount <= 0){
+			alert(setPopMessage("1006"));
+			close();
+		} 
+	}  
+}
+function web01_OnWindowClosing(obj,bIsChild)
+{
+	close();
+}
+
+function web01_OnDocumentComplete(obj,strUrl)
+{
+	if ( ff == 1 ) {
+	web01.Start_fg = false;
+		if(ds_ssoaccount.GetColumn(0,"LOGIN_YN") == "Y")
+		{
+			web01.PageUrl = url + "?user_Id=" + sys_id + "&pwd=" + sys_pw;
+		} else {
+			web01.PageUrl = url2;
+		}	
+	web01.HeadVal = "JSESSIONID=" + g_session+ ";Path=/" ;
+	web01.Run();
+	ff = 0;
+	}	
+}
+]]></Script>
+</Window>

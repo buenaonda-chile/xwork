@@ -1,0 +1,887 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LinkDao">
+
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="link" type="LinkDomain">
+        <result property="type" column="LINK_TYPE" />
+        <result property="seq" column="LINK_SEQ" />
+        <result property="sort" column="LINK_SORT" />
+        <result property="siteName" column="LINK_SITENAME" />
+        <result property="siteUrl" column="LINK_SITEURL" />
+        <result property="intro" column="LINK_DESCRIPTION" />
+        <result property="useTf" column="LINK_USETF" />
+        <result property="etc" column="ETC" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+
+ 	<resultMap id="sso" type="LinkDomain">
+        <result property="seq" column="SEQ" />
+        <result property="sysSeq" column="SYS_SEQ" />
+        <result property="company" column="COMPANY" />
+        <result property="sysName" column="SYS_NAME" />
+        <result property="sysUrl" column="SYS_URL" />
+        <result property="sysUrl2" column="SYS_URL2" />
+        <result property="sysType" column="SYS_TYPE" />
+        <result property="popupYn" column="POPUP_YN" />
+        <result property="inOutType" column="INOUT_TYPE" />
+        <result property="loginYn" column="LOGIN_YN" />
+        <result property="popupW" column="POPUP_W" />
+        <result property="popupH" column="POPUP_H" />
+        <result property="subYn" column="SUB_YN" />
+        <result property="useTf" column="USE_YN" />
+        <result property="ssoTf" column="SSO_YN" />
+        <result property="rowNum" column="ROW_NUM" />
+    </resultMap>
+    
+	<resultMap id="ssoAccount" type="LinkDomain">
+        <result property="sysName" column="SYS_NAME" />
+        <result property="sysUrl" column="SYS_URL" />
+        <result property="sysUrl2" column="SYS_URL2" />
+        <result property="loginYn" column="LOGIN_YN" />
+        <result property="ssoTf" column="SSO_YN" />
+        <result property="company" column="COMPANY" />
+        
+		<result property="empNumber" column="EMP_NUMBER" />
+		<result property="systemId" column="SYSTEM_ID" />
+		<result property="systemPW" column="SYSTEM_PW" />
+		<result property="systemGroup" column="SYSTEM_GROUP" />
+		<result property="remarks" column="REMARKS" />
+	</resultMap>
+	    
+	<resultMap id="EmpPrtSession" type="SessionDomain">
+		<result property="empNumber" column="EMP_NUMBER" />
+		<result property="company" column="COMPANY" />
+        <result property="workPlace" column="WORKPLACE" />
+        <result property="device1" column="DEV1" />
+        <result property="device2" column="DEV2" />
+        <result property="deviceCnt" column="CNT" />
+    </resultMap>
+
+	<resultMap id="EmpDspSession" type="SessionDomain">
+		<result property="empNumber" column="EMP_NUMBER" />
+		<result property="sysSeq" column="SYS_SEQ" />
+		<result property="systemId" column="SYSTEM_ID" />
+		<result property="systemPW" column="SYSTEM_PW" />
+		<result property="systemGroup" column="SYSTEM_GROUP" />
+		<result property="company" column="COMPANY" />
+        <result property="workPlace" column="WORKPLACE" />
+        <result property="oldCompany" column="OLD_COMPANY" />
+        <result property="oldWorkPlace" column="OLD_WORKPLACE" />
+    </resultMap>
+    
+    <resultMap id="DioneAccountCnt" type="SessionDomain">
+		<result property="empNumber" column="EMP_NUMBER" />
+ 		<result property="empId" column="EMP_ID" />
+        <result property="empName" column="EMP_NAME" />  
+        <result property="company" column="COMPANY" />
+        <result property="workPlace" column="WORKPLACE" />
+        <result property="oldCompany" column="OLD_COMPANY" />
+        <result property="oldWorkPlace" column="OLD_WORKPLACE" />
+        <result property="deviceCnt" column="DIONE_CNT" />
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountLink" resultType="java.lang.Integer" parameterType="LinkDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_SITE_LIST
+        where 
+                'SqlMap-Link.searchCountLink' = 'SqlMap-Link.searchCountLink' 
+                 <if test="pType != null and pType != ''">
+          		 and LINK_TYPE = #{pType}
+      		 	 </if>
+                 <if test="pUseTf != null and pUseTf != ''">
+          		 and LINK_USETF = #{pUseTf}
+      		 	 </if>         
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPagingLink" resultMap="link" parameterType="LinkDomain">
+        select 
+                LINK_TYPE
+              , LINK_SEQ
+              , LINK_SORT
+              , LINK_SITENAME
+              , LINK_SITEURL
+              , LINK_DESCRIPTION
+              , LINK_USETF
+              , ETC
+              , ROW_NUM
+        from (
+            select 
+               LINK_TYPE
+              , LINK_SEQ
+              , LINK_SORT
+              , LINK_SITENAME
+              , LINK_SITEURL
+              , LINK_DESCRIPTION
+              , LINK_USETF
+              , ETC
+              , row_number() over (order by LINK_TYPE, TO_NUMBER(LINK_SORT)) ROW_NUM
+        from 
+                DNKR_SITE_LIST
+        where 
+                'SqlMap-Link.searchByConditionLink' = 'SqlMap-Link.searchByConditionLink'
+                 <if test="pType != null and pType != ''">
+          		 and LINK_TYPE = #{pType}
+      		 	 </if>
+                 <if test="pUseTf != null and pUseTf != ''">
+          		 and LINK_USETF = #{pUseTf}
+      		 	 </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+        order by ROW_NUM
+    </select>
+    
+    <insert id="createLink" parameterType="LinkDomain">
+    	insert into DNKR_SITE_LIST (LINK_TYPE, LINK_SEQ, LINK_SORT, LINK_SITENAME, LINK_SITEURL, LINK_DESCRIPTION, 
+    	<if test="useTf != null and useTf != ''">
+			LINK_USETF,
+		</if>
+		ETC, CREATE_USER, CREATE_DATE, UPDATE_USER, UPDATE_DATE)
+    	values(#{iType},  DNKR_SITE_LINK_SEQ.NEXTVAL, #{sort}, #{siteName}, #{siteUrl}, #{intro},
+    	<if test="useTf != null and useTf != ''">
+			 #{useTf},
+		</if>
+		#{etc}, #{createUser}, SYSDATE, #{createUser}, SYSDATE)
+    </insert>
+    
+    <update id="updateLink" parameterType="LinkDomain">
+    	update DNKR_SITE_LIST
+    	 set
+		<!--     	 
+			<if test="type != null and type != ''">
+          		LINK_TYPE = #{type},
+      		</if>
+      		<if test="sort != null and sort != ''">
+          		LINK_SORT = #{sort},
+      		</if>
+      		<if test="siteName != null and siteName != ''">
+          	 	LINK_SITENAME = #{siteName},
+      		</if>
+      		<if test="siteUrl != null and siteUrl != ''">
+          		LINK_SITEURL = #{siteUrl},
+      		</if>
+      		<if test="intro != null and intro != ''">
+          		LINK_DESCRIPTION = #{intro},
+      		</if>
+      		<if test="useTf != null and useTf != ''">
+          		LINK_USETF = #{useTf},
+      		</if>
+      		 <if test="etc != null and etc != ''">
+          		ETC = #{etc},
+      		</if>
+      	 -->
+			<if test="type != null and type != ''">
+				LINK_TYPE = #{type},
+			</if>
+			<if test="sort != null and sort != ''">
+          		LINK_SORT = #{sort},
+      		</if>
+          		LINK_SITENAME = #{siteName},
+			<if test="siteUrl != null and siteUrl != ''">
+          		LINK_SITEURL = #{siteUrl},
+      		</if>
+          		LINK_DESCRIPTION = #{intro},
+          		LINK_USETF = #{useTf},
+          		ETC = #{etc},
+          		UPDATE_USER =  #{updateUser},
+          		UPDATE_DATE = SYSDATE
+    	 where LINK_SEQ = #{seq}
+    	 
+    </update>
+    
+    <delete id="deleteLink" parameterType="LinkDomain">
+    	delete from DNKR_SITE_LIST
+    	where LINK_SEQ = #{seq}
+    </delete>
+    
+    <select id="searchCountSso" resultType="java.lang.Integer" parameterType="LinkDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_SSO_LIST
+        where 
+                'SqlMap-Link.searchCountSso' = 'SqlMap-Link.searchCountSso' 
+      		 	 <!-- 임시삭제
+                 and POPUP_YN ='N'
+           		 <if test="pInOutType != null and pInOutType != ''">
+          		 and INOUT_TYPE = #{pInOutType}
+      		 	 </if>
+      		 	 -->
+      		 	 <if test="pInOutType != null and pInOutType != ''">
+          		 and INOUT_TYPE = #{pInOutType}
+      		 	 </if>
+      		 	 <if test="pUseTf != null and pUseTf != ''">
+          		 and USE_YN = #{pUseTf}
+          		 </if>
+          		 <!-- 2019.11.14 JHB 수정
+      		 	 <if test="pCompany != null and pCompany != ''">
+          		 and COMPANY = #{pCompany}
+      		 	 </if>
+      		 	  -->
+      		 	 <choose>
+      		 	 	<when test="type != 'SsolinkPageInit'">
+      		 	 	 <if test="pCompany != null and pCompany != ''">
+	          		 and COMPANY = #{pCompany}
+	      		 	 </if>
+      		 	 	</when>
+      		 	 	<otherwise>
+      		 	 	<if test="pCompany != null and pCompany != ''">
+	          		  and COMPANY IN ('${pCompany}', 'CLS000004')
+	      		 	 </if>
+      		 	 	</otherwise>
+      		 	 </choose>
+      		 	 <if test="sysSeq != null and sysSeq != ''">
+          		 and SYS_SEQ = #{sysSeq}
+      		 	 </if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPagingSso" resultMap="sso" parameterType="LinkDomain">
+        select 
+        	  SEQ
+            , SYS_SEQ
+			, COMPANY
+			, SYS_NAME
+			, SYS_URL
+			, SYS_URL2
+			, SYS_TYPE
+			, POPUP_YN
+			, INOUT_TYPE
+			, LOGIN_YN
+			, POPUP_W
+			, POPUP_H
+			, SUB_YN
+			, USE_YN
+			, SSO_YN
+            , ROW_NUM
+        from (
+            select 
+              SEQ
+			, SYS_SEQ
+			, COMPANY
+			, SYS_NAME
+			, SYS_URL
+			, SYS_URL2
+			, SYS_TYPE
+			, POPUP_YN
+			, INOUT_TYPE
+			, LOGIN_YN
+			, POPUP_W
+			, POPUP_H
+			, SUB_YN
+			, USE_YN
+			, SSO_YN
+            , row_number() over (order by TO_NUMBER(SYS_SEQ), COMPANY) ROW_NUM
+        from 
+                DNKR_SSO_LIST
+        where 
+                'SqlMap-Link.searchByConditionSso' = 'SqlMap-Link.searchByConditionSso'
+      		 	 <!-- 임시삭제
+                 and POPUP_YN ='N'
+           		 <if test="pInOutType != null and pInOutType != ''">
+          		 and INOUT_TYPE = #{pInOutType}
+      		 	 </if>
+      		 	 -->
+      		 	 <if test="pInOutType != null and pInOutType != ''">
+          		 and INOUT_TYPE = #{pInOutType}
+      		 	 </if>
+      		 	 <if test="pUseTf != null and pUseTf != ''">
+          		 and USE_YN = #{pUseTf}
+          		 </if>
+      		 	 <!-- 2019.11.14 JHB 수정
+      		 	 <if test="pCompany != null and pCompany != ''">
+          		 and COMPANY = #{pCompany}
+      		 	 </if> -->
+      		 	 <choose>
+      		 	 	<when test="type != 'SsolinkPageInit'">
+      		 	 	 <if test="pCompany != null and pCompany != ''">
+	          		 and COMPANY = #{pCompany}
+	      		 	 </if>
+      		 	 	</when>
+      		 	 	<otherwise>
+      		 	 	<if test="pCompany != null and pCompany != ''">
+	          		  and COMPANY IN ('${pCompany}', 'CLS000004')
+	      		 	 </if>
+      		 	 	</otherwise>
+      		 	 </choose>
+      		 	 <if test="sysSeq != null and sysSeq != ''">
+          		 and SYS_SEQ = #{sysSeq}
+      		 	 </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+        order by ROW_NUM
+    </select>
+
+	<insert id="createSso" parameterType="LinkDomain">
+    	insert into DNKR_SSO_LIST (  	
+    		SEQ, SYS_SEQ, COMPANY, SYS_NAME, SYS_URL, SYS_URL2, SYS_TYPE,
+    		<if test="popupYn != null and popupYn != ''">
+				POPUP_YN,
+			</if>
+    		INOUT_TYPE,	
+    		<if test="loginYn != null and loginYn != ''">
+				LOGIN_YN,
+			</if>
+			POPUP_W, POPUP_H,
+			<if test="subYn != null and subYn != ''">
+				SUB_YN,
+			</if>
+			<if test="useTf != null and useTf != ''">
+				USE_YN,
+			</if>
+			<if test="ssoTf != null and ssoTf != ''">
+				SSO_YN,
+			</if>
+	    	CREATE_USER, CREATE_DATE, UPDATE_USER, UPDATE_DATE)
+    	values(
+    		 DNKR_SSO_SEQ.NEXTVAL, #{sysSeq}, #{iCompany}, #{sysName}, #{sysUrl}, #{sysUrl2}, #{iSysType},
+    		 <if test="popupYn != null and popupYn != ''">
+				 #{popupYn},
+			</if>
+    		 #{iInOutType},
+    		 <if test="loginYn != null and loginYn != ''">
+				 #{loginYn},
+			</if>
+			 #{popupW}, #{popupH}, 
+			 <if test="subYn != null and subYn != ''">
+				 #{subYn},
+			</if>
+			 <if test="useTf != null and useTf != ''">
+				 #{useTf},
+			</if>
+			<if test="ssoTf != null and ssoTf != ''">
+				 #{ssoTf},
+			</if>
+    		 #{createUser}, SYSDATE, #{createUser}, SYSDATE)
+    </insert>
+    
+    <update id="updateSso" parameterType="LinkDomain">
+    	update DNKR_SSO_LIST
+    	 set
+			<if test="sysSeq != null and sysSeq != ''">
+				SYS_SEQ = #{sysSeq},
+			</if>
+			<if test="company != null and company != ''">
+          		COMPANY = #{company},
+      		</if>
+      			SYS_NAME = #{sysName},
+      			SYS_URL = #{sysUrl},
+      			SYS_URL2 = #{sysUrl2},
+      			SYS_TYPE = #{sysType},
+      			POPUP_YN = #{popupYn},
+      			INOUT_TYPE = #{inOutType},
+      			LOGIN_YN = #{loginYn},
+      			POPUP_W = #{popupW},
+      			POPUP_H = #{popupH},
+      			SUB_YN = #{subYn},
+      			USE_YN = #{useTf},
+      			SSO_YN = #{ssoTf},
+          		UPDATE_USER =  #{updateUser},
+          		UPDATE_DATE = SYSDATE
+    	 where SEQ = #{seq} 
+    </update>
+    
+    <delete id="deleteSso" parameterType="LinkDomain">
+    	delete from DNKR_SSO_LIST
+    	where SEQ = #{seq}
+    </delete>
+    
+    
+    <select id="searchSsoUrl" resultMap="sso" parameterType="LinkDomain">
+		select 
+            SEQ, SYS_SEQ, COMPANY, SYS_NAME, SYS_URL, SYS_URL2, SYS_TYPE, POPUP_YN,
+    		INOUT_TYPE,	LOGIN_YN, POPUP_W, POPUP_H, SUB_YN, USE_YN
+        from 
+                DNKR_SSO_LIST
+        where 
+                'SqlMap-Link.searchSsoUrl' = 'SqlMap-Link.searchSsoUrl' 
+                 <if test="sysSeq != null and sysSeq != ''">
+          		 and SYS_SEQ = #{sysSeq} 
+      		 	 </if>
+      		 	  <if test="company != null and company != ''">
+      		 	  <!-- 
+          		 and COMPANY = #{company}
+          		  -->
+          		 and COMPANY IN ('${company}', 'CLS000004')
+      		 	 </if>
+      		 	 and SUB_YN='Y'
+      		 	 and USE_YN='Y'
+    </select>
+
+	<select id="searchBySsoAccount" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	select 
+		A.EMP_ID AS EMPID, A.EMP_NUMBER AS EMPNUMBER, A.EMP_NAME AS EMPNAME, A.EMP_EMAIL AS EMPEMAIL,
+		A.CLS_CODE AS CLSCODE, B.REL_NAME AS CLSNAME, A.LOC_CODE AS LOCCODE, C.REL_NAME AS LOCNAME
+	from 
+		DNKR_EMP A
+		left join DNKR_RELATION_NM B on A.CLS_CODE = B.REL_CODE and B.CMC_CODE = #{cmcLangCode}	
+		left join DNKR_RELATION_NM C on A.LOC_CODE = C.REL_CODE and C.CMC_CODE = #{cmcLangCode}	
+		<if test="deviceId != null and deviceId != ''">
+       	left join (select Z.EMP_NUMBER, Z.DEVICE_NAME from DNKR_SSO_DEVICE Z GROUP BY Z.EMP_NUMBER, Z.DEVICE_NAME) D on A.EMP_NUMBER=D.EMP_NUMBER 
+        </if>
+	where 
+		'SqlMap-Link.searchBySsoAccount' = 'SqlMap-Link.searchBySsoAccount' 		
+		<!-- AND A.EMP_USE='Y'  --><!-- 사용중인 id만 가저욤/ -->
+		<if test="empUse != null and empUse != ''">
+			and A.EMP_USE = #{empUse}
+		</if>
+		<if test="inOutType != null and inOutType != ''">
+			and A.IN_OUT_TYPE = #{inOutType}
+		</if>
+		<if test="locCode != null and locCode != ''">
+			and A.LOC_CODE = #{locCode}
+		</if>
+		<if test="clsCode != null and clsCode != ''">
+	        and A.CLS_CODE = #{clsCode}
+		</if>
+		 <if test="empUse != null and empUse != ''">
+            and A.EMP_USE = #{empUse}  
+        </if>
+        <if test="empId != null and empId != ''">
+            and A.EMP_ID = #{empId}  
+        </if>
+        <if test="empName != null and empName != ''">
+            and A.EMP_NAME = #{empName}  
+        </if>
+		<if test="deviceId != null and deviceId != ''">
+            and D.DEVICE_NAME = UPPER(#{deviceId})  
+        </if>
+      ORDER BY CLSCODE, LOCCODE, EMPNAME
+	</select>
+	
+	<select id="searchBySsoSystem" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	SELECT
+		A.SYS_SEQ AS SYSSEQ, A.SYS_NAME AS SYSNAME,
+		'${empNumber}' AS EMPNUMBER, NVL(B.SYSTEM_ID,'') AS SYSTEMID, NVL(B.SYSTEM_PW,'') AS SYSTEMPW, NVL(B.SYSTEM_GROUP,'') AS SYSTEMGROUP, NVL(B.REMARKS,'') AS REMARKS,
+		<!-- A.COMPANY, A.SSO_YN AS SSOYN, B.EMP_NUMBER AS EMPNUMBER2 -->
+		'${company}' AS COMPANY, '${workPlace}' AS WORKPLACE,  A.COMPANY AS COMPANY2, A.SSO_YN AS SSOYN, B.EMP_NUMBER AS EMPNUMBER2
+	FROM
+		DNKR_SSO_LIST A
+		LEFT OUTER JOIN DNKR_SSO_ACCOUNT B ON A.SYS_SEQ=B.SYSTEM_SEQ AND B.EMP_NUMBER =#{empNumber} AND B.COMPANY = #{changeCompany}
+		  <if test="workPlace != null and workPlace != ''"> AND B.WORKPLACE=#{workPlace} </if>
+	WHERE
+		'SqlMap-Link.searchBySsoSystem' = 'SqlMap-Link.searchBySsoSystem' 
+		and A.USE_YN='Y'
+		<if test="inOutType != null and inOutType != ''">
+			and A.INOUT_TYPE = #{inOutType}
+		</if>
+		<!--
+		  <if test="company != null and company != ''">
+          	 and A.COMPANY = #{company}
+      	 </if>
+      	 -->
+      	 <!--  <if test="company != null and company != ''">
+          	 and A.COMPANY = #{company}
+      	 </if> -->
+      	 <if test="company != null and company != ''">
+          	 and A.COMPANY IN ('${company}', 'CLS000004')
+      	 </if>
+		ORDER BY A.SYS_NAME
+	</select>
+		
+	<!-- WAC021 -->
+	<select id="searchBySsoDeviceId" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	SELECT
+		A.DEVICE_NAME AS DEVICEID, A.DEVICE_NAME AS DEVICENAME
+	FROM
+		DNKR_SSO_DEVICE A
+	WHERE 
+		'SqlMap-Link.searchBySsoDeviceId' = 'SqlMap-Link.searchBySsoDeviceId' 
+		AND A.EMP_NUMBER =#{empNumber}
+		AND A.COMPANY=#{company}
+		AND A.USE_YN='Y'
+		AND A.WORKPLACE=#{workPlace}
+	</select>
+	
+	<select id="searchBySsoSystemCount" resultType="java.lang.Integer" parameterType="SsoAccountDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_SSO_ACCOUNT
+        where 
+                'SqlMap-Link.searchBySsoSystemCount' = 'SqlMap-Link.searchBySsoSystemCount'
+        <if test="empNumber != null and empNumber != ''">
+            AND EMP_NUMBER =#{empNumber}
+        </if>
+        <if test="company != null and company != ''">
+          	 and COMPANY = #{company}
+      	</if>
+      	<!-- 디바이스는 사업단위로 등록시킴 필요시 주석해제 : 2019.11.21
+      	<if test="workPlace != null and workPlace != ''">
+          	 and WORKPLACE=#{workPlace}
+      	</if>
+      	 -->
+         <if test="sysSeq != null and sysSeq != ''">
+          	 and SYSTEM_SEQ = #{sysSeq}
+      	</if>
+      	<if test="inOutGubn != null and inOutGubn != ''">
+          	 and INOUT_GUBN = #{inOutGubn}
+      	</if>
+    </select>
+    
+	<insert id="insertSsoSystemUser" parameterType="SsoAccountDomain">
+		insert into DNKR_SSO_ACCOUNT (EMP_NUMBER, SYSTEM_SEQ, <!-- SYSTEM_ID, SYSTEM_PW, SYSTEM_GROUP, REMARKS, -->
+			<if test="systemId != null and systemId != ''">
+	          	 SYSTEM_ID,
+	      	</if>
+	      	<if test="systemPW != null and systemPW != ''">
+	          	 SYSTEM_PW,
+	      	</if>
+	      	<if test="systemGroup != null and systemGroup != ''">
+	          	 SYSTEM_GROUP,
+	      	</if>
+	      	<if test="remarks != null and remarks != ''">
+	          	 REMARKS,
+	      	</if>
+		 INOUT_GUBN, COMPANY, WORKPLACE, CREATE_USER, CREATE_DATE, UPDATE_USER, UPDATE_DATE)
+    	values(#{empNumber}, #{sysSeq}, <!-- #{systemId}, #{systemPW}, #{systemGroup}, #{remarks}, -->
+	    	<if test="systemId != null and systemId != ''">
+	          	 #{systemId},
+	      	</if>
+	      	<if test="systemPW != null and systemPW != ''">
+	          	 #{systemPW},
+	      	</if>
+	      	<if test="systemGroup != null and systemGroup != ''">
+	          	 #{systemGroup},
+	      	</if>
+	      	<if test="remarks != null and remarks != ''">
+	          	 #{remarks},
+	      	</if>
+    	#{inOutGubn}, #{company}, #{workPlace}, #{createUser}, SYSDATE, #{createUser}, SYSDATE)
+    </insert>
+    <update id="updateSsoSystemUser" parameterType="SsoAccountDomain">
+		update DNKR_SSO_ACCOUNT
+		set
+			SYSTEM_ID = #{systemId},
+			SYSTEM_PW = #{systemPW},
+			SYSTEM_GROUP = #{systemGroup},
+			REMARKS = #{remarks},
+			<!--  
+			<if test="systemId != null and systemId != ''">
+	          	SYSTEM_ID = #{systemId},
+	      	</if>
+	      	<if test="systemPW != null and systemPW != ''">
+	          	 SYSTEM_PW = #{systemPW},
+	      	</if>
+	      	<if test="systemGroup != null and systemGroup != ''">
+	          	SYSTEM_GROUP = #{systemGroup},
+	      	</if>
+	      	<if test="remarks != null and remarks != ''">
+	          	 REMARKS = #{remarks},
+	      	</if>
+	      	-->
+			UPDATE_USER =  #{updateUser},
+			UPDATE_DATE = SYSDATE
+		where
+			EMP_NUMBER = #{empNumber}
+    	 	AND SYSTEM_SEQ = #{sysSeq}
+			AND COMPANY = #{company}
+			AND WORKPLACE = #{workPlace}
+			AND INOUT_GUBN = #{inOutGubn}
+    </update>
+	
+	<delete id="deleteSsoSystemUser" parameterType="SsoAccountDomain">
+		delete from DNKR_SSO_ACCOUNT
+		where
+			EMP_NUMBER = #{empNumber}
+    	 	AND SYSTEM_SEQ = #{sysSeq}
+			AND COMPANY = #{company}
+			AND WORKPLACE = #{workPlace}
+			AND INOUT_GUBN = #{inOutGubn}
+    </delete>
+    
+    <!-- WAC022 -->
+	<select id="searchBySsoSystemCompany" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	SELECT
+		A.EMP_NUMBER AS EMPNUMBER, MAX(B.EMP_ID) AS EMPID, MAX(B.EMP_NAME) AS EMPNAME, A.COMPANY, MAX(C.REL_NAME) AS CLSNAME,
+		A.WORKPLACE, MAX(D.REL_NAME) AS LOCNAME
+	FROM
+		DNKR_SSO_ACCOUNT A
+		LEFT OUTER JOIN DNKR_EMP B ON A.EMP_NUMBER=B.EMP_NUMBER
+		LEFT OUTER JOIN DNKR_RELATION_NM C ON A.COMPANY = C.REL_CODE and C.CMC_CODE = #{cmcLangCode}
+		LEFT OUTER JOIN DNKR_RELATION_NM D ON A.WORKPLACE = D.REL_CODE and D.CMC_CODE = #{cmcLangCode}
+	WHERE 
+		'SqlMap-Link.searchBySsoSystemCompany' = 'SqlMap-Link.searchBySsoSystemCompany' 
+		AND A.EMP_NUMBER =#{empNumber}
+<!-- 		AND A.COMPANY=#{company}
+ -->		<if test="inOutGubn != null and inOutGubn != ''">
+          	 AND A.INOUT_GUBN = #{inOutGubn}
+      	</if>
+     GROUP BY A.EMP_NUMBER, A.COMPANY, A.WORKPLACE
+	</select>
+	
+	<!-- WAC023 -->
+	<select id="searchBySsoDeviceCompany" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	SELECT
+		A.EMP_NUMBER AS EMPNUMBER, MAX(B.EMP_ID) AS EMPID, MAX(B.EMP_NAME) AS EMPNAME, A.COMPANY, MAX(C.REL_NAME) AS CLSNAME,
+		A.WORKPLACE, MAX(D.REL_NAME) AS LOCNAME
+	FROM
+		DNKR_SSO_DEVICE A
+		LEFT OUTER JOIN DNKR_EMP B ON A.EMP_NUMBER=B.EMP_NUMBER
+		LEFT OUTER JOIN DNKR_RELATION_NM C ON A.COMPANY = C.REL_CODE and C.CMC_CODE = #{cmcLangCode}
+		LEFT OUTER JOIN DNKR_RELATION_NM D ON A.WORKPLACE = D.REL_CODE and D.CMC_CODE = #{cmcLangCode}
+	WHERE 
+		'SqlMap-Link.searchBySsoDeviceCompany' = 'SqlMap-Link.searchBySsoDeviceCompany' 
+		AND A.EMP_NUMBER =#{empNumber}
+		<!-- AND A.USE_YN='Y' -->
+	  GROUP BY A.EMP_NUMBER, A.COMPANY, A.WORKPLACE
+	</select>
+	<select id="searchBySsoDevice" resultType="SsoAccountDomain" parameterType="SsoAccountDomain">
+	SELECT
+		A.CMC_CODE AS DEVICEID, '${empNumber}' AS EMPNUMBER, C.DEVICE_NAME AS DEVICENAME, NVL(C.USE_YN, 'N') AS USEYN,
+		B.CNM_NAME AS DEVICETYPE, C.DEVICE_ID AS DEVICEID2, C.EMP_NUMBER AS EMPNUMBER2, <!-- C.COMPANY -->
+		'${company}' AS COMPANY, '${workPlace}' AS WORKPLACE
+	FROM
+		DNKR_COMMON_CODE A
+		LEFT OUTER JOIN DNKR_COMMON_CODE_NM B ON A.CMC_CODE = B.CMC_CODE and CNM_LANG_CODE = #{cmcLangCode}
+		LEFT OUTER JOIN DNKR_SSO_DEVICE C ON A.CMC_CODE = C.DEVICE_ID AND C.EMP_NUMBER =#{empNumber} AND C.COMPANY=#{company} AND C.WORKPLACE=#{workPlace}
+	WHERE 
+		'SqlMap-Link.searchBySsoDevice' = 'SqlMap-Link.searchBySsoDevice' 
+		AND A.CMC_PARENT_CODE = #{cmcParentCode}
+	</select>
+	
+	<select id="searchBySsoDeviceCount" resultType="java.lang.Integer" parameterType="SsoAccountDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_SSO_DEVICE
+        where 
+                'SqlMap-Link.searchBySsoDeviceCount' = 'SqlMap-Link.searchBySsoDeviceCount'
+        <if test="empNumber != null and empNumber != ''">
+            AND EMP_NUMBER =#{empNumber}
+        </if>
+        <if test="company != null and company != ''">
+          	 and COMPANY = #{company}
+      	</if>
+         <if test="deviceId != null and deviceId != ''">
+          	 and DEVICE_ID = #{deviceId}
+      	</if>
+    </select>
+    
+	<insert id="insertSsoDeviceUser" parameterType="SsoAccountDomain">
+    	insert into DNKR_SSO_DEVICE (EMP_NUMBER, DEVICE_ID, DEVICE_NAME, USE_YN, COMPANY, WORKPLACE, CREATE_USER, CREATE_DATE, UPDATE_USER, UPDATE_DATE)
+    	values(#{empNumber}, #{deviceId}, #{deviceName}, #{useYn}, #{company}, #{workPlace}, #{createUser}, SYSDATE, #{createUser}, SYSDATE)
+    </insert>
+    <update id="updateSsoDeviceUser" parameterType="SsoAccountDomain">
+		update DNKR_SSO_DEVICE
+		set
+			DEVICE_NAME = #{deviceName},
+			USE_YN = #{useYn},
+			UPDATE_USER =  #{updateUser},
+			UPDATE_DATE = SYSDATE
+		where
+			EMP_NUMBER = #{empNumber}
+    	 	AND DEVICE_ID = #{deviceId}
+			AND COMPANY = #{company}
+			AND WORKPLACE = #{workPlace}
+    </update>
+	<!-- WAA001 Main에서 사용 -->
+	<select id="ssoUrlAccounts" resultMap="sso" parameterType="LinkDomain">
+		<!-- 
+		SELECT
+			TRIM(A.SYS_URL) SYS_URL, TRIM(A.SYS_URL2) SYS_URL2, A.LOGIN_YN LOGIN_YN
+		FROM DNKR_SSO_LIST A
+		WHERE
+			'SqlMap-Link.ssoUrlAccounts' = 'SqlMap-Link.ssoUrlAccounts'
+			 AND A.SYS_SEQ= #{sysSeq} AND A.COMPANY= #{company} AND A.USE_YN= 'Y'
+		 -->
+		SELECT
+			A.SYS_NAME AS SYSNAME, TRIM(A.SYS_URL) SYS_URL, TRIM(A.SYS_URL2) SYS_URL2, A.LOGIN_YN LOGIN_YN, A.SSO_YN AS SSOTF, A.COMPANY, A.SYS_TYPE
+		FROM DNKR_SSO_LIST A
+		WHERE
+			'SqlMap-Link.ssoUrlAccounts' = 'SqlMap-Link.ssoUrlAccounts'
+			 AND A.SYS_SEQ= #{sysSeq} AND A.COMPANY IN ('${company}', 'CLS000004') AND A.USE_YN= 'Y' AND A.INOUT_TYPE = #{inOutType}
+	</select>
+	
+	<select id="ssoUrlAccountsAuth" resultMap="ssoAccount" parameterType="LinkDomain">
+		SELECT
+			A.SYS_NAME AS SYSNAME, TRIM(A.SYS_URL) SYS_URL, TRIM(A.SYS_URL2) SYS_URL2, A.LOGIN_YN LOGIN_YN, A.SSO_YN AS SSOTF, A.COMPANY,
+			B.EMP_NUMBER, B.SYSTEM_ID, B.SYSTEM_PW, B.SYSTEM_GROUP, B.REMARKS
+		FROM DNKR_SSO_LIST A
+   		LEFT OUTER JOIN DNKR_SSO_ACCOUNT B ON A.SYS_SEQ=B.SYSTEM_SEQ AND B.COMPANY = #{company}
+		WHERE
+			'SqlMap-Link.ssoUrlAccounts' = 'SqlMap-Link.ssoUrlAccounts'
+		      AND A.SYS_SEQ= #{sysSeq} AND A.COMPANY IN ('${company}', 'CLS000004') <!-- AND A.COMPANY= 'CLS000001'  -->
+		      AND A.USE_YN= 'Y' AND A.INOUT_TYPE=#{inOutType} AND B.EMP_NUMBER = #{empNumber}
+	</select>
+	
+	
+	<select id="searchSsoDspSessionAccount" resultMap="EmpDspSession" parameterType="SessionDomain">
+	<!--
+	SELECT
+		A.EMP_NUMBER, A.SYSTEM_SEQ, A.SYSTEM_ID, A.SYSTEM_PW, A.SYSTEM_GROUP, A.COMPANY, A.WORKPLACE, 
+		CASE WHEN A.COMPANY ='CLS000001' THEN 'PS'
+		WHEN A.COMPANY ='CLS000002' THEN 'PE'
+		ELSE 'KR' END AS OLD_COMPANY,
+		CASE WHEN A.WORKPLACE ='LOC000001' THEN 'C1'
+		WHEN A.WORKPLACE ='LOC000002' THEN 'H1'
+		WHEN A.WORKPLACE ='LOC000003' THEN 'S1'
+		WHEN A.WORKPLACE ='LOC000004' THEN 'E1'
+		ELSE 'KR' END AS OLD_WORKPLACE
+	FROM
+		DNKR_SSO_ACCOUNT A
+	WHERE 
+		'SqlMap-Link.searchSsoDspSessionAccount' = 'SqlMap-Link.searchSsoDspSessionAccount'
+		AND A.SYSTEM_SEQ IN ('4','5', '6', '8')
+		AND A.SYSTEM_ID IS NOT NULL
+		AND A.EMP_NUMBER='110290'
+		AND A.COMPANY = 'CLS000001'
+		//AND A.WORKPLACE= 'LOC000004' // 우선주석처리
+				AND A.SYSTEM_GROUP IN (SELECT 
+				Z.DEVICE_NAME FROM DNKR_SSO_DEVICE Z
+				WHERE
+				Z.EMP_NUMBER= A.EMP_NUMBER
+				AND Z.COMPANY = A.COMPANY
+				AND USE_YN='Y'
+				//AND Z.WORKPLACE= A.WORKPLACE // 우선주석처리
+		)
+	ORDER BY A.SYSTEM_SEQ;
+		  -->
+		SELECT
+			A.EMP_NUMBER, A.SYSTEM_SEQ, A.SYSTEM_ID, A.SYSTEM_PW, A.SYSTEM_GROUP, A.COMPANY, A.WORKPLACE, 
+			CASE WHEN A.COMPANY ='CLS000001' THEN 'PS'
+			WHEN A.COMPANY ='CLS000002' THEN 'PE'
+			ELSE 'KR' END AS OLD_COMPANY,
+			CASE WHEN A.WORKPLACE ='LOC000001' THEN 'C1'
+			WHEN A.WORKPLACE ='LOC000002' THEN 'H1'
+			WHEN A.WORKPLACE ='LOC000003' THEN 'S1'
+			WHEN A.WORKPLACE ='LOC000004' THEN 'E1'
+			ELSE 'KR' END AS OLD_WORKPLACE
+		FROM
+			DNKR_SSO_ACCOUNT A
+		WHERE 
+			'SqlMap-Link.searchSsoDspSessionAccount' = 'SqlMap-Link.searchSsoDspSessionAccount'
+			AND A.SYSTEM_SEQ IN ('4', '5', '6', '8')
+			AND A.SYSTEM_ID IS NOT NULL
+			AND A.EMP_NUMBER = #{empNumber}
+			AND A.COMPANY = #{company}
+			<!-- AND A.WORKPLACE= #{workPlace} --> <!-- 우선주석처리  -->
+			<!-- 디바이스가 사용인 항목만 보여줌. -->
+			AND A.SYSTEM_GROUP IN (SELECT Z.DEVICE_NAME
+				FROM DNKR_SSO_DEVICE Z
+				WHERE
+					Z.EMP_NUMBER = A.EMP_NUMBER
+					AND Z.COMPANY = A.COMPANY
+					AND USE_YN='Y'
+				<!-- AND Z.WORKPLACE= A.WORKPLACE --> <!-- 우선주석처리  -->
+			)
+		ORDER BY A.SYSTEM_SEQ
+    </select>
+ 	<!-- PrinterSession 사용여부 확인 -->
+    <select id="searchSsoPrtSessionAccount" resultMap="EmpPrtSession" parameterType="SessionDomain">
+		SELECT
+			A.EMP_NUMBER, MAX(A.COMPANY) AS COMPANY, MAX(A.WORKPLACE) AS WORKPLACE,
+			MAX(CASE WHEN A.SYSTEM_SEQ='7' THEN TRIM(A.SYSTEM_GROUP) ELSE '' END) AS DEV1,
+			MAX(CASE WHEN A.SYSTEM_SEQ='9' THEN TRIM(A.SYSTEM_GROUP) ELSE '' END) AS DEV2,
+			MAX(CASE WHEN A.SYSTEM_SEQ='9' AND A.SYSTEM_GROUP IS NOT NULL THEN  2 ELSE 1 END) AS CNT
+		FROM
+			DNKR_SSO_ACCOUNT A
+		WHERE
+			'SqlMap-Link.searchSsoPrtSessionAccount' = 'SqlMap-Link.searchSsoPrtSessionAccount'
+			AND A.SYSTEM_SEQ IN ('7','9')
+			AND A.EMP_NUMBER = #{empNumber}
+			AND A.COMPANY = #{company}
+			<!-- AND A.WORKPLACE= #{workPlace} --> <!-- 우선주석처리  -->
+			<!-- 디바이스가 사용인 항목만 보여줌. -->
+			AND A.SYSTEM_GROUP IN (SELECT Z.DEVICE_NAME
+				FROM DNKR_SSO_DEVICE Z
+				WHERE
+					Z.EMP_NUMBER= A.EMP_NUMBER
+					AND Z.COMPANY = A.COMPANY
+					AND USE_YN='Y'
+				<!-- AND Z.WORKPLACE= A.WORKPLACE --> <!-- 우선주석처리  -->
+				)
+		GROUP BY A.EMP_NUMBER
+    </select>
+    
+   	<!-- Dione 계정 카운트 -->
+   	<!-- 미사용 디바이스 제외 추후 설정필요 -->
+    <select id="searchDioneAccountCnt" resultMap="DioneAccountCnt" parameterType="SessionDomain">
+    <!-- 
+		SELECT 
+			A.EMP_NUMBER, A.EMP_ID, A.EMP_NAME, B.COMPANY, B.WORKPLACE, B.OLD_COMPANY, B.OLD_WORKPLACE, NVL(B.DIONE_CNT, 0) AS DIONE_CNT
+		FROM 
+		DNKR_EMP A
+		LEFT OUTER JOIN (
+			SELECT 
+				Z.EMP_NUMBER, Z.COMPANY, Z.WORKPLACE, 
+				CASE WHEN Z.COMPANY ='CLS000001' THEN 'PS'
+				WHEN Z.COMPANY ='CLS000002' THEN 'PE'
+				ELSE 'KR' END AS OLD_COMPANY,
+				CASE WHEN Z.WORKPLACE ='LOC000001' THEN 'C1'
+				WHEN Z.WORKPLACE ='LOC000002' THEN 'H1'
+				WHEN Z.WORKPLACE ='LOC000003' THEN 'S1'
+				WHEN Z.WORKPLACE ='LOC000004' THEN 'E1'
+				ELSE 'KR' END AS OLD_WORKPLACE, 
+				COUNT(Z.SYSTEM_SEQ) AS DIONE_CNT
+			FROM
+				DNKR_SSO_ACCOUNT Z
+			WHERE
+				Z.EMP_NUMBER = #{empNumber}
+				AND Z.SYSTEM_SEQ IN ('4','5','6','8')
+				AND Z.SYSTEM_ID IS NOT NULL
+			GROUP BY Z.EMP_NUMBER, Z.COMPANY, Z.EMP_NUMBER, Z.WORKPLACE
+		) B ON A.EMP_NUMBER = B.EMP_NUMBER
+		WHERE
+			'SqlMap-Link.searchDioneAccountCnt' = 'SqlMap-Link.searchDioneAccountCnt'
+			AND A.EMP_USE = 'Y'
+			AND A.EMP_NUMBER=#{empNumber}
+			 -->
+		<!-- 	//미사용 디바이스도 포함됨.
+		SELECT 
+			A.EMP_NUMBER, A.EMP_ID, A.EMP_NAME, B.COMPANY, B.WORKPLACE, NVL(B.DIONE_CNT, 0) AS DIONE_CNT
+		FROM 
+		DNKR_EMP A
+		LEFT OUTER JOIN (
+			SELECT 
+				Z.EMP_NUMBER, Z.COMPANY, Z.WORKPLACE, 
+				COUNT(Z.SYSTEM_SEQ) AS DIONE_CNT
+			FROM
+				DNKR_SSO_ACCOUNT Z
+			WHERE
+				Z.EMP_NUMBER = #{empNumber}
+				AND Z.SYSTEM_SEQ IN ('4','5','6','8')
+				AND Z.SYSTEM_ID IS NOT NULL
+			GROUP BY Z.EMP_NUMBER, Z.COMPANY, Z.EMP_NUMBER, Z.WORKPLACE
+		) B ON A.EMP_NUMBER = B.EMP_NUMBER
+		WHERE
+			'SqlMap-Link.searchDioneAccountCnt' = 'SqlMap-Link.searchDioneAccountCnt'
+			AND A.EMP_USE = 'Y'
+			AND A.EMP_NUMBER=#{empNumber}
+			 -->
+		SELECT 
+			A.EMP_NUMBER, A.EMP_ID, A.EMP_NAME, B.COMPANY, B.WORKPLACE, NVL(B.DIONE_CNT, 0) AS DIONE_CNT
+		FROM 
+		DNKR_EMP A
+		LEFT OUTER JOIN (
+			SELECT 
+				Z.EMP_NUMBER, Z.COMPANY, Z.WORKPLACE, COUNT(Z.SYSTEM_SEQ) AS DIONE_CNT
+			FROM
+				DNKR_SSO_ACCOUNT Z, (SELECT X.*
+				FROM DNKR_SSO_DEVICE X
+				WHERE
+					X.EMP_NUMBER= #{empNumber}
+					AND X.USE_YN='Y'
+          ) Y
+			WHERE
+				Z.EMP_NUMBER = #{empNumber}
+				AND Z.SYSTEM_SEQ IN ('4','5','6','8')
+				AND Z.SYSTEM_ID IS NOT NULL
+		        AND Z.COMPANY =Y.COMPANY
+		        AND Z.WORKPLACE=Y.WORKPLACE
+		        AND Z.SYSTEM_GROUP = Y.DEVICE_NAME
+			GROUP BY Z.EMP_NUMBER, Z.COMPANY, Z.EMP_NUMBER, Z.WORKPLACE
+		) B ON A.EMP_NUMBER = B.EMP_NUMBER
+		WHERE
+			'SqlMap-Link.searchDioneAccountCnt' = 'SqlMap-Link.searchDioneAccountCnt'
+			AND A.EMP_USE = 'Y'
+			AND A.EMP_NUMBER=#{empNumber}
+    </select>
+	
+</mapper>

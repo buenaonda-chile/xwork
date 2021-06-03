@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="638" Id="PSESSION1" Left="8" OnLoadCompleted="OnLoadCompleted" PidAttrib="7" Title="PSESSION1" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1057" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<Image Height="620" Id="Image0" ImageID="main_img" TabOrder="1" Width="1050"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var USER_ID		= G_ds_user.GetColumn(0,"USER_ID");
+var SYSTEM_SEQ 	= "7";
+
+function OnLoadCompleted(obj)
+{
+    getTitle();
+	getSsoAccount();		
+			
+	var PDevice = ds_ssoaccount.GetColumn(0,"SYSTEM_GRU"); //디바이스
+	alert(PDevice);
+	//ExecProc(quote('C:/Program Files/WeveTec/Max5250/TS400Printer.exe'),"/H 10.72.209.3 /D " + PDevice + " /S#1");
+	ExecProc(quote('C:/Program Files/WeveTec/Max5250/TS400Printer.exe'),"/H cigma_c1.dnka.kr /D " + PDevice + " /S#1");
+}
+
+function getSsoAccount(){
+	http.Sync 		= true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::login/ssoAccounts.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";
+	var sArgument   = "";
+	
+	sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_Id"));
+	sArgument += " INOUT_GUBN=" + quote("I");
+	sArgument += " COMPANY=" + quote(G_ds_user.GetColumn(0,"COMPANY"));
+	sArgument += " SYSTEM_SEQ=" + quote(7);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	}else if(svcId=="getSsoAccount"){
+		// 조회건수가 없을경우
+		if(ds_ssoaccount.rowcount <= 0){
+			alert(setPopMessage("1006"));
+			close();
+		} 
+	}  
+}]]></Script>
+</Window>

@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="619" Id="SAMPLE" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="업로드" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list">
+				<Contents>
+					<colinfo id="title" size="256" summ="default" type="STRING"/>
+					<colinfo id="text" size="256" summ="default" type="STRING"/>
+					<colinfo id="tableNm" size="256" summ="default" type="STRING"/>
+					<colinfo id="columnCnt" size="256" summ="default" type="STRING"/>
+					<record>
+						<columnCnt>2</columnCnt>
+						<tableNm>TABLEA</tableNm>
+						<text>HKMC&#32;D2&#32;주간소요량&#32;UP</text>
+						<title>SVHE304UCP</title>
+					</record>
+					<record>
+						<columnCnt></columnCnt>
+						<tableNm></tableNm>
+						<text>모비스　발주현황&#32;UP</text>
+						<title>SVHE604UCP</title>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list2">
+				<Contents>
+					<colinfo id="title" size="256" summ="default" type="STRING"/>
+					<colinfo id="text" size="256" summ="default" type="STRING"/>
+					<colinfo id="tableNm" size="256" summ="default" type="STRING"/>
+					<record>
+						<tableNm>TABLEA</tableNm>
+						<text>현대일일검수통보서&#32;UP</text>
+						<title>SVHZ404UCP</title>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list3">
+				<Contents>
+					<colinfo id="title" size="256" summ="default" type="STRING"/>
+					<colinfo id="title2" size="256" summ="default" type="STRING"/>
+					<colinfo id="text" size="256" summ="default" type="STRING"/>
+					<colinfo id="date" size="256" summ="default" type="STRING"/>
+					<colinfo id="tableNm" size="256" summ="default" type="STRING"/>
+					<record>
+						<date></date>
+						<tableNm>TABLEX</tableNm>
+						<text>근태이관</text>
+						<title>workday</title>
+						<title2>근태이관</title2>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_list" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="302" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="265" Id="grd_board" InputPanel="FALSE" Left="1" LineColor="#dfdfdf" MinWidth="100" OnCellClick="onCellCilck" Right="1057" TabOrder="5" TabStop="true" Top="37" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="INACTIVECAPTION" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="219"/>
+						<col width="639"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="업로드&#32;내역"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="설명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="엑셀"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="CSV"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="0" colid="title" display="normal"/>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="1" colid="text" combocol="code1" combodataset="ds_mdtp" combotext="code_name" display="normal"/>
+						<cell align="center" bkcolor="lightsteelblue" col="2" combocol="code1" combodataset="ds_medi" combotext="code_name" display="text" text="업로드"/>
+						<cell align="center" bkcolor="lightsteelblue" col="3" combocol="code1" combodataset="ds_medi" combotext="code_name" display="text" text="업로드"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="40" TabOrder="1" Text="업로드" Top="8" Width="974"></Static>
+		<Image Height="28" Id="Image3" ImageID="main_tit_icon" Left="1" TabOrder="2" Width="29"></Image>
+		<File Bottom="24" Height="24" Id="File" Left="1008" Right="1032" TabOrder="17" Width="24"></File>
+		<FileDialog Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1035" MultiSelect="TRUE" Right="1059" TabOrder="19" Type="Save" Width="24"></FileDialog>
+		<Grid AutoEnter="TRUE" BindDataset="ds_main" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="720" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" FillArea="TRUE" HeadBorder="Flat" HeadHeight="25" Height="96" Id="Grid0" InputPanel="FALSE" LineColor="#b4b4b4" OnCellClick="onCellCilck" Right="227" ScrollCell="true" TabOrder="4" TabStop="true" Top="624" UseDBuff="true" UsePopupMenu="true" UseSelColor="FALSE" Visible="true" VLineColor="#b4b4b4" WheelScrollRow="1" Width="227">
+			<contents>
+				<format id="Default"></format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_list2" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="460" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="150" Id="Grid1" InputPanel="FALSE" Left="1" LineColor="#dfdfdf" MinWidth="100" OnCellClick="onCellCilck2" Right="1057" TabOrder="6" TabStop="true" Top="310" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="INACTIVECAPTION" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="219"/>
+						<col width="736"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="업로드&#32;내역"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="설명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="텍스트"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="0" colid="title" display="normal"/>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="1" colid="text" combocol="code1" combodataset="ds_mdtp" combotext="code_name" display="normal"/>
+						<cell align="center" bkcolor="lightsteelblue" col="2" color="#333333" display="text" text="업로드"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_list3" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#b4b4b4" Bottom="609" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="142" Id="Grid2" InputPanel="FALSE" Left="1" LineColor="#dfdfdf" MinWidth="100" OnCellClick="onCellCilck3" Right="1057" TabOrder="7" TabStop="true" Top="467" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="INACTIVECAPTION" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="219"/>
+						<col width="634"/>
+						<col width="100"/>
+						<col width="100"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="업로드&#32;내역"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="설명"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="근태년월일"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="근태이관"/>
+					</head>
+					<body>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="0" colid="title2" display="normal"/>
+						<cell align="center" bkcolor="expr:decode(currow%2,0,&apos;ffffff&apos;,1,&apos;#F0F0F0&apos;)" col="1" colid="text" combocol="code1" combodataset="ds_mdtp" combotext="code_name" display="normal"/>
+						<cell align="center" col="2" colid="date" color="#333333" display="text" edit="normal" Mask="####-##-##"/>
+						<cell align="center" bkcolor="lightsteelblue" col="3" color="#333333" display="text" text="업로드"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<WTA_RemoteCall Bottom="642" Height="10" Id="WTA_RemoteCall0" Left="240" Right="250" Top="632" Width="10"></WTA_RemoteCall>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var Lib = "TESTA";
+
+
+
+function on_LoadCompleted(obj)
+{
+	getTitle();
+
+}
+
+// 엑셀 & CSV 파일 업로드
+function onCellCilck(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var tableNm  = ds_list.GetColumn(nRow,"tableNm");
+	var yyyymm   = ds_list.GetColumn(nRow,"date");
+	var colCnt   = ds_list.GetColumn(nRow,"columnCnt");
+	var pgmNmae  = ds_list.GetColumn(nRow,"title");	
+	
+	if(nCell == 2)
+	{
+		uploadExcel();
+		saveDataSet(tableNm,pgmNmae);
+	}
+	
+	if(nCell == 3)
+	{
+		uploadCsv(colCnt);
+		saveDataSet(tableNm,pgmName);
+	}
+}
+
+// 텍스트파일 업로드
+function onCellCilck2(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var tableNm = ds_list2.GetColumn(nRow,"tableNm");
+	var yyyymm  = ds_list2.GetColumn(nRow,"date");
+	var pgmNmae  = ds_list.GetColumn(nRow,"title");		
+	
+	if(nCell == 2)
+	{
+		uploadText();
+		saveDataSet(tableNm,pgmNmae);
+	}
+}
+
+function uploadExcel()
+{
+	ds_main.DeleteAll();
+	FileDialog0.Filter = "ALL File(xls.*)|*.xls";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	// 20110103l-koowgnojeel, 1009 == 파일 선택 창을 여는데 실패하였습니다.
+		return;
+	}
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	
+	ext_ExcelImportByIndex(path,0,"ds_main",0);
+	Grid0.CreateFormat(); 
+}
+
+function uploadCsv(conCnt)
+{
+	ds_main.DeleteAll();
+	FileDialog0.Filter = "ALL File(csv.*)|*.csv";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	// 20110103l-koowgnojeel, 1009 == 파일 선택 창을 여는데 실패하였습니다.
+		return;
+	}
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	
+	Ext_Csv2Ds(path,"ds_main",true,setColumn(conCnt));
+	Grid0.CreateFormat();
+}
+
+function uploadText()
+{
+	ds_main.DeleteAll();
+	FileDialog0.Filter = "ALL File(txt.*)|*.txt";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	// 20110103l-koowgnojeel, 1009 == 파일 선택 창을 여는데 실패하였습니다.
+		return;
+	}
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	
+	var	dataCount = array(-1);
+		
+	file.FileName = path;
+	file.Open("r");
+	buff = file.Read();
+	file.Close();
+
+	dataCount = Split(buff, "\r\n");
+
+	for(i=0;i<dataCount.Length();i++)
+	{
+		ds_main.AddColumn("Col01");
+		ds_main.AddRow();
+		ds_main.SetColumn(i,"Col01",dataCount[i]);
+	}	
+	Grid0.CreateFormat(); 
+}
+
+function saveDataSet(tableNm,pgmNmae)
+{
+	http.Sync = true;
+	var sKind		= "SAVE00";						
+	var sMethodName = "service::sample/saveUpload.do";
+	var sInDataSet  = "ds_main=ds_main";
+	var sOutDataSet = "";
+	var arg			= " LIB=" + quote(Lib) + " TABLENM=" + quote(tableNm);	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "");	
+	
+	callPgm(pgmNmae);
+	
+}
+
+function setColumn(cnt)
+{
+	var returnTxt = "";
+	for(i=1;i<=cnt;i++)
+	{
+		if(i<10)
+		{
+			if(i == cnt) returnTxt += "Col0" + i;
+			else returnTxt += "Col0" + i + ",";
+		} else {
+			if(i == cnt) returnTxt += "Col" + i;
+			else returnTxt += "Col" + i + ",";
+		}
+	}
+	return returnTxt ;
+}
+
+function onCellCilck3(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	var tableNm 	= ds_list3.GetColumn(nRow,"tableNm");
+	var yyyymmdd  	= ds_list3.GetColumn(nRow,"date");
+	var pgmNmae  	= ds_list.GetColumn(nRow,"title");	
+		
+	if(nCell == 3)
+	{
+		getDataSet(yyyymmdd);
+		saveDataSet(tableNm,pgmNmae);
+	}	
+}
+
+
+function getDataSet(yyyymmdd)
+{
+	ds_main.DeleteAll();
+
+	http.Sync 		= true;
+	var sKind		= "SEARCH00";						
+	var sMethodName = "service::workday/selectWorkDay.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_main=ds_main";
+	var arg			= " LIB=" + quote(Lib) + " YYYYMM=" + quote(yyyymmdd);
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fn_CallBack");	
+}
+
+function fn_CallBack(sMethodName, ErrorCode, ErrorMSG) {
+	if(ErrorCode != 0)
+	{
+		returnMSG = ErrorMSG
+	} else {
+		returnMSG = "처리되었습니다.                 "
+	}
+}
+
+
+function callPgm(pgmNmae)
+{
+	if(pgmNmae == "SVHE304UCP")
+	{
+		callSVHE304UCP();
+	}
+	
+	if(pgmNmae == "SVHZ404UCP")
+	{
+		callSVHZ404UCP();
+	}	
+
+	if(pgmNmae == "SVHE604UCP")
+	{
+		callSVHE604UCP();
+	}		
+}
+
+
+
+
+function callSVHE304UCP()
+{
+	// 연결 (접속아이피 , 아이디, 비밀번호)
+	var rtn = WTA_RemoteCall0.RC_Connect("58.227.62.109","QSECOFR","SECOFR");
+	if(rtn != 0){   //접속성공시 
+
+		Var val1 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304U)");
+		Var val2 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UA)");
+		Var val3 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UB)");
+		if(rtn2 != 0){ //정상적으로 수행했을 시
+			//리턴 파라메타 값을 출력한다.
+			alert("성공===>" + WTA_RemoteCall0.RC_GetReturnParm(1));
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	}else{
+		//오류 코드 경고창
+		alert("접속오류===>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	WTA_RemoteCall0.RC_Disconnect();
+}
+
+
+function callSVHZ404UCP()
+{
+	// 연결 (접속아이피 , 아이디, 비밀번호)
+	var rtn = WTA_RemoteCall0.RC_Connect("58.227.62.109","QSECOFR","SECOFR");
+	if(rtn != 0){   //접속성공시 
+
+		Var val1 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHZ404U)");
+		Var val2 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHZ400U)");
+
+		if(rtn2 != 0){ //정상적으로 수행했을 시
+			//리턴 파라메타 값을 출력한다.
+			alert("성공===>" + WTA_RemoteCall0.RC_GetReturnParm(1));
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	}else{
+		//오류 코드 경고창
+		alert("접속오류===>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	WTA_RemoteCall0.RC_Disconnect();
+}
+
+
+function callSVHE604UCP()
+{
+	// 연결 (접속아이피 , 아이디, 비밀번호)
+	var rtn = WTA_RemoteCall0.RC_Connect("58.227.62.109","QSECOFR","SECOFR");
+	if(rtn != 0){   //접속성공시 
+
+		Var val1 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304U)");
+		Var val2 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UA)");
+		Var val3 = WTA_RemoteCall0.RC_RmtCmd("CALL PGM(SVHE304UB)");
+
+		if(rtn2 != 0){ //정상적으로 수행했을 시
+			//리턴 파라메타 값을 출력한다.
+			alert("성공===>" + WTA_RemoteCall0.RC_GetReturnParm(1));
+		}else{
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + WTA_RemoteCall0.bstrErrorMessage);
+		}
+	}else{
+		//오류 코드 경고창
+		alert("접속오류===>" + WTA_RemoteCall0.ulErrorCode);
+	}
+	WTA_RemoteCall0.RC_Disconnect();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.CodeDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.CodeDto">
+    <id property="_id" column="CODE_ID" javaType="java.lang.Long" />
+    <result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+    <result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+    <result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+    <result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+    <result property="grpCd" column="GRP_CD" javaType="java.lang.String" />
+    <result property="codeCd" column="CODE_CD" javaType="java.lang.String" />
+    <result property="codeKoNm" column="CODE_KO_NM" javaType="java.lang.String" />
+    <result property="codeEnNm" column="CODE_EN_NM" javaType="java.lang.String" />
+    <result property="codeJaNm" column="CODE_JA_NM" javaType="java.lang.String" />
+    <result property="codeOrdr" column="CODE_ORDR" javaType="java.lang.Integer" />
+    <result property="useYn" column="USE_YN" javaType="java.lang.String" />
+    <result property="ref1" column="REF_1" javaType="java.lang.String" />
+    <result property="ref2" column="REF_2" javaType="java.lang.String" />
+    <result property="ref3" column="REF_3" javaType="java.lang.String" />
+    <result property="ref4" column="REF_4" javaType="java.lang.String" />
+    <result property="ref5" column="REF_5" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT CODE_ID,
+           RGSTR_ID,
+           RGST_DT,
+           UPDTR_ID,
+           UPDT_DT,
+           GRP_CD,
+           CODE_CD,
+           CODE_KO_NM,
+           CODE_EN_NM,
+           CODE_JA_NM,
+           CODE_ORDR,
+           REF_1,
+           REF_2,
+           REF_3,
+           REF_4,
+           REF_5,
+           USE_YN
+    FROM TB_CM_CODE
+
+  </sql>
+
+  <sql id="where_01">
+
+    <choose>
+      <when test="criteria.grpCds != null">
+        AND GRP_CD IN
+        <foreach collection="criteria.grpCds" item="item" index="index"  open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        <choose>
+          <when test="criteria.grpCd == null">
+            AND GRP_CD IS NULL
+          </when>
+          <when test="criteria.grpCd != ''">
+            AND GRP_CD = #{criteria.grpCd}
+          </when>
+        </choose>
+      </otherwise>
+    </choose>
+    <if test="criteria.codeNm != null and criteria.codeNm != ''">
+      AND (
+        CODE_KO_NM LIKE '%' ||  #{criteria.codeNm} || '%'
+          OR CODE_EN_NM LIKE '%' ||  #{criteria.codeNm} || '%'
+            OR CODE_JA_NM LIKE '%' || #{criteria.codeNm} || '%' )
+    </if>
+    <if test="criteria.useYn != null and criteria.useYn != ''">
+        AND USE_YN =  #{criteria.useYn}
+    </if>
+
+  </sql>
+
+  <!-- 検索 SQL文（主キー） -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.CodeDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.CODE_ID = #{_id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.GRP_CD, A.CODE_ORDR
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(CODE_ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.CodeDomain">
+
+    INSERT INTO TB_CM_CODE (
+      CODE_ID,
+      RGSTR_ID,
+      RGST_DT,
+      UPDTR_ID,
+      UPDT_DT,
+      GRP_CD,
+      CODE_CD,
+      CODE_KO_NM,
+      CODE_EN_NM,
+      CODE_JA_NM,
+      CODE_ORDR,
+      USE_YN,
+      REF_1,
+      REF_2,
+      REF_3,
+      REF_4,
+      REF_5
+    ) VALUES (
+      #{_id},
+      #{rgstrId},
+      #{rgstDt},
+      #{updtrId},
+      #{updtDt},
+      #{grpCd},
+      #{codeCd},
+      #{codeKoNm},
+      #{codeEnNm},
+      #{codeJaNm},
+      #{codeOrdr},
+      #{useYn},
+      #{ref1},
+      #{ref2},
+      #{ref3},
+      #{ref4},
+      #{ref5}
+    )
+
+    <selectKey resultType="long" keyProperty="_id" order="BEFORE">
+      SELECT SEQ_CM_CODE.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.CodeDomain">
+
+    UPDATE TB_CM_CODE
+    SET UPDTR_ID = #{updtrId},
+        UPDT_DT = #{updtDt},
+        CODE_CD = #{codeCd},
+        CODE_KO_NM = #{codeKoNm},
+        CODE_EN_NM = #{codeEnNm},
+        CODE_JA_NM = #{codeJaNm},
+        CODE_ORDR = #{codeOrdr},
+        USE_YN = #{useYn},
+        REF_1 = #{ref1},
+        REF_2 = #{ref2},
+        REF_3 = #{ref3},
+        REF_4 = #{ref4},
+        REF_5 = #{ref5}
+    WHERE CODE_ID = #{_id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.CodeDomain">
+
+    DELETE FROM TB_CM_CODE
+    WHERE CODE_ID = #{_id}
+
+  </delete>
+
+
+</mapper>

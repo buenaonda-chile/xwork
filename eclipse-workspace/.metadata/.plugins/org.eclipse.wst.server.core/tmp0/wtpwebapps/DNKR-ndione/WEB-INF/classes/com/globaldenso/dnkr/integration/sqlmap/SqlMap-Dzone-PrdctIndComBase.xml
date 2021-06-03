@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdctIndComBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdctIndComBase" type="PrdctIndComBaseDomain">
+        <result property="comps" column="COMPS" />
+        <result property="code" column="CODE" />
+        <result property="name" column="NAME" />
+        
+        <result property="cdBizarea" column="CD_BIZAREA" />        
+        <result property="noEmp" column="NO_EMP" />   
+        <result property="nmKor" column="NM_KOR" />                
+        <result property="cdIncom" column="CD_INCOM" />  
+        <result property="deptCdMap" column="DEPT_CD_MAP" />    
+        <result property="teamCdMap" column="TEAM_CD_MAP" />                                             
+        
+        <result property="tmCard" column="TM_CARD" />  
+        <result property="startTmCard" column="START_TM_CARD" />  
+        <result property="endTmCard" column="END_TM_CARD" />  
+        <result property="startOutCard" column="START_OUT_CARD" />  
+        <result property="endOutCard" column="END_OUT_CARD" />  
+
+ 
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+    </resultMap>
+ 
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchDeptMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 cd_dept_map AS CODE
+			,nm_dept AS NAME
+		FROM V_Z_DNKA_MA_DEPT_ST
+		WHERE 1 =1
+		<if test="comps != null and comps != ''">		
+			AND CD_COMPS = #{comps}
+		</if>		
+		<if test="deptCdMap != null and deptCdMap != ''">		
+			AND cd_dept_map = #{deptCdMap}
+		</if>
+		<if test="teamCdMap != null and teamCdMap != ''">
+			AND TEAM_CD_MAP = #{teamCdMap}
+		</if>  
+    </select>   
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchEmpMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 CD_BIZAREA
+			,NM_KOR
+			,NO_EMP
+			,CD_INCOM
+			,DEPT_CD_MAP			
+		FROM V_Z_DNKA_MA_EMP
+		WHERE 1 =1
+		<if test="cdBizarea != null and cdBizarea != ''">		
+			AND CD_BIZAREA = #{cdBizarea}
+		</if>
+		<if test="deptCdMap != null and deptCdMap != ''">		
+			AND DEPT_CD_MAP = #{deptCdMap}
+		</if> 		 
+		AND (CD_INCOM = '001' OR CD_INCOM = '002') 		
+    </select>    
+    
+    <!-- 検索 SQL文（任意条件） 
+    <select id="searchWorkTimeMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT AA.NO_EMP AS NO_EMP,MAX(AA.TM_CARD) AS TM_CARD FROM (
+			SELECT C.DEPT_CD_MAP,B.NO_EMP, A.DT_WORK || A.TM_CARD AS TM_CARD FROM HR_WBARCODE A
+			INNER JOIN HR_WECMATCH B
+			ON A.NO_CARD = B.NO_CARD
+			INNER JOIN V_Z_DNKA_MA_EMP C
+			ON B.NO_EMP = C.NO_EMP
+			WHERE CD_WCODE  = '${cdWcode}'
+			AND B.NO_EMP = '${noEmp}'
+			<if test="deptCdMap != null and deptCdMap != ''">		
+			AND	C.DEPT_CD_MAP = '${deptCdMap}'
+			</if> 
+			<if test="endDate != null and endDate != ''">
+			AND DT_WORK BETWEEN '${startDate}' AND '${endDate}'
+			</if> 
+			<if test="endDate == null || endDate == ''">
+			AND DT_WORK = '${startDate}'
+			</if> 			
+		) AA
+		WHERE AA.TM_CARD BETWEEN '${startTime}' AND '${endTime}'
+		GROUP BY AA.NO_EMP		
+    </select>  
+-->    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchWorkTimeMasterOld" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT AA.NO_EMP AS NO_EMP,MIN(AA.TM_CARD) AS START_TM_CARD, MAX(AA.TM_CARD) AS END_TM_CARD FROM (
+			SELECT C.DEPT_CD_MAP,B.NO_EMP, A.DT_WORK || A.TM_CARD AS TM_CARD FROM HR_WBARCODE A
+			INNER JOIN HR_WECMATCH B
+			ON A.NO_CARD = B.NO_CARD
+			INNER JOIN V_Z_DNKA_MA_EMP C
+			ON B.NO_EMP = C.NO_EMP
+			WHERE CD_WCODE IN ('001','002')
+			AND B.NO_EMP = '${noEmp}'
+			<if test="deptCdMap != null and deptCdMap != ''">		
+			AND	C.DEPT_CD_MAP = '${deptCdMap}'
+			</if> 
+			<if test="endDate != null and endDate != ''">
+			AND DT_WORK BETWEEN '${startDate}' AND '${endDate}'
+			</if> 
+			<if test="endDate == null || endDate == ''">
+			AND DT_WORK = '${startDate}'
+			</if> 			
+		) AA
+		WHERE AA.TM_CARD BETWEEN '${startTime}' AND '${endTime}'
+		GROUP BY AA.NO_EMP		
+    </select>        
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchWorkOutTimeMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT AA.NO_EMP AS NO_EMP,MIN(AA.TM_CARD) AS START_TM_CARD, MAX(AA.TM_CARD) AS END_TM_CARD FROM (
+			SELECT C.DEPT_CD_MAP,B.NO_EMP, A.DT_WORK || A.TM_CARD AS TM_CARD FROM HR_WBARCODE A
+			INNER JOIN HR_WECMATCH B
+			ON A.NO_CARD = B.NO_CARD
+			INNER JOIN V_Z_DNKA_MA_EMP C
+			ON B.NO_EMP = C.NO_EMP
+			WHERE CD_WCODE IN ('003','004')
+			AND B.NO_EMP = '${noEmp}'
+			<if test="deptCdMap != null and deptCdMap != ''">		
+			AND	C.DEPT_CD_MAP = '${deptCdMap}'
+			</if> 
+			<if test="endDate != null and endDate != ''">
+			AND DT_WORK BETWEEN '${startDate}' AND '${endDate}'
+			</if> 
+			<if test="endDate == null || endDate == ''">
+			AND DT_WORK = '${startDate}'
+			</if> 			
+		) AA
+		WHERE AA.TM_CARD BETWEEN '${startTime}' AND '${endTime}'
+		GROUP BY AA.NO_EMP		
+    </select>  
+    
+    <select id="searchWorkTimeMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+		    AA.NO_EMP AS NO_EMP,
+		    MIN(case when CD_WCODE='001' then AA.TM_CARD else '' end) AS START_TM_CARD, 
+		    MAX(case when CD_WCODE='002' then AA.TM_CARD else '' end) AS END_TM_CARD ,
+		    MIN(case when CD_WCODE='003' then AA.TM_CARD else '' end) AS START_OUT_CARD, 
+		    MAX(case when CD_WCODE='004' then AA.TM_CARD else '' end) AS END_OUT_CARD 
+		FROM 
+		    ( SELECT C.DEPT_CD_MAP,B.NO_EMP, A.DT_WORK || A.TM_CARD AS TM_CARD ,CD_WCODE
+		    FROM HR_WBARCODE A 
+		    INNER JOIN HR_WECMATCH B ON A.NO_CARD = B.NO_CARD 
+		    INNER JOIN V_Z_DNKA_MA_EMP C ON B.NO_EMP = C.NO_EMP 
+		    WHERE CD_WCODE IN ('001','002','003','004') 
+			AND B.NO_EMP = '${noEmp}'
+			AND	C.DEPT_CD_MAP = '${deptCdMap}'
+			AND DT_WORK BETWEEN '${startDate}' AND '${endDate}'
+		    ) AA 
+		WHERE AA.TM_CARD BETWEEN '${startTime}' AND '${endTime}'
+		GROUP BY AA.NO_EMP
+
+    </select>   
+        
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchWtmcalcCount" resultType="java.lang.Integer" parameterType="PrdctIndComBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             HR_Z_DNKA_WTMCALC
+        WHERE NO_EMP = '${noEmp}'
+		AND   DT_WORK = '${startDate}'   
+
+    </select>    
+           
+    <!-- 登録 SQL文 -->
+    <insert id="createWtmcalc" parameterType ="PrdctIndComBaseDomain">
+        INSERT INTO HR_Z_DNKA_WTMCALC
+       (
+            CD_COMPANY
+           ,CD_BIZAREA 
+           ,NO_EMP
+ 		   ,DT_WORK
+ 		   ,CD_WCODE 
+           ,CD_TMCODE
+           ,TM_LATE          
+           ,TM_EARLY   
+           ,TM_OUT              
+           ,TM_MOR      
+           ,TM_EVENING  
+        )	
+        VALUES (
+           'DENSO',
+           '2000',                
+           #{noEmp},
+           #{startDate},
+           '001',
+           #{cdTmcode},
+           #{tmLate},
+           #{tmEarly},
+           #{tmOut},
+           #{tmMor},
+           #{tmEvening}
+       )
+    </insert>           
+           
+
+           
+</mapper>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.OfficeDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.OfficeDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="groupId" column="GROUP_ID" javaType="java.lang.String" />
+		<result property="officeDiv" column="OFFICE_DIV" javaType="java.lang.String" />
+		<result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+		<result property="officeCd" column="OFFICE_CD" javaType="java.lang.String" />
+		<result property="officeCity" column="OFFICE_CITY" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="officeOriNm" column="OFFICE_ORI_NM" javaType="java.lang.String" />
+		<result property="officeTel" column="OFFICE_TEL" javaType="java.lang.String" />
+		<result property="fax" column="FAX" javaType="java.lang.String" />
+		<result property="address" column="ADDRESS" javaType="java.lang.String" />
+		<result property="expatNm" column="EXPAT_NM" javaType="java.lang.String" />
+		<result property="expatTel" column="EXPAT_TEL" javaType="java.lang.String" />
+		<result property="partMaintenance" column="PART_MAINTENANCE" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="labor" column="LABOR" javaType="java.lang.Long" />
+		<result property="hRate" column="H_RATE" javaType="java.lang.Long" />
+	    <result property="km100InRate" column="KM100_IN_RATE" javaType="java.lang.Double" />
+		<result property="km100OutRate" column="KM100_OUT_RATE" javaType="java.lang.Double" />
+		<result property="materialDiv" column="MATERIAL_DIV" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,MAKER
+		,GROUP_ID
+		,OFFICE_DIV
+		,PART_DIV
+		,OFFICE_CD
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_ORI_NM
+		,OFFICE_TEL
+		,FAX
+		,ADDRESS
+		,EXPAT_NM
+		,EXPAT_TEL
+		,PART_MAINTENANCE
+		,AUTOINSERT
+		,USE_YN
+		,LABOR
+		,H_RATE
+		,KM100_IN_RATE
+		,KM100_OUT_RATE
+		,MATERIAL_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    FROM TB_BA_OFFICE_MASTER
+
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.maker != null and criteria.maker != ''">
+		  AND MAKER = #{criteria.maker}
+	  </if>
+
+	  <if test="criteria.useYn != null and criteria.useYn != ''">
+		  AND USE_YN = #{criteria.useYn}
+	  </if>
+
+	  <if test="criteria.officeNm != null and criteria.officeNm != ''">
+		  AND OFFICE_NM LIKE '%'||#{criteria.officeNm}||'%'
+	  </if>
+
+	  <if test="criteria.officeDiv != null and criteria.officeDiv != ''">
+		  AND OFFICE_DIV = #{criteria.officeDiv}
+	  </if>
+
+	  <if test="criteria.officeCity != null and criteria.officeCity != ''">
+		  AND OFFICE_CITY = #{criteria.officeCity}
+	  </if>
+
+	  <if test="criteria.materialDiv != null and criteria.materialDiv != ''">
+		  AND MATERIAL_DIV = #{criteria.materialDiv}
+	  </if>
+
+	  <if test="criteria.partDiv != null and criteria.partDiv != ''">
+	  	AND PART_DIV = #{criteria.partDiv}
+	  </if>
+
+	  <if test="criteria.officeCd != null and criteria.officeCd != ''">
+		  AND OFFICE_CD = #{criteria.officeCd}
+	  </if>
+
+	  <if test="criteria.flag != null and criteria.flag == 1">
+		  AND OFFICE_DIV IN ('2','4')
+	  </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.OfficeDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.OfficeDomain">
+
+    INSERT INTO TB_BA_OFFICE_MASTER (
+		ID
+		,MAKER
+		,GROUP_ID
+		,OFFICE_DIV
+		,PART_DIV
+		,OFFICE_CD
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_ORI_NM
+		,OFFICE_TEL
+		,FAX
+		,ADDRESS
+		,EXPAT_NM
+		,EXPAT_TEL
+		,PART_MAINTENANCE
+		,AUTOINSERT
+		,USE_YN
+		,LABOR
+		,H_RATE
+		,KM100_IN_RATE
+		,KM100_OUT_RATE
+		,MATERIAL_DIV
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{maker}
+		,#{groupId}
+		,#{officeDiv}
+		,#{partDiv}
+		,#{officeCd}
+		,#{officeCity}
+		,#{officeNm}
+		,#{officeOriNm}
+		,#{officeTel}
+		,#{fax}
+		,#{address}
+		,#{expatNm}
+		,#{expatTel}
+		,#{partMaintenance}
+		,#{autoinsert}
+		,#{useYn}
+		,#{labor}
+		,#{hRate}
+		,#{km100InRate}
+		,#{km100OutRate}
+		,#{materialDiv}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_OFFICE_MASTER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.OfficeDomain">
+
+    UPDATE TB_BA_OFFICE_MASTER SET
+		MAKER = #{maker}
+		,GROUP_ID = #{groupId}
+		,OFFICE_DIV = #{officeDiv}
+		,PART_DIV = #{partDiv}
+		,OFFICE_CD = #{officeCd}
+		,OFFICE_CITY = #{officeCity}
+		,OFFICE_NM = #{officeNm}
+		,OFFICE_ORI_NM = #{officeOriNm}
+		,OFFICE_TEL = #{officeTel}
+		,FAX = #{fax}
+		,ADDRESS = #{address}
+		,EXPAT_NM = #{expatNm}
+		,EXPAT_TEL = #{expatTel}
+		,PART_MAINTENANCE = #{partMaintenance}
+		,AUTOINSERT = #{autoinsert}
+		,USE_YN = #{useYn}
+		,LABOR = #{labor}
+		,H_RATE = #{hRate}
+		,KM100_IN_RATE = #{km100InRate}
+		,KM100_OUT_RATE = #{km100OutRate}
+		,MATERIAL_DIV = #{materialDiv}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.OfficeDomain">
+
+    DELETE FROM TB_BA_OFFICE_MASTER
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="PC&#32;HPCS일일부품소요현황(상세)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SVHE330Q"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="1" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="1" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="264" TabOrder="1" Text="거&#32;&#32;&#32;래&#32;&#32;&#32;처" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="122" TabOrder="7" Top="35" VAlign="Middle" Width="136"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="126" OnChanged="common_OnChanged" TabOrder="1" Top="39" Width="128"></Combo>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="382" Style="static" TabOrder="9" Top="34" VAlign="Middle" Width="398"></Static>
+		<Edit Height="20" Id="ed_pyvnd" ImeMode="none" Left="386" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_pyvnd_OnCharChanged" OnKillFocus="ed_pyvnd_OnKillFocus" TabOrder="8" Top="37" Width="130"></Edit>
+		<Static Height="14" Id="st_pyvnd" Left="525" TabOrder="12" Top="39" Width="225"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="522" TabOrder="10" Top="54" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgMaker" ImageID="ic_search" Left="753" OnClick="imgMaker_OnClick" Static="FALSE" TabOrder="11" Top="38" Width="20"></Image>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SVHE330Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="608" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="544" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" OnKeyDown="MainGrid_OnKeyDown" Right="1048" TabOrder="13" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col fix="left" width="48"/>
+						<col fix="left" width="135"/>
+						<col fix="left" width="66"/>
+						<col fix="left" width="50"/>
+						<col fix="left" width="50"/>
+						<col fix="left" width="50"/>
+						<col width="120"/>
+						<col width="87"/>
+						<col width="166"/>
+						<col width="70"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="60"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="70"/>
+						<col width="70"/>
+					</columns>
+					<head>
+						<cell col="0" colspan="2" display="text" rowspan="2" text="DENSO거래처"/>
+						<cell col="2" display="text" rowspan="2" text="공장"/>
+						<cell col="3" colspan="3" display="text" text="대표"/>
+						<cell col="6" display="text" rowspan="2" text="OEM품번"/>
+						<cell col="7" colspan="2" display="text" rowspan="2" text="DENSO품번"/>
+						<cell col="9" display="text" rowspan="2" text="OEM재고"/>
+						<cell col="10" colspan="3" display="text" text="DENSO재고"/>
+						<cell col="3" display="text" row="1" text="차종"/>
+						<cell col="4" display="text" row="1" text="서열"/>
+						<cell col="5" display="text" row="1" text="번호"/>
+						<cell col="10" display="text" row="1" text="사내"/>
+						<cell col="11" display="text" row="1" text="사외"/>
+						<cell col="12" display="text" row="1" text="TOTAL"/>
+						<cell col="13" display="text" rowspan="2" text="TRIM"/>
+						<cell col="14" display="text" rowspan="2" text="대기댓수"/>
+						<cell col="15" display="text" rowspan="2" text="도장댓수"/>
+						<cell col="16" display="text" rowspan="2" text="비축댓수"/>
+						<cell col="17" colspan="11" display="text" text="D&#32;Day"/>
+						<cell col="28" colspan="6" display="text" text="D+1&#32;Day"/>
+						<cell col="34" colspan="2" display="text" text="D+2&#32;Day"/>
+						<cell col="36" colspan="2" display="text" text="D+3&#32;Day"/>
+						<cell col="38" display="text" rowspan="2" text="이후투입"/>
+						<cell col="39" display="text" rowspan="2" text="합계"/>
+						<cell col="17" display="text" row="1" text="2HR"/>
+						<cell col="18" display="text" row="1" text="2HR"/>
+						<cell col="19" display="text" row="1" text="2HR"/>
+						<cell col="20" display="text" row="1" text="2HR"/>
+						<cell col="21" display="text" row="1" text="2HR"/>
+						<cell col="22" display="text" row="1" text="2HR"/>
+						<cell col="23" display="text" row="1" text="2HR"/>
+						<cell col="24" display="text" row="1" text="2HR"/>
+						<cell col="25" display="text" row="1" text="2HR"/>
+						<cell col="26" display="text" row="1" text="2HR"/>
+						<cell col="27" display="text" row="1" text="합계"/>
+						<cell col="28" display="text" row="1" text="2HR"/>
+						<cell col="29" display="text" row="1" text="2HR"/>
+						<cell col="30" display="text" row="1" text="4HR"/>
+						<cell col="31" display="text" row="1" text="4HR"/>
+						<cell col="32" display="text" row="1" text="4HR"/>
+						<cell col="33" display="text" row="1" text="4HR"/>
+						<cell col="34" display="text" row="1" text="주간"/>
+						<cell col="35" display="text" row="1" text="야간"/>
+						<cell col="36" display="text" row="1" text="주간"/>
+						<cell col="37" display="text" row="1" text="야간"/>
+					</head>
+					<body>
+						<cell col="0" colid="PYVND" display="text" suppress="1"/>
+						<cell col="1" colid="CUSNM" display="text" suppress="2"/>
+						<cell col="2" colid="DFACD" display="text" suppress="3"/>
+						<cell col="3" colid="DMKCR" display="text" suppress="4"/>
+						<cell col="4" colid="DSECD" display="text"/>
+						<cell col="5" colid="DSENO" display="text"/>
+						<cell col="6" colid="CPRTN" display="text"/>
+						<cell col="7" colid="PSPNO" display="text"/>
+						<cell col="8" colid="ITDSC" display="text"/>
+						<cell col="9" colid="OEMJG" display="number"/>
+						<cell col="10" colid="SANE" display="number"/>
+						<cell col="11" colid="SAWE" display="number"/>
+						<cell col="12" colid="MOHTQ" display="number"/>
+						<cell col="13" colid="TRIMD" display="number"/>
+						<cell col="14" colid="PBSQY" display="number"/>
+						<cell col="15" colid="PATQY" display="number"/>
+						<cell col="16" colid="WBSQY" display="number"/>
+						<cell col="17" colid="DATD0" display="number"/>
+						<cell col="18" colid="DATD1" display="number"/>
+						<cell col="19" colid="DATD2" display="number"/>
+						<cell col="20" colid="DATD3" display="number"/>
+						<cell col="21" colid="DATD4" display="number"/>
+						<cell col="22" colid="DATD5" display="number"/>
+						<cell col="23" colid="DATD6" display="number"/>
+						<cell col="24" colid="DATD7" display="number"/>
+						<cell col="25" colid="DATD8" display="number"/>
+						<cell col="26" colid="DATD9" display="number"/>
+						<cell col="27" colid="DATQY" display="number"/>
+						<cell col="28" colid="DATN1" display="number"/>
+						<cell col="29" colid="DATN2" display="number"/>
+						<cell col="30" colid="DATN3" display="number"/>
+						<cell col="31" colid="DATN4" display="number"/>
+						<cell col="32" colid="DATN5" display="number"/>
+						<cell col="33" colid="DATN6" display="number"/>
+						<cell col="34" colid="DT2AF" display="number"/>
+						<cell col="35" colid="DT2EV" display="number"/>
+						<cell col="36" colid="DT3AF" display="number"/>
+						<cell col="37" colid="DT3EV" display="number"/>
+						<cell col="38" colid="REMQY" display="number"/>
+						<cell col="39" colid="GRTOT" display="number"/>
+					</body>
+					<summary>
+						<cell col="0" colspan="40" display="text" expr='&quot;TOTAL&#32;&#32;&#32;&#32;&#32;&#32;&quot;+rowcount()+&quot;건&quot;'/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="20" Id="Button0" Left="671" OnClick="fn_Search" TabOrder="14" Text="Button0" Top="39" Width="63"></Button>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static13" Left="904" Style="static" TabOrder="17" Top="34" VAlign="Middle" Width="136"></Static>
+		<Calendar Height="21" Id="cal_YMD" Left="906" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="15" Top="37" Width="130"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="786" TabOrder="16" Text="기&#32;준&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : LEE SK
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SVHE330Q.xml
+ * ● PROGRAM DESCRIPTION  : PD HPCS일일부품소요현황(종합)
+ * ● DATE WRITTEN         : 2012.07.10
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 		
+	getComCode(); //공장구분 선택
+	cal_YMD.Value = nowDate;
+	MainGrid.UserData = MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getSVHE330Q(){
+	if(length(trim(cal_YMD.Value)) < 1){
+		alert(setPopMessage("2016"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("2016");	
+		cal_YMD.SetFocus();
+		return;
+	}
+	var sKind		= "getSVHE330Q";						
+	var sMethodName = "service::pssallib/selectSVHE330Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SVHE330Q=ds_SVHE330Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@PYVND=" + quote(ed_pyvnd.Text);
+	sArgument += "@DUMCB=" + quote(cal_YMD.Value);
+	sArgument += "@DUMYM=" + quote(substr(cal_YMD.Value,0,6));
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+function ed_pyvnd_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_pyvnd.Text = "";
+}
+
+function ed_pyvnd_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("1502"));  //[확인] 거래처코드 확인바랍니다.
+		setMessage("1502");	
+		ed_pyvnd.SetFocus();
+		return;
+	}
+	st_pyvnd.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;
+}
+
+function imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pyvnd.Text);
+	if (length(trim(ed_pyvnd.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pyvnd.Text = rtn[0];
+		st_pyvnd.Text = rtn[1];
+	}
+}
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SVHE330Q.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "PD_HPCS일일부품소요현황_종합";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|PD_HPCS일일부품소요현황_종합";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+		grd_fn_ClipboardCopy(obj, strSeparator);
+	}	
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSVHE330Q();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_SVHE330Q")== false) return;
+	ds_SVHE330Q.AddRow();
+}
+
+function fn_Delete()
+{
+	ds_SVHE330Q.DeleteRow(ds_SVHE330Q.currow);
+}
+
+function fn_Save()
+{
+	setSVHE330Q();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+]]></Script>
+</Window>

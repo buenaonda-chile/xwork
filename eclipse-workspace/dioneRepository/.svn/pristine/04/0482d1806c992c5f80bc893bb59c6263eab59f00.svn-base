@@ -1,0 +1,2626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="소득신고파일생성" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_C"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_D"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD020PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_E"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_F"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ201C_G"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ERROR" UseClientLayout="1">
+				<Contents>
+					<colinfo id="SABUN" size="256" summ="default" type="STRING"/>
+					<colinfo id="TITLE" size="256" summ="default" type="STRING"/>
+					<colinfo id="ORG" size="256" summ="default" type="STRING"/>
+					<colinfo id="CHG" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="1" Top="30" Width="1057"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="33" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="120" Style="static" TabOrder="3" Top="33" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static28" Left="444" TabOrder="8" Top="66" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static31" Left="328" TabOrder="7" Text="제&#32;출&#32;일&#32;자" Top="66" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_SUBMISSION" Left="449" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="6" Top="70" Value="TODAY" Width="88"></Calendar>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="4" Top="36" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="120" TabOrder="11" Top="66" VAlign="Middle" Width="195"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="4" TabOrder="10" Text="기&#32;준&#32;년&#32;월" Top="66" VAlign="Middle" Width="116"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_FR" Left="125" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="9" Top="70" Value="TODAY" Width="80"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmd_PTJYM_TO" Left="229" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="12" Top="70" Value="TODAY" Width="80"></Calendar>
+		<Static Align="Center" Height="11" Id="Static154" Left="209" TabOrder="13" Text="~" Top="74" VAlign="Middle" Width="15"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="968" OnClick="fn_Search" TabOrder="14" Text="조회" Top="34" Visible="FALSE" Width="75"></Button>
+		<Static Border="RaisedEdge" Font="Default,10,Bold" Height="80" Id="Static27" Left="510" TabOrder="27" Text="단일세율&#32;적용자&#32;사번" Top="280" Visible="FALSE" Width="530"></Static>
+		<FileDialog Bottom="540" Height="24" Id="FileDialog0" Left="224" Right="248" TabOrder="16" Top="516" Width="24"></FileDialog>
+		<File Bottom="546" Height="24" Id="File0" Left="331" Right="355" TabOrder="50" Top="522" Width="24"></File>
+		<Button Height="26" Id="btn_write" ImageID="sum_생성" Left="972" OnClick="btn_write_OnClick" TabOrder="17" Text="File&#32;생성" Top="68" Width="70"></Button>
+		<Grid BkColor2="default" BoldHead="true" Bottom="408" Enable="true" EndLineColor="default" Height="40" Id="Grid2" InputPanel="FALSE" Left="960" LineColor="default" Right="1044" TabOrder="18" TabStop="true" Top="368" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="84">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="처리중"/>
+					</head>
+					<body>
+						<cell col="0" colid="KORNM" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Height="21" Id="Static25" Left="16" TabOrder="19" Text="**&#32;C&#32;레코드(갑근&#32;주(현)근무처&#32;레코드)&#32;:" Top="280" Width="227"></Static>
+		<Static Height="13" Id="Static26" Left="16" TabOrder="20" Text="**&#32;D&#32;레코드(갑근&#32;종(전)근무처&#32;레코드)&#32;:" Top="312" Width="227"></Static>
+		<Static Align="Right" Border="SunkenEdge" Height="19" Id="st_REC_C" Left="241" TabOrder="21" Top="279" Width="49"></Static>
+		<Static Align="Right" Border="SunkenEdge" Height="19" Id="st_REC_D" Left="241" TabOrder="22" Top="308" Width="49"></Static>
+		<Static Height="19" Id="Static29" Left="294" TabOrder="23" Text="건" Top="283" Width="33"></Static>
+		<Static Height="19" Id="Static30" Left="294" TabOrder="24" Text="건" Top="312" Width="33"></Static>
+		<TextArea CheckLength="Byte" Height="136" HScroll="TRUE" Id="ta_RESULT" Left="8" TabOrder="25" Top="464" VScroll="TRUE" Width="1042"></TextArea>
+		<Grid BkColor2="default" BoldHead="true" Bottom="352" Editable="TRUE" Enable="true" EndLineColor="default" Height="48" Id="Grid5" InputPanel="FALSE" Left="520" LineColor="default" Right="608" TabOrder="26" TabStop="true" Top="304" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="88">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="사번"/>
+					</head>
+					<body>
+						<cell col="0" colid="sabun" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="30" Id="btn_insert" Left="936" OnClick="btn_insert_OnClick" TabOrder="28" Text="추가" Top="283" Visible="FALSE" Width="46"></Button>
+		<Button Height="30" Id="btn_del" Left="992" OnClick="btn_del_OnClick" TabOrder="29" Text="삭제" Top="283" Visible="FALSE" Width="46"></Button>
+		<Radio Height="27" Id="rdoggub" INDEX="-1" Left="340" OnChanged="rdoggub_OnChanged" TabOrder="29" Top="33" Width="292">
+			<Contents>
+				<Layout code="J" height="15" left="10" text="중도정산" top="5" width="70"/>
+				<Layout code="Y" height="15" left="100" text="연말정산" top="5" width="70"/>
+				<Layout code="A" height="15" left="190" text="연말정산제출" top="5" width="90"/>
+			</Contents>
+		</Radio>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static0" Left="224" TabOrder="30" Text="구&#32;분&#32;코&#32;드" Top="33" VAlign="Middle" Width="116"></Static>
+		<Static Border="SunkenEdge" Font="Default,12,Bold" Height="168" Id="Static16" Left="568" TabOrder="48" Text="**&#32;B&#32;레코드&#32;(갑근&#32;원천징수&#32;의무자별&#32;집계)" Top="96" Width="476"></Static>
+		<Static Border="SunkenEdge" Font="Default,12,Bold" Height="168" Id="Static15" Left="4" TabOrder="47" Text="**&#32;A&#32;레코드&#32;(갑근&#32;제출자&#32;대리인)" Top="96" Width="556"></Static>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_gijunym" Left="88" TabOrder="31" Top="136" Width="87"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_saupjano" Left="400" TabOrder="32" Top="133" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_sajang" Left="88" TabOrder="33" Top="200" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_brandname" Left="88" TabOrder="34" Top="168" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_postcode" Left="400" TabOrder="35" Top="197" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_bubinno" Left="400" TabOrder="36" Top="165" Width="144"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_address" Left="88" TabOrder="37" Top="232" Width="216"></Edit>
+		<Edit CheckLength="Byte" Enable="FALSE" Height="22" Id="ed_telno" Left="400" TabOrder="38" Top="229" Width="144"></Edit>
+		<Static Font="Default,10" Height="20" Id="Static5" Left="16" TabOrder="39" Text="기&#32;준&#32;년&#32;월" Top="136" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static6" Left="16" TabOrder="40" Text="업&#32;&#32;체&#32;&#32;명" Top="168" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static9" Left="16" TabOrder="41" Text="대&#32;표&#32;자&#32;명" Top="200" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static10" Left="16" TabOrder="42" Text="주&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;소" Top="232" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static11" Left="312" TabOrder="43" Text="사업자등록번호" Top="136" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static12" Left="312" TabOrder="44" Text="법인등록번호" Top="168" Width="80"></Static>
+		<Static Font="Default,10" Height="20" Id="Static13" Left="312" TabOrder="45" Text="우&#32;편&#32;번&#32;호" Top="200" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static14" Left="312" TabOrder="46" Text="전&#32;화&#32;번&#32;호" Top="232" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static17" Left="584" TabOrder="52" Text="결정&#32;주민세" Top="230" Width="72"></Static>
+		<Static Font="Default,10" Height="20" Id="Static18" Left="584" TabOrder="51" Text="결정&#32;방위세" Top="198" Width="72"></Static>
+		<Static Font="Default,10" Height="20" Id="Static19" Left="584" TabOrder="50" Text="소&#32;득&#32;금&#32;액" Top="166" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static20" Left="584" TabOrder="49" Text="총&#32;&#32;건&#32;&#32;수" Top="136" Width="63"></Static>
+		<Static Font="Default,10" Height="20" Id="Static21" Left="800" TabOrder="56" Text="결정&#32;세액계" Top="230" Width="72"></Static>
+		<Static Font="Default,10" Height="20" Id="Static22" Left="800" TabOrder="55" Text="결정&#32;농특세" Top="198" Width="72"></Static>
+		<Static Font="Default,10" Height="20" Id="Static23" Left="800" TabOrder="54" Text="결정&#32;소득세" Top="166" Width="80"></Static>
+		<Static Font="Default,10" Height="20" Id="Static24" Left="800" TabOrder="53" Text="전&#32;근무지&#32;총&#32;건수" Top="136" Width="104"></Static>
+		<Checkbox Height="21" Id="chkEND" Left="634" TabOrder="57" Text="마감자료" Top="37" Value="FALSE" Width="73"></Checkbox>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="568" TabOrder="58" Text="연&#32;말&#32;정&#32;산" Top="66" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="684" TabOrder="60" Top="66" VAlign="Middle" Width="88"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM" Enable="FALSE" FocusIndex="0" Height="18" Id="cmb_PTJYM" Left="689" LeftMargin="10" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="59" Top="70" Value="TODAY" Width="80"></Calendar>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_EMP" Left="664" TabOrder="61" Top="131" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_SODEUK" Left="664" TabOrder="62" Top="163" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_BANGWE" Left="664" NullValue="0" TabOrder="63" Top="195" Value="0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_JUMIN" Left="664" TabOrder="64" Top="227" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_EXEMP" Left="912" TabOrder="65" Top="131" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_SODEUK_TAX" Left="912" TabOrder="66" Top="163" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_NONG" Left="912" TabOrder="67" Top="195" Value="MaskEdit0" Width="120"></MaskEdit>
+		<MaskEdit Enable="FALSE" Height="22" Id="ed_TOTAL_TAX" Left="912" TabOrder="68" Top="227" Value="MaskEdit0" Width="120"></MaskEdit>
+		<Grid BindDataset="ds_HAYZ201C_C" BkColor2="default" BoldHead="true" Bottom="435" Enable="true" EndLineColor="default" Height="77" Id="GridUC_C" InputPanel="FALSE" Left="25" LineColor="default" Right="336" TabOrder="69" TabStop="true" Top="358" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="311"></Grid>
+		<Grid BindDataset="ds_HAYZ201C_D" BkColor2="default" BoldHead="true" Bottom="437" Enable="true" EndLineColor="default" Height="77" Id="GridUC_D" InputPanel="FALSE" Left="344" LineColor="default" Right="655" TabOrder="70" TabStop="true" Top="360" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="311"></Grid>
+		<Grid BindDataset="ds_HMD020PF" BkColor2="default" BoldHead="true" Bottom="437" Enable="true" EndLineColor="default" Height="77" Id="GridUC_HMD020" InputPanel="FALSE" Left="664" LineColor="default" Right="928" TabOrder="71" TabStop="true" Top="360" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="264"></Grid>
+		<Grid BindDataset="ds_ERROR" BkColor2="default" BoldHead="true" Bottom="352" Editable="TRUE" Enable="true" EndLineColor="default" Height="72" Id="GridUC_ERROR" InputPanel="FALSE" Left="704" LineColor="default" Right="1040" TabOrder="72" TabStop="true" Top="280" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="336">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="60"/>
+						<col width="123"/>
+						<col width="70"/>
+						<col width="70"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="사번"/>
+						<cell col="1" display="text" text="항목"/>
+						<cell col="2" display="text" text="변경전"/>
+						<cell col="3" display="text" text="변경후"/>
+					</head>
+					<body>
+						<cell checklength="Byte" col="0" colid="sabun" display="text"/>
+						<cell checklength="Byte" col="1" colid="TITLE" display="text"/>
+						<cell checklength="Byte" col="2" colid="ORG" display="number"/>
+						<cell checklength="Byte" col="3" colid="CHG" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Height="21" Id="Static32" Left="704" TabOrder="73" Text="*&#32;신고파일&#32;건강/고용보험료&#32;수정항목" Top="267" Width="328"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAYZ201C.xml
+ * ● PROGRAM DESCRIPTION  : 소득신고파일생성 
+ * ● DATE WRITTEN         : 2014.01.19
+ * ● DATE REVISION        : 2015.05.15
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+/*
+var SsId, BsId, Part, DName, TaxId, FileName, tName, toYy, FrDate, ToDate, frYy, Byfl2, Sub0Amt;
+var result, PNHUBF10, PNHUBF15, PNHUBF30, ChaAmt;
+var KITX1BF, KITX2BF, KITX3BF, KITX4BF, KITXBBF;
+var PrePy1, PreBs1, PrePy2, PreBs2, PreSo1, PreSo2, PreJu1, PreJu2;
+var Zzbuf1, Zzbuf2, Zzbuf21, Zzbuf22, Zzbuf31, Zzbuf32, Zzbuf33, Zzbuf34, Zzbuf41;
+var chk1tx;   // 단일세율 check
+var TotCnt, C_Cnt, D_Cnt;
+
+var PreCnt = 0;
+*/
+var result, SsId, BsId, Part, DName, TaxId, FileName;
+var FrDate, ToDate, frYy, toYy;
+var PreCnt=0, Sub0Amt=0, Sub1Amt=0, Sub2Amt=0, Sub3Amt=0, Sub4Amt=0, Sub5Amt=0, Sub6Amt=0, ChaAmt=0;
+var PrePy1=0, PreBs1=0, PreSo1=0, PreJu1=0, PrePy2=0, PreBs2=0, PreSo2=0, PreJu2=0;
+var PreNm1="", PreNm2="", PrenA1="", PrenB1="", PrenC1="", PrenA2="", PrenB2="", PrenC2="";
+var TotCnt=0, C_Cnt=0, D_Cnt=0;
+var chk1tx=0;   // 단일세율 check
+var PNHUBF10=0, PNHUBF15=0, PNHUBF30=0;
+var KITX1BF=0, KITX2BF=0, KITX3BF=0, KITX4BF=0, KITXBBF=0;
+
+//var PrePy1, PreBs1, PreSo1, PreJu1, PrePy2, PreBs2, PreSo2, PreJu2;
+//Sn1=ds_HAYZ201C_C  Sn2=ds_HAYZ201C_D.GetColumn
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)		
+	rdoggub.Value = 'Y';
+	setYYMM();//기준년월
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		//sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+function validationChk(){
+
+	var result = true;
+	cmd_PTJYM_FR.BKColor="white";
+	cmd_PTJYM_TO.BKColor="white";
+	cmb_SUBMISSION.BKColor="white";
+
+	if(cmd_PTJYM_FR.Value == ""){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		//alert(setPopMessage("4036"));//[확인] 정산년월을 확인바랍니다.
+		///setMessage("4036");
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_TO.Value == ""){
+		cmd_PTJYM_TO.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		//alert(setPopMessage("4036"));//[확인] 정산년월을 확인바랍니다.
+		///setMessage("4036");
+		cmd_PTJYM_TO.SetFocus();
+		result = false;
+	}else if(cmb_SUBMISSION.Value == ""){
+		cmb_SUBMISSION.BKColor="paleturquoise";
+		alert("[확인] 제출일자를 확인하세요.");	
+		//alert(setPopMessage("4036"));//[확인] 정산년월을 확인바랍니다.
+		///setMessage("4036");
+		cmb_SUBMISSION.SetFocus();
+		result = false;
+	}else if(cmd_PTJYM_FR.Value > cmd_PTJYM_TO.Value){
+		cmd_PTJYM_FR.BKColor="paleturquoise";
+		alert("[확인] 기준년월을 확인하세요.");	
+		//alert(setPopMessage("4036"));//[확인] 정산년월을 확인바랍니다.
+		///setMessage("4036");
+		cmd_PTJYM_FR.SetFocus();
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 개 발 자 : 김정현 
+ * 개발일자 : 2012-10-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");		
+	} else  {
+		
+	}	
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.2"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+//기준년월
+function setYYMM(){
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))-1+"0101";
+	}else{
+		cmd_PTJYM_FR.Value=parseInt(substr(today(),0,4))+"0101";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}else{
+		cmd_PTJYM_TO.Value=parseInt(substr(today(),0,4))+"1231";
+	}
+	if(parseInt(substr(today(),4,2)) < 4){
+		//alert(parseInt(substr(today(),0,4))-1);
+		cmb_PTJYM.Value=parseInt(substr(today(),0,4))-1+"1231";
+	}
+}
+function fn_Search()
+{
+	if(!validationChk()){
+		return;
+	}
+
+	FrDate = substr(cmd_PTJYM_FR.Value,0,6); //기준년월(시작)
+	ToDate = substr(cmd_PTJYM_TO.Value,0,6); //기준년월(종료)
+	TotCnt=0;
+	C_Cnt=0;
+	D_Cnt=0;
+
+	ed_gijunym.Text = substr(cmd_PTJYM_TO.Value,0,6);						//기준년월
+	if (ComboBoxPlant.Value = "E1") {										//PE
+		ed_saupjano.Text = "609-81-01877";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아일렉트로닉스주식회사";  				//법인명(40)
+		ed_bubinno.Text = "194211-0000141";  								//법인번호
+		//ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_sajang.Text = "야규 히로시";  										//대표자명(30)
+		ed_postcode.Text = "641-020";  										//우편번호
+		ed_address.Text = "경남 창원시 마산합포구 첨단산업로3"; 			//소재지
+		ed_telno.Text = "055-220-9082";  									//담당전화번호
+		SsId = "6098101877"; 												//사업자등록번호
+		BsId = "1942110000141";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "박하정";  													//담당자(30)
+		TaxId = "DNPE538";  												//홈택스ID
+		FileName = "C6098101.877";
+		Lib1 ="PERESLIB";//cigma library
+		Lib2 ="PSEDBLIB";//회사 library
+		Lib3 ="PSEDBLIB";//사업부 library
+	}else if (ComboBoxPlant.Value = "C1") {									//KA창원
+		ed_saupjano.Text = "206-81-28245";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아오토모티브주식회사";  				//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text = "641-315";  										//우편번호
+		ed_address.Text = "경남 창원시 성산구 웅남로630";  					//소재지
+		ed_telno.Text = "055-600-9522"; 									//담당전화번호(15)
+		SsId = "2068128245";  												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "오성훈";  													//담당자(30)
+		TaxId = "DNPS200";  												//홈택스ID
+		FileName = "C2068128.245";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSCDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "H1") {									//PS홍성
+		ed_saupjano.Text = "310-85-09579";  								//사업자등록번호
+		ed_brandname.Text = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text= "350-881"; 										//우편번호
+		ed_address.Text = "충남 홍성군 은하면 구성남로386";  				//소재지
+		ed_telno.Text = "041-630-2714";  									//담당전화번호
+		SsId = "3108509579"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "김태근";	  												//담당자(30)
+		TaxId = "DNPSHS";  													//홈택스ID
+		FileName = "C3108509.579";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSHDBLIB";//사업부 library
+	} else if (ComboBoxPlant.Value = "S1") {  								//PS화성
+		ed_saupjano.Text = "124-85-61218";  								//사업자등록번호      
+		ed_brandname.Text = "덴소코리아오토모티브주식회사"; 			 	//법인명(40)
+		ed_bubinno.Text = "110111-2040585";  								//법인번호
+		//ed_sajang.Text = "카토 모토미";  									//대표자명(30)      
+		ed_sajang.Text = "김경섭";  										//대표자명(30)
+		ed_postcode.Text = "445-944";            							//우편번호      
+		ed_address.Text = "경기도 화성시 장안면 장안공단5길9";  			//소재지
+		ed_telno.Text = "031-8059-9010"; 									//담당전화번호      
+		SsId = "1248561218"; 												//사업자등록번호
+		BsId = "1101112040585";  											//법인번호
+		Part = "경리팀"; 													//담당부서(30)
+		DName = "김상중"; 													//담당자(30)
+		TaxId = "";  														//홈택스ID      
+		FileName = "C1248561.218";  										//"C"+사업자등록번호
+		Lib1 ="PSRESLIB";//cigma library
+		Lib2 ="PSCDBLIB";//회사 library
+		Lib3 ="PSSDBLIB";//사업부 library		
+	}
+	
+		var p_PTJYM="";
+		if(rdoggub.Value = "Y"){//연말정산인 경우
+			p_PTJYM=substr(cmb_PTJYM.Value,0,4)+"13";
+		}else{//중도정산인경우
+			p_PTJYM =substr(cmb_PTJYM.Value,0,6);
+		}
+		//HAY081PF OR HAY200PF
+		var sKind		= "getHAYZ201C_C";						
+		var sMethodName = "service::pshumlib/selectHAYZ201C_C.do";     			// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_HAYZ201C_C=ds_HAYZ201C_C";    						// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			//sArgument += " LIB1=" + quote(Lib1);
+			//sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " LIB3=" + quote(Lib3);
+			sArgument += " GUBCD=" + quote(rdoggub.Value);//구분코드(중도:J, 연말:Y)
+			sArgument += " MAGAM=" + quote(chkEND.Value);//마감여부
+			sArgument += " PTJYM=" + quote(p_PTJYM);//연말정산
+			//sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value);//중도정산FR
+			//sArgument += " PTJYM_TO=" + quote(cmd_PTJYM_TO.Value);//중도정산TO
+			sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value,0,6));//중도정산FR
+			sArgument += " PTJYM_TO=" + quote(substr(cmd_PTJYM_TO.Value,0,6));//중도정산TO			
+		http.Sync = true;		
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+GridUC_C.CreateFormat();		
+		if(ds_HAYZ201C_C.rowcount < 1){
+			alert("[확인] 처리할 내역이 없습니다.");
+			//alert(setPopMessage("2564"));//[확인] 처리할 내역이 없습니다.
+			setMessage("2564");
+			return;
+		}
+st_REC_C.Text=ds_HAYZ201C_C.rowcount;	
+		ed_EMP.Text=ds_HAYZ201C_C.rowcount;//주(현)근무처(C레코드)수
+		ed_SODEUK.Text=ds_HAYZ201C_C.Sum("ZZ020");//총급여 총계
+		ed_SODEUK_TAX.Text=ds_HAYZ201C_C.Sum("ZZ110");//결정세액(소득세)총계
+		ed_JUMIN.Text=ds_HAYZ201C_C.Sum("ZZ112");//결정세액(지방소득세)총계
+		ed_NONG.Text=ds_HAYZ201C_C.Sum("ZZ114");//결정세액(농특세)총계
+		ed_TOTAL_TAX.Text=ds_HAYZ201C_C.Sum("ZZ110")+ds_HAYZ201C_C.Sum("ZZ112")+ds_HAYZ201C_C.Sum("ZZ114");//결정세액총계
+		
+		//HAY100PF,HAY200PF OR HAY011PF,HAY081PF
+		var sKind		= "getHAYZ201C_D";						
+		var sMethodName = "service::pshumlib/selectHAYZ201C_D.do";     			// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_HAYZ201C_D=ds_HAYZ201C_D";    						// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			//sArgument += " LIB1=" + quote(Lib1);
+			//sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " LIB3=" + quote(Lib3);
+			sArgument += " GUBCD=" + quote(rdoggub.Value);//구분코드(중도:J, 연말:Y)
+			sArgument += " MAGAM=" + quote(chkEND.Value);//마감여부
+			sArgument += " PTJYM=" + quote(p_PTJYM);//연말정산
+			//sArgument += " PTJYM_FR=" + quote(cmd_PTJYM_FR.Value);//중도정산FR
+			//sArgument += " PTJYM_TO=" + quote(cmd_PTJYM_TO.Value);//중도정산TO
+			sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value,0,6));//중도정산FR
+			sArgument += " PTJYM_TO=" + quote(substr(cmd_PTJYM_TO.Value,0,6));//중도정산TO				
+			//sArgument += " arrSABUN=" + quote(arrSABUN);
+		http.Sync = true;		
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+GridUC_D.CreateFormat();
+		var p_EXEMP1=0;
+		var p_EXEMP2=0;
+		var p_EXEMP=0;
+		for(i=0; i<ds_HAYZ201C_D.rowcount; i++){
+			p_EXEMP1 = parseInt(ds_HAYZ201C_D.GetColumn(i,"RPAT1"))+parseInt(ds_HAYZ201C_D.GetColumn(i,"RBAT1"));//전근무지1 급여총액+상여총액
+			p_EXEMP2 = parseInt(ds_HAYZ201C_D.GetColumn(i,"RPAT2"))+parseInt(ds_HAYZ201C_D.GetColumn(i,"RBAT2"));//전근무지2 급여총액+상여총액
+			if(p_EXEMP1 != 0){
+				p_EXEMP+=1;
+			}
+			if(p_EXEMP2 != 0){
+				p_EXEMP+=1;
+			}
+//alert(ds_HAYZ201C_D.GetColumn(i,"RPAT1")+ds_HAYZ201C_D.GetColumn(i,"RBAT1")+ds_HAYZ201C_D.GetColumn(i,"RPAT2")+ds_HAYZ201C_D.GetColumn(i,"RBAT2"));
+		}
+		ed_EXEMP.Text=p_EXEMP;//종(전)근무처(D레코드)수
+st_REC_D.Text=p_EXEMP;	
+		/********************************************************************** 
+		 * 내용설명 : A 레코드(갑근 제출자(대리인) 레코드)
+		 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.제출연월일9(8), 5.제출자 구분9(1), 
+					  6.세무대리인or관리번호X(6), 7.홈택스 IDX(20), 8.세무프로그램코드X(4), 9.사업자등록번호X(10),
+					 10.법인명(상호)X(40), 11.담당자 부서X(30), 12.담당자 성명X(30), 13.담당자 전화번호X(15), 
+					 14.신고의무자수9(5), 15.사용한글코드9(3), 16.공란X(1342) 
+		**********************************************************************/ 
+		// 1.레코드구분, 2.자료구분, 3.세무서, 4.제출일자, 5.제출자구분, 6.세무대리인관리번호, 7.홈택스ID, 8.세무프로그램코드, 9.사업자등록번호
+		result = "A" + "20" + "609" + cmb_SUBMISSION.Value + "2" + space(6) + leftb(TaxId + space(20), 20) + "9000" + leftb(SsId + space(10), 10);
+		// 10.법인명(상호)
+		result += leftb(ed_brandname.Text + space(40), 40);
+		// 11.담당자부서, 12.담당자성명, 13.담당자전화번호, 
+		result += leftb(Part + space(30), 30) + leftb(DName + space(30), 30) + leftb(trim(ed_telno.Text) + space(15), 15);
+		// 14.신고의무자수(B 레코드수)
+		result += "00001";  	
+		// 15.사용한글코드, 16.공란 
+		//result += "101" + space(1342);
+		//result += "101" + space(1402); //2015.05.15수정
+		//result += "101" + space(1432); //2015.12.28수정
+		result += "101" + space(1442); //2016.01.09수정
+//trace(lengthb(result));
+		result += "\r\n";
+TotCnt += 1;//총 row계산
+
+
+var result_TEST99="";
+		/********************************************************************** 
+		 * 내용설명 : B 레코드(갑근 원천징수의무자별 집계레코드)
+		 * 주요변수 : 1.레코드 구분X(1), 2.자료구분9(2), 3.세무서X(3), 4.일련번호9(6), 5.③사업자등록번호X(10),
+					  6.①법인명(상호)X(40), 7.②대표자(성명)X(30), 8.④주민(법인)등록번호X(13), 9.주(현)근무처(C레코드)수9(7),
+					 10.종(전)근무처(D레코드)수9(7), 11.총급여 총계9(14), 12.결정세액(소득세)총계9(13), 13.결정세액(지방소득세)총계9(13),
+					 14.결정세액(농특세)총계9(13), 15.결정세액총계9(13), 16.제출대상기간 코드9(1), 17.공란X(1334)
+		**********************************************************************/ 
+		// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+		result_TEST99 += "B" + "20" + "609" + "000001" + leftb(SsId + space(10), 10);
+		// 6.법인명(상호), 7.대표자명, 8.주민(법인)번호	
+		result_TEST99 += leftb(ed_brandname.Text + space(40), 40) + leftb(ed_sajang.Text + space(30), 30) + leftb(BsId + space(13), 13);
+		// 9.주(현)근무처(C레코드)건수, 10.종(전)근무처(D레코드)건수
+		result_TEST99 += rightb("0000000" + ed_EMP.Value, 7) + rightb("0000000" + ed_EXEMP.Value, 7);
+		// 11.소득금액총계, 12.소득세결정세액계
+		result_TEST99 += rightb("00000000000000" + ed_SODEUK.Value, 14) + rightb("0000000000000" + ed_SODEUK_TAX.Value, 13);
+		// 13.주민세결정세액계, 14.농특세결정세액계
+		result_TEST99 += rightb("0000000000000" + ed_JUMIN.Value, 13) + rightb("0000000000000" + ed_NONG.Value, 13);
+		// 15.결정세액총계, 16.제출대상기간코드(1-연간합산제출), 17.공란
+		//result += rightb("0000000000000" + ed_TOTAL_TAX.Value, 13) + "1" + space(1334);					
+		//result_TEST99 += rightb("0000000000000" + ed_TOTAL_TAX.Value, 13) + "1" + space(1394);	 //2015.05.15수정
+		//result_TEST99 += rightb("0000000000000" + ed_TOTAL_TAX.Value, 13) + "1" + space(1424);	 //2015.12.28수정
+		result_TEST99 += rightb("0000000000000" + ed_TOTAL_TAX.Value, 13) + "1" + space(1434);	 //2017.01.09수정
+						
+//trace("result_TEST99길이 "+lengthb(result_TEST99));
+		result += result_TEST99;
+		result += "\r\n";
+		TotCnt += 1;//총 row계산	
+							
+		/********************************************************************** 
+		 * 내용설명 : C 레코드(주(현)근무지 레코드)
+		 * 주요변수 : 
+		**********************************************************************/ 
+		var arrSABUN = "(";
+		for(i=0; i< ds_HAYZ201C_C.rowcount; i++){
+			if(i == ds_HAYZ201C_C.rowcount-1){
+				arrSABUN = arrSABUN+ds_HAYZ201C_C.GetColumn(i,"SABUN") + ")";
+			}else{
+				arrSABUN = arrSABUN+ds_HAYZ201C_C.GetColumn(i,"SABUN") + ",";
+			}
+		}	
+		//인사마스터	 
+		var sKind		= "getHMD020";						
+		var sMethodName = "service::pshumlib/selectHMD020PF.do";     			// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_HMD020PF=ds_HMD020PF";    						// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			//sArgument += " LIB1=" + quote(Lib1);
+			//sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " LIB3=" + quote(Lib3);
+			sArgument += " arrSABUN=" + quote(arrSABUN);
+		http.Sync = true;		
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		http.Sync=false;
+GridUC_HMD020.CreateFormat();
+				
+		//var p_REC_D_ROW=0;
+var result_TEST="";
+		for (i = 0; i < ds_HAYZ201C_C.rowcount; i++) {
+			PreCnt=0; Sub0Amt=0; Sub1Amt=0; Sub2Amt=0; Sub3Amt=0; Sub4Amt=0; ChaAmt=0;
+			PrePy1=0; PreBs1=0; PreSo1=0; PreJu1=0; PrePy2=0; PreBs2=0; PreSo2=0; PreJu2=0;
+			PreNm1=""; PreNm2=""; PrenA1=""; PrenB1=""; PrenC1=""; PrenA2=""; PrenB2=""; PrenC2="";
+			var p_REC_D_ROW=0;
+			var p_SABUN="";
+				p_SABUN=ds_HAYZ201C_C.GetColumn(i,"SABUN");
+				p_REC_D_ROW=ds_HAYZ201C_D.FindRow("SABUN",p_SABUN);//소득공제신고서 사번조회
+//alert(p_REC_D_ROW);
+			//전근무처수
+			if (ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPAT1") > 0) {
+//trace("전근무지1 존재 = "+p_SABUN+"=="+ds_HAYZ201C_D.GetColumn(p_REC_D_ROW, "SABUN"));
+				PreCnt = PreCnt + 1;  												//전근무지1
+				PrePy1 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPAT1"));  			//전근무지급여1				
+				PreBs1 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RBAT1"));  			//전근무지상여1
+				PreSo1 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RT1X1"));  			//전근무지소득세1
+				PreJu1 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RT1X3"));  			//전근무지주민세1
+				PreNm1 = trim(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPNM1"));  	//전근무지명1
+
+				PreNm1 = leftb(PreNm1 + space(40), 40);				
+				
+				PrenA1 = rightb("000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOA1"), 3);  	//등록번호1
+				PrenB1 = rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOB1"), 2);  		//등록번호1
+				PrenC1 = rightb("00000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOC1"), 5); 	//등록번호1
+//trace("전근무지1 PreSo2=="+PreJu1+"=="+PreSo1);									
+			}
+       
+			if (ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPAT2") > 0) {
+//trace("전근무지2 존재 = "+p_SABUN+"=="+ds_HAYZ201C_D.GetColumn(p_REC_D_ROW, "SABUN"));
+				PreCnt = PreCnt + 1;  											//전근무지2
+				PrePy2 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPAT2"));  		//전근무지급여2
+				PreBs2 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RBAT2"));  		//전근무지상여2
+				PreSo2 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RT2X1"));  		//전근무지소득세2
+				PreJu2 = parseInt( ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RT2X3"));  		//전근무지주민세2
+				PreNm2 = trim(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RPNM2"));  	//전근무지명2
+											
+				PreNm2 = leftb(PreNm2 + space(40), 40);		
+				
+				PrenA2 = rightb("000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOA2"), 3);	  	//등록번호2
+				PrenB2 = rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOB2"), 2);  		//등록번호2
+				PrenC2 = rightb("00000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RNOC2"), 5);  	//등록번호2
+//trace("전근무지2 PreSo2=="+PreJu2+"=="+PreSo2);									
+			}
+			var p_REC_HMD020_ROW=0;
+				p_REC_HMD020_ROW=ds_HMD020PF.FindRow("SABUN",p_SABUN);//인사마스터 사번조회
+			//var p_ENDAT=ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"ENDAT");
+			//var p_CNDCD=ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDCD");
+			//var p_CNDAT=ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDAT");
+			//var p_KORNM=trim(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"KORNM"));
+	
+			// 귀속시작년도
+//alert(leftb(ds_HMD020PF.GetColumn(0,"ENDAT"), 4));
+			if (leftb(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"ENDAT"), 4) < leftb(FrDate, 4)) {
+				//frYy = leftb(FrDate, 4) + "0101";  	cmd_PTJYM_FR.Value				// 1년이상자-->당해년도1월1일
+				frYy = cmd_PTJYM_FR.Value;				// 1년이상자-->당해년도1월1일
+			} else {	
+				frYy = ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"ENDAT");  	// 1년미만자-->입사일자
+//trace("입사 : "+p_SABUN+"=="+ds_HMD020PF.GetColumn(p_REC_HMD020_ROW, "SABUN")+"=="+frYy);				
+			}
+			// 귀속종료년도			
+			toYy =cmd_PTJYM_TO.Value;	// 현근무자-->당해년도12월31일
+			//if ((ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDCD") = "R") && (ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDAT") < cmb_SUBMISSION.Value)) { 
+			if ((ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDCD") = "R") && (ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDAT") < cmd_PTJYM_TO.Value)) { //제출일자 이전퇴사자오류
+				toYy = ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"CNDAT");  	// 중도퇴사자-->퇴사일자
+//trace("퇴사 : "+p_SABUN+"=="+ds_HMD020PF.GetColumn(p_REC_HMD020_ROW, "SABUN")+"=="+toYy);				
+			} else {
+				toYy =cmd_PTJYM_TO.Value;// 현근무자-->당해년도12월31일
+			}	
+			tName = trim(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW, "KORNM"));
+//result += leftb(tName + space(30), 30); 
+
+		// 외국인근로자 단일세율 적용자 차감소득액 재계산
+			chk1tx=0; //단일세율 초기화
+			//if(ComboBoxPlant.Value="C1" && p_SABUN = 1140165){//2014년도 카토(1140165)적용
+			//2014년도 카토(1140165), 하시모토(1240034), 다케나카(1140051)적용
+			//if(ComboBoxPlant.Value="C1" && (p_SABUN = 1140165 || p_SABUN = 1240034 ||p_SABUN = 1140051 )){
+			//2016년 하시모토, 다케나카 제외
+			if(ComboBoxPlant.Value="C1" && (p_SABUN = 1140165)){
+				chk1tx = 1;
+			}
+			/*
+			// 기본공제
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ030"));//본인
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ031"));//배우자
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ032"));//20이하
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ033"));//60이상
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ048"));//경로우대B
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ037"));//장애자
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ038"));//부녀자세대주
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ040"));//자녀양육비
+			
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ041"));//출생입양
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ042"));//추가공제1
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ034"));//다자녀
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ065"));//연금보험료
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ064"));//퇴직연금
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ074"));//연금저축2
+
+			//특별공제
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"));//징수의료보
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"));//징수고용보
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050A"));//보험료일반
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050B"));//보험료장애
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ051"));//의료비A
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ052"));//의료비B
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ053"));//본인교육비
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ054"));//직계교육비
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062A"));//주택임차기관
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062B"));//주택임차거주
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062C"));//주택자금월세액
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055A"));//주택임차15
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055B"));//주택임차29
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055C"));//주택임차30
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055M"));//주택임차고정
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055N"));//주택임차기타
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ057"));//지정기부금
+			*/
+			//2014년도
+			// 기본공제
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ030"));//본인
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ031"));//배우자
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ032"));//20이하
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ033"));//60이상
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ048"));//경로우대B
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ037"));//장애자
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ038"));//부녀자세대주
+			//Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ040"));//자녀양육비>2014년 삭제2014년 삭제
+			//Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ041"));//출생입양->2014년 삭제
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ042"));//추가공제1(한부모)
+			//Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ034"));//다자녀->2014년 삭제
+			Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ065"));//연금보험료(국민연금의료보험)//처리후ZZ065=입력ZZ014
+			//Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ064"));//퇴직연금(퇴직연금소득공제-근로자퇴직급여보장법)->2014년 삭제
+			//Sub0Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ074"));//연금저축2(연금계좌소득공제 연금저축)->2014년 삭제
+			
+			//제환복 체크
+			//기본공제계+추가공제계
+			if(Sub0Amt != (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ035"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ049"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ065")))){
+				trace("기본NG!!"+Sub0Amt+"=="+(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ035"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ049"))));
+			}
+			//특별공제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"));//징수의료보
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"));//징수고용보
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"));//징수의료보험+징수고용보험
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050A"));//보험료일반->2014년 삭제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050B"));//보험료장애->2014년 삭제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ051"));//의료비A->2014년 삭제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ052"));//의료비B->2014년 삭제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ053"));//본인교육비->2014년 삭제
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ054"));//직계교육비->2014년 삭제
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062A"));//주택임차기관
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062B"));//주택임차거주
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062C"));//주택자금월세액->2014년 삭제
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055A"));//주택임차15
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055B"));//주택임차29
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055C"));//주택임차30
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055M"));//주택임차고정
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055N"));//주택임차기타
+			//Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ057"));//지정기부금->2014년 삭제
+			//기부금이월>2014추가
+			//Sub2Amt += parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOA"));//이월기부법정
+			//Sub2Amt += parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOB"));//이월기부지정
+			//Sub2Amt += parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOC"));//이월기부특례
+			//Sub2Amt += parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOD"));//이월기부종교
+			
+			// 2015년 연말정산추가
+			// 주택자금B 15 고정 AND 비거치, 주택자금B 15 고정 OR 비거치, 주택자금B 15 기타, 주택임차B 10 고정
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055Q"));//주택자금B 15 고정 AND 비거치
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055R"));//주택자금B 15 고정 OR 비거치
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055S"));//택자금B 15 기타
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055P"));//주택임차B 10 고정
+			// END
+			
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ056"));//이월법정기부금
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ057"));//이월지정기부금
+			Sub2Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ063"));//이월특례기부금
+							
+			//특별소득공제 체크
+			if(Sub2Amt != parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059"))){
+				trace("특별NG!!"+Sub2Amt+"=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059")));
+				trace("특별NG!!"+p_SABUN);
+			}
+			/*
+			//2015.03.09추가(보험료공제=징수의료보험+징수고용)
+			if(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050")) != (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013")))){
+				trace("보험료공제NG!!"+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"))+"=="+(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))));
+				trace("보험료공제NG!!"+p_SABUN);
+			}
+			*/
+			/* 2014년 삭제
+			if(parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBUA")) > 100000){
+				Sub2Amt = Sub2Amt + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBUA")) - 100000;
+				Sub2Amt = Sub2Amt + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ056")) - parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBUA")) - 100000);
+			} else{
+				//Sub2Amt = Sub2Amt;
+				Sub2Amt = Sub2Amt + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ056"));
+			}
+			*/
+//trace("chk"+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059"))+"==="+Sub2Amt);
+			if(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059")) == 0 && Sub2Amt > 0){
+//trace("NG"+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059"))+"==="+Sub2Amt);
+				Sub2Amt = 0;
+			}
+
+//trace(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ059"))+"==="+Sub2Amt);
+			//그밖에소득공제
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ075"));//연금저축１(개인연금)
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071A"));//주택저축청약
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071C"));//주택저축종합
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071D"));//주택저축근로
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ076"));//중기　투자(미사용)
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ077"));//신용　카드
+			Sub4Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZM001"));//장기집합증권->2014년 추가
+						
+			//연금계좌
+			//Sub5Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ064"))*0.12;//연금계좌-연금저축(근로자퇴직급여보장법)-세액공제액>2014년추가
+			//Sub5Amt += parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ074"))*0.12;//연금계좌-연금저축(연금계좌소득공제 연금저축)-세액공제액->2014년추가
+
+			
+			//차감소득금
+			/*
+			if (Sub2Amt >= iif(Sub2Amt < 1000000, 1000000, 0)) { 				
+				// 차감소득금액=근로소득수입금액-기본공제-추가공제-국민연금-특별공제계
+				ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022")) - Sub0Amt - Sub2Amt;  
+				//ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022")) - parseInt(Sub0Amt) - parseInt(Sub2Amt);  
+			} else {
+				// 차감소득금액=근로소득수입금액-기본공제-추가공제-국민연금-표준공제
+				ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022")) - Sub0Amt-1000000;
+				//ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022")) - parseInt(Sub0Amt)-1000000;
+			}*/
+			// 차감소득금액=근로소득수입금액(65)-기본공제-추가공제-연금보험료-특별공제계)
+			ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022")) - Sub0Amt - Sub2Amt;  
+			//ChaAmt = ds_HAYZ201C_C.GetColumn(i,"ZZ070");
+			//제환복 체크
+			//특별소득공제
+			if(ChaAmt != parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ070"))){
+				trace("차감소득금액NG!!"+p_SABUN+"=="+ChaAmt+"=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ070")));
+			}	
+//trace("ChaAmt=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ022"))+"==="+Sub0Amt+"==="+Sub2Amt+"==="+ChaAmt);
+			// 외국인근로자 단일세율 적용자 차감소득액 재계산
+			if (chk1tx = 1) {
+				ChaAmt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ020"));
+			}						
+			if (ChaAmt < 0) {
+				ChaAmt = 0;
+			}
+			//현근무지소득세=기납소득세-전근무지소득세
+			Sub1Amt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ005")) - PreSo1 - PreSo2;
+			//현근무지주민세=기납주민세-전근무지주민세
+			Sub3Amt = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ007")) - PreJu1 - PreJu2;	
+//trace("Sub1Amt=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ005"))+"==="+PreSo1+"==="+PreSo2+"==="+Sub1Amt);
+//trace("Sub3Amt=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ007"))+"==="+PreJu1+"==="+PreJu2+"==="+Sub3Amt);
+
+			// C 레코드(갑근 주(현)근무처 레코드)
+			// 단일세율을 적용하지 않은 근로자 생성(2012.2. 추가)
+result_TEST="";
+			if (chk1tx = 0) {
+				// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호, 6.종(전)근무처수			
+				result_TEST += "C" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10) + rightb("00" + PreCnt, 2);	
+				// 8.거주지국코드(거주자1, 비거주자2)
+				result_TEST += "1" + "  "; 
+				//result_TEST += "1" + iif(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"FORCD") = 0, "  ", "  "); //거주지국코드
+				// 9.단일세율적용 chk1tx가 1일때 단일세율적용
+				result_TEST += "2"; // 적용함 : 1, 적용안함 : 2
+				// 9 ＠.외국법인소속 파견근로자여부 1:여, 2:부 - 2017.01.09추가
+				//result_TEST += rightb("0" + ds_HAYZ201C_C.GetColumn(i,"SNDCD"), 1);
+				result_TEST += rightb("0" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SNDCD"), 1);
+				//trace("파견근로자 여부"+ ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SNDCD"));
+				// 10.성명	
+				result_TEST += leftb(tName + space(30), 30);
+									
+				// 11.내.외국인코드
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "9";
+				} else {
+					result_TEST += "1";
+				}
+				// 12.주민등록번호
+				result_TEST += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);	
+				// 13.국적코드
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "JP";
+				} else {
+					result_TEST += space(2);
+					//result += "  ";
+				}
+				// 14.세대주여부
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "2";//세대원
+				} else {
+					result_TEST += "1";//세대주
+				}												
+				// 15.연말정산구분
+				if (toYy == cmd_PTJYM_TO.Value) {
+					result_TEST += "1";
+				} else {
+					result_TEST += "2";
+				}
+				// 16.주현근무처-사업자등록증
+				result_TEST += leftb(SsId + space(10), 10);
+				// 17.주현근무처-근무처명-법인명(상호)
+				result_TEST += leftb(ed_brandname.Text + space(40), 40);  
+				// 18.주현근무처-근무기간 시작연월일, 19.종료연월일
+				result_TEST += frYy + toYy;
+				// 20.감면기간 시작년월, 21.종료연월
+//trace(ds_HAYZ201C_C.GetColumn(i,"ZZ101"));
+				if ((ds_HAYZ201C_C.GetColumn(i,"ZZ101") || ds_HAYZ201C_C.GetColumn(i,"ZX006")) > 0) {
+					result_TEST += frYy + toYy;
+					trace("세액감면 : " + p_SABUN);
+				} else {
+					result_TEST += "0000000000000000";
+				}
+				var c = 0;// 출향자 비과세금액 = 급여총+상여총-소득총
+				if ( ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"FORCD") = 1) {
+					c = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ002")) - parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ020"));
+				}
+				// 22.현근무지 급여총액				
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i, "ZY004")) - PrePy1 - PrePy2 - c), 11);
+//trace("급여총액=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001"))+"==="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004"))+"==="+PrePy1+"==="+PrePy2+"==="+c);
+				//result += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i, "ZY004")) - parseInt(PrePy1) - parseInt(PrePy2) + parseInt(c)), 11);
+				// 23.현근무지 상여총액(인정상여-PS의경우 이주지원금)
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ002")) - PreBs1 - PreBs2 - parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"IJJWN")) - parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"ERILM"))), 11);
+				// 24.인정상여-PS의경우 이주지원금
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"IJJWN"), 11);
+				// 25.현근무지주식매수선택권행사이익, 26.현근무지우리사주조합인출금
+				result_TEST += "00000000000" + "00000000000";
+				// 27.임원 퇴직소득금액 한도초과액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"ERILM"), 11);
+				// 28.공란22 ->21 (2017.01.09변경)
+				//result_TEST += "0000000000000000000000";
+				result_TEST += "000000000000000000000";
+				// 29.현근무지 급여총액+ 상여총액
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ002")) - PrePy1 - PrePy2 - PreBs1 - PreBs2 - c), 11);
+				
+				//주(현)근무처 비과세 소득
+				// 30~35.비과세학자금, 무보수위원수당, 경호/승선수당, 유아/초중등, 고등교육범, 특별법
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 36.연구기관등, 37.기업연구소, 38.보육교사근무환경개선비, 39.사립유치원수석교사교사의 인건비   
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY001"), 10) + "0000000000" + "0000000000" + "0000000000";
+				//40~44.취재수당, 벽지수당, 재해관련급여, 정부공공기관지방이전기관 종사자 이전수당당(20130219추가), 외국정부등근무자
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 45~47.외국주둔군인등, 국외근로100만원, 국외근로300만원
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 48~49.국외근로소득, 야간근로수당
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY002"), 10) + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ003"), 10);
+				// 50~52.출산보육수당, 근로장학금, 주식매수선택권
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY003"), 10) + "0000000000" + "0000000000";
+				// 53.외국기술자				
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10); //2016년 연말정산시변경(2017.02.15)
+				//세액감면금액이 아닌 감면대상 총급여로 변경(zz102생성) 
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ102"), 10);
+//trace(ds_HAYZ201C_C.GetColumn(i,"ZZ102"));
+				// 54~57.우리사주조합인출금50%, 우리사주조합인출금75%, 장기미취업자중소기업 취업, 해저광물자원개발
+				//result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				//2015연말정산 변경내용 - 57 해저광물자원개발 삭제
+				// 54~56.우리사주조합인출금50%, 우리사주조합인출금75%, 장기미취업자중소기업 취업
+				//result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 54~56.우리사주조합인출금50%, 우리사주조합인출금75%, 우리사주조합인출금100%, 장기미취업자중소기업 취업(2016연말정산)
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+
+				// 57~59.전공의수련보조수당, 중소기업 취업청년 소득세 감면, 조세조약상 교직자 감면
+				//result_TEST += "0000000000" + "0000000000" + "0000000000";
+				//result_TEST += "0000000000" + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10) + "0000000000";	////2016년 연말정산 삭제
+				
+				//2016년 연말정산
+				// 57.전공의수련보조수당
+				result_TEST += "0000000000" ;
+				// 58.중소기업 취업청년 소득세 감면
+				// 해당없음
+				if(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SMCCD")=0){
+					result_TEST += "0000000000" ;
+					result_TEST += "0000000000" ;
+					result_TEST += "0000000000" ;
+				}
+				// 58.ⓐ감면100%
+				if(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SMCCD")=1){
+					result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10);
+					result_TEST += "0000000000" ;
+					result_TEST += "0000000000" ;
+				}
+				// 58.ⓑ감면50%
+				if(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SMCCD")=5){
+					result_TEST += "0000000000" ;
+					result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10);
+					result_TEST += "0000000000" ;
+				}
+				// 58.ⓒ감면70%
+				if(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SMCCD")=7){
+					result_TEST += "0000000000" ;
+					result_TEST += "0000000000" ;
+					result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10);
+				}
+				
+				// 59.조세조약상 교직자 감면
+				result_TEST +=  "0000000000";
+				
+				// 60.비과세계 [ 항목 30 + ~ + 항목 43+ 항목 58] (항목 53,  항목 57  제외)
+				//result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ004")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY002")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004"))), 10);
+				// 60.비과세계 [ 항목 30 + ~ + 항목 43+ 항목 58] (항목 53,  항목 57  제외)
+				//2016년 연말정산시변경(2017.03.15)
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ004")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY002")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004"))+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ102")) +parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX006"))), 10);
+				// 61.감면소득계 [항목 53 + 항목 57 + 항목 59 + 항목 60]				
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10);			
+				//result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ101")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX006"))), 10); //2016년 연말정산시변경(2017.02.15)
+				//세액감면금액이 아닌 감면대상 총급여로 변경
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ102")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX006"))), 10);
+
+				// 2015연말정산 변경내용
+				// 62. 공란 10자리추가(삭제 : 2016 연말정산)
+				//result_TEST += "0000000000";
+				
+				// 정산명세
+				// 63.총급여,64.근로소득공제
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ020"), 11) + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ021"), 10);
+				// 65.과세대상근로소득금액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ022"), 11);
+				
+				// 기본공제
+				// 66.본인공제
+				result_TEST += rightb("00000000" + "1500000", 8);
+				//result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ030"), 8);
+				// 67.배우자공제금액(공제금액이 미달하여도 공제금액 전액을 수록함)
+				result_TEST += rightb("00000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"WFBCD")) * 1500000), 8);
+				// 68.부양가족공제인원
+				result_TEST += rightb("00" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"CHBCD")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PTBCD"))), 2);
+				// 69.부양가족공제금
+				result_TEST += rightb("00000000" + ((parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"CHBCD")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PTBCD"))) * 1500000), 8);
+								
+				// 추가공제
+				// 70.경로우대공제인원,71.경로우대공제금액				
+				result_TEST += rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KYBCB"), 2) + rightb("00000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KYBCB")) * 1000000), 8);
+				// 72.장애인공제인원,73.장애인공제금액
+				result_TEST += rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"TRBCD"), 2) + rightb("00000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"TRBCD")) * 2000000), 8);			
+				// 74.부녀자공제금액
+				result_TEST += rightb("00000000" +( parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BUBCD")) * 500000), 8);
+//			if(p_SABUN=80258){
+//			trace(parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BUBCD")) * 500000);
+//			}
+				/* 2014년도 삭제항목
+				// 75.자녀(6세이하)양육비공제인원
+				result += rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"CBUCD"), 2);
+				// 76.자녀양육비공제금액
+				result += rightb("00000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"CBUCD")) * 1000000), 8);
+				// 77.출산입양자공제인원,78.출산입양자공제금액
+				result += rightb("00" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"POFL1"), 2) + rightb("00000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"POFL1")) * 2000000), 8);
+				*/
+				// 75. 한부모 가족공제금액
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SPFCD")) * 1000000), 10);			
+				/* 2014년도 삭제항목
+				// 다자녀공제
+				Byfl2 = 0;
+				if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BYFL2")) * 1 = 1){
+					Byfl2 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BYFL2")) - 1
+				}else{
+					Byfl2 = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BYFL2"));
+				}
+				// 78.다자녀추가공제인원, 
+				result += rightb("00" + Byfl2, 2);
+				// 79.다자녀추가공제금액
+				result += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ034"), 8);
+				*/
+				// 연금보험공제
+				// 76.국민연금보험료공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ065"), 10);//ZZ065=ZZ014
+				//77~80 공적연금보험료공제-공무원연금, 공적연금보험료공제-군인연금, 공적연금보험료공제-사립학교교육원, 공적연금보험료공제-별정우체국연금
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				/* 2014년도 삭제항목
+				// 87.퇴직연금소득공제-과학기술인공제
+				result += "0000000000";
+				// 88.퇴직연금소득공제-근로자퇴직급여보장법
+				result += rightb("0000000000" +  ds_HAYZ201C_C.GetColumn(i,"ZZ064"), 10);
+				// 89.연금계좌소득공제 연금저축
+				result += rightb("0000000000" +  ds_HAYZ201C_C.GetColumn(i,"ZZ074"), 10);
+				*/
+				/*
+				// 81.보험료공제-건강보험료
+				result_TEST += rightb("0000000000" + iif(Sub2Amt <= 0, "0000000000", ds_HAYZ201C_C.GetColumn(i,"ZZ011")), 10);
+				// 82.보험료공제-고용보험료
+				//result_TEST += rightb("0000000000" + iif(Sub2Amt <= 0, "0000000000", ds_HAYZ201C_C.GetColumn(i,"ZZ013")), 10);
+				if(ComboBoxPlant.Value="C1" && (p_SABUN = 1440157 || p_SABUN = 1440142)){
+					result_TEST += rightb("0000000000" + iif(Sub2Amt <= 0, "0000000000", parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))-1378), 10);
+				}
+				else{
+					result_TEST += rightb("0000000000" + iif(Sub2Amt <= 0, "0000000000", ds_HAYZ201C_C.GetColumn(i,"ZZ013")), 10);			
+				}				
+				*/
+				
+//여기까지20160113
+
+				//2015.03.09수정 제환복
+				//보험료공제=징수의료보험+징수고용
+				if(Sub2Amt <= 0){
+				//특별공제금액이 0이면 건강/고용 금액 0으로 처리
+					// 81.보험료공제-건강보험료
+					result_TEST += "0000000000";
+					// 82.보험료공제-고용보험료
+					result_TEST += "0000000000";
+				}else{
+					if(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050")) != (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013")))){
+						//보험료공제(ZZ050)!=건강(ZZ011)+의료(ZZ013)이 다른 경우 수행
+						trace("보험료공제수정!! 사번= "+p_SABUN+" 금액="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"))+"=="+(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))));
+						ds_ERROR.AddRow();
+						ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"SABUN",p_SABUN);//사번
+						var setZZ050=0;
+						if(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))!=0){
+							//의료(ZZ013)금액이 있는 경우 의료에서 차이분계산하여 입력
+							setZZ050=parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"))-parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"));
+							if((setZZ050 >= 0)  && (setZZ050 <= parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013")))){
+							//조정금액이 의료(ZZ013)보다 작은경우
+								// 81.보험료공제-건강보험료
+								result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ011"), 10);
+								// 82.보험료공제-고용보험료
+								result_TEST += rightb("0000000000" + setZZ050, 10);
+								trace("보험료공제(고용보험료수정-고용)!!"+setZZ050);
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"TITLE","고용보험료");//항목
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"ORG",parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013")));//변경전금액
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"CHG",setZZ050);//변경후금액
+							}else{
+							//조정금액이 의료(ZZ013)보다 큰경우
+								setZZ050=parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"));
+								// 81.보험료공제-건강보험료
+								result_TEST += rightb("0000000000" + setZZ050, 10);
+								// 82.보험료공제-고용보험료
+								result_TEST += "0000000000";
+								trace("보험료공제(고용보험료수정-건강)!!"+setZZ050);
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"TITLE","건강/고용보험료");//항목
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"ORG",parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011")));//변경전금액
+								ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"CHG",setZZ050);//변경후금액
+							}
+						}else{
+							// 의료(ZZ013)금액이 없는 경우 건강(ZZ011)에서 차이분계산하여 입력
+							setZZ059=parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050"));
+							// 81.보험료공제-건강보험료
+							result_TEST += rightb("0000000000" + setZZ050, 10);
+							// 82.보험료공제-고용보험료
+							result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ013"), 10);
+							trace("보험료공제(건강보험료수정)!!"+setZZ050);
+							ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"TITLE","건강보험료");//항목
+							ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"ORG",parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011")));//변경전금액
+							ds_ERROR.SetColumn(ds_ERROR.GetLastRow(),"CHG",setZZ050);//변경후금액
+						}
+						//trace(ds_ERROR.SaveXML());
+					}else{
+						// 81.보험료공제-건강보험료
+						result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ011"), 10);
+						// 82.보험료공제-고용보험료
+						result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ013"), 10);
+					}
+				}
+				// end
+				
+				// 83.주택자금-주택임차차입금원리금상환액- 대출기관
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ062A"), 8);
+				// 84.주택자금-주택임차차입금원리금상환액- 거주자
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ062B"), 8);
+				
+				//삭제2015년연말정산
+				// 85.주택자금-월세액
+				//result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZX102"), 8);
+
+/*
+				//주택자금 처리, 각사업부별 CHECK 필요함.
+				PNHUBF10 = 0;//10년
+				PNHUBF15 = 0;//15년
+				PNHUBF30 = 0;//30년
+				// 주택자금처리 10년
+				if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU2")) > 0) {
+				  if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU3")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU4")) != 0) {
+					 PNHUBF10 = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055")) - (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU3")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU4")));
+				  } else {
+					 PNHUBF10 = ds_HAYZ201C_C.GetColumn(i,"ZZ055");
+				  }
+				}
+				// 주택자금처리 15년
+				if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU3")) > 0) {
+				  if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU2")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU4")) != 0) {
+					 PNHUBF15 = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055")) - (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU2")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU4")));
+				  } else {
+					 PNHUBF15 = ds_HAYZ201C_C.GetColumn(i,"ZZ055");
+				  }
+				}
+				// 주택자금처리 30년						
+				if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU4")) > 0) {
+				  if (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU2")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU3")) != 0) {
+					 PNHUBF30 = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055")) - (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU2")) + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"PNHU3")));
+				  } else {
+					 PNHUBF30 = ds_HAYZ201C_C.GetColumn(i,"ZZ055");
+				  }
+				}
+								
+				if (PNHUBF10 < 0) {
+					PNHUBF10 = 0;
+				} 			   
+				if (PNHUBF15 < 0) {
+					PNHUBF15 = 0;
+				}
+				if (PNHUBF30 < 0) {
+					PNHUBF30 = 0;
+				}
+				// 86.주택자금-장기주택저당차입금이자상환액-15미만
+				result_TEST += rightb("00000000" + PNHUBF10, 8);
+				// 87.주택자금-장기주택저당차입금이자상환액-15년~29년
+				result_TEST += rightb("00000000" + PNHUBF15, 8);				
+				// 88.주택자금-장기주택저당차입금이자상환액-30년이상
+				result_TEST += rightb("00000000" + PNHUBF30, 8);
+*/								
+								
+				// 85.주택자금-장기주택저당차입금이자상환액-15미만
+				//result_TEST += rightb("00000000" + PNHUBF10, 8);
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055A"), 8);
+				// 86.주택자금-장기주택저당차입금이자상환액-15년~29년
+				//result_TEST += rightb("00000000" + PNHUBF15, 8);				
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055B"), 8);
+				// 87.주택자금-장기주택저당차입금이자상환액-30년이상
+				//result_TEST += rightb("00000000" + PNHUBF30, 8);
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055C"), 8);
+				// 88.주택자금-(2012년 이후 차입분) 고정금리.비거치상환 대출
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055M"), 8);
+				// 89.주택자금-(2012년 이후 차입분) 기타 대출
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055N"), 8);
+	
+				// 2015년연말정산추가
+				// 90.주택자금-(2015년 이후 차입분) 상환기간15년 고정금리 and 비거치
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055Q"), 8);	
+				// 91.주택자금-(2015년 이후 차입분) 상환기간15년 고정금리 OR 비거치
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055R"), 8);					
+				// 92.주택자금-(2015년 이후 차입분) 상환기간15년 기타대출
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055S"), 8);					
+				// 93.주택자금-(2015년 이후 차입분) 상환기간10년 고정금리 OR 비거치
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ055P"), 8);					
+				
+				
+				// 94.기부금(이월분)
+				/*
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOA"))+parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOB"))
+							+parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOC"))+parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"KIBOD"))), 11);
+				*/
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ056"))+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ057"))
+							+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ063"))), 11);
+				
+				// 95.공란(삭제 : 2016 연말정산)
+				//result_TEST += rightb("00000000000000000000", 20);					
+				// 96.특별소득공제계(보험 + 주택 + 이월기부)
+				result_TEST += rightb("00000000000" + Sub2Amt, 11);				
+				//result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ059"), 11);				
+				// 97.차감소득금액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ070"), 11);
+						
+				//[그 밖의 소득공제]
+				// 98.개인연금저축소득공제
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ075"), 8);//연금저축1(개인연금저축)
+				// 99.소기업공제부금소득공제
+				result_TEST += "0000000000";
+				KITX1BF = 0;
+				KITX2BF = 0;
+				KITX3BF = 0;
+				KITX4BF = 0;
+				KITXBBF = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071"));//주택저축공제
+				/*
+				if(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071")) > 0){
+					// 주택마련저축소득공제_주택청약저축
+					KITX1BF = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"HUSA1")) * 0.4;
+					if (KITX1BF >= 480000) {
+						KITX1BF = 480000;
+					}
+					if(KITXBBF <= KITX1BF) {
+						KITX1BF = KITXBBF;
+					} else {
+						KITXBBF = KITXBBF - KITX1BF;
+					}
+//trace(KITXBBF+"=="+KITXBBF+"=="+KITX1BF);
+					
+					// 주택마련저축소득공제_주택청약종합저축
+					KITX2BF = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"HUSA3")) * 0.4;
+					if(KITX2BF >= 480000) {
+						KITX2BF = 480000;
+					}
+					if(KITXBBF <= KITX2BF) {
+						KITX2BF = KITXBBF;
+					} else {
+						KITXBBF = KITXBBF - KITX2BF;
+					}
+					//미사용
+					// 주택마련저축소득공제_장기주택마련저축
+					//KITX3BF = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"HUSA2")) * 0.4; 
+					//if(KITXBBF <= KITX3BF) {
+					//	KITX3BF = KITXBBF;
+					//} else {
+					//	KITXBBF = KITXBBF - KITX3BF;
+					//}
+					
+					// 주택마련저축소득공제_근로자주택마련저축
+					KITX4BF = parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"HUSA4")) * 0.4;
+					if (parseInt(KITX4BF) >= 720000) {
+						KITX4BF = 720000;
+					}
+					if(KITXBBF <= KITX4BF) {
+						KITX4BF = KITXBBF;
+					}					
+				}
+				*/
+				// 100.주택마련저축소득공제_주택청약저축
+				//result_TEST += rightb("0000000000" + KITX1BF, 10);
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ071A"), 10);
+				// 101.주택마련저축소득공제-주택청약종합저축
+				//result_TEST += rightb("0000000000" + KITX2BF, 10);
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ071C"), 10);
+				// 주택마련저축소득공제_장기주택마련저축
+				//result_TEST += rightb("0000000000" + KITX3BF, 10);
+				// 102.주택마련저축소득공제_근로자주택마련저축
+				//result_TEST += rightb("0000000000" + KITX4BF, 10);
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ071D"), 10);
+				// 103.투자조합출자등소득공제(중기투자(?)), 104.신용카드소득공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ076"), 10) + rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ077"), 8);
+				// 105.우리사주조합출연금, 106.우리사주조합 기부금, 107.고용유지중소기업근로자소득공제, 108.목돈안드는전세이자상환액공제
+				//result_TEST += "0000000000" + "00000000000" + "0000000000" + "0000000000";
+				// 105.우리사주조합출연금, 107.고용유지중소기업근로자소득공제, 108.목돈안드는전세이자상환액공제 (삭제 : 2016 연말정산)
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 109.장기집학투자증권저축(수정필요)
+				//result_TEST += "0000000000";
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZM001"), 10);
+				// 110.그밖의 소득공제계
+				result_TEST += rightb("00000000000" + Sub4Amt, 11);
+
+			
+
+				// 111.소득공제종합한도 초과액
+					//83.주택자금-주택임차차입금원리금상환액- 대출기관 84.주택자금-주택임차차입금원리금상환액- 거주자
+					//85.주택자금-장기주택저당차입금이자상환액-15미만 86.주택자금-장기주택저당차입금이자상환액-15년~29년
+					//87.주택자금-장기주택저당차입금이자상환액-30년이상 88.주택자금-(2012년 이후 차입분) 고정금리.비거치상환 대출
+					//89.주택자금-(2012년 이후 차입분) 기타 대출
+					//90.주택자금B 15 고정 AND 비거치 91.주택자금B 15 고정 OR 비거치 92.주택자금 기타 93.주택임차B 10 고정					
+					//100.주택마련저축소득공제_주택청약저축 101.주택마련저축소득공제-주택청약종합저축 102.주택마련저축소득공제_근로자주택마련저축
+					//103.투자조합출자등소득공제(중기투자(?)), 104.신용카드소득공제
+					//109.장기집학투자증권저축
+					//해당없는 항목 : 99.소기업공제부금소득공제 105.우리사주조합출연금
+				var Amt108=0;
+				/*
+				Amt108 = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062A"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062B"))+PNHUBF10+PNHUBF15+PNHUBF30
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055M"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055N"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071A"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071C"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071D"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ076"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ077"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZM001"));
+				*/
+				Amt108 = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062A"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ062B"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055A"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055B"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055C"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055M"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055N"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071A"))
+						//2015년추가
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055Q"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055R"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055S"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ055P"))
+						//END
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071C"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ071D"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ076"))
+						+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ077"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZM001"));						
+			
+				if(Amt108 >=25000000){
+					Amt108 = Amt108 - 25000000;
+				}else{
+					Amt108=0;
+				}	
+				result_TEST += rightb("00000000000" + Amt108, 11);
+				// 112.종합소득 과세표준
+				result_TEST += rightb("00000000000" + iif(ChaAmt - Sub4Amt + Amt108 <= 0, 0, (ChaAmt - Sub4Amt + Amt108)), 11);
+				//result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ080"), 11);
+				//제환복 체크
+				//기본공제계+추가공제계
+				if((ChaAmt - Sub4Amt + Amt108) != ds_HAYZ201C_C.GetColumn(i,"ZZ080")){
+					trace("종합소득 과세표준NG!!"+(ChaAmt - Sub4Amt + Amt108)+"=="+ds_HAYZ201C_C.GetColumn(i,"ZZ080"));
+					trace("종합소득 과세표준NG!!"+p_SABUN+"=="+ChaAmt+"=="+Sub4Amt+"=="+Amt108);
+				}
+				// 113.산출세액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ082"), 10);
+				//세액감면
+				// 114~115. 소득세법,조특법(제30조 제외)
+				result_TEST += "0000000000" + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10);//외국기술자
+				// 113~116. 조특법(제30조) ,조세조약, 공란, 감면세액계
+				//result_TEST += "0000000000" + "0000000000" + "0000000000" + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10);
+				// 116~118. 조특법(제30조) ,조세조약, 공란
+				///result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10) + "0000000000" + "0000000000";//중소기업근로자감면
+				// 116~117. 조특법(제30조) ,조세조약 (공란 삭제 : 2016 연말정산)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX006"), 10) + "0000000000";
+				// 119. 감면세액계
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ101")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX006"))), 10);
+			
+				//세액공제
+				//120.근로소득세액공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ090"), 10);
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ034"), 10);
+				// 121.자녀세액공제인원 (2015.05.15추가)
+				result_TEST += rightb("00" + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"BYFL2")), 2);			
+				// 122.자녀세액공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX001"), 10); //다자녀->자녀공제변경(2014년)
+				// 123.6세이하세액공제인원 (2015.05.15추가)
+				result_TEST += rightb("00" + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"CBUCD")), 2);			
+				// 124.6세이하세액공제(2015.05.15추가)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX022"), 10);
+				// 125.출산/입양세액공제인원 (2015.05.15추가)
+				result_TEST += rightb("00" + parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"POFL1")), 2);			
+				// 126.출산/입양세액공제(2015.05.15추가)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX023"), 10);
+				
+				//127.연금계좌-과학기술인공제-공제대상금액, 128.연금계좌-과학기술인공제-세액공제액
+				result_TEST += "0000000000" + "0000000000";
+				
+/*				
+				//121.연금계좌-근로자퇴직급여보장법-공제대상금액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ064"), 10);
+//신규				//122.연금계좌-근로자퇴직급여보장법-세액공제액->2014년추가
+				result_TEST += rightb("0000000000" + parseInt(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ064"))*0.12), 10);
+				//123.연금계좌-연금저축-공제대상금액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ074"), 10);
+//신규				//124.연금계좌-연금저축-세액공제액->2014년추가
+				result_TEST += rightb("0000000000" + parseInt(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ074"))*0.12), 10);
+				//특별세액공제
+				// 125.특별세액공제-보장성보험료-공제대상금액(일반+장애)
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050A"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050B"))), 10);
+//신규				// 126.특별세액공제-보장성보험료-세액공제액(일반+장애)
+				result_TEST += rightb("0000000000" + parseInt((parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050A"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ050B")))*0.12), 10);
+				// 127.특별세액공제-의료비-공제대상금액(본인/장애/경로+그외)
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ051"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ052"))), 10);
+//신규				// 128.특별세액공제-의료비-세액공제액(본인/장애/경로+그외)
+				result_TEST += rightb("0000000000" + parseInt((parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ051"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ052")))*0.15), 10);
+				// 129.특별세액공제-교육비-공제대상금액(본인+그외)
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ053"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ054"))), 10);
+//신규				// 130.특별세액공제-교육비--세액공제액(본인+그외)
+				result_TEST += rightb("0000000000" + parseInt((parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ053"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ054")))*0.15), 10);
+*/	
+				//129.연금계좌-근로자퇴직급여보장법-공제대상금액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX0071"), 10);
+				//130.연금계좌-근로자퇴직급여보장법-세액공제액->2014년추가
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX0072"), 10);
+				//131.연금계좌-연금저축-공제대상금액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX0073"), 10);
+				//132.연금계좌-연금저축-세액공제액->2014년추가
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX0074"), 10);				
+				//특별세액공제
+				// 130.특별세액공제-보장성보험료-공제대상금액(일반+장애)
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX008"), 10);
+				// 131.특별세액공제-보장성보험료-세액공제액(일반+장애)
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX009"), 10);
+				// 보장성보험 일반/장애전용분리 2015.05.15
+				// 133.특별세액공제-보장성보험료-공제대상금액(일반)
+/*				
+if(p_SABUN=260142){
+
+trace("일반대상== "+ds_HAYZ201C_C.GetColumn(i,"ZX008"));
+trace("일반공제== "+ds_HAYZ201C_C.GetColumn(i,"ZX009"));
+trace("장애대상== "+ds_HAYZ201C_C.GetColumn(i,"ZX024"));
+trace("장애공제== "+ds_HAYZ201C_C.GetColumn(i,"ZX025"));
+}
+*/
+				// 133.특별세액공제-보장성보험료-공제대상금액(일반)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX008"), 10);
+				// 134.특별세액공제-보장성보험료-세액공제액(일반)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX009"), 10);				
+				// 135.특별세액공제-보장성보험료-공제대상금액(장애인전용보험)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX024"), 10);
+				// 136.특별세액공제-보장성보험료-세액공제액(장애인전용보험)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX025"), 10);
+								
+				// 137.특별세액공제-의료비-공제대상금액(본인/장애/경로+그외)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX010"), 10);
+				// 138.특별세액공제-의료비-세액공제액(본인/장애/경로+그외)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX011"), 10);
+				// 139.특별세액공제-교육비-공제대상금액(본인+그외)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX012"), 10);
+				// 140.특별세액공제-교육비--세액공제액(본인+그외)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX013"), 10);
+				// 141.특별세액공제-기부금-정치자금10만원이하-공제대상금액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX014"), 10);
+				// 142.특별세액공제-기부금-정치자금10만원이하-세액공제액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX015"), 10);
+				// 143.특별세액공제-기부금-정치자금10만원이상공제대상금액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX016"), 11);
+				// 144.특별세액공제-기부금-정치자금10만원이상-세액공제액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX017"), 10);
+				// 145.특별세액공제-기부금-법정기부-공제대상금액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX018"), 11);
+				// 146.특별세액공제-기부금-법정기부-세액공제액
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX019"), 10);			
+				// 2015연말정산추가
+				// 147.특별세액공제-기부금-우리사주조합-공제대상금액, 148.특별세액공제-기부금-우리사주조합-세액공제액 
+				result_TEST += "00000000000" + "0000000000";
+				//END
+
+				// 149.특별세액공제-기부금-지정기부-공제대상금액
+				//result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX020"), 11);
+				// 150.특별세액공제-기부금-지정기부-세액공제액
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX021"), 10);
+
+				// 149.특별세액공제-기부금-지정기부-공제대상금액 -> 지정기부_종교단체외-공제대상금액(2016년 연말정산)
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX020"), 11);
+				// 150.특별세액공제-기부금-지정기부-세액공제액  -> 지정기부_종교단체외-공제대상금액(2016년 연말정산)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX021"), 10);
+				// 150 ⓐ.특별세액공제-기부금-지정기부_종교단체-공제대상금액(2016년 연말정산)
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX026"), 11);
+				// 150 ⓑ.특별세액공제-기부금-지정기부_종교단체-공제대상금액(2016년 연말정산)
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX027"), 10);
+				
+				// 151.특별세액공제계(장애인보장성 세액공제액 추가2015.05.15)
+				//result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX009"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX011"))
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX009"))+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX025"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX011"))
+					+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX013")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX015")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX017"))
+					//+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX019")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX021"))), 10);
+					// 2017.02.07 지정기부(종교) 항목 추가
+					+ parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX019")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX021")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZX027"))), 10);
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX100"), 10);	
+			// 152.표준세액공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX005"), 10);
+			// 153.납세조합공제
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX101"), 10);
+			// 154.주택차입금
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ092"), 10);
+			// 155.외국납부
+				//result_TEST += "0000000000";
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ091"), 10);
+			// 2015연말정산추가
+			// 156.월세세액공제 대상금액 
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZX102"), 10);
+				//END				
+			// 157.월세세액공제
+				result_TEST += rightb("00000000" + ds_HAYZ201C_C.GetColumn(i,"ZX103"), 8);
+			// 158.세액공제계
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ100"), 10);
+			// 159.결정세액-소득세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ110"), 10);
+			// 160.결정세액-지방소득세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ112"), 10);
+			// 161.결정세액-농특세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ114"), 10);
+			// 162.기납세액-소득세
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ090"), 10);
+				result_TEST += rightb("0000000000" + Sub1Amt, 10);
+			// 163.기납세액-지방소득세
+				result_TEST += rightb("0000000000" + Sub3Amt, 10);
+			// 164.기납세액-농특세
+				result_TEST += "0000000000";
+			// 165~167.납부특례세액-소득세, 지방소득세, 농특세
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+			// 168.차감징수세액-소득세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ130") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ130")), 10);
+			// 169.차감징수세액-지방소득세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ132") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ132")), 10);
+			// 170.차감징수세액-농특세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ134") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ134")), 10);
+			// 171.공란
+				//result_TEST += space(14);
+				//result_TEST += space(28);	//2015.05.15수정
+				//result_TEST += space(5);	//2015년 연말정산수정
+				result_TEST += space(15);	//2016년 연말정산수정
+//단일세율적용
+			}else{
+				// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호, 6.종(전)근무처수			
+				result_TEST += "C" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10) + rightb("00" + PreCnt, 2);	
+				// 8.거주지국코드(거주자1, 비거주자2)
+				//result_TEST += "1" + "  "; 
+				result_TEST += "1" + iif(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"FORCD") = 0, "  ", "  "); //거주지국코드
+				// 9.단일세율적용 chk1tx가 1일때 단일세율적용
+				result_TEST +=iif(chk1tx = 1, "1", "2"); // 적용함 : 1, 적용안함 : 2
+				// 9 ＠.외국법인소속 파견근로자여부 1:여, 2:부 - 2017.01.09추가
+				//result_TEST += rightb("0" + ds_HAYZ201C_C.GetColumn(i,"SNDCD"), 1);
+				result_TEST += rightb("0" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SNDCD"), 1);
+				//trace("파견근로자 여부"+ ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"SNDCD"));				
+				// 10.성명	
+				result_TEST += leftb(tName + space(30), 30);						
+				// 11.내.외국인코드
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "9";
+				} else {
+					result_TEST += "1";
+				}			 						
+				// 12.주민등록번호
+				result_TEST += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+				// 13.국적코드
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "JP";
+				} else {
+					result_TEST += space(2);
+					//result += "  ";
+				}
+				// 14.세대주여부
+				if(ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") >= 5 && ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") <= 8) {
+					result_TEST += "2";//세대원
+				} else {
+					result_TEST += "1";//세대주
+				}								
+				// 15.연말정산구분
+				if (toYy == cmd_PTJYM_TO.Value) {
+					result_TEST += "1";
+				} else {
+					result_TEST += "2";
+				}
+				// 16.주현근무처-사업자등록증
+				result_TEST += leftb(SsId + space(10), 10);
+				// 17.주현근무처-근무처명-법인명(상호)
+				result_TEST += leftb(ed_brandname.Text + space(40), 40);  
+				// 18.주현근무처-근무기간 시작연월일, 19.종료연월일
+				result_TEST += frYy + toYy;
+				// 20.감면기간 시작년월, 21.종료연월
+//trace(ds_HAYZ201C_C.GetColumn(i,"ZZ101"));
+				if (ds_HAYZ201C_C.GetColumn(i,"ZZ101") > 0) {
+					result_TEST += frYy + toYy;
+				} else {
+					result_TEST += "0000000000000000";
+				}
+				var c = 0;// 출향자 비과세금액 = 급여총+상여총-소득총
+				if ( ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"FORCD") = 1) {
+					c = parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ002")) - parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ020"));
+				}
+				// 22.현근무지 급여총액				
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i, "ZY004")) - PrePy1 - PrePy2 - c), 11);
+//trace("급여총액=="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001"))+"==="+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004"))+"==="+PrePy1+"==="+PrePy2+"==="+c);
+				//result += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i, "ZY004")) - parseInt(PrePy1) - parseInt(PrePy2) + parseInt(c)), 11);
+				// 23.현근무지 상여총액(인정상여-PS의경우 이주지원금)
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i, "ZZ002")) - PreBs1 - PreBs2 - parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"IJJWN")) - parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"ERILM"))), 11);
+				// 24.인정상여-PS의경우 이주지원금
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"IJJWN"), 11);
+				// 25.현근무지주식매수선택권행사이익, 26.현근무지우리사주조합인출금
+				result_TEST += "00000000000" + "00000000000";
+				// 27.임원 퇴직소득금액 한도초과액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"ERILM"), 11);
+				// 28.공란22->21 변경(2017.01.09)
+				//result_TEST += "0000000000000000000000";
+				result_TEST += "000000000000000000000";
+				// 29.현근무지 급여총액+ 상여총액
+				result_TEST += rightb("00000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ002")) - PrePy1 - PrePy2 - PreBs1 - PreBs2 - c), 11);
+				
+				//주(현)근무처 비과세 소득
+				// 30~35.비과세학자금, 무보수위원수당, 경호/승선수당, 유아/초중등, 고등교육범, 특별법
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 36.연구기관등, 37.기업연구소, 38.보육교사근무환경개선비, 39.사립유치원수석교사교사의 인건비   
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY001"), 10) + "0000000000" + "0000000000" + "0000000000";
+				//40~44.취재수당, 벽지수당, 재해관련급여, 정부공공기관지방이전기관 종사자 이전수당당(20130219추가), 외국정부등근무자
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 45~47.외국주둔군인등, 국외근로100만원, 국외근로300만원
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 48~49.국외근로소득, 야간근로수당
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY002"), 10) + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ003"), 10);
+				// 50~52.출산보육수당, 근로장학금, 주식매수선택권
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZY003"), 10) + "0000000000" + "0000000000";
+				// 53.외국기술자				
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10);					
+				result_TEST += "0000000000";				
+				// 54~57.우리사주조합인출금50%, 우리사주조합인출금75%, 장기미취업자중소기업 취업, 해저광물자원개발
+				//result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 54~56.우리사주조합인출금50%, 우리사주조합인출금75%, 장기미취업자중소기업 취업
+				//result_TEST += "0000000000" + "0000000000" + "0000000000";
+				
+				// 54~56.우리사주조합인출금50%, 우리사주조합인출금75%,  55ⓐ.우리사주조합인출금100% , 장기미취업자중소기업 취업
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000"; //2016연말정산 추가
+				
+				// 57~59.전공의수련보조수당, 중소기업 취업청년 소득세 감면, 조세조약상 교직자 감면
+				//result_TEST += "0000000000" + "0000000000" + "0000000000";
+
+				// 57.전공의수련보조수당
+				result_TEST += "0000000000" ;
+				//2016년 연말정산
+				// 58.ⓐ감면100%, 58.ⓑ감면50%, 58.ⓒ감면70%
+				result_TEST += "0000000000" +  "0000000000" + "0000000000";			
+				// 59.조세조약상 교직자 감면
+				result_TEST += "0000000000" ;
+												
+				// 60.비과세계 [ 항목 30 + ~ + 항목 43+ 항목 58] (항목 53,  항목 57  제외)
+				result_TEST += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ004")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY001")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY002")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY003")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZY004"))), 10);
+				// 61.감면소득계 [항목 53 + 항목 57 + 항목 59 + 항목 60]				
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ101"), 10);			
+				result_TEST += "0000000000";
+				// 2015연말정산 변경내용
+				// 62. 공란 10자리추가
+				//result_TEST += "0000000000"; //(삭제 : 2016 연말정산)
+
+				// 정산명세
+				// 63.총급여,64.근로소득공제
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ020"), 11) + rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ021"), 10);
+				// 65.과세대상근로소득금액
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ022"), 11);
+				
+				// 기본공제 -> 단일세율인 경우 0입력
+				// 66.본인공제
+				result_TEST += "00000000";//단일세율인 경우 0입력
+				// 67.배우자공제금액, 68.부양가족공제인원, 69.부양가족공제금
+				result_TEST += "00000000" + "00" + "00000000";
+				// 추가공제
+				// 70.경로우대공제인원,71.경로우대공제금액, 72.장애인공제인원,73.장애인공제금액			
+				result_TEST += "00" + "00000000" +  "00" + "00000000";
+				// 74.부녀자공제금액, 75. 한부모 가족공제금액
+				result_TEST += "00000000" + "0000000000";
+				
+				// 연금보험공제 -> 단일세율인 경우 0입력
+				// 76.국민연금보험료공제
+				result_TEST += "0000000000";
+				//77~80 공적연금보험료공제-공무원연금, 공적연금보험료공제-군인연금, 공적연금보험료공제-사립학교교육원, 공적연금보험료공제-별정우체국연금
+				result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 81.보험료공제-건강보험료, 82.보험료공제-고용보험료
+				result_TEST += "0000000000"+"0000000000";
+				// 83.주택자금-주택임차차입금원리금상환액- 대출기관, 84.주택자금-주택임차차입금원리금상환액- 거주자, 85.주택자금-월세액
+				//result_TEST += "00000000" + "00000000" + "00000000";
+				// 월세삭제
+				// 83.주택자금-주택임차차입금원리금상환액- 대출기관, 84.주택자금-주택임차차입금원리금상환액- 거주자
+				result_TEST += "00000000" + "00000000";	
+				// 85.주택자금-장기주택저당차입금이자상환액-15미만
+				result_TEST += "00000000";
+				// 86.주택자금-장기주택저당차입금이자상환액-15년~29년
+				result_TEST += "00000000";
+				// 87.주택자금-장기주택저당차입금이자상환액-30년이상
+				result_TEST += "00000000";
+				// 88.주택자금-(2012년 이후 차입분) 고정금리.비거치상환 대출
+				result_TEST += "00000000";
+				// 90.주택자금-(2012년 이후 차입분) 기타 대출
+				result_TEST += "00000000";
+				
+				// 2015년연말정산추가
+				// 90.주택자금-(2015년 이후 차입분) 상환기간15년 고정금리 and 비거치
+				result_TEST +="00000000";
+				// 91.주택자금-(2015년 이후 차입분) 상환기간15년 고정금리 OR 비거치
+				result_TEST += "00000000";
+				// 92.주택자금-(2015년 이후 차입분) 상환기간15년 기타대출
+				result_TEST += "00000000";
+				// 93.주택자금-(2015년 이후 차입분) 상환기간10년 고정금리 OR 비거치
+				result_TEST +="00000000";
+				// END
+				
+				// 94.기부금(이월분), 95.공란
+				//result_TEST += "00000000000" + "00000000000000000000";
+				// 94.기부금(이월분), 95.공란(삭제 : 2016 연말정산)
+				result_TEST += "00000000000" ;
+				// 96.특별소득공제계(보험 + 주택 + 이월기부)
+				result_TEST += "00000000000";
+				// 97.차감소득금액
+				//result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ070"), 11);
+				//외국인단일세율인 경우 차감소득금액[0]은 계산값[총급여](199,518,070)와 같아야 합니다.
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ022"), 11);
+		
+				//[그 밖의 소득공제] -> 단일세율인 경우 0입력
+				// 98.개인연금저축소득공제, 99.소기업공제부금소득공제
+				result_TEST += "00000000" + "0000000000";
+				// 100.주택마련저축소득공제_주택청약저축
+				result_TEST += "0000000000";
+				// 101.주택마련저축소득공제-주택청약종합저축
+				result_TEST += "0000000000";
+				// 102.주택마련저축소득공제_근로자주택마련저축
+				result_TEST += "0000000000";
+				// 103.투자조합출자등소득공제(중기투자(?)), 104.신용카드소득공제
+				result_TEST +="0000000000" + "00000000";
+				// 105.우리사주조합출연금, 106.우리사주조합 기부금, 107.고용유지중소기업근로자소득공제, 108.목돈안드는전세이자상환액공제
+				//result_TEST += "0000000000" + "00000000000" + "0000000000" + "0000000000";
+				// 105.우리사주조합출연금, 107.고용유지중소기업근로자소득공제, 108.목돈안드는전세이자상환액공제 (삭제 : 2016 연말정산)
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 109.장기집학투자증권저축, 110.그밖의 소득공제계
+				result_TEST += "0000000000" + "00000000000";
+				// 111.소득공제종합한도 초과액
+				result_TEST += "00000000000";
+				// 112.종합소득 과세표준
+				//result_TEST += rightb("00000000000" + iif(ChaAmt - Sub4Amt + Amt108 <= 0, 0, (ChaAmt - Sub4Amt + Amt108)), 11);
+				//result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ080"), 11);
+				//외국인단일세율인 경우 종합소득과세표준(0)과 계산값(199,518,070)이 다릅니다.
+				result_TEST += rightb("00000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ022"), 11);
+				// 113.산출세액
+				//단일세율적용자는 종합소득 과세표준*17%
+				//제환복 체크
+				/*
+				if((parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ080"))*0.17)!=ds_HAYZ201C_C.GetColumn(i,"ZZ082")){
+					trace("산출세액NG!!"+(parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ080"))*0.17)+"=="+ds_HAYZ201C_C.GetColumn(i,"ZZ082"));
+					trace("산출세액NG!!"+p_SABUN);
+				}
+				*/
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ082"), 10);
+				//세액감면
+				// 114~115. 소득세법,조특법(제30조 제외)
+				result_TEST += "0000000000" + "0000000000";
+				// 116~119. 조특법(제30조) ,조세조약, 공란, 감면세액계
+				//result_TEST += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 116~119. 조특법(제30조) ,조세조약, 감면세액계 (공란 삭제 : 2016 연말정산)
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+
+				//세액공제
+				// 120.근로소득세액공제
+				result_TEST += "0000000000";
+				// 121.다자녀세액공제자녀수, 122.다자녀세액공제
+				result_TEST += "00"+"0000000000";
+				// 123.6세이하자녀세액공제자녀수 124.6세이하자녀세액공제
+				result_TEST += "00"+"0000000000";
+				// 125.출생/입양세액자녀수 126.출생/입양공제
+				result_TEST += "00"+"0000000000";
+				//127.연금계좌-과학기술인공제-공제대상금액, 128. 연금계좌-과학기술인공제-세액공제액
+				result_TEST += "0000000000" + "0000000000";
+				//129.연금계좌-근로자퇴직급여보장법-공제대상금액
+				result_TEST += "0000000000";
+				//130.연금계좌-근로자퇴직급여보장법-세액공제액->2014년추가
+				result_TEST += "0000000000";
+				//131.연금계좌-연금저축-공제대상금액
+				result_TEST += "0000000000";
+				//132.연금계좌-연금저축-세액공제액->2014년추가
+				result_TEST += "0000000000"	;
+				//특별세액공제
+				// 125.특별세액공제-보장성보험료-공제대상금액(일반+장애)
+				//result_TEST += "0000000000";
+				// 126.특별세액공제-보장성보험료-세액공제액(일반+장애)
+				//result_TEST += "0000000000";
+				// 보장성보험료-공제대상금액(일반/장애분리) 2015.05.15
+				// 133.특별세액공제-보장성보험료-공제대상금액(일반)
+				result_TEST += "0000000000";
+				// 134.특별세액공제-보장성보험료-세액공제액(일반)
+				result_TEST += "0000000000";
+				// 135.특별세액공제-보장성보험료-공제대상금액(장애인전용보험)
+				result_TEST += "0000000000";
+				// 136.특별세액공제-보장성보험료-세액공제액(장애인전용보험)
+				result_TEST += "0000000000";				
+				// 137.특별세액공제-의료비-공제대상금액(본인/장애/경로+그외)
+				result_TEST += "0000000000";
+				// 138.특별세액공제-의료비-세액공제액(본인/장애/경로+그외)
+				result_TEST += "0000000000";
+				// 139.특별세액공제-교육비-공제대상금액(본인+그외)
+				result_TEST += "0000000000";
+				// 140.특별세액공제-교육비--세액공제액(본인+그외)
+				result_TEST += "0000000000";
+				// 141.특별세액공제-기부금-정치자금10만원이하-공제대상금액
+				result_TEST += "0000000000";
+				// 142.특별세액공제-기부금-정치자금10만원이하-세액공제액
+				result_TEST += "0000000000";
+				// 143.특별세액공제-기부금-정치자금10만원이상공제대상금액
+				result_TEST += "00000000000";
+				// 144.특별세액공제-기부금-정치자금10만원이상-세액공제액
+				result_TEST += "0000000000";
+				// 145.특별세액공제-기부금-법정기부-공제대상금액
+				result_TEST += "00000000000";
+				// 146.특별세액공제-기부금-법정기부-세액공제액
+				result_TEST += "0000000000";
+				// 147.특별세액공제-기부금-우리사주조합-공제대상금액
+				result_TEST += "00000000000";
+				// 148.특별세액공제-기부금-우리사주조합-세액공제액
+				result_TEST += "0000000000";
+				// 149.특별세액공제-기부금-지정기부-공제대상금액
+				//result_TEST += "00000000000";
+				// 150.특별세액공제-기부금-지정기부-세액공제액
+				//result_TEST += "0000000000";
+				// 149.특별세액공제-기부금-지정기부_종교단체외-공제대상금액
+				result_TEST += "00000000000";
+				// 150.특별세액공제-기부금-지정기부_종교단체외-세액공제액
+				result_TEST += "0000000000";
+				// 150 ⓐ.특별세액공제-기부금-지정기부_종교단체-공제대상금액
+				result_TEST += "00000000000";
+				// 150 ⓑ.특별세액공제-기부금-지정기부_종교단체외-세액공제액
+				result_TEST += "0000000000";
+				// 151.특별세액공제계
+				result_TEST += "0000000000";
+				// 152.표준세액공제
+				result_TEST += "0000000000";
+				// 153.납세조합공제
+				result_TEST += "0000000000";
+				// 154.주택차입금
+				result_TEST += "0000000000";
+				// 155.외국납부
+				result_TEST += "0000000000";
+				// 156.월세세액공제대상금액
+				result_TEST += "0000000000";
+				// 157.월세세액공제
+				result_TEST += "00000000";
+				// 158.세액공제계
+				result_TEST += "0000000000";
+		
+				// 159.결정세액-소득세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ110"), 10);
+				// 160.결정세액-지방소득세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ112"), 10);
+				// 161.결정세액-농특세
+				result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ114"), 10);
+				// 162.기납세액-소득세
+				//result_TEST += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ090"), 10);
+				result_TEST += rightb("0000000000" + Sub1Amt, 10);
+				// 163.기납세액-지방소득세
+				result_TEST += rightb("0000000000" + Sub3Amt, 10);
+				// 164.기납세액-농특세
+				result_TEST += "0000000000";
+				// 165~167.납부특례세액-소득세, 지방소득세, 농특세
+				result_TEST += "0000000000" + "0000000000" + "0000000000";
+				// 168.차감징수세액-소득세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ130") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ130")), 10);
+				// 169.차감징수세액-지방소득세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ132") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ132")), 10);
+				// 170.차감징수세액-농특세
+				result_TEST += iif(ds_HAYZ201C_C.GetColumn(i,"ZZ134") >= 0, "0", "1");
+				result_TEST += rightb("0000000000" + abs(ds_HAYZ201C_C.GetColumn(i,"ZZ134")), 10);
+				// 171.공란
+				//result_TEST += space(14);
+				//result_TEST += space(28);	//2015.05.15수정
+				//result_TEST += space(5);	//2015.05.15수정
+				result_TEST += space(15);	//2017.01.09수정
+			}
+		//result +=Sub0Amt;
+		//result +=" ";
+		//result +=Sub2Amt;
+		//result +=Sub3Amt;
+if(lengthb(result_TEST) !=1620 ) {
+	trace("result_TEST길이 C레코드 : "+lengthb(result_TEST)+"=="+p_SABUN);
+} 
+		result += result_TEST;
+		result += "\r\n";			
+		C_Cnt += 1;
+		TotCnt += 1;//총 row계산
+		/********************************************************************** 
+		 * 내용설명 : D 레코드(종(전)근무지 레코드)
+		 * 주요변수 : 
+		**********************************************************************/ 
+var result_TEST2="";
+		if(chk1tx = 0){//단일세율을 적용하지 않은 근로자만 생성
+			if( PrePy1 >0){//전근무지1이 있는 사용자
+//trace(p_SABUN);
+				// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호
+				result_TEST2 += "D" + "20" + "609" + rightb("000000" + (i+1), 6);
+				// 5.사업자등록번호, 6.공란
+				result_TEST2 += leftb(SsId + space(10), 10) + space(50);
+				// 7.주민등록번호
+				result_TEST2 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);
+				// 8.납세조합구분
+				result_TEST2 += "1";
+				// 9.법인명
+				result_TEST2 += PreNm1;
+				// 10.사업자등록번호
+				result_TEST2 += PrenA1 + PrenB1 + PrenC1;
+				// 11.근무기간 시작년월일
+				result_TEST2 += rightb("00000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RDTS1"), 8); 
+				// 12.근무기간 종료년월일
+				result_TEST2 += rightb("00000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RDTE1"), 8); 
+				// 13.감면기간 시작년월일, 14.감면기간 종료년월일
+				result_TEST2 += "00000000" + "00000000";
+				// 15.급여총액,
+				result_TEST2 += rightb("00000000000" + PrePy1, 11);
+				// 16.상여총액, 17.인정상여,
+				result_TEST2 += rightb("00000000000" + PreBs1, 11) + "00000000000";
+				// 18.주식매수선택권 행사이익, 19.우리사주조합인출금, 20.임원퇴직소득금액한도초과액,
+				result_TEST2 += "00000000000" + "00000000000" + "00000000000";
+				// 21.공란(22)
+				result_TEST2 += "0000000000000000000000";
+				// 22.계			
+				result_TEST2 += rightb("00000000000" + (parseInt(PrePy1) + parseInt(PreBs1)), 11);
+				// 전근무지 비과세 및 감면소득
+				// 23.비과세학자금, 24.무보수위원수당, 25.경호/승선수당, 26.유아/초중등, 27.고등교육법
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 28.특별법, 29.연구기관등, 30.기업연구소
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 31.보육교사, 32.사립유치원교사, 33.취재수당
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 34.벽지수당, 35.재해관련급여, 36.정부공공기관지방이전기관 종사자 이전수당
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 37.외국정부등근무자, 38.외국주둔군인등, 39.국외근로100만원
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 40.국외근로300만원, 41.국외근로, 42.야간근로수당
+				//result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				//2017.02.02수정 DNKE 해외파견근무자 비과세
+				result_TEST2 += "0000000000";
+				result_TEST2 += rightb("0000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RGB11"), 10); 
+				result_TEST2 += rightb("0000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RGB12"), 10); 
+
+				//국외근로가 HAY011PF에 하나이기때문에 전근무지가 2개인 경우 하나에만 입력한다.
+				//result_TEST2 += "0000000000" + rightb("0000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"FCWTF"), 10)  + "0000000000";
+				// 43.출산보육수당, 44.근로장학금, 45.주식매수선택권,
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 46.외국기술자, 47,우리사주조합인출금50%, 48,우리사주조합인출금70%
+				//result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 46.외국기술자, 47,우리사주조합인출금50%, 48,우리사주조합인출금70%, 48ⓐ,우리사주조합인출금100%(2016연말정산)
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000" + "0000000000";			
+				// 49.장기미취업자중소기업 취업, 50.해저광물자원개발, 51.전공의 수련 보조수당
+				//result_TEST2 += "0000000000" + "0000000000" + "0000000000";
+				// 2015연말정산 수정
+				// 50.해저광물자원개발삭제
+				// 49.장기미취업자중소기업 취업, 50.전공의 수련 보조수당
+				result_TEST2 += "0000000000" + "0000000000";
+				// END			
+				// 51.중소기업취업 청년 소득세 감면, 52.조세상교직자감면,
+				//result_TEST2 += "0000000000" + "0000000000";
+				// 51.중소기업취업 청년 소득세 감면(58.ⓐ감면100%, 58.ⓑ감면50%, 58.ⓒ감면70%), 52.조세상교직자감면 (2016연말정산)
+				result_TEST2 += "0000000000" + "0000000000" + "0000000000" + "0000000000";				
+				// 53.비과세계, 54. 감면소득계
+				//result_TEST2 += "0000000000" + "0000000000";
+				//DNKE 해외파견자 전근무지 비과세처리(2017.02.07)
+				result_TEST2 += rightb("0000000000" + (parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RGB12")) +parseInt(ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RGB11"))), 10);
+				result_TEST2 += "0000000000";
+
+				// 55.공란
+				result_TEST2 += "0000000000";// 2015연말정산추가
+				//result_TEST2 += rightb("0000000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"FCWTF"), 10) + "0000000000";
+				//기납부세액-전근무지
+				// 56.소득세, 57.지방소득세, 58.농특세
+				result_TEST2 += rightb("0000000000" + PreSo1, 10);
+				result_TEST2 += rightb("0000000000" + PreJu1, 10) + "0000000000";
+				// 59.전근무지일련번호, 공란(891)
+				//result_TEST2 += "01" + space(891);
+				//result_TEST2 += "01" + space(951);	//2015.05.15수정
+				//result_TEST2 += "01" + space(981);	//2015연말정산 수정
+				result_TEST2 += "01" + space(961);	//2016연말정산
+								
+ //trace("result_TEST2길이 "+lengthb(result_TEST2));
+if(lengthb(result_TEST2) !=1620 ) {
+	trace("result_TEST2길이 "+lengthb(result_TEST2)+"=="+p_SABUN);
+} 
+				result += result_TEST2;
+				result += "\r\n";
+				C_Cnt += 1;
+				TotCnt += 1;//총 row계산				
+			}
+var result_TEST3="";
+			if( PrePy2 >0){//전근무지2이 있는 사용자
+//trace(p_SABUN);
+				// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호
+				result_TEST3 += "D" + "20" + "609" + rightb("000000" + (i+1), 6);
+				// 5.사업자등록번호, 6.공란
+				result_TEST3 += leftb(SsId + space(10), 10) + space(50);
+				// 7.주민등록번호
+				result_TEST3 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);
+				// 8.납세조합구분
+				result_TEST3 += "1";
+				// 9.법인명
+				result_TEST3 += PreNm2;
+				// 10.사업자등록번호
+				result_TEST3 += PrenA2 + PrenB2 + PrenC2;
+				// 11.근무기간 시작년월일
+				result_TEST3 += rightb("00000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RDTS2"), 8); 
+				// 12.근무기간 종료년월일
+				result_TEST3 += rightb("00000000" + ds_HAYZ201C_D.GetColumn(p_REC_D_ROW,"RDTE2"), 8); 
+				// 13.감면기간 시작년월일, 14.감면기간 종료년월일
+				result_TEST3 += "00000000" + "00000000";
+				// 15.급여총액,
+				result_TEST3 += rightb("00000000000" + PrePy2, 11);
+				// 16.상여총액, 17.인정상여,
+				result_TEST3 += rightb("00000000000" + PreBs2, 11) + "00000000000";
+				// 18.주식매수선택권 행사이익, 19.우리사주조합인출금, 20.임원퇴직소득금액한도초과액,
+				result_TEST3 += "00000000000" + "00000000000" + "00000000000";
+				// 21.공란(22)
+				result_TEST3 += "0000000000000000000000";
+				// 22.계			
+				result_TEST3 += rightb("00000000000" + (parseInt(PrePy2) + parseInt(PreBs2)), 11);
+				// 전근무지 비과세 및 감면소득
+				// 23.비과세학자금, 24.무보수위원수당, 25.경호/승선수당, 26.유아/초중등, 27.고등교육법
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 28.특별법, 29.연구기관등, 30.기업연구소
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 31.보육교사, 32.사립유치원교사, 33.취재수당
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 34.벽지수당, 35.재해관련급여, 36.정부공공기관지방이전기관 종사자 이전수당
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 37.외국정부등근무자, 38.외국주둔군인등, 39.국외근로100만원
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 40.국외근로300만원, 41.국외근로, 42.야간근로수당
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 43.출산보육수당, 44.근로장학금, 45.주식매수선택권,
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 46.외국기술자, 47,우리사주조합인출금50%, 48,우리사주조합인출금70%
+				//result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 46.외국기술자, 47,우리사주조합인출금50%, 48,우리사주조합인출금70%, 48ⓐ,우리사주조합인출금100%(2016연말정산)
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 49.장기미취업자중소기업 취업, 50.해저광물자원개발, 51.전공의 수련 보조수당
+				//result_TEST3 += "0000000000" + "0000000000" + "0000000000";
+				// 2015연말정산 수정
+				// 50.해저광물자원개발삭제
+				// 49.장기미취업자중소기업 취업, 50.전공의 수련 보조수당
+				result_TEST3 += "0000000000" + "0000000000";
+				// END			
+				// 51.중소기업취업 청년 소득세 감면, 52.조세상교직자감면,
+				//result_TEST3 += "0000000000" + "0000000000";
+				// 51.중소기업취업 청년 소득세 감면(58.ⓐ감면100%, 58.ⓑ감면50%, 58.ⓒ감면70%), 52.조세상교직자감면 (2016연말정산)
+				result_TEST3 += "0000000000" + "0000000000" + "0000000000" + "0000000000";
+				// 53.비과세계, 54. 감면소득계
+				result_TEST3 += "0000000000" + "0000000000";
+				// 55.공란
+				result_TEST3 += "0000000000";// 2015연말정산추가
+				//기납부세액-전근무지
+				// 56.소득세, 57.지방소득세, 58.농특세
+				result_TEST3 += rightb("0000000000" + PreSo2, 10);
+				result_TEST3 += rightb("0000000000" + PreJu2, 10) + "0000000000";
+				// 59.전근무지일련번호, 공란(891)
+				//result_TEST3 += "02" + space(891);
+				//result_TEST3 += "01" + space(951);	//2015.05.15수정
+				//result_TEST3 += "01" + space(981);	//2015연말정산 수정
+				result_TEST3 += "01" + space(961);	//2016연말정산
+//trace("result_TEST3길이 "+lengthb(result_TEST3));
+if(lengthb(result_TEST3) !=1620 ) {
+	trace("result_TEST3길이 "+lengthb(result_TEST3)+"=="+p_SABUN);
+}
+				result += result_TEST3;
+				result += "\r\n";
+				C_Cnt += 1;
+				TotCnt += 1;//총 row계산
+			}
+		}//ds_HAYZ201C_D
+
+		//단일적용자는 카토사장님 1명로 전근무지 단율세율적용자 로직 제외함.
+		/********************************************************************** 
+		 * 내용설명 : E 레코드(소득공제명세 레코드)
+		 * 주요변수 : 
+		**********************************************************************/ 
+var result_TEST4="";
+		if (chk1tx = 0) {//단일세율을 적용하지 않는 근로자만 생성
+			var Desc = "";
+			var x = 1;
+			var Child = 0;
+			var sKind		= "getHAYZ201C_E";						
+			var sMethodName = "service::pshumlib/selectHAYZ201C_E.do";     			// 서버에서 호출 될 Method 명
+			var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "ds_HAYZ201C_E=ds_HAYZ201C_E";    						// 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+				//sArgument += " LIB1=" + quote(Lib1);
+				//sArgument += " LIB2=" + quote(Lib2);
+				sArgument += " LIB3=" + quote(Lib3);
+				sArgument += " GUBCD=" + quote(rdoggub.Value);//구분코드(중도:J, 연말:Y)
+				sArgument += " MAGAM=" + quote(chkEND.Value);//마감여부
+				sArgument += " PTJYM=" + quote(p_PTJYM);//연말정산
+				//sArgument += " PTJYM_FR=" + quote(cmd_PTJYM_FR.Value);//중도정산FR
+			//	sArgument += " PTJYM_TO=" + quote(cmd_PTJYM_TO.Value);//중도정산TO
+				sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value,0,6));//중도정산FR
+				sArgument += " PTJYM_TO=" + quote(substr(cmd_PTJYM_TO.Value,0,6));//중도정산TO					
+				sArgument += " SABUN=" + quote(p_SABUN);
+			http.Sync = true;		
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+//result += "\r\n";	  
+			if(ds_HAYZ201C_E.rowcount <= 0 ){//없는경우
+//trace("없는경우");
+				//Desc = space(40) + 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000000 // 부양가족1                     
+				//Desc = space(40) + "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";// 부양가족1                     
+				//Desc = Desc + space(40) + "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족2
+				//Desc = Desc + space(40) + "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족3
+				//Desc = Desc + space(40) + "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족4
+				//Desc = Desc + space(40) + "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족5
+				Desc = space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";// 부양가족1                     
+				Desc = Desc + space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족2
+				Desc = Desc + space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족3
+				Desc = Desc + space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족4
+				Desc = Desc + space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"; 	// 부양가족5
+				//Desc = Desc + "01" + space(303);  // 부양가족일련번호,공란
+	
+			}else{
+				var j=0;
+				for(j=0; j<ds_HAYZ201C_E.rowcount; j++){
+					if(((j+1) != 1) && (((j+1) % 5) = 1)){//5이상 나머지가 1인경우만 write
+						// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+						result_TEST4 += "E" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+						// 6.주민등록번호								
+						result_TEST4 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+						result_TEST4 += Desc;
+						//result_TEST4 += rightb("00" + x, 2) + space(303);  // 부양가족,공란
+						//result_TEST4 += rightb("00" + x, 2) + space(283);  // 부양가족,공란 2015.05.15추가    2016.02.17수정 space(253)->space(283)
+						result_TEST4 += rightb("00" + x, 2) + space(293);  // 부양가족,공란 (2016연말정산)
+						x = x + 1;
+						Desc = "";
+						if(lengthb(result_TEST4) !=1620 ) {
+							//alert("IT전략팀으로 연락바랍니다. E recode Length Error: " + p_SABUN);
+							trace("result_TEST4길이 "+lengthb(result_TEST4)+"=="+p_SABUN);
+						}
+						result += result_TEST4;
+						result += "\r\n";
+						result_TEST4="";
+						C_Cnt += 1;
+						TotCnt += 1;//총 row계산
+					} 
+					var RelNm = "";
+					// 성명
+					RelNm = leftb(trim(ds_HAYZ201C_E.GetColumn(j,"RELNM")) + space(20), 20);
+					// 7.관계
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"RELNO") = 5, "6", ds_HAYZ201C_E.GetColumn(j,"RELNO"));   						
+					// 8.내외국인
+					Desc += iif(mid(trim(ds_HAYZ201C_E.GetColumn(j,"KORNO")), 6, 1) >= 5 && mid(trim(ds_HAYZ201C_E.GetColumn(j,"KORNO")), 6, 1) <= 8, "9", "1");  														
+					// 9.성명, 10.주민등록번호
+					Desc += RelNm + leftb(trim(ds_HAYZ201C_E.GetColumn(j,"KORNO")) + space(13), 13); 
+					// 11.기본공제
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"KIBCD") = 1, "1", " ");
+					// 12.장애인
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"TRBNO") > 0, ds_HAYZ201C_E.GetColumn(j,"TRBNO"), " ");//장애인코드는 1~3입력
+					// 13.부녀자공제	
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"BUBNO") = 1, "1", " "); 
+					// 14.경로우대공제
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"KYBNO") = 1, "1", " "); 
+					// 15.한부모공제
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"SPFCD") = 1, "1", " "); 
+					// 16.출생/입양(2015.05.15추가)
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"BTPNO") = 1, "1", " "); 
+					// 17.6세이하(2015.05.15추가)
+					Desc += iif(ds_HAYZ201C_E.GetColumn(j,"CBUNO") = 1, "1", " "); 
+					
+					// 국세청 자료
+					// 18.보험료-건강/고용보험
+					Desc += "0000000000";//국세청 건강/고용보험은 없음.
+					// 17.보험료-보장성, 18.의료비
+					//Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PHOSK"), 10);   
+					// 보장성보험(일반/장애인전용보험 항목분리) 2015.05.15
+					// 19.보험료-보장성(일반)
+					//Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10);
+					// 20.보험료-보장성(장애)-2015.05.15추가
+					//Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10); 
+
+					if(ds_HAYZ201C_C.GetColumn(i,"ZX024") =0){//장애인보장성대상금액이 없으면
+						// 19보험료-보장성(일반)
+						Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10);
+						// 20.보험료-보장성(장애)-2015.05.15추가
+						Desc += "0000000000";
+					}else{//장애인보장성대상금액이 있는 경우
+						if(ds_HAYZ201C_E.GetColumn(j,"TRBNO") = 0){ //장애인이 아니면
+							// 19.보험료-보장성(일반)
+							Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10);
+							// 20.보험료-보장성(장애)-2015.05.15추가
+							Desc += "0000000000";
+						}else{
+							// 19.보험료-보장성(일반)
+							Desc += "0000000000";
+							// 20.보험료-보장성(장애)-2015.05.15추가
+							Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSK"), 10);
+						}
+					}				
+					//21.의료비
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PHOSK"), 10);
+					// 22교육비, 23, 신용카드(전통시장,대중교통제외)
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PEDSK"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PSISK"), 10);   
+					// 24.직불카드(전통시장,대중교통제외), 25.현금영수증(전통시장,대중교통제외)
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"JIGBK"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"CSHSK"), 10);   
+					// 26.전통시장사용액, 27.대중교통이용액
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"CJANK"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PBTSK"), 10);   
+					// 28.기부금1
+					/* 
+					// 2015 연말정산 수정
+					    => 정치자금기부금 본인만 포함 
+					var KibAmt = 0;
+					KibAmt = parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBAK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBBK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBCK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBDK")); 
+					Desc += rightb("0000000000000" + KibAmt, 13);   //국세청 기부금
+					*/
+					if (ds_HAYZ201C_E.GetColumn(j,"RELNO") = 0) { //본인만 해당 add(RELCD=10
+						KibAmt = parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBAK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBBK"))
+								+ parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBCK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBDK")) 
+								+ parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBUA")); //본인만 정치기부금포함
+						Desc += rightb("0000000000000" + KibAmt, 13);   //국세청 기부금
+					}else{
+						KibAmt = parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBAK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBBK"))
+								+ parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBCK")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBDK")); 
+						Desc += rightb("0000000000000" + KibAmt, 13);   //국세청 기부금
+					}
+							
+					//국세청외 자료
+					// 29.보험료-건강/고용보험
+					if (ds_HAYZ201C_E.GetColumn(j,"RELNO") = 0) { //본인만 해당 add(RELCD=10
+					//	Desc += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))), 10);
+						//2015.03.09수정-각각의 필드의 합대신 합계를 사용
+						/*
+						if(ComboBoxPlant.Value="C1" && (p_SABUN = 1440157 || p_SABUN = 1440142)){
+							Desc += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))-1378), 10);
+						}else{
+							Desc += rightb("0000000000" + (parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ011"))+parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ013"))), 10);
+						}
+						*/
+						//수정 2015.03.09
+						Desc += rightb("0000000000" + ds_HAYZ201C_C.GetColumn(i,"ZZ050"), 10);//ZZ011+ZZ013의 계산된금액
+					// 29.보험료공제-고용보험료
+					}else{
+						Desc += "0000000000";
+					}
+					// 27.보험료-보장성, 28.의료비
+					//Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSU"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PHOSU"), 10);
+					// 보장성보험(일반/장애 항목분리) 2015.05.15
+					
+					if(ds_HAYZ201C_C.GetColumn(i,"ZX024") =0){//장애인보장성대상금액이 없으면
+						// 30보험료-보장성(일반)
+						Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSU"), 10);
+						// 31.보험료-보장성(장애)-2015.05.15추가
+						Desc += "0000000000";
+/*
+if(p_SABUN=260142){
+trace(lengthb(result_TEST4));
+trace("국세청외1== "+ds_HAYZ201C_E.GetColumn(j,"PGPSU"));
+trace("국세청외2== "+ rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSU"), 10));
+}
+*/
+					}else{//장애인보장성대상금액이 있는 경우
+						if(ds_HAYZ201C_E.GetColumn(j,"TRBNO") = 0){ //장애인이 아니면
+							// 30보험료-보장성(일반)
+							Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSU"), 10);
+							// 31.보험료-보장성(장애)-2015.05.15추가
+							Desc += "0000000000";
+						}else{
+							// 30.보험료-보장성(일반)
+							Desc += "0000000000";
+							// 31.보험료-보장성(장애)-2015.05.15추가
+							Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PGPSU"), 10);
+						}
+					}
+					
+					//32.의료비
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PHOSU"), 10);					
+					// 33.교육비, 34.신용카드(전통시장,대중교통제외)
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PEDSU"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PSISU"), 10);   
+					// 35.직불카드(전통시장,대중교통제외)
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"JIKBU"), 10);
+					// 36전통시장사용액, 37.대중교통이용액
+					Desc += rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"CJANU"), 10) + rightb("0000000000" + ds_HAYZ201C_E.GetColumn(j,"PBTSU"), 10);   
+					// 38.기부금1
+					KibAmt = 0;//초기화
+					if (ds_HAYZ201C_E.GetColumn(j,"RELNO") = 0) { //본인기부금에 노조비 add(RELCD=10
+						KibAmt = parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBAU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBBU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBCU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBDU")) + parseInt(ds_HAYZ201C_C.GetColumn(i,"ZZ018")); //기부금1(국세청외)+급여노조비
+					} else {
+						KibAmt = parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBAU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBBU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBCU")) + parseInt(ds_HAYZ201C_E.GetColumn(j,"KIBDU")); //기부금1(국세청외)
+					}
+					Desc += rightb("0000000000000" + KibAmt, 13);
+				}//부양가족for문
+				// 채워주기
+//trace("j길이 "+j);
+				if ((j % 5) != 0) {
+//trace("채우기문");
+					for (k=0; k < 5- iif(j < 5, j, (j % 5)); k++) {
+						Desc += space(42) + "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+					}
+				}								
+			}
+			// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+			result_TEST4 += "E" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+			// 6.주민등록번호								
+			result_TEST4 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+			result_TEST4 += Desc;
+			//result_TEST4 += rightb("00" + x, 2) + space(303);  // 부양가족,공란	
+			//result_TEST4 += rightb("00" + x, 2) + space(253);  // 부양가족,공란	2015.05.15추가
+			//result_TEST4 += rightb("00" + x, 2) + space(283);  // 부양가족,공란	2015연말정산수정
+			//result_TEST4 += rightb("00" + x, 2) + space(283);  // 부양가족,공란	2015연말정산수정
+			result_TEST4 += rightb("00" + x, 2) + space(293);  // 부양가족,공란 (2016연말정산)
+//trace("result_TEST4길이 "+lengthb(result_TEST4));
+if(lengthb(result_TEST4) !=1620 ) {
+	trace("result_TEST4길이 "+lengthb(result_TEST4)+"=="+p_SABUN);
+}
+			result += result_TEST4;
+			result += "\r\n";
+			C_Cnt += 1;
+			TotCnt += 1;//총 row계산
+		}//ds_HAYZ201C_E(단일세율적용)
+		/********************************************************************** 
+		 * 내용설명 : F 레코드(연금저축등 소득세액 공제명세레코드)
+		 * 주요변수 : 
+		**********************************************************************/ 
+var result_TEST5="";
+		if (chk1tx = 0) {
+		
+			var Desc = "";
+			
+			var sKind		= "getHAYZ201C_F";						
+			var sMethodName = "service::pshumlib/selectHAYZ201C_F.do";     			// 서버에서 호출 될 Method 명
+			var sInDataSet  = "";                             						// 자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "ds_HAYZ201C_F=ds_HAYZ201C_F";    						// 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+				//sArgument += " LIB1=" + quote(Lib1);
+				//sArgument += " LIB2=" + quote(Lib2);
+				sArgument += " LIB3=" + quote(Lib3);
+				sArgument += " GUBCD=" + quote(rdoggub.Value);//구분코드(중도:J, 연말:Y)
+				sArgument += " MAGAM=" + quote(chkEND.Value);//마감여부
+				sArgument += " PTJYM=" + quote(p_PTJYM);//연말정산
+				//sArgument += " PTJYM_FR=" + quote(cmd_PTJYM_FR.Value);//중도정산FR
+				//sArgument += " PTJYM_TO=" + quote(cmd_PTJYM_TO.Value);//중도정산TO
+				sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value,0,6));//중도정산FR
+				sArgument += " PTJYM_TO=" + quote(substr(cmd_PTJYM_TO.Value,0,6));//중도정산TO
+				sArgument += " SABUN=" + quote(p_SABUN);
+			http.Sync = true;		
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+//result += "\r\n";	  
+			if(ds_HAYZ201C_F.rowcount <= 0 ){//없는경우
+//trace("없는경우");
+				Desc = space(75) + "00000000000000000000";	//소득공제1(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제2(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제3(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제4(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제5(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제6(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제7(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제8(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제9(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제10(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제11(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제12(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제13(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제14(20)                                  
+				Desc = Desc + space(75) + "00000000000000000000";	//소득공제15(20)                                  
+			}else{
+				var j=0;
+				for(j=0; j<ds_HAYZ201C_F.rowcount; j++){
+					if(((j+1) != 1) && (((j+1) % 15) = 1)){//15이상 나머지가 1인경우만 write
+						// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+						result_TEST5 += "F" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+						// 6.주민등록번호								
+						result_TEST5 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+						//result_TEST5 += Desc + space(360);  //연극저축명세, 공란(360)	
+						//result_TEST5 += Desc + space(120);  //연극저축명세, 공란(120) 2015.05.15 추가	
+						//result_TEST5 += Desc + space(150);  //연극저축명세, 공란(150) 2015연말정산 수정
+						result_TEST5 += Desc + space(160);  //연극저축명세, 공란(160)  (2016연말정산)
+						Desc = "";
+						result += result_TEST5;
+						result += "\r\n";
+						result_TEST5="";
+						C_Cnt += 1;
+						TotCnt += 1;//총 row계산
+					}
+					// 7.소득공제구분, 8.금융기관코드
+					Desc += rightb("00" + ds_HAYZ201C_F.GetColumn(j,"INCCD"), 2) + rightb("000" + ds_HAYZ201C_F.GetColumn(j,"BNKCD"), 3);  
+					// 9.금융기관명
+					//Desc += leftb(trim(ds_HAYZ201C_F.GetColumn(j,"BNKNM")) + space(30), 30);
+					Desc += leftb(trim(ds_HAYZ201C_F.GetColumn(j,"BNKNM")) + space(50), 50);	//2015.05.15추가
+					// 10.계좌번호
+					Desc += leftb(trim(ds_HAYZ201C_F.GetColumn(j,"GJBNB")) + space(20), 20); 
+					
+					// 11.납입금액
+					Desc += rightb("0000000000" +  ds_HAYZ201C_F.GetColumn(j,"PAYTT"), 10);
+					// 12.공제금액
+					Desc += rightb("0000000000" +  ds_HAYZ201C_F.GetColumn(j,"PAYTM"), 10);
+				
+					
+				}//연금저축for문
+				// 채워주기
+				if ((j % 15) != 0) {
+					for (k=0; k < 15- iif(j < 15, j, (j % 15)); k++) {
+						Desc += space(75) + "00000000000000000000";
+					}
+				}		
+			}
+			// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+			result_TEST5 += "F" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+			// 6.주민등록번호								
+			result_TEST5 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+			//result_TEST5 += Desc + space(360);  //연극저축명세, 공란(360)	
+			//result_TEST5 += Desc + space(120);  //연극저축명세, 공란(120) 2015.05.15 추가
+			//result_TEST5 += Desc + space(150);  //연극저축명세, 공란(150) 2015연말정산 수정
+			result_TEST5 += Desc + space(160);  //연극저축명세, 공란(160)  (2016연말정산)
+ //trace("result_TEST5길이 "+lengthb(result_TEST5));
+if(lengthb(result_TEST5) !=1620 ) {
+	trace("result_TEST5길이 "+lengthb(result_TEST5)+"=="+p_SABUN);
+}
+			result += result_TEST5;
+			result += "\r\n";
+			C_Cnt += 1;
+			TotCnt += 1;//총 row계산
+			
+		}//ds_HAYZ201C_F(단일세율적용)
+	
+		/********************************************************************** 
+		 * 내용설명 : G 레코드(월세 거주자간 주택임차차입금 원리금 상환액 소득공제명세 레코드)
+		 * 주요변수 : 
+		**********************************************************************/ 
+
+var result_TEST6="";
+		var Desc = "";
+		var x = 1;
+		var sKind		= "getHAYZ201C_G";						
+		var sMethodName = "service::pshumlib/selectHAYZ201C_G.do";     			// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";													// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_HAYZ201C_G=ds_HAYZ201C_G";						// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+			//sArgument += " LIB1=" + quote(Lib1);
+			//sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " LIB3=" + quote(Lib3);
+			sArgument += " GUBCD=" + quote(rdoggub.Value);//구분코드(중도:J, 연말:Y)
+			sArgument += " MAGAM=" + quote(chkEND.Value);//마감여부
+			sArgument += " PTJYM=" + quote(p_PTJYM);//연말정산
+			//sArgument += " PTJYM_FR=" + quote(cmd_PTJYM_FR.Value);//중도정산FR
+			//sArgument += " PTJYM_TO=" + quote(cmd_PTJYM_TO.Value);//중도정산TO
+			sArgument += " PTJYM_FR=" + quote(substr(cmd_PTJYM_FR.Value,0,6));//중도정산FR
+			sArgument += " PTJYM_TO=" + quote(substr(cmd_PTJYM_TO.Value,0,6));//중도정산TO				
+			sArgument += " SABUN=" + quote(p_SABUN);
+		http.Sync = true;		
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+//result += "\r\n";	  
+		if(ds_HAYZ201C_G.rowcount <= 0 ){//없는경우
+//trace("없는경우");
+			//Desc = space(34) + "00000" + space(100)+"0000000000 0000000000 0000000000 000000" +space(33)+"0000000000 0000000000 0000000000 0000000000 0000000000 0000000000" + space(34) + "00000" + space(100)+"0000000000 0000000000 000000";	//월세액 소득공제(34,5,100,36 ),금전소비대차계약(33,60) , 임대차계약1(34,5,100,26)
+			Desc = space(34) + "00000" + space(100)+"000000000000000000000000000000000000" +space(33)+"000000000000000000000000000000000000000000000000000000000000" + space(34) + "00000" + space(100)+"00000000000000000000000000";	//월세액 소득공제(34,5,100,36 ),금전소비대차계약(33,60) , 임대차계약1(34,5,100,26)
+			Desc = Desc + space(34) + "00000" + space(100) + "000000000000000000000000000000000000" + space(33) + "000000000000000000000000000000000000000000000000000000000000" + space(34) + "00000" + space(100) + "00000000000000000000000000";	//월세액 소득공제(34,5,100,36 ),금전소비대차계약(33,60) , 임대차계약2(34,5,100,26)                             
+			Desc = Desc + space(34) + "00000" + space(100) + "000000000000000000000000000000000000" + space(33) + "000000000000000000000000000000000000000000000000000000000000" + space(34) + "00000" + space(100) + "00000000000000000000000000";	//월세액 소득공제(34,5,100,36 ),금전소비대차계약(33,60) , 임대차계약3(34,5,100,26)                             
+		}else{
+			var j=0;
+			for(j=0; j<ds_HAYZ201C_G.rowcount; j++){
+				if(((j+1) != 1) && (((j+1) % 3) = 1)){//3이상 나머지가 1인경우만 write
+					// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+					result_TEST6 += "G" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+					// 6.주민등록번호								
+					result_TEST6 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+					//result_TEST6 += Desc + rightb("00" + x, 2) + space(184);  //월세액 소득공제명세, 공란(184)	
+					//result_TEST6 += Desc + rightb("00" + x, 2) + space(244);  //월세액 소득공제명세, 공란(244) 2015.05.15추가
+					//result_TEST6 += Desc + rightb("00" + x, 2) + space(274);  //월세액 소득공제명세, 공란(274) 2015연말정산수정
+					result_TEST6 += Desc + rightb("00" + x, 2) + space(284);  //월세액 소득공제명세, 공란(284)  (2016연말정산)
+					x = x + 1;
+					Desc = "";
+					result += result_TEST6;
+					result += "\r\n";
+					result_TEST6="";
+					C_Cnt += 1;
+					TotCnt += 1;//총 row계산
+				}
+				//월세액
+				// 7.임대인성명, 8.주민등록번호(사업자번호)
+				Desc += leftb(trim(ds_HAYZ201C_G.GetColumn(j,"LSENMA")) + space(20), 20); 
+				Desc += leftb(trim(ds_HAYZ201C_G.GetColumn(j,"LSENOA")) + space(13), 13); 
+				// 9.주택유형(단독주택1, 다가구2, 다세대3, 연립주택4, 아파트5, 오피스텔6, 기타7)
+				Desc += leftb(trim(ds_HAYZ201C_G.GetColumn(j,"LSETYP")) + space(1), 1); 
+				// 10.주택계약면적
+				Desc += rightb("00000" + ds_HAYZ201C_G.GetColumn(j,"LSESIZ"), 5);
+				// 11.임대차계약서상주소지1
+				Desc += leftb(trim(ds_HAYZ201C_G.GetColumn(j,"LSEADD")) + space(100), 100); 
+				// 12.임대차계약기간개시일
+				Desc += rightb("00000000" + ds_HAYZ201C_G.GetColumn(j,"LSEDAS"), 8);
+				// 13.임대차계약기간종료일
+				Desc += rightb("00000000" + ds_HAYZ201C_G.GetColumn(j,"LSEDAE"), 8);
+				// 14.연간월세액
+				Desc += rightb("0000000000" + ds_HAYZ201C_G.GetColumn(j,"LSEMTT"), 10);
+				// 15.세액공제금액
+				Desc += rightb("0000000000" + ds_HAYZ201C_G.GetColumn(j,"LSEMTD"), 10);
+				// 금전소비대차계약(16~24)
+				Desc += space(33) + "000000000000000000000000000000000000000000000000000000000000";
+				// 임대차예약(25~32)
+				Desc += space(34) + "00000" + space(100) + "00000000000000000000000000";			
+				
+			}//월세For문
+			// 채워주기
+			if ((j % 3) != 0) {
+				for (k=0; k < 3- iif(j < 3, j, (j % 3)); k++) {
+					Desc += space(34) + "00000" + space(100) + "000000000000000000000000000000000000" + space(33) + "000000000000000000000000000000000000000000000000000000000000" + space(34) + "00000" + space(100) + "00000000000000000000000000";
+				}
+			}		
+		}
+		// 1.레코드구분, 2.자료구분, 3.세무서, 4.일련번호, 5.사업자등록번호
+		result_TEST6 += "G" + "20" + "609" + rightb("000000" + (i+1), 6) + leftb(SsId + space(10), 10);
+		// 6.주민등록번호								
+		result_TEST6 += rightb("00" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSA"), 6) + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSB") + rightb("000" + ds_HMD020PF.GetColumn(p_REC_HMD020_ROW,"PASSC"), 6);					
+		//result_TEST6 += Desc + rightb("00" + x, 2) + space(184);  //월세액 소득공제명세, 일련번호, 공란(184)
+		//result_TEST6 += Desc + rightb("00" + x, 2) + space(244);  //월세액 소득공제명세, 일련번호, 공란(244) 2015.05.15추가
+		//result_TEST6 += Desc + rightb("00" + x, 2) + space(274);  //월세액 소득공제명세, 일련번호, 공란(274) 2015연말정산수정
+		result_TEST6 += Desc + rightb("00" + x, 2) + space(284);  //월세액 소득공제명세, 일련번호, 공란(284)  (2016연말정산)
+ //trace("result_TEST6길이 "+lengthb(result_TEST6));
+if(lengthb(result_TEST6) !=1620 ) {
+	trace("result_TEST6길이 "+lengthb(result_TEST6)+"=="+p_SABUN);
+}
+		result += result_TEST6;
+		result += "\r\n";
+		C_Cnt += 1;
+		TotCnt += 1;//총 row계산
+	
+	}//ds_HAYZ201C_C for문
+	//result += result_TEST2;
+	//result += "\r\n";			
+	//C_Cnt += 1;
+	//TotCnt += 1;//총 row계산	
+trace("C_Cnt = "+C_Cnt+"TotCnt = "+TotCnt);
+	
+//////////////////////////////////	
+	ta_RESULT.Text = result;
+
+}
+
+function rightb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, lengthb(strText) - nSize, nSize);
+	return tmp;
+}
+
+function leftb(strText, nSize)
+{
+	var tmp;
+	if (lengthb(strText) < nSize) {
+		nSize = lengthb(strText);
+	}	
+	tmp = midb(strText, 0, nSize);
+	return tmp;
+}
+
+function fn_write(obj)
+{
+	FileDialog0.Type = "SAVE";	
+	FileDialog0.FileName = FileName;
+	FileDialog0.Open("C:\\");	
+	File0.FileName = FileDialog0.FilePath + "\\" + FileName;	
+	File0.Open ( "w+" );
+	var len = File0.Write(result, 10000000000000);	
+	//alert("len= "+len);
+	File0.Close();
+}
+
+function rdoggub_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(rdoggub.Value = "Y"){
+		setYYMM();
+		cmd_PTJYM_FR.Enable=false;
+		cmd_PTJYM_TO.Enable=false;
+	}else{
+		cmd_PTJYM_FR.Enable=true;
+		cmd_PTJYM_TO.Enable=true;
+	}
+	all_Clear();
+}
+
+function all_Clear(){
+	ed_gijunym.Text="";
+	ed_saupjano.Text="";
+	ed_brandname.Text="";
+	ed_bubinno.Text="";
+	ed_sajang.Text="";
+	ed_postcode.Text="";
+	ed_address.Text="";
+	ed_telno.Text="";
+	
+	ed_EMP.Value=0;
+	ed_EXEMP.Value=0;
+	ed_SODEUK.Value=0;
+	ed_SODEUK_TAX.Value=0;
+	ed_NONG.Value=0;
+	ed_JUMIN.Value=0;
+	ed_TOTAL_TAX.Value=0;
+	
+	ta_RESULT.Text="";
+	
+	st_REC_C.Text="";
+	st_REC_D.Text="";
+	ds_HAYZ201C_C.Clear();
+	ds_HAYZ201C_D.Clear();
+	ds_HMD020PF.Clear();
+	ds_ERROR.ClearData();
+
+}
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	all_Clear();
+}
+function btn_write_OnClick(obj)
+{
+	fn_write();
+}]]></Script>
+</Window>

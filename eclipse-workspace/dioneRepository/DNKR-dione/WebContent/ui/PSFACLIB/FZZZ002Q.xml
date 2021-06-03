@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="BOM&#32;조회&#32;(정방향)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_FZZ002Q">
+				<Contents>
+					<colinfo id="STEP_TXT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PINBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ROWNUMBER" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITNBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="QTYPR" size="256" summ="default" type="STRING"/>
+					<colinfo id="UNMSR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="MDATE" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="STEP" size="256" summ="default" type="STRING"/>
+					<colinfo id="STEP2" size="256" summ="default" type="STRING"/>
+					<colinfo id="EDATM" size="256" summ="default" type="STRING"/>
+					<colinfo id="EDATO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CONNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPCOD" size="256" summ="default" type="STRING"/>
+					<colinfo id="TQTYPR" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FZZ002QSub"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmp"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_tmp2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SEND">
+				<Contents>
+					<colinfo id="PRTNO" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_multi">
+				<Contents>
+					<colinfo id="STEP_TXT" size="256" summ="default" type="STRING"/>
+					<colinfo id="PINBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ROWNUMBER" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITNBR" size="256" summ="default" type="STRING"/>
+					<colinfo id="QTYPR" size="256" summ="default" type="STRING"/>
+					<colinfo id="UNMSR" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITTYP" size="256" summ="default" type="STRING"/>
+					<colinfo id="MDATE" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="STEP" size="256" summ="default" type="STRING"/>
+					<colinfo id="STEP2" size="256" summ="default" type="STRING"/>
+					<colinfo id="EDATM" size="256" summ="default" type="STRING"/>
+					<colinfo id="EDATO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CONNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="SPCOD" size="256" summ="default" type="STRING"/>
+					<colinfo id="TQTYPR" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="66" Id="searchBar" Left="1" TabOrder="2" Top="30" Width="1057"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="118" Style="static" TabOrder="10" Top="68" VAlign="Middle" Width="136"></Static>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_main" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="584" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="488" Id="MainGrid" InputPanel="FALSE" Left="3" LineColor="#888888" MinWidth="100" Right="1058" TabOrder="1" TabStop="true" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1055">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="56"/>
+						<col width="122"/>
+						<col width="114"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="62"/>
+						<col width="62"/>
+						<col width="317"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="LEVEL"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="PART&#32;NUMBER"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="QTY_PER"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="UM"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="IT"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" colspan="2" display="text" text="FROM&#32;/&#32;TO"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="DESCRIPTION"/>
+					</head>
+					<body>
+						<cell align="left" bkcolor='expr:iif(STEP_TXT&#32;==&#32;&quot;0&quot;,&quot;yellow&quot;,&quot;default&quot;)' col="0" colid="STEP_TXT" cursor="hand" display="text"/>
+						<cell align="left" col="1" colid="ITNBR" display="normal" LimitDec="0"/>
+						<cell align="right" col="2" colid="TQTYPR" display="text" LimitDec="0"/>
+						<cell align="center" col="3" colid="UNMSR" display="normal"/>
+						<cell align="center" col="4" colid="ITTYP" display="normal"/>
+						<cell align="right" autosizing="none" col="5" colid="EDATM" display="normal"/>
+						<cell align="right" autosizing="none" col="6" colid="EDATO" display="normal"/>
+						<cell align="left" autosizing="none" col="7" colid="ITDSC" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="8" Width="24"></File>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="9" Type="Save" Width="24"></FileDialog>
+		<Button Height="24" Id="Button0" Left="624" OnClick="fn_Search" TabOrder="5" Text="조회" Top="40" Visible="FALSE" Width="51"></Button>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="2" TabOrder="6" Text="모품번" Top="68" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="120" Style="static" TabOrder="7" Top="68" VAlign="Middle" Visible="FALSE" Width="646"></Static>
+		<Edit Border="Default" BorderColor="SCROLLBAR" Enable="FALSE" Height="20" Id="ed_path" ImeMode="none" Left="124" MaxLength="15" TabOrder="9" TabStop="FALSE" Top="71" UpperOnly="TRUE" Visible="FALSE" Width="547"></Edit>
+		<Button ButtonStyle="TRUE" Height="24" Id="Button1" ImageID="5_btn" Left="672" OnClick="Button1_OnClick" TabOrder="8" TabStop="FALSE" Text="파일찾기" Top="70" Visible="FALSE" Width="88"></Button>
+		<Radio Border="None" Height="16" Id="rdoggub" INDEX="0" Left="8" OnChanged="rdoggub_OnChanged" TabOrder="11" Top="40" Width="184">
+			<Contents>
+				<Layout code="A" height="12" left="10" text="품번선택" top="5" width="90"/>
+				<Layout code="B" height="12" left="100" text="파일선택" top="5" width="90"/>
+			</Contents>
+		</Radio>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="5" Style="static" TabOrder="12" Top="37" VAlign="Middle" Width="188"></Static>
+		<Edit Height="20" Id="ed_itnbr" ImeMode="none" Left="121" MaxLength="15" TabOrder="13" Top="72" UpperOnly="TRUE" UseIME="FALSE" Width="130"></Edit>
+		<Static Height="22" Id="st_stime" Left="904" TabOrder="14" Top="40" VAlign="Middle" Width="146"></Static>
+		<Static Height="22" Id="st_etime" Left="904" TabOrder="15" Top="64" VAlign="Middle" Width="146"></Static>
+		<Static Height="22" Id="Static4" Left="816" TabOrder="16" Text="시작시간&#32;:" Top="40" VAlign="Middle" Visible="FALSE" Width="82"></Static>
+		<Static Height="22" Id="Static5" Left="816" TabOrder="17" Text="종료시간&#32;:" Top="64" VAlign="Middle" Visible="FALSE" Width="82"></Static>
+		<Button Height="24" Id="Button2" Left="714" OnClick="fn_Excel" TabOrder="18" Text="Excel" Top="40" Visible="FALSE" Width="58"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : LSK
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FZZZ002.xml
+ * ● PROGRAM DESCRIPTION  : BOM 정방향 조회
+ * ● DATE WRITTEN         : 2010.11.25
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var LIB1 = G_ds_user.GetColumn(0,"LIB1");
+var LIB2 = G_ds_user.GetColumn(0,"LIB2");
+
+var nowDate = today();
+
+var step = "1";
+
+var strStep = "1";
+var intStep = 1;
+ 
+var p_seq = "0000"; 
+/********************************************************************** 
+ * 내용설명 : 화면 로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("1"); 
+}
+
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+
+/*
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;	
+*/	
+}
+
+function getFZZZ002Q(){
+	if(rdoggub.Value == "A"){
+		if(length(trim(ed_itnbr.Value)) == 0){
+			alert(setPopMessage("2017"));	// 20110103l-koowgnojeel, 2017 == 품번을 입력하세요.
+			ed_itnbr.SetFocus();
+			return;
+		}
+		
+		MainGrid.BindDataset = "ds_main";
+		p_seq = "0001"; 
+		http.Sync = true;
+		var sKind		= "getFZZZ002Q";						
+		var sMethodName = "service::psfaclib/selectFZZ002Q.do";     		// 서버에서 호출 될 Method 명
+		var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+		var sOutDataSet = "ds_FZZ002Q=ds_FZZ002Q";    				// 조회 후 돌려 받을 DataSet 명칭
+		var sArgument   = "";
+		sArgument += " LIB2=" + quote(LIB2);
+		sArgument += " LIB1=" + quote(LIB1);	
+		sArgument += " PINBR=" + quote(ed_itnbr.Value);
+		sArgument += " STEP='1'";
+		sArgument += " STEP_TXT='1'";
+		sArgument += " PNO_SEQ=" + quote(p_seq);
+		sArgument += " NOWDATE=" + quote(substr(nowDate,2,6));
+		
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+		
+	}else if(rdoggub.Value == "B"){
+		if (ds_SEND.GetRowCount() < 1){
+			alert("[경고] 생성할 data가 없습니다. 확인바랍니다."); 
+			return;
+		}
+		if (ds_SEND.GetRowCount() > 50){
+			alert("[확인] 작업시간이 많이 소요됩니다. 건당 1분."); 
+		}
+		if(confirm("PSDIOLIB.FZZ002PF에 저장됩니다. 작업전 CLEAR바랍니다. 작업하시겠습니까? ") == false) return;
+
+		//MainGrid.BindDataset = "ds_multi";
+
+		st_stime.Text = GetDate();
+		for(var i=0;i<ds_SEND.GetRowCount();i++){
+			strStep = "1";
+			intStep = 1;
+			p_seq = right("0000"+(i+1),4); 
+			http.Sync = true;
+			var sKind		= "getFZZZ002Q";						
+			var sMethodName = "service::psfaclib/selectFZZ002Q.do";     		// 서버에서 호출 될 Method 명
+			var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "ds_FZZ002Q=ds_FZZ002Q";    				// 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+			sArgument += " LIB2=" + quote(LIB2);
+			sArgument += " LIB1=" + quote(LIB1);	
+			sArgument += " PINBR=" + quote(ds_SEND.GetColumn(i,"PRTNO"));
+			sArgument += " STEP='1'";
+			sArgument += " STEP_TXT='1'";
+			sArgument += " PNO_SEQ=" + quote(p_seq);
+			sArgument += " NOWDATE=" + quote(substr(nowDate,2,6));
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+			
+			http.Sync = true;
+			var sKind		= "setFZZZ002Q";						
+			var sMethodName = "service::psfaclib/saveFZZZ002Q.do";     		// 서버에서 호출 될 Method 명
+			var sInDataSet  = "ds_multi=ds_multi";            				// 자료 저장 시 보낼 DataSet 명칭
+			var sOutDataSet = "";				    				// 조회 후 돌려 받을 DataSet 명칭
+			var sArgument   = "";
+			sArgument += " LIB2=" + quote(LIB2);
+			sArgument += " LIB1=" + quote(LIB1);
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			ds_multi.ClearData();	
+		}
+		//ds_multi.Sort("ROWNUMBER");
+		st_etime.Text = GetDate();
+		alert("PSDIOLIB/BZZ002PF에 저장되었습니다.");
+	}
+		
+}
+
+function subFZZZ002Q(dsObj)
+{
+	var intStep2 = 0;
+
+	strStep = strStep + (intStep+1);
+
+	intStep++;
+
+	ds_tmp2.Copy(object(dsObj));
+	ds_tmp.ClearData();
+
+	for(i=0;i<ds_tmp2.rowcount;i++)
+	{
+		var sArgument   = "";
+		
+		intStep2++;
+		http.Sync = true;
+		sArgument += " LIB1=" + quote(LIB1);	
+		sArgument += " PINBR=" + quote(ds_tmp2.GetColumn(i,"ITNBR"));
+		sArgument += " STEP=" + quote(ds_tmp2.GetColumn(i,"ROWNUMBER"));
+		sArgument += " STEP2=" + quote(intStep2);
+		sArgument += " STEP_TXT=" + quote(makePoint(intStep) + intStep);
+		sArgument += " NOWDATE=" + quote(substr(nowDate,2,6));
+		sArgument += " TOPQTYPR=" + quote(ds_tmp2.GetColumn(i,"TQTYPR"));
+		Transaction("subFZZZ002Q", "service::psfaclib/selecFZZZ002QSub.do", "", "ds_FZZ002QSub=ds_FZZ002QSub", sArgument, "");
+		
+		if(rdoggub.Value == "A"){
+			ds_main.AppendDataset("ds_FZZ002QSub");
+		}else if(rdoggub.Value == "B"){
+			ds_multi.AppendDataset("ds_FZZ002QSub");
+		}
+		ds_tmp.AppendDataset("ds_FZZ002QSub");
+
+	}
+
+	if(object(dsObj).rowcount != 0)
+	{
+		subFZZZ002Q("ds_tmp");
+	} else {
+		if(rdoggub.Value == "A"){
+			ds_main.Sort("ROWNUMBER");
+			alert(setPopMessage("1004"));
+			setMessage("1004");			
+		} 
+		
+		
+	}
+}
+
+
+function makePoint(cnt)
+{
+	var returnCnt = cnt -1;
+	var returnValue = "";
+
+	for(i=0; i<returnCnt;i++)
+	{
+		returnValue += ".";
+	}
+	
+	return returnValue;
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getFZZZ002Q"){
+		// 조회건수가 없을경우
+		if(ds_FZZ002Q.rowcount <= 0){
+			if(rdoggub.Value == "A"){
+				alert(setPopMessage("1003"));
+				setMessage("1003");	
+			}else{
+				
+			}
+		// 정상 조회
+		} else {
+			if(rdoggub.Value == "A"){
+				ds_main.Copy("ds_FZZ002Q");
+				var nRow = ds_main.AddRow();
+				ds_main.SetColumn(nRow,"STEP_TXT","0");
+				ds_main.SetColumn(nRow,"PINBR","");
+				ds_main.SetColumn(nRow,"ROWNUMBER","0");
+				ds_main.SetColumn(nRow,"ITNBR",ds_FZZ002Q.GetColumn(0,"PINBR"));
+				ds_main.SetColumn(nRow,"QTYPR","");
+				ds_main.SetColumn(nRow,"UNMSR","");
+				ds_main.SetColumn(nRow,"ITTYP","");
+				ds_main.SetColumn(nRow,"MDATE","");
+				ds_main.SetColumn(nRow,"ITDSC","");
+				ds_main.SetColumn(nRow,"STEP","");
+				ds_main.SetColumn(nRow,"STEP2","");
+				ds_main.SetColumn(nRow,"EDATM","");
+				ds_main.SetColumn(nRow,"EDATO","");
+				ds_main.SetColumn(nRow,"CONNO","");
+				ds_main.SetColumn(nRow,"SPCOD","");
+				ds_main.SetColumn(nRow,"TQTYPR","");
+				subFZZZ002Q("ds_FZZ002Q");
+			}else if(rdoggub.Value == "B"){
+				
+				var nRow = ds_multi.AddRow();
+				ds_multi.SetColumn(nRow,"STEP_TXT","0");
+				ds_multi.SetColumn(nRow,"PINBR","");
+				ds_multi.SetColumn(nRow,"ROWNUMBER",p_seq);
+				ds_multi.SetColumn(nRow,"ITNBR",ds_FZZ002Q.GetColumn(0,"PINBR"));
+				ds_multi.SetColumn(nRow,"QTYPR","");
+				ds_multi.SetColumn(nRow,"UNMSR","");
+				ds_multi.SetColumn(nRow,"ITTYP","");
+				ds_multi.SetColumn(nRow,"MDATE","");
+				ds_multi.SetColumn(nRow,"ITDSC","");
+				ds_multi.SetColumn(nRow,"STEP","");
+				ds_multi.SetColumn(nRow,"STEP2","");
+				ds_multi.SetColumn(nRow,"EDATM","");
+				ds_multi.SetColumn(nRow,"EDATO","");
+				ds_multi.SetColumn(nRow,"CONNO","");
+				ds_multi.SetColumn(nRow,"SPCOD","");
+				ds_multi.SetColumn(nRow,"TQTYPR","");
+				ds_multi.AppendDataset("ds_FZZ002Q");
+				subFZZZ002Q("ds_FZZ002Q");
+
+			}
+			
+			
+			
+			
+		}
+	// tran 성공	
+	}else if(svcId=="setFZZZ002Q"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+function setExcel()
+{
+	var fName   = "BOM 조회(정방향)";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|BOM 조회(정방향)";
+	
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	strStep = "1";
+	intStep = 1;
+	getFZZZ002Q();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Save()
+{
+	setPpmi007m();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function Button1_OnClick(obj)
+{
+	FileDialog0.Filter = "ALL File(.xls)|*.xls";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	//  파일 선택 창을 여는데 실패하였습니다.
+		return;
+	}
+	
+	ds_SEND.ClearData();
+	//ds_RECEIVE.ClearData();
+	//ds_SLTZ100UC_BOX.ClearData();
+	
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	setMessageDirect(path);	
+	ed_path.Text = path;
+	ext_ExcelImportByIndex(path,0,"ds_SEND",1,1,0,1);
+	//ext_ExcelImportByIndex(strExcelFilename, intSheetIndex, strTargetDatasetID, [intUseColInfo, intExp, intDecimal,intStartRow]); 
+	//strExcelFilename: 엑셀파일에서 intSheetIndex 번째 sheet의 내용을 strTargetDatasetID dataset에 저장한다. 성공: 0, 실패: -1.
+	//strExcelFilename: 엑셀 파일명
+	//intSheetIndex: 데이터를 가져오기 위한 sheet index(0 부터 시작)
+	//strTargetDatasetID: 데이터를 저장할 dataset
+	//intUseColInfo : 데이터셋의 컬럼정보를 사용 1     데이터셋 컬럼정보를 무시 0
+	//intExp: 데이터가 숫자형의 12자리 이상일 경우 지수형으로 표현되어 나오는데, 이를 일반 숫자 형식으로 표현하고자 할 때 사용한다.
+	//          1 이면 지수형의 데이터를 일반 숫자 형식으로 추출.
+	//          0 이면 지수형식으로 추출
+    //intDecimal: intExp의 값이 1일 때 사용하는 것으로 숫자의 소숫점 자릿수를 지정한다. 모든 숫자데이터에 일괄적으로 적용된다.. Default = 0
+	//            데이터 양이 많거나 PC의 사양에 따라 응답시간이 차이가 날 수 있다.
+	//            EXCEL 프로그램이 반드시 설치되어 있어야 한다.
+	//intStartRow : Excel파일의 시작 행위치(default 1)
+	//numcheck : 숫자컬럼에 셀값이 숫자가 아닌값이 있는경우 메시지출력여부   intUseColInfo가 1인경우에 적용
+	//skiprow: 레코드중 지정한 행의 값이 empty인경우 해당레코드는 skip
+
+
+	//trace(ds_SEND.SaveXML());
+	if (ds_SEND.GetRowCount() < 1){
+		alert("[경고] 생성할 data가 없습니다. 확인바랍니다."); 
+		return;
+	}
+	ds_main.ClearData();
+	ds_multi.ClearData();
+	ds_FZZ002Q.ClearData();
+	ds_FZZ002QSub.ClearData();
+	ds_tmp.ClearData();
+	ds_tmp2.ClearData();
+	chkExcelData();
+}
+function chkExcelData(){
+
+}
+
+function rdoggub_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	if(strCode == "A"){
+		Static15.Text = "모품번";
+		Static0.Visible = true;
+		ed_itnbr.Visible = true;
+		Static16.Visible = false;
+		ed_path.Visible = false;
+		Button1.Visible = false;
+		ds_main.ClearData();
+		ds_multi.ClearData();
+		ds_FZZ002Q.ClearData();
+		ds_FZZ002QSub.ClearData();
+		ds_tmp.ClearData();
+		ds_tmp2.ClearData();
+	}else{
+		Static15.Text = "모품번 파일찿기";
+		Static0.Visible = false;
+		ed_itnbr.Visible = false;
+		Static16.Visible = true;
+		ed_path.Visible = true;
+		Button1.Visible = true;
+		ds_main.ClearData();
+		ds_multi.ClearData();
+		ds_FZZ002Q.ClearData();
+		ds_FZZ002QSub.ClearData();
+		ds_tmp.ClearData();
+		ds_tmp2.ClearData();
+		
+	}
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+]]></Script>
+</Window>

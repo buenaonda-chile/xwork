@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="768" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="인사기록카드발행" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Ubi Bottom="768" Height="768" Id="Ubi0" Right="1056" Width="1056">
+			<_PersistData>&#13;&#10;/6w9iZeL/wAAAQAkbQAAd2BPAPjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP48pkB7Pn71wTwv/r0BVMAxWjCAGVXAQID+fUDdF+t&#13;&#10;vLm0zNQHFPr0cwIwLwD+9AExAA==&#13;&#10;</_PersistData>
+		</Ubi>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="25" Id="btn_OUTPUT" ImageID="sum_print" Left="976" OnClick="btn_OUTPUT_OnClick" TabOrder="2" Width="70"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAEZ02R.xml
+ * ● PROGRAM DESCRIPTION  : 인사기록카드 발행
+ * ● DATE WRITTEN         : 2016.04.28
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+var strSeparator = "	";
+
+var nowDate = today();
+
+
+function On_LoadCompleted(obj)
+{
+	getTitle();	
+	getDesign();
+	getComCode();
+		
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	
+	
+	getHAEZ02R();
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : 공통디자인 설정
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+}
+
+/********************************************************************** 
+ * 내용설명 : 사업부 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";
+	var sMethodName = "service::login/selectComCode.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+		
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2016-05-03
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getHAEZ02R(){
+
+	var sabunname = SABUN;
+	
+	if(comps == 'E1'){
+		if(length(toString(SABUN)) = 5){
+			sabunname = "0" + SABUN;
+		}else if(length(toString(SABUN)) = 4){
+			sabunname = "00" + SABUN;
+		}else if(length(toString(SABUN)) = 3){
+			sabunname = "000" + SABUN;
+		}else if(length(toString(SABUN)) = 2){
+			sabunname = "0000" + SABUN;
+		}
+	}else{
+		if(length(toString(SABUN)) = 6){
+			sabunname = "0" + SABUN;
+		}else if(length(toString(SABUN)) = 5){
+			sabunname = "00" + SABUN;
+		}
+	}
+	
+	http.Sync = true;
+	Ubi0.setJrfFileDir(G_baseURL+"ui/PSHUMLIB/REPORT/");
+	Ubi0.setJrfFileName("HAEZ02R.jrf");
+	Ubi0.SetDataset("ds_HAEZ02Q", "ds_HAEZ02Q");
+	Ubi0.SetDataset("ds_HMD150PF", "ds_HMD150PF");
+	Ubi0.SetDataset("ds_HMD170PF", "ds_HMD170PF");
+	Ubi0.SetDataset("ds_HMD180PF", "ds_HMD180PF");
+	Ubi0.SetDataset("ds_HMD190PF", "ds_HMD190PF");
+	Ubi0.SetDataset("ds_HMD160PF", "ds_HMD160PF");
+	Ubi0.SetDataset("ds_HMD220PF", "ds_HMD220PF");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB2", "ds_HAEZ02Q_TAB2");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB3", "ds_HAEZ02Q_TAB3");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB4", "ds_HAEZ02Q_TAB4");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB5", "ds_HAEZ02Q_TAB5");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB6", "ds_HAEZ02Q_TAB6");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB7", "ds_HAEZ02Q_TAB7");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB8", "ds_HAEZ02Q_TAB8");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB9", "ds_HAEZ02Q_TAB9");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB10", "ds_HAEZ02Q_TAB10");
+	Ubi0.SetDataset("ds_HAEZ02Q_TAB11", "ds_HAEZ02Q_TAB11");
+	
+	Ubi0.SetArgument("PHOTO", toLower(substr(comps,0,1)) + sabunname + '.jpg');
+	Ubi0.SetArgument("SABUN", ds_HAEZ02Q.GetColumn(0,"SABUN"));
+	Ubi0.SetArgument("ENAME", ds_HAEZ02Q.GetColumn(0,"KORNM"));
+	Ubi0.SetArgument("COMPS", company);
+
+	Ubi0.Retrieve();
+	
+	http.Sync = false;
+	
+}
+	
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	Ubi0.printset();
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function btn_OUTPUT_OnClick(obj)
+{
+	Ubi0.printset();
+}
+]]></Script>
+</Window>

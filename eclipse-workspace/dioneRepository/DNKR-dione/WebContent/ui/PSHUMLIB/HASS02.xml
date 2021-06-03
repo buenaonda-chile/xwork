@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="616" Id="OBSE04" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="인사정보조회상세" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HASS02"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_uploadFile">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static73" Left="256" TabOrder="126" Top="281" Width="173"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static72" Left="147" TabOrder="122" Top="281" Width="110"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static69" Left="3" TabOrder="117" Top="281" Width="45"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="57" Id="Static46" Left="147" TabOrder="81" Top="220" Width="93"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static30" Left="541" TabOrder="55" Top="124" Width="116"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static20" Left="954" TabOrder="35" Top="92" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static18" Left="860" TabOrder="32" Top="92" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static15" Left="766" TabOrder="47" Top="92" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static13" Left="672" TabOrder="28" Top="92" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static2" Left="388" TabOrder="15" Top="92" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static1" Left="232" TabOrder="14" Top="92" Width="157"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static16" Left="232" TabOrder="13" Top="64" Width="157"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="21" Width="24"></File>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="22" Type="Save" Width="24"></FileDialog>
+		<Tab Border="RaisedEdge" BorderColor="APPWORKSPACE" Font="굴림,10,Bold" Height="272" Id="Tab0" MouseOverColor="cadetblue" OnChanged="fn_Tab_Search" PreLoad="TRUE" TabOrder="3" Top="320" Width="1049">
+			<Contents>
+				<TabPage Height="248" Id="tab1" Left="2" scroll="true" TabOrder="24" Text="가&#32;&#32;족" Top="22" Url="pshumlib::HASS02_TAB1.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab2" Left="2" TabOrder="24" Text="학&#32;&#32;력" Top="22" Url="pshumlib::HASS02_TAB2.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab3" Left="2" TabOrder="24" Text="경&#32;&#32;력" Top="22" Url="pshumlib::HASS02_TAB3.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab4" Left="2" TabOrder="24" Text="자격면허" Top="22" Url="pshumlib::HASS02_TAB4.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab5" Left="2" TabOrder="24" Text="교&#32;&#32;육" Top="22" Url="pshumlib::HASS02_TAB5.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab6" Left="2" TabOrder="24" Text="상벌규정" Top="22" Url="pshumlib::HASS02_TAB6.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab7" Left="2" TabOrder="24" Text="병력사항" Top="22" Url="pshumlib::HASS02_TAB7.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab8" Left="2" TabOrder="24" Text="외국어" Top="22" Url="pshumlib::HASS02_TAB8.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab9" Left="2" TabOrder="24" Text="인사발령" Top="22" Url="pshumlib::HASS02_TAB9.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab10" Left="2" TabOrder="24" Text="승진일자" Top="22" Url="pshumlib::HASS02_TAB10.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab11" Left="2" TabOrder="24" Text="급&#32;&#32;여" Top="22" Url="pshumlib::HASS02_TAB11.xml" Width="1045"></TabPage>
+				<TabPage Height="248" Id="tab12" Left="2" TabOrder="24" Text="인사고과" Top="22" Url="pshumlib::HASS02_TAB12.xml" Width="1045"></TabPage>
+			</Contents>
+		</Tab>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="4" Top="30" Width="1057"></Static>
+		<Image Border="Flat" BorderColor="#888888" FillType="STRETCH" Height="189" Id="img01" Left="3" TabOrder="5" Top="75" Width="141"></Image>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="57" Id="Static11" Left="147" TabOrder="6" Top="64" Width="93"></Static>
+		<Edit BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="KORNM" Enable="FALSE" Height="23" Id="ed_kornm" ImeMode="none" Left="244" LeftMargin="5" MaxLength="10" OnChanged="ed_kornm_OnChanged" OnKillFocus="checkid" RightMargin="5" TabOrder="7" Top="67" UseIME="FALSE" Width="140"></Edit>
+		<Shape BKColor="#888888" Bottom="95" Height="5" Id="Shape5" Left="164" LineColor="#dceaf7" Right="169" TabOrder="8" Top="90" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static12" Left="175" Style="static" TabOrder="9" Text="성&#32;&#32;명" Top="83" VAlign="Middle" Width="51"></Static>
+		<Edit BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CHRNM" Enable="FALSE" Height="23" Id="ed_chrnm" ImeMode="none" Left="244" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="10" Top="95" UseIME="FALSE" Width="140"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static0" Left="388" TabOrder="11" Top="64" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SEX" Enable="FALSE" Height="23" Id="Edit0" ImeMode="none" Left="394" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="12" Top="95" UseIME="FALSE" Width="40"></Edit>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape0" Left="407" LineColor="#dceaf7" Right="412" TabOrder="16" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static3" Left="418" Style="static" TabOrder="17" Text="성&#32;&#32;별" Top="69" VAlign="Middle" Width="51"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SEXCD" Enable="FALSE" Height="23" Id="Edit1" ImeMode="none" Left="437" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="18" Top="95" UseIME="FALSE" Width="40"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="57" Id="Static5" Left="489" TabOrder="19" Top="64" Width="90"></Static>
+		<Shape BKColor="#888888" Bottom="95" Height="5" Id="Shape1" Left="509" LineColor="#dceaf7" Right="514" TabOrder="20" Top="90" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static6" Left="520" Style="static" TabOrder="21" Text="신&#32;&#32;체" Top="83" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static7" Left="578" TabOrder="22" Top="64" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static8" Left="578" TabOrder="23" Top="92" Width="95"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static9" Left="610" Style="static" TabOrder="25" Text="신&#32;&#32;장" Top="69" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape2" Left="599" LineColor="#dceaf7" Right="604" TabOrder="24" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="TALLM" Enable="FALSE" Height="23" Id="Edit2" ImeMode="none" Left="583" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="26" Top="95" UseIME="FALSE" Width="85"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static10" Left="672" TabOrder="27" Top="64" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="WEIGT" Enable="FALSE" Height="23" Id="Edit3" ImeMode="none" Left="677" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="29" Top="95" UseIME="FALSE" Width="85"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static14" Left="766" TabOrder="30" Top="64" Width="95"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static17" Left="860" TabOrder="31" Top="64" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="BLDTY" Enable="FALSE" Height="23" Id="Edit5" ImeMode="none" Left="865" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="33" Top="95" UseIME="FALSE" Width="85"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static19" Left="954" TabOrder="34" Top="64" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="BDYCT" Enable="FALSE" Height="23" Id="Edit6" ImeMode="none" Left="959" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="36" Top="95" UseIME="FALSE" Width="85"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static21" Left="704" Style="static" TabOrder="38" Text="체&#32;&#32;중" Top="69" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape3" Left="693" LineColor="#dceaf7" Right="698" TabOrder="37" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static22" Left="799" Style="static" TabOrder="40" Text="시&#32;&#32;력" Top="69" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape4" Left="788" LineColor="#dceaf7" Right="793" TabOrder="39" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static23" Left="891" Style="static" TabOrder="42" Text="혈액형" Top="69" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape6" Left="880" LineColor="#dceaf7" Right="885" TabOrder="41" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static24" Left="981" Style="static" TabOrder="44" Text="건강상태" Top="69" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="81" Height="5" Id="Shape7" Left="970" LineColor="#dceaf7" Right="975" TabOrder="43" Top="76" Type="Ellipse" Width="5"></Shape>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="LEEYE" Enable="FALSE" Height="23" Id="Edit7" ImeMode="none" Left="772" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="45" Top="95" UseIME="FALSE" Width="40"></Edit>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="RIEYE" Enable="FALSE" Height="23" Id="Edit8" ImeMode="none" Left="815" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="46" Top="95" UseIME="FALSE" Width="40"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static25" Left="147" TabOrder="48" Top="124" Width="110"></Static>
+		<Shape BKColor="#888888" Bottom="142" Height="5" Id="Shape8" Left="163" LineColor="#dceaf7" Right="168" TabOrder="49" Top="137" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static26" Left="174" Style="static" TabOrder="50" Text="생년월일" Top="130" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static27" Left="255" TabOrder="51" Top="124" Width="173"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Enable="FALSE" Height="23" Id="Edit9" ImeMode="none" Left="379" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="52" Top="127" UseIME="FALSE" Width="45"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static28" Left="432" TabOrder="53" Top="124" Width="110"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static29" Left="462" Style="static" TabOrder="54" Text="입사일자" Top="130" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="142" Height="5" Id="Shape9" Left="452" LineColor="#dceaf7" Right="457" TabOrder="56" Top="137" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static31" Left="756" TabOrder="58" Top="124" Width="100"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static32" Left="662" TabOrder="57" Top="124" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="PCONT" Enable="FALSE" Height="23" Id="Edit11" ImeMode="none" Left="761" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="59" Top="127" UseIME="FALSE" Width="90"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static33" Left="694" Style="static" TabOrder="61" Text="종&#32;&#32;교" Top="130" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="142" Height="5" Id="Shape10" Left="682" LineColor="#dceaf7" Right="687" TabOrder="60" Top="137" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static34" Left="949" TabOrder="63" Top="124" Width="100"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static35" Left="855" TabOrder="62" Top="124" Width="95"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CHMCD" Enable="FALSE" Height="23" Id="Edit12" ImeMode="none" Left="954" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="64" Top="127" UseIME="FALSE" Width="90"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static36" Left="887" Style="static" TabOrder="66" Text="취&#32;&#32;미" Top="130" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="142" Height="5" Id="Shape11" Left="876" LineColor="#dceaf7" Right="881" TabOrder="65" Top="137" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static37" Left="175" Style="static" TabOrder="69" Text="생년월일" Top="162" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="174" Height="5" Id="Shape12" Left="164" LineColor="#dceaf7" Right="169" TabOrder="68" Top="169" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static38" Left="147" TabOrder="67" Top="156" Width="110"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static39" Left="255" TabOrder="71" Top="156" Width="794"></Static>
+		<Edit BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="ORADR" Enable="FALSE" Height="23" Id="Edit13" ImeMode="none" Left="260" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="70" Top="159" UseIME="FALSE" Width="784"></Edit>
+		<Shape BKColor="#888888" Bottom="174" Height="5" Id="Shape13" Left="163" LineColor="#dceaf7" Right="168" TabOrder="72" Top="169" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static40" Left="174" Style="static" TabOrder="73" Text="본적지주소" Top="162" VAlign="Middle" Width="81"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static41" Left="175" Style="static" TabOrder="76" Text="생년월일" Top="194" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="206" Height="5" Id="Shape14" Left="164" LineColor="#dceaf7" Right="169" TabOrder="75" Top="201" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static42" Left="147" TabOrder="74" Top="188" Width="110"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static43" Left="255" TabOrder="78" Top="188" Width="794"></Static>
+		<Edit BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="CUADR" Enable="FALSE" Height="23" Id="Edit14" ImeMode="none" Left="260" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="77" Top="191" UseIME="FALSE" Width="784"></Edit>
+		<Shape BKColor="#888888" Bottom="206" Height="5" Id="Shape15" Left="163" LineColor="#dceaf7" Right="168" TabOrder="79" Top="201" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static44" Left="174" Style="static" TabOrder="80" Text="현적지주소" Top="194" VAlign="Middle" Width="81"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static45" Left="175" Style="static" TabOrder="83" Text="병&#32;&#32;역" Top="238" VAlign="Middle" Width="51"></Static>
+		<Shape BKColor="#888888" Bottom="250" Height="5" Id="Shape16" Left="164" LineColor="#dceaf7" Right="169" TabOrder="82" Top="245" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static59" Left="566" TabOrder="84" Top="220" Width="110"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape21" Left="587" LineColor="#dceaf7" Right="592" TabOrder="86" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static60" Left="598" Style="static" TabOrder="87" Text="계&#32;&#32;급" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static61" Left="566" TabOrder="85" Top="248" Width="110"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="FCLCD" Enable="FALSE" Height="23" Id="Edit19" ImeMode="none" Left="571" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="88" Top="251" UseIME="FALSE" Width="100"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static47" Left="239" TabOrder="89" Top="220" Width="110"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape17" Left="266" LineColor="#dceaf7" Right="271" TabOrder="91" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static48" Left="277" Style="static" TabOrder="92" Text="역&#32;&#32;종" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static49" Left="239" TabOrder="90" Top="248" Width="110"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="FYGCD" Enable="FALSE" Height="23" Id="Edit15" ImeMode="none" Left="244" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="93" Top="251" UseIME="FALSE" Width="100"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static50" Left="348" TabOrder="94" Top="220" Width="110"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape18" Left="375" LineColor="#dceaf7" Right="380" TabOrder="96" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static51" Left="386" Style="static" TabOrder="97" Text="군&#32;&#32;별" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static52" Left="348" TabOrder="95" Top="248" Width="110"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="FVRCD" Enable="FALSE" Height="23" Id="Edit16" ImeMode="none" Left="353" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="98" Top="251" UseIME="FALSE" Width="100"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static53" Left="457" TabOrder="99" Top="220" Width="110"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape19" Left="484" LineColor="#dceaf7" Right="489" TabOrder="101" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static54" Left="495" Style="static" TabOrder="102" Text="병&#32;&#32;과" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static55" Left="457" TabOrder="100" Top="248" Width="110"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="FBGCD" Enable="FALSE" Height="23" Id="Edit17" ImeMode="none" Left="462" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="103" Top="251" UseIME="FALSE" Width="100"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static56" Left="675" TabOrder="104" Top="220" Width="115"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape20" Left="697" LineColor="#dceaf7" Right="702" TabOrder="106" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static57" Left="708" Style="static" TabOrder="107" Text="입대일자" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static58" Left="675" TabOrder="105" Top="248" Width="115"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static62" Left="789" TabOrder="108" Top="220" Width="115"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape22" Left="811" LineColor="#dceaf7" Right="816" TabOrder="110" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static63" Left="824" Style="static" TabOrder="111" Text="제대일자" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static64" Left="789" TabOrder="109" Top="248" Width="115"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static65" Left="903" TabOrder="112" Top="220" Width="146"></Static>
+		<Shape BKColor="#888888" Bottom="237" Height="5" Id="Shape23" Left="948" LineColor="#dceaf7" Right="953" TabOrder="114" Top="232" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static66" Left="959" Style="static" TabOrder="115" Text="비&#32;&#32;고" Top="225" VAlign="Middle" Width="51"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static67" Left="903" TabOrder="113" Top="248" Width="146"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SIKCM" Enable="FALSE" Height="23" Id="Edit21" ImeMode="none" Left="908" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="116" Top="251" UseIME="FALSE" Width="136"></Edit>
+		<Shape BKColor="#888888" Bottom="298" Height="5" Id="Shape24" Left="5" LineColor="#dceaf7" Right="10" TabOrder="118" Top="293" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static68" Left="12" Style="static" TabOrder="119" Text="부&#32;서" Top="286" VAlign="Middle" Width="32"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static70" Left="47" TabOrder="120" Top="281" Width="97"></Static>
+		<Edit BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="DPNM" Enable="FALSE" Height="23" Id="Edit22" ImeMode="none" Left="49" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="121" Top="284" UseIME="FALSE" Width="92"></Edit>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static71" Left="176" Style="static" TabOrder="124" Text="직&#32;&#32;&#32;급" Top="286" VAlign="Middle" Width="81"></Static>
+		<Shape BKColor="#888888" Bottom="298" Height="5" Id="Shape25" Left="165" LineColor="#dceaf7" Right="170" TabOrder="123" Top="293" Type="Ellipse" Width="5"></Shape>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="GRANM" Enable="FALSE" Height="23" Id="Edit23" ImeMode="none" Left="261" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="125" Top="284" UseIME="FALSE" Width="116"></Edit>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="GRADE" Enable="FALSE" Height="23" Id="Edit24" ImeMode="none" Left="380" LeftMargin="5" MaxLength="10" OnKillFocus="checkid" RightMargin="5" TabOrder="127" Top="284" UseIME="FALSE" Width="45"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static74" Left="435" TabOrder="128" Top="281" Width="136"></Static>
+		<Shape BKColor="#888888" Bottom="298" Height="5" Id="Shape26" Left="455" LineColor="#dceaf7" Right="460" TabOrder="132" Top="293" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static75" Left="465" Style="static" TabOrder="129" Text="주민등록번호" Top="286" VAlign="Middle" Width="95"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static76" Left="570" TabOrder="131" Top="281" Width="169"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="JUMIN" Enable="FALSE" Height="23" Id="Edit25" ImeMode="none" Left="574" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="130" Top="284" UseIME="FALSE" Width="160"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static77" Left="745" TabOrder="133" Top="281" Width="136"></Static>
+		<Shape BKColor="#888888" Bottom="298" Height="5" Id="Shape27" Left="765" LineColor="#dceaf7" Right="770" TabOrder="137" Top="293" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static78" Left="775" Style="static" TabOrder="134" Text="전&#32;화&#32;번&#32;호" Top="286" VAlign="Middle" Width="89"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static79" Left="880" TabOrder="136" Top="281" Width="169"></Static>
+		<Edit Align="CENTER" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="TELNB" Enable="FALSE" Height="23" Id="Edit26" ImeMode="none" Left="884" LeftMargin="5" OnKillFocus="checkid" RightMargin="5" TabOrder="135" Top="284" UseIME="FALSE" Width="160"></Edit>
+		<MaskEdit Align="Center" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" Column="PASSA" Enable="FALSE" Height="23" Id="MaskEdit0" Left="260" Mask="@@@@/@@/@@" TabOrder="138" Top="127" Type="STRING" Width="116"></MaskEdit>
+		<MaskEdit Align="Center" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" Column="GNDAT" Enable="FALSE" Height="23" Id="MaskEdit1" Left="547" Mask="@@@@/@@/@@" TabOrder="139" Top="127" Type="STRING" Width="105"></MaskEdit>
+		<MaskEdit Align="Center" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" Column="FIDAT" Enable="FALSE" Height="23" Id="MaskEdit2" Left="680" Mask="@@@@/@@/@@" TabOrder="140" Top="251" Type="STRING" Width="105"></MaskEdit>
+		<MaskEdit Align="Center" BindDataset="ds_HASS02" Border="Flat" BorderColor="#888888" Column="FODAT" Enable="FALSE" Height="23" Id="MaskEdit3" Left="794" Mask="@@@@/@@/@@" TabOrder="141" Top="251" Type="STRING" Width="105"></MaskEdit>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="25" Id="butPrt" ImageID="btn2_publ2" Left="972" OnClick="butPrt_OnClick" TabOrder="142" Top="34" Width="75"></Button>
+		<Button AutoDraw="FALSE" Cursor="HAND" Height="25" Id="butUp" ImageID="btn2_regi2" Left="892" OnClick="butUp_OnClick" TabOrder="142" Top="34" Width="75"></Button>
+		<File Bottom="287" Height="24" Id="ProFile" Left="92" Right="116" TabOrder="144" Top="263" Width="24"></File>
+		<CyHttpFile Height="24" Id="CyHttpFile0" Left="120" Top="263" Width="24"></CyHttpFile>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 민명규
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HASS02.xml
+ * ● PROGRAM DESCRIPTION  : 인사정보 조회
+ * ● DATE WRITTEN         : 2013.11.11
+ ----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+#include "script::fileupdown.js"
+
+var strSeparator = "	";
+
+/*
+* 2016.04.19 jhb
+* KA창원 인사T장은 KA전사업부 열람가능하도록 PGM수정
+* KA창원 이정호부장추가 C9040061
+* 부모page의 Lib값을 사용하기위해 삭제함.
+*/
+//var Lib1 = G_ds_user.GetColumn(0,"LIB1");    //CIGMA LIBRARY(PERESLIB              PSRESLIB)
+//var Lib2 = G_ds_user.GetColumn(0,"LIB2");    //MRP LIBRARY(PSEDBLIB                PSCDBLIB)
+//var Lib3 = G_ds_user.GetColumn(0,"LIB3");    //인사급여 LIBRARY(PSEDBLIB           PSCDBLIB.PSHDBLIB.PSSDBLIB)
+
+var company = G_ds_user.GetColumn(0,"COMPANY"); //PE      PS
+var comps = G_ds_user.GetColumn(0,"PLANT_CD"); //E1,      C1.H1.S1
+
+var nowDate = today();
+var file_name;
+var file_size;
+
+var gImgPath = "/picture/";
+var imgVpath=G_baseURL+"DIONE_UPDOWN_FILE";
+
+var imgUPDOWNpath="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/picture/";
+
+//HASS03이 아닌 경우에는 저장/발행 버튼 활성화
+var p_HASS03="";	//HASS03에서 사용
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode();
+	selectHASS02();	
+	gFcOnTopButtonColor("0");
+	
+	if(p_HASS03=="HASS03"){
+		butUp.Visible=false;
+		butPrt.Visible=false;
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	/*
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+	*/
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 그룹 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function selectHASS02(){
+	
+	var sKind		= "selectHASS02";						
+	var sMethodName = "service::pshumlib/selectHASS02.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HASS02=ds_HASS02";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@LIB3=" + quote(Lib3);
+	sArgument += "@SABUN=" + quote(SABUN);
+		
+	var str = dialog("Common::PGMLOAD_IMM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	var sabunname = SABUN;
+	
+	if(comps == 'E1'){
+		if(Length(ToString(SABUN)) = 5){
+			sabunname = "0" + SABUN;
+		}else if(Length(ToString(SABUN)) = 4){
+			sabunname = "00" + SABUN;
+		}else if(Length(ToString(SABUN)) = 3){
+			sabunname = "000" + SABUN;
+		}else if(Length(ToString(SABUN)) = 2){
+			sabunname = "0000" + SABUN;
+		}		 
+	}else{
+		if(Length(ToString(SABUN)) = 6){
+			sabunname = "0" + SABUN;
+		}else if(Length(ToString(SABUN)) = 5){
+			sabunname = "00" + SABUN;
+		}
+	}
+	
+	img01.ImageID = G_baseURL+"DIONE_UPDOWN_FILE/picture/" + ToLower(SubStr(comps,0,1)) + sabunname + ".jpg";
+	
+	fn_Tab_Search();
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	setExcel();
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+ /*--------------------------------------------------------------
+ * 탭 별 조회 함수 호출
+ ---------------------------------------------------------------*/
+function fn_Tab_Search()
+{	
+	if(tab0.TabIndex == 0){	
+		tab0.tab1.procs = SABUN;				
+		tab0.tab1.selectHASS02_TAB1();			
+	} else if(tab0.TabIndex == 1){
+		tab0.tab2.procs = SABUN;				
+		tab0.tab2.selectHASS02_TAB2();
+	} else if(tab0.TabIndex == 2){
+		tab0.tab3.procs = SABUN;				
+		tab0.tab3.selectHASS02_TAB3();
+	} else if(tab0.TabIndex == 3){
+		tab0.tab4.procs = SABUN;				
+		tab0.tab4.selectHASS02_TAB4();
+	} else if(tab0.TabIndex == 4){
+		tab0.tab5.procs = SABUN;				
+		tab0.tab5.selectHASS02_TAB5();
+	} else if(tab0.TabIndex == 5){
+		tab0.tab6.procs = SABUN;				
+		tab0.tab6.selectHASS02_TAB6();
+	} else if(tab0.TabIndex == 6){
+		tab0.tab7.procs = SABUN;				
+		tab0.tab7.selectHASS02_TAB7();
+	} else if(tab0.TabIndex == 7){
+		tab0.tab8.procs = SABUN;				
+		tab0.tab8.selectHASS02_TAB8();
+	} else if(tab0.TabIndex == 8){
+		tab0.tab9.procs = SABUN;				
+		tab0.tab9.selectHASS02_TAB9();
+	} else if(tab0.TabIndex == 9){
+		tab0.tab10.procs = SABUN;				
+		tab0.tab10.selectHASS02_TAB10();
+	} else if(tab0.TabIndex == 10){
+		tab0.tab11.procs = SABUN;				
+		tab0.tab11.selectHASS02_TAB11();
+	} else if(tab0.TabIndex == 11){
+		tab0.tab12.procs = SABUN;				
+		tab0.tab12.selectHASS02_TAB12();
+	}
+			
+}
+
+function butPrt_OnClick(obj)
+{		
+	var str = dialog("pshumlib::HMD020_rep.xml","SABUN=" + SABUN,"인사기록카드",900,1024,"TitleBar=false");		
+}
+
+
+function fn_Input()
+{
+}
+
+function fn_Delete()
+{
+}
+
+function fn_Save()
+{
+}
+
+function fn_print()
+{
+}
+
+function fn_Excel()
+{
+}
+
+function fn_Help()
+{
+}
+
+function butUp_OnClick(obj)
+{
+	
+	var blobbuffer;
+
+		FileDialog0.Filter = "Image Files(*.*)|*.*|";	
+		FileDialog0.Type = "OPEN";
+		if(FileDialog0.Open()){
+
+			file_name = FileDialog0.FileName;
+			var file_path = FileDialog0.FilePath;
+			var path = file_path + "\\" + file_name;
+			
+			img01.ImageID=path;
+			ProFile.FileName = path;
+						
+			var ext = split(file_name,'.');
+			//var imgName = ToLower(SubStr(comps,0,1)) + SABUN + "." + ToLower(ext[1]);
+			var imgName="";
+			if(comps == 'E1'){
+				imgName = ToLower(SubStr(comps,0,1)) + SABUN + "." + ToLower(ext[1]);
+			}else{
+				imgName = ToLower(SubStr(comps,0,1)) + lpad(SABUN,0,7) + "." + ToLower(ext[1]);
+			}
+			var	imgval = gImgPath + imgName;
+
+			var imgtype= "IMGBF";
+			
+			//데이터셋에 로우 추가
+			ds_uploadFile.addRow();
+			//다이얼로그에서 선택한 파일의 경로명(파일명포함)을 데이터셋에 저장
+			ds_uploadFile.SetColumn(ds_uploadFile.row,"fullname", path);
+			//다이얼로그에서 선택한 파일명을 데이터셋에 저장
+			ds_uploadFile.SetColumn(ds_uploadFile.row,"filename", imgName);	
+		
+			if(!file_Upload()){
+				ds_uploadFile.DeleteAll();
+				FileDialog0.FileName= "";
+				return false;
+			}
+			else {
+				FileDialog0.FileName= "";
+			}
+		}
+		else{
+			alert(setPopMessage("3040"));
+		}
+}
+
+function file_Upload(obj)
+{
+	
+	var ret;
+	
+	//파일선택 버튼을 이용해서 선택된 파일이 없는 경우 처리 생략
+	if(ds_uploadFile.rowcount != 0){
+	
+		//데이터셋 로우 수 만큼 루프
+		for ( var i = 0 ; i < ds_uploadFile.rowcount ; i++ )
+		{
+			// 풀경로 취득
+			var file_url = ds_uploadFile.getColumn(i,"fullname");
+			
+			// 파일 사이즈 취득
+			file_size = CyHttpFile0.GetFileSizeLocal(file_url);
+			trace("파일사이즈" + file_size);
+			
+			//사이즈 체크(5MB제한)
+			if(file_size > 5000000){
+				alert("업로드 가능 용량은 5MB입니다. 확인하고 다시 시도해주십시오.");
+				return false;
+			}
+			
+			var extension = split(file_name,'.');
+		
+			if(extension[1] != 'jpg'){
+				alert("JPG 파일만 등록 가능합니다.");
+				img01.ImageID = "";
+				return false;
+			}	
+		
+			//로컬에서 선택한 파일명을 취득하여 변수에 설정
+			var str_param = ds_uploadFile.getColumn(i,"filename");
+			//업로드 할 서버 경로와 파일명
+			var str_param_server = imgUPDOWNpath + str_param;
+			
+			//스크립트 파일의 함수 호출 
+			ret = gfn_FileWrite(CyHttpFile0, file_url, str_param_server, i, "prog_bar", CyHttpFile0);
+									
+			//호출함수 리턴값 처리
+			if ( ret[0] == "FAIL" )
+			{
+				alert(ret[1]);
+				break;
+			}
+		}
+	}
+	return true;	
+}]]></Script>
+</Window>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="960" Id="ogm203_rep" Left="8" OnLoadCompleted="OnLoadCompleted" PidAttrib="7" Title="보전작업보고서발행" TooltipFont="Default,0" Top="8" Ver="1.0" Width="768" WorkArea="true">
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" OnClick="titleBar_OnClick" TabOrder="1" Width="770"></Image>
+		<Ubi Bottom="960" Height="928" Id="Ubi0" Right="768" Top="32" Width="768">
+			<_PersistData>&#13;&#10;/6wXxsRZ/wAAAQBgTwAAd+lfAPjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+		<Button Height="25" Id="repClose" ImageID="closeBtn" Left="672" OnClick="repClose" TabOrder="3" Text="닫기" Width="75"></Button>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="8" TabOrder="4" Top="8" Width="760"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+
+function OnLoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	//Ubi0.setJrfFileDir("http://10.72.209.23/ui/PSOGMLIB/report/");
+	Ubi0.setJrfFileDir(G_baseURL+"ui/PSOGMLIB/report/");
+	Ubi0.setJrfFileName("ogm203_rep.jrf");
+	Ubi0.SetDataset("ds_ogm203_rep", "ds_ogm203_rep");
+	Ubi0.SetDataset("ds_ogm203_prtRep", "ds_ogm203_prtRep");
+	//Ubi0.SetDataset("ds_ogm203_prtRep", "ds_ogm203_prtRep");
+
+//	ubi0.SetArgument("DHCODE", search_dhcode.Text+"("+search_dhcode.Value+")");
+//	ubi0.SetArgument("WRKDT", parent.search_wrkdt.Text);	
+//	ubi0.SetArgument("CURRENT_TIME", substr(Getdate(),8,2)+":"+substr(Getdate(),10,2)+":"+substr(Getdate(),12,2));
+	Ubi0.Retrieve();
+}
+
+function getDesign(){	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function repClose(obj)
+{
+	close();
+}
+]]></Script>
+</Window>

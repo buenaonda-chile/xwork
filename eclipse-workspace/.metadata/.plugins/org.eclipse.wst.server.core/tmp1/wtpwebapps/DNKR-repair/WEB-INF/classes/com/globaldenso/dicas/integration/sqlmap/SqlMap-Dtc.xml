@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.DtcDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.DtcDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="exhaustReg" column="EXHAUST_REG" javaType="java.lang.String" />
+        <result property="exhaustRegNm" column="EXHAUST_REG_NM" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+        <result property="engineTypeNm" column="ENGINE_TYPE_NM" javaType="java.lang.String" />
+		<result property="dtcCode" column="DTC_CODE" javaType="java.lang.String" />
+		<result property="dtcEnNm" column="DTC_EN_NM" javaType="java.lang.String" />
+		<result property="dtcKrNm" column="DTC_KR_NM" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+            A.ID
+    ,       A.EXHAUST_REG
+    ,       B.CODE_KO_NM AS EXHAUST_REG_NM
+    ,       A.ENGINE_TYPE
+    ,       C.CODE_KO_NM AS ENGINE_TYPE_NM
+    ,       A.DTC_CODE
+    ,       A.DTC_EN_NM
+    ,       A.DTC_KR_NM
+    ,       A.RGSTR_ID
+    ,       A.RGST_DT
+    ,       A.UPDTR_ID
+    ,       A.UPDT_DT
+    FROM    TB_DC_DTC_INFO A
+    INNER JOIN TB_CM_CODE B
+      ON B.GRP_CD = 'C006'
+       AND B.CODE_CD = A.EXHAUST_REG
+    INNER JOIN TB_CM_CODE C
+      ON C.GRP_CD = 'C021'
+        AND C.CODE_CD = A.ENGINE_TYPE
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+          <if test="criteria.dateSearchOption == '01'">
+              <if test="criteria.dtcKrNm != null and criteria.dtcKrNm != ''">
+                  AND DTC_CODE  LIKE '%'||#{criteria.dtcKrNm}||'%'
+              </if>
+          </if>
+          <if test="criteria.dateSearchOption == '02'">
+              <if test="criteria.dtcKrNm != null and criteria.dtcKrNm != ''">
+                  AND DTC_KR_NM  LIKE '%'||#{criteria.dtcKrNm}||'%'
+              </if>
+          </if>
+          <if test="criteria.dateSearchOption == '03'">
+              <if test="criteria.dtcKrNm != null and criteria.dtcKrNm != ''">
+                  AND DTC_EN_NM  LIKE '%'||#{criteria.dtcKrNm}||'%'
+              </if>
+          </if>
+          <if test="criteria.dateSearchOption == null">
+              <if test="criteria.dtcKrNm != null and criteria.dtcKrNm != ''">
+                  AND  DTC_KR_NM  LIKE '%'||#{criteria.dtcKrNm}||'%'
+              </if>
+          </if>
+      </if>
+
+      <if test="criteria.exhaustReg != null and criteria.exhaustReg != ''">
+          AND A.EXHAUST_REG LIKE '%'||#{criteria.exhaustReg}||'%'
+      </if>
+
+      <if test="criteria.engineType != null and criteria.engineType != ''">
+          AND A.ENGINE_TYPE LIKE '%'||#{criteria.engineType}||'%'
+      </if>
+  </sql>
+
+  <sql id="select_02">
+
+    SELECT
+    A.ID
+    ,       A.DTC_CODE
+    ,       A.DTC_KR_NM
+    FROM    TB_DC_DTC_INFO A
+    WHERE ROWID IN (SELECT MAX(ROWID) FROM TB_DC_DTC_INFO GROUP BY DTC_CODE)
+    ORDER BY A.DTC_CODE ASC
+
+  </sql>
+
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.DtcDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+    <select id="searchByCondition2" resultMap="codeMap" parameterType="Map">
+
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS RN, A.*
+        FROM (
+        <include refid="select_02" />
+        <where>
+            <include refid="where_01"/>
+        </where>
+        ) A
+        ORDER BY A.ID
+        ) AA
+
+        <if test="pageable != null">
+            WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+        </if>
+        ORDER BY RN
+
+    </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.DtcDomain">
+
+    INSERT INTO TB_DC_DTC_INFO (
+		ID
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,DTC_CODE
+		,DTC_EN_NM
+		,DTC_KR_NM
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{exhaustReg}
+		,#{engineType}
+		,#{dtcCode}
+		,#{dtcEnNm}
+		,#{dtcKrNm}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_DTC_INFO.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.DtcDomain">
+
+    UPDATE TB_DC_DTC_INFO SET
+		EXHAUST_REG = #{exhaustReg}
+		,ENGINE_TYPE = #{engineType}
+		,DTC_CODE = #{dtcCode}
+		,DTC_EN_NM = #{dtcEnNm}
+		,DTC_KR_NM = #{dtcKrNm}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.DtcDomain">
+
+    DELETE FROM TB_DC_DTC_INFO
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

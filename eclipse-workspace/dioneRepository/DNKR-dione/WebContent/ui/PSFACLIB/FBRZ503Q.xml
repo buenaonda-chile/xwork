@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="QR&#32;Truck&#32;Loading&#32;완료상세조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FBRZ503Q"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BM008PR"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="65" Id="searchBar" TabOrder="3" Top="31" Width="1060"></Static>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FBRZ503Q" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="520" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="Grid0_OnHeadClick" OnKeyDown="Grid0_OnKeyDown" Right="1058" TabOrder="2" TabStop="FALSE" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="122"/>
+						<col width="118"/>
+						<col width="118"/>
+						<col width="78"/>
+						<col width="118"/>
+						<col width="99"/>
+						<col width="43"/>
+						<col width="92"/>
+						<col width="110"/>
+						<col width="149"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="출하일자"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="생산지시일"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="생산전표일"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="출하수량"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="실생산일자"/>
+						<cell bkcolor="#dfdfdf" col="5" colspan="2" display="text" text="업체코드"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="공정코드"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="트럭번호"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="업체품번"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="RSIDT" display="date" suppress="1"/>
+						<cell align="center" col="1" colid="RPROD" display="date"/>
+						<cell align="center" col="2" colid="TRNDTZ" display="date"/>
+						<cell align="right" col="3" colid="RSIQT" display="number"/>
+						<cell align="center" col="4" colid="PDTZ6Z" display="date"/>
+						<cell align="center" col="5" colid="RCUSN" display="normal"/>
+						<cell align="center" col="6" colid="RSHIP" display="normal"/>
+						<cell align="left" col="7" colid="RPRCD" display="text"/>
+						<cell align="left" col="8" colid="RTRKN" display="text"/>
+						<cell align="left" col="9" colid="CPRTNT" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="4" TabOrder="5" Text="품&#32;&#32;&#32;&#32;&#32;&#32;&#32;번" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="528" TabOrder="7" Text="출&#32;하&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static6" Left="645" Style="static" TabOrder="6" Top="34" VAlign="Middle" Width="215"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="528" TabOrder="8" Text="생산&#32;전표일" Top="66" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="122" Style="static" TabOrder="9" Top="34" VAlign="Middle" Width="398"></Static>
+		<Edit Height="20" Id="ed_pspno" ImeMode="none" Left="124" MaxLength="15" OnChanged="common_OnChanged" OnKillFocus="ed_pspno_OnKillFocus" TabOrder="3" Top="37" UpperOnly="TRUE" UseIME="FALSE" Width="130"></Edit>
+		<Static Height="14" Id="st_pspno" Left="261" TabOrder="11" Top="40" Width="225"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="259" TabOrder="12" Top="54" Width="230"></Static>
+		<Image Cursor="HAND" Height="17" Id="imgPspno" ImageID="ic_search" Left="493" OnClick="imgPspno_OnClick" Static="FALSE" TabOrder="4" TabStop="FALSE" Top="40" Width="20"></Image>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="645" Style="static" TabOrder="13" Top="66" VAlign="Middle" Width="216"></Static>
+		<Calendar Height="22" Id="ca_FRSIDT" Left="652" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="5" Top="37" Value="TODAY" Width="90"></Calendar>
+		<Calendar Height="22" Id="ca_TRSIDT" Left="763" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="6" Top="37" Value="TODAY" Width="90"></Calendar>
+		<Static Align="Center" Height="11" Id="Static2" Left="746" TabOrder="16" Text="~" Top="42" VAlign="Middle" Width="10"></Static>
+		<Calendar Height="22" Id="ca_FTRNDTZ" Left="652" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="7" Top="69" Width="90"></Calendar>
+		<Static Align="Center" Height="11" Id="Static4" Left="746" TabOrder="19" Text="~" Top="74" VAlign="Middle" Width="10"></Static>
+		<Calendar Height="22" Id="ca_TTRNDTZ" Left="763" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="8" Top="69" Value="TODAY" Width="90"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="186" TabOrder="21" Text="생산&#32;지시일" Top="66" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static8" Left="303" Style="static" TabOrder="23" Top="66" VAlign="Middle" Width="216"></Static>
+		<Calendar Height="22" Id="ca_FRPROD" Left="310" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="21" Top="69" Width="90"></Calendar>
+		<Static Align="Center" Height="11" Id="Static9" Left="404" TabOrder="24" Text="~" Top="74" VAlign="Middle" Width="10"></Static>
+		<Calendar Height="22" Id="ca_TRPROD" Left="421" OnChanged="common_OnChanged" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="22" Top="69" Value="TODAY" Width="90"></Calendar>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FBRZ503Q.xml
+ * ● PROGRAM DESCRIPTION  : QR_TruckLoading완료상세조회
+ * ● DATE WRITTEN         : 2011.08.17
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+/*
+var Lib1 = 'PSRESLIB';
+var Lib2 = 'PSCDBLIB';
+var company = 'PS';
+var comps = 'C1';
+*/
+var nowDate = today();
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 
+	MainGrid.UserData = MainGrid.Height;
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053"); //상세화면 메시지
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	MainGrid.RowHeight = G_ds_design.GetColumn(0,"RowHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	
+	//displayDiv.Width = G_ds_design.GetColumn(0,"Width");
+}
+
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getFBRZ503Q(){
+	if(length(trim(ed_PSPNO.Text)) <1){
+		alert("품번은 필수입력입니다.");
+		ed_PSPNO.SetFocus();
+		return;
+	}
+	var FRSIDT = iif(length(trim(ca_FRSIDT.Value)) <1,"0",trim(ca_FRSIDT.Value));
+	var TRSIDT = iif(length(trim(ca_TRSIDT.Value)) <1,"0",trim(ca_TRSIDT.Value));
+	var FRPROD = iif(length(trim(ca_FRPROD.Value)) <1,"0",trim(ca_FRPROD.Value));
+	var TRPROD = iif(length(trim(ca_TRPROD.Value)) <1,"0",trim(ca_TRPROD.Value));
+	var FTRNDTZ = iif(length(trim(ca_FTRNDTZ.Value)) <1,"0",trim(ca_FTRNDTZ.Value));
+	var TTRNDTZ = iif(length(trim(ca_TTRNDTZ.Value)) <1,"0",trim(ca_TTRNDTZ.Value));
+	
+	http.Sync = true;
+	var sKind		= "getFBRZ503Q";
+	var sMethodName = "service::psfaclib/selectFBRZ503Q.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FBRZ503Q=ds_FBRZ503Q";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@GUB=" + quote(cb_grpcd.Value);
+	sArgument += "@PSPNO=" + quote(trim(ed_PSPNO.Text));
+	sArgument += "@FRSIDT=" + quote(FRSIDT);  //출하일자 FROM
+	sArgument += "@TRSIDT=" + quote(TRSIDT);  //출하일자 TO
+	sArgument += "@FRPROD=" + quote(FRPROD);  //생산지시일 FROM
+	sArgument += "@TRPROD=" + quote(TRPROD);  //생산지시일 TO
+	sArgument += "@FTRNTDZ=" + quote(FTRNDTZ);  //생산전표일 FROM
+	sArgument += "@TTRNTDZ=" + quote(TTRNDTZ);  //생산전표일 TO
+	var str = dialog("Common::PGMLOAD_FAC.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "QR_TruckLoading완료상세조회";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|QR_TruckLoading완료상세조회";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FBRZ503Q.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getFBRZ503Q();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+
+function imgPspno_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_pspno.Text);
+	if (length(trim(ed_pspno.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "A1";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_pspno.Text = rtn[0];
+		st_pspno.Text = rtn[1];
+	}
+}
+
+function ed_pspno_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//품번Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectBM008PR.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_BM008PR=ds_BM008PR";
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " ITNBR=" + quote(obj.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_BM008PR.GetRowCount() < 1){
+		alert(setPopMessage("1501"));
+		setMessage("1501");	
+		ed_pspno.SetFocus();
+		return;
+	}
+	if (ds_BM008PR.GetRowCount() > 0){
+		st_pspno.Text=ds_BM008PR.GetColumn(0,"ITDSC");
+	}
+	http.usewaitcursor = true;	
+}
+]]></Script>
+</Window>

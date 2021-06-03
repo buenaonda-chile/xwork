@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.FinlCustInfoBaseDao">
+
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="FinlCustInfoBaseDomain" type="FinlCustInfoBaseDomain">
+    	<result property="endccd" column="endccd" />
+    	<result property="endcnm" column="endcnm" />
+    	<result property="regu" column="regu" />
+    	<result property="regd" column="regd" />
+    	<result property="modu" column="modu" />
+    	<result property="modd" column="modd" />
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="FinlCustInfoBaseDomain" parameterType="FinlCustInfoBaseDomain">
+    	select
+    		trim(endccd) as endccd
+    		,trim(endcnm) as endcnm
+    		,regu
+    		,regd
+    		,modu
+    		,modd
+    	from PSZDBLIB.SPZ100PF
+    	where
+    		'SqlMap-FinlCustInfoBase.searchByCondition' = 'SqlMap-FinlCustInfoBase.searchByCondition'
+    	<if test='endccd != null and !endccd.equalsIgnoreCase("")'>
+			AND endccd = #{endccd}
+		</if>
+		<if test='endcnm != null and !endcnm.equalsIgnoreCase("")'>
+			AND endcnm = #{endcnm}
+		</if>
+		order by endccd
+		
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="FinlCustInfoBaseDomain">
+         SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SPZ100PF
+        WHERE 
+        	'SqlMap-FinlCustInfoBase.searchCount' = 'SqlMap-FinlCustInfoBase.searchCount'
+        AND endcnm = #{endcnm} 
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="FinlCustInfoBaseDomain">
+    	insert into PSZDBLIB.SPZ100PF(
+    		/* 'SqlMap-FinlCustInfoBase.create' = 'SqlMap-FinlCustInfoBase.create' */
+    		endccd,endcnm,regu,regd
+    	) values(
+    		 (SELECT 'M' || REPEAT('0', 3-LENGTH(TRIM(CHAR(NEXTVAL FOR PSZDBLIB.SAL_FINLCUSTTYPE_SEQ)))) || CHAR(NEXTVAL FOR PSZDBLIB.SAL_FINLCUSTTYPE_SEQ) AS AA 
+    		 FROM SYSIBM.SYSDUMMY1)
+    		,#{endcnm}
+    		,#{regu}
+    		,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    		
+    	)
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="FinlCustInfoBaseDomain">
+    	 
+    	update PSZDBLIB.SPZ100PF
+    	set
+    		endcnm = #{endcnm}
+    		,modu = #{modu}
+    		,modd = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+    	where
+    		'SqlMap-FinlCustInfoBase.update' = 'SqlMap-FinlCustInfoBase.update'
+    	AND endccd = #{endccd}
+    
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="FinlCustInfoBaseDomain">
+        DELETE 
+      	FROM 
+       		PSZDBLIB.SPZ100PF
+      	WHERE
+	       	'SqlMap-FinlCustInfoBase.delete' = 'SqlMap-FinlCustInfoBase.delete'
+        AND endccd = #{endccd}
+    </delete>
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete2" parameterType="FinlCustInfoBaseDomain">
+        DELETE 
+      	FROM 
+       		PSZDBLIB.SPZ110PF
+      	WHERE
+	       	'SqlMap-FinlCustInfoBase.delete' = 'SqlMap-FinlCustInfoBase.delete'
+        AND endccd = #{endccd}
+    </delete>
+    
+
+</mapper>

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="제품BarCode&#32;자료생성작업" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_MST040PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCod">
+				<Contents>
+					<colinfo id="code" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+					<record>
+						<code>PE</code>
+						<code_name>DNKE</code_name>
+					</record>
+					<record>
+						<code>PS</code>
+						<code_name>DNKA</code_name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Static Align="Center" BKColor="red" Color="MENU" Font="Default,10,Bold" Height="64" Id="st_Msg" Left="256" TabOrder="3" Text="제품BarCode&#32;자료생성작업&#32;중입니다.......&#32;&#13;&#10;&#13;&#10;장시간&#32;화면이&#32;멈추어&#32;있거나&#32;이상발생시&#32;정보관리팀으로&#32;연락바랍니다." Top="392" VAlign="Middle" Visible="FALSE" Width="552"></Static>
+		<Div Height="276" Id="Div0" Left="231" TabOrder="3" Text="Div0" Top="108" Width="596">
+			<Contents>
+				<Static Align="Center" Font="Default,12,Bold" Height="31" Id="Static0" Left="100" TabOrder="0" Text="◆&#32;제품BarCode&#32;자료생성작업◆" Top="32" VAlign="Middle" Width="361"></Static>
+				<Button Cursor="HAND" Height="28" Id="btn_process" ImageID="sum_생성" Left="264" OnClick="fn_Remote" TabOrder="1" Top="240" Width="75"></Button>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static12" Left="156" TabOrder="4" Text="지&#32;시&#32;일&#32;자" Top="149" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static13" Left="274" Style="static" TabOrder="5" Top="149" VAlign="Middle" Width="96"></Static>
+				<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_PRODY" Left="278" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="153" Value="TODAY" Width="88"></Calendar>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static5" Left="156" TabOrder="5" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="117" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static7" Left="274" Style="static" TabOrder="6" Top="117" VAlign="Middle" Width="96"></Static>
+				<Combo CodeColumn="code2" DataColumn="code_name" Editable="TRUE" Height="19" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="278" TabOrder="2" Top="120" Width="88"></Combo>
+			</Contents>
+		</Div>
+		<WTA_RemoteCall Bottom="610" Height="34" Id="WTA_RemoteCall0" Left="24" Right="264" Top="576" Visible="FALSE" Width="240"></WTA_RemoteCall>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FPWS700C.xml
+ * ● PROGRAM DESCRIPTION  : 제품BarCode 자료생성작업
+ * ● DATE WRITTEN         : 2014.04.16
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var pgmLib = "*LIBL";
+var pgmName = "FPWS700RC";
+//var pgmName = "FPWS700RCT";
+var param = "";
+var exeTime = 1200;
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부  1:조회,excel                1.1:조회,발행,excel                 1.2:조회     
+	                          //                       2.1:조회,추가,삭제,저장     2.2:조회,추가,삭제,저장,excel       2.3:조회,저장,excel
+	                          //                       2.4:조회,추가,저장          2.5:저장                            2.6:조회,삭제,저장
+	                          //                       2.7:조회,추가,저장,excel 		
+	
+	//st_Msg.Visible = false;
+	Div0.cmb_PRODY.SetFocus();
+}
+
+function getComCode(){
+	http.Sync=true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	Div0.ComboBoxPlant.Value=comps;
+}
+
+/********************************************************************** 
+ * 내용설명 : 마감
+ * 주요변수 : 
+ **********************************************************************/ 
+function fn_Remote(){
+	Div0.cmb_PRODY.BKColor="white";
+
+	if(length(trim(Div0.cmb_PRODY.Value)) < 8){
+		Div0.cmb_PRODY.BKColor="paleturquoise";
+		alert(setPopMessage("6076"));  //[알림]지시일자를 입력하세요.
+		setMessage("6076");	
+		Div0.cmb_PRODY.SetFocus();
+		return;
+	}
+
+	if(confirm(Div0.cmb_PRODY.Text + " 제품BarCode 자료생성작업입니다. 작업하시겠습니까? ") == false) return;
+
+	st_Msg.Visible = true;
+	Div0.Enable = false;
+	SetWaitCursor(true);
+	SetCapture();
+	
+	/* 삭제 : 2019.11.28 NEWDIONE로 SSO관리전환
+	//as400 USERID Get
+	http.Sync = true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::user/selectSsoAccount.do";   	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";    		// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += " USER_ID="    + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	sArgument += " INOUT_GUBN=" + quote("I");	
+	sArgument += " COMPANY="    + quote(company);
+	sArgument += " SYSTEM_SEQ=" + quote("4");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_ssoaccount.GetRowCount() < 1){
+		alert(setPopMessage("1014"));
+		setMessage("1014");	
+		return;
+	}	
+	*/
+	//사업부별 공통ID(as400 USERID)로 실행
+	var iDget = getRemotecallID(comps);
+	if (iDget != "ERROR"){
+		callUser = iDget;
+		callPass = iDget;
+	}else{
+		alert(setPopMessage("1444"));
+		setMessage("1444");	
+		return;
+	}
+	//리모트콜 실행
+	param = Div0.ComboBoxPlant.Value + Div0.cmb_PRODY.Value;
+	
+	//param = Div0.ComboBoxPlant.Value + Div0.cmb_PRODY.Value + ds_ssoaccount.GetColumn(0,"SYSTEM_ID");
+	for(i=length(param)+1;i<=40;i++){
+		param += " ";
+	}
+	param += callUser;		
+	for(j=1;j<=10-length(callUser);j++){
+		param += " ";
+	}
+	param += '000';
+
+	st_Msg.Visible = true;
+	Div0.Enable = false;
+	SetWaitCursor(true);
+	SetCapture();
+
+	WTA_RemoteCall0.RC_SetAttrValue(0,"2984",exeTime);	
+	
+	// 연결 (접속아이피 , 아이디, 비밀번호)	
+	var rtn = WTA_RemoteCall0.RC_Connect(callIp,callUser,callPass);
+
+	//접속성공시 
+	if(rtn != 0){
+		//프로그램 Call (라이브러리명, 프로그램명, 인자값, 크기);
+		var rtn2 = WTA_RemoteCall0.RC_RmtPgmCall(pgmLib,pgmName,param,pgmSize);
+		//정상적으로 수행했을 시
+		if(rtn2 != 0){
+			ReleaseCapture();
+			SetWaitCursor(false);
+			st_Msg.Visible = false;
+			if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "999") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+
+				//마감history에 저장
+				var sKind		= "setmst049";						
+				var sMethodName = "service::pscomlib/saveMST049.do";     		// 서버에서 호출 될 Method 명
+				var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+				var sOutDataSet = "";    		 								// 조회 후 돌려 받을 DataSet 명칭
+				var sArgument   = "";
+				sArgument += " LIB2=" + quote(Lib2);
+				sArgument += " COMPS=" + quote(Div0.ComboBoxPlant.Value);
+				sArgument += " PGSRC=" + quote("FPWS700C");
+				sArgument += " PGMNM=" + quote("제품BarCode 자료생성");
+				sArgument += " PDATE=" + quote(Div0.cmb_PRODY.Value);
+				sArgument += " JOBID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+				sArgument += " BIGO1=" + quote("FFPW710PF FFPW701PF FPW704PF BD303PR");
+				Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+				alert(setPopMessage("1001")); //  정상적으로 처리가 완료되었습니다.	
+				setMessage("1001");		
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "888") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				var ruser = trim(substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,10));
+				var rcount = toNumber(substr(WTA_RemoteCall0.RC_GetReturnParm(1),60,2))-1;
+				alert("사용자("+ruser+")외 "+rcount+"명이 사용중입니다. 작업이 불가능 합니다.");
+				//alert(setPopMessage("1008"));	// 현재 시스템에 락이 걸렸습니다. 전산관리자에게 문의하세요.
+				//setMessage("1008");
+				return false;
+			} else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "777") {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("1002")); //[경고] 처리 중 오류가 발생하였습니다.
+				setMessage("1002");	
+				return false;
+			}else if (substr(WTA_RemoteCall0.RC_GetReturnParm(1),50,3) == "666") {
+				alert(WTA_RemoteCall0.RC_GetReturnParm(1));
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("4020")); //[확인] 마감년월을 확인바랍니다.
+				setMessage("4020");	
+				return false;
+			}else {
+				WTA_RemoteCall0.RC_Disconnect();	//연결종료
+				Div0.Enable = true;
+				alert(setPopMessage("1015")); //[경고] AS400 CL 처리 중 오류가 발생하였습니다.
+				setMessage("1015");	
+				return false;
+			}
+		}else{
+			var bstrErrorMessage = WTA_RemoteCall0.bstrErrorMessage;
+			WTA_RemoteCall0.RC_Disconnect();	//연결종료
+			ReleaseCapture();
+			SetWaitCursor(false);
+			//오류 코드 경고창
+			alert("에러 메세지=======>" + bstrErrorMessage);
+		}
+	//접속실패시
+	}else{
+		var ulErrorCode = WTA_RemoteCall0.ulErrorCode;
+		WTA_RemoteCall0.RC_Disconnect();	//연결종료
+		ReleaseCapture();
+		SetWaitCursor(false);
+		//오류 코드 경고창
+		alert("접속 실패 오류=======>" + ulErrorCode);
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- svcId	Transaction 고유 ID
+ * 			- rtnCd 	에러코드
+ * 			- rtnMsg 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(rtnCd<0){
+		ReleaseCapture();
+		SetWaitCursor(false);
+		alert(setPopMessage("5008"));  //[오류] 마감처리는 진행되었으나 마감년월을 관리마스타(MST040PF)에 저장 실패. 
+		setMessage("5008");
+	}else{
+		ReleaseCapture();
+		SetWaitCursor(false);
+		st_Msg.Visible = false;
+		alert(setPopMessage("1001")); //[알림] 정상적으로 처리가 완료되었습니다.
+		setMessage("1001");
+	}
+}
+
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("0"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+]]></Script>
+</Window>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.LogDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="Log" type="LogDomain">
+        <result property="logIdx" column="LOG_IDX" />
+        <result property="logId" column="LOG_ID" />
+        <result property="logUri" column="LOG_URI" />
+        <result property="logDate" column="LOG_DATE" />
+        <result property="mcdCode" column="MCD_CODE" /> 
+        <result property="mcdName" column="MCD_NAME" />
+        <result property="logIp" column="LOG_IP" />
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="clsName" column="CLS_NAME" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="empName" column="EMP_NAME" />
+        <result property="empId" column="EMP_ID" /> 
+    </resultMap>
+
+    <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Log" parameterType="LogDomain">
+        select 
+                LOG_IDX
+              , LOG_ID
+              , LOG_URI
+              , LOG_DATE
+              , MCD_CODE
+              , LOG_IP
+              , EMP_NUMBER
+                
+        from 
+                DNKR_LOG
+              
+        where 
+                'SqlMap-Log.searchByKey' = 'SqlMap-Log.searchByKey'
+            and LOG_IDX = #{logIdx}
+            <!-- and A.LANGUAGE = #{language} -->
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Log"
+        parameterType="LogDomain">
+        select 
+                LOG_IDX
+              , LOG_ID
+              , LOG_URI
+              , LOG_DATE
+              , MCD_CODE
+              , LOG_IP
+              , EMP_NUMBER
+              , EMP_NAME
+              , EMP_ID
+        from 
+                DNKR_LOG 
+        where 
+                'SqlMap-Log.searchByCondition' = 'SqlMap-Log.searchByCondition'
+        <if test="logIdx != null and logIdx != ''">
+            and LOG_IDX = #{logIdx}
+        </if>
+        <if test="logId != null and logId != ''">
+            and LOG_ID = #{logId}
+        </if>
+        <if test="logUri != null and logUri != ''">
+            and LOG_URI = #{logUri}
+        </if>
+        <if test="logDate != null">
+            and LOG_DATE = #{logDate}
+        </if>
+        <if test="mcdCode != null and mcdCode != ''">
+            and MCD_CODE = #{mcdCode}
+        </if>
+        <if test="logIp != null and logIp != ''">
+            and LOG_IP = #{logIp}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and EMP_NUMBER = #{empNumber}
+        </if> 
+        <if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+	            and (to_char(LOG_DATE,'yyyy-mm-dd') BETWEEN #{startDate} AND #{endDate})
+	    </if>
+        order by 
+                LOG_IDX desc
+    </select>
+
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="Log"
+        parameterType="LogDomain">
+        select 
+                LOG_IDX
+              , LOG_ID
+              , LOG_URI
+              , LOG_DATE
+              , MCD_CODE
+              , DECODE(MCD_NAME, NULL, '로그인', MCD_NAME) AS MCD_NAME
+              , LOG_IP
+              , EMP_NUMBER
+              , CLS_NAME
+              , LOC_NAME
+              , EMP_NAME
+              , EMP_ID
+        from (
+            select
+                    A.LOG_IDX  AS LOG_IDX
+	              , A.LOG_ID AS LOG_ID
+	              , A.LOG_URI AS LOG_URI
+	              , A.LOG_DATE AS LOG_DATE
+	              , A.MCD_CODE AS MCD_CODE
+	              , C.MCD_NAME AS MCD_NAME
+	              , A.LOG_IP AS LOG_IP
+	              , A.EMP_NUMBER AS EMP_NUMBER
+	              , D.REL_NAME AS CLS_NAME
+	              , E.REL_NAME AS LOC_NAME
+	              , B.EMP_NAME AS EMP_NAME
+	              , B.EMP_ID AS EMP_ID
+	              , row_number() over (order by A.LOG_IDX desc) AS ROW_NUM
+            from 
+                      DNKR_LOG A
+            left join DNKR_EMP B
+            on   	A.EMP_NUMBER = B.EMP_NUMBER
+            left join DNKR_MENU_CODE_NM C
+            on   	A.MCD_CODE = C.MCD_CODE
+            and 	C.CMC_CODE = #{cmcCode}      
+            left join DNKR_RELATION_NM D
+            on   	B.CLS_CODE = D.REL_CODE
+            and 	D.CMC_CODE = #{cmcCode}
+            left join DNKR_RELATION_NM E
+            on   	B.LOC_CODE = E.REL_CODE
+            and 	E.CMC_CODE = #{cmcCode} 
+            where 
+                    'SqlMap-Log.searchByConditionForPaging' = 'SqlMap-Log.searchByConditionForPaging'
+	        <if test="logIdx != null and logIdx != ''">
+	            and A.LOG_IDX = #{logIdx}
+	        </if>
+	        <if test="logId != null and logId != ''">
+	            and A.LOG_ID = #{logId}
+	        </if>
+	        <if test="logUri != null and logUri != ''">
+	            and A.LOG_URI = #{logUri}
+	        </if>
+	        <if test="logDate != null">
+	            and A.LOG_DATE = #{logDate}
+	        </if>
+	        <if test="mcdCode != null and mcdCode != ''">
+	            and A.MCD_CODE = #{mcdCode}
+	        </if>
+	        <if test="logIp != null and logIp != ''">
+	            and A.LOG_IP = #{logIp}
+	        </if>
+	        <if test="empNumber != null and empNumber != ''">
+	            and A.EMP_NUMBER = #{empNumber}
+	        </if>
+	        <if test="empName != null and empName != ''">
+	            and B.EMP_NAME Like '%' || #{empName} || '%'
+	        </if>
+	        <if test="empId != null and empId != ''">
+	            and B.EMP_ID Like '%' || #{empId} || '%'
+	        </if>
+	        <if test="clsCode != null and clsCode != ''">
+	            and B.CLS_CODE = #{clsCode}
+	        </if>
+	        <if test="locCode != null and locCode != ''">
+	            and B.LOC_CODE = #{locCode}
+	        </if>
+	        <if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+	            and (to_char(A.LOG_DATE,'yyyy-mm-dd') BETWEEN #{startDate} AND #{endDate})
+	        </if>
+            )
+        where 
+                ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="LogDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_LOG A
+            left join DNKR_EMP B
+            on   	A.EMP_NUMBER = B.EMP_NUMBER
+            left join DNKR_MENU_CODE_NM C
+            on   	A.MCD_CODE = C.MCD_CODE
+            and 	C.CMC_CODE = #{cmcCode}      
+            left join DNKR_RELATION_NM D
+            on   	B.CLS_CODE = D.REL_CODE
+            and 	D.CMC_CODE = #{cmcCode}
+            left join DNKR_RELATION_NM E
+            on   	B.LOC_CODE = E.REL_CODE
+            and 	E.CMC_CODE = #{cmcCode}
+        where 
+                'SqlMap-Log.searchCount' = 'SqlMap-Log.searchCount'
+        <if test="logIdx != null and logIdx != ''">
+	            and A.LOG_IDX = #{logIdx}
+        </if>
+        <if test="logId != null and logId != ''">
+            and A.LOG_ID = #{logId}
+        </if>
+        <if test="logUri != null and logUri != ''">
+            and A.LOG_URI = #{logUri}
+        </if>
+        <if test="logDate != null">
+            and A.LOG_DATE = #{logDate}
+        </if>
+        <if test="mcdCode != null and mcdCode != ''">
+            and A.MCD_CODE = #{mcdCode}
+        </if>
+        <if test="logIp != null and logIp != ''">
+            and A.LOG_IP = #{logIp}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and A.EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="clsCode != null and clsCode != ''">
+            and B.CLS_CODE = #{clsCode}
+        </if>
+        <if test="locCode != null and locCode != ''">
+            and B.LOC_CODE = #{locCode}
+        </if>
+        <if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+	            and (to_char(LOG_DATE,'yyyy-mm-dd') BETWEEN #{startDate} AND #{endDate})
+	    </if>
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="LogDomain">
+        insert into DNKR_LOG (
+                /* SqlMap-Log.create */
+            	LOG_IDX,
+	        <if test="logId != null">
+	            LOG_ID,
+	        </if>
+	        <if test="logUri != null">
+	            LOG_URI,
+	        </if>
+	        <if test="mcdCode != null">
+	            MCD_CODE,
+	        </if>
+	        <if test="logIp != null">
+	            LOG_IP,
+	        </if>
+	        <if test="empNumber != null">
+	            EMP_NUMBER,
+	        </if>
+	        <if test="_parameter != null">
+	            LOG_DATE
+	        </if>
+        ) values 
+        	(
+             (select nvl(max(LOG_IDX),0) from DNKR_LOG) + 1,
+            <if test="logId != null">
+                #{logId},
+            </if>
+            <if test="logUri != null">
+                #{logUri},
+            </if>
+            <if test="mcdCode != null">
+                #{mcdCode},
+            </if>
+            <if test="logIp != null">
+                #{logIp},
+            </if>
+            <if test="empNumber != null">
+                #{empNumber},
+            </if>
+            <if test="_parameter != null">
+                SYSTIMESTAMP
+            </if>
+        )
+    </insert>
+</mapper>

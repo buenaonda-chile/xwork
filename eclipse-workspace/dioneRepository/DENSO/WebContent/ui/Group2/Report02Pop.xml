@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="608" Id="BHZZ100SM" Left="8" OnLoadCompleted="BHZZ100SM_OnLoadCompleted" PidAttrib="7" Title="BHZZ100SM" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_HMD150PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD160PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD170PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD180PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD190PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD200PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD210PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD230PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD240PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HMD250PF"></Dataset>
+		</Datasets>
+		<Ubi Bottom="600" Height="568" Id="ubi0" Left="8" Right="792" Top="32" Width="784">
+			<_PersistData>&#13;&#10;/6xtRsOz/wAAAQAHUQAAd7Q6APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQAyLwABNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQRlD28FAfv07vGhAxQGswT+NAIHRABlAGYAH2EAdQBsVwP495gC9vjw8L/78wVTAGgCwgBlVwECA5gC&#13;&#10;</_PersistData>
+		</Ubi>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="801"></Image>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="3" Text="인사기록카드" Top="8" Width="104"></Static>
+	</Form>
+	<Script><![CDATA[var lastBsdat;
+
+
+function BHZZ100SM_OnLoadCompleted(obj)
+{
+	http.Sync 	= true;
+	var sKind		= "getReportDetList";						
+	var sMethodName = "service::report/selectReport02_1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_HMD150PF=ds_HMD150PF ";
+		sOutDataSet += "ds_HMD160PF=ds_HMD160PF ";
+		sOutDataSet += "ds_HMD170PF=ds_HMD170PF ";
+		sOutDataSet += "ds_HMD180PF=ds_HMD180PF ";
+		sOutDataSet += "ds_HMD190PF=ds_HMD190PF ";
+		sOutDataSet += "ds_HMD200PF=ds_HMD200PF ";
+		sOutDataSet += "ds_HMD210PF=ds_HMD210PF ";
+		sOutDataSet += "ds_HMD230PF=ds_HMD230PF ";
+		sOutDataSet += "ds_HMD240PF=ds_HMD240PF ";
+		sOutDataSet += "ds_HMD250PF=ds_HMD250PF ";
+	var sArgument   = "";
+		sArgument += " SABUN=" + quote(ds_report.getColumn(ds_report.currow, "SABUN"));
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+	
+	
+	
+	
+	ubi0.setJrfFileDir(G_baseURL+"ui/Group2/report/");
+	ubi0.setJrfFileName("rep2.jrf");
+	ubi0.SetDataset("ds_report", "ds_report");
+	ubi0.SetDataset("ds_HMD150PF", "ds_HMD150PF");
+	ubi0.SetDataset("ds_HMD160PF", "ds_HMD160PF");
+	ubi0.SetDataset("ds_HMD170PF", "ds_HMD170PF");
+	ubi0.SetDataset("ds_HMD180PF", "ds_HMD180PF");
+	ubi0.SetDataset("ds_HMD190PF", "ds_HMD190PF");
+	ubi0.SetDataset("ds_HMD200PF", "ds_HMD200PF");
+	ubi0.SetDataset("ds_HMD210PF", "ds_HMD210PF");
+	ubi0.SetDataset("ds_HMD230PF", "ds_HMD230PF");
+	ubi0.SetDataset("ds_HMD250PF", "ds_HMD250PF");	
+	ubi0.SetArgument("LAST_BSDAT", lastBsdat);
+	ubi0.Retrieve();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * applicationContext-akatsuki-tools.xml
+ * 
+ * Akatsukiのジョブ単体テスト用モジュールの Spring 設定ファイルです。
+ * 
+ * $ applicationContext-akatsuki-tools.xml 1496 2015-05-11 08:53:10Z 815372040074 $
+ *
+ * Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- 必ず記載して下さい。Akatsukiの設定です。JUnitからDB接続するためにimportします -->
+    <import resource="classpath:applicationContext-akatsuki-job.xml" />
+
+    <!-- FacadeService実装 -->
+    <!-- キュー登録部品に関するサービスクラス DI用の設定です -->
+    <bean id="requestjobFacadeService"
+        class="com.globaldenso.ai.akatsuki.library.business.service.RequestjobFacadeServiceImpl">
+        <property name="queueService" ref="queueService" />
+        <property name="jobManageService" ref="jobManageService" />
+    </bean>
+    
+    <!-- 常駐リクエスト登録部品に関するサービスクラス DI用の設定です -->
+    <bean id="residentRequestjobFacadeService"
+        class="com.globaldenso.ai.akatsuki.library.business.service.ResidentRequestjobFacadeServiceImpl">
+        <property name="aijbResidentReqManageService" ref="aijbResidentReqManageService" />
+        <property name="residentRequestService" ref="residentRequestService" />
+        <property name="jobManageService" ref="jobManageService" />
+        <property name="vwAijbReqManageUnionAllService" ref="vwAijbReqManageUnionAllService" />
+    </bean>
+
+    <!-- 常駐リクエスト管理に関するサービスクラス DI用の設定です -->
+    <bean id="residentRequestService"
+        class="com.globaldenso.ai.akatsuki.business.service.ResidentRequestServiceImpl">
+        <property name="residentRequestDao" ref="residentRequestDao" />
+    </bean>
+
+    <!-- 常駐リクエスト管理DAO -->
+    <bean id="residentRequestDao"
+        class="com.globaldenso.ai.akatsuki.integration.ResidentRequestDaoImpl">
+        <property name="sqlSessionTemplate">
+            <ref bean="sqlSessionTemplate" />
+        </property>
+    </bean>
+
+    <!-- Utility実装 -->
+
+
+</beans>

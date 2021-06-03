@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="500" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="전광판&#32;불량처리관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="850" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi006mTab2Code"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>[전체]</cdnm>
+					</record>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_runcd">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>R</cd>
+						<cdnm>가동</cdnm>
+					</record>
+					<record>
+						<cd>P</cd>
+						<cdnm>비가동</cdnm>
+					</record>
+					<record>
+						<cd>S</cd>
+						<cdnm>정지</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi006mTab2"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_daygu2">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>D</cd>
+						<cdnm>주간</cdnm>
+					</record>
+					<record>
+						<cd>N</cd>
+						<cdnm>야간</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="Static16" Left="1" TabOrder="18" Top="31" Width="844"></Static>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi006mTab2" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="493" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="429" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellClick="onCellClick" Right="844" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="844">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="78"/>
+						<col width="93"/>
+						<col width="85"/>
+						<col width="85"/>
+						<col width="85"/>
+						<col width="76"/>
+						<col width="124"/>
+						<col width="55"/>
+						<col width="118"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="주야구분"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="발생시간"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="소분류"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="분류찾기"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="품번"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="불량수"/>
+						<cell bkcolor="#dfdfdf" col="9" color="#002043" display="text" text="발생사유"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="DAYGU" combocol="cd" combodataset="ds_daygu2" combotext="cdnm" display="combo" edit="expr:iif(ds_ppmi006mTab2.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;combo&apos;,&#32;&apos;none&apos;&#32;)" LimitDec="0"/>
+						<cell align="center" autosizing="none" col="2" colid="BADTM" display="text" edit="expr:iif(ds_ppmi006mTab2.GetRowType(currow)&#32;==&#32;&apos;insert&apos;,&#32;&apos;normal&apos;,&#32;&apos;none&apos;&#32;)" Mask="##:##:##"/>
+						<cell align="left" col="3" colid="BADLG_NAME" display="normal"/>
+						<cell align="left" col="4" colid="BADMD_NAME" display="normal"/>
+						<cell align="left" col="5" colid="BADSM_NAME" display="normal"/>
+						<cell align="center" bkimageid="blue_btn" col="6" display="normal" text="찾기"/>
+						<cell align="center" col="7" colid="PSPNO" display="normal" edit="normal" LimitDec="0" RegExprFilter="[a-zA-Z0-9]"/>
+						<cell align="center" col="8" colid="BADQY" display="normal" edit="number"/>
+						<cell align="left" col="9" colid="BADNM" color="#333333" display="normal" edit="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="31" Id="searchBar" Left="1" TabOrder="2" Top="1" Width="844"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" Left="443" TabOrder="4" Top="4" Width="100"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="643" TabOrder="5" Top="4" Width="100"></Static>
+		<Shape BKColor="#888888" Bottom="18" Height="5" Id="Shape2" Left="655" LineColor="#dceaf7" Right="660" TabOrder="3" Top="13" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="665" Style="static" TabOrder="4" Text="품번" Top="9" VAlign="Middle" Width="75"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static7" Left="4" TabOrder="8" Top="3" Width="100"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static8" Left="24" Style="static" TabOrder="7" Text="대/중/소" Top="8" VAlign="Middle" Width="75"></Static>
+		<Shape BKColor="#888888" Bottom="17" Height="5" Id="Shape3" Left="14" LineColor="#dceaf7" Right="19" TabOrder="6" Top="12" Type="Ellipse" Width="5"></Shape>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="cd" Color="#333333" DataColumn="cdnm" Height="21" Id="cd_daygu" ImeMode="none" INDEX="0" InnerDataset="ds_daygu" Left="544" ResetIndex="FIRST" TabOrder="9" Top="6" Width="90"></Combo>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static0" Left="465" Style="static" TabOrder="10" Text="주야구분" Top="9" VAlign="Middle" Width="75"></Static>
+		<Shape BKColor="#888888" Bottom="18" Height="5" Id="Shape0" Left="455" LineColor="#dceaf7" Right="460" TabOrder="11" Top="13" Type="Ellipse" Width="5"></Shape>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_procs" ImeMode="none" Left="744" MaxLength="20" TabOrder="12" Top="6" Width="90"></Edit>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="443" TabOrder="15" Top="35" Width="100"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static9" Left="243" TabOrder="15" Top="35" Width="100"></Static>
+		<Shape BKColor="#888888" Bottom="49" Height="5" Id="Shape4" Left="255" LineColor="#dceaf7" Right="260" TabOrder="13" Top="44" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static10" Left="265" Style="static" TabOrder="14" Text="발생시간" Top="40" VAlign="Middle" Width="75"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static15" Left="465" Style="static" TabOrder="16" Text="불량수" Top="40" VAlign="Middle" Width="75"></Static>
+		<Shape BKColor="#888888" Bottom="50" Height="5" Id="Shape7" Left="455" LineColor="#dceaf7" Right="460" TabOrder="17" Top="45" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static3" Left="4" TabOrder="21" Top="34" Width="100"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static4" Left="24" Style="static" TabOrder="20" Text="발생사유" Top="39" VAlign="Middle" Width="75"></Static>
+		<Shape BKColor="#888888" Bottom="48" Height="5" Id="Shape1" Left="14" LineColor="#dceaf7" Right="19" TabOrder="19" Top="43" Type="Ellipse" Width="5"></Shape>
+		<Button Height="21" Id="Button0" Left="410" OnClick="searchCode" TabOrder="24" Text="찾기" Top="6" Width="29"></Button>
+		<Shape BKColor="#888888" Bottom="79" Height="5" Id="Shape6" Left="15" LineColor="#dceaf7" Right="20" TabOrder="25" Top="74" Type="Ellipse" Width="5"></Shape>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_code1" ImeMode="none" Left="106" MaxLength="10" Readonly="TRUE" TabOrder="26" Top="6" Width="90"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_code2" ImeMode="none" Left="197" MaxLength="10" Readonly="TRUE" TabOrder="27" Top="6" Width="90"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_code3" ImeMode="none" Left="288" MaxLength="10" Readonly="TRUE" TabOrder="28" Top="6" Width="90"></Edit>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="Edit0" ImeMode="none" Left="106" MaxLength="20" TabOrder="29" Top="36" Width="130"></Edit>
+		<Edit Align="RIGHT" Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="Edit2" ImeMode="none" Left="544" MaxLength="20" Number="TRUE" TabOrder="30" Top="38" Width="90"></Edit>
+		<MaskEdit Align="Center" Border="Flat" BorderColor="#888888" DisplayMaskchar="-" Height="21" Id="MaskEdit0" Left="344" Mask="##:##:##" MaxLength="6" TabOrder="31" Top="37" Type="STRING" Width="91"></MaskEdit>
+		<Button Height="21" Id="Button1" Left="379" OnClick="deleteCode" TabOrder="32" Text="삭제" Top="6" Width="29"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : PPMI006_TAB2.xml
+ * ● PROGRAM DESCRIPTION  : 전광판 생산현황 조회
+ * ● DATE WRITTEN         : 2010.11.18
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var Lib = G_ds_user.GetColumn(0,"LIB2");
+var nowDate = today();
+var procs = "" ;
+var ordat = "" ;
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = nowDate;	
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.Filter("code2=='" + G_ds_user.GetColumn(0,"PLANT_CD") +"'");
+
+
+	http.Sync 	= true;
+	var sKind		= "getComCode2";						
+	var sMethodName = "service::sample/selectPpmi001MCode.do"; 	
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ppmi001mCode=ds_ppmi001mCode";
+	var sArgument   = "";
+		sArgument   += " LIB=" + quote(Lib);
+		sArgument   += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ppmi001mCode.InsertRow(0);
+	ds_ppmi001mCode.SetColumn(0,"ROWGB","");
+	ds_ppmi001mCode.SetColumn(0,"ROWNM","[전체]");
+	Combo0.index = 0;	
+
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function searchCode(obj)
+{
+	var arrReturn = dialog("Common::comFgp260pf.xml","" ,300,300);
+
+	for(i=0;i<length(arrReturn);i++)
+	{
+		var codes = split(arrReturn[i],"|");
+		// *
+		object("ed_code" + (i+1)).Column 	= codes[0];
+		object("ed_code" + (i+1)).value 	= codes[1];		
+	}   
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getPpmi006mTab2(){
+	http.Sync = true;
+	var sKind		= "getPpmi006mTab2";						
+	var sMethodName = "service::sample/selectPpmi006MTab2.do";     					// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             								// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi006mTab2=ds_ppmi006mTab2";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+	sArgument += " PROCS=" + quote(procs);	
+	sArgument += " ORDAT=" + quote(ordat);
+	sArgument += " DAYGU=" + quote(cd_daygu.Value);	
+	sArgument += " BADLG=" + quote(trim(ed_code1.Column));	
+	sArgument += " BADMD=" + quote(trim(ed_code2.Column));	
+	sArgument += " BADSM=" + quote(trim(ed_code3.Column));	
+	sArgument += " PSPNO=" + quote(ed_procs.Value);	
+	sArgument += " BADQY=" + quote(Edit2.Value);	
+	sArgument += " BADTM=" + quote(MaskEdit0.Value);	
+	sArgument += " BADNM=" + quote(Edit0.Value);				
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+}
+
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-08
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setPpmi006mTab2(){
+	if(!validationChk()) return;
+	var sKind		= "setPpmi006mTab2";						
+	var sMethodName = "service::sample/savePpmi006MTab2.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_ppmi006mTab2=ds_ppmi006mTab2:U";     			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    											// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : validation 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+function validationChk(){
+	for(var i=0; i<ds_ppmi006mTab2.rowcount(); i++){
+	
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "DAYGU")))==0){
+			alert(setPopMessage("2027"));	// 20110103l-koowgnojeel, 2027 == 주야구분을 선택하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}
+		
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "BADTM")))==0){
+			alert(setPopMessage("2051"));	// 20110103l-koowgnojeel, 2051 == 발행시간을 입력하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}
+		
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "BADLG")))==0){
+			alert(setPopMessage("2052"));	// 20110103l-koowgnojeel, 2052 == 코드를 선택하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}
+		
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "PSPNO")))==0){
+			alert(setPopMessage("2017"));	// 20110103l-koowgnojeel, 2017 == 품번을 입력하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "BADQY")))==0){
+			alert(setPopMessage("2023"));	// 20110103l-koowgnojeel, 2023 == 불량수를 입력하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}			
+		if(length(trim(ds_ppmi006mTab2.GetColumn(i, "BADNM")))==0){
+			alert(setPopMessage("2024"));	// 20110103l-koowgnojeel, 2024 == 발생사유를 입력하세요.
+			ds_ppmi006mTab2.row = i;
+			return false;
+		}			
+	}
+	
+	return true;
+}
+
+
+
+
+function onRowPosChange(obj,nOldRow,nRow)
+{
+	if(ds_ppmi006mTab1.GetRowType(ds_ppmi006mTab1.row) == "insert"){
+		cd_daygu.Enable = true;
+		Edit2.Enable = true;
+		Edit1.Enable = true;	
+	} else {
+		cd_daygu.Enable = false;
+		Edit2.Enable = false;
+		Edit1.Enable = false;	
+	}
+
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function deleteCode(obj)
+{
+	ed_code1.Value = "";
+	ed_code2.Value = "";
+	ed_code3.Value = "";
+	
+	ed_code1.Column = "";
+	ed_code2.Column = "";
+	ed_code3.Column = "";
+	
+}
+
+
+function onCellClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell == 6){
+		var arrReturn = dialog("Common::comFgp260pf.xml","" ,300,300);
+
+		for(i=0;i<length(arrReturn);i++)
+		{
+			var codes = split(arrReturn[i],"|");
+
+			if(i ==0)
+			{
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADLG", trim(codes[0]));
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADLG_NAME", codes[1]);
+			}
+			
+			if(i ==1)
+			{
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADMD", trim(codes[0]));
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADMD_NAME", codes[1]);
+			}
+						
+			if(i ==2)
+			{
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADSM", trim(codes[0]));
+				ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"BADSM_NAME", codes[1]);
+			}						
+		}   
+
+	}
+}
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getPpmi006mTab2"){
+		// 조회건수가 없을경우
+		if(ds_ppmi006mTab2.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}	
+	}else if(svcId=="setPpmi006mTab2"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+
+}
+
+function fn_Search()
+{
+
+}
+
+function fn_Input()
+{
+	ds_ppmi006mTab2.AddColumn("COMPS","STRING",255);
+	ds_ppmi006mTab2.AddColumn("ORDAT","STRING",255);
+	ds_ppmi006mTab2.AddColumn("PROCS","STRING",255);
+	ds_ppmi006mTab2.AddColumn("DAYGU","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADTM","STRING",255);
+	
+	ds_ppmi006mTab2.AddColumn("BADLG_NAME","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADMD_NAME","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADSM_NAME","STRING",255);	
+	
+	ds_ppmi006mTab2.AddColumn("BADLG","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADMD","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADSM","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADNM","STRING",255);
+	ds_ppmi006mTab2.AddColumn("PSPNO","STRING",255);
+	ds_ppmi006mTab2.AddColumn("BADQY","STRING",255);
+	
+
+	if(checkInsertCount("ds_ppmi006mTab2")== false) return;	
+	
+	ds_ppmi006mTab2.AddRow();
+	
+	ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"COMPS",G_ds_user.GetColumn(0,"PLANT_CD"));
+	ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"ORDAT",ordat);
+	ds_ppmi006mTab2.SetColumn(ds_ppmi006mTab2.row,"PROCS",procs);
+
+
+}
+
+function fn_Delete()
+{
+	ds_ppmi006mTab2.DeleteRow(ds_ppmi006mTab2.row);
+}
+
+function fn_Save()
+{
+	setPpmi006mTab2();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+
+
+]]></Script>
+</Window>

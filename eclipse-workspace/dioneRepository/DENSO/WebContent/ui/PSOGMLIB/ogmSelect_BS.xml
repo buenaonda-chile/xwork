@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="584" Id="UserList" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="선택하세요" TooltipFont="Default,0" Top="8" Ver="1.0" Width="528" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_Select">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMPrtno"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OGMMaker"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Bsel"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="58" Id="searchBar" Left="1" TabOrder="8" Top="30" Width="523"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static5" Left="3" TabOrder="7" Top="32" Width="91"></Static>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="3" Width="527"></Image>
+		<Grid AutoEnter="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_Select" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="582" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="494" Id="menuGrd2" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="menuGrd2_OnCellDblClick" Right="524" TabOrder="1" TabStop="true" Top="88" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="524">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="41"/>
+						<col width="60"/>
+						<col width="150"/>
+						<col width="150"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No."/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="CODE"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="NAME1"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="NAME2"/>
+					</head>
+					<body>
+						<cell col="0" display="text" expr="currow+1" SuppressAlign="Middle"/>
+						<cell align="left" col="1" colid="A1" display="normal" suppress="1" SuppressAlign="Middle"/>
+						<cell align="left" col="2" colid="A2" display="normal" suppress="2" SuppressAlign="Middle"/>
+						<cell align="left" autosizing="none" col="3" colid="A3" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_info" Left="40" TabOrder="2" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="4" Top="8" Width="104"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape2" Left="15" LineColor="#dceaf7" Right="20" TabOrder="5" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="st_title1" Left="24" Style="static" TabOrder="6" Text="부&#32;서" Top="36" VAlign="Middle" Width="69"></Static>
+		<Edit Height="25" Id="ed_select" Left="96" TabOrder="9" Top="60" UpperOnly="TRUE" Width="152"></Edit>
+		<Image Cursor="HAND" Height="27" Id="imgQuery" ImageID="btn2_sear" Left="285" OnClick="imgQuery_OnClick" Static="FALSE" TabOrder="10" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgSelect" ImageID="btn2_sele" Left="365" OnClick="imgSelect_OnClick" Static="FALSE" TabOrder="11" Top="31" Width="75"></Image>
+		<Image Cursor="HAND" Height="27" Id="imgClose" ImageID="btn2_out" Left="445" OnClick="imgClose_OnClick" Static="FALSE" TabOrder="12" Top="31" Width="75"></Image>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="3" TabOrder="15" Top="60" Width="91"></Static>
+		<Shape BKColor="#888888" Bottom="74" Height="5" Id="Shape0" Left="15" LineColor="#dceaf7" Right="20" TabOrder="13" Top="69" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="st_title2" Left="25" Style="static" TabOrder="14" Text="사&#32;번" Top="65" VAlign="Middle" Width="69"></Static>
+		<Combo CodeColumn="a1" DataColumn="a3" Height="25" Id="ComboBox" InnerDataset="ds_Bsel" Left="96" TabOrder="16" Text="Combo0" Top="32" Width="152"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 이상건
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogmSelect.xml
+ * ● PROGRAM DESCRIPTION  : 공통사용(선택된 값으로 명 찾기)
+ * ● DATE WRITTEN         : 2011.08.25
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 화면 로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj)
+{
+	//ed_select.Text = CODE;
+	//if (CODE == "zzzzzzzzzz") ed_select.Text="";
+	switch (SEL){
+		case 1 : 
+			title_info.Text = "사용자선택"; 
+			st_title1.Text = "부서";
+			st_title2.Text = "사번";
+			http.Sync 	= false;
+			var sKind		= "getOGMPrtcd";		
+			var sMethodName = "service::psogmlib/selectOGMPrtcd.do";  					
+			var sInDataSet  = "";
+			var sOutDataSet = "ds_Bsel=ds_Select";
+			var sArgument   = "";
+			sArgument += " LIB2=" + quote(Lib2);
+			sArgument += " COMPS=" + quote(COMPS); //사업부
+			sArgument += " GROUP=" + quote(GROUP); //그룹
+			Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+			break;
+		case 2 : title_info.Text = "?"; break;  //향후 추가를 위하여
+		case 3 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 4 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 5 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 6 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 7 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 8 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 9 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		case 10 : title_info.Text = "?"; break;  //향후 추가를 위하여 남겨둠
+		default : title_info.Text = "";
+	}
+
+	//imgQuery_OnClick();
+}
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 선택별 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgQuery_OnClick(obj,nX,nY)
+{
+	var iSel = SEL;
+	//title_user.Value = USER_ID;
+	if (iSel== 1){   //부서명으로 사번찾기
+		http.Sync 	= false;
+		var sKind		= "getOGMBuSabun";		
+		var sMethodName = "service::psogmlib/selectOGMBuSabun.do";  					
+		var sInDataSet  = "";
+		var sOutDataSet = "ds_Select=ds_Select";
+		var sArgument   = "";
+		    sArgument += " LIB2=" + quote(Lib2);
+		    sArgument += " LIB3=" + quote(Lib3);
+		    sArgument += " COMPS=" + quote(COMPS); //사업부
+		    sArgument += " DPCODE=" + quote(ComboBox.Value); //부서코드
+		    sArgument += " SABUN=" + quote(ed_select.Text); //사번
+		Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	}
+	if (iSel== 2){   //
+		//
+	}
+	if (iSel== 3){   //
+		//
+	}
+	if (iSel== 4){   //
+		//
+	}
+	if (iSel== 5){   //
+		//
+	}
+	if (iSel== 6){   //
+		//
+	}
+}
+
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgSelect_OnClick(obj,nX,nY)
+{
+	var arrReturn  =  Array();
+	arrReturn[0]  = ds_Select.GetColumn(ds_Select.row,"A1");
+	arrReturn[1]  = ds_Select.GetColumn(ds_Select.row,"A2");
+	arrReturn[2]  = ds_Select.GetColumn(ds_Select.row,"A3");
+	close(arrReturn);
+}
+
+function menuGrd2_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	imgSelect_OnClick();
+}
+/********************************************************************** 
+ * 개 발 자 : 이상건
+ * 개발일자 : 2011-08-25
+ * 내용설명 : close
+ * 주요변수 : 
+ **********************************************************************/ 
+function imgClose_OnClick(obj,nX,nY)
+{
+	Close();
+}
+
+
+
+
+
+]]></Script>
+</Window>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.NonOrderDayTransferWorkDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="NonOrderDayTransferWork" type="NonOrderDayTransferWorkDomain">
+        <result property="adsdt" column="ADSDT" />        
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchCigmaDate" resultMap="NonOrderDayTransferWork" parameterType="NonOrderDayTransferWorkDomain">
+		SELECT 
+			ADSDT
+		FROM 
+			${lib1}.SC000PR 
+		WHERE 
+		      'SqlMap-NonOrderDayTransferWork.searchCigmaDate' = 'SqlMap-NonOrderDayTransferWork.searchCigmaDate'
+    </select>
+
+    <select id="procTrans" parameterType="HashMap" statementType="CALLABLE">
+        /*{CALL PSEOBJLIB.SPDE159RC('${mi_parm}') }*/
+    </select>
+    
+</mapper>

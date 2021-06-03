@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnSize="form_OnSize" OnTimer="form_OnTimer" PidAttrib="7" scroll="false" Title="SESSION2" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_loginYn"></Dataset>
+		</Datasets>
+		<MAX5250 Bottom="535" Fire_Focus="MAX5250_Fire_Focus" Fire_Reset="MAX5250_Fire_Reset" Height="535" Id="MAX5250" Right="800" Visible="FALSE" Width="800"></MAX5250>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : NewSESSION2.xml
+ * ● PROGRAM DESCRIPTION  : 뉴디오네 Session연동
+ * ● DATE WRITTEN         : 2019.11.21
+ ----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+
+var pUserID = G_ds_user.GetColumn(0,"USER_ID");
+var pCompany = G_ds_user.GetColumn(0,"COMPANY");
+var pPlantCd = G_ds_user.GetColumn(0,"PLANT_CD");
+var pSessionID = G_ds_user.GetColumn(0,"SESSION_ID");
+var pSessionPW = G_ds_user.GetColumn(0,"SESSION_PW");
+var pSessionGroup = G_ds_user.GetColumn(0,"SESSION_GROUP");
+var pAutoLogin = "Y";	//자동로그인
+
+function form_OnLoadCompleted(obj)
+{
+   // getTitle();	//임시삭제
+	//alert(pUserID+pCompany+pPlantCd+pSessionID+pSessionPW+pSessionGroup);
+
+	if(pPlantCd = "E1")		
+		max5250.SystemName = "cigma_e1.dnke.kr";  //10.72.209.2					
+	else if(pPlantCd = "C1")
+		max5250.SystemName = "cigma_c1.dnka.kr";	//10.72.209.3
+	else if(pPlantCd = "H1")
+		max5250.SystemName = "cigma_h1.dnka.kr"; //10.72.209.4	
+	else if(pPlantCd = "S1")
+		max5250.SystemName = "cigma_s1.dnka.kr"; //10.72.209.5	
+	// MDI인 경우 AutoSizing을 위하여 추가
+    if(parent == "Group1::NewDioneSESSION2.xml")
+    {
+		Max5250.top = 0;
+		Max5250.left = 0;
+		if(parent.height < GetTopWindow().div_content.Height)
+			div_content.Max5250.height = parent.height;
+		else	
+			div_content.Max5250.height = GetTopWindow().div_content.Height;
+		if(parent.width < GetTopWindow().div_content.Width)
+			div_content.Max5250.width =  parent.width;
+		else
+			div_content.Max5250.width =  GetTopWindow().div_content.Width;
+	}
+	fnc_connection(); //세션 컨넥션
+}
+
+function Button0_OnClick(obj)
+{
+	max5250.SendKeys("MELITA_DL[FLDEXT]MELITA_DL[FLDEXT][ENTER]");
+}
+
+function MAX5250_Fire_Update(obj)
+{
+	trace("1");
+}
+
+function MAX5250_Fire_Reset(obj)
+{
+	trace("==리셋 이벤트");
+	Max5250.Visible = true;
+}
+
+//로그인 처리
+function setLogin()
+{
+		MAX5250.SendToField("FD06053",pSessionID);
+		MAX5250.SendToField("FD07053",pSessionPW);
+		MAX5250.SendKeys("[Enter]");		
+}
+
+//connection 이벤트
+function fnc_connection()
+{
+	trace("=== getuser complete");
+	max5250.DeviceName = pSessionGroup; //디바이스
+	max5250.ConfigName = "Session2";
+	var rtn = max5250.Connect();
+	if(rtn != 0) {
+		max5250.SetKeyHook("VK_TAB");
+		//로그인처리
+		if(pAutoLogin=="Y"){
+			setTimer(1,1000);
+		
+		}else{
+			max5250.Visible = true;
+		}
+		MAX5250.SetFocus();
+	}
+	else{
+		alert("connect fail!!");
+	}
+}
+
+
+//타이머
+function form_OnTimer(obj,nEventID)
+{
+	if(nEventID == 1) 
+	{
+		killTimer(1);
+		setLogin();
+	}
+}
+
+function form_OnSize(obj,nCx,nCy,nState)
+{
+	fn_SetScreenSize(nCx, nCy);
+}
+
+function MAX5250_Fire_Focus(obj)
+{
+    if(parent == "Group1::NewDioneSESSION2.xml")
+    {
+        parent.SetFocus();
+        MAX5250.SetFocus();
+	}
+}
+]]></Script>
+</Window>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.GroupDao">
+
+  <resultMap id="deptMap" type="com.globaldenso.dicas.business.dto.GroupDto">
+    <id property="deptCd" column="DEPT_CD" javaType="java.lang.String" />
+    <result property="upperDeptCd" column="UPPER_DEPT_CD" javaType="java.lang.String" />
+    <result property="groupId" column="GROUP_ID" javaType="java.lang.String" />
+    <result property="deptKoNm" column="DEPT_KO_NM" javaType="java.lang.String" />
+    <result property="deptEnNm" column="DEPT_EN_NM" javaType="java.lang.String" />
+    <result property="deptJaNm" column="DEPT_JA_NM" javaType="java.lang.String" />
+    <result property="telNo" column="TEL_NO" javaType="java.lang.String" />
+    <result property="faxNo" column="FAX_NO" javaType="java.lang.String" />
+    <result property="telNo2" column="TEL_NO_2" javaType="java.lang.String" />
+    <result property="faxNo2" column="FAX_NO_2" javaType="java.lang.String" />
+    <result property="zip" column="ZIP" javaType="java.lang.String" />
+    <result property="adres" column="ADRES" javaType="java.lang.String" />
+    <result property="roadAdres" column="ROAD_ADRES" javaType="java.lang.String" />
+    <result property="dtlAdres" column="DTL_ADRES" javaType="java.lang.String" />
+    <result property="closDe" column="CLOS_DE" javaType="java.lang.String" />
+    <result property="useYn" column="USE_YN" javaType="java.lang.String" />
+    <result property="partDiv" column="PART_DIV" javaType="java.lang.String" />
+    <result property="deptLvl" column="DEPT_LVL" javaType="java.lang.Integer" />
+    <result property="deptMaxLvl" column="DEPT_MAX_LVL" javaType="java.lang.Integer" />
+    <result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+    <result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+    <result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+    <result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime"/>
+  </resultMap>
+
+  <sql id="select_01">
+
+    WITH GROUP_TREE (
+      DEPT_CD,
+      UPPER_DEPT_CD,
+      GROUP_ID,
+      DEPT_KO_NM,
+      DEPT_EN_NM,
+      DEPT_JA_NM,
+      TEL_NO,
+      FAX_NO,
+      TEL_NO_2,
+      FAX_NO_2,
+      ZIP,
+      ADRES,
+      ROAD_ADRES,
+      DTL_ADRES,
+      CLOS_DE,
+      USE_YN,
+      PART_DIV,
+      DEPT_LVL
+    ) AS (
+    SELECT DEPT_CD,
+           UPPER_DEPT_CD,
+           GROUP_ID,
+           DEPT_KO_NM,
+           DEPT_EN_NM,
+           DEPT_JA_NM,
+           TEL_NO,
+           FAX_NO,
+           TEL_NO_2,
+           FAX_NO_2,
+           ZIP,
+           ADRES,
+           ROAD_ADRES,
+           DTL_ADRES,
+           CLOS_DE,
+           USE_YN,
+           PART_DIV,
+           1 AS DEPT_LVL
+    FROM TB_CM_GROUP
+    <where>
+      <choose>
+        <when test="criteria != null">
+          <choose>
+            <when test="criteria.deptCd != null and criteria.deptCd != ''">
+              AND DEPT_CD = #{criteria.deptCd}
+            </when>
+            <when test="criteria.groupId != null and criteria.groupId != ''">
+              AND UPPER_DEPT_CD IS NULL
+              AND GROUP_ID = #{criteria.groupId}
+              <if test="criteria.useYn != null and criteria.useYn != ''">
+                AND USE_YN = #{criteria.useYn}
+              </if>
+            </when>
+            <otherwise>
+              AND UPPER_DEPT_CD IS NULL
+              <if test="criteria.useYn != null and criteria.useYn != ''">
+                AND USE_YN = #{criteria.useYn}
+              </if>
+            </otherwise>
+          </choose>
+        </when>
+        <otherwise>
+          AND UPPER_DEPT_CD IS NULL
+          <if test="criteria.useYn != null and criteria.useYn != ''">
+            AND USE_YN = #{criteria.useYn}
+          </if>
+        </otherwise>
+      </choose>
+    </where>
+    UNION ALL
+    SELECT A.DEPT_CD,
+           A.UPPER_DEPT_CD,
+           A.GROUP_ID,
+           A.DEPT_KO_NM,
+           A.DEPT_EN_NM,
+           A.DEPT_JA_NM,
+           A.TEL_NO,
+           A.FAX_NO,
+           A.TEL_NO_2,
+           A.FAX_NO_2,
+           A.ZIP,
+           A.ADRES,
+           A.ROAD_ADRES,
+           A.DTL_ADRES,
+           A.CLOS_DE,
+           A.USE_YN,
+           A.PART_DIV,
+           B.DEPT_LVL + 1 AS DEPT_LVL
+    FROM TB_CM_GROUP A
+    INNER JOIN GROUP_TREE B
+    ON A.UPPER_DEPT_CD = B.DEPT_CD
+    <where>
+      <if test="criteria.useYn != null and criteria.useYn != ''">
+        AND USE_YN = #{criteria.useYn}
+      </if>
+    </where>
+    )
+    SELECT DEPT_CD,
+           UPPER_DEPT_CD,
+           GROUP_ID,
+           DEPT_KO_NM,
+           DEPT_EN_NM,
+           DEPT_JA_NM,
+           TEL_NO,
+           FAX_NO,
+           TEL_NO_2,
+           FAX_NO_2,
+           ZIP,
+           ADRES,
+           ROAD_ADRES,
+           DTL_ADRES,
+           CLOS_DE,
+           USE_YN,
+           PART_DIV,
+           DEPT_LVL,
+           MAX(DEPT_LVL) OVER() AS DEPT_MAX_LVL
+    FROM GROUP_TREE A
+
+  </sql>
+
+  <!-- 検索 SQL文（主キー） -->
+  <select id="searchByKey" resultMap="deptMap" parameterType="com.globaldenso.dicas.business.domain.GroupDomain">
+
+		SELECT DEPT_CD,
+           UPPER_DEPT_CD,
+           GROUP_ID,
+	         DEPT_KO_NM,
+           DEPT_EN_NM,
+           DEPT_JA_NM,
+           TEL_NO,
+           FAX_NO,
+           TEL_NO_2,
+           FAX_NO_2,
+           ZIP,
+           ADRES,
+           ROAD_ADRES,
+           DTL_ADRES,
+           CLOS_DE,
+           USE_YN,
+           PART_DIV,
+           RGSTR_ID,
+           RGST_DT,
+           UPDTR_ID,
+           UPDT_DT
+ 		FROM TB_CM_GROUP A
+    WHERE A.DEPT_CD = #{deptCd}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="deptMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+      SELECT ROWNUM AS RN,
+             A.DEPT_CD,
+             A.UPPER_DEPT_CD,
+             A.GROUP_ID,
+             A.DEPT_KO_NM,
+             A.DEPT_EN_NM,
+             A.DEPT_JA_NM,
+             A.TEL_NO,
+             A.FAX_NO,
+             A.TEL_NO_2,
+             A.FAX_NO_2,
+             A.ZIP,
+             A.ADRES,
+             A.ROAD_ADRES,
+             A.DTL_ADRES,
+             A.CLOS_DE,
+             A.USE_YN,
+             A.PART_DIV,
+             A.DEPT_LVL,
+             A.DEPT_MAX_LVL
+      FROM (
+        <include refid="select_01" />
+      ) A
+      ORDER BY A.GROUP_ID, A.DEPT_CD
+    ) AA
+
+  </select>
+
+
+  <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(GROUP_ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+    ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.GroupDomain">
+
+    INSERT INTO TB_CM_GROUP (
+      DEPT_CD,
+      RGSTR_ID,
+      RGST_DT,
+      UPDTR_ID,
+      UPDT_DT,
+      UPPER_DEPT_CD,
+      GROUP_ID,
+      DEPT_KO_NM,
+      DEPT_EN_NM,
+      DEPT_JA_NM,
+      TEL_NO,
+      FAX_NO,
+      TEL_NO_2,
+      FAX_NO_2,
+      ZIP,
+      ADRES,
+      ROAD_ADRES,
+      DTL_ADRES,
+      CLOS_DE,
+      USE_YN,
+      PART_DIV
+    ) VALUES (
+      #{deptCd},
+      #{rgstrId},
+      #{rgstDt},
+      #{updtrId},
+      #{updtDt},
+      #{upperDeptCd},
+      #{groupId},
+      #{deptKoNm},
+      #{deptEnNm},
+      #{deptJaNm},
+      #{telNo},
+      #{faxNo},
+      #{telNo2},
+      #{faxNo2},
+      #{zip},
+      #{adres},
+      #{roadAdres},
+      #{dtlAdres},
+      #{closDe},
+      #{useYn},
+      #{partDiv}
+    )
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.GroupDomain">
+
+    UPDATE TB_CM_GROUP
+    SET UPDTR_ID = #{updtrId},
+        UPDT_DT = #{updtDt},
+        UPPER_DEPT_CD = #{upperDeptCd},
+        GROUP_ID = #{groupId},
+        DEPT_KO_NM = #{deptKoNm},
+        DEPT_EN_NM = #{deptEnNm},
+        DEPT_JA_NM = #{deptJaNm},
+        TEL_NO = #{telNo},
+        FAX_NO = #{faxNo},
+        TEL_NO_2 = #{telNo2},
+        FAX_NO_2 = #{faxNo2},
+        ZIP = #{zip},
+        ADRES = #{adres},
+        ROAD_ADRES = #{roadAdres},
+        DTL_ADRES = #{dtlAdres},
+        CLOS_DE = #{closDe},
+        USE_YN = #{useYn},
+        PART_DIV = #{partDiv}
+    WHERE DEPT_CD = #{deptCd}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.GroupDomain">
+
+    DELETE FROM TB_CM_GROUP
+    WHERE DEPT_CD = #{deptCd}
+
+  </delete>
+
+
+</mapper>

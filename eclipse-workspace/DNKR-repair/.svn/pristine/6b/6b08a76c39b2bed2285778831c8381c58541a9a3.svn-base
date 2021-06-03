@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.ServiceDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.ServiceDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="masterId" column="MASTER_ID" javaType="java.lang.String" />
+		<result property="manageNo" column="MANAGE_NO" javaType="java.lang.String" />
+		<result property="serviceDegree" column="SERVICE_DEGREE" javaType="java.lang.Long" />
+		<result property="condition" column="CONDITION" javaType="java.lang.String" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="carNo" column="CAR_NO" javaType="java.lang.String" />
+		<result property="exhaustReg" column="EXHAUST_REG" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+		<result property="model" column="MODEL" javaType="java.lang.String" />
+		<result property="consultingExp" column="CONSULTING_EXP" javaType="java.lang.String" />
+		<result property="div" column="DIV" javaType="java.lang.String" />
+		<result property="manageNoId" column="MANAGE_NO_ID" javaType="java.lang.Long" />
+		<result property="approvalNoId" column="APPROVAL_NO_ID" javaType="java.lang.Long" />
+		<result property="approvalNo" column="APPROVAL_NO" javaType="java.lang.String" />
+		<result property="receiptDate" column="RECEIPT_DATE" javaType="java.lang.String" />
+		<result property="receiptNm" column="RECEIPT_NM" javaType="java.lang.String" />
+		<result property="inquiry" column="INQUIRY" javaType="java.lang.String" />
+		<result property="country" column="COUNTRY" javaType="java.lang.String" />
+		<result property="mileage" column="MILEAGE" javaType="java.lang.Long" />
+		<result property="unit" column="UNIT" javaType="java.lang.String" />
+		<result property="occurDate" column="OCCUR_DATE" javaType="java.sql.Date" />
+		<result property="relapseDate" column="RELAPSE_DATE" javaType="java.sql.Date" />
+		<result property="reappearance" column="REAPPEARANCE" javaType="java.lang.String" />
+		<result property="officeCode" column="OFFICE_CODE" javaType="java.lang.String" />
+		<result property="officeCity" column="OFFICE_CITY" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="officeTel" column="OFFICE_TEL" javaType="java.lang.String" />
+		<result property="officeFax" column="OFFICE_FAX" javaType="java.lang.String" />
+		<result property="officeAddr" column="OFFICE_ADDR" javaType="java.lang.String" />
+		<result property="expatNm" column="EXPAT_NM" javaType="java.lang.String" />
+		<result property="expatTel" column="EXPAT_TEL" javaType="java.lang.String" />
+		<result property="mechanic1Nm" column="MECHANIC_1_NM" javaType="java.lang.String" />
+		<result property="mechanic1Tel" column="MECHANIC_1_TEL" javaType="java.lang.String" />
+		<result property="mechanic2Nm" column="MECHANIC_2_NM" javaType="java.lang.String" />
+		<result property="mechanic2Tel" column="MECHANIC_2_TEL" javaType="java.lang.String" />
+		<result property="wearingDate" column="WEARING_DATE" javaType="java.sql.Date" />
+		<result property="cs1000" column="CS1000" javaType="java.lang.Long" />
+		<result property="warranty" column="WARRANTY" javaType="java.lang.Long" />
+		<result property="officeFix" column="OFFICE_FIX" javaType="java.lang.Long" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="rs1000" column="RS1000" javaType="java.lang.Long" />
+		<result property="inquiryGubun" column="INQUIRY_GUBUN" javaType="java.lang.String" />
+		<result property="prodBase" column="PROD_BASE" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+	  	<result property="qualityIndex" column="QUALITY_INDEX" javaType="java.lang.String" />
+	  	<result property="useMonth" column="USE_MONTH" javaType="java.lang.String" />
+	  	<result property="sdAppoint" column="SD_APPOINT" javaType="java.lang.String" />
+	  	<result property="receiptNm2" column="RECEIPT_NM2" javaType="java.lang.String" />
+	  	<result property="officeCityNm" column="OFFICE_CITY_NM" javaType="java.lang.String" />
+	  	<result property="conditionNm" column="CONDITION_NM" javaType="java.lang.String" />
+
+  </resultMap>
+
+  <sql id="select_01">
+    SELECT Z.*
+    	  ,X.CODE_KO_NM AS OFFICE_CITY_NM
+    	  ,(SELECT CODE_KO_NM FROM TB_CM_CODE WHERE GRP_CD = 'C010' AND CODE_CD = Z.CONDITION ) AS CONDITION_NM
+    FROM
+    (SELECT
+		ID
+		,MASTER_ID
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,CONDITION
+		,MAKER
+		,VINNO
+		,CAR_NO
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,MODEL
+		,CONSULTING_EXP
+		,DIV
+		,MANAGE_NO_ID
+		,APPROVAL_NO_ID
+		,APPROVAL_NO
+		,TO_CHAR(RECEIPT_DATE,'yyyy-MM-dd') AS RECEIPT_DATE
+		,RECEIPT_NM
+		,INQUIRY
+		,COUNTRY
+		,MILEAGE
+		,UNIT
+		,OCCUR_DATE
+		,RELAPSE_DATE
+		,REAPPEARANCE
+		,OFFICE_CODE
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_TEL
+		,OFFICE_FAX
+		,OFFICE_ADDR
+		,EXPAT_NM
+		,EXPAT_TEL
+		,MECHANIC_1_NM
+		,MECHANIC_1_TEL
+		,MECHANIC_2_NM
+		,MECHANIC_2_TEL
+		,WEARING_DATE
+		,CS1000
+		,WARRANTY
+		,OFFICE_FIX
+		,AUTOINSERT
+		,RS1000
+		,INQUIRY_GUBUN
+		,PROD_BASE
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		  ,( <![CDATA[ select
+		  CASE WHEN A.RECEIPT_DATE - B.SALE_DATE <= 90 THEN 'CS'
+		  WHEN A.RECEIPT_DATE - B.SALE_DATE >= 271 AND A.RECEIPT_DATE - B.SALE_DATE <= 365 THEN 'RS'
+		  WHEN A.RECEIPT_DATE - B.SALE_DATE >= 0 AND A.RECEIPT_DATE - B.SALE_DATE <= 365 THEN 'RS1'
+		  ELSE '' END
+		  from
+		  TB_DC_VEHICLE_MSATER B
+		  where
+		  A.MASTER_ID = B.MASTER_ID AND ROWNUM = 1 ]]> ) AS QUALITY_INDEX
+		  ,( select ROUND((A.RECEIPT_DATE - B.SALE_DATE) / 30)
+		  from
+		  TB_DC_VEHICLE_MSATER B
+		  where
+		  A.MASTER_ID = B.MASTER_ID AND ROWNUM = 1) AS USE_MONTH
+		,(SELECT SD_APPOINT FROM TB_DC_CONSULTING WHERE MANAGE_NO = A.MANAGE_NO AND ROWNUM=1) AS SD_APPOINT
+		,(SELECT FST_NM FROM TB_CM_USER WHERE ACCT_ID = A.RECEIPT_NM AND ROWNUM = 1) AS RECEIPT_NM2
+
+    FROM TB_DC_SERVICE_MASTER A) Z
+	LEFT OUTER JOIN (SELECT CODE_CD, CODE_KO_NM FROM TB_CM_CODE WHERE GRP_CD = 'CLRSN' ) X ON Z.OFFICE_CITY = X.CODE_CD
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.vinno != null and criteria.vinno != ''">
+		  AND VINNO = UPPER(#{criteria.vinno})
+	  </if>
+
+	  <if test="criteria.manageNo != null and criteria.manageNo != ''">
+		  AND MANAGE_NO = #{criteria.manageNo}
+	  </if>
+
+	  <if test="criteria.sdAppoint != null and criteria.sdAppoint != ''">
+		  AND SD_APPOINT = #{criteria.sdAppoint}
+	  </if>
+
+	  <if test="criteria.popSearchOption != null and criteria.popSearchOption != ''">
+		  <if test="criteria.popSearchOption == '01'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND VINNO LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+		  <if test="criteria.popSearchOption == '02'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND RECEIPT_DATE LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+		  <if test="criteria.popSearchOption == '03'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND OFFICE_NM LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+	  </if>
+
+  </sql>
+
+  <sql id="where_02">
+	  <if test="criteria.vinno != null and criteria.vinno != ''">
+		  AND VINNO = UPPER(#{criteria.vinno})
+	  </if>
+
+	  <if test="criteria.manageNo != null and criteria.manageNo != ''">
+		  AND MANAGE_NO = #{criteria.manageNo}
+	  </if>
+
+	  <if test="criteria.sdAppoint != null and criteria.sdAppoint != ''">
+		  AND SD_APPOINT = #{criteria.sdAppoint}
+	  </if>
+	  <if test="criteria.officeCode != null and criteria.officeCode != ''">
+		  AND OFFICE_CODE = #{criteria.officeCode}
+	  </if>
+
+	  <if test="criteria.popSearchOption != null and criteria.popSearchOption != ''">
+		  <if test="criteria.popSearchOption == '01'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND VINNO LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+		  <if test="criteria.popSearchOption == '02'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND RECEIPT_DATE LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+		  <if test="criteria.popSearchOption == '03'">
+			  <if test="criteria.searchKeyword != null and criteria.searchKeyword != ''">
+				  AND OFFICE_NM LIKE '%'||#{criteria.searchKeyword}||'%'
+			  </if>
+		  </if>
+	  </if>
+
+  </sql>
+
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.ServiceDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+	  AND ROWNUM = 1
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+			  <include refid="where_01"/>
+          </where>
+	      ORDER BY RECEIPT_DATE DESC, ID DESC
+          ) A
+
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+
+	<select id="searchBySdCondition" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		ORDER BY RECEIPT_DATE DESC, ID DESC
+		) A
+
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY RN
+
+	</select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+	<select id="searchSdCount" resultType="int" parameterType="Map">
+
+		SELECT COUNT(ID) AS CNT
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		) AA
+
+	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.ServiceDomain">
+
+    INSERT INTO TB_DC_SERVICE_MASTER (
+		ID
+		,MASTER_ID
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,CONDITION
+		,MAKER
+		,VINNO
+		,CAR_NO
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,MODEL
+		,CONSULTING_EXP
+		,DIV
+		,MANAGE_NO_ID
+		,APPROVAL_NO_ID
+		,APPROVAL_NO
+		,RECEIPT_DATE
+		,RECEIPT_NM
+		,INQUIRY
+		,COUNTRY
+		,MILEAGE
+		,UNIT
+		,OCCUR_DATE
+		,RELAPSE_DATE
+		,REAPPEARANCE
+		,OFFICE_CODE
+		,OFFICE_CITY
+		,OFFICE_NM
+		,OFFICE_TEL
+		,OFFICE_FAX
+		,OFFICE_ADDR
+		,EXPAT_NM
+		,EXPAT_TEL
+		,MECHANIC_1_NM
+		,MECHANIC_1_TEL
+		,MECHANIC_2_NM
+		,MECHANIC_2_TEL
+		,WEARING_DATE
+		,CS1000
+		,WARRANTY
+		,OFFICE_FIX
+		,AUTOINSERT
+		,RS1000
+		,INQUIRY_GUBUN
+		,PROD_BASE
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,#{masterId}
+		,(select #{prefix} || LPAD(SUBSTR(MAX(NVL(MANAGE_NO,0)),4)+1,9,'0') from TB_DC_SERVICE_MASTER WHERE MANAGE_NO LIKE #{prefix}||'%' )
+		,#{serviceDegree}
+		,#{condition}
+		,#{maker}
+		,UPPER(#{vinno})
+		,#{carNo}
+		,#{exhaustReg}
+		,#{engineType}
+		,#{model}
+		,#{consultingExp}
+		,#{div}
+		,#{manageNoId}
+		,#{approvalNoId}
+		,#{approvalNo}
+		,TO_DATE(#{receiptDate},'yyyy-MM-dd')
+		,#{receiptNm}
+		,#{inquiry}
+		,#{country}
+		,#{mileage}
+		,#{unit}
+		,#{occurDate}
+		,#{relapseDate}
+		,#{reappearance}
+		,#{officeCode}
+		,#{officeCity}
+		,#{officeNm}
+		,#{officeTel}
+		,#{officeFax}
+		,#{officeAddr}
+		,#{expatNm}
+		,#{expatTel}
+		,#{mechanic1Nm}
+		,#{mechanic1Tel}
+		,#{mechanic2Nm}
+		,#{mechanic2Tel}
+		,#{wearingDate}
+		,#{cs1000}
+		,#{warranty}
+		,#{officeFix}
+		,#{autoinsert}
+		,#{rs1000}
+		,#{inquiryGubun}
+		,#{prodBase}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_SERVICE_MASTER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.ServiceDomain">
+
+    UPDATE TB_DC_SERVICE_MASTER SET
+		MASTER_ID = #{masterId}
+		,MANAGE_NO = #{manageNo}
+		,SERVICE_DEGREE = #{serviceDegree}
+		,CONDITION = #{condition}
+		,MAKER = #{maker}
+		,VINNO = UPPER(#{vinno})
+		,CAR_NO = #{carNo}
+		,EXHAUST_REG = #{exhaustReg}
+		,ENGINE_TYPE = #{engineType}
+		,MODEL = #{model}
+		,CONSULTING_EXP = #{consultingExp}
+		,DIV = #{div}
+		,MANAGE_NO_ID = #{manageNoId}
+		,APPROVAL_NO_ID = #{approvalNoId}
+		,APPROVAL_NO = #{approvalNo}
+		,RECEIPT_DATE = TO_DATE(#{receiptDate},'yyyy-MM-dd')
+		,RECEIPT_NM = #{receiptNm}
+		,INQUIRY = #{inquiry}
+		,COUNTRY = #{country}
+		,MILEAGE = #{mileage}
+		,UNIT = #{unit}
+		,OCCUR_DATE = #{occurDate}
+		,RELAPSE_DATE = #{relapseDate}
+		,REAPPEARANCE = #{reappearance}
+		,OFFICE_CODE = #{officeCode}
+		,OFFICE_CITY = #{officeCity}
+		,OFFICE_NM = #{officeNm}
+		,OFFICE_TEL = #{officeTel}
+		,OFFICE_FAX = #{officeFax}
+		,OFFICE_ADDR = #{officeAddr}
+		,EXPAT_NM = #{expatNm}
+		,EXPAT_TEL = #{expatTel}
+		,MECHANIC_1_NM = #{mechanic1Nm}
+		,MECHANIC_1_TEL = #{mechanic1Tel}
+		,MECHANIC_2_NM = #{mechanic2Nm}
+		,MECHANIC_2_TEL = #{mechanic2Tel}
+		,WEARING_DATE = #{wearingDate}
+		,CS1000 = #{cs1000}
+		,WARRANTY = #{warranty}
+		,OFFICE_FIX = #{officeFix}
+		,AUTOINSERT = #{autoinsert}
+		,RS1000 = #{rs1000}
+		,INQUIRY_GUBUN = #{inquiryGubun}
+		,PROD_BASE = #{prodBase}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.ServiceDomain">
+
+    DELETE FROM TB_DC_SERVICE_MASTER
+    WHERE ID = #{id}
+
+  </delete>
+
+  <update id="update2" parameterType="com.globaldenso.dicas.business.domain.ServiceDomain">
+
+    UPDATE TB_DC_SERVICE_MASTER SET
+		CONDITION = #{condition}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+</mapper>

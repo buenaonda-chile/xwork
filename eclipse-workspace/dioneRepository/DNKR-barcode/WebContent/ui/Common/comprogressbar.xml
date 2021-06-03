@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form BKColor="white" Height="125" Id="comprogressbar" Left="8" OnLoadCompleted="fn_FormLoadSetting" OnTimer="fn_DoLoop" OnUnloadCompleted="fn_FormUnloadProcess" PidAttrib="7" TooltipFont=",0" Top="8" Ver="1.0" Width="300" WorkArea="true">
+		<Image Height="125" Id="Image0" ImageID="image::waiting.gif" TabOrder="1" Width="300"></Image>
+	</Form>
+	<Script><![CDATA[function fn_FormLoadSetting(obj){
+ 
+	//Timer Setting
+	SetTimer(1, 100);
+	
+	//Show Status가 False
+	if (GBL_PROGRESSCHK==false) {
+		Close();
+		return;
+	}
+
+}
+
+function fn_FormUnloadProcess(obj){
+
+	//Form Unload時 Timer Kill
+	KillTimer(1);
+ 
+}
+
+function fn_DoLoop(){
+
+	//Show Status가 False
+	if (GBL_PROGRESSCHK==false) {
+		Close();
+		return;
+	}
+ 
+}]]></Script>
+</Window>

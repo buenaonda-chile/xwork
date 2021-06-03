@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="344" Id="form" Left="8" OnLoadCompleted="fn_OnLoadComPlete" PidAttrib="7" Title="공통코드&#32;조회(fgp260pf)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="520" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ppmi006mTab2Code">
+				<Contents>
+					<colinfo id="USER_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="PASSWORD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENU_PW" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_loginYn"></Dataset>
+		</Datasets>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_ppmi006mTab2Code" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="305" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="305" Id="etcGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="setClick" Right="518" TabOrder="1" TabStop="true" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="518">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="66"/>
+						<col width="66"/>
+						<col width="85"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="대분류"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="중분류"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="소분류"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="CLGNM" display="text" LimitDec="0"/>
+						<cell align="left" col="1" colid="CMDNM" display="text" LimitDec="0"/>
+						<cell align="left" col="2" colid="CSMNM" display="text" LimitDec="0"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button ButtonStyle="TRUE" Cursor="HAND" Height="24" Id="Button1" ImageID="2_btn" Left="232" OnClick="Button1_OnClick" TabOrder="2" Text="선택" Top="312" Width="53"></Button>
+	</Form>
+	<Script><![CDATA[
+#include "script::lib_script_common.js";
+
+
+
+function fn_OnLoadComPlete(obj)
+{
+	http.Sync = true;
+	var sKind		= "getComfgp260pf";						
+	var sMethodName = "service::sample/selectPpmi006MTab2Code.do";     				// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             								// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_ppmi006mTab2Code=ds_ppmi006mTab2Code";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += " LIB=" + quote(Lib);
+	sArgument += " COMPS=" + quote(G_ds_user.GetColumn(0,"PLANT_CD"));
+
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+
+}
+
+function Button1_OnClick(obj)
+{
+	var arrReturn  =  Array();  
+
+	arrReturn[0]  = ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CLSLG") + "|" + ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CLGNM");
+	arrReturn[1]  = ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CLSMD") + "|" + ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CMDNM");
+	arrReturn[2]  = ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CLSSM") + "|" + ds_ppmi006mTab2Code.GetColumn(ds_ppmi006mTab2Code.row,"CSMNM");
+	
+	close(arrReturn);	
+}
+
+function setClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	Button1_OnClick("");
+}
+]]></Script>
+</Window>

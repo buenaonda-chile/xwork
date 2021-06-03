@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="543" Id="form" Left="8" PidAttrib="7" Title="aaaa" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="column0" size="256" summ="default" type="STRING"/>
+					<colinfo id="column1" size="256" summ="default" type="STRING"/>
+					<colinfo id="column2" size="256" summ="default" type="DECIMAL"/>
+					<record>
+						<column0>1</column0>
+						<column1>a</column1>
+						<column2>500</column2>
+					</record>
+					<record>
+						<column0>1</column0>
+						<column1>a</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>1</column0>
+						<column1>b</column1>
+						<column2>400</column2>
+					</record>
+					<record>
+						<column0>1</column0>
+						<column1>z</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>1</column0>
+						<column1>w</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>s</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>d</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>d</column1>
+						<column2/>
+					</record>
+					<record>
+						<column0>3</column0>
+						<column1>d</column1>
+						<column2/>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Grid BindDataset="Dataset0" BkColor2="default" BoldHead="true" Bottom="480" Editable="TRUE" Enable="true" EndLineColor="default" Height="368" Id="Grid0" InputPanel="FALSE" Left="408" LineColor="default" OnHeadClick="Grid0_OnHeadClick" Right="720" TabOrder="1" TabStop="true" Top="112" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="312">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="column0"/>
+						<cell col="1" display="text" text="column1"/>
+						<cell col="2" display="text" text="column2"/>
+						<cell col="3" display="text"/>
+					</head>
+					<body>
+						<cell col="0" colid="column0" display="text"/>
+						<cell col="1" colid="column1" display="text"/>
+						<cell col="2" colid="column2" display="number"/>
+						<cell col="3" display="text" subsumexpr='casesum(&quot;row&#32;&lt;=&#32;currow&quot;,&quot;column2&quot;)'/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="33" Id="Button0" Left="62" OnClick="Button0_OnClick" TabOrder="2" Text="Cursor를&#32;모래시계" Top="68" Width="126"></Button>
+	</Form>
+	<Script><![CDATA[
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	lib_grid_SetGridSort(obj,nCell);
+}
+
+var CONST_ASC_MARK="▲";
+var CONST_DESC_MARK="▼";
+var lib_gridv_CreateChkDS = false;		// Multi Sort(Column 정의 Dataset)
+var lib_gridv_mCnt;
+var lib_gridv_gCnt;
+
+/*===============================================================
+= 기능 : Grid Header Click => Sorting 처리
+= 인수 : Gridobj		Grid Object
+         nCell			Column Index(Click Head index)
+===============================================================*/
+function lib_grid_SetGridSort(Gridobj,nCell)
+{
+	var objBDs = Gridobj.BindDataset;
+	
+	
+	lib_gridv_mCnt = Gridobj.GetCellProp("head",0,"colspan");
+ 	lib_gridv_gCnt = 0;
+ 	
+ 	if (Gridobj.GetSubCellCount("head",0) > 0) lib_gridv_gCnt = Gridobj.GetSubCellCount("head",0) - 1;
+	
+	
+	if (getKeyState("shift")){
+		
+		if (lib_gridv_CreateChkDS == false){
+			
+			Create("Dataset","ds_grdsort", "");
+			ds_grdsort.AddColumn("Col", "String",255); 
+			ds_grdsort.AddColumn("Sort","String",255);
+			
+			lib_gridv_CreateChkDS = true;
+		}
+		
+		if (ds_grdsort.RowCount() < 1) lib_grid_SetHeadClearAll(Gridobj);
+		
+		lib_grid_SetGridShiftSort(Gridobj, objBDs, nCell);
+		
+	} else {	
+		if (lib_gridv_CreateChkDS) ds_grdsort.DeleteAll();
+		lib_grid_GridSort(Gridobj,objBDs,nCell);
+	}	
+}
+
+/*===============================================================
+= 기능 : Grid Header Click => Sorting 처리
+= 인수 : Gridobj		Grid Object
+         dsObj      Grid BindDataset
+         nCell			Column Index(Click Head index)
+= 예제 : lib_grid_GridSort(Gridobj,Dataset,nCell);
+===============================================================*/
+function lib_grid_GridSort(Gridobj,dsObj,nCell){
+	var nheadText,sflag;
+	
+	var sort_cell;
+	var sort_col;
+	var sort_span;
+ 	var sort_columns="";
+ 	
+  //---------------------------------------------------------
+	//  해당하는 셀의 타이틀의 소트마크를 추가 또는 변경한다.
+	//---------------------------------------------------------
+	if(right(Gridobj.GetCellProp("head",nCell,"text"),1) == CONST_ASC_MARK) {
+	
+		if (Gridobj.GetCellProp("head",nCell,"colspan") > 1){
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_span = Gridobj.GetCellProp("head",nCell,"colspan");			
+			//trace("1111   " + sort_col + " : " + sort_span);
+			for (i=sort_col; i<toNumber(sort_col)+toNumber(sort_span); i++){
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+			}
+		} else {
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_columns = Gridobj.GetCellProp("Body",sort_col,"colid");
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = replace(nheadText,CONST_ASC_MARK,"");
+		nheadText = nheadText + CONST_DESC_MARK;
+
+//		alert(sort_columns);
+		object(dsObj).sort(sort_columns,false);
+		
+	} else if(right(Gridobj.GetCellProp("head",nCell,"text"),1) == CONST_DESC_MARK) {	
+		var body_cnt = Gridobj.GetCellCount("Body");
+		var sort_idx = 0;
+		for (i=0; i<body_cnt; i++){
+			if (Length(Gridobj.GetCellProp("Body",i,"colid")) > 1){		
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+				sort_idx++;
+			}
+			if (sort_idx == 5) break;
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = replace(nheadText,CONST_DESC_MARK,"");
+		
+		object(dsObj).sort(sort_columns,true);
+		
+	} else {
+	
+		if (nCell == 0 && lib_gridv_gCnt > 0) return;
+		
+		if (Gridobj.GetCellProp("head",nCell,"colspan") > 1){
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_span = Gridobj.GetCellProp("head",nCell,"colspan");
+			for (i=sort_col; i<toNumber(sort_col)+toNumber(sort_span); i++){
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+			}
+			
+		} else {
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			
+			sort_col -= lib_gridv_gCnt;
+			sort_columns = Gridobj.GetCellProp("Body",sort_col,"colid");
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = nheadText + CONST_ASC_MARK;
+		
+		object(dsObj).sort(sort_columns,true);
+	}
+	 
+	Gridobj.SetCellProp("head",nCell,"text",nheadText);	
+	
+	//---------------------------------------------------------
+	//  해당하는 셀 이외의 해더 타이틀의 소트마크를 제거한다.
+	//---------------------------------------------------------
+	
+	var nColCnt = Gridobj.GetCellCount("head");
+	var sRepText;
+	
+	for(i=lib_gridv_gCnt;i<nColCnt;i++){
+		
+		if(nCell <> i) {
+			sRepText = replace(Gridobj.GetCellProp("head",i,"text"), CONST_ASC_MARK,"");
+			Gridobj.SetCellProp("head",i,"text", sRepText);
+			
+			sRepText = replace(Gridobj.GetCellProp("head",i,"text"), CONST_DESC_MARK,"");
+			Gridobj.SetCellProp("head",i,"text", sRepText);
+		}
+	}
+}
+
+/*===============================================================
+= 기능 : Shift Key + Grid Header Click => Sorting 처리
+= 인수 : Gridobj		Grid Object
+         dsObj      Grid BindDataset
+         nCell			Column Index(Click Head index)
+= 예제 : lib_grid_SetGridShiftSort(obj, Dataset ,nCell);
+===============================================================*/
+function lib_grid_SetGridShiftSort(Gridobj, dsObj, nCell){
+	var nheadText,sflag;
+	
+	var sort_cell;
+	var sort_col;
+	var sort_span;
+ 	var sort_columns="";
+ 	var depth_row;
+ 	var endCell;
+ 	
+	if(right(Gridobj.GetCellProp("head",nCell,"text"),1) == CONST_ASC_MARK)	{
+	
+		if (Gridobj.GetCellProp("head",nCell,"colspan") > 1){
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_span = Gridobj.GetCellProp("head",nCell,"colspan");
+			depth_row = Gridobj.GetCellProp("head",nCell,"row");
+			
+			for (i=sort_col; i<toNumber(sort_col)+toNumber(sort_span); i++){
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+			}
+			endCell = toNumber(sort_col)+toNumber(sort_span);
+			lib_grid_SetSubHeadClear(Gridobj, sort_col, endCell, depth_row);
+			
+		} else {
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_columns = Gridobj.GetCellProp("Body",sort_col,"colid");
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = replace(nheadText,CONST_ASC_MARK,"");
+		nheadText = nheadText + CONST_DESC_MARK;
+		sflag = CONST_DESC_MARK;
+		
+	}	else if (right(Gridobj.GetCellProp("head",nCell,"text"),1) == CONST_DESC_MARK) {
+	
+		if (Gridobj.GetCellProp("head",nCell,"colspan") > 1){
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_span = Gridobj.GetCellProp("head",nCell,"colspan");
+			depth_row = Gridobj.GetCellProp("head",nCell,"row");
+			
+			for (i=sort_col; i<toNumber(sort_col)+toNumber(sort_span); i++){
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+			}
+			
+			endCell = toNumber(sort_col)+toNumber(sort_span);
+			lib_grid_SetSubHeadClear(Gridobj, sort_col, endCell, depth_row);
+			
+		} else {
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_columns = Gridobj.GetCellProp("Body",sort_col,"colid");
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = replace(nheadText,CONST_DESC_MARK,"");		
+		sflag = "";
+		
+	} else {
+	
+		if (nCell == 0 && lib_gridv_gCnt > 0) return;
+		
+		if (Gridobj.GetCellProp("head",nCell,"colspan") > 1){
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_span = Gridobj.GetCellProp("head",nCell,"colspan");
+			depth_row = Gridobj.GetCellProp("head",nCell,"row");
+			
+			for (i=sort_col; i<toNumber(sort_col)+toNumber(sort_span); i++){
+				sort_columns += Gridobj.GetCellProp("Body",i,"colid") + ",";
+			}
+			endCell = toNumber(sort_col)+toNumber(sort_span);
+			lib_grid_SetSubHeadClear(Gridobj, sort_col, endCell, depth_row);
+			
+		} else {
+			sort_col = Gridobj.GetCellProp("head",nCell,"col");
+			sort_col -= lib_gridv_gCnt;
+			sort_columns = Gridobj.GetCellProp("Body",sort_col,"colid");
+		}
+		
+		nheadText = Gridobj.GetCellProp("head",nCell,"text");
+		nheadText = nheadText + CONST_ASC_MARK;
+		sflag = CONST_ASC_MARK;
+	}
+	
+	var arr_cols = split(sort_columns,",");
+	
+	for (i=0; i<length(arr_cols); i++){
+	
+		var str_exist = ds_grdsort.FindRow("Col", arr_cols[i]);
+		
+		if (str_exist < 0) {
+			ds_grdsort.AddRow();
+			
+			ds_grdsort.SetColumn(ds_grdsort.currow,"Col", arr_cols[i]);			
+			ds_grdsort.SetColumn(ds_grdsort.currow,"Sort", "A");
+			
+			if (sflag == "") ds_grdsort.DeleteRow(str_exist);
+			
+		} else {
+		
+			ds_grdsort.DeleteRow(str_exist);
+			
+			if (sflag != "") {
+				ds_grdsort.AddRow();
+				ds_grdsort.SetColumn(ds_grdsort.currow,"Col", arr_cols[i]);
+				if (sflag == CONST_DESC_MARK) ds_grdsort.SetColumn(ds_grdsort.currow,"Sort", "D");
+				else ds_grdsort.SetColumn(ds_grdsort.currow,"Sort", "A");
+			} 
+		}
+	}
+	
+	var str_sort = "";
+	for (i=0; i<ds_grdsort.RowCount(); i++){
+		str_sort += ds_grdsort.GetColumn(i,"Col") + ":" + ds_grdsort.GetColumn(i,"Sort") + ",";
+	}
+	
+	if (ds_grdsort.RowCount() < 1){
+		var body_cnt = Gridobj.GetCellCount("Body");
+		var sort_idx = 0;
+		for (i=0; i<body_cnt; i++){
+			if (Length(Gridobj.GetCellProp("Body",i,"colid")) > 1){		
+				str_sort += Gridobj.GetCellProp("Body",i,"colid") + ",";
+				sort_idx++;
+			}
+			if (sort_idx == 2) break;
+		}
+	}
+	
+	object(dsObj).sort(str_sort,true);
+	
+	Gridobj.SetCellProp("head",nCell,"text",nheadText);
+}
+
+/*===============================================================
+= 기능 : Grid Selected Head Clear All (공통)
+= 인수 : obj				Grid Component ID
+= 예제 : lib_grid_SetColumnAdd(obj)
+===============================================================*/
+function lib_grid_SetHeadClearAll(obj){	
+	var nColCnt = obj.GetCellCount("head");
+	var sRepText;
+	
+	for(i=lib_gridv_gCnt;i<nColCnt;i++){		
+		sRepText = replace(obj.GetCellProp("head",i,"text"), CONST_ASC_MARK,"");
+		obj.SetCellProp("head",i,"text", sRepText);
+		
+		sRepText = replace(obj.GetCellProp("head",i,"text"), CONST_DESC_MARK,"");
+		obj.SetCellProp("head",i,"text", sRepText);		
+	}
+}
+
+function Button0_OnClick(obj)
+{
+	SetWaitCursor(true);
+	SetCapture();
+	
+	
+	ReleaseCapture();
+	SetWaitCursor(false);
+}
+]]></Script>
+</Window>

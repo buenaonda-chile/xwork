@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="124" Id="PGMPOPUP" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnTimer="form_OnTimer" PidAttrib="7" TooltipFont="Default,0" Top="8" Ver="1.0" Width="298" WorkArea="true">
+		<Image Height="125" Id="Image1" ImageID="image::waiting.gif" Left="-1" TabOrder="1" Top="-1" Width="304"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+function form_OnLoadCompleted(obj)
+{
+    
+    var sArgument_new ="";
+    
+    for(i=0;i<Length(sArgument);i++){
+		if(Substr(sArgument, i, 1) = "@"){
+			sArgument_new += " ";			
+		} else {
+			sArgument_new += Substr(sArgument, i, 1);						
+		}
+    }
+	
+	var sOutDataSet_new ="";
+	for(i=0;i<Length(sOutDataSet);i++){
+		if(Substr(sOutDataSet, i, 1) = "@"){
+			sOutDataSet_new += " ";			
+		} else {
+			sOutDataSet_new += Substr(sOutDataSet, i, 1);						
+		}
+	}
+	
+	SetWaitCursor(true); 
+	http.Sync = false;
+	Transaction(sKind, sMethodName, "", sOutDataSet_new, sArgument_new, "callback");
+	SetTimer(1,100);
+}
+
+
+function callback(svcId, rtnCd, rtnMsg){	
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		close("E");	
+	}else{
+		switch (svcId){
+			case "getHPM100_rep" :
+				if(ds_HPM100_rep.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHWD075Q" :
+				if(ds_HWD075Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHWB253Q" :
+				if(ds_HWB253Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ200" :
+				if(ds_HMDZ200.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHASS01" :
+				if(ds_HASS01.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHASS03" :
+				if(ds_HASS01.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHASS04" :
+				if(ds_HUM090PF.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ051" :
+				if(ds_HAYZ051.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ071" :
+				if(ds_HAYZ071.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ082Q" :
+				if(ds_HAYZ082Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ010Q" :
+				if(ds_HAYZ010Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ011Q" :
+				if(ds_HAYZ011Q_E.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ082R_1" :
+				if(ds_HAYZ082R_1.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ082R_2" :
+				if(ds_HAYZ082R_2.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ001Q" :
+				if(ds_HMDZ001Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ002Q" :
+				if(ds_HMDZ002Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ003Q" :
+				if(ds_HMDZ003Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ023B" :
+				if(ds_HMDZ023B.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ004Q" :
+				if(ds_HMDZ004Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ005Q" :
+				if(ds_HMDZ005Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ006Q" :
+				if(ds_HMDZ006Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ007Q" :
+				if(ds_HMDZ007Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ009Q" :
+				if(ds_HAYZ009Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHPMZ100Q" :
+				if(ds_HPMZ100Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHPCZ104Q" :
+				if(ds_HPCZ104Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ100Q" :
+				if(ds_HMDZ100Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHBMZ101Q" :
+				if(ds_HBMZ101Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ061Q" :
+				if(ds_HAYZ061Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ063Q" :
+				if(ds_HAYZ063Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ093Q" :
+				if(ds_HAYZ093Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ094Q" :
+				if(ds_HAYZ094Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ095Q" :
+				if(ds_HAYZ095Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAYZ096Q" :
+				if(ds_HAYZ096Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHAEZ02Q" :
+				if(ds_HAEZ02Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ150" :
+				if(ds_HMDZ150.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ160" :
+				if(ds_HMDZ160.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ180" :
+				if(ds_HMDZ180.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ190" :
+				if(ds_HMDZ190.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ280" :
+				if(ds_HMDZ280.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ290" :
+				if(ds_HMDZ290.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ300" :
+				if(ds_HMDZ300.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHMDZ301Q" :
+				if(ds_HMDZ301Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;	
+			case "getHMDZ014Q" :
+				if(ds_HMDZ014Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHWBZ200Q" :
+				if(ds_HWBZ200Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getHARZ203Q" :
+				if(ds_HARZ203Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getInOutTime02" :
+				if(ds_GATE02.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			}
+		close();
+	}
+}
+
+function form_OnTimer(obj,nEventID)
+{
+	KillTimer(1);
+} 
+]]></Script>
+</Window>

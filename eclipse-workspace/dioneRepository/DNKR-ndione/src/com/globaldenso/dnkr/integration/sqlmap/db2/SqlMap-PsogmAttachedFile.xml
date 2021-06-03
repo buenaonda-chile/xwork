@@ -1,0 +1,189 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PsogmAttachedFileDao">
+
+	<!-- 보전이력검색 조회 -->
+	<!-- 検索結果をMapで受け取る --> 
+    <resultMap id="Psogm" type="PsogmDomain">
+    	<result property="comps" column="MSH" />
+        <result property="msh" column="MSH" />
+        <result property="mshno" column="MSHNO" />
+        <result property="mshnm" column="MSHNM" />
+        <result property="wrkm" column="WRKM" />
+        <result property="kornm" column="KORNM" />
+        <result property="jisno" column="JISNO" />
+        <result property="wndat" column="WNDAT" />
+        <result property="hyosn" column="HYOSN" />
+        <result property="hyosn2" column="HYOSN" />
+        <result property="hyosn3" column="HYOSN" />
+        <result property="wonin" column="WONIN" />
+        <result property="wonin2" column="WONIN" />
+        <result property="wonin3" column="WONIN" />
+        <result property="daech" column="DAECH" />
+        <result property="daech2" column="DAECH" />
+        <result property="daech3" column="DAECH" />
+        <result property="job" column="JOB" />
+        <result property="jobcd" column="JOBCD" />
+        <result property="jobnm" column="JOBNM" />
+        <result property="assy" column="ASSY" />
+        <result property="set" column="SET" />
+        <result property="hyo" column="HYO" />
+        <result property="cho" column="CYO" />
+        <result property="dec" column="DEC" />
+        <result property="dpart" column="DPART" />
+        <result property="stphr" column="STPHR" />
+        <result property="janhr" column="JANHR" />
+        <result property="kogub" column="KOGUB" />
+        <result property="padat" column="PADAT" />
+        <result property="urdat" column="URDAT" />
+        <result property="ksdat" column="KSDAT" />
+        <result property="wndat2" column="WNDAT2" />
+        <result property="prtcd" column="PRTCD" />
+        <result property="lincd" column="LINCD" />
+        <result property="timcd" column="TIMCD" />
+        <result property="dptcd" column="DPTCD" />
+        <result property="sdpcd" column="SDPCD" />
+        <result property="subas" column="SUBAS" />
+        <result property="comcd" column="COMCD" />
+        <result property="deccd" column="DECCD" />
+        <result property="chocd" column="CHOCD" />
+        <result property="hyocd" column="HYOCD" />
+        <result property="caucd" column="CAUCD" />
+        <result property="cause" column="ANDOR" />
+        <result property="trucd" column="TRUCD" />
+        <result property="trunm" column="TRUNM" />
+        <result property="andor" column="ANDOR" />
+        <result property="wndats" column="WNDATS" />
+        <result property="wndate" column="WNDATE" />
+        <result property="kdown" column="KDOWN" />
+        <result property="inocd" column="INOCD" />
+        <result property="inonm" column="INONM" />
+        <result property="emgcd" column="EMGCD" />
+        <result property="emgry" column="EMGRY" />
+        <result property="qorcd" column="QORCD" />
+        <result property="qornm" column="QORNM" />
+        <result property="assnm" column="ASSNM" />
+        <result property="assno" column="ASSNO" />
+        <result property="cpart" column="CPART" />
+        <result property="prtno" column="PRTNO" />
+        <result property="patim" column="PATIM" />
+        <result property="urtim" column="URTIM" />
+        <result property="kstim" column="KSTIM" />
+        <result property="wntim" column="WNTIM" />
+        <result property="wrkm2" column="WRKM2" />
+        <result property="sdpnm" column="SDPNM" />
+        <result property="sdpnm2" column="SDPNM2" />
+        <result property="kornm2" column="KORNM2" />
+        <result property="subcn" column="SUBCN" />
+        <result property="scost" column="SCOST" />
+        <result property="pcost" column="PCOST" />
+        <result property="repcd" column="REPCD" />
+        <result property="repnm" column="REPNM" />
+        <result property="effcd" column="EFFCD" />
+        <result property="effnm" column="EFFNM" />
+        <result property="ecost" column="ECOST" />
+        <result property="wathr" column="JWATHR" />
+        <result property="stphr" column="STPHT" />
+        <result property="wrkhr" column="WRKHR" />
+        <result property="bfrhr" column="BFRHR" />
+        <result property="tothr" column="TOTHR" />
+        <result property="cmplt" column="CMPLT" />
+        <result property="cnote" column="CNOTE" />
+        <result property="mnthr" column="MNTHR" />
+        <result property="teima" column="TEIMA" />
+        <result property="daesn" column="DAESN" />
+        <result property="chkan" column="CHKAN" />
+        <result property="imgbf" column="IMGBF" />
+        <result property="imgaf" column="IMGAF" />
+        <result property="maker" column="MAKER" />
+        <result property="price" column="PRICE" />
+        <result property="seqno" column="SEQNO" />
+    </resultMap>
+    
+    <!-- 検索結果をMapで受け取る -->
+    <resultMap id="FileDb2" type="FileDb2Domain">
+        <result property="seqno" column="SEQNO" />
+        <result property="comps" column="COMPS" />
+        <result property="jisno" column="JISNO" />
+        <result property="ftype" column="FTYPE" />
+        <result property="siryo" column="SIRYO" />
+        <result property="filnm" column="FILNM" />
+        <result property="lib2" column="LIB2" />
+    </resultMap>
+    
+    <!-- 첨부파일 유무검색 -->
+	<select id="searchById" resultMap="FileDb2" parameterType="FileDb2Domain">
+		select 
+				  trim(siryo) as siryo
+				, right(trim(filnm),3) as ftype
+				, trim(filnm) as filnm
+				, seqno
+		from 
+				${lib2}.obj230pf 
+		where 
+			'SqlMap-psogmAttachedFile.selectOgm219_obj230pf' = 'SqlMap-psogmAttachedFile.selectOgm219_obj230pf'
+			and	comps = #{comps}
+		<if test="jisno != null and jisno != ''">
+			and jisno = #{jisno}
+		</if>
+		<if test="seqno != null and seqno != ''">
+			and seqno = #{seqno}
+		</if>
+	</select>
+	
+	<!-- 첨부파일 유무검색 -->
+	<select id="selectOgm219_obj230pf" resultMap="FileDb2" parameterType="FileDb2Domain">
+		select 
+				  trim(siryo) as siryo
+				, right(trim(filnm),3) as ftype
+				, trim(filnm) as filnm 
+				, '0' as delchk
+				, seqno
+		from 
+				${lib2}.obj230pf 
+		where 
+			'SqlMap-psogmAttachedFile.selectOgm219_obj230pf' = 'SqlMap-psogmAttachedFile.selectOgm219_obj230pf'
+			and	comps = #{comps}
+			and jisno = #{jisno}
+		<if test="seqno != null and seqno != ''">
+			and seqno = #{seqno}
+		</if>
+	</select>
+	
+	<!-- 첨부파일 맥스 no -->
+	<select id="selectOgm206_maxSeq"  resultType="java.lang.Integer" parameterType="FileDb2Domain">
+		select 
+			coalesce(max(decimal(seqno)), 0) + 1   
+		from 
+			${lib2}.obj230pf
+		where 
+				'SqlMap-psogmAttachedFile.selectOgm206_maxSeq' = 'SqlMap-psogmAttachedFile.selectOgm206_maxSeq'
+			and comps = #{comps}
+	</select>
+	
+	<!-- 첨부파일 정보 저장 -->
+	<insert id="insertOgm206_sFile" parameterType="FileDb2Domain">
+		insert into ${lib2}.obj230pf (
+				comps, 
+				seqno, 
+				jisno, 
+				filnm, 
+				siryo
+			) values (
+				#{comps}, 
+				#{seqno}, 
+				#{jisno}, 
+				#{filnm}, 
+				#{siryo}
+			)
+	</insert>
+	
+	<!-- 첨부파일 정보 삭제 -->
+	<delete id="deleteOgm206" parameterType="FileDb2Domain">
+		delete from 
+				${lib2}.obj230pf
+		where 
+				'SqlMap-psogmAttachedFile.deleteOgm206' = 'SqlMap-psogmAttachedFile.deleteOgm206'
+			and	comps=#{comps} 
+			and seqno=#{seqno}
+	</delete>
+</mapper>

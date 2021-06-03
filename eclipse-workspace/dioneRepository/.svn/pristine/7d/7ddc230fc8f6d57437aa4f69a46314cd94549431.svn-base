@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="124" Id="PGMPOPUP" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnTimer="form_OnTimer" PidAttrib="7" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="298" WorkArea="true">
+		<Image Height="125" Id="Image1" ImageID="image::waiting.gif" Left="-1" TabOrder="1" Top="-1" Width="304"></Image>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+function form_OnLoadCompleted(obj)
+{
+    
+    var sArgument_new ="";
+    
+    for(i=0;i<Length(sArgument);i++){
+		if(Substr(sArgument, i, 1) = "@"){
+			sArgument_new += " ";			
+		} else {
+			sArgument_new += Substr(sArgument, i, 1);						
+		}
+    }
+	
+	var sOutDataSet_new ="";
+	for(i=0;i<Length(sOutDataSet);i++){
+		if(Substr(sOutDataSet, i, 1) = "@"){
+			sOutDataSet_new += " ";			
+		} else {
+			sOutDataSet_new += Substr(sOutDataSet, i, 1);						
+		}
+	}
+	
+	SetWaitCursor(true); 
+	
+	http.Sync = false;
+	http.TimeOut=500;
+	Transaction(sKind, sMethodName, "", sOutDataSet_new, sArgument_new, "callback");
+	http.TimeOut=30;
+	SetTimer(1,100);
+}
+
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		close("E");	
+	}else{
+		switch (svcId){
+			case "getMSTZ058" :
+				if(ds_MSTZ058.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTC302Q" :
+				if(ds_MSTC302Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;	
+			case "getMSTZ042Q" :
+				if(ds_MSTZ042Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ302Q" :
+				if(ds_MSTZ302Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMstz053" :
+				if(ds_MSTZ053.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ054" :
+				if(ds_MSTZ054.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ0567Q" :
+				if(ds_MSTZ0567Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;				
+			case "getMSTZ052Q" :
+				if(ds_MSTZ052Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ060" :
+				if(ds_MSTZ060.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;						
+			case "getMSTZ061Q" :
+				if(ds_MSTZ061Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ100" :
+				if(ds_MSTZ100.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTE101Q" :
+				if(ds_MSTE101Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getACCZ901Q" :
+				if(ds_ACCZ901Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ603Q" :
+				if(ds_MSTZ603Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ090" :
+				if(ds_MSTZ090.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTC301Q" :
+				if(ds_MSTC301Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			case "getMSTZ650Q" :
+				if(ds_MSTZ650Q.rowcount <= 0){
+					close("B");
+				}else{
+					close("T");
+				}
+				break;
+			}
+		close();
+	}
+}
+
+function form_OnTimer(obj,nEventID)
+{
+	KillTimer(1);
+} 
+]]></Script>
+</Window>

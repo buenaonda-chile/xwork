@@ -1,0 +1,2399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WorkStatsDao">
+
+	<!-- 検索結果をMapで受け取る -->
+    <resultMap id="Pjt" type="PjtDomain">
+        <result property="pjtNum" column="PJT_NUM" />
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="empName" column="EMP_NAME" />
+        <result property="workDate" column="WORK_DT" />
+        <result property="workHour" column="WORK_HOUR" />
+        <result property="workCode" column="WORK_TYPE_CD" />
+        <result property="workLCode" column="WORK_TYPE_LRG" />
+        <result property="workMCode" column="WORK_TYPE_MDM" />
+        <result property="workSCode" column="WORK_TYPE_SML" />
+        <result property="workLTypeNm" column="WORK_TYPE_LRG_NM" />
+        <result property="workMTypeNm" column="WORK_TYPE_MDM_NM" />
+        <result property="workTypeNm" column="WORK_TYPE_NM" />
+        <result property="relSys" column="RLTN_SYS" />
+        <result property="workTrtr" column="WORK_TRTR" />
+        <result property="aprvType" column="APRV_TYPE" />
+        <result property="aprvEmpNum" column="APRV_EMP_NUMBER" />
+        <result property="note" column="NOTE" />
+        <result property="workDtlCnts" column="WORK_DTL_CNTS" />
+        <result property="regDate" column="REGI_DTM" />
+        <result property="startDate" column="REGI_DTM" />
+        <result property="endDate" column="REGI_DTM" />
+        <result property="aprvDate" column="APRV_DTM" />
+        <result property="cmcLangCode" column="CMC_CODE" />
+        <result property="rowNum" column="ROW_NUM" /> 
+        <collection property="empNumList" column="EMP_NUMBER" javaType="java.util.List" ofType="java.lang.String">
+	    </collection>
+    </resultMap>
+    
+     <!-- 検索 SQL文（主キー） -->
+    <select id="searchByKey" resultMap="Pjt" parameterType="PjtDomain">
+        select 
+                PJT_NUM
+              , EMP_NUMBER
+              , WORK_DT
+              , WORK_HOUR
+              , WORK_TYPE_CD
+              , WORK_TYPE_LRG
+              , WORK_TYPE_MDM
+              , WORK_TYPE_SML
+              , RLTN_SYS
+              , WORK_TRTR
+              , APRV_TYPE
+              , APRV_EMP_NUMBER
+              , NOTE
+              , REGI_DTM
+              , APRV_DTM
+        from 
+                DNKR_PJT
+        where 
+                'SqlMap-Pjt.searchByKey' = 'SqlMap-Pjt.searchByKey'
+            and PJT_NUM = #{pjtNum}
+        
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForTeamL" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        	    sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG	
+	        	  , WORK_TYPE_LRG_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_LRG_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_LRG
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_LRG = B.WORK_TYPE_CD     
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        <if test="empNumList != null">
+		         	and A.EMP_NUMBER in
+		        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+		        		#{empNum}
+		        	</foreach>
+		        </if>
+		        )
+	        group by WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForTeamM" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        	    sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_MDM	
+	        	  , WORK_TYPE_MDM_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_MDM_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_MDM
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_MDM = B.WORK_TYPE_CD     
+		        where 
+		                'SqlMap-Pjt.searchByConditionForTeamM' = 'SqlMap-Pjt.searchByConditionForTeamM'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        <if test="empNumList != null">
+		         	and A.EMP_NUMBER in
+		        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+		        		#{empNum}
+		        	</foreach>
+		        </if>
+		        )
+	        group by WORK_TYPE_MDM, WORK_TYPE_MDM_NM
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForTeamS" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        	    sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_CD	
+	        	  , WORK_TYPE_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_CD
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD     
+		        where 
+		                'SqlMap-Pjt.searchByConditionForTeamS' = 'SqlMap-Pjt.searchByConditionForTeamS'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        <if test="empNumList != null">
+		         	and A.EMP_NUMBER in
+		        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+		        		#{empNum}
+		        	</foreach>
+		        </if>
+		        )
+	        group by WORK_TYPE_CD, WORK_TYPE_NM
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForTeamRelSys" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        	    sum(WORK_HOUR) WORK_HOUR
+	        	  , RLTN_SYS
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, RLTN_SYS desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.RLTN_SYS
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        where 
+		                'SqlMap-Pjt.searchByConditionForTeamRelSys' = 'SqlMap-Pjt.searchByConditionForTeamRelSys'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        <if test="empNumList != null">
+		         	and A.EMP_NUMBER in
+		        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+		        		#{empNum}
+		        	</foreach>
+		        </if>
+		        )
+	        group by RLTN_SYS
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForL" resultMap="Pjt"
+        parameterType="PjtDomain"> 
+        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG	
+	        	  , WORK_TYPE_LRG_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_LRG_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_LRG
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_LRG = B.WORK_TYPE_CD     
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+    </select>
+    
+    <select id="searchByConditionForM" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG
+	        	  , WORK_TYPE_MDM
+	        	  , WORK_TYPE_LRG_NM
+	        	  , WORK_TYPE_MDM_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_MDM_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_LRG
+		              , A.WORK_TYPE_MDM
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A    
+		        left join
+	                	DNKR_WORK_TYPE C
+		        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+		        left join
+		                DNKR_WORK_TYPE D
+		        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+    </select>
+    
+    <select id="searchByConditionForS" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_CD
+	        	  , WORK_TYPE_LRG
+	        	  , WORK_TYPE_MDM
+	        	  , WORK_TYPE_SML	
+	        	  , WORK_TYPE_NM
+	        	  , WORK_TYPE_LRG_NM
+	        	  , WORK_TYPE_MDM_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_CD
+		              , A.WORK_TYPE_LRG
+		              , A.WORK_TYPE_MDM
+		              , A.WORK_TYPE_SML
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD    
+		        left join
+	                	DNKR_WORK_TYPE C
+		        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+		        left join
+		                DNKR_WORK_TYPE D
+		        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_CD, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_SML, WORK_TYPE_NM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+    </select>
+    
+    <select id="searchByConditionForRelSys" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , RLTN_SYS
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, RLTN_SYS) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.RLTN_SYS
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        where 
+		                'SqlMap-WorkStats.searchByConditionForRelSys' = 'SqlMap-WorkStats.searchByConditionForRelSys'
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, RLTN_SYS
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPaging" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select 
+                PJT_NUM
+              , EMP_NUMBER
+              , WORK_DT
+              , WORK_HOUR
+              , WORK_TYPE_CD
+              , WORK_TYPE_LRG
+              , WORK_TYPE_MDM
+              , WORK_TYPE_SML
+              , WORK_TYPE_NM
+              , WORK_TYPE_LRG_NM
+              , WORK_TYPE_MDM_NM
+              , RLTN_SYS
+              , WORK_TRTR
+              , APRV_TYPE
+              , APRV_EMP_NUMBER
+              , NOTE
+              , REGI_DTM
+              , APRV_DTM
+              , ROW_NUM
+        from (
+       		select
+	            	A.PJT_NUM
+	              , A.EMP_NUMBER
+	              , A.WORK_DT
+	              , A.WORK_HOUR
+	              , A.WORK_TYPE_CD
+	              , A.WORK_TYPE_LRG
+	              , A.WORK_TYPE_MDM
+	              , A.WORK_TYPE_SML
+	          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+	          	  , B.WORK_TYPE_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+	          </if>
+	          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+	          	  , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+	          </if>
+	          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+	          	  , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+	          </if>    
+	              , A.RLTN_SYS
+	              , A.WORK_TRTR
+	              , A.APRV_TYPE
+	              , A.APRV_EMP_NUMBER
+	              , A.NOTE
+	              , A.WORK_DTL_CNTS
+	              , A.REGI_DTM
+	              , A.APRV_DTM
+                  , row_number() over (order by PJT_NUM desc) ROW_NUM
+            from 
+                    DNKR_PJT A
+	        left join
+	                DNKR_WORK_TYPE B
+	        on    A.WORK_TYPE_CD = B.WORK_TYPE_CD
+	        left join
+	                DNKR_WORK_TYPE C
+	        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+	        left join
+	                DNKR_WORK_TYPE D
+	        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD     
+	        where 
+                    'SqlMap-Pjt.searchByConditionForPaging' = 'SqlMap-Pjt.searchByConditionForPaging'
+        <if test="pjtNum != null and pjtNum != ''">
+            and	A.PJT_NUM = #{pjtNum}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and A.EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="workDate != null and workDate != ''">
+            and A.WORK_DT = #{workDate}
+        </if>
+        <if test="workHour != null and workHour != ''">
+            and A.WORK_HOUR = #{workHour}
+        </if>
+        <if test="workCode != null and workCode != ''">
+            and A.WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="workLCode != null and workLCode != ''">
+            and A.WORK_TYPE_LRG = #{workLCode}
+        </if>
+        <if test="workMCode != null and workMCode != ''">
+            and A.WORK_TYPE_MDM = #{workMCode}
+        </if>
+        <if test="workSCode != null and workSCode != ''">
+            and A.WORK_TYPE_SML = #{workSCode}
+        </if>
+        <if test="relSys != null and relSys != ''">
+            and A.RLTN_SYS = #{relSys}
+        </if>
+        <if test="workTrtr != null and workTrtr != ''">
+            and A.WORK_TRTR = #{workTrtr}
+        </if>
+        <if test="aprvType != null and aprvType != ''">
+            and A.APRV_TYPE = #{aprvType}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+        </if>
+        <if test="note != null and note != ''">
+            and A.NOTE = #{note}
+        </if>
+        <if test="regDate != null and regDate != ''">
+            and A.REGI_DTM = #{regDate}
+        </if>
+         <if test="startDate != null and startDate != ''">
+            and A.WORK_DT >= #{startDate}
+        </if>
+         <if test="endDate != null and endDate != ''">
+            and #{endDate} >= A.WORK_DT
+        </if>
+        <if test="aprvDate != null and aprvDate != ''">
+            and A.APRV_DTM = #{aprvDate}
+        </if>
+	        )
+	    where 
+            	ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPagingWorkL" resultMap="Pjt"
+        parameterType="PjtDomain">
+	    select
+	    		EMP_NUMBER
+	    	  , WORK_HOUR
+	    	  , WORK_TYPE_LRG
+	    	  , WORK_TYPE_LRG_NM
+	    	  , ROW_NUM
+   	    from	
+	    (
+	        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG	
+	        	  , WORK_TYPE_LRG_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_LRG_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_LRG
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_LRG = B.WORK_TYPE_CD     
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+        )
+	    where 
+           	ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPagingWorkM" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	    		EMP_NUMBER
+	    	  , WORK_HOUR
+	    	  , WORK_TYPE_LRG
+        	  , WORK_TYPE_MDM
+        	  , WORK_TYPE_LRG_NM
+        	  , WORK_TYPE_MDM_NM
+	    	  , ROW_NUM
+   	    from	
+	    (
+	        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG
+	        	  , WORK_TYPE_MDM
+	        	  , WORK_TYPE_LRG_NM
+	        	  , WORK_TYPE_MDM_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_MDM_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_LRG
+		              , A.WORK_TYPE_MDM
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A    
+		        left join
+	                	DNKR_WORK_TYPE C
+		        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+		        left join
+		                DNKR_WORK_TYPE D
+		        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+        )
+	    where 
+           	ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件、ページング用） -->
+    <select id="searchByConditionForPagingWorkS" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	    		EMP_NUMBER
+	    	  , WORK_HOUR
+	    	  , WORK_TYPE_CD
+	    	  , WORK_TYPE_LRG
+        	  , WORK_TYPE_MDM
+        	  , WORK_TYPE_SML	
+        	  , WORK_TYPE_NM
+        	  , WORK_TYPE_LRG_NM
+        	  , WORK_TYPE_MDM_NM
+	    	  , ROW_NUM
+   	    from	
+	    (
+	        select
+	        		EMP_NUMBER
+	        	  , sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_CD
+	        	  , WORK_TYPE_LRG
+	        	  , WORK_TYPE_MDM
+	        	  , WORK_TYPE_SML	
+	        	  , WORK_TYPE_NM
+	        	  , WORK_TYPE_LRG_NM
+	        	  , WORK_TYPE_MDM_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_NM desc) ROW_NUM
+       		from
+	        (
+		        select 
+		                A.EMP_NUMBER
+		              , A.WORK_HOUR
+		              , A.WORK_TYPE_CD
+		              , A.WORK_TYPE_LRG
+		              , A.WORK_TYPE_MDM
+		              , A.WORK_TYPE_SML
+		          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+		              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+		          </if>
+		              , A.APRV_EMP_NUMBER
+		        from 
+		                DNKR_PJT A
+		        left join
+		                DNKR_WORK_TYPE B
+		        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD    
+		        left join
+	                	DNKR_WORK_TYPE C
+		        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+		        left join
+		                DNKR_WORK_TYPE D
+		        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+		        where 
+		                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+		        <if test="pjtNum != null and pjtNum != ''">
+		            and	A.PJT_NUM = #{pjtNum}
+		        </if>
+		        <if test="empNumber != null and empNumber != ''">
+		            and A.EMP_NUMBER = #{empNumber}
+		        </if>
+		        <if test="workDate != null and workDate != ''">
+		            and A.WORK_DT = #{workDate}
+		        </if>
+		        <if test="workHour != null and workHour != ''">
+		            and A.WORK_HOUR = #{workHour}
+		        </if>
+		        <if test="workCode != null and workCode != ''">
+		            and A.WORK_TYPE_CD = #{workCode}
+		        </if>
+		        <if test="workLCode != null and workLCode != ''">
+		            and A.WORK_TYPE_LRG = #{workLCode}
+		        </if>
+		        <if test="workMCode != null and workMCode != ''">
+		            and A.WORK_TYPE_MDM = #{workMCode}
+		        </if>
+		        <if test="workSCode != null and workSCode != ''">
+		            and A.WORK_TYPE_SML = #{workSCode}
+		        </if>
+		        <if test="relSys != null and relSys != ''">
+		            and A.RLTN_SYS = #{relSys}
+		        </if>
+		        <if test="workTrtr != null and workTrtr != ''">
+		            and A.WORK_TRTR = #{workTrtr}
+		        </if>
+		        <if test="aprvType != null and aprvType != ''">
+		            and A.APRV_TYPE = #{aprvType}
+		        </if>
+		        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+		            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+		        </if>
+		        <if test="note != null and note != ''">
+		            and A.NOTE = #{note}
+		        </if>
+		        <if test="regDate != null and regDate != ''">
+		            and A.REGI_DTM = #{regDate}
+		        </if>
+		         <if test="startDate != null and startDate != ''">
+		            and A.WORK_DT >= #{startDate}
+		        </if>
+		         <if test="endDate != null and endDate != ''">
+		            and #{endDate} >= A.WORK_DT
+		        </if>
+		        <if test="aprvDate != null and aprvDate != ''">
+		            and A.APRV_DTM = #{aprvDate}
+		        </if>
+		        )
+	        group by EMP_NUMBER, WORK_TYPE_CD, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_SML, WORK_TYPE_NM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+        )
+	    where 
+           	ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForPagingTeamL" resultMap="Pjt"
+        parameterType="PjtDomain">
+       select
+	    		WORK_HOUR
+	    	  , WORK_TYPE_LRG
+	    	  , WORK_TYPE_LRG_NM
+	    	  , ROW_NUM
+  	    from
+	       (
+	       	select
+	        	    sum(WORK_HOUR) WORK_HOUR
+	        	  , WORK_TYPE_LRG	
+	        	  , WORK_TYPE_LRG_NM
+	        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_LRG_NM desc) ROW_NUM
+	     	from
+		        (
+			        select 
+			                A.EMP_NUMBER
+			              , A.WORK_HOUR
+			              , A.WORK_TYPE_LRG
+			          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+			              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+			              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+			              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+			          </if>
+			              , A.APRV_EMP_NUMBER
+			        from 
+			                DNKR_PJT A
+			        left join
+			                DNKR_WORK_TYPE B
+			        on      A.WORK_TYPE_LRG = B.WORK_TYPE_CD     
+			        where 
+			                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+			        <if test="pjtNum != null and pjtNum != ''">
+			            and	A.PJT_NUM = #{pjtNum}
+			        </if>
+			        <if test="empNumber != null and empNumber != ''">
+			            and A.EMP_NUMBER = #{empNumber}
+			        </if>
+			        <if test="workDate != null and workDate != ''">
+			            and A.WORK_DT = #{workDate}
+			        </if>
+			        <if test="workHour != null and workHour != ''">
+			            and A.WORK_HOUR = #{workHour}
+			        </if>
+			        <if test="workCode != null and workCode != ''">
+			            and A.WORK_TYPE_CD = #{workCode}
+			        </if>
+			        <if test="workLCode != null and workLCode != ''">
+			            and A.WORK_TYPE_LRG = #{workLCode}
+			        </if>
+			        <if test="workMCode != null and workMCode != ''">
+			            and A.WORK_TYPE_MDM = #{workMCode}
+			        </if>
+			        <if test="workSCode != null and workSCode != ''">
+			            and A.WORK_TYPE_SML = #{workSCode}
+			        </if>
+			        <if test="relSys != null and relSys != ''">
+			            and A.RLTN_SYS = #{relSys}
+			        </if>
+			        <if test="workTrtr != null and workTrtr != ''">
+			            and A.WORK_TRTR = #{workTrtr}
+			        </if>
+			        <if test="aprvType != null and aprvType != ''">
+			            and A.APRV_TYPE = #{aprvType}
+			        </if>
+			        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+			            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+			        </if>
+			        <if test="note != null and note != ''">
+			            and A.NOTE = #{note}
+			        </if>
+			        <if test="regDate != null and regDate != ''">
+			            and A.REGI_DTM = #{regDate}
+			        </if>
+			         <if test="startDate != null and startDate != ''">
+			            and A.WORK_DT >= #{startDate}
+			        </if>
+			         <if test="endDate != null and endDate != ''">
+			            and #{endDate} >= A.WORK_DT
+			        </if>
+			        <if test="aprvDate != null and aprvDate != ''">
+			            and A.APRV_DTM = #{aprvDate}
+			        </if>
+			        <if test="empNumList != null">
+			         	and A.EMP_NUMBER in
+			        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+			        		#{empNum}
+			        	</foreach>
+			        </if>
+			        )
+		        group by WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+	        )
+        where 
+         		ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForPagingTeamM" resultMap="Pjt"
+        parameterType="PjtDomain">
+        select
+	    		WORK_HOUR
+	     	  , WORK_TYPE_LRG
+	    	  , WORK_TYPE_MDM
+	    	  , WORK_TYPE_LRG_NM
+	    	  , WORK_TYPE_MDM_NM
+	    	  , ROW_NUM
+  	    from
+        	(
+	        	select
+		        	    sum(WORK_HOUR) WORK_HOUR
+		        	  , WORK_TYPE_LRG
+		        	  , WORK_TYPE_MDM	
+		        	  , WORK_TYPE_LRG_NM
+		        	  , WORK_TYPE_MDM_NM
+		        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_MDM_NM desc) ROW_NUM
+	       		from
+		        (
+			        select 
+			                A.EMP_NUMBER
+			              , A.WORK_HOUR
+			              , A.WORK_TYPE_LRG
+			              , A.WORK_TYPE_MDM
+			          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+			          	  , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+			              , B.WORK_TYPE_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+			          	  , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+			              , B.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+			          	  , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+			              , B.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+			          </if>
+			              , A.APRV_EMP_NUMBER
+			        from 
+			                DNKR_PJT A
+	                left join
+	                		DNKR_WORK_TYPE C
+		        	on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+			        left join
+			                DNKR_WORK_TYPE B
+			        on    A.WORK_TYPE_MDM = B.WORK_TYPE_CD     
+			        where 
+			                'SqlMap-Pjt.searchByConditionForTeamM' = 'SqlMap-Pjt.searchByConditionForTeamM'
+			        <if test="pjtNum != null and pjtNum != ''">
+			            and	A.PJT_NUM = #{pjtNum}
+			        </if>
+			        <if test="empNumber != null and empNumber != ''">
+			            and A.EMP_NUMBER = #{empNumber}
+			        </if>
+			        <if test="workDate != null and workDate != ''">
+			            and A.WORK_DT = #{workDate}
+			        </if>
+			        <if test="workHour != null and workHour != ''">
+			            and A.WORK_HOUR = #{workHour}
+			        </if>
+			        <if test="workCode != null and workCode != ''">
+			            and A.WORK_TYPE_CD = #{workCode}
+			        </if>
+			        <if test="workLCode != null and workLCode != ''">
+			            and A.WORK_TYPE_LRG = #{workLCode}
+			        </if>
+			        <if test="workMCode != null and workMCode != ''">
+			            and A.WORK_TYPE_MDM = #{workMCode}
+			        </if>
+			        <if test="workSCode != null and workSCode != ''">
+			            and A.WORK_TYPE_SML = #{workSCode}
+			        </if>
+			        <if test="relSys != null and relSys != ''">
+			            and A.RLTN_SYS = #{relSys}
+			        </if>
+			        <if test="workTrtr != null and workTrtr != ''">
+			            and A.WORK_TRTR = #{workTrtr}
+			        </if>
+			        <if test="aprvType != null and aprvType != ''">
+			            and A.APRV_TYPE = #{aprvType}
+			        </if>
+			        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+			            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+			        </if>
+			        <if test="note != null and note != ''">
+			            and A.NOTE = #{note}
+			        </if>
+			        <if test="regDate != null and regDate != ''">
+			            and A.REGI_DTM = #{regDate}
+			        </if>
+			         <if test="startDate != null and startDate != ''">
+			            and A.WORK_DT >= #{startDate}
+			        </if>
+			         <if test="endDate != null and endDate != ''">
+			            and #{endDate} >= A.WORK_DT
+			        </if>
+			        <if test="aprvDate != null and aprvDate != ''">
+			            and A.APRV_DTM = #{aprvDate}
+			        </if>
+			        <if test="empNumList != null">
+			         	and A.EMP_NUMBER in
+			        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+			        		#{empNum}
+			        	</foreach>
+			        </if>
+			        )
+		        group by WORK_TYPE_MDM, WORK_TYPE_LRG, WORK_TYPE_MDM_NM, WORK_TYPE_LRG_NM
+	        )
+        where 
+         		ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForPagingTeamS" resultMap="Pjt"
+        parameterType="PjtDomain"> 
+        select
+	    		WORK_HOUR
+	    	  , WORK_TYPE_CD
+	    	  , WORK_TYPE_LRG
+        	  , WORK_TYPE_MDM
+        	  , WORK_TYPE_SML	
+	    	  , WORK_TYPE_NM
+	    	  , WORK_TYPE_LRG_NM
+        	  , WORK_TYPE_MDM_NM
+	    	  , ROW_NUM
+  	    from
+        	(
+	        	select
+		        	    sum(WORK_HOUR) WORK_HOUR
+		        	  , WORK_TYPE_CD	
+		        	  , WORK_TYPE_LRG
+		        	  , WORK_TYPE_MDM
+		        	  , WORK_TYPE_SML
+		        	  , WORK_TYPE_NM
+		        	  , WORK_TYPE_LRG_NM
+	        	  	  , WORK_TYPE_MDM_NM
+		        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_NM desc) ROW_NUM
+	       		from
+		        (
+			        select 
+			                A.EMP_NUMBER
+			              , A.WORK_HOUR
+			              , A.WORK_TYPE_CD
+			              , A.WORK_TYPE_LRG
+			              , A.WORK_TYPE_MDM
+			              , A.WORK_TYPE_SML
+			          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+			              , B.WORK_TYPE_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+			              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+			              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+			          </if>
+			              , A.APRV_EMP_NUMBER
+			        from 
+			                DNKR_PJT A
+			        left join
+			                DNKR_WORK_TYPE B
+			        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD     
+			        left join
+		                	DNKR_WORK_TYPE C
+			        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+			        left join
+			                DNKR_WORK_TYPE D
+			        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+			        where 
+			                'SqlMap-Pjt.searchByConditionForTeamS' = 'SqlMap-Pjt.searchByConditionForTeamS'
+			        <if test="pjtNum != null and pjtNum != ''">
+			            and	A.PJT_NUM = #{pjtNum}
+			        </if>
+			        <if test="empNumber != null and empNumber != ''">
+			            and A.EMP_NUMBER = #{empNumber}
+			        </if>
+			        <if test="workDate != null and workDate != ''">
+			            and A.WORK_DT = #{workDate}
+			        </if>
+			        <if test="workHour != null and workHour != ''">
+			            and A.WORK_HOUR = #{workHour}
+			        </if>
+			        <if test="workCode != null and workCode != ''">
+			            and A.WORK_TYPE_CD = #{workCode}
+			        </if>
+			        <if test="workLCode != null and workLCode != ''">
+			            and A.WORK_TYPE_LRG = #{workLCode}
+			        </if>
+			        <if test="workMCode != null and workMCode != ''">
+			            and A.WORK_TYPE_MDM = #{workMCode}
+			        </if>
+			        <if test="workSCode != null and workSCode != ''">
+			            and A.WORK_TYPE_SML = #{workSCode}
+			        </if>
+			        <if test="relSys != null and relSys != ''">
+			            and A.RLTN_SYS = #{relSys}
+			        </if>
+			        <if test="workTrtr != null and workTrtr != ''">
+			            and A.WORK_TRTR = #{workTrtr}
+			        </if>
+			        <if test="aprvType != null and aprvType != ''">
+			            and A.APRV_TYPE = #{aprvType}
+			        </if>
+			        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+			            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+			        </if>
+			        <if test="note != null and note != ''">
+			            and A.NOTE = #{note}
+			        </if>
+			        <if test="regDate != null and regDate != ''">
+			            and A.REGI_DTM = #{regDate}
+			        </if>
+			         <if test="startDate != null and startDate != ''">
+			            and A.WORK_DT >= #{startDate}
+			        </if>
+			         <if test="endDate != null and endDate != ''">
+			            and #{endDate} >= A.WORK_DT
+			        </if>
+			        <if test="aprvDate != null and aprvDate != ''">
+			            and A.APRV_DTM = #{aprvDate}
+			        </if>
+			        <if test="empNumList != null">
+			         	and A.EMP_NUMBER in
+			        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+			        		#{empNum}
+			        	</foreach>
+			        </if>
+			        )
+		        group by WORK_TYPE_CD, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_SML, WORK_TYPE_NM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+	        )
+        where 
+         		ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByConditionForPagingRelSys" resultMap="Pjt"
+        parameterType="PjtDomain"> 
+        select
+	    		WORK_HOUR
+	    	  , WORK_TYPE_CD
+	    	  , WORK_TYPE_LRG
+        	  , WORK_TYPE_MDM
+        	  , WORK_TYPE_SML	
+	    	  , WORK_TYPE_NM
+	    	  , WORK_TYPE_LRG_NM
+        	  , WORK_TYPE_MDM_NM
+        	  , RLTN_SYS
+	    	  , ROW_NUM
+  	    from
+        	(
+	        	select
+		        	    sum(WORK_HOUR) WORK_HOUR
+		        	  , WORK_TYPE_CD	
+		        	  , WORK_TYPE_LRG
+		        	  , WORK_TYPE_MDM
+		        	  , WORK_TYPE_SML
+		        	  , WORK_TYPE_NM
+		        	  , WORK_TYPE_LRG_NM
+	        	  	  , WORK_TYPE_MDM_NM
+	        	  	  , RLTN_SYS
+		        	  , row_number() over (order by sum(WORK_HOUR) desc, RLTN_SYS desc) ROW_NUM
+	       		from
+		        (
+			        select 
+			                A.EMP_NUMBER
+			              , A.WORK_HOUR
+			              , A.WORK_TYPE_CD
+			              , A.WORK_TYPE_LRG
+			              , A.WORK_TYPE_MDM
+			              , A.WORK_TYPE_SML
+			          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+			              , B.WORK_TYPE_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+			              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+			          </if>
+			          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+			              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+			              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		              	  , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+			          </if>
+			          	  , RLTN_SYS
+			              , A.APRV_EMP_NUMBER
+			        from 
+			                DNKR_PJT A
+			        left join
+			                DNKR_WORK_TYPE B
+			        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD     
+			        left join
+		                	DNKR_WORK_TYPE C
+			        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+			        left join
+			                DNKR_WORK_TYPE D
+			        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD 
+			        where 
+			                'SqlMap-Pjt.searchByConditionForTeamS' = 'SqlMap-Pjt.searchByConditionForTeamS'
+			        <if test="pjtNum != null and pjtNum != ''">
+			            and	A.PJT_NUM = #{pjtNum}
+			        </if>
+			        <if test="empNumber != null and empNumber != ''">
+			            and A.EMP_NUMBER = #{empNumber}
+			        </if>
+			        <if test="workDate != null and workDate != ''">
+			            and A.WORK_DT = #{workDate}
+			        </if>
+			        <if test="workHour != null and workHour != ''">
+			            and A.WORK_HOUR = #{workHour}
+			        </if>
+			        <if test="workCode != null and workCode != ''">
+			            and A.WORK_TYPE_CD = #{workCode}
+			        </if>
+			        <if test="workLCode != null and workLCode != ''">
+			            and A.WORK_TYPE_LRG = #{workLCode}
+			        </if>
+			        <if test="workMCode != null and workMCode != ''">
+			            and A.WORK_TYPE_MDM = #{workMCode}
+			        </if>
+			        <if test="workSCode != null and workSCode != ''">
+			            and A.WORK_TYPE_SML = #{workSCode}
+			        </if>
+			        <if test="relSys != null and relSys != ''">
+			            and A.RLTN_SYS = #{relSys}
+			        </if>
+			        <if test="workTrtr != null and workTrtr != ''">
+			            and A.WORK_TRTR = #{workTrtr}
+			        </if>
+			        <if test="aprvType != null and aprvType != ''">
+			            and A.APRV_TYPE = #{aprvType}
+			        </if>
+			        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+			            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+			        </if>
+			        <if test="note != null and note != ''">
+			            and A.NOTE = #{note}
+			        </if>
+			        <if test="regDate != null and regDate != ''">
+			            and A.REGI_DTM = #{regDate}
+			        </if>
+			         <if test="startDate != null and startDate != ''">
+			            and A.WORK_DT >= #{startDate}
+			        </if>
+			         <if test="endDate != null and endDate != ''">
+			            and #{endDate} >= A.WORK_DT
+			        </if>
+			        <if test="aprvDate != null and aprvDate != ''">
+			            and A.APRV_DTM = #{aprvDate}
+			        </if>
+			        <if test="empNumList != null">
+			         	and A.EMP_NUMBER in
+			        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+			        		#{empNum}
+			        	</foreach>
+			        </if>
+			        )
+		        group by RLTN_SYS, WORK_TYPE_CD, WORK_TYPE_LRG, WORK_TYPE_MDM, WORK_TYPE_SML, WORK_TYPE_NM, WORK_TYPE_LRG_NM, WORK_TYPE_MDM_NM
+	        )
+        where 
+         		ROW_NUM between #{rowNumFrom} and #{rowNumTo}
+    </select>
+    
+    
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+                count(rownum) 
+        select
+	            	A.PJT_NUM
+	              , A.EMP_NUMBER
+	              , A.WORK_DT
+	              , A.WORK_HOUR
+	              , A.WORK_TYPE_CD
+	              , A.WORK_TYPE_LRG
+	              , A.WORK_TYPE_MDM
+	              , A.WORK_TYPE_SML
+	          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+	          	  , B.WORK_TYPE_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_NM WORK_TYPE_MDM_NM
+	          </if>
+	          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+	          	  , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+	          </if>
+	          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+	          	  , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+	              , C.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+	              , D.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+	          </if>    
+	              , A.RLTN_SYS
+	              , A.WORK_TRTR
+	              , A.APRV_TYPE
+	              , A.APRV_EMP_NUMBER
+	              , A.NOTE
+	              , A.WORK_DTL_CNTS
+	              , A.REGI_DTM
+	              , A.APRV_DTM
+              <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+                  , row_number() over (order by B.WORK_TYPE_NM desc) ROW_NUM
+              </if>
+              <if test="cmcLangCode != null and cmcLangCode == 'en'">
+                  , row_number() over (order by B.WORK_TYPE_EN_NM desc) ROW_NUM
+              </if>
+              <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+                  , row_number() over (order by B.WORK_TYPE_JA_NM desc) ROW_NUM
+              </if>
+            from 
+                    DNKR_PJT A
+	        left join
+	                DNKR_WORK_TYPE B
+	        on    A.WORK_TYPE_CD = B.WORK_TYPE_CD
+	        left join
+	                DNKR_WORK_TYPE C
+	        on    A.WORK_TYPE_LRG = C.WORK_TYPE_CD
+	        left join
+	                DNKR_WORK_TYPE D
+	        on    A.WORK_TYPE_MDM = D.WORK_TYPE_CD     
+	        where 
+                    'SqlMap-Pjt.searchByConditionForPaging' = 'SqlMap-Pjt.searchByConditionForPaging'
+        <if test="pjtNum != null and pjtNum != ''">
+            and	A.PJT_NUM = #{pjtNum}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and A.EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="workDate != null and workDate != ''">
+            and A.WORK_DT = #{workDate}
+        </if>
+        <if test="workHour != null and workHour != ''">
+            and A.WORK_HOUR = #{workHour}
+        </if>
+        <if test="workCode != null and workCode != ''">
+            and A.WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="workLCode != null and workLCode != ''">
+            and A.WORK_TYPE_LRG = #{workLCode}
+        </if>
+        <if test="workMCode != null and workMCode != ''">
+            and A.WORK_TYPE_MDM = #{workMCode}
+        </if>
+        <if test="workSCode != null and workSCode != ''">
+            and A.WORK_TYPE_SML = #{workSCode}
+        </if>
+        <if test="relSys != null and relSys != ''">
+            and A.RLTN_SYS = #{relSys}
+        </if>
+        <if test="workTrtr != null and workTrtr != ''">
+            and A.WORK_TRTR = #{workTrtr}
+        </if>
+        <if test="aprvType != null and aprvType != ''">
+            and A.APRV_TYPE = #{aprvType}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+        </if>
+        <if test="note != null and note != ''">
+            and A.NOTE = #{note}
+        </if>
+        <if test="regDate != null and regDate != ''">
+            and A.REGI_DTM = #{regDate}
+        </if>
+         <if test="startDate != null and startDate != ''">
+            and A.WORK_DT >= #{startDate}
+        </if>
+         <if test="endDate != null and endDate != ''">
+            and #{endDate} >= A.WORK_DT
+        </if>
+        <if test="aprvDate != null and aprvDate != ''">
+            and A.APRV_DTM = #{aprvDate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountWorkL" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+                count(rownum)
+    	from
+        	(
+	        select 
+	                EMP_NUMBER
+	              , WORK_TYPE_LRG
+            from 
+            	( 
+           		select
+           			    A.EMP_NUMBER
+           			  , A.WORK_HOUR
+           			  , A.WORK_TYPE_LRG
+         		  <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+		              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+		              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+		          </if>
+		          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+		              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+		           </if>
+         		from 
+         			  DNKR_PJT A
+       			left join 
+       				  DNKR_WORK_TYPE B
+     			on A.WORK_TYPE_LRG = B.WORK_TYPE_CD
+     			where 'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+	        <if test="pjtNum != null and pjtNum != ''">
+	            and	A.PJT_NUM = #{pjtNum}
+	        </if>
+	        <if test="empNumber != null and empNumber != ''">
+	            and A.EMP_NUMBER = #{empNumber}
+	        </if>
+	        <if test="workDate != null and workDate != ''">
+	            and A.WORK_DT = #{workDate}
+	        </if>
+	        <if test="workHour != null and workHour != ''">
+	            and A.WORK_HOUR = #{workHour}
+	        </if>
+	        <if test="workCode != null and workCode != ''">
+	            and A.WORK_TYPE_CD = #{workCode}
+	        </if>
+	        <if test="workLCode != null and workLCode != ''">
+	            and A.WORK_TYPE_LRG = #{workLCode}
+	        </if>
+	        <if test="workMCode != null and workMCode != ''">
+	            and A.WORK_TYPE_MDM = #{workMCode}
+	        </if>
+	        <if test="workSCode != null and workSCode != ''">
+	            and A.WORK_TYPE_SML = #{workSCode}
+	        </if>
+	        <if test="relSys != null and relSys != ''">
+	            and A.RLTN_SYS = #{relSys}
+	        </if>
+	        <if test="workTrtr != null and workTrtr != ''">
+	            and A.WORK_TRTR = #{workTrtr}
+	        </if>
+	        <if test="aprvType != null and aprvType != ''">
+	            and A.APRV_TYPE = #{aprvType}
+	        </if>
+	        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+	            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+	        </if>
+	        <if test="note != null and note != ''">
+	            and A.NOTE = #{note}
+	        </if>
+	        <if test="regDate != null and regDate != ''">
+	            and A.REGI_DTM = #{regDate}
+	        </if>
+	         <if test="startDate != null and startDate != ''">
+	            and A.WORK_DT >= #{startDate}
+	        </if>
+	         <if test="endDate != null and endDate != ''">
+	            and #{endDate} >= A.WORK_DT
+	        </if>
+	        <if test="aprvDate != null and aprvDate != ''">
+	            and A.APRV_DTM = #{aprvDate}
+	        </if>
+	        )
+        group by EMP_NUMBER, WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+        )
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountWorkM" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_PJT   
+        where  
+                'SqlMap-Pjt.searchCount' = 'SqlMap-Pjt.searchCount'
+      	<if test="pjtNum != null and pjtNum != ''">
+            and	PJT_NUM = #{pjtNum}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="workDate != null and workDate != ''">
+            and WORK_DT = #{workDate}
+        </if>
+        <if test="workHour != null and workHour != ''">
+            and WORK_HOUR = #{workHour}
+        </if>
+        <if test="workCode != null and workCode != ''">
+            and WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="workLCode != null and workLCode != ''">
+            and WORK_TYPE_LRG = #{workLCode}
+        </if>
+        <if test="workMCode != null and workMCode != ''">
+            and WORK_TYPE_MDM = #{workMCode}
+        </if>
+        <if test="workSCode != null and workSCode != ''">
+            and WORK_TYPE_SML = #{workSCode}
+        </if>
+        <if test="relSys != null and relSys != ''">
+            and RLTN_SYS = #{relSys}
+        </if>
+        <if test="workTrtr != null and workTrtr != ''">
+            and WORK_TRTR = #{workTrtr}
+        </if>
+        <if test="aprvType != null and aprvType != ''">
+            and APRV_TYPE = #{aprvType}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and APRV_EMP_NUMBER = #{aprvEmpNum}
+        </if>
+        <if test="note != null and note != ''">
+            and NOTE = #{note}
+        </if>
+        <if test="regDate != null and regDate != ''">
+            and REGI_DTM = #{regDate}
+        </if>
+         <if test="startDate != null and startDate != ''">
+            and WORK_DT >= #{startDate}
+        </if>
+         <if test="endDate != null and endDate != ''">
+            and #{endDate} >= WORK_DT
+        </if>
+        <if test="aprvDate != null and aprvDate != ''">
+            and APRV_DTM = #{aprvDate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountWorkS" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+                count(rownum) 
+        from 
+                DNKR_PJT   
+        where  
+                'SqlMap-Pjt.searchCount' = 'SqlMap-Pjt.searchCount'
+      	<if test="pjtNum != null and pjtNum != ''">
+            and	PJT_NUM = #{pjtNum}
+        </if>
+        <if test="empNumber != null and empNumber != ''">
+            and EMP_NUMBER = #{empNumber}
+        </if>
+        <if test="workDate != null and workDate != ''">
+            and WORK_DT = #{workDate}
+        </if>
+        <if test="workHour != null and workHour != ''">
+            and WORK_HOUR = #{workHour}
+        </if>
+        <if test="workCode != null and workCode != ''">
+            and WORK_TYPE_CD = #{workCode}
+        </if>
+        <if test="workLCode != null and workLCode != ''">
+            and WORK_TYPE_LRG = #{workLCode}
+        </if>
+        <if test="workMCode != null and workMCode != ''">
+            and WORK_TYPE_MDM = #{workMCode}
+        </if>
+        <if test="workSCode != null and workSCode != ''">
+            and WORK_TYPE_SML = #{workSCode}
+        </if>
+        <if test="relSys != null and relSys != ''">
+            and RLTN_SYS = #{relSys}
+        </if>
+        <if test="workTrtr != null and workTrtr != ''">
+            and WORK_TRTR = #{workTrtr}
+        </if>
+        <if test="aprvType != null and aprvType != ''">
+            and APRV_TYPE = #{aprvType}
+        </if>
+        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+            and APRV_EMP_NUMBER = #{aprvEmpNum}
+        </if>
+        <if test="note != null and note != ''">
+            and NOTE = #{note}
+        </if>
+        <if test="regDate != null and regDate != ''">
+            and REGI_DTM = #{regDate}
+        </if>
+         <if test="startDate != null and startDate != ''">
+            and WORK_DT >= #{startDate}
+        </if>
+         <if test="endDate != null and endDate != ''">
+            and #{endDate} >= WORK_DT
+        </if>
+        <if test="aprvDate != null and aprvDate != ''">
+            and APRV_DTM = #{aprvDate}
+        </if>
+    </select> 
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchCountTeamL" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+        		count(rownum)
+       	from	
+		        (
+			        select
+				        	    sum(WORK_HOUR) WORK_HOUR
+				        	  , WORK_TYPE_LRG	
+				        	  , WORK_TYPE_LRG_NM
+				        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_LRG_NM desc) ROW_NUM
+			       		from
+				        (
+					        select 
+					                A.EMP_NUMBER
+					              , A.WORK_HOUR
+					              , A.WORK_TYPE_LRG
+					          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+					              , B.WORK_TYPE_NM WORK_TYPE_LRG_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+					              , B.WORK_TYPE_EN_NM WORK_TYPE_LRG_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+					              , B.WORK_TYPE_JA_NM WORK_TYPE_LRG_NM
+					          </if>
+					              , A.APRV_EMP_NUMBER
+					        from 
+					                DNKR_PJT A
+					        left join
+					                DNKR_WORK_TYPE B
+					        on      A.WORK_TYPE_LRG = B.WORK_TYPE_CD     
+					        where 
+					                'SqlMap-Pjt.searchByConditionForPagingWorkL' = 'SqlMap-Pjt.searchByConditionForPagingWorkL'
+					        <if test="pjtNum != null and pjtNum != ''">
+					            and	A.PJT_NUM = #{pjtNum}
+					        </if>
+					        <if test="empNumber != null and empNumber != ''">
+					            and A.EMP_NUMBER = #{empNumber}
+					        </if>
+					        <if test="workDate != null and workDate != ''">
+					            and A.WORK_DT = #{workDate}
+					        </if>
+					        <if test="workHour != null and workHour != ''">
+					            and A.WORK_HOUR = #{workHour}
+					        </if>
+					        <if test="workCode != null and workCode != ''">
+					            and A.WORK_TYPE_CD = #{workCode}
+					        </if>
+					        <if test="workLCode != null and workLCode != ''">
+					            and A.WORK_TYPE_LRG = #{workLCode}
+					        </if>
+					        <if test="workMCode != null and workMCode != ''">
+					            and A.WORK_TYPE_MDM = #{workMCode}
+					        </if>
+					        <if test="workSCode != null and workSCode != ''">
+					            and A.WORK_TYPE_SML = #{workSCode}
+					        </if>
+					        <if test="relSys != null and relSys != ''">
+					            and A.RLTN_SYS = #{relSys}
+					        </if>
+					        <if test="workTrtr != null and workTrtr != ''">
+					            and A.WORK_TRTR = #{workTrtr}
+					        </if>
+					        <if test="aprvType != null and aprvType != ''">
+					            and A.APRV_TYPE = #{aprvType}
+					        </if>
+					        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+					            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+					        </if>
+					        <if test="note != null and note != ''">
+					            and A.NOTE = #{note}
+					        </if>
+					        <if test="regDate != null and regDate != ''">
+					            and A.REGI_DTM = #{regDate}
+					        </if>
+					         <if test="startDate != null and startDate != ''">
+					            and A.WORK_DT >= #{startDate}
+					        </if>
+					         <if test="endDate != null and endDate != ''">
+					            and #{endDate} >= A.WORK_DT
+					        </if>
+					        <if test="aprvDate != null and aprvDate != ''">
+					            and A.APRV_DTM = #{aprvDate}
+					        </if>
+					        <if test="empNumList != null">
+					         	and A.EMP_NUMBER in
+					        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+					        		#{empNum}
+					        	</foreach>
+					        </if>
+					        )
+				        group by WORK_TYPE_LRG, WORK_TYPE_LRG_NM
+		        )
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchCountTeamM" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+        		count(rownum)
+       	from
+	        	(
+		        	select
+			        	    sum(WORK_HOUR) WORK_HOUR
+			        	  , WORK_TYPE_MDM	
+			        	  , WORK_TYPE_MDM_NM
+			        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_MDM_NM desc) ROW_NUM
+		       		from
+				        (
+					        select 
+					                A.EMP_NUMBER
+					              , A.WORK_HOUR
+					              , A.WORK_TYPE_MDM
+					          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+					              , B.WORK_TYPE_NM WORK_TYPE_MDM_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+					              , B.WORK_TYPE_EN_NM WORK_TYPE_MDM_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+					              , B.WORK_TYPE_JA_NM WORK_TYPE_MDM_NM
+					          </if>
+					              , A.APRV_EMP_NUMBER
+					        from 
+					                DNKR_PJT A
+					        left join
+					                DNKR_WORK_TYPE B
+					        on      A.WORK_TYPE_MDM = B.WORK_TYPE_CD     
+					        where 
+					                'SqlMap-Pjt.searchByConditionForTeamM' = 'SqlMap-Pjt.searchByConditionForTeamM'
+					        <if test="pjtNum != null and pjtNum != ''">
+					            and	A.PJT_NUM = #{pjtNum}
+					        </if>
+					        <if test="empNumber != null and empNumber != ''">
+					            and A.EMP_NUMBER = #{empNumber}
+					        </if>
+					        <if test="workDate != null and workDate != ''">
+					            and A.WORK_DT = #{workDate}
+					        </if>
+					        <if test="workHour != null and workHour != ''">
+					            and A.WORK_HOUR = #{workHour}
+					        </if>
+					        <if test="workCode != null and workCode != ''">
+					            and A.WORK_TYPE_CD = #{workCode}
+					        </if>
+					        <if test="workLCode != null and workLCode != ''">
+					            and A.WORK_TYPE_LRG = #{workLCode}
+					        </if>
+					        <if test="workMCode != null and workMCode != ''">
+					            and A.WORK_TYPE_MDM = #{workMCode}
+					        </if>
+					        <if test="workSCode != null and workSCode != ''">
+					            and A.WORK_TYPE_SML = #{workSCode}
+					        </if>
+					        <if test="relSys != null and relSys != ''">
+					            and A.RLTN_SYS = #{relSys}
+					        </if>
+					        <if test="workTrtr != null and workTrtr != ''">
+					            and A.WORK_TRTR = #{workTrtr}
+					        </if>
+					        <if test="aprvType != null and aprvType != ''">
+					            and A.APRV_TYPE = #{aprvType}
+					        </if>
+					        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+					            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+					        </if>
+					        <if test="note != null and note != ''">
+					            and A.NOTE = #{note}
+					        </if>
+					        <if test="regDate != null and regDate != ''">
+					            and A.REGI_DTM = #{regDate}
+					        </if>
+					         <if test="startDate != null and startDate != ''">
+					            and A.WORK_DT >= #{startDate}
+					        </if>
+					         <if test="endDate != null and endDate != ''">
+					            and #{endDate} >= A.WORK_DT
+					        </if>
+					        <if test="aprvDate != null and aprvDate != ''">
+					            and A.APRV_DTM = #{aprvDate}
+					        </if>
+					        <if test="empNumList != null">
+					         	and A.EMP_NUMBER in
+					        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+					        		#{empNum}
+					        	</foreach>
+					        </if>
+				        )
+			        group by WORK_TYPE_MDM, WORK_TYPE_MDM_NM
+		        )
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchCountTeamS" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+        		count(rownum)
+       	from
+	        	(
+		        	select
+			        	    sum(WORK_HOUR) WORK_HOUR
+			        	  , WORK_TYPE_CD	
+			        	  , WORK_TYPE_NM
+			        	  , row_number() over (order by sum(WORK_HOUR) desc, WORK_TYPE_NM desc) ROW_NUM
+		       		from
+				        (
+					        select 
+					                A.EMP_NUMBER
+					              , A.WORK_HOUR
+					              , A.WORK_TYPE_CD
+					          <if test="cmcLangCode != null and cmcLangCode == 'kr'">
+					              , B.WORK_TYPE_NM WORK_TYPE_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'en'">
+					              , B.WORK_TYPE_EN_NM WORK_TYPE_NM
+					          </if>
+					          <if test="cmcLangCode != null and cmcLangCode == 'ja'">
+					              , B.WORK_TYPE_JA_NM WORK_TYPE_NM
+					          </if>
+					              , A.APRV_EMP_NUMBER
+					        from 
+					                DNKR_PJT A
+					        left join
+					                DNKR_WORK_TYPE B
+					        on      A.WORK_TYPE_CD = B.WORK_TYPE_CD     
+					        where 
+					                'SqlMap-Pjt.searchByConditionForTeamS' = 'SqlMap-Pjt.searchByConditionForTeamS'
+					        <if test="pjtNum != null and pjtNum != ''">
+					            and	A.PJT_NUM = #{pjtNum}
+					        </if>
+					        <if test="empNumber != null and empNumber != ''">
+					            and A.EMP_NUMBER = #{empNumber}
+					        </if>
+					        <if test="workDate != null and workDate != ''">
+					            and A.WORK_DT = #{workDate}
+					        </if>
+					        <if test="workHour != null and workHour != ''">
+					            and A.WORK_HOUR = #{workHour}
+					        </if>
+					        <if test="workCode != null and workCode != ''">
+					            and A.WORK_TYPE_CD = #{workCode}
+					        </if>
+					        <if test="workLCode != null and workLCode != ''">
+					            and A.WORK_TYPE_LRG = #{workLCode}
+					        </if>
+					        <if test="workMCode != null and workMCode != ''">
+					            and A.WORK_TYPE_MDM = #{workMCode}
+					        </if>
+					        <if test="workSCode != null and workSCode != ''">
+					            and A.WORK_TYPE_SML = #{workSCode}
+					        </if>
+					        <if test="relSys != null and relSys != ''">
+					            and A.RLTN_SYS = #{relSys}
+					        </if>
+					        <if test="workTrtr != null and workTrtr != ''">
+					            and A.WORK_TRTR = #{workTrtr}
+					        </if>
+					        <if test="aprvType != null and aprvType != ''">
+					            and A.APRV_TYPE = #{aprvType}
+					        </if>
+					        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+					            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+					        </if>
+					        <if test="note != null and note != ''">
+					            and A.NOTE = #{note}
+					        </if>
+					        <if test="regDate != null and regDate != ''">
+					            and A.REGI_DTM = #{regDate}
+					        </if>
+					         <if test="startDate != null and startDate != ''">
+					            and A.WORK_DT >= #{startDate}
+					        </if>
+					         <if test="endDate != null and endDate != ''">
+					            and #{endDate} >= A.WORK_DT
+					        </if>
+					        <if test="aprvDate != null and aprvDate != ''">
+					            and A.APRV_DTM = #{aprvDate}
+					        </if>
+					        <if test="empNumList != null">
+					         	and A.EMP_NUMBER in
+					        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+					        		#{empNum}
+					        	</foreach>
+					        </if>
+				        )
+			        group by WORK_TYPE_CD, WORK_TYPE_NM
+		        )
+    </select>
+    
+    <select id="searchCountRelSys" resultType="java.lang.Integer"
+        parameterType="PjtDomain">
+        select 
+        		count(rownum)
+       	from
+        	(
+	        	select
+		        		EMP_NUMBER
+		        	  , sum(WORK_HOUR) WORK_HOUR
+		        	  , RLTN_SYS
+		        	  , row_number() over (order by sum(WORK_HOUR) desc, RLTN_SYS) ROW_NUM
+	       		from
+		        (
+			        select 
+			                A.EMP_NUMBER
+			              , A.WORK_HOUR
+			              , A.RLTN_SYS
+			              , A.APRV_EMP_NUMBER
+			        from 
+			                DNKR_PJT A
+			        where 
+			                'SqlMap-WorkStats.searchByConditionForRelSys' = 'SqlMap-WorkStats.searchByConditionForRelSys'
+			        <if test="empNumber != null and empNumber != ''">
+			            and A.EMP_NUMBER = #{empNumber}
+			        </if>
+			        <if test="workDate != null and workDate != ''">
+			            and A.WORK_DT = #{workDate}
+			        </if>
+			        <if test="workHour != null and workHour != ''">
+			            and A.WORK_HOUR = #{workHour}
+			        </if>
+			        <if test="workCode != null and workCode != ''">
+			            and A.WORK_TYPE_CD = #{workCode}
+			        </if>
+			        <if test="workLCode != null and workLCode != ''">
+			            and A.WORK_TYPE_LRG = #{workLCode}
+			        </if>
+			        <if test="workMCode != null and workMCode != ''">
+			            and A.WORK_TYPE_MDM = #{workMCode}
+			        </if>
+			        <if test="workSCode != null and workSCode != ''">
+			            and A.WORK_TYPE_SML = #{workSCode}
+			        </if>
+			        <if test="relSys != null and relSys != ''">
+			            and A.RLTN_SYS = #{relSys}
+			        </if>
+			        <if test="workTrtr != null and workTrtr != ''">
+			            and A.WORK_TRTR = #{workTrtr}
+			        </if>
+			        <if test="aprvType != null and aprvType != ''">
+			            and A.APRV_TYPE = #{aprvType}
+			        </if>
+			        <if test="aprvEmpNum != null and aprvEmpNum != ''">
+			            and A.APRV_EMP_NUMBER = #{aprvEmpNum}
+			        </if>
+			        <if test="note != null and note != ''">
+			            and A.NOTE = #{note}
+			        </if>
+			        <if test="regDate != null and regDate != ''">
+			            and A.REGI_DTM = #{regDate}
+			        </if>
+			         <if test="startDate != null and startDate != ''">
+			            and A.WORK_DT >= #{startDate}
+			        </if>
+			         <if test="endDate != null and endDate != ''">
+			            and #{endDate} >= A.WORK_DT
+			        </if>
+			        <if test="aprvDate != null and aprvDate != ''">
+			            and A.APRV_DTM = #{aprvDate}
+			        </if>
+			        <if test="empNumList != null">
+			         	and A.EMP_NUMBER in
+			        	<foreach collection="empNumList" item="empNum" index="index" separator="," open="(" close=")">
+			        		#{empNum}
+			        	</foreach>
+			        </if>
+			        )
+		        group by EMP_NUMBER, RLTN_SYS
+		        )
+    </select>
+
+</mapper>

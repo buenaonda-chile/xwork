@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form BKColor="white" Font="Arial,9" Height="624" Id="ORPE001" Left="8" OnFocus="ORPE001_OnFocus" OnLoadCompleted="ORPE001_OnLoadCompleted" PidAttrib="7" Title="사외성적서등록" TooltipFont="Default,0" Top="8" Ver="1.1" Width="1064" WorkArea="TRUE">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_files">
+				<Contents>
+					<colinfo id="chk" size="256" summ="default" type="STRING"/>
+					<colinfo id="fullname" size="256" summ="default" type="STRING"/>
+					<colinfo id="filename" size="256" summ="default" type="STRING"/>
+					<colinfo id="prog_bar" size="256" summ="default" type="STRING"/>
+					<colinfo id="filesize" size="256" summ="default" type="INT"/>
+					<colinfo id="progsize" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_orpe001_main">
+				<Contents>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRITER" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="FILENAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_orpe001r_jbcode">
+				<Contents>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_orpe001_select">
+				<Contents>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="KORNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="FILENAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_mst650pf"></Dataset>
+		</Datasets>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="20" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" TabOrder="4" Top="43" Width="120"></Combo>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="73" Id="searchBar" TabOrder="22" Top="31" Width="1048"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static13" Left="667" TabOrder="29" Top="72" Width="372"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static12" Left="357" TabOrder="28" Top="72" Width="187"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static8" Left="120" TabOrder="24" Top="72" Width="128"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static1" Left="120" TabOrder="23" Top="40" Width="128"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static11" Left="932" TabOrder="27" Top="40" Width="112"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static10" Left="667" TabOrder="26" Top="40" Width="158"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="26" Id="Static9" Left="357" TabOrder="25" Top="40" Width="187"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="1" TabOrder="1" Top="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="2" TabOrder="3" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="40" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="549" TabOrder="5" Text="자산관리번호" Top="40" VAlign="Middle" Width="116"></Static>
+		<Combo BindDataset="ds_orpe001_main" CodeColumn="MNGNO" Column="MNGNO" DataColumn="NAME" Editable="TRUE" Height="20" Id="cmb_mngno" InnerDataset="ds_orpe001r_jbcode" Left="671" Search="FILTERED" TabOrder="6" Top="43" Width="148"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static0" Left="2" TabOrder="7" Text="부서명" Top="72" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="829" TabOrder="8" Text="교정일" Top="40" VAlign="Middle" Width="100"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="254" TabOrder="9" Text="작성자" Top="72" VAlign="Middle" Width="100"></Static>
+		<Grid BindDataset="ds_files" BkColor2="default" BoldHead="true" Bottom="588" Enable="true" EndLineColor="default" Height="116" Id="Grid0" InputPanel="FALSE" Left="32" LineColor="default" Right="536" TabOrder="10" TabStop="true" Top="472" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="504">
+			<contents>
+				<columns>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+					<col width="80"/>
+				</columns>
+				<head>
+					<cell col="0" display="text" text="chk"/>
+					<cell col="1" display="text" text="fullname"/>
+					<cell col="2" display="text" text="filename"/>
+					<cell col="3" display="text" text="prog_bar"/>
+					<cell col="4" display="text" text="filesize"/>
+					<cell col="5" display="text" text="progsize"/>
+				</head>
+				<body>
+					<cell col="0" colid="chk" display="text"/>
+					<cell col="1" colid="fullname" display="text"/>
+					<cell col="2" colid="filename" display="text"/>
+					<cell col="3" colid="prog_bar" display="text"/>
+					<cell col="4" colid="filesize" display="number"/>
+					<cell col="5" colid="progsize" display="text"/>
+				</body>
+			</contents>
+		</Grid>
+		<Calendar BindDataset="ds_orpe001_main" Column="REPDT" EditAlign="CENTER" Height="20" Id="cal_repdt" Left="937" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="11" Top="44" Width="104"></Calendar>
+		<Button Height="21" Id="btn_file" Left="993" OnClick="btn_file_OnClick" TabOrder="12" Text="첨부" Top="74" Width="40"></Button>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="549" TabOrder="13" Text="파일첨부" Top="72" VAlign="Middle" Width="116"></Static>
+		<Edit BindDataset="ds_orpe001_main" Column="FILENAME" Enable="FALSE" Height="20" Id="ed_file" Left="672" TabOrder="14" Top="75" Width="320"></Edit>
+		<FileDialog Bottom="24" Height="24" Id="FileDlg" Left="1000" Right="1024" TabOrder="21" Width="24"></FileDialog>
+		<CyHttpFile Height="24" Id="CyHttpFile" Left="1032" Width="24"></CyHttpFile>
+		<Edit Height="20" Id="ed_repno" Left="360" MaxLength="10" OnKeyDown="ed_repno_OnKeyDown" TabOrder="15" Top="44" UpperOnly="TRUE" Width="168"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static6" Left="254" TabOrder="16" Text="교정번호" Top="40" VAlign="Middle" Width="100"></Static>
+		<Combo BindDataset="ds_orpe001_main" CodeColumn="code" Column="DPTCD" DataColumn="CDNM" Height="18" Id="cmb_dpt" InnerDataset="ds_mst650pf" Left="124" TabOrder="17" Top="75" Width="120"></Combo>
+		<Edit Align="CENTER" BindDataset="ds_orpe001_main" Column="WRITER" Enable="FALSE" Height="20" Id="ed_writerId" Left="361" TabOrder="20" Top="76" Width="64"></Edit>
+		<Edit Align="CENTER" BindDataset="ds_orpe001_main" Column="KORNM" Enable="FALSE" Height="20" Id="ed_writer" Left="427" TabOrder="19" Top="76" Width="92"></Edit>
+		<Image Cursor="HAND" Height="17" Id="imgWriterId" ImageID="ic_search" Left="520" OnClick="imgWriterId_OnClick" Static="FALSE" TabOrder="18" Top="76" Width="20"></Image>
+		<Grid AutoFit="TRUE" BindDataset="ds_orpe001_select" BKColor="white" BkColor2="white" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="616" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="22" Height="504" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnCellDBLClick="MainGrid_OnCellDblClick" Right="1048" TabOrder="21" TabStop="true" Top="112" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="1048">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="33"/>
+						<col width="80"/>
+						<col width="88"/>
+						<col width="179"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="238"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" button3d="false" col="0" display="text" InputZeroTime="true" text="No"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="1" display="text" InputZeroTime="true" text="교정번호"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="2" display="text" InputZeroTime="true" text="관리번호"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="3" display="text" InputZeroTime="true" text="계측기명"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="4" display="text" InputZeroTime="true" text="교정일"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="5" display="text" InputZeroTime="true" text="작성자"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="6" display="text" InputZeroTime="true" text="장비번호"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="7" display="text" InputZeroTime="true" text="형식"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="8" display="text" InputZeroTime="true" text="부서명"/>
+						<cell bkcolor="#dfdfdf" button3d="false" col="9" display="text" InputZeroTime="true" text="첨부파일명"/>
+					</head>
+					<body>
+						<cell align="right" col="0" display="text" expr="currow+1" InputZeroTime="true"/>
+						<cell col="1" colid="REPNO" display="text" InputZeroTime="true"/>
+						<cell col="2" colid="MNGNO" display="text" InputZeroTime="true"/>
+						<cell col="3" colid="MNAME" display="text" InputZeroTime="true"/>
+						<cell align="center" col="4" colid="REPDT" display="date" InputZeroTime="true"/>
+						<cell align="center" col="5" colid="KORNM" display="text" InputZeroTime="true"/>
+						<cell col="6" colid="JNBNO" display="text" InputZeroTime="true"/>
+						<cell col="7" colid="MTYPE" display="text" InputZeroTime="true"/>
+						<cell col="8" colid="DPNM" display="text" InputZeroTime="true"/>
+						<cell col="9" colid="FILENAME" display="text" InputZeroTime="true"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<FileDialog Bottom="37" Height="24" Id="FileDialog0" Left="952" Right="976" TabOrder="30" Top="13" Width="24"></FileDialog>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Kim Jung hyun
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ORPE001.xml
+ * ● PROGRAM DESCRIPTION  : 계측기/사내성적서 등록
+ * ● DATE WRITTEN         : 2012.06.01
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+#include "script::fileupdown.js"
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var repno;
+var del_filename;
+var input_chk;
+
+function ORPE001_OnLoadCompleted(obj)
+{
+	getTitle();	
+	getDesign();	
+	getJbcode();
+	gFcOnTopButtonColor("2.2");	
+	getComCode();
+	getogmGauge_mst650();
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+function getJbcode(){
+	http.Sync 	= true;
+	var sKind		= "getJbcode";						
+	var sMethodName = "service::psogmlib/selectORPE001Rjbcode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_orpe001r_jbcode=ds_orpe001r_jbcode";
+	var sArgument   = "";	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getogmGauge_mst650()
+{
+	var sKind		= "getMst650pf";						
+	var sMethodName = "service::psogmlib/selectOGM_ORPE_Mst650pf.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_mst650pf=ds_mst650pf";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	
+	//Trace(" LIB2=" + Lib2);
+	//Trace(" COMPS=" + ComboBoxPlant.Value);
+		
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+}
+
+function btn_file_OnClick(obj)
+{
+	//다이얼로그창에 업로드 할 파일 기본경로 설정
+	FileDlg.FilePath= "C:\\";
+	//다이얼로그창 버튼 OPEN으로 설정(안해주면 저장 후 다시 파일찾기 할 경우 저장버튼으로 됨)
+	FileDlg.Type = "OPEN";
+	//다이얼로그창에서 보여지는 파일의 확장자 설정
+	//현재 jpg 또는 gif만 보여지도록 설정
+	
+	//FileDlg.Filter = "*.jpg|*.JPG|*.gif|*.GIF|";
+	
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 데이터셋에 설정
+	if(FileDlg.Open()){
+		var strdatetime = GetDate();
+	
+		//데이터셋에 로우 추가
+		ds_files.addRow();
+		//다이얼로그에서 선택한 파일의 경로명(파일명포함)을 데이터셋에 저장
+		ds_files.SetColumn(ds_files.row,"fullname",FileDlg.FilePath + "\\" + FileDlg.FileName);
+		//다이얼로그에서 선택한 파일명을 데이터셋에 저장
+		ds_files.SetColumn(ds_files.row,"filename", strdatetime + "_" + FileDlg.FileName);			
+		ed_file.Text = strdatetime + "_" + FileDlg.FileName;
+	}
+	
+	//다이얼로그창에 다운받을 파일명 초기화설정(안해주면 이전에 올렸던 파일명 그대로 존속)
+	FileDlg.FileName= "";	
+}
+
+function fn_Excel() {
+	if (ds_orpe001_select.rowcount > 0) {
+		var fName   = "사내성적서";
+		var arrSheets  =  Array();  
+	
+		arrSheets[0]  = "MainGrid|사내성적서";
+		createExcelSheetS2(FileDialog0, fName ,arrSheets);
+	} else {
+		alert("다운받을 자료가 없습니다.");
+	}
+}
+
+function fn_Input() {	
+	ds_orpe001_main.DeleteAll();		
+	ds_orpe001_main.AddRow();
+	ed_repno.Text = "";
+	input_chk = true;	
+}
+
+function fn_Search() {
+	
+	var sKind		= "selectORPE001_main";						
+	var sMethodName = "service::psogmlib/selectORPE001_main.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_orpe001_main=ds_orpe001_main";
+	var sArgument   = "";	
+	
+	sArgument += " REPNO=" + quote(trim(ed_repno.Text));		
+	sArgument += " GUBUN=" + quote("I");	
+	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	
+	
+	var sKind		= "selectORPE001_select";						
+	var sMethodName = "service::psogmlib/selectORPE001_select.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_orpe001_select=ds_orpe001_select";
+	var sArgument   = "";	
+	
+	if(length (trim(ed_repno.Text)) > 0) {		
+		sArgument += "REPNO=" + quote(trim(ed_repno.Text));	
+	} else	{		
+		sArgument += "REPNO=%";			
+	}
+	
+	sArgument += "@GUBUN=" + quote("I");	
+	
+	//http.Sync=true;	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");		
+	//http.Sync=false;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument, 272, 64, "TitleBar=false");	
+	
+	//검색시 그 결과값이 없을 때 추가ㅣ버튼을 누르면 로우가 추가되지 않기에 강제추가
+	if(ds_orpe001_main.GetRowCount() < 1){	
+		ds_orpe001_main.AddColumn("MNGNO");
+		ds_orpe001_main.AddColumn("REPDT");
+		ds_orpe001_main.AddColumn("NEXT_REPDT");
+		ds_orpe001_main.AddColumn("GIKWAN");
+		ds_orpe001_main.AddColumn("VALIDDT");
+		ds_orpe001_main.AddColumn("FILENAME");
+		ds_orpe001_main.AddColumn("DPTCD");
+		ds_orpe001_main.AddColumn("KORNM");
+		ds_orpe001_main.AddColumn("WRITER");
+	}	
+}
+
+function fn_Save() {
+	
+	if (input_chk) {	
+		if (length(ed_repno.Text) = 0 ) {
+			alert("교정번호를 입력해 주세요!");
+			return;
+		} else if (length(cmb_mngno.Text) = 0 ) {
+			alert("자산관리번호를 입력해 주세요!");
+			return;
+		} else if (length(cal_repdt.Value) = 0 ) {
+			alert("교정일을 입력해 주세요!");		
+			return;
+		} else if (length(cmb_dpt.Text) = 0 ) {
+			alert("부서명을 입력해 주세요!");
+			return;
+		} else if (length(ed_writer.Value) = 0 ) {
+			alert("작성자를 입력해 주세요!");		
+			return;
+		} else if (length(ed_file.Value) = 0 ) {
+			alert("파일을 입력해 주세요!");		
+			return;
+		}			 
+	} 
+	
+	var sKind		= "saveORPE001";						
+	var sMethodName = "service::psogmlib/saveORPE001.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_orpe001_main=ds_orpe001_main:U";   	//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							       	// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	var idnum = substr(G_ds_user.GetColumn(0,"USER_ID"),1,7);	//유저아이디
+	
+	sArgument += " GUBUN=" + quote("I");	
+	sArgument += " ADUSR=" + quote(idnum);
+	//sArgument += " LIB2=" + quote(Lib2);
+	//sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+		
+	if(length(trim(ed_repno.Text)) > 0) {
+		sArgument += " REPNO=" + quote(trim(ed_repno.Text));		//교정번호	
+	} else {
+		sArgument += " REPNO=" + quote(repno);		//교정번호	
+	}
+	
+	//alert(sArgument);
+	
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;	
+	
+	//alert(sArgument);	
+	
+	/////////////////////////////////////////////////////////////////////////////////
+	// 첨부파일 저장 코드
+	var ret;
+	//var isNewRow = 0;
+	
+	trace("데이터셋 로우 수:" + ds_files.rowcount);
+	
+	//파일선택 버튼을 이용해서 선택된 파일이 없는 경우 처리 생략
+	if(ds_files.rowcount != 0){
+	
+		//데이터셋 로우 수 만큼 루프
+		for ( var i = 0 ; i < ds_files.rowcount ; i++ )
+		{
+			
+			// 풀경로 취득
+			var file_url = ds_files.getColumn(i,"fullname");
+			// 파일 사이즈 취득
+			file_size = CyHttpFile0.GetFileSizeLocal(file_url);
+			trace("파일사이즈" + file_size);
+			
+			//사이즈 체크(5MB제한)
+			if(file_size > 5000000){
+				alert("업로드 가능 용량은 5MB입니다. 확인하고 다시 시도해주십시오.");
+				return false;
+			}
+			//로컬에서 선택한 파일명을 취득하여 변수에 설정
+			var str_param = ds_files.getColumn(i,"filename");
+			//업로드 할 서버 경로와 파일명
+			//var str_param_server = "D:/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+			var str_param_server = "C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+			
+			//스크립트 파일의 함수 호출 
+			//CyHttpFile0객체(대용량데이터 이동지원 객체), 경로(파일명포함), 파일명
+			//ret = gfn_FileWrite(CyHttpFile0,ds_files.getColumn(i,"fullname"), str_param, i, "prog_bar", grid0);
+			ret = gfn_FileWrite(CyHttpFile, file_url, str_param_server, i, "prog_bar", "");
+							
+			trace("파일명:" + str_param);
+			trace("경로명:" + ds_files.getColumn(i,"fullname"));
+			
+			//alert(ret[1]);
+			
+			//호출함수 리턴값 처리
+			if ( ret[0] == "FAIL" )
+			{
+				alert(ret[1]);
+				break;
+			}
+		}
+	}
+		
+	if(length(del_filename) > 0) {
+		//alert("del test");
+		file_del(del_filename);
+	}	
+		
+	fn_Search();
+	input_chk = false;	
+}
+
+function fn_Delete() {
+	del_filename = ed_file.Text;
+	ds_orpe001_main.DeleteRow(ds_orpe001_main.Row); 
+	repno = trim(ed_repno.Text);
+	ed_repno.Text = "";
+}
+
+
+function MainGrid_OnCellDblClick(obj,nRow,nCell,nX,nY,nPivotIndex)
+{
+	//다운로드 받을 파일명을 취득하여 변수에 설정(클릭한 로우의 파일)
+	var str_param = trim(ds_orpe001_select.GetColumn(ds_orpe001_select.currow,"FILENAME"));
+	//다운로드 받을 파일이 저장되어있는 서버 경로와 파일명
+	//var str_param_server = "D:/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+	var str_param_server = "C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/dnpe_gauge/" + str_param;
+				
+	trace("str_param:" + str_param);
+	trace("str_param_server:" + str_param_server);
+	
+	//-----------  다이얼로그창  설정------------------
+    //다이얼로그창에 다운받을 파일명 설정
+	FileDlg.FileName= str_param;
+    //다이얼로그창에 다운받을 기본경로 설정
+	FileDlg.FilePath= "C:\\";
+	//다이얼로그창 버튼 SAVE로 설정
+	FileDlg.Type = "SAVE";
+	//확장자가 없을 때 기본 확장자 설정
+	FileDlg.AppendExtDefault = "TRUE";	
+	
+	//다이얼로그 생성(확인 버튼 클릭시 true, 취소버튼을 클릭시 false 반환)
+	//확인 버튼 클릭시만 처리 계속
+
+	if(FileDlg.Open()){
+	
+		//다운로드 받을 경로(로컬)
+		//var str_param_full = "C:/download/" + Dataset1.getColumn(nRow,"filename"); //다이얼로그창 미사용시(고정폴더)
+		var str_param_full = FileDlg.FilePath + "\\" + FileDlg.FileName;		
+		
+		trace("파일명:" + str_param);
+		trace("경로(파일명):" + str_param_full);
+		
+		//스크립트 파일의 함수 호출 
+		var file_size = CyHttpFile.GetFileSizeLocal(str_param_server);
+		trace("파일사이즈:" + file_size);
+		var ret = gfn_FileRead(CyHttpFile, str_param_full, str_param_server, file_size, nRow, "prog_bar", MainGrid);
+		
+		//호출함수 리턴값 처리
+		if ( ret[0] == "FAIL" )
+		{
+			alert(ret[1]);
+		}
+	}				
+}
+
+function ed_repno_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if (nChar == 13) {
+		fn_Search();
+	}	
+}
+
+function file_del(fname){
+
+	var sKind		= "file_del";						
+	//var sMethodName = "http://10.72.209.23/psogmlib/fileDel.do"; 
+	var sMethodName = G_baseURL+"psogmlib/fileDel.do"; 
+	var sInDataSet  = ""; //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";
+	var sArgument   = "";
+	var sArgument   = "";
+	var sArgument   = "";
+		sArgument += " FNAME=" + quote(fname);
+		//sArgument += " FDIR=" + quote("D:/DIONE_UPDOWN_FILE/dnpe_gauge/");
+		sArgument += " FDIR=" + quote("C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/DIONE_UPDOWN_FILE/dnpe_gauge/");
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+}
+function imgWriterId_OnClick(obj,nX,nY)
+{
+	if (ds_orpe001_main.rowcount <> 0) {
+		var sUseid;
+		var selectnumber = "1";    // 1.부서사용자
+		var rtn = dialog("PSOGMLIB::ogmSelect_BS.xml","COMPS="+ ComboBoxPlant.Value + " " + "GROUP="+ "1" + " " + "SEL=" + selectnumber + " " + "CODE=" + "",584,528);
+		
+		if (length(rtn) != 0){						
+			ed_writerId.Text = rtn[0];
+			ed_writer.Text = rtn[1];
+		}
+	}	
+}
+
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="saveORPE002"){
+		fn_Search();
+	}
+	//alert(global.http.SendHttpStr);
+}
+
+function ORPE001_OnFocus(obj)
+{
+	getTitle();	
+	getDesign();	
+	getJbcode();
+	gFcOnTopButtonColor("2.2");
+	getComCode();
+	getogmGauge_mst650();
+	MainGrid.Height = 504;
+}
+]]></Script>
+</Window>

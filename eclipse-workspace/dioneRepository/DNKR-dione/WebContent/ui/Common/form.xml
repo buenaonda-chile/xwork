@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="600" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" OnTimer="form_OnTimer" PidAttrib="7" Title="New&#32;Form" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Edit Font="굴림,24,Bold" Height="84" Id="Edit0" Left="24" TabOrder="1" Text="Edit0" Top="240" Width="760"></Edit>
+		<Edit Font="굴림,24,Bold" Height="84" Id="Edit1" Left="24" TabOrder="2" Text="Edit0" Top="336" Width="760"></Edit>
+	</Form>
+	<Script><![CDATA[
+
+function form_OnTimer(obj,nEventID)
+{
+	Edit0.Text = gf_GetCurTime();	
+	Edit1.Text = Datetime(GetDate()).ToString("yyyyMMddhhmmss"); //gf_GetCurTime();	
+}
+
+function form_OnLoadCompleted(obj)
+{
+	setTime();	
+}
+
+function setTime()
+{
+    SetTimer(1,1000);
+}
+
+// 시간을 구하는 함수
+function gf_GetCurTime() {
+    intDay = GetDay(Today());
+	strDay = Decode( intDay, 0, "일", 1, "월", 2, "화", 3, "수", 4, "목", 5, "금", 6, "토" );
+    return ToString(getDate(),"@@@@-@@-@@(" + strDay + ") @@:@@"); 
+}
+]]></Script>
+</Window>

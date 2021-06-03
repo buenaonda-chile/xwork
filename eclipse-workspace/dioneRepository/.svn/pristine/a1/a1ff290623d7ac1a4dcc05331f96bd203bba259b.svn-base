@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.PhenomenonSubDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.PhenomenonSubDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="manageNo" column="MANAGE_NO" javaType="java.lang.String" />
+		<result property="serviceDegree" column="SERVICE_DEGREE" javaType="java.lang.Long" />
+		<result property="phenomenonCdDiv" column="PHENOMENON_CD_DIV" javaType="java.lang.String" />
+		<result property="code" column="CODE" javaType="java.lang.String" />
+		<result property="explan" column="EXPLAN" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,PHENOMENON_CD_DIV
+		,CODE
+		,EXPLAN
+		,AUTOINSERT
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    FROM TB_DC_PHENOMENON_SUB
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.manageNo != null and criteria.manageNo != ''">
+          AND MANAGE_NO = #{criteria.manageNo}
+      </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.PhenomenonSubDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.PhenomenonSubDomain">
+
+    INSERT INTO TB_DC_PHENOMENON_SUB (
+		ID
+		,VINNO
+		,MANAGE_NO
+		,SERVICE_DEGREE
+		,PHENOMENON_CD_DIV
+		,CODE
+		,EXPLAN
+		,AUTOINSERT
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+
+    ) VALUES (
+		#{id}
+		,UPPER(#{vinno})
+		,#{manageNo}
+		,#{serviceDegree}
+		,#{phenomenonCdDiv}
+		,#{code}
+		,#{explan}
+		,#{autoinsert}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_PHENOMENON_SUB.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.PhenomenonSubDomain">
+
+    UPDATE TB_DC_PHENOMENON_SUB SET
+		VINNO = UPPER(#{vinno})
+		,MANAGE_NO = #{manageNo}
+		,SERVICE_DEGREE = #{serviceDegree}
+		,PHENOMENON_CD_DIV = #{phenomenonCdDiv}
+		,CODE = #{code}
+		,EXPLAN = #{explan}
+		,AUTOINSERT = #{autoinsert}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.PhenomenonSubDomain">
+
+    DELETE FROM TB_DC_PHENOMENON_SUB
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="440" Id="Chart01Pop" Left="8" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="생산계획대&#32;실적&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="760" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuth">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuthGroup"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="2" Width="762"></Image>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_user" Left="40" TabOrder="1" Top="8" Width="104"></Static>
+		<Static Color="#333333" Font="돋움,9" Height="13" Id="Static0" Left="152" TabOrder="3" Text="생산계획대&#32;실적" Top="8" Width="104"></Static>
+		<xChart Bottom="437" Chart3D="true" Height="405" Id="xChart0" LegendBox="true" MultipleColors="true" NSeries="2" NValues="5" Right="757" Top="32" View3DDepth="10" Width="757">
+			<_PersistData>&#13;&#10;/6xR9eQL30NGWDYA8vJNQ/9oYXJ0RlgsIP9WZXJzaW9uPf82LjIuMTM0Mv8uMCwgQ3VsdP91cmU9bmV1dP9yYWwsIFB1Yv9saWNL&#13;&#10;ZXlUb/9rZW49YTE4N/84ZTIwNTJjMP84ZGNlElNvZv90d2FyZUZYLlr59B/y8wAj8vAgXgR6aw0E8vABAf7/gQUqawUBawUCawYG&#13;&#10;pQSRBdUK8vAQ8vAD8vD7/4d/f4JlAXwCvwKRBQG/BUFyaWFs8vBBpG8P8vIFjgWsBQBGD1h/Ei5IaWdobCkQ/3RTZXR0aW5nZ3MQ&#13;&#10;CZMIRR8AB3YFzwEBAAgCHRMfWAWfLkF4aXOVAX0CAHECOhDy82UWKDjgtwIC8vILRxmeB88f3BmVAZ4DYIUNbQ9/A40OjwUCDJsf&#13;&#10;Aq0QDbEfYi90L+cf+R8LLxSdL8UlDloYD44FvAHy8X1S+fQuQmFzZQAPyBIPJA82DRd3H/wiDS7/SUdhbGxlcnmvVHlwZZUBFDIl&#13;&#10;Eaj6DIk/lTgSlTUTjQYRRwkAS78AcTPy8BXkLfxHP/sjCS5MaW5lD0luZm/bAr0s0wM6IUlClT+XCAG4GoEBFiNFfReFJw9EZWZh&#13;&#10;GDD/LldpbmRvd3M=&#13;&#10;</_PersistData>
+		</xChart>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : UserAuth.xml
+ * ● PROGRAM DESCRIPTION  : 사용자 권한 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+var chartGubun;
+
+function on_LoadCompleted(obj){
+	loadingChart();		
+}
+function loadingChart(){	
+	//xChart1.Titles[0].Text = "생산계획대 실적";
+	
+	var chartCnt = ds_chart.rowCount();
+	xChart0.OpenData("COD_Values", chartCnt, 12);
+	
+	//xChart0.SerLegBox = true;
+	//xChart0.SerLeg(0) = "aaa";
+	For(var i=0;i<chartCnt;i++){	
+		xChart0.Value(i, 0) = ds_chart.GetColumn(i,"AMT_04");			
+		xChart0.Value(i, 1) = ds_chart.GetColumn(i,"AMT_05");			
+		xChart0.Value(i, 2) = ds_chart.GetColumn(i,"AMT_06");			
+		xChart0.Value(i, 3) = ds_chart.GetColumn(i,"AMT_07");			
+		xChart0.Value(i, 4) = ds_chart.GetColumn(i,"AMT_08");			
+		xChart0.Value(i, 5) = ds_chart.GetColumn(i,"AMT_09");			
+		xChart0.Value(i, 6) = ds_chart.GetColumn(i,"AMT_10");			
+		xChart0.Value(i, 7) = ds_chart.GetColumn(i,"AMT_11");			
+		xChart0.Value(i, 8) = ds_chart.GetColumn(i,"AMT_12");			
+		xChart0.Value(i,9) = ds_chart.GetColumn(i,"AMT_01");			
+		xChart0.Value(i, 10) = ds_chart.GetColumn(i,"AMT_02");			
+		xChart0.Value(i, 11) = ds_chart.GetColumn(i,"AMT_03");	
+	}		
+	/*
+	For(var i=0;i<12;i++){
+		xChart0.Legend(0) = i+"월";	
+		xChart0.Value(0, i) = ds_chart.GetColumn(i,"AMT");	
+	}
+	*/
+	xChart0.CloseData("COD_Values");
+	
+	//xChart0.Series[0].Gallery = "Gallery_Bar";	
+	if(chartGubun==1){	//꺽은선
+		xChart0.Gallery = "Gallery_Lines";
+		xChart0.View3DDepth = 0;
+	}else if(chartGubun==2){	//2D 막대
+		xChart0.Gallery = "Gallery_Bar";
+		xChart0.View3DDepth = 0;
+	}else if(chartGubun==3){	//3D 막대
+		xChart0.Gallery = "Gallery_Bar";
+		xChart0.View3DDepth = 50;
+	}
+	
+	xChart0.AxisX.Gridlines = True;
+	xChart0.AxisY.Gridlines = True;
+	
+	// 'In this case we are hardcoding the labels
+	// 'but it would be the same if the labels are retrieved from the database
+	/* X축 값설정 */
+
+	xChart0.Legend(0) = "4월";
+	xChart0.Legend(1) = "5월";
+	xChart0.Legend(2) = "6월";
+	xChart0.Legend(3) = "7월";
+	xChart0.Legend(4) = "8월";
+	xChart0.Legend(5) = "9월";
+	xChart0.Legend(6) = "10월";
+	xChart0.Legend(7) = "11월";
+	xChart0.Legend(8) = "12월";
+	xChart0.Legend(9) = "1월";
+	xChart0.Legend(10) = "2월";
+	xChart0.Legend(11) = "3월";
+
+
+	
+	//XChart0.AxisY.LabelValue = 0.01;	                 // 소수점 2자리까지 표현
+    xChart0.AxisY.LabelsFormat.CustomFormat = "#,###"; // 출력될 라벨 포멧
+	// 'Use the LabelAngle property to show the labels vertically
+	//XChart0.AxisX.LabelAngle = 90;
+	
+}]]></Script>
+</Window>

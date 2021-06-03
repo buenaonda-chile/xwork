@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CodeDao">
+
+	<resultMap id="Code" type="CodeDomain">
+        <result property="cmcCode" column="CMC_CODE" />
+        <result property="cmcParentCode" column="CMC_PARENT_CODE" />
+        <result property="cmcType" column="CMC_TYPE" />
+        <result property="cmcUseYN" column="CMC_USE_YN" />
+        <result property="cmcRegdate" column="CMC_REGDATE" />
+        <result property="cnmName" column="CNM_NAME" />
+        <result property="cnmDescription" column="CNM_DESCRIPTION" />
+        <result property="cnmLangCode" column="CNM_LANG_CODE" />
+    </resultMap>
+    
+    <resultMap id="ExpCode" type="ExceptionCodeDomain">
+        <result property="codeType" column="TYPE" />
+        <result property="code" column="CODE" />
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="locCode" column="LOC_CODE" />
+        <result property="useTf" column="USE_TF" />
+        <result property="etc" column="ETC" />
+        <result property="locName" column="LOC_NAME" />
+        <result property="clsName" column="CLS_NAME" />
+        <result property="codeName" column="CODE_NAME" />
+    </resultMap>
+    
+    <!--  -->
+    <select id="searchByKey" resultMap="Code" parameterType="CodeDomain">
+        select 
+                A.CMC_CODE
+              , A.CMC_PARENT_CODE
+              , A.CMC_TYPE
+              , A.CMC_USE_YN
+              , A.CMC_REGDATE
+              , B.CNM_NAME
+              , B.CNM_DESCRIPTION
+              , B.CNM_LANG_CODE
+              
+        from 
+                DNKR_COMMON_CODE A,
+                DNKR_COMMON_CODE_NM B
+        where 
+                'SqlMap-Code.searchByKey' = 'SqlMap-Code.searchByKey'
+            and A.CMC_CODE = B.CMC_CODE
+            and A.CMC_CODE = #{cmcCode}
+            <if test="cnmLangCode != null and cnmLangCode != ''">
+            and B.CNM_LANG_CODE = #{cnmLangCode}
+        	</if>
+        	<if test="cnmLangCode == null or cnmLangCode == ''">
+            and B.CNM_LANG_CODE = 'en'
+        	</if>
+    </select>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Code" parameterType="CodeDomain">
+        select 
+                A.CMC_CODE
+              , A.CMC_PARENT_CODE
+              , A.CMC_TYPE
+              , A.CMC_USE_YN
+              , A.CMC_REGDATE
+              , B.CNM_NAME
+              , B.CNM_DESCRIPTION
+              , B.CNM_LANG_CODE
+        from 
+                DNKR_COMMON_CODE A
+  		left outer join
+               (select 
+          				  CMC_CODE
+          				, CNM_NAME
+              			, CNM_DESCRIPTION
+              			, CNM_LANG_CODE
+    			from 
+    					  DNKR_COMMON_CODE_NM 
+ 				where
+ 					'SqlMap-Code.searchByCondition' = 'SqlMap-Code.searchByCondition'
+ 			<if test="cnmLangCode != null and cnmLangCode != ''">
+            		  and CNM_LANG_CODE = #{cnmLangCode}
+        	</if>
+        	<if test="cnmLangCode == null or cnmLangCode == ''">
+            		  and CNM_LANG_CODE = 'en'
+        	</if>	 
+        		) B   
+	 	on 
+       			A.CMC_CODE = B.CMC_CODE
+        where 
+                'SqlMap-Code.searchByCondition' = 'SqlMap-Code.searchByCondition'         
+        <if test="cmcCode != null and cmcCode != ''">
+            and A.CMC_CODE = #{cmcCode}
+        </if>
+        <if test="cmcParentCode != null and cmcParentCode != ''">
+            and A.CMC_PARENT_CODE = #{cmcParentCode}
+        </if>
+        <if test="cmcType != null and cmcType != ''">
+            and A.CMC_TYPE = #{cmcType}
+        </if>
+        <if test="cmcUseYN != null and cmcUseYN != ''">
+            and A.CMC_USE_YN = #{cmcUseYN}
+        </if>
+        <if test="cnmName != null and cnmName != ''">
+            and B.CNM_NAME Like '%' || #{cnmName} || '%'
+        </if>
+        <if test="cmcRegdate != null and cmcRegdate != ''">
+            and A.CMC_REGDATE = #{cmcRegdate}
+        </if>
+        order by 
+                A.CMC_CODE asc
+    </select>
+
+	<!-- 수정필요(serach에 맍는...) -->
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="CodeDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_COMMON_CODE
+        where 
+                'SqlMap-Code.searchCount' = 'SqlMap-Code.searchCount'
+         <if test="cmcCode != null and cmcCode != ''">
+            and CMC_CODE = #{cmcCode}
+        </if>
+        <if test="cmcParentCode != null and cmcParentCode != ''">
+            and CMC_PARENT_CODE = #{cmcParentCode}
+        </if>
+        <if test="cmcType != null and cmcType != ''">
+            and CMC_TYPE = #{cmcType}
+        </if>
+        <if test="cmcUseYN != null and cmcUseYN != ''">
+            and CMC_USE_YN = #{cmcUseYN}
+        </if>
+        <if test="cnmLangCode != null and cnmLangCode != ''">
+            and CNM_LANG_CODE = #{cnmLangCode}
+        </if>
+        <if test="cmcRegdate != null and cmcRegdate != ''">
+            and CMC_REGDATE = #{cmcRegdate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCmcCount" resultType="java.lang.Integer" parameterType="CodeDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_COMMON_CODE
+        where 
+                'SqlMap-Code.searchCount' = 'SqlMap-Code.searchCount'
+         <if test="cmcCode != null and cmcCode != ''">
+            and CMC_CODE = #{cmcCode}
+        </if>
+        <if test="cmcParentCode != null and cmcParentCode != ''">
+            and CMC_PARENT_CODE = #{cmcParentCode}
+        </if>
+        <if test="cmcType != null and cmcType != ''">
+            and CMC_TYPE = #{cmcType}
+        </if>
+        <if test="cmcUseYN != null and cmcUseYN != ''">
+            and CMC_USE_YN = #{cmcUseYN}
+        </if>
+        <if test="cnmLangCode != null and cnmLangCode != ''">
+            and CNM_LANG_CODE = #{cnmLangCode}
+        </if>
+        <if test="cmcRegdate != null and cmcRegdate != ''">
+            and CMC_REGDATE = #{cmcRegdate}
+        </if>
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchMaxCommonCode" resultType="java.lang.String" parameterType="CodeDomain">
+        select 
+                max(CMC_CODE)
+        from 
+                DNKR_COMMON_CODE
+        where 
+                'SqlMap-Code.searchCount' = 'SqlMap-Code.searchCount'
+           and length(CMC_CODE) >= 9        	
+    </select>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createCmc" parameterType ="CodeDomain">
+        insert into DNKR_COMMON_CODE (
+                /* SqlMap-Code.create */
+            <if test="cmcCode != null">
+                CMC_CODE,
+            </if>
+            <if test="cmcParentCode != null">
+                CMC_PARENT_CODE,
+            </if>
+            <if test="cmcType != null">
+                CMC_TYPE,
+            </if>
+            <if test="cmcUseYN != null">
+                CMC_USE_YN,
+            </if>
+            <if test="_parameter != null">
+                CMC_REGDATE
+            </if> 
+        ) values (
+            <if test="cmcCode != null">
+                #{cmcCode},
+            </if>
+            <if test="cmcParentCode != null">
+                #{cmcParentCode},
+            </if>
+            <if test="cmcType != null">
+                #{cmcType},
+            </if>
+            <if test="cmcUseYN != null">
+                #{cmcUseYn},
+            </if>
+             <if test="_parameter != null">
+                SYSTIMESTAMP
+            </if>
+        )
+    </insert>
+    
+    <!-- 登録 SQL文 -->
+    <insert id="createCnm" parameterType ="CodeDomain">
+        insert into DNKR_COMMON_CODE_NM (
+                /* SqlMap-Code.createCnm */ 
+            <if test="cmcCode != null">
+                CMC_CODE,
+            </if>           
+            <if test="cnmName != null">
+                CNM_NAME,
+            </if>
+            <if test="cnmDescription != null">
+                CNM_DESCRIPTION,
+            </if>
+            <if test="cnmLangCode != null">
+                CNM_LANG_CODE
+            </if>
+        ) values (
+            <if test="cmcCode != null">
+                #{cmcCode},
+            </if>
+            <if test="cnmName != null">
+                #{cnmName},
+            </if>
+            <if test="cnmDescription != null">
+                #{cnmDescription},
+            </if>
+            <if test="cnmLangCode != null">
+                #{cnmLangCode}
+            </if>
+        )
+    </insert>
+   <!--  
+    更新 SQL文（主キー）
+    <update id="update" parameterType="CodeDomain">
+        update 
+                DNKR_COMMON_CODE 
+        set
+            <if test="cmcUseYn != null">
+                CMC_USE_YN = #{cmcUseYn}
+            </if>
+        where 
+                'SqlMap-Code.update' = 'SqlMap-Code.update'
+            and CMC_CODE = #{cmcCode}
+    </update> -->
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateCmc" parameterType="CodeDomain">
+        update 
+                DNKR_COMMON_CODE
+        set
+            <if test="cmcUseYN != null">
+                CMC_USE_YN = #{cmcUseYN}
+            </if>
+        where 
+                'SqlMap-Code.updateCnm' = 'SqlMap-Code.updateCnm'
+            and CMC_CODE = #{cmcCode}
+    </update>
+    
+    <!-- 更新 SQL文（主キー） -->
+    <update id="updateCnm" parameterType="CodeDomain">
+        update 
+                DNKR_COMMON_CODE_NM 
+        set
+            <if test="cnmName != null">
+                CNM_NAME = #{cnmName},
+            </if>
+            <if test="cnmDescription != null">
+                CNM_DESCRIPTION = #{cnmDescription}
+            </if>
+            <if test="cnmDescription == null">
+                CNM_DESCRIPTION = ''
+            </if>
+        where 
+                'SqlMap-Code.updateCnm' = 'SqlMap-Code.updateCnm'
+            and CMC_CODE = #{cmcCode}
+            and CNM_LANG_CODE = #{cnmLangCode}
+    </update>
+    
+    <!--  -->
+    <delete id="deleteCmc" parameterType="CodeDomain">
+        delete from 
+                DNKR_COMMON_CODE
+        where 
+                'SqlMap-Code.deleteCmc' = 'SqlMap-Code.deleteCmc'
+            and CMC_CODE = #{cmcCode}
+    </delete>
+    
+    <!--  -->
+    <delete id="deleteCnm" parameterType="CodeDomain">
+        delete from 
+                DNKR_COMMON_CODE_NM
+        where 
+                'SqlMap-Code.deleteCnm' = 'SqlMap-Code.deleteCnm'
+        <if test="cmcCode != null and cmcCode != ''">
+            and CMC_CODE = #{cmcCode}
+        </if>
+        <if test="cnmLangCode != null and cnmLangCode != ''">
+            and CNM_LANG_CODE = #{cnmLangCode}
+        </if>
+    </delete>
+    
+    
+    <select id="searchByExceptionDeptCode" resultMap="ExpCode" parameterType="ExceptionCodeDomain">
+    select
+		A.TYPE, A.CODE, A.CLS_CODE, A.LOC_CODE, A.USE_TF, A.ETC,
+	    B.REL_NAME AS CLS_NAME, C.REL_NAME AS LOC_NAME, D.REL_NAME AS CODE_NAME
+    from
+    	DNKR_EXP_CODE A
+    	LEFT OUTER JOIN DNKR_RELATION_NM B ON A.CLS_CODE = B.REL_CODE AND B.CMC_CODE =  #{cmcLangCode}
+    	LEFT OUTER JOIN DNKR_RELATION_NM C ON A.LOC_CODE = C.REL_CODE AND C.CMC_CODE =  #{cmcLangCode}
+    	LEFT OUTER JOIN DNKR_RELATION_NM D ON A.CODE = D.REL_CODE AND D.CMC_CODE =  #{cmcLangCode}
+	where 
+		'SqlMap-Code.searchByExceptionDeptCode' = 'SqlMap-Code.searchByExceptionDeptCode'
+		and A.TYPE = #{pCodeType}
+    </select>
+
+    
+    <select id="searchByExceptionDeptCodeCount" resultType="java.lang.Integer" parameterType="ExceptionCodeDomain">
+        select 
+                count(rownum)
+        from 
+                DNKR_EXP_CODE
+        where 
+                'SqlMap-Code.searchByExceptionDeptCodeCount' = 'SqlMap-Code.searchByExceptionDeptCodeCount'
+        <if test="codeType != null and codeType != ''">
+            and TYPE = #{codeType}
+        </if>
+        <if test="code != null and code != ''">
+          	  and CODE = #{code}
+      	</if>
+    </select>
+    
+    
+    <insert id="createExceptionDeptCode" parameterType ="ExceptionCodeDomain">
+    	insert into DNKR_EXP_CODE (TYPE, CODE, CLS_CODE, LOC_CODE, USE_TF, ETC, CREATE_USER, CREATE_DATE, UPDATE_USER, UPDATE_DATE)
+    	values(#{codeType}, #{code}, #{clsCode}, #{locCode}, #{useTf}, #{etc}, #{createUser}, SYSDATE, #{createUser}, SYSDATE)
+    </insert>
+    <update id="updateExceptionDeptCode" parameterType="ExceptionCodeDomain">
+        update 
+			DNKR_EXP_CODE 
+        set
+			USE_TF = #{useTf},
+			ETC = #{etc},
+            <if test="updateUser != null">
+			UPDATE_USER =  #{updateUser},
+            </if>
+			UPDATE_DATE = SYSDATE
+        where 
+			'SqlMap-Code.updateExceptionDeptCode' = 'SqlMap-Code.updateExceptionDeptCode'
+            and TYPE = #{codeType}
+            and CODE = #{code}
+    </update>
+    <delete id="deleteExceptionDeptCode" parameterType="ExceptionCodeDomain">
+        delete from 
+			 DNKR_EXP_CODE
+        where 
+			'SqlMap-Code.deleteExceptionDeptCode' = 'SqlMap-Code.deleteExceptionDeptCode'
+            and TYPE = #{codeType}
+            and CODE = #{code}
+    </delete>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustTypeOrderExceptMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustTypeOrderExceptMst" type="CustTypeOrderExceptMstDomain">
+        <result property="comps" column="COMPS" />
+        <result property="pyvnd" column="PYVND" />
+        <result property="mkcar" column="MKCAR" />
+        <result property="seyno" column="SEYNO" />
+        <result property="seycd" column="SEYCD" />
+        <result property="cusnm" column="CUSNM" />
+
+        <result property="oldMkcar" column="OLD_MKCAR" />
+        <result property="oldSeyno" column="OLD_SEYNO" />
+        <result property="oldSeycd" column="OLD_SEYCD" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustTypeOrderExceptMst" parameterType="CustTypeOrderExceptMstDomain">
+		SELECT 
+			A.COMPS, A.PYVND, TRIM(A.MKCAR) AS MKCAR , TRIM(A.SEYNO) AS SEYNO, TRIM(A.SEYCD) AS SEYCD,
+			TRIM(B.CUSNM) AS CUSNM,
+			TRIM(A.MKCAR) AS OLD_MKCAR , TRIM(A.SEYNO) AS OLD_SEYNO, TRIM(A.SEYCD) AS OLD_SEYCD
+		FROM 
+			PSZDBLIB.SVM300PF A
+			LEFT OUTER JOIN ${lib1}.CUSMAS B ON A.PYVND=B.CUSNO
+		WHERE
+		      'SqlMap-CustTypeOrderExceptMst.searchByCondition' = 'SqlMap-CustTypeOrderExceptMst.searchByCondition'
+		  AND A.COMPS = #{comps}
+		  AND A.PYVND = #{pyvnd}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="CustTypeOrderExceptMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM300PF
+        WHERE 
+             'SqlMap-CustTypeOrderExceptMst.searchCount' = 'SqlMap-CustTypeOrderExceptMst.searchCount'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+	      AND MKCAR = #{mkcar}
+	      AND SEYNO = #{seyno}
+	      AND SEYCD = #{seycd}	
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="CustTypeOrderExceptMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVM300PF
+        WHERE 
+             'SqlMap-CustTypeOrderExceptMst.searchCount2' = 'SqlMap-CustTypeOrderExceptMst.searchCount2'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+	      AND MKCAR = #{oldMkcar}
+	      AND SEYNO = #{oldSeyno}
+	      AND SEYCD = #{oldSeycd}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountSVM101" resultType="java.lang.Integer" parameterType="CustTypeOrderExceptMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             ${lib2}.SVM101LF
+        WHERE 
+             'SqlMap-CustTypeOrderExceptMst.searchCountCUSNO' = 'SqlMap-CustTypeOrderExceptMst.searchCountCUSNO'										
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+	      AND MCRCD = #{mkcar}
+	      AND SEQNO = #{seyno}
+	      AND SEQCD = #{seycd}
+	</select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="CustTypeOrderExceptMstDomain">
+        INSERT INTO PSZDBLIB.SVM300PF (
+                /* SqlMap-CustTypeOrderExceptMst.create */
+                COMPS, PYVND, MKCAR, SEYNO, SEYCD
+        ) values (
+                #{comps}, #{pyvnd}, #{mkcar}, #{seyno}, #{seycd}
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="CustTypeOrderExceptMstDomain">
+        UPDATE 
+               PSZDBLIB.SVM300PF
+        SET
+            MKCAR = #{mkcar}
+          , SEYNO = #{seyno}
+          , SEYCD = #{seycd}
+        WHERE 
+              'SqlMap-CustTypeOrderExceptMst.update' = 'SqlMap-CustTypeOrderExceptMst.update'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+	      AND MKCAR = #{oldMkcar}
+	      AND SEYNO = #{oldSeyno}
+	      AND SEYCD = #{oldSeycd}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="CustTypeOrderExceptMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVM300PF
+        WHERE 
+              'SqlMap-CustTypeOrderExceptMst.delete' = 'SqlMap-CustTypeOrderExceptMst.delete'
+		  AND COMPS = #{comps}
+		  AND PYVND = #{pyvnd}
+	      AND MKCAR = #{mkcar}
+	      AND SEYNO = #{seyno}
+	      AND SEYCD = #{seycd}
+    </delete>
+
+</mapper>

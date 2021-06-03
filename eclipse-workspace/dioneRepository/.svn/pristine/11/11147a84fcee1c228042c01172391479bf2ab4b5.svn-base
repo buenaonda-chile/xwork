@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="72" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="Exporting" TooltipFont="Default,0" Top="8" Ver="1.0" Width="368" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_menuAuth"></Dataset>
+		</Datasets>
+		<Progressbar Height="25" Id="Progressbar0" Left="21" Max="100" Origin="Horizontal" Smooth="FALSE" Step="1" TabOrder="1" Top="32" Width="326"></Progressbar>
+		<Static Color="#333333" Font="돋움,8" Height="10" Id="title_text" Left="45" TabOrder="2" Text="Procession&#32;Data..." Top="14" Width="102"></Static>
+		<Static Align="Right" Color="#333333" Font="돋움,9,Bold" Height="13" Id="Static0" Left="161" TabOrder="3" Top="13" Width="70"></Static>
+		<Static Align="Center" Color="#333333" Font="돋움,9,Bold" Height="13" Id="Static1" Left="241" TabOrder="4" Text="/" Top="14" Width="14"></Static>
+		<Static Align="Right" Color="#333333" Font="돋움,9,Bold" Height="13" Id="Static2" Left="280" TabOrder="5" Top="13" Width="70"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var buff = "";
+
+function form_OnLoadCompleted(obj)
+{
+	Progressbar0.Max = ds_main.rowcount ;
+	Static2.Value = ds_main.rowcount;
+	
+	for(i=0; i<ds_main.rowcount; i++)
+	{
+		for(j=0; j<ds_main.colcount; j++)
+		{
+			buff += Object(gridNm).GetCellValue(i,j);	
+			Progressbar0.Pos = i;
+			Static0.Value = i;
+		}
+		buff += "\r\n";
+	}
+	file.Write(buff);
+	close(1);
+}
+]]></Script>
+</Window>

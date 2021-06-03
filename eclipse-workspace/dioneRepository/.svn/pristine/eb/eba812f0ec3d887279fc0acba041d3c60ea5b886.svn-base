@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncWkReprtExlDao">
+	
+	<resultMap id="SalPlnPerfmncWkReprtExl" type="SalPlnPerfmncWkReprtExlDomain">
+		<result property="maker" column="MAKER" />
+		<result property="pcosty" column="P_COST_Y" />
+		<result property="pcostm" column="P_COST_M" />
+		<result property="pcosts" column="P_COST_S" />
+	</resultMap>
+  	<select id="searchByMaker" resultMap="SalPlnPerfmncWkReprtExl" parameterType="SalPlnPerfmncWkReprtExlDomain">
+	
+	select 
+         A.COMPS as maker,
+         (A.P_COST_Y / 10000000) AS P_COST_Y, 
+         (B.P_COST_M / 10000000) AS P_COST_M,
+         (C.P_COST_S / 10000000) AS P_COST_S
+      from
+         (SELECT 
+         A.COMPS, 
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY A.COMPS) B,
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+         SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+         GROUP BY A.COMPS) C
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+
+	select 
+         A.COMPS as maker,
+         (A.P_COST_Y / 10000000) AS P_COST_Y, 
+         (B.P_COST_M / 10000000) AS P_COST_M,
+         (C.P_COST_S / 10000000) AS P_COST_S
+      from
+         (SELECT 
+         A.COMPS, 
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY A.COMPS) A,
+         (SELECT
+         A.COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY A.COMPS) B,
+         (SELECT
+         A.COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+         SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+         GROUP BY A.COMPS) C
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+
+      UNION ALL
+      
+
+      select 
+         'SUM' as maker,
+         ((A.P_COST_Y + D.P_COST_Y) / 10000000) AS P_COST_Y, 
+         ((B.P_COST_M + E.P_COST_M) / 10000000) AS P_COST_M,
+         ((C.P_COST_S + F.P_COST_S) / 10000000) AS P_COST_S
+      from
+         (SELECT 
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSEDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') A,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSEDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') B,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSEDBLIB.SMD110PF A
+         WHERE
+         SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+         GROUP BY '1') C,
+         (SELECT 
+         '1' AS COMPS,
+         SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+         FROM PSCDBLIB.SPY200PF A
+         WHERE
+         A.PLNGB='1' --계획구분) 1 : 계획, 2:수정
+         and A.plnym = #{dumcb} --계획년월
+         GROUP BY '1') D,
+         (SELECT
+         '1' AS COMPS,
+         SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+         FROM PSCDBLIB.SPM110PF A
+         WHERE
+         A.PLNYM = #{dumcb} --계획년월
+         GROUP BY '1') E,
+         (SELECT
+         '1' AS COMPS,
+         SUM(A.JPSAM) AS P_COST_S
+         FROM
+         PSCDBLIB.SMD110PF A
+         WHERE
+         SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+         GROUP BY '1') F
+      where
+         A.COMPS = B.COMPS
+         and B.COMPS = C.COMPS
+         and C.COMPS = D.COMPS
+         and D.COMPS = E.COMPS
+         and E.COMPS = F.COMPS
+		
+	</select>
+</mapper>

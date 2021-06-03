@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.NonOrderHostUpDao">
+
+    <resultMap id="NonOrderHostUp" type="NonOrderHostUpDomain">
+    	<result property="stplndt" column="STPLNDT" />
+    	<result property="enplndt" column="ENPLNDT" />
+    	
+		<result property="psvnd" column="PSVND" />
+		<result property="pscom" column="PSCOM" />
+		<result property="vndcd" column="VNDCD" />		
+		
+		<result property="prtno" column="PRTNO" />
+		<result property="cpdsc" column="CPDSC" />
+		<result property="cusno" column="CUSNO" />
+		<result property="cprtn" column="CPRTN" />
+		
+		<result property="prtgb" column="PRTGB" />
+		<result property="lingb" column="LINGB" />
+		
+		<result property="comps" column="COMPS" />
+		<result property="typcd" column="TYPCD" />
+		<result property="pyvnd" column="PYVND" />
+		<result property="shpto" column="SHPTO" />
+		<result property="pspno" column="PSPNO" />
+		<result property="plndt" column="PLNDT" />
+		<result property="basqy" column="BASQY" />
+		<result property="ponum" column="PONUM" />
+		<result property="faccd" column="FACCD" />
+		<result property="yard" column="YARD" />
+		<result property="outqy" column="OUTQY" />
+		<result property="inpid" column="INPID" />
+		
+		<result property="period" column="PERIOD" />		
+		
+		<result property="tgubn" column="TGUBN" />
+		
+		<result property="mindate" column="MINDATE" />
+		<result property="maxdate" column="MAXDATE" />
+		<result property="checkdata" column="CHECKDATA" />
+		
+
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />     
+    </resultMap>
+
+    <select id="selectSVM020PF" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+		SELECT PSVND, PSCOM
+		FROM 
+		     <if test='comps.equals("E1")'>
+			 PSZDBLIB.SVM020PF
+			 </if>
+		     <if test='!comps.equals("E1")'>
+			 PSZDBLIB.SVM030PF
+			 </if>
+		WHERE 
+		      'SqlMap-NonOrderHostUp.selectSVM020PF' = 'SqlMap-NonOrderHostUp.selectSVM020PF'
+		<if test="vndcd != null and vndcd !='' ">
+		  AND VNDCD = #{vndcd}
+		</if>	
+		<if test="faccd != null and faccd !='' ">
+		    <if test='comps.equals("E1")'>
+			AND FACCD = #{faccd}
+			</if>
+		    <if test='!comps.equals("E1")'>
+			AND SEQNO = #{faccd}
+			</if>
+		</if>
+    </select>
+
+    <select id="selectEM000PR" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			  A.PRTNO AS PRTNO
+		    , A.CPRTN AS CPRTN
+			, A.CPDSC AS CPDSC
+		FROM 
+			${lib1}.EM000LR0 A 
+		WHERE 
+		      'SqlMap-NonOrderHostUp.selectEM000PR' = 'SqlMap-NonOrderHostUp.selectEM000PR'
+		  AND A.CUSNO = #{cusno}
+		  
+		  <if test='prtgb.equals("C")'> <!-- 업체품번으로 덴소품번 확인 -->
+		  AND TRIM(REPLACE(REPLACE(A.CPRTN, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+		  </if>
+		  <if test='prtgb.equals("D")'> <!-- 덴소품번으로 업체품번 확인 -->
+		  AND TRIM(REPLACE(REPLACE(A.PRTNO, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+		  </if>
+		  
+		  <!-- 확정오더 덴소품번 확인 -->
+		  <if test="lingb != null and lingb !='' ">
+		  AND SUBSTR(TRIM(A.PRTNO), LENGTH(TRIM(A.PRTNO))-1, 1) = #{lingb}
+		  </if>
+		  
+		  AND A.EDATM = (SELECT MAX(X.EDATM)
+			               FROM ${lib1}.EM000LR0 X
+			              WHERE X.CUSNO = #{cusno}
+			              
+			                <if test='prtgb.equals("C")'>
+			                AND TRIM(REPLACE(REPLACE(X.CPRTN, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+			                </if>
+			                <if test='prtgb.equals("D")'>
+			                AND TRIM(REPLACE(REPLACE(X.PRTNO, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+			                </if>
+			                
+		                    <if test="lingb != null and lingb !='' ">
+		                    AND SUBSTR(TRIM(X.PRTNO), LENGTH(TRIM(X.PRTNO))-1, 1) = #{lingb}
+		                    </if>
+			            )
+    </select>
+    
+    <select id="selectEM000PR_MOBISAS" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			  A.PRTNO AS PRTNO
+		    , A.CPRTN AS CPRTN
+			, A.CPDSC AS CPDSC
+		FROM 
+			${lib1}.EM000LR0 A 
+		WHERE 
+		      'SqlMap-NonOrderHostUp.selectEM000PR_MOBISAS' = 'SqlMap-NonOrderHostUp.selectEM000PR_MOBISAS'
+		  AND A.CUSNO = #{cusno}
+		  AND TRIM(REPLACE(REPLACE(A.CPRTN, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+		  AND SUBSTR(TRIM(A.PRTNO), LENGTH(TRIM(A.PRTNO))-1, 1) = '3'
+		  AND A.EDATM = (SELECT MAX(X.EDATM)
+			               FROM ${lib1}.EM000LR0 X
+			              WHERE X.CUSNO = #{cusno}
+			                AND TRIM(REPLACE(REPLACE(X.CPRTN, '-', ''), ' ', '')) = TRIM(REPLACE(REPLACE('${cprtn}', '-', ''), ' ', ''))
+		                    AND SUBSTR(TRIM(X.PRTNO), LENGTH(TRIM(X.PRTNO))-1, 1) = '3'
+			            )
+    </select>
+
+    <select id="countMST100PF" resultType="java.lang.Integer" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			COUNT(*) CNT
+		FROM 
+			${lib2}.MST100PF
+		WHERE 
+		      'SqlMap-NonOrderHostUp.countMST100PF' = 'SqlMap-NonOrderHostUp.countMST100PF'
+		<if test="comps != null and comps !='' ">
+		  AND COMPS = #{comps}
+		</if>	
+		<if test="prtno != null and prtno !='' ">
+		  AND PRTNO = #{prtno}
+		</if>
+    </select>
+    
+    <!--  
+	      <choose>
+	      	<when test="plndt != null and plndt !='' ">
+	      		AND PLNDT = #{plndt}
+	      	</when>
+	      	<otherwise>
+	      		AND PLNDT BETWEEN #{stplndt} AND #{enplndt}
+	      	</otherwise>
+	      </choose>
+    -->
+    <select id="countSVZ60PF" resultType="java.lang.Integer" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			COUNT(*) CNT
+		FROM 
+			<if test='typcd.equals("BB")'>
+			PSZDBLIB.SVZ601PF 
+			</if>
+			<if test='typcd.equals("CC")'>
+			PSZDBLIB.SVZ602PF 
+			</if>
+		WHERE 
+		      'SqlMap-NonOrderHostUp.countSVZ60PF' = 'SqlMap-NonOrderHostUp.countSVZ60PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+	      
+	      <if test="shpto != null and shpto !='' ">
+	      AND SHPTO = #{shpto}
+	      </if>
+		  <if test="pspno != null and pspno !='' ">
+		  AND PSPNO = #{pspno} 
+		  </if>	      
+		  <if test="plndt != null and plndt !='' ">
+		  AND PLNDT = #{plndt} 
+		  </if>
+    </select>
+    
+    <!-- AND PLNDT BETWEEN #{stplndt} AND #{enplndt} -->
+    <delete id="deleteSVZ60PF" parameterType="NonOrderHostUpDomain">
+		DELETE FROM 
+			<if test='typcd.equals("BB")'>
+			PSZDBLIB.SVZ601PF 
+			</if>
+			<if test='typcd.equals("CC")'>
+			PSZDBLIB.SVZ602PF 
+			</if>
+		WHERE 
+			  'SqlMap-NonOrderHostUp.deleteSVZ60PF' = 'SqlMap-NonOrderHostUp.deleteSVZ60PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}	      
+    </delete>
+        
+    <insert id="createSVZ60PF" parameterType ="NonOrderHostUpDomain">
+    	/* SqlMap-NonOrderHostUpDomain.createSVZ60PF */
+		INSERT INTO 
+			<if test='typcd.equals("BB")'>
+			PSZDBLIB.SVZ601PF 
+			</if>
+			<if test='typcd.equals("CC")'>
+			PSZDBLIB.SVZ602PF 
+			</if>
+       (
+           COMPS, TYPCD, PYVND, SHPTO, PSPNO, PLNDT, BASQY, PONUM,
+           FACCD, YARD, OUTQY,	
+           CHGDT,	
+           INPID,
+           INPDT,	
+           INPTM,	
+           CHPID, CHPDT, CHGTM
+        )			
+		VALUES
+			(
+			#{comps},#{typcd},#{pyvnd},#{shpto},#{pspno},#{plndt},#{basqy},#{ponum},
+			#{faccd},#{yard},#{outqy},
+            substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            #{inpid},
+            substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+            '',0,0
+			)
+    </insert> 
+    
+    <update id="updateSVZ602PF" parameterType="NonOrderHostUpDomain">
+        	
+               PSZDBLIB.SVZ602PF
+        SET
+              BASQY = BASQY + #{basqy}
+        WHERE 
+              'SqlMap-NonOrderHostUpDomain.updateSVZ602PF' = 'SqlMap-NonOrderHostUpDomain.updateSVZ602PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+	      AND SHPTO = #{shpto}
+		  AND PSPNO = #{pspno}
+		  AND PLNDT = #{plndt}
+    </update>
+ 
+    <select id="selectPERIOD" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			MIN(PLNDT) AS STPLNDT, MAX(PLNDT) AS ENPLNDT
+		FROM 
+			PSZDBLIB.SVZ602PF 
+		WHERE 
+		      'SqlMap-NonOrderHostUp.selectPERIOD' = 'SqlMap-NonOrderHostUp.selectPERIOD'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+    </select>
+     
+ 	<!-- AND PLNDT BETWEEN #{stplndt} AND #{enplndt} -->
+ 	<select id="countSVZ600PF" resultType="java.lang.Integer" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			COUNT(*) CNT
+		FROM 
+			PSZDBLIB.SVZ600PF 
+		WHERE 
+			  'SqlMap-NonOrderHostUp.countSVZ600PF' = 'SqlMap-NonOrderHostUp.countSVZ600PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+    </select>
+    
+    <!-- AND PLNDT BETWEEN #{stplndt} AND #{enplndt} -->
+    <delete id="deleteSVZ600PF" parameterType="NonOrderHostUpDomain">
+		DELETE FROM 
+			PSZDBLIB.SVZ600PF 
+		WHERE 
+			  'SqlMap-NonOrderHostUp.deleteSVZ600PF' = 'SqlMap-NonOrderHostUp.deleteSVZ600PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}	      
+    </delete>
+        
+    <!-- AND A.PLNDT BETWEEN #{stplndt} AND #{enplndt} -->
+    <insert id="createSVZ600PF" parameterType ="NonOrderHostUpDomain">
+    	/* SqlMap-NonOrderHostUpDomain.createSVZ600PF */
+		INSERT INTO 
+			PSZDBLIB.SVZ600PF
+       (
+           COMPS, TYPCD, PYVND, SHPTO, PSPNO, PLNDT,
+           BASQY,
+           PLNCD,	
+           CHGDT,           
+           INPID,	
+           INPDT,	
+           INPTM,	
+           CHPID, CHPDT, CHGTM
+        )
+       <if test='checkdata.equals("0") and checkdata != null'>
+		(SELECT X.COMPS, X.TYPCD, X.PYVND, X.SHPTO, X.PSPNO, X.PLNDT,
+		        X.BASQY, 		        
+		        'P',
+		        substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+		        '${inpid}',
+                substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+                substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+                '',0,0
+		   FROM 
+		     <if test='tgubn.equals("1")'>
+		       (SELECT A.COMPS, A.TYPCD, A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT,
+		               SUM(A.BASQY) AS BASQY
+		          FROM 
+					   <if test='typcd.equals("BB")'>
+					   PSZDBLIB.SVZ601PF A 
+					   </if>
+					   <if test='typcd.equals("CC")'>
+					   PSZDBLIB.SVZ602PF A
+					   </if>
+	             WHERE A.COMPS = #{comps}
+	               AND A.TYPCD = #{typcd}
+	               AND A.PYVND = #{pyvnd}
+	            GROUP BY A.COMPS, A.TYPCD, A.PYVND, A.SHPTO, A.PSPNO, A.PLNDT
+	           ) X
+	         </if>
+	         <if test='tgubn.equals("2")'>
+               (SELECT A.COMPS, A.TYPCD, A.PYVND, A.SHPTO, A.PSPNO, '${plndt}' AS PLNDT, 
+                       SUM(A.BASQY) AS BASQY
+                  FROM 
+				       PSZDBLIB.SVZ602PF A                 
+                 WHERE A.COMPS = #{comps}
+                   AND A.TYPCD = #{typcd}
+                   AND A.PYVND = #{pyvnd}
+                   AND A.PLNDT <![CDATA[<=]]> #{plndt}
+                GROUP BY A.COMPS, A.TYPCD, A.PYVND, A.SHPTO, A.PSPNO
+                UNION
+                SELECT B.COMPS, B.TYPCD, B.PYVND, B.SHPTO, B.PSPNO, B.PLNDT, 
+                       SUM(B.BASQY) AS BASQY
+                  FROM 
+				       PSZDBLIB.SVZ602PF B
+                 WHERE B.COMPS = #{comps}
+                   AND B.TYPCD = #{typcd}
+                   AND B.PYVND = #{pyvnd}
+                   AND B.PLNDT <![CDATA[>]]> #{plndt}
+                GROUP BY B.COMPS, B.TYPCD, B.PYVND, B.SHPTO, B.PSPNO, B.PLNDT
+               ) X
+             </if>
+	    )
+	    </if>
+	    <!-- 없는 date basqy0으로 insert -->
+	    <if test='checkdata.equals("1")'>
+	    VALUES(
+	  	  	#{comps},
+	  	  	#{typcd},
+	  	  	#{pyvnd},
+	  	  	#{shpto},
+	  	  	#{pspno}, 
+	  	  	#{plndt},
+		    '0',	        
+		    'P',
+		    substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+		    '${inpid}',
+            substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+            '',
+            0,
+            0
+          )
+	    </if>
+    </insert> 
+	
+	<!-- SVZ600PF에서 품번, DATE(MIN,MAX) 취득 -->
+	<select id="selectDateInfo" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+		SELECT
+			PSPNO,
+			MIN(PLNDT) AS MINDATE,
+			MAX(PLNDT) AS MAXDATE
+		FROM
+			PSZDBLIB.SVZ600PF
+		WHERE
+			'SqlMap-NonOrderHostUpDomain.selectDateInfo'='SqlMap-NonOrderHostUpDomain.selectDateInfo'
+			AND COMPS = #{comps}
+			AND TYPCD = #{typcd}
+			AND PYVND = #{pyvnd}
+		GROUP BY PSPNO
+		ORDER BY PSPNO
+	</select>
+	
+	 <!-- 달력취득 검색날짜 ~ maxDate기간 --> 
+    <select id="calendarInfo" resultType="java.lang.String" parameterType="NonOrderHostUpDomain">
+		SELECT
+			MAKDT AS PLNDT
+		FROM
+			PSEDBLIB.SAL100PF
+		WHERE
+			'SqlMap-NonOrderHostUpDomain.calendarInfo'='SqlMap-NonOrderHostUpDomain.calendarInfo'
+			AND MAKDT BETWEEN #{plndt}
+						AND #{maxdate}
+		GROUP BY MAKDT
+    </select>
+	
+	<!-- SVZ600PF에서 품번 oriDate 취득 -->
+	<select id="selectOriData" resultType="java.lang.String" parameterType="NonOrderHostUpDomain">
+		SELECT
+			PLNDT
+		FROM
+			PSZDBLIB.SVZ600PF
+		WHERE
+			'SqlMap-NonOrderHostUpDomain.selectOriData'='SqlMap-NonOrderHostUpDomain.selectOriData'
+			AND COMPS = #{comps}
+			AND TYPCD = #{typcd}
+			AND PYVND = #{pyvnd}
+			AND PSPNO = #{pspno}
+		GROUP BY PLNDT
+		ORDER BY PLNDT
+	</select>
+	
+ 	<select id="countSVZ603PF" resultType="java.lang.Integer" parameterType="NonOrderHostUpDomain">
+		SELECT 
+			COUNT(*) CNT
+		FROM 
+			PSZDBLIB.SVZ603PF 
+		WHERE 
+			  'SqlMap-NonOrderHostUp.countSVZ603PF' = 'SqlMap-NonOrderHostUp.countSVZ603PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}
+    </select>
+    
+    <delete id="deleteSVZ603PF" parameterType="NonOrderHostUpDomain">
+		DELETE FROM 
+			PSZDBLIB.SVZ603PF 
+		WHERE 
+			  'SqlMap-NonOrderHostUp.deleteSVZ603PF' = 'SqlMap-NonOrderHostUp.deleteSVZ603PF'
+	      AND COMPS = #{comps}
+	      AND TYPCD = #{typcd}
+	      AND PYVND = #{pyvnd}	      
+    </delete>
+    
+    <insert id="createSVZ603PF" parameterType ="NonOrderHostUpDomain">
+    	/* SqlMap-NonOrderHostUpDomain.createSVZ603PF */
+		INSERT INTO 
+			PSZDBLIB.SVZ603PF
+       (
+           COMPS, PYVND, SHPTO, TYPCD, PERIOD, INPID,	
+           INPDT,	
+           INPTM,	
+           CHPID, CHGDT, CHGTM
+        )
+		VALUES
+			(
+			#{comps},#{pyvnd},#{shpto},#{typcd},#{period},#{inpid},
+            substr(trim(char(date(current date), ISO)),1,4) || substr(trim(char(date(current date), ISO)),6,2) || substr(trim(char(date(current date), ISO)),9,2),
+            substr(trim(char(time(current time), ISO)),1,2) || substr(trim(char(time(current time), ISO)),4,2) || substr(trim(char(time(current time), ISO)),7,2),
+            '',0,0
+			)
+    </insert> 
+    
+   <!--  <select id="selectSVZ600PF" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+    	SELECT PLNDT,PSPNO
+    	FROM PSZDBLIB.SVZ600PF
+    	WHERE A.COMPS = #{comps}
+	          AND A.TYPCD = #{typcd}
+	          AND A.PYVND = #{pyvnd}
+    </select>
+    
+    <select id="selectSAL100PF" resultMap="NonOrderHostUp" parameterType="NonOrderHostUpDomain">
+    	SELECT A.MAKDT AS PLNDT
+    	FROM PSEDBLIB.SAL100PF
+    </select>
+    
+    <update id="updateSVZ602PF" parameterType="NonOrderHostUpDomain">
+		PSZDBLIB.SVZ602PF
+    	SET BASQY = 0
+    	
+    </update> -->
+    
+    
+</mapper>

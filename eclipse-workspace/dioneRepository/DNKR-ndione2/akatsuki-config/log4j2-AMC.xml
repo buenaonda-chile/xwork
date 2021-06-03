@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    log4j2-AMC.xml
+    
+ [JP]    AijmMainController の Log4j 設定ファイルです。
+ [JP]
+ [JP]    本番/開発環境用の log4j 設定ファイルです。
+ [JP]
+ [JP]    出力ファイルサイズ軽減のため、標準出力はしていないので注意してください。
+ [JP]
+ [JP]    システムログ( aijmAmcSys.log )は JP1 監視対象のため、ログローテーションを
+ [JP]    行わない設定になっています。(変更不可)
+ [JP]    その他のログはローテーションを行うことが可能です。
+ [JP]    標準設定はアプリログ( aijmAmcApp.log )のみ日次でローテーションを行う設定に
+ [JP]    なっています。
+    
+ [EN]    It is the configuration file for Log4j AijmMainController.
+ [EN]
+ [EN]    It is a log4j configuration file for the production environment / development machine.
+ [EN]
+ [EN]    Please note that in order to reduce output file size, does not have the standard output.
+ [EN]
+ [EN]    In order to JP1 monitor, system logging (aijmAmcSys.log) is configured to not perform log rotation.
+ [EN]    (Do not change)
+ [EN]    Other logs can perform the rotation is possible.
+ [EN]    The standard setting has been configured to perform log (aijmAmcApp.log) rotation 
+ [EN]    on a daily basis only app.
+    
+    $ log4j2-AMC.xml 1650 2015-06-03 08:43:08Z 815372040074 $
+    
+    Copyright (c) 2015 DENSO IT SOLUTIONS. All rights reserved.
+-->
+<Configuration>
+
+    <!-- ========================================================== Appender -->
+    <Appenders>
+        <!-- [JP] アプリケーションログ (日次ローテーション) -->
+        <!-- [EN] Application Log (daily rotation) -->
+        <RollingFile name="app_file_roll" fileName="D:/AIJM/logs/aijmAmcApp.log" filePattern="D:/AIJM/logs/aijmAmcApp.log.%d{yyyy-MM-dd}" append="true">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY" />
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL" />
+            </Filters>
+        </RollingFile>
+
+        <!-- [JP] システムログ (固定出力) -->
+        <!-- [EN] System log (fixed output) -->
+        <File name="sys_file_fix" fileName="D:/AIJM/logs/aijmAmcSys.log" append="true">
+            <PatternLayout pattern="[SYS] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] [%C{1}.%M] %m%n" />
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <!-- [JP] 各アプリジョブのプロセスID ログ (ファイル出力) -->
+        <!-- [EN] Log of every job application process ID (output file) -->
+        <File name="pid_file_fix" fileName="D:/AIJM/logs/aijmAmcPid.log" append="true">
+            <PatternLayout pattern="[APP] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] %m%n" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY" />
+            </Filters>
+        </File>
+    </Appenders>
+
+    <!-- ============================================================ Logger -->
+    <Loggers>
+        <!-- [JP] アプリ基盤  -->
+        <!-- [EN] Application Development Infrastructure -->
+        <Logger name="com.globaldenso.ai" level="INFO" additivity="false">
+            <AppenderRef ref="app_file_roll" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+
+        <!-- [JP] AI-JM プロセスID出力  -->
+        <!-- [EN] AI-JM output process ID  -->
+        <Logger name="com.globaldenso.ai.akatsuki.aijm.util.ProcessId" level="INFO" additivity="false">
+            <AppenderRef ref="pid_file_fix" />
+        </Logger>
+
+        <!-- [JP] Spring Framework トランザクション情報出力 -->
+        <!-- [EN] Spring Framework transaction information output -->
+        <Logger name="org.springframework.transaction" level="DEBUG" additivity="false">
+            <AppenderRef ref="app_file_roll" />
+            <AppenderRef ref="sys_file_fix" />
+        </Logger>
+
+        <!-- ============================================================== Root -->
+        <Root level="ERROR">
+            <AppenderRef ref="sys_file_fix" />
+        </Root>
+    </Loggers>
+</Configuration>

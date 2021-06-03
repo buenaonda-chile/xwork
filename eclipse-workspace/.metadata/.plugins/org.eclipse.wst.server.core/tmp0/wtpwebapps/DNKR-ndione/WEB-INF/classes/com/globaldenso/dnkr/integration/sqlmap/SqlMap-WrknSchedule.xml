@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WrknScheduleDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="wrknSchedule" type="WrknScheduleDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="empNumber" column="EMP_NUMBER" />
+        <result property="locCode" column="LOC_CODE" />        
+        <result property="rcRn" column="RCRN" />
+        <result property="weekIntr" column="WEEK_INTR" />
+        
+        <result property="startDe" column="START_DE" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+  
+    </resultMap>
+
+	<select id="searchByCode" resultMap="wrknSchedule" parameterType="WrknScheduleDomain">
+		SELECT TRIM(A.RCRN) AS RCRN
+		FROM PSZDBLIB.FHP052PF A
+		WHERE CLS_CODE = #{clsCode}
+		group by A.RCRN
+		ORDER BY A.RCRN
+    </select>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="wrknSchedule" parameterType="WrknScheduleDomain">
+		SELECT 
+			 	A.CLS_CODE AS CLS_CODE
+		       , TRIM(A.EMPNO) AS EMP_NUMBER
+		       , TRIM(A.LOC_CODE) AS LOC_CODE
+		       , (SUBSTR(A.START_DATE,1,4) || '-' || SUBSTR(A.START_DATE,5,2) || '-' || SUBSTR(A.START_DATE,7,2)) AS START_DE
+		       , TRIM(A.RCRN) AS RCRN
+		       , TRIM(A.WEEK_INTR) AS WEEK_INTR
+		       ,REG_USER
+		       ,REG_DATE
+		       ,MOD_USER
+		       ,MOD_DATE
+		FROM PSZDBLIB.FHP053PF A
+		WHERE 1 =1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if> 		
+		<if test='locCode != null and !locCode.equalsIgnoreCase("")'>
+			AND LOC_CODE = #{locCode}
+		</if> 
+		ORDER BY EMP_NUMBER
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="WrknScheduleDomain">
+    	SELECT 
+              COUNT(*) CNT
+        FROM
+             PSZDBLIB.FHP053PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}
+        AND EMPNO = #{empNumber}
+        
+    </select>
+
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WrknScheduleDomain">
+        INSERT INTO  PSZDBLIB.FHP053PF (
+				 CLS_CODE
+				,EMPNO
+				,LOC_CODE
+				,START_DATE
+				,RCRN
+				,WEEK_INTR
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{empNumber}
+               ,#{locCode}
+               ,#{startDe}
+               ,#{rcRn}
+               ,#{weekIntr}
+               ,#{regUser}
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WrknScheduleDomain">
+        UPDATE 
+               PSZDBLIB.FHP053PF
+        SET
+			  RCRN = #{rcRn}
+			 ,WEEK_INTR = #{weekIntr}
+			 ,START_DATE = #{startDe}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMPNO = #{empNumber}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WrknScheduleDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP053PF
+        WHERE CLS_CODE = #{clsCode}
+        AND   LOC_CODE = #{locCode}        
+        AND   EMPNO = #{empNumber}
+    </delete>
+    
+    
+
+</mapper>

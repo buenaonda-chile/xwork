@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.MenuDao">
+
+  <resultMap id="menuMap" type="com.globaldenso.dicas.business.dto.MenuDto">
+    <result property="_id" column="MENU_ID" javaType="java.lang.Long" />
+    <result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+    <result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+    <result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+    <result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+    <result property="menuKoNm" column="MENU_KO_NM" javaType="java.lang.String" />
+    <result property="menuEnNm" column="MENU_EN_NM" javaType="java.lang.String" />
+    <result property="menuJaNm" column="MENU_JA_NM" javaType="java.lang.String" />
+    <result property="menuCd" column="MENU_CD" javaType="java.lang.String" />
+    <result property="menuOrdr" column="MENU_ORDR" javaType="java.lang.Integer" />
+    <result property="menuUrl" column="MENU_URL" javaType="java.lang.String" />
+    <result property="pubYn" column="PUB_YN" javaType="java.lang.String" />
+    <result property="upperMenuId" column="UPPER_MENU_ID" javaType="java.lang.Long" />
+    <result property="menuIcon" column="MENU_ICON" javaType="java.lang.String" />
+    <result property="menuKoFulnm" column="MENU_KO_FULNM" javaType="java.lang.String" />
+    <result property="menuEnFulnm" column="MENU_EN_FULNM" javaType="java.lang.String" />
+    <result property="menuJaFulnm" column="MENU_JA_FULNM" javaType="java.lang.String" />
+    <result property="menuLvl" column="MENU_LVL" javaType="java.lang.Integer" />
+    <result property="menuMaxLvl" column="MENU_MAX_LVL" javaType="java.lang.Integer" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    WITH MENU_TREE (
+           MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           MENU_CD,
+           MENU_ORDR,
+           MENU_URL,
+           UPPER_MENU_ID,
+           MENU_ICON,
+           MENU_KO_FULNM,
+           MENU_EN_FULNM,
+           MENU_JA_FULNM,
+           MENU_LVL,
+           PUB_YN
+    ) AS (
+          SELECT MENU_ID,
+                 MENU_KO_NM,
+                 MENU_EN_NM,
+                 MENU_JA_NM,
+                 MENU_CD,
+                 MENU_ORDR,
+                 MENU_URL,
+                 UPPER_MENU_ID,
+                 MENU_ICON,
+                 '' || MENU_KO_NM AS MENU_KO_FULNM,
+                 '' || MENU_EN_NM AS MENU_EN_FULNM,
+                 '' || MENU_JA_NM AS MENU_JA_FULNM,
+                  1 AS MENU_LVL,
+                 PUB_YN
+          FROM TB_CM_MENU
+          <where>
+            <choose>
+              <when test="criteria != null">
+                <choose>
+                  <when test="criteria.menuKey != null">
+                    AND MENU_ID = #{criteria.menuKey}
+                  </when>
+                  <when test="criteria.upperMenuId != null">
+                    AND UPPER_MENU_ID IS NULL
+                    AND MENU_ID = #{criteria.upperMenuId}
+                  </when>
+                  <otherwise>
+                    AND UPPER_MENU_ID IS NULL
+                  </otherwise>
+                </choose>
+              </when>
+              <otherwise>
+                AND UPPER_MENU_ID IS NULL
+              </otherwise>
+            </choose>
+          </where>
+          UNION ALL
+          SELECT A.MENU_ID,
+                 A.MENU_KO_NM,
+                 A.MENU_EN_NM,
+                 A.MENU_JA_NM,
+                 A.MENU_CD,
+                 A.MENU_ORDR,
+                 A.MENU_URL,
+                 A.UPPER_MENU_ID,
+                 A.MENU_ICON,
+                 B.MENU_KO_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_KO_FULNM,
+                 B.MENU_EN_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_EN_FULNM,
+                 B.MENU_JA_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_JA_FULNM,
+                 B.MENU_LVL + 1 AS MENU_LVL,
+                 A.PUB_YN
+          FROM TB_CM_MENU A
+          INNER JOIN MENU_TREE B
+          ON A.UPPER_MENU_ID = B.MENU_ID
+    )
+    SELECT MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           MENU_CD,
+           MENU_ORDR,
+           MENU_URL,
+           MENU_ICON,
+           UPPER_MENU_ID,
+           MENU_KO_FULNM,
+           MENU_EN_FULNM,
+           MENU_JA_FULNM,
+           MENU_LVL,
+           MAX(MENU_LVL) OVER() AS MENU_MAX_LVL,
+           PUB_YN
+    FROM MENU_TREE A
+
+  </sql>
+
+    <sql id="select_02">
+
+    WITH MENU_TREE (
+           MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           MENU_CD,
+           MENU_ORDR,
+           MENU_URL,
+           UPPER_MENU_ID,
+           MENU_ICON,
+           MENU_KO_FULNM,
+           MENU_EN_FULNM,
+           MENU_JA_FULNM,
+           MENU_LVL,
+           PUB_YN
+    ) AS (
+          SELECT MENU_ID,
+                 MENU_KO_NM,
+                 MENU_EN_NM,
+                 MENU_JA_NM,
+                 MENU_CD,
+                 MENU_ORDR,
+                 MENU_URL,
+                 UPPER_MENU_ID,
+                 MENU_ICON,
+                 '' || MENU_KO_NM AS MENU_KO_FULNM,
+                 '' || MENU_EN_NM AS MENU_EN_FULNM,
+                 '' || MENU_JA_NM AS MENU_JA_FULNM,
+                  1 AS MENU_LVL,
+                 PUB_YN
+          FROM TB_CM_MENU
+          WHERE UPPER_MENU_ID IS NULL
+          UNION ALL
+          SELECT A.MENU_ID,
+                 A.MENU_KO_NM,
+                 A.MENU_EN_NM,
+                 A.MENU_JA_NM,
+                 A.MENU_CD,
+                 A.MENU_ORDR,
+                 A.MENU_URL,
+                 A.UPPER_MENU_ID,
+                 A.MENU_ICON,
+                 B.MENU_KO_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_KO_FULNM,
+                 B.MENU_EN_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_EN_FULNM,
+                 B.MENU_JA_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_JA_FULNM,
+                 B.MENU_LVL + 1 AS MENU_LVL,
+                 A.PUB_YN
+          FROM TB_CM_MENU A
+          INNER JOIN MENU_TREE B
+          ON A.UPPER_MENU_ID = B.MENU_ID
+    )
+    SELECT MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           MENU_CD,
+           MENU_ORDR,
+           MENU_URL,
+           MENU_ICON,
+           UPPER_MENU_ID,
+           MENU_KO_FULNM,
+           MENU_EN_FULNM,
+           MENU_JA_FULNM,
+           MENU_LVL,
+           MAX(MENU_LVL) OVER() AS MENU_MAX_LVL,
+           PUB_YN
+    FROM MENU_TREE A
+
+  </sql>
+
+
+  <!-- 検索 SQL文（主キー） -->
+  <select id="searchByKey" resultMap="menuMap" parameterType="com.globaldenso.dicas.business.domain.MenuDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_02"/>
+    ) AA
+    WHERE AA.MENU_ID = #{_id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="menuMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+      SELECT ROWNUM AS RN,
+             A.MENU_ID,
+             A.MENU_KO_NM,
+             A.MENU_EN_NM,
+             A.MENU_JA_NM,
+             A.MENU_CD,
+             A.MENU_ORDR,
+             A.MENU_URL,
+             A.MENU_ICON,
+             A.UPPER_MENU_ID,
+             A.MENU_KO_FULNM,
+             A.MENU_EN_FULNM,
+             A.MENU_JA_FULNM,
+             A.MENU_LVL,
+             MAX(A.MENU_LVL) OVER() AS MENU_MAX_LVL,
+             <choose>
+               <when test="criteria.userId != null">
+                 CASE WHEN A.PUB_YN = 'N' THEN A.PUB_YN
+                 ELSE
+                   CASE WHEN B.MENU_ID IS NOT NULL THEN 'Y'
+                   ELSE 'N' END
+                 END AS PUB_YN
+               </when>
+               <otherwise>
+                 A.PUB_YN
+               </otherwise>
+             </choose>
+      FROM (
+         <include refid="select_01"/>
+        ) A
+        <if test="criteria.userId != null">
+        LEFT OUTER JOIN (
+          SELECT DISTINCT MENU_ID
+          FROM TB_CM_MENU_ROLE
+          WHERE ROLE_CD IN (
+            SELECT ROLE_CD
+            FROM TB_CM_USER_ROLE
+            WHERE USER_ID = #{criteria.userId}
+          )
+        ) B
+        ON A.MENU_ID = B.MENU_ID
+        </if>
+        ORDER BY A.MENU_CD
+      ) AA
+      <if test="pageable != null">
+        WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+      </if>
+
+  </select>
+
+  <!-- 検索 SQL文（任意条件 件数取得） -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="Map">
+
+    SELECT COUNT(MENU_ID) AS CNT
+    FROM (
+        <include refid="select_01"/>
+    ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.MenuDomain">
+
+    INSERT INTO TB_CM_MENU (
+        MENU_ID,
+        RGSTR_ID,
+        RGST_DT,
+        UPDTR_ID,
+        UPDT_DT,
+        MENU_KO_NM,
+        MENU_EN_NM,
+        MENU_JA_NM,
+        MENU_CD,
+        MENU_ORDR,
+        MENU_URL,
+        PUB_YN,
+        UPPER_MENU_ID,
+        MENU_ICON
+      ) VALUES (
+        #{_id},
+        #{rgstrId},
+        #{rgstDt},
+        #{updtrId},
+        #{updtDt},
+        #{menuKoNm},
+        #{menuEnNm},
+        #{menuJaNm},
+        #{menuCd},
+        #{menuOrdr},
+        #{menuUrl},
+        #{pubYn},
+        #{upperMenuId},
+        #{menuIcon}
+      )
+
+    <selectKey resultType="long" keyProperty="_id" order="BEFORE">
+      SELECT SEQ_CM_MENU.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.MenuDomain">
+
+    UPDATE TB_CM_MENU
+    SET UPDTR_ID = #{updtrId},
+        UPDT_DT = #{updtDt},
+        MENU_KO_NM = #{menuKoNm},
+        MENU_EN_NM = #{menuEnNm},
+        MENU_JA_NM = #{menuJaNm},
+        MENU_CD = #{menuCd},
+        MENU_ORDR = #{menuOrdr},
+        MENU_URL = #{menuUrl},
+        PUB_YN = #{pubYn},
+        UPPER_MENU_ID = #{upperMenuId},
+        MENU_ICON = #{menuIcon}
+    WHERE MENU_ID = #{_id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.MenuDomain">
+
+    DELETE FROM TB_CM_MENU
+    WHERE MENU_ID = #{_id}
+
+  </delete>
+
+  <select id="searchMenuCategoryByCondition" resultMap="menuMap">
+
+    SELECT MENU_ID,
+         MENU_KO_NM,
+         MENU_EN_NM,
+         MENU_JA_NM,
+         MENU_CD,
+         MENU_ORDR,
+         MENU_URL,
+         PUB_YN
+    FROM TB_CM_MENU
+      WHERE UPPER_MENU_ID IS NULL
+        AND PUB_YN = 'Y'
+
+  </select>
+
+  <select id="searchChildMenuCountByCondition" parameterType="long" resultType="int">
+
+    SELECT COUNT(MENU_ID)
+    FROM TB_CM_MENU
+    WHERE UPPER_MENU_ID = #{_id}
+
+  </select>
+
+</mapper>

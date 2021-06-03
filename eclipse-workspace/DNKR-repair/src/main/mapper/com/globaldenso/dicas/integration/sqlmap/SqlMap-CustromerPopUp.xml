@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.CustomerPopUpDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.CustomerPopUpDto">
+  		<id property="custId" column="ID" javaType="java.lang.Long" />
+		<result property="custCd" column="CUST_CD" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="custDiv" column="CUST_DIV" javaType="java.lang.String" />
+		<result property="custTel" column="CUST_TEL" javaType="java.lang.String" />
+		<result property="fax" column="FAX" javaType="java.lang.String" />
+		<result property="address" column="ADDRESS" javaType="java.lang.String" />
+		<result property="chk" column="CHK" javaType="java.lang.String" />
+  </resultMap>
+
+  <!-- ?? SQL?????? -->
+   <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.CustomerPopUpDomain">
+    SELECT *
+    FROM TB_CM_CUST
+    WHERE CUST_CD = #{custCd}
+	  AND ROWNUM = 1
+  </select>
+  
+  
+  	<select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+  		SELECT *
+  		FROM TB_CM_CUST
+  		WHERE ROWNUM  <![CDATA[<=]]> 100	
+	</select>
+	
+	<select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(CUST_CD) AS CNT
+    FROM TB_CM_CUST
+
+  </select>
+
+</mapper>

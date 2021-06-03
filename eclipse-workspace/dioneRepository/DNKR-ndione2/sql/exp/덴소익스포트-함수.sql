@@ -1,0 +1,200 @@
+--------------------------------------------------------
+--  파일이 생성됨 - 금요일-2월-23-2018   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Function FNC_GET_BOARD_CNTS_CUT
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "FNC_GET_BOARD_CNTS_CUT" 
+(
+  IN_BOARD_ID IN VARCHAR2 
+, IN_IDX IN VARCHAR2
+, IN_SIZE IN NUMBER
+) RETURN VARCHAR2 
+  IS OUT_DATA VARCHAR2(4000);
+  V_SIZE NUMBER(10);
+  V_CNT VARCHAR2(255);
+BEGIN
+
+  SELECT LENGTH(CNTS)
+    INTO V_SIZE
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+
+  IF V_SIZE >= IN_SIZE THEN
+    SELECT SUBSTR(CNTS, 0, IN_SIZE) || '...'
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  ELSIF V_SIZE > 4000 THEN
+    SELECT SUBSTR(CNTS, 0, 3999) || '...'
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  ELSE
+    SELECT CNTS
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  END IF;
+  
+  RETURN OUT_DATA;
+END FNC_GET_BOARD_CNTS_CUT;
+
+/
+--------------------------------------------------------
+--  DDL for Function FNC_GET_BOARD_NEXT_DATA
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "FNC_GET_BOARD_NEXT_DATA" 
+(
+  IN_BOARD_ID IN VARCHAR2 
+, IN_IDX IN VARCHAR2
+, IN_TYPE IN VARCHAR2
+, IN_USER_ID IN VARCHAR2
+) RETURN VARCHAR2 
+  IS OUT_DATA VARCHAR2(200);
+BEGIN
+
+  IF IN_TYPE = 'PREV_IDX' THEN
+    SELECT MAX(IDX) 
+      INTO OUT_DATA
+      FROM BOARD_TEXT 
+     WHERE BOARD_ID = IN_BOARD_ID 
+       AND IDX < IN_IDX
+       AND CIRCULATION_ID LIKE '%' || IN_USER_ID || '%';
+  ELSIF IN_TYPE = 'PREV_TITLE' THEN
+    SELECT TITLE
+      INTO OUT_DATA
+      FROM BOARD_TEXT
+     WHERE BOARD_ID = IN_BOARD_ID
+       AND IDX = (SELECT MAX(IDX) 
+                    FROM BOARD_TEXT 
+                   WHERE BOARD_ID = IN_BOARD_ID 
+                     AND IDX < IN_IDX
+                     AND CIRCULATION_ID LIKE '%' || IN_USER_ID || '%');
+  ELSIF IN_TYPE = 'NEXT_IDX' THEN
+    SELECT MIN(IDX) 
+      INTO OUT_DATA
+      FROM BOARD_TEXT 
+     WHERE BOARD_ID = IN_BOARD_ID 
+       AND IDX > IN_IDX
+       AND CIRCULATION_ID LIKE '%' || IN_USER_ID || '%';
+  ELSIF IN_TYPE = 'NEXT_TITLE' THEN
+    SELECT TITLE
+      INTO OUT_DATA
+      FROM BOARD_TEXT
+     WHERE BOARD_ID = IN_BOARD_ID
+       AND IDX = (SELECT MIN(IDX) 
+                    FROM BOARD_TEXT 
+                   WHERE BOARD_ID = IN_BOARD_ID 
+                     AND IDX > IN_IDX
+                     AND CIRCULATION_ID LIKE '%' || IN_USER_ID || '%');
+  ELSE OUT_DATA := '';
+  END IF;
+  
+  RETURN OUT_DATA;
+END FNC_GET_BOARD_NEXT_DATA;
+
+/
+--------------------------------------------------------
+--  DDL for Function FNC_GET_BOARD_TITLE_CUT
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "FNC_GET_BOARD_TITLE_CUT" 
+(
+  IN_BOARD_ID IN VARCHAR2 
+, IN_IDX IN VARCHAR2
+, IN_SIZE IN NUMBER
+) RETURN VARCHAR2 
+  IS OUT_DATA VARCHAR2(4000);
+  V_SIZE NUMBER(10);
+  V_CNT VARCHAR2(255);
+BEGIN
+
+  SELECT LENGTH(TITLE)
+    INTO V_SIZE
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+
+  IF V_SIZE >= IN_SIZE THEN
+    SELECT SUBSTR(TITLE, 0, IN_SIZE) || '...'
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  ELSIF V_SIZE > 4000 THEN
+    SELECT SUBSTR(TITLE, 0, 3999) || '...'
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  ELSE
+    SELECT TITLE
+    INTO OUT_DATA
+    FROM BOARD_TEXT
+   WHERE BOARD_ID = IN_BOARD_ID
+     AND IDX = IN_IDX;
+  END IF;
+  
+  RETURN OUT_DATA;
+END FNC_GET_BOARD_TITLE_CUT;
+
+/
+--------------------------------------------------------
+--  DDL for Function FNC_GET_EMP_ID
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "FNC_GET_EMP_ID" (
+	  EMP_NO IN VARCHAR2 ,
+	  CLS_RLTN_CODE IN VARCHAR2,
+	  LOC_RLTN_CODE IN VARCHAR2
+) RETURN VARCHAR2 IS EMP_ID VARCHAR2(50);
+BEGIN
+ 
+ IF CLS_RLTN_CODE = '1000' AND LOC_RLTN_CODE = '1000'  THEN
+    EMP_ID := 'C' || EMP_NO;
+ ELSIF CLS_RLTN_CODE = '1000' AND LOC_RLTN_CODE = '2000'  THEN
+    EMP_ID := 'H' || EMP_NO;
+ ELSIF CLS_RLTN_CODE = '1000' AND LOC_RLTN_CODE = '3000'  THEN
+    EMP_ID := 'S' || EMP_NO;
+ ELSIF CLS_RLTN_CODE = '2000' AND LOC_RLTN_CODE = '1000'  THEN
+    EMP_ID := 'E' || EMP_NO;
+ ELSE
+    EMP_ID := ''+EMP_NO;
+ END IF;
+   
+  RETURN EMP_ID;
+  
+END FNC_GET_EMP_ID;
+
+/
+--------------------------------------------------------
+--  DDL for Function FNC_GET_MENU_CODE_NM
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "FNC_GET_MENU_CODE_NM" (
+	  IN_MCD_CODE IN VARCHAR2 ,
+	  IN_CMC_CODE IN VARCHAR2
+) RETURN VARCHAR2 IS OUT_DATA VARCHAR2(100);
+V_CMC_CODE VARCHAR2(10);
+BEGIN
+
+  IF IN_CMC_CODE = '' THEN
+    V_CMC_CODE := 'kr';
+  ELSE
+    V_CMC_CODE := IN_CMC_CODE;
+  END IF;
+  --메뉴코드 와 언어코드를 받아 메뉴명을 반환한다.
+ SELECT MCD_NAME INTO OUT_DATA FROM DNKR_MENU_CODE_NM WHERE CMC_CODE = IN_CMC_CODE AND MCD_CODE = IN_MCD_CODE;
+   
+  RETURN OUT_DATA;
+  
+END FNC_GET_MENU_CODE_NM;
+
+/

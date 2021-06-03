@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.TrainingAppcntViewDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.TrainingAppcntViewDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="applyId" column="APPLY_ID" javaType="java.lang.Long" />
+		<result property="eduDiv" column="EDU_DIV" javaType="java.lang.String" />
+		<result property="eduItem" column="EDU_ITEM" javaType="java.lang.String" />
+		<result property="eduNm" column="EDU_NM" javaType="java.lang.String" />
+		<result property="custNm" column="CUST_NM" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="reprNm" column="REPR_NM" javaType="java.lang.String" />
+		<result property="officeTel" column="OFFICE_TEL" javaType="java.lang.String" />
+		<result property="telNo" column="TEL_NO" javaType="java.lang.String" />
+		<result property="email" column="EMAIL" javaType="java.lang.String" />
+		<result property="officePw" column="OFFICE_PW" javaType="java.lang.String" />
+		<result property="infoYn" column="INFO_YN" javaType="java.lang.String" />
+		<result property="eduDt" column="EDU_DT" javaType="java.lang.String" />
+  </resultMap>
+
+  <sql id="select_01">
+  	select *
+  	   from(
+	 select A.ID
+  		  ,A.RGSTR_ID
+		  ,A.RGST_DT
+	      ,A.UPDTR_ID
+	      ,A.UPDT_DT
+		  ,A.APPLY_ID
+		  ,A.EDU_DIV
+		  ,A.EDU_ITEM
+		  ,(SELECT EDU_NM FROM  TB_ED_EDUCATION_INFO WHERE ID = A.EDU_ITEM) AS EDU_NM
+		  ,A.CUST_NM
+		  ,A.OFFICE_NM
+		  ,A.REPR_NM
+		  ,A.OFFICE_TEL
+		  ,A.TEL_NO
+		  ,A.EMAIL
+		  ,A.OFFICE_PW
+		  ,A.INFO_YN
+		  ,TO_CHAR(B.EDU_DT, 'YYYYMMDDHH24MI') AS EDU_DT
+	  from TB_ED_EDUCATION_MASTER A
+	  left outer join TB_ED_EDUCATION_INFO B ON B.EDU_DIV = A.EDU_DIV AND B.ID = A.EDU_ITEM
+	   ) X
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.eduDiv != null and criteria.eduDiv != ''">
+		  AND EDU_DIV = UPPER(#{criteria.eduDiv})
+	  </if>
+	  <if test="criteria.eduNm != null and criteria.eduNm != ''">
+		  AND EDU_ITEM = #{criteria.eduNm}
+	  </if>
+	  
+	  <if test="criteria.searchEduDtFr != null and criteria.searchEduDtFr != ''">
+		  AND EDU_DT  &gt;=  #{criteria.searchEduDtFr}
+	  </if>
+	  <if test="criteria.searchEduDtTo != null and criteria.searchEduDtTo != ''">
+		  AND EDU_DT  &lt;=  #{criteria.searchEduDtTo}  || '9999'
+	  </if>
+	  <if test="criteria.officeNm != null and criteria.officeNm != ''">
+		  AND OFFICE_NM LIKE '%'||#{criteria.officeNm}||'%'
+	  </if>
+
+  </sql>
+
+  <sql id="where_02">
+  
+	  <if test="criteria.eduDiv != null and criteria.eduDiv != ''">
+		  AND EDU_DIV = UPPER(#{criteria.eduDiv})
+	  </if>
+
+	  <if test="criteria.searchEduDtFr != null and criteria.searchEduDtFr != ''">
+		  AND EDU_DT  &gt;=  #{criteria.searchEduDtFr}
+	  </if>
+	  <if test="criteria.searchEduDtTo != null and criteria.searchEduDtTo != ''">
+		  AND EDU_DT  &lt;=  #{criteria.searchEduDtTo}  || '9999'
+	  </if>
+
+  </sql>
+
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntViewDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+	  AND ROWNUM = 1
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+			  <include refid="where_01"/>
+          </where>
+	      ORDER BY EDU_DT DESC, ID DESC
+          ) A
+
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+
+	<select id="searchBySdCondition" resultMap="codeMap" parameterType="Map">
+
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		select *
+		  from TB_ED_EDUCATION_INFO
+		 where EDU_DT <![CDATA[<]]> to_date((to_char(sysdate, 'YYYY-MM-DD') || ' 23:59:59' ), 'YYYY-MM-DD HH24:MI:SS')
+	 	   and USE_YN = 'Y'
+		ORDER BY EDU_DT DESC, ID DESC
+		) A
+
+		) AA
+
+		<if test="pageable != null">
+			WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+		</if>
+		ORDER BY RN
+
+	</select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+	<select id="searchSdCount" resultType="int" parameterType="Map">
+
+		SELECT COUNT(ID) AS CNT
+		FROM (
+		<include refid="select_01" />
+		<where>
+			<include refid="where_02"/>
+		</where>
+		) AA
+
+	</select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntViewDomain">
+
+    INSERT INTO TB_ED_EDUCATION_INFO(
+			 ID
+			,RGSTR_ID
+			,RGST_DT
+			,UPDTR_ID
+			,UPDT_DT
+			,EDU_DIV
+			,EDU_NM
+			,EDU_DT
+			,RECEIPT_END_DATE
+			,PERS_CNT
+			,ONOFF_YN
+			,USE_YN
+			,REMARK
+	)VALUES(
+			 #{id}
+			,#{rgstrId}
+			,#{rgstDt}
+			,#{updtrId}
+			,#{updtDt}
+			,#{eduDiv}
+			,#{eduNm}
+			,TO_DATE(#{eduDt}, 'YYYY-MM-DD HH24:MI')
+			,TO_DATE(#{receiptEndDate}, 'YYYY-MM-DD HH24:MI')
+			,#{persCnt}
+			,#{onoffYn}
+			,#{useYn}
+			,#{remark}
+	)
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_ED_EDUCATION_INFO.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntViewDomain">
+
+    UPDATE TB_ED_EDUCATION_INFO
+     SET UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,EDU_DIV = #{eduDiv}
+		,EDU_NM = #{eduNm}
+		,EDU_DT = TO_DATE(#{eduDt}, 'YYYY-MM-DD HH24:MI')
+		,RECEIPT_END_DATE = TO_DATE(#{receiptEndDate}, 'YYYY-MM-DD HH24:MI')
+		,PERS_CNT = #{persCnt}
+		,ONOFF_YN = #{onoffYn}
+		,USE_YN = #{useYn}
+		,REMARK = #{remark}
+		
+ WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.TrainingAppcntViewDomain">
+
+    DELETE FROM TB_ED_EDUCATION_INFO
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

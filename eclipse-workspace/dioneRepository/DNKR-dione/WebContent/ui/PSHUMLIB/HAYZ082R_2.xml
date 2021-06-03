@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="원천징수영수증&#32;조회" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ082R_1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_HAYZ082R_2">
+				<Contents></Contents>
+			</Dataset>
+		</Datasets>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static2" Left="28" Style="static" TabOrder="4" Top="34" VAlign="Middle" Width="96"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="241" Style="static" TabOrder="5" Top="34" VAlign="Middle" Width="75"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="2" Top="31" Width="1048"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="Image0" ImageID="main_tit_bak" Left="-2" TabOrder="4" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="3" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="25" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog1" Left="1000" Right="1024" TabOrder="15" Top="1" Type="Save" Width="24"></FileDialog>
+		<File Bottom="25" Height="24" Id="File0" Left="1032" Right="1056" TabOrder="14" Top="1" Width="24"></File>
+		<Ubi Bottom="608" Height="544" Id="MainGrid" Right="1048" scale="140" Top="64" Width="1048">
+			<_PersistData>&#13;&#10;/6zjvQUN/wAAAQBQbAAAdzk4APjy//7//fL4/PcMDwACBVQAWQBfUABFADD48QH+8C8DMQA0LwABNQH99S8CXgBuSQR0+vn+8G8L&#13;&#10;MgA1agAsAGkLBGUPbwUB+/Tu8aEDFAazBP40AgdEAGUAZgAfYQB1AGxXA/jymQHs+fvXBPC/+vQFUwDFaMIAZVcBAgP59QN0X628&#13;&#10;ubTM1AcU+vRzAjAvAP70ATEA&#13;&#10;</_PersistData>
+		</Ubi>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static11" Left="224" TabOrder="6" Text="마감년도" Top="34" VAlign="Middle" Visible="FALSE" Width="100"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static14" Left="324" Style="static" TabOrder="8" Top="34" VAlign="Middle" Visible="FALSE" Width="88"></Static>
+		<Checkbox Height="21" Id="chkEND" Left="428" TabOrder="9" Text="마감자료" Top="37" Value="FALSE" Visible="FALSE" Width="73"></Checkbox>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="11" Top="33" VAlign="Middle" Width="96"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static3" Left="4" TabOrder="12" Text="사업부" Top="33" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="125" TabOrder="10" Top="36" Width="88"></Combo>
+		<Calendar Dateformat="yyyy" Height="22" Id="cmb_PTJYM" Left="328" LeftMargin="20" MonthPickerFormat="yyyy" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="7" Top="36" Visible="FALSE" Width="80"></Calendar>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="967" OnClick="fn_Search" TabOrder="13" TabStop="FALSE" Text="조회" Top="35" Visible="FALSE" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 제환복
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : HAYZ082R_2.xml
+ * ● PROGRAM DESCRIPTION  : 근로소득 원천징수영수증 조회
+ * ● DATE WRITTEN         : 2015.02.03
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");    //CIGMA LIBRARY(PERESLIB              PSRESLIB)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");    //MRP LIBRARY(PSEDBLIB                PSCDBLIB)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3");    //인사급여 LIBRARY(PSEDBLIB           PSCDBLIB.PSHDBLIB.PSSDBLIB)
+
+var company = G_ds_user.GetColumn(0,"COMPANY"); //PE      PS
+var comps = G_ds_user.GetColumn(0,"PLANT_CD"); //E1,      C1.H1.S1
+
+var nowDate = today();
+
+
+function On_LoadCompleted(obj)
+{
+	getTitle();	
+	getDesign();
+	getComCode();
+	
+	cmb_PTJYM.Value = today();
+	gFcOnTopButtonColor("1.4"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+	ComboBoxPlant.SetFocus();
+}
+
+/********************************************************************** 
+ * 내용설명 : 공통디자인 설정
+ * 주요변수 : 
+ **********************************************************************/ 
+function getDesign(){
+
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+/********************************************************************** 
+ * 내용설명 : 사업부 선택
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;	
+	ComboBoxPlant.Enable = false; 
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 제환복 
+ * 개발일자 : 2015-02-20
+ * 내용설명 : 화면조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getHAYZ082R_1(){
+
+	var ssid = "";
+	var CName = "";
+	var	tName = "";
+	var TsId = "";
+	var Addr = "";
+	var TaxNm = "";
+	
+	var day = substr(today(),0,4) + " 년   " + substr(today(),4,2) + " 월   " + substr(today(),6,2) + " 일";
+	
+	if (ComboBoxPlant.Value == 'C1'){
+      ssid = "206-81-28245";
+      CName = "덴소코리아오토모티브(주)";
+      tName = "김경섭";
+      TsId = "110111-2040585";
+      Addr = "경남 창원시 성산구 웅남로 630";
+      TaxNm = "창원세무서장";
+   }
+   else if (ComboBoxPlant.Value == 'E1'){
+      ssid = "609-81-01877";
+      CName = "덴소코리아일렉트로닉스(주)";
+      tName = "야규 히로시";
+      TsId = "194211-0000141";
+      Addr = "경남 창원시 마산합포구 첨단산업로3";
+      TaxNm = "마산세무서장";
+   }
+   else if (ComboBoxPlant.Value == 'H1'){
+      ssid = "310-85-09579";
+      CName = "덴소코리아오토모티브주식회사";
+      tName = "김경섭";
+      TsId = "110111-2040585";
+	  Addr = "충남 홍성군 은하면 구성남로 386";
+      TaxNm = "홍성세무서장";
+   }
+   else if (ComboBoxPlant.Value == 'S1'){
+      ssid = "124-85-61218";
+      CName = "덴소코리아오토모티브주식회사";
+      tName = "김경섭";
+      TsId = "110111-2040585";
+      JName = "덴소코리아오토모티브(주)";
+      Addr = "경기도 화성시 장안면 장안공단5길 9";
+      TaxNm = "화성세무서장";
+   }
+   
+   	http.Sync = true;
+	var sKind		= "getHAYZ082R_1";						
+	var sMethodName = "service::pshumlib/selectHAYZ082R_1.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	//var sOutDataSet = "ds_HAYZ082R_1=ds_HAYZ082R_1 ds_HAYZ082R_2=ds_HAYZ082R_2";   // 조회 후 돌려 받을 DataSet 명칭
+	var sOutDataSet = "ds_HAYZ082R_1=ds_HAYZ082R_1";   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@LIB3=" + quote(Lib3);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += "@PTJYM=" + quote(LEFT((cmb_PTJYM.Value),4)+13);
+	sArgument += "@USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));		
+	sArgument += "@MAGAM=" + quote(chkEND.Value);		
+	sArgument += "@SELGUB=" + quote("2");//1:경리팀, 2:사용자
+	var str = dialog("Common::PGMLOAD_HUM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	
+//trace(ds_HAYZ082R_1.rowcount+"=="+ds_HAYZ082R_2.rowcount);
+	MainGrid.setJrfFileDir(G_baseURL+"ui/PSHUMLIB/REPORT/");
+
+	if(ds_HAYZ082R_1.GetColumn(0, "PTJYM") > 201401){
+		//trace("2014");
+		//MainGrid.setJrfFileName("HAYZ082R_2013.jrf");
+		MainGrid.setJrfFileName("HAYZ082R_"+substr(ds_HAYZ082R_1.GetColumn(0, "PTJYM"),0,4)+".jrf");
+	}else {
+		//trace("2013");
+		MainGrid.setJrfFileName("HAYZ082R_2013.jrf");
+	}
+		
+	//MainGrid.setJrfFileName("HAYZ082R_2013.jrf");
+	/*
+	if (ComboBoxPlant.Value == 'E1'){
+		MainGrid.setJrfFileName("HAYZ082R_2013.jrf");
+	}
+	else{
+		//MainGrid.setJrfFileName("HAYZ082R_2013.jrf");//마감
+	}
+		*/
+/*
+	if (ComboBoxPlant.Value == 'E1'){
+		if(chkEND.Value=1){
+			trace("마감");
+			MainGrid.setJrfFileName("HAY081_2.jrf");//마감
+		MainGrid.SetDataset("ds_HAY200", "ds_HAYZ082R_1");	
+		}
+		else{
+			trace("미마감");
+			MainGrid.setJrfFileName("HAY081_1.jrf");//미마감
+		MainGrid.SetDataset("ds_HAY081", "ds_HAYZ082R_1");	
+		}
+	}
+	else{
+		if(chkEND.Value=1){
+			MainGrid.setJrfFileName("HAY081_2_1.jrf");//마감
+		MainGrid.SetDataset("ds_HAY200", "ds_HAYZ082R_1");	
+		}
+		else{
+			MainGrid.setJrfFileName("HAY081_1_1.jrf");//미마감
+		MainGrid.SetDataset("ds_HAY081", "ds_HAYZ082R_1");	
+		}
+	}
+*/
+	//MainGrid.SetDataset("ds_HAYZ082R_1", "ds_HAYZ082R_1");	
+	//MainGrid.SetDataset("ds_HAYZ082R_2", "ds_HAYZ082R_2");
+	MainGrid.SetDataset("ds_HAYZ082R_1", "ds_HAYZ082R_1");
+	MainGrid.SetArgument("COMPS", ComboBoxPlant.Value);	
+	MainGrid.SetArgument("ssid", ssid);
+	MainGrid.SetArgument("CName", CName);
+	MainGrid.SetArgument("tName", tName);
+	MainGrid.SetArgument("TsId", TsId);
+	MainGrid.SetArgument("Addr", Addr);
+	MainGrid.SetArgument("TaxNm", TaxNm);
+	MainGrid.SetArgument("day", day);
+	MainGrid.SetArgument("MAGAM", chkEND.Value);//마감여부
+	
+	getHAYZ082R_2();
+
+	//MainGrid.Retrieve();
+		
+	http.Sync=false;
+}
+function getHAYZ082R_2(){
+
+	http.Sync = true;
+	
+	var sKind		= "getHAYZ082R_2";						
+	var sMethodName = "service::pshumlib/selectHAYZ082R_2.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_HAYZ082R_2=ds_HAYZ082R_2";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+/*	
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@LIB3=" + quote(Lib3);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += "@USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	sArgument += "@PTJYM=" + quote(LEFT((cmb_PTJYM.Value),4)+13);
+	sArgument += "@MAGAM=" + quote(chkEND.Value);		
+	sArgument += "@SELGUB=" + quote("2");//1:경리팀, 2:사용자
+		
+	var str = dialog("Common::PGMLOAD_HUM.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	//Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+*/	
+	sArgument += " LIB1=" + quote(Lib1);
+	sArgument += " LIB2=" + quote(Lib2);
+	sArgument += " LIB3=" + quote(Lib3);
+	sArgument += " COMPS=" + quote(ComboBoxPlant.Value);
+	sArgument += " USER_ID=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	sArgument += " PTJYM=" + quote(LEFT((cmb_PTJYM.Value),4)+13);
+	sArgument += " MAGAM=" + quote(chkEND.Value);		
+	sArgument += " SELGUB=" + quote("2");//1:경리팀, 2:사용자	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	MainGrid.SetDataset("ds_HAYZ082R_2", "ds_HAYZ082R_2");
+	MainGrid.Retrieve();
+	
+	http.Sync=false;
+}
+/********************************************************************** 
+ *--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{	
+	ds_HAYZ082R_1.ClearData();
+	ds_HAYZ082R_2.ClearData();
+
+	getHAYZ082R_1();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	MainGrid.printset();
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.4"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_HAYZ082R_1.ClearData();
+	ds_HAYZ082R_2.ClearData();
+}
+]]></Script>
+</Window>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="192" Id="ogm322" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월별집계" TooltipFont="Default,0" Top="8" Ver="1.0" Width="376" WorkArea="true">
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="378"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="2" Top="8" Width="360"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="312" Right="336" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="344" Right="368" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="161" Id="searchBar" TabOrder="3" Top="31" Width="376"></Static>
+		<Static Align="Center" BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="32" TabOrder="4" Text="집계하고&#32;싶은&#32;년도를&#32;입력하세요" Top="56" VAlign="Middle" Width="224"></Static>
+		<Button Height="26" Id="btnCancel" ImageID="closeBtn" Left="272" OnClick="btnCancel_OnClick" TabOrder="5" Text="닫기" Top="56" Width="75"></Button>
+		<Edit Font="굴림,16" Height="40" Id="txtyear" Left="32" MaxLength="4" Number="TRUE" TabOrder="6" Top="96" UseIME="FALSE" Width="152"></Edit>
+		<Static Font="굴림,16,Bold" Height="34" Id="Static0" Left="190" TabOrder="7" Text="년도" Top="102" VAlign="Bottom" Width="58"></Static>
+		<Button Height="25" Id="btnsummary" ImageID="btn2_total2" Left="272" OnClick="btnsummary_OnClick" TabOrder="8" Text="Button1" Top="96" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm200_popxml
+ * ● PROGRAM DESCRIPTION  : 작업개시등록 설비조회
+ * ● DATE WRITTEN         : 2011.08.25
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+function on_LoadCompleted(obj){
+}
+
+
+function btnCancel_OnClick(obj)
+{
+	close();
+}
+
+function btnsummary_OnClick(obj)
+{
+		if(length(trim(txtyear.Text)) !=0){
+			selyear.Text = trim(txtyear.Text);
+			close(open_ogm323());
+		}
+		else
+		{
+			alert("입력값이 없습니다.");
+		}
+}
+]]></Script>
+</Window>

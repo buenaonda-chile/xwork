@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="공지사항&#32;관리" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_notice"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_status">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd>1</cd>
+						<cdnm>사용</cdnm>
+					</record>
+					<record>
+						<cd>0</cd>
+						<cdnm>미사용</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_VComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_device"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_userCompany"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_DEVC"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" Left="1" TabOrder="21" Top="30" Width="1057"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static27" Left="741" TabOrder="46" Top="32" Width="91"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static24" Left="556" TabOrder="43" Top="32" Width="91"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static21" Left="368" TabOrder="40" Top="32" Width="91"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="521" Id="Static26" Left="684" TabOrder="2" Top="64" Width="373"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_notice" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="587" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="523" Id="grd_1" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="678" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="678">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="334"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사업장"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="공지시작일"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="공지종료일"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="공지제목"/>
+					</head>
+					<body>
+						<cell align="center" col="0" colid="COMPANY" combocol="code1" combodataset="ds_VComCode_COMP" combotext="code_name" display="combo"/>
+						<cell align="center" col="1" colid="PLANT_CD" combocol="CODE2" combodataset="ds_VComCode_PLNT" combotext="CODE_NAME" display="combo"/>
+						<cell align="center" col="2" colid="NTC_SDATE" color="#333333" display="text" Mask="####-##-##"/>
+						<cell align="center" col="3" colid="NTC_EDATE" color="#333333" display="text" Mask="####-##-##"/>
+						<cell align="left" autosizing="none" col="4" colid="NTC_TITLE" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static29" Left="686" TabOrder="5" Top="66" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static30" Left="686" TabOrder="6" Top="66" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static22" Left="710" Style="static" TabOrder="3" Text="사업부" Top="71" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="83" Height="5" Id="Shape9" Left="698" LineColor="#dceaf7" Right="703" TabOrder="4" Top="78" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static0" Left="686" TabOrder="9" Top="94" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static1" Left="686" TabOrder="10" Top="94" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static2" Left="710" Style="static" TabOrder="7" Text="사업장" Top="99" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="111" Height="5" Id="Shape0" Left="698" LineColor="#dceaf7" Right="703" TabOrder="8" Top="106" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static3" Left="686" TabOrder="13" Top="122" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static4" Left="686" TabOrder="14" Top="122" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static5" Left="710" Style="static" TabOrder="11" Text="공지시작일" Top="127" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="139" Height="5" Id="Shape1" Left="698" LineColor="#dceaf7" Right="703" TabOrder="12" Top="134" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static6" Left="686" TabOrder="15" Top="150" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static7" Left="686" TabOrder="16" Top="150" Width="106"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static9" Left="686" TabOrder="17" Top="178" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static10" Left="686" TabOrder="18" Top="178" Width="106"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="19" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="19" Top="8" Width="1032"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static8" Left="3" TabOrder="24" Top="32" Width="91"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape3" Left="15" LineColor="#dceaf7" Right="20" TabOrder="22" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static18" Left="25" Style="static" TabOrder="23" Text="사업부" Top="37" VAlign="Middle" Width="69"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code1" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_COMP" Left="94" OnChanged="compChange" ResetIndex="FIRST" TabOrder="25" Top="33" Width="88"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static19" Left="184" TabOrder="28" Top="32" Width="91"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape6" Left="196" LineColor="#dceaf7" Right="201" TabOrder="26" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static20" Left="206" Style="static" TabOrder="27" Text="사업장" Top="37" VAlign="Middle" Width="69"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" DataColumn="code_name" Height="21" Id="cb_PLNT" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="275" ResetIndex="FIRST" TabOrder="29" Top="33" Width="88"></Combo>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="349" Id="Static11" Left="686" TabOrder="30" Top="234" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="345" Id="Static13" Left="686" TabOrder="31" Top="234" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static14" Left="710" Style="static" TabOrder="32" Text="공지종료일" Top="155" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="167" Height="5" Id="Shape2" Left="698" LineColor="#dceaf7" Right="703" TabOrder="33" Top="162" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static15" Left="710" Style="static" TabOrder="34" Text="등록자" Top="183" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="195" Height="5" Id="Shape4" Left="698" LineColor="#dceaf7" Right="703" TabOrder="35" Top="190" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static16" Left="710" Style="static" TabOrder="36" Text="공지내용" Top="240" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="252" Height="5" Id="Shape5" Left="698" LineColor="#dceaf7" Right="703" TabOrder="37" Top="247" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape7" Left="380" LineColor="#dceaf7" Right="385" TabOrder="38" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static17" Left="390" Style="static" TabOrder="39" Text="공지시작일" Top="37" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape8" Left="568" LineColor="#dceaf7" Right="573" TabOrder="41" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static23" Left="578" Style="static" TabOrder="42" Text="공지종료일" Top="37" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape10" Left="753" LineColor="#dceaf7" Right="758" TabOrder="44" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static25" Left="763" Style="static" TabOrder="45" Text="공지제목" Top="37" VAlign="Middle" Width="69"></Static>
+		<Edit Border="Flat" BorderColor="#888888" CheckLength="Byte" Height="21" Id="ed_title" Left="834" MaxLength="10" TabOrder="47" Top="33" Width="222"></Edit>
+		<Calendar BindDataset="ds_notice" Border="Flat" BorderColor="SCROLLBAR" Column="NTC_SDATE" Height="21" Id="Calendar1" Left="793" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="48" Top="126" Width="260"></Calendar>
+		<Calendar BindDataset="ds_notice" Border="Flat" BorderColor="SCROLLBAR" Column="NTC_EDATE" Height="21" Id="Calendar2" Left="793" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="49" Top="154" Width="260"></Calendar>
+		<Combo BindDataset="ds_notice" Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code1" Color="#333333" Column="COMPANY" DataColumn="code_name" Height="21" Id="Combo0" ImeMode="none" INDEX="0" InnerDataset="ds_VComCode_COMP" Left="793" OnChanged="compChange2" ResetIndex="FIRST" TabOrder="50" Top="69" Width="260"></Combo>
+		<Combo BindDataset="ds_notice" Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code2" Color="#333333" Column="PLANT_CD" DataColumn="code_name" Height="21" Id="Combo1" ImeMode="none" INDEX="0" InnerDataset="ds_VComCode_PLNT" Left="793" ResetIndex="FIRST" TabOrder="51" Top="97" Width="260"></Combo>
+		<Edit BindDataset="ds_notice" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="USER_NAME" Enable="FALSE" Height="21" Id="Edit0" Left="793" MaxLength="10" TabOrder="52" Top="182" Width="260"></Edit>
+		<TextArea BindDataset="ds_notice" Border="Flat" BorderColor="#888888" Column="NTC_CNT" Height="341" Id="TextArea0" Left="794" MaxLength="200" TabOrder="53" Top="237" Width="257"></TextArea>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static12" Left="686" TabOrder="54" Top="206" Width="369"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static28" Left="686" TabOrder="55" Top="206" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static31" Left="710" Style="static" TabOrder="56" Text="공지제목" Top="211" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="223" Height="5" Id="Shape11" Left="698" LineColor="#dceaf7" Right="703" TabOrder="57" Top="218" Type="Ellipse" Width="5"></Shape>
+		<Edit BindDataset="ds_notice" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="NTC_TITLE" Height="21" Id="Edit1" Left="793" MaxLength="200" TabOrder="58" Top="210" Width="260"></Edit>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_eyyyymmdd" Left="651" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="59" Top="33" Width="85"></Calendar>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Height="21" Id="ed_syyyymmdd" Left="462" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="60" Top="33" Width="85"></Calendar>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SsoAccount.xml
+ * ● PROGRAM DESCRIPTION  : 사용자 디바이스 관리
+ * ● DATE WRITTEN         : 2010.11.15
+----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+var nowDate = today();
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	ed_syyyymmdd.Value = substr(nowDate,0,6) + "01";
+	ed_eyyyymmdd.Value = nowDate;	
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)					
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 		= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	
+	ds_VComCode_COMP.Copy("ds_ComCode_COMP");	
+	ds_VComCode_COMP.InsertRow(0);
+	ds_VComCode_COMP.SetColumn(0,"CODE1","00");
+	ds_VComCode_COMP.SetColumn(0,"CODE_NAME","공통");	
+	Combo0.index = 0;
+
+	ds_ComCode_COMP.InsertRow(0);
+	ds_ComCode_COMP.SetColumn(0,"CODE1","");
+	ds_ComCode_COMP.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;		
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	ds_VComCode_PLNT.Copy("ds_ComCode_PLNT");	
+	ds_VComCode_PLNT.InsertRow(0);
+	ds_VComCode_PLNT.SetColumn(0,"CODE1","PS");
+	ds_VComCode_PLNT.SetColumn(0,"CODE2","00");	
+	ds_VComCode_PLNT.SetColumn(0,"CODE_NAME","PS 전체");	
+	
+	ds_VComCode_PLNT.InsertRow(0);
+	ds_VComCode_PLNT.SetColumn(0,"CODE1","PE");
+	ds_VComCode_PLNT.SetColumn(0,"CODE2","00");	
+	ds_VComCode_PLNT.SetColumn(0,"CODE_NAME","PE 전체");		
+	
+	ds_VComCode_PLNT.InsertRow(0);
+	ds_VComCode_PLNT.SetColumn(0,"CODE1","00");
+	ds_VComCode_PLNT.SetColumn(0,"CODE2","00");	
+	ds_VComCode_PLNT.SetColumn(0,"CODE_NAME","공통");			
+	
+	Combo1.index = 0;	
+	
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_PLNT.index = 0;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_DEVC=ds_ComCode_DEVC";
+	var sArgument   = "";
+		sArgument   += " CLASS='DEVC'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+}
+
+
+
+function compChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(cb_comp.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+
+	ds_ComCode_PLNT.InsertRow(0);
+	ds_ComCode_PLNT.SetColumn(0,"CODE1","");
+	ds_ComCode_PLNT.SetColumn(0,"CODE_NAME","[전체]");
+	cb_PLNT.index = 0;	
+}
+
+function compChange2(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_VComCode_PLNT.Filter("CODE1=='" + Combo0.Value + "'");
+}
+
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 메인 그리드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getNotice(){
+	var sKind		= "getNotice";						
+	var sMethodName = "service::user/selectNotice.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             // 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_notice=ds_notice";    // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	
+		sArgument += " COMPANY=" + quote(cb_comp.Value);
+		sArgument += " PLANT_CD=" + quote(cb_PLNT.Value);
+		sArgument += " NTC_SDATE=" + quote(ed_syyyymmdd.Value);
+		sArgument += " NTC_EDATE=" + quote(ed_eyyyymmdd.Value);
+		sArgument += " NTC_TITLE=" + quote(ed_title.Value);
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면 저장 
+ * 주요변수 : 
+ **********************************************************************/ 
+function setNotice(){
+	//if(!validationChk()) return;
+	var sKind		= "setNotice";						
+	var sMethodName = "service::user/saveNotice.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_notice=ds_notice:U";     				//자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    									// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument = "";
+	    sArgument += " CREATE_USER=" + quote(G_ds_user.GetColumn(0,"USER_ID"));
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getNotice"){
+		// 조회건수가 없을경우
+		if(ds_notice.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setNotice"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getNotice();
+}
+
+function fn_Input()
+{
+	ds_notice.AddColumn("NTC_SEQ");
+	ds_notice.AddColumn("COMPANY");
+	ds_notice.AddColumn("PLANT_CD");
+	ds_notice.AddColumn("NTC_SDATE");
+	ds_notice.AddColumn("NTC_EDATE");
+	ds_notice.AddColumn("NTC_TITLE");
+	ds_notice.AddColumn("NTC_CNT");
+	ds_notice.AddColumn("USER_ID");
+
+	ds_notice.AddRow();
+	
+	Edit0.Value = G_ds_user.GetColumn(0,"USER_NAME");
+
+}
+
+function fn_Delete()
+{
+	ds_notice.DeleteRow(ds_notice.row);
+}
+
+function fn_Save()
+{
+	setNotice();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+
+
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	 lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

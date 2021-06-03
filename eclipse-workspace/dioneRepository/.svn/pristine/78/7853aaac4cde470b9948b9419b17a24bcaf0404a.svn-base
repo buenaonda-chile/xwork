@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnKeyDown="fnc_OnKeyDown" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="autoConvert" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_main"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_list"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Height="28" Id="Image0" ImageID="main_tit_bak" Left="-1" TabOrder="22" Width="799"></Image>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static1" TabOrder="25" Top="78" Width="798"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static40" Left="120" TabOrder="30" Top="78" Width="58"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static22" TabOrder="28" Top="78" Width="58"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static0" TabOrder="24" Top="54" Width="798"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static21" TabOrder="27" Top="54" Width="58"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static37" Left="80" TabOrder="29" Top="30" Width="58"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="searchBar" TabOrder="23" Top="30" Width="798"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static20" TabOrder="26" Top="30" Width="58"></Static>
+		<Image Height="28" Id="Image2" ImageID="main_tit_icon" TabOrder="21" Width="29"></Image>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20" Id="FD04019" Left="179" MaxLength="6" OnKeyDown="fnc_OnKeyDown" TabOrder="18" Top="80" Width="60"></Edit>
+		<Static Height="20" Id="ID01008" Left="488" TabOrder="0" Text="DSP99" Top="3" VAlign="Middle" Width="50"></Static>
+		<Static Height="20" Id="ID01016" Left="568" TabOrder="1" Text="B031000" Top="3" VAlign="Middle" Width="70"></Static>
+		<Static Height="20" Id="ID01026" Left="32" TabOrder="2" Text="PRODUCTION&#32;PLAN&#32;MODIFICATION" Top="3" VAlign="Middle" Width="280"></Static>
+		<Static Height="20" Id="ID01063" Left="712" TabOrder="3" Text="10/10/07" Top="3" VAlign="Middle" Width="80"></Static>
+		<Static Height="20" Id="ID02001" Left="10" TabOrder="4" Text="ACT&#32;:" Top="32" VAlign="Middle" Width="54"></Static>
+		<Static Height="20" Id="ID02007" Left="70" TabOrder="5" Text="&#32;" Top="44" VAlign="Middle" Width="10"></Static>
+		<Static Height="20" Id="ID02015" Left="150" TabOrder="7" Text="&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;" Top="44" VAlign="Middle" Width="150"></Static>
+		<Static Height="20" Id="ID03001" Left="10" TabOrder="8" Text="PROC:" Top="56" VAlign="Middle" Width="50"></Static>
+		<Static Height="20" Id="ID03007" Left="70" TabOrder="9" Text="&#32;&#32;&#32;&#32;&#32;" Top="65" VAlign="Middle" Width="50"></Static>
+		<Static Height="20" Id="ID04001" Left="10" TabOrder="10" Text="PAGE:" Top="80" VAlign="Middle" Width="50"></Static>
+		<Static Height="20" Id="ID04007" Left="70" TabOrder="11" Text="&#32;&#32;&#32;&#32;" Top="86" VAlign="Middle" Width="40"></Static>
+		<Static Height="20" Id="ID04013" Left="130" TabOrder="12" Text="DATE:" Top="80" VAlign="Middle" Width="50"></Static>
+		<Static Height="20" Id="ID04019" Left="202" TabOrder="13" Text="101007" Top="120" VAlign="Middle" Visible="FALSE" Width="60"></Static>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20" Id="FD02007" Left="59" MaxLength="1" OnKeyDown="fnc_OnKeyDown" TabOrder="14" Top="32" Width="15"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20" Id="FD02015" Left="135" MaxLength="15" OnKeyDown="fnc_OnKeyDown" TabOrder="15" Top="32" Width="150"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20" Id="FD03007" Left="59" MaxLength="5" OnKeyDown="fnc_OnKeyDown" TabOrder="16" Top="56" Width="50"></Edit>
+		<Edit Border="Flat" BorderColor="#b4b4b4" Height="20" Id="FD04007" Left="59" MaxLength="4" OnKeyDown="fnc_OnKeyDown" TabOrder="17" Top="80" Width="40"></Edit>
+		<Button ButtonStyle="TRUE" Height="24" Id="btn_add" ImageID="2_btn" Left="743" OnClick="btn_add_OnClick" TabOrder="20" Text="Enter" Top="31" Width="53"></Button>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static2" Left="76" TabOrder="31" Top="30" Width="58"></Static>
+		<Static Height="20" Id="ID02010" Left="84" TabOrder="6" Text="P/N:" Top="32" VAlign="Middle" Width="40"></Static>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+function sendColumn(){
+}
+function sendField(){
+	MAX5250.SendToField("FD02007",FD02007.Text );
+	MAX5250.SendToField("FD02015",FD02015.Text );
+	MAX5250.SendToField("FD03007",FD03007.Text );
+	MAX5250.SendToField("FD04007",FD04007.Text );
+	MAX5250.SendToField("FD04019",FD04019.Text );
+	MAX5250.SendKeys("[Enter]");
+}
+function form_OnLoadCompleted(obj)
+{
+	if(IsValid(btn_pgdn))
+	chkPage(replace(trim(max5250.GetString(22,67,12)),".","")); 
+	var subStr = "";
+	var sKind		= "CONVERTXMLDATA";	
+	var sMethodName = "service::max5250/convertxmlData.do"; 
+	var sInDataSet  = ""; 	
+	var sOutDataSet = "ds_main=ds_main"; 	
+	var mainStr = max5250.GetScreenData(1,24); 	
+	var arg			= " str=" + quote(mainStr); 	
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "fnc_callBack"); 	
+}
+function fnc_callBack(svcId,rntCode, errCode, errMsg){
+	if(svcId=="CONVERTXMLDATA"){
+		ID01008.Text=ds_main.getColumn(0,"ID01008");
+		ID01008.Color=ds_main.getColumn(0,"ID01008_c");
+		ID01008.BkColor=ds_main.getColumn(0,"ID01008_b");
+		ID01008.Font=ds_main.getColumn(0,"ID01008_f");
+		ID01016.Text=ds_main.getColumn(0,"ID01016");
+		ID01016.Color=ds_main.getColumn(0,"ID01016_c");
+		ID01016.BkColor=ds_main.getColumn(0,"ID01016_b");
+		ID01016.Font=ds_main.getColumn(0,"ID01016_f");
+		ID01026.Text=ds_main.getColumn(0,"ID01026");
+		ID01026.Color=ds_main.getColumn(0,"ID01026_c");
+		ID01026.BkColor=ds_main.getColumn(0,"ID01026_b");
+		ID01026.Font=ds_main.getColumn(0,"ID01026_f");
+		ID01063.Text=ds_main.getColumn(0,"ID01063");
+		ID01063.Color=ds_main.getColumn(0,"ID01063_c");
+		ID01063.BkColor=ds_main.getColumn(0,"ID01063_b");
+		ID01063.Font=ds_main.getColumn(0,"ID01063_f");
+		ID02001.Text=ds_main.getColumn(0,"ID02001");
+		ID02001.Color=ds_main.getColumn(0,"ID02001_c");
+		ID02001.BkColor=ds_main.getColumn(0,"ID02001_b");
+		ID02001.Font=ds_main.getColumn(0,"ID02001_f");
+		ID02010.Text=ds_main.getColumn(0,"ID02010");
+		ID02010.Color=ds_main.getColumn(0,"ID02010_c");
+		ID02010.BkColor=ds_main.getColumn(0,"ID02010_b");
+		ID02010.Font=ds_main.getColumn(0,"ID02010_f");
+		ID03001.Text=ds_main.getColumn(0,"ID03001");
+		ID03001.Color=ds_main.getColumn(0,"ID03001_c");
+		ID03001.BkColor=ds_main.getColumn(0,"ID03001_b");
+		ID03001.Font=ds_main.getColumn(0,"ID03001_f");
+		ID04001.Text=ds_main.getColumn(0,"ID04001");
+		ID04001.Color=ds_main.getColumn(0,"ID04001_c");
+		ID04001.BkColor=ds_main.getColumn(0,"ID04001_b");
+		ID04001.Font=ds_main.getColumn(0,"ID04001_f");
+		ID04013.Text=ds_main.getColumn(0,"ID04013");
+		ID04013.Color=ds_main.getColumn(0,"ID04013_c");
+		ID04013.BkColor=ds_main.getColumn(0,"ID04013_b");
+		ID04013.Font=ds_main.getColumn(0,"ID04013_f");
+		FD02007.Text=ds_main.getColumn(0,"FD02007");
+		FD02007.Color=ds_main.getColumn(0,"FD02007_c");
+		FD02007.BkColor=ds_main.getColumn(0,"FD02007_b");
+		FD02007.Font=ds_main.getColumn(0,"FD02007_f");
+		FD02007.Enable=ds_main.getColumn(0,"FD02007_s");
+		FD02015.Text=ds_main.getColumn(0,"FD02015");
+		FD02015.Color=ds_main.getColumn(0,"FD02015_c");
+		FD02015.BkColor=ds_main.getColumn(0,"FD02015_b");
+		FD02015.Font=ds_main.getColumn(0,"FD02015_f");
+		FD02015.Enable=ds_main.getColumn(0,"FD02015_s");
+		FD03007.Text=ds_main.getColumn(0,"FD03007");
+		FD03007.Color=ds_main.getColumn(0,"FD03007_c");
+		FD03007.BkColor=ds_main.getColumn(0,"FD03007_b");
+		FD03007.Font=ds_main.getColumn(0,"FD03007_f");
+		FD03007.Enable=ds_main.getColumn(0,"FD03007_s");
+		FD04007.Text=ds_main.getColumn(0,"FD04007");
+		FD04007.Color=ds_main.getColumn(0,"FD04007_c");
+		FD04007.BkColor=ds_main.getColumn(0,"FD04007_b");
+		FD04007.Font=ds_main.getColumn(0,"FD04007_f");
+		FD04007.Enable=ds_main.getColumn(0,"FD04007_s");
+		FD04019.Text=ds_main.getColumn(0,"FD04019");
+		FD04019.Color=ds_main.getColumn(0,"FD04019_c");
+		FD04019.BkColor=ds_main.getColumn(0,"FD04019_b");
+		FD04019.Font=ds_main.getColumn(0,"FD04019_f");
+		FD04019.Enable=ds_main.getColumn(0,"FD04019_s");
+	}
+}
+
+function fnc_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam){
+	if(nChar == 13){
+		sendColumn();
+		sendField();
+	}
+}
+
+function btn_add_OnClick(obj)
+{
+	sendField();
+}
+]]></Script>
+</Window>

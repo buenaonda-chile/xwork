@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="592" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="내부시스템" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_outSystem" OnRowPosChanged="OnRowPosChange"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_EXSC"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_popupyn">
+				<Contents>
+					<colinfo id="popup_yn" size="256" summ="default" type="STRING"/>
+					<record>
+						<popup_yn>Y</popup_yn>
+					</record>
+					<record>
+						<popup_yn>N</popup_yn>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_loginyn">
+				<Contents>
+					<colinfo id="login_yn" size="256" summ="default" type="STRING"/>
+					<record>
+						<login_yn>Y</login_yn>
+					</record>
+					<record>
+						<login_yn>N</login_yn>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_outSystem_tmp"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_COMP1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT1"></Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="29" Id="searchBar" TabOrder="39" Top="30" Width="1057"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#b4b4b4" Height="25" Id="Static11" Left="3" TabOrder="42" Top="32" Width="91"></Static>
+		<Grid AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_outSystem" BkColor2="default" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="454" CellMoving="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="25" Height="390" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" OnHeadClick="Grid0_OnHeadClick" Right="1054" TabOrder="1" TabStop="true" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="#94c1ea" WheelScrollRow="1" Width="1054">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="35"/>
+						<col width="105"/>
+						<col width="105"/>
+						<col width="107"/>
+						<col width="431"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="90"/>
+						<col width="274"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="번호"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="사업부"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="시스템&#32;코드"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="시스템명"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="시스템&#32;URL"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" text="자동&#32;로그인"/>
+						<cell bkcolor="#dfdfdf" col="6" color="#002043" display="text" text="시스템&#32;구분"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="팝업여부"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" display="text" text="시스템&#32;위치"/>
+					</head>
+					<body>
+						<cell align="center" col="0" cursor="hand" display="text" expr="row+1"/>
+						<cell align="center" col="1" colid="COMPANY" display="normal"/>
+						<cell align="center" col="2" colid="SYSTEM_SEQ" display="normal"/>
+						<cell align="center" col="3" colid="SYS_NAME" display="normal"/>
+						<cell align="left" col="4" colid="SYS_URL" color="#333333" display="normal"/>
+						<cell align="center" col="5" colid="LOGIN_YN" color="#333333" combocol="login_yn" combodataset="ds_loginyn" combotext="login_yn" display="combo"/>
+						<cell align="center" col="6" colid="SYS_GUBN" color="#333333" combocol="code1" combodataset="ds_ComCode_EXSC" combotext="code_name" display="combo"/>
+						<cell align="center" col="7" colid="POPUP_YN" color="#333333" combocol="popup_yn" combodataset="ds_popupyn" combotext="popup_yn" display="combo"/>
+						<cell align="center" autosizing="none" col="8" colid="SYS_EXELOC" display="normal"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="117" Id="Static26" Left="2" TabOrder="2" Top="465" Width="1054"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static3" Left="4" TabOrder="26" Top="551" Width="1049"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static9" Left="540" TabOrder="31" Top="551" Width="106"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static8" Left="4" TabOrder="6" Top="467" Width="1049"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static7" Left="4" TabOrder="7" Top="495" Width="1049"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static0" Left="540" TabOrder="8" Top="467" Width="106"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static13" Left="4" TabOrder="3" Top="467" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static14" Left="20" Style="static" TabOrder="4" Text="사업부" Top="472" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="484" Height="5" Id="Shape6" Left="8" LineColor="#dceaf7" Right="13" TabOrder="5" Top="479" Type="Ellipse" Width="5"></Shape>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static18" Left="540" TabOrder="12" Top="495" Width="106"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static19" Left="4" TabOrder="9" Top="495" Width="106"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static20" Left="556" Style="static" TabOrder="10" Text="시스템명" Top="472" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="484" Height="5" Id="Shape2" Left="544" LineColor="#dceaf7" Right="549" TabOrder="11" Top="479" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static27" Left="20" Style="static" TabOrder="13" Text="시스템&#32;URL" Top="500" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="512" Height="5" Id="Shape10" Left="8" LineColor="#dceaf7" Right="13" TabOrder="14" Top="507" Type="Ellipse" Width="5"></Shape>
+		<Shape BKColor="#94c1ea" Bottom="512" Height="5" Id="Shape4" Left="544" LineColor="#dceaf7" Right="549" TabOrder="16" Top="507" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static10" Left="556" Style="static" TabOrder="15" Text="자동&#32;로그인" Top="500" VAlign="Middle" Width="77"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#888888" Height="29" Id="Static34" Left="4" TabOrder="18" Top="523" Width="1049"></Static>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static36" Left="4" TabOrder="17" Top="523" Width="106"></Static>
+		<Shape BKColor="#94c1ea" Bottom="540" Height="5" Id="Shape8" Left="8" LineColor="#dceaf7" Right="13" TabOrder="20" Top="535" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static37" Left="20" Style="static" TabOrder="19" Text="시스템구분" Top="528" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SYS_URL" Height="23" Id="Edit2" Left="114" MaxLength="120" TabOrder="21" Top="498" Width="422"></Edit>
+		<Combo BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CodeColumn="code1" Color="#333333" Column="SYS_GUBN" DataColumn="code_name" Height="23" Id="cb_welo" INDEX="0" InnerDataset="ds_ComCode_EXSC" Left="114" OnChanged="on_compChange" ResetIndex="FIRST" TabOrder="22" Top="525" Width="422"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static1" Left="540" TabOrder="23" Top="523" Width="106"></Static>
+		<Combo BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CodeColumn="popup_yn" Color="#333333" Column="POPUP_YN" DataColumn="popup_yn" Height="23" Id="Combo0" INDEX="0" InnerDataset="ds_popupyn" Left="647" OnChanged="on_compChange" ResetIndex="FIRST" TabOrder="24" Top="525" Width="404"></Combo>
+		<Static BKColor="#dfdfdf" Border="Flat" BorderColor="#888888" Height="29" Id="Static4" Left="4" TabOrder="25" Top="551" Width="106"></Static>
+		<Shape BKColor="#94c1ea" Bottom="568" Height="5" Id="Shape1" Left="8" LineColor="#dceaf7" Right="13" TabOrder="28" Top="563" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static5" Left="20" Style="static" TabOrder="27" Text="시스템&#32;위치" Top="556" VAlign="Middle" Width="69"></Static>
+		<Edit BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SYS_EXELOC" Height="23" Id="Edit3" Left="114" MaxLength="100" TabOrder="29" Top="554" Width="422"></Edit>
+		<Combo BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CodeColumn="login_yn" Color="#333333" Column="LOGIN_YN" DataColumn="login_yn" Height="23" Id="Combo2" INDEX="0" InnerDataset="ds_loginyn" Left="647" OnChanged="on_compChange" ResetIndex="FIRST" TabOrder="30" Top="497" Width="404"></Combo>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="32" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="32" Top="8" Width="1032"></Static>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="20" Id="Static2" Left="556" Style="static" TabOrder="34" Text="팝업여부" Top="528" VAlign="Middle" Width="69"></Static>
+		<Shape BKColor="#94c1ea" Bottom="540" Height="5" Id="Shape0" Left="544" LineColor="#dceaf7" Right="549" TabOrder="35" Top="535" Type="Ellipse" Width="5"></Shape>
+		<Edit BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SYSTEM_SEQ" Height="23" Id="Edit1" Left="648" MaxLength="10" TabOrder="36" Top="470" Width="76"></Edit>
+		<Edit BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CheckLength="Byte" Column="SYS_NAME" Height="23" Id="Edit4" Left="728" MaxLength="10" TabOrder="37" Top="470" Width="322"></Edit>
+		<Combo BindDataset="ds_outSystem" Border="Flat" BorderColor="#888888" CodeColumn="CODE1" Color="#333333" Column="COMPANY" DataColumn="CODE_NAME" Height="23" Id="Combo1" INDEX="0" InnerDataset="ds_ComCode_COMP" Left="112" OnChanged="on_compChange" ResetIndex="FIRST" TabOrder="38" Top="469" Width="424"></Combo>
+		<Shape BKColor="#888888" Bottom="46" Height="5" Id="Shape3" Left="15" LineColor="#dceaf7" Right="20" TabOrder="40" Top="41" Type="Ellipse" Width="5"></Shape>
+		<Static Border="None" Color="#333333" Font="굴림,9,Bold" Height="16" Id="Static6" Left="25" Style="static" TabOrder="41" Text="사업부" Top="37" VAlign="Middle" Width="69"></Static>
+		<Combo Border="Flat" BorderColor="SCROLLBAR" CodeColumn="code1" Color="#333333" DataColumn="code_name" Height="21" Id="cb_comp" ImeMode="none" INDEX="0" InnerDataset="ds_ComCode_COMP1" Left="94" OnChanged="compChange" ResetIndex="FIRST" TabOrder="43" Top="33" Width="88"></Combo>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @version               : 1.0 
+ * @author                : 황규철
+ * @see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : InSystem.xml
+ * ● PROGRAM DESCRIPTION  : 내부시스템 관리
+ * ● DATE WRITTEN         : 2010.11.11
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	getComCode();
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)				
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getOutSystem(){
+	http.Sync = true;
+	var sKind		= "getOutSystem";						
+	var sMethodName = "service::user/selectOutSystem.do";     	// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_outSystem=ds_outSystem";    			// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument   += " INOUT_GUBN='I'";
+		sArgument   += " COMP=" + quote(cb_comp.Value);
+		// sArgument   += " PLNT=" + quote(cb_PLNT.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	ds_outSystem_tmp.Copy("ds_outSystem");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 공통코드 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_EXSC=ds_ComCode_EXSC";
+	var sArgument   = "";
+		sArgument   += " CLASS='EXSC'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	
+	//사업부
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_COMP1=ds_ComCode_COMP";
+	var sArgument   = "";
+		sArgument   += " CLASS='COMP'";
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync = false;
+	ds_ComCode_COMP1.InsertRow(0);
+	ds_ComCode_COMP1.SetColumn(0,"CODE1","");
+	ds_ComCode_COMP1.SetColumn(0,"CODE_NAME","[전체]");
+	cb_comp.index = 0;		
+
+	//사업장
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT1=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	// ds_ComCode_PLNT1.InsertRow(0);
+	// ds_ComCode_PLNT1.SetColumn(0,"CODE1","");
+	// ds_ComCode_PLNT1.SetColumn(0,"CODE_NAME","[전체]");
+	// cb_PLNT.index = 0;
+
+}
+
+function compChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT1=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(cb_comp.Value);
+	http.Sync = true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	// ds_ComCode_PLNT1.InsertRow(0);
+	// ds_ComCode_PLNT1.SetColumn(0,"CODE1","");
+	// ds_ComCode_PLNT1.SetColumn(0,"CODE_NAME","[전체]");
+	// cb_PLNT.index = 0;	
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : 화면저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setOutSystem(){
+	if(validationChk() == false) return false ;
+	var sKind		= "setOutSystem";						
+	var sMethodName = "service::user/outSystemSave.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_outSystem=ds_outSystem:U";     //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "";    							// 조회 후 돌려 받을 DataSet 명칭
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, "", "callback");
+}
+
+
+
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-02
+ * 내용설명 : validation 체크
+ * 주요변수 : 
+ **********************************************************************/ 
+function validationChk()
+{
+
+	for(j=0;j<ds_outSystem.rowcount;j++){
+
+		if(length(trim(ds_outSystem.GetColumn(j, "COMPANY")))==0){
+			alert(setPopMessage("2041"));	// 20110103l-koowgnojeel, 2041 == 사업부를 선택하세요.		
+			ds_outSystem.row = j;
+			return false;
+		}
+		if(length(trim(ds_outSystem.GetColumn(j, "SYSTEM_SEQ")))==0){
+			alert(setPopMessage("2042"));	// 20110103l-koowgnojeel, 2042 == 시스템 코드를 입력해 주세요.
+			ds_outSystem.row = j;
+			return false;
+		}
+		if(length(trim(ds_outSystem.GetColumn(j, "SYS_NAME")))==0){
+			alert(setPopMessage("2038"));	// 20110103l-koowgnojeel, 2038 == 시스템명을 입력해 주세요.
+			ds_outSystem.row = j;
+			return false;
+		}					
+	}
+
+
+	var chk = 0;
+	for(i=0;i<ds_outSystem_tmp.rowcount;i++)
+	{
+		chk = 0;
+		for(j=0;j<ds_outSystem.rowcount;j++)
+		{
+			if(ds_outSystem_tmp.GetColumn(i,"COMPANY") == ds_outSystem.GetColumn(j,"COMPANY")
+				&& ds_outSystem_tmp.GetColumn(i,"SYSTEM_SEQ") == ds_outSystem.GetColumn(j,"SYSTEM_SEQ"))
+			{
+				chk++;
+			}		
+		}
+
+		if(chk > 1)
+		{
+			alert(setPopMessage("2039"));	// 20110103l-koowgnojeel, 2039 == 중복된 데이터가 존재합니다.
+			return false;
+		}
+	}
+	return true;
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-11-26
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else if(svcId=="getOutSystem"){
+		// 조회건수가 없을경우
+		if(ds_outSystem.rowcount <= 0){
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	// tran 성공	
+	}else if(svcId=="setOutSystem"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+
+
+function on_compChange(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_ComCode_PLNT.Filter("CODE1=='" + cb_company.Value + "'");
+}
+
+
+
+function OnRowPosChange(obj,nOldRow,nRow)
+{
+	if(ds_outSystem.GetRowType(ds_outSystem.row) == "insert")
+	{
+		Edit1.Enable = true;
+	} else {
+		Edit1.Enable = false;
+	}	
+}
+
+
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOutSystem();
+}
+
+function fn_Input()
+{
+	if(checkInsertCount("ds_outSystem")== false) return;
+	ds_outSystem.AddRow();
+	ds_outSystem.SetColumn(ds_outSystem.row,"INOUT_GUBN","I");
+	ds_outSystem.SetColumn(ds_outSystem.row,"LOGIN_YN","Y");
+	ds_outSystem.SetColumn(ds_outSystem.row,"POPUP_YN","Y");
+}
+
+function fn_Delete()
+{
+	ds_outSystem.DeleteRow(ds_outSystem.currow);
+}
+
+function fn_Save()
+{
+	setOutSystem();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}]]></Script>
+</Window>

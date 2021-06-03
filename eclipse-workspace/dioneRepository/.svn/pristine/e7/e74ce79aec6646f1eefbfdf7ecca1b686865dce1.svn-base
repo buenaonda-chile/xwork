@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" OnTimer="form_OnTimer" PidAttrib="7" Title="New&#32;Form" TooltipFont=",0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Button Height="41" Id="Button0" Left="28" OnClick="Button0_OnClick" TabOrder="1" Text="start" Top="38" Width="95"></Button>
+		<Button Height="44" Id="Button1" Left="176" OnClick="Button1_OnClick" TabOrder="2" Text="stop" Top="40" Width="122"></Button>
+	</Form>
+	<Script><![CDATA[var rCnt = 0;
+var rRtn = false;
+function Button0_OnClick(obj)
+{
+	rCnt = 0;
+	rRtn = false;
+	setTimer(1,1);  //1000는 1초를 의미합니다.  더빨리 실행하려면 숫자를 줄이세요 
+}
+
+function Button1_OnClick(obj)
+{
+trace("rRtn Set");
+	rRtn = true;
+}
+
+function form_OnTimer(obj,nEventID)
+{
+	if((rCnt == 5000) || rRtn == true)
+	{
+		KillTimer(1);
+	} else {
+		rCnt ++;
+		trace(rRtn + "===" + rCnt);
+	}	
+	
+}]]></Script>
+</Window>

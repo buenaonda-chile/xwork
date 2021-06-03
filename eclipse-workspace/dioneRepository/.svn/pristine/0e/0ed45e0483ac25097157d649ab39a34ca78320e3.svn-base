@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustomerDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="Customer" type="CustomerDomain">
+        <result property="cusno" column="CUSNO" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="cusa1" column="CUSA1" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="Customer" parameterType="CustomerDomain">
+		SELECT
+				CUSNO, CUSNM, CUSA1
+		FROM
+			 ${lib1}.CUSMAS1
+		WHERE 'SqlMap-Customer.searchByCondition' = 'SqlMap-Customer.searchByCondition'
+		<if test="cusno != null and cusno !='' ">										
+		   AND CUSNO = #{cusno}									
+		</if>
+		ORDER BY
+			CUSNO
+    </select>
+
+</mapper>

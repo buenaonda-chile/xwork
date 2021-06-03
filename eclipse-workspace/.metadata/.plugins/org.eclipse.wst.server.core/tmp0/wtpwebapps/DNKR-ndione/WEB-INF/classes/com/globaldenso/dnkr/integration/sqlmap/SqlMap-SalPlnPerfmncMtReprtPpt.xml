@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.globaldenso.dnkr.integration.dao.SalPlnPerfmncMtReprtPptDao">
+	
+	<resultMap id="SalPlnPerfmncMtReprtPpt" type="SalPlnPerfmncMtReprtPptDomain">
+		<result property="maker" column="MAKER" />
+		<result property="pcosty" column="P_COST_Y" />
+		<result property="pcostm" column="P_COST_M" />
+		<result property="pcosts" column="P_COST_S" />
+	</resultMap>
+	
+	<select id="searchByMaker" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	
+		select 
+			COALESCE(COALESCE(A.endcnm,b.endcnm),C.endcnm)      as maker,
+			COALESCE((A.P_COST_Y / 10000000),0) AS P_COST_Y,
+    	    COALESCE((B.P_COST_M / 10000000),0) AS P_COST_M,
+    	    COALESCE((C.P_COST_S / 10000000),0) AS P_COST_S
+    	    /*'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMaker' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMaker'*/
+		from
+			(SELECT 
+			B.endcnm, 
+			SUM(A.MONQY) AS P_QTY_Y, 
+			SUM(A.MONQY*A.YESCS) AS P_COST_Y 
+			FROM ${lib2}.SPY200PF A,
+			PSZDBLIB.SPZ100PF B,
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNGB = #{plngb} --계획구분) 1 : 계획, 2:수정
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			AND A.plnym = #{dumcb} --계획년월
+			AND C.COMPS = #{orgComps} 		
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성	
+			GROUP BY B.endcnm) A full outer join
+			(SELECT
+			B.endcnm, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY ELSE A.SL0QY END) AS P_QTY_M, 
+			SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M 
+			FROM ${lib2}.SPM110PF A, 
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			A.PLNYM = #{dumcb} --계획년월
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			AND C.COMPS = #{orgComps}
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+			GROUP BY B.endcnm) B ON A.endcnm = B.endcnm full outer join
+			(SELECT
+			B.endcnm,
+			SUM(A.JPSQY) AS P_QTY_S,
+			SUM(A.JPSAM) AS P_COST_S
+			FROM
+			${lib2}.SMD110PF A,
+			PSZDBLIB.SPZ100PF B, 
+			PSZDBLIB.SPZ110PF C
+			WHERE
+			SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월			
+			AND B.endccd = C.endccd 
+			AND A.PYVND= C.PYVND
+			AND C.COMPS = #{orgComps}
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+			GROUP BY B.endcnm) C ON B.endcnm = C.endcnm
+	</select>
+	
+	<select id="searchByMakerOther" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	select
+       A.OTHER            AS MAKER,
+       	COALESCE((A.P_COST_Y / 10000000),0) AS P_COST_Y,
+       	COALESCE((B.P_COST_M / 10000000),0) AS P_COST_M,
+    	COALESCE((C.P_COST_S / 10000000),0) AS P_COST_S
+	from (SELECT
+             'OTHER' AS OTHER,
+             SUM(A.MONQY) AS P_QTY_Y,
+             SUM(A.MONQY * A.YESCS) AS P_COST_Y
+      FROM
+           ${lib2}.SPY200PF A
+      WHERE
+      'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMakerOther' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMakerOther'
+      	AND A.PLNGB = #{plngb} 
+        AND A.COMPS IN (${comps})
+        AND A.PLNYM = #{dumcb}
+        AND A.PYVND NOT IN (SELECT
+                                 B.PYVND
+                            FROM
+                                PSZDBLIB.SPZ110PF B
+                            WHERE
+                                 B.COMPS = #{orgComps})
+      GROUP BY 'OTHER') A full outer join
+     (SELECT 'OTHER'                                                                AS OTHER,
+             SUM(CASE WHEN 1 = 1 THEN A.SM0QY ELSE A.SL0QY END)                     AS P_QTY_M,
+             SUM(CASE WHEN 1 = 1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END) AS P_COST_M
+      FROM ${lib2}.SPM110PF A
+      WHERE A.PLNYM = #{dumcb}
+        AND A.COMPS IN (${comps})
+        AND A.PYVND NOT IN (SELECT
+                                 B.PYVND
+                            FROM
+                                PSZDBLIB.SPZ110PF B
+                            WHERE
+                                 B.COMPS = #{orgComps})
+      GROUP BY 'OTHER') B ON A.OTHER = B.OTHER full outer join
+     (SELECT 'OTHER' AS OTHER, SUM(A.JPSQY) AS P_QTY_S, SUM(A.JPSAM) AS P_COST_S
+      FROM ${lib2}.SMD110PF A
+      WHERE SUBSTR(A.JPSDT, 1, 6) = #{dumcb}
+        AND A.COMPS IN (${comps})
+        AND A.PYVND NOT IN (SELECT
+                                 B.PYVND
+                            FROM
+                                PSZDBLIB.SPZ110PF B
+                            WHERE
+                                 B.COMPS = #{orgComps})
+      GROUP BY 'OTHER') C ON A.OTHER = C.OTHER
+	</select>
+	
+	<select id="searchByMakerCompsSum" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">			
+			
+	select
+  	     A.MakerCompsSum                AS MAKER,
+  	     COALESCE((A.P_COST_Y / 10000000),0) AS P_COST_Y,
+    	 COALESCE((B.P_COST_M / 10000000),0) AS P_COST_M,
+    	 COALESCE((C.P_COST_S / 10000000),0) AS P_COST_S
+    	 /*'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMakerCompsSum' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByMakerCompsSum'*/
+	from (SELECT
+  	           'MakerCompsSum' AS MakerCompsSum,
+    	         SUM(A.MONQY) AS P_QTY_Y,
+        	     SUM(A.MONQY * A.YESCS) AS P_COST_Y
+	      FROM ${lib2}.SPY200PF A
+    	  WHERE A.PLNGB = #{plngb} 
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+        	AND A.PLNYM <![CDATA[>=]]> #{sdumcb}
+			AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+      	GROUP BY 'MakerCompsSum')  A full outer join
+     	(SELECT
+        	     'MakerCompsSum'                                                                    AS MakerCompsSum,
+            	SUM(CASE WHEN 1 = 1 THEN A.SM0QY ELSE A.SL0QY END)                     AS P_QTY_M,
+             	SUM(CASE WHEN 1 = 1 THEN A.SM0QY * A.PCOST ELSE A.SL0QY * A.PCOST END) AS P_COST_M
+      	FROM ${lib2}.SPM110PF A
+      	WHERE 
+      		A.PLNYM <![CDATA[>=]]> #{sdumcb}
+			AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+    	  GROUP BY 'MakerCompsSum')B ON A.MakerCompsSum  = B.MakerCompsSum  full outer join
+     	(SELECT
+        	     'MakerCompsSum' AS MakerCompsSum,
+            	 SUM(A.JPSQY) AS P_QTY_S, SUM(A.JPSAM) AS P_COST_S
+    	  FROM ${lib2}.SMD110PF A
+    	  WHERE
+    	   	SUBSTR(A.JPSDT, 1, 6) <![CDATA[>=]]> #{sdumcb}
+			AND SUBSTR(A.JPSDT, 1, 6) <![CDATA[<=]]> #{dumcb}
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+   	   GROUP BY 'MakerCompsSum') C ON B.MakerCompsSum  = C.MakerCompsSum 		
+			
+	</select>
+	
+	<select id="searchByITME" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	
+		select  
+		(select Z.mstrm from ${lib2}.mst050pf Z where trim(Z.grpcd) = 'PRD' and trim(Z.mstcd) = A.PRDCD fetch first 1 row only) as maker,
+		(A.P_COST_Y / 10000000) AS P_COST_Y, 
+		(B.P_COST_M / 10000000) AS P_COST_M,
+		(C.P_COST_S / 10000000) AS P_COST_S
+		/*'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITME' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITME'*/
+		from
+		(select 
+		PRDCD,
+		P_COST_Y
+		from
+		(SELECT
+		A.PRDCD, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB = #{plngb} --계획구분) 1 : 계획, 2:수정
+		AND A.PLNYM = #{dumcb} --계획년월
+		AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		GROUP BY A.PRDCD) A
+		order by P_COST_Y desc
+		) A,
+		(select 
+		PRDCD,
+		P_COST_M
+		from
+		(SELECT
+		A.PRDCD,   
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM = #{dumcb} --계획년월
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		</if>			
+		GROUP BY A.PRDCD) B
+		order by P_COST_M desc
+		) B,
+		(select 
+		PRDCD,
+		P_COST_S
+		from
+		(SELECT
+		A.PRDCD,  
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) = #{dumcb} --계획년월
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		</if>	
+		GROUP BY A.PRDCD) C
+		order by P_COST_S desc
+		) C
+		where
+		A.PRDCD = B.PRDCD
+		AND B.PRDCD = C.PRDCD
+		<if test='pltcd.equals("E1")'>
+		AND A.PRDCD IN
+		<foreach collection="checkBoxE1" item="arr" index="i" separator="," open="(" close=")">
+		#{arr}
+		</foreach>
+		AND A.PRDCD NOT IN ('')
+		</if>
+		<if test='pltcd.equals("S1")'>
+		AND A.PRDCD IN
+		<foreach collection="checkBoxS1" item="arr" index="i" separator="," open="(" close=")">
+		#{arr}
+		</foreach>
+		AND A.PRDCD NOT IN ('')
+		</if>
+		<if test='pltcd.equals("C1")'>
+		AND A.PRDCD IN
+		<foreach collection="checkBoxC1" item="arr" index="i" separator="," open="(" close=")">
+		#{arr}
+		</foreach>
+		AND A.PRDCD NOT IN ('')
+		</if>
+		
+	</select>
+	<select id="searchByITMEOther" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+	SELECT A.OTHER AS MAKER,
+        A.P_COST_Y / 10000000 AS P_COST_Y,
+        B.P_COST_M / 10000000 AS P_COST_M,
+        C.P_COST_S / 10000000 AS P_COST_S
+        /*'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITMEOther' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITMEOther'*/
+	FROM (
+         select 'OTHER' AS OTHER,
+                SUM(A.MONQY * A.YESCS) AS P_COST_Y
+         FROM ${lib2}.SPY200PF A
+         WHERE A.PLNGB = #{plngb} 
+           AND A.PLNYM = #{dumcb}
+           AND A.COMPS IN (${comps})
+                         <if test='pltcd.equals("E1") and !checkE1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxE1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("S1") and !checkS1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxS1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("C1") and !checkC1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxC1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+             
+         GROUP BY 'OTHER'
+         ORDER BY P_COST_Y DESC
+     )A left outer join
+     (select 'OTHER' AS OTHER,
+        SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+         FROM ${lib2}.SPM110PF A
+         WHERE A.PLNYM = #{dumcb}
+           AND A.COMPS IN (${comps})
+                         <if test='pltcd.equals("E1") and !checkE1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxE1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("S1") and !checkS1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxS1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("C1") and !checkC1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxC1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+             
+         GROUP BY 'OTHER'
+         ORDER BY P_COST_M DESC
+    )B ON A.OTHER = B.OTHER
+       left outer JOIN
+     (select 'OTHER' AS OTHER,
+        SUM(A.JPSAM) AS P_COST_S
+         FROM ${lib2}.SMD110PF A
+         WHERE SUBSTR(A.JPSDT, 1,6) = #{dumcb}
+           AND A.COMPS IN (${comps})
+                        <if test='pltcd.equals("E1") and !checkE1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxE1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("S1") and !checkS1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxS1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>
+						<if test='pltcd.equals("C1") and !checkC1.equals("0")'>
+						AND A.PRDCD NOT IN
+						<foreach collection="checkBoxC1" item="arr" index="i" separator="," open="(" close=")">
+						#{arr}
+						</foreach>
+						</if>		           
+         GROUP BY 'OTHER'
+         ORDER BY P_COST_S DESC
+    )C ON A.OTHER = C.OTHER
+	</select>
+	<!-- <select id="searchByITMEComps" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+		
+		select 
+		A.PRDCD as maker,
+		(A.P_COST_Y / 10000000) AS P_COST_Y, 
+		(B.P_COST_M / 10000000) AS P_COST_M,
+		(C.P_COST_S / 10000000) AS P_COST_S
+		from
+		(SELECT
+		' ' AS PRDCD, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB='1'
+		AND A.PLNYM = #{dumcb} 
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) 
+		</if>	
+		GROUP BY ' ') A,
+		(SELECT
+		' ' AS PRDCD, 
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM = #{dumcb} 
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) 
+		</if>		
+		GROUP BY ' ') B,
+		(SELECT
+		' ' AS PRDCD, 
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) = #{dumcb} 
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) 
+		</if>
+		GROUP BY ' ') C
+		where
+		A.PRDCD = B.PRDCD
+		AND B.PRDCD = C.PRDCD
+	</select>
+	 -->
+	<select id="searchByITMECompsSum" resultMap="SalPlnPerfmncMtReprtPpt" parameterType="SalPlnPerfmncMtReprtPptDomain">
+
+		select 
+		A.ItemSum as maker,
+		(A.P_COST_Y / 10000000) AS P_COST_Y, 
+		(B.P_COST_M / 10000000) AS P_COST_M,
+		(C.P_COST_S / 10000000) AS P_COST_S
+		/*'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITMECompsSum' = 'SqlMap-SalPlnPerfmncMtReprtPpt.searchByITMECompsSum'*/
+		from
+		(SELECT
+		'ItemSum' AS ItemSum, 
+		SUM(A.MONQY*A.YESCS) AS P_COST_Y
+		FROM ${lib2}.SPY200PF A
+		WHERE
+		A.PLNGB = #{plngb}  --계획구분) 1 : 계획, 2:수정
+		AND A.PLNYM <![CDATA[>=]]> #{sdumcb}
+		AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		</if>		
+		GROUP BY 'ItemSum') A full outer join
+		(SELECT
+		'ItemSum' AS ItemSum, 
+		SUM(CASE WHEN 1=1 THEN A.SM0QY*A.PCOST ELSE A.SL0QY*A.PCOST END) AS P_COST_M
+		FROM ${lib2}.SPM110PF A
+		WHERE
+		A.PLNYM <![CDATA[>=]]> #{sdumcb}
+		AND A.PLNYM <![CDATA[<=]]> #{dumcb}
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		</if>	
+		GROUP BY 'ItemSum')B ON A.ItemSum = B.ItemSum  full outer join
+		(SELECT
+		'ItemSum' AS ItemSum, 
+		SUM(A.JPSAM) AS P_COST_S
+		FROM
+		${lib2}.SMD110PF A
+		WHERE
+		SUBSTR(A.JPSDT, 1,6) <![CDATA[>=]]> #{sdumcb}
+		AND SUBSTR(A.JPSDT, 1,6) <![CDATA[<=]]> #{dumcb} --계획년월
+		<if test='!comps.equals("ALL")'>
+			AND A.COMPS IN (${comps}) --C1:창원, S1:화성, H1:홍성
+		</if>
+		GROUP BY 'ItemSum') C ON A.ItemSum = C.ItemSum
+
+	</select>
+</mapper>

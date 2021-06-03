@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.WorkCodeBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="workCodeBase" type="WorkCodeBaseDomain">
+        <result property="clsCode" column="CLS_CODE" />
+        <result property="se" column="SE" />
+        <result property="code" column="CODE" />
+        <result property="codeNm" column="CODE_NM" />        
+        <result property="startTime" column="START_TIME" />                
+        <result property="endTime" column="END_TIME" />                        
+        <result property="overtimeM" column="OVERTIME_M" />
+        <result property="overtimeH" column="OVERTIME_H" />
+        <result property="regUser" column="REG_USER" />        
+        <result property="regDate" column="REG_DATE" />
+        <result property="modUser" column="MOD_USER" />
+        <result property="modDate" column="MOD_DATE" /> 
+        <result property="oldSe" column="OLD_SE" />
+        <result property="oldCode" column="OLD_CODE" />  
+    </resultMap>
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="workCodeBase" parameterType="WorkCodeBaseDomain">
+		SELECT 
+			 CLS_CODE
+			,TRIM(SE) AS SE
+			,TRIM(CODE) AS CODE
+			,TRIM(CODE_NM) AS CODE_NM
+			,CASE 
+			WHEN 10 <![CDATA[>]]> START_TIME THEN '00' || ':0'||  SUBSTR(START_TIME,1,1)			
+			WHEN 60 <![CDATA[>]]> START_TIME THEN '00' || ':'||  SUBSTR(START_TIME,1,2)			
+			WHEN 999 <![CDATA[<]]> START_TIME THEN TRIM(SUBSTR(START_TIME,1,2) || ':'||  SUBSTR(START_TIME,3,4))
+			WHEN 999 <![CDATA[>]]> START_TIME AND 0 <![CDATA[<]]> START_TIME THEN TRIM('0' || SUBSTR(START_TIME,1,1) || ':'||  SUBSTR(START_TIME,2,3))
+			ELSE ''
+			END START_TIME
+			,CASE 
+			WHEN 10 <![CDATA[>]]> END_TIME THEN '00' || ':0'||  SUBSTR(END_TIME,1,1)				
+			WHEN 60 <![CDATA[>]]> END_TIME THEN '00' || ':'||  SUBSTR(END_TIME,1,2)					
+			WHEN 999 <![CDATA[<]]> END_TIME THEN TRIM(SUBSTR(END_TIME,1,2) || ':'||  SUBSTR(END_TIME,3,4))
+			WHEN 999 <![CDATA[>]]> END_TIME AND 0 <![CDATA[<]]> END_TIME THEN TRIM('0' || SUBSTR(END_TIME,1,1) || ':'||  SUBSTR(END_TIME,2,3))
+			ELSE ''
+			END END_TIME
+			,OVERTIME_M
+			,OVERTIME_H									
+			,REG_USER
+			,REG_DATE
+			,MOD_USER
+			,MOD_DATE
+			,TRIM(SE) AS OLD_SE
+			,TRIM(CODE) AS OLD_CODE			
+		FROM   PSZDBLIB.FHP020PF
+		WHERE 1 = 1
+		<if test='clsCode != null and !clsCode.equalsIgnoreCase("")'>
+			AND CLS_CODE = #{clsCode}
+		</if> 
+		<if test='se != null and !se.equalsIgnoreCase("")'>
+			AND SE = #{se}
+		</if> 
+		ORDER BY CODE
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="WorkCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP020PF
+        WHERE CLS_CODE = #{clsCode}
+        AND SE = #{se} 
+        AND CODE = #{code} 
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="WorkCodeBaseDomain">
+        SELECT 
+              COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.FHP020PF
+        WHERE CLS_CODE = #{clsCode}
+        AND SE = #{oldSe}
+        AND CODE = #{oldCode}        
+    </select>
+        
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="WorkCodeBaseDomain">
+        INSERT INTO  PSZDBLIB.FHP020PF (
+				 CLS_CODE
+				,SE
+				,CODE
+				,CODE_NM
+				,START_TIME
+				,END_TIME
+				,OVERTIME_M
+				,OVERTIME_H									
+				,REG_USER
+				,REG_DATE
+        ) values (
+                #{clsCode}
+               ,#{se}
+               ,#{code}
+               ,#{codeNm}
+               ,#{startTime}
+               ,#{endTime}
+               ,#{overtimeM}
+               ,#{overtimeH}
+               ,#{regUser}               
+               ,REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        )
+    </insert>
+
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="WorkCodeBaseDomain">
+        UPDATE 
+               PSZDBLIB.FHP020PF
+        SET
+			  SE = #{se} 
+			 ,CODE = #{code}  			        
+			 ,CODE_NM = #{codeNm}
+			 ,START_TIME = #{startTime}
+			 ,END_TIME = #{endTime}
+			 ,OVERTIME_M = #{overtimeM}
+			 ,OVERTIME_H = #{overtimeH}
+         	 ,MOD_USER = #{modUser}
+             ,MOD_DATE = REPLACE(CHAR(DATE(CURRENT DATE), ISO), '-','')
+        WHERE CLS_CODE = #{clsCode}
+        AND SE = #{oldSe}
+        AND CODE = #{oldCode}   
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="WorkCodeBaseDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.FHP020PF
+        WHERE CLS_CODE = #{clsCode}
+        AND SE = #{se}
+        AND CODE = #{code}    
+    </delete>
+    
+    
+
+</mapper>

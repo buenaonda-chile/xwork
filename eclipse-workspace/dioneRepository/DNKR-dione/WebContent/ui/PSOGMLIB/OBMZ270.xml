@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="userList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="라인/설비&#32;장애상태관리" ToolTipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ270" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="LINNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MSHNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ERRTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU_MSH" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU_MSH_NM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU_LINE" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU_LINE_NM" size="256" summ="default" type="STRING"/>
+					<colinfo id="STATU_CHG" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_OBMZ270_CHECK">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_PRDCD">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_LINCD">
+				<Contents>
+					<colinfo id="CD" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="CDNM2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="3" Top="30" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static1" Left="120" Style="static" TabOrder="2" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" INDEX="0" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="2" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Grid AreaSelect="true" AutoEnter="TRUE" AutoEnterType="Key" AutoFit="TRUE" AutoFitEndLine="Hide" AutoSelect="TRUE" BindDataset="ds_OBMZ270" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="604" CellMoving="TRUE" ColSelect="TRUE" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="540" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnHeadClick="MainGrid_OnHeadClick" Right="1056" SelColor="black" TabOrder="3" TabStop="FALSE" Top="64" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1056">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="50"/>
+						<col width="80"/>
+						<col width="220"/>
+						<col width="111"/>
+						<col width="220"/>
+						<col width="30"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="30"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" text="SEQ"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" text="라인코드"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" text="라인명"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" text="설비코드"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" text="설비명"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" colspan="2" display="text" text="설비상태"/>
+						<cell bkcolor="#dfdfdf" col="7" color="#002043" display="text" text="장애시간"/>
+						<cell bkcolor="#dfdfdf" col="8" color="#002043" colspan="2" display="text" text="라인상태"/>
+						<cell bkcolor="#dfdfdf" col="10" color="#002043" display="text" text="정상변경"/>
+					</head>
+					<body>
+						<cell align="center" checklength="Byte" col="0" display="text" expr="row+1"/>
+						<cell align="left" checklength="Byte" col="1" colid="LINCD" display="normal" limit="3" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="left" checklength="Byte" col="2" colid="LINNM" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="3" colid="MSHNO" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="4" colid="MSHNM" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="5" colid="STATU_MSH" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="6" colid="STATU_MSH_NM" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="7" colid="ERRTM" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="8" colid="STATU_LINE" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="center" checklength="Byte" col="9" colid="STATU_LINE_NM" display="normal" limit="16" LimitDec="0" TrimType="Both"/>
+						<cell align="left" checklength="Byte" col="10" colid="STATU_CHG" display="checkbox" edit="checkbox" limit="16" LimitDec="0" TrimType="Both"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="694" OnClick="fn_Search" TabOrder="3" Text="조회" Top="4" Visible="FALSE" Width="75"></Button>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="858" OnClick="fn_Save" TabOrder="4" TabStop="FALSE" Text="Button2" Top="3" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="Button0" ImageID="btn2_delete2" Left="776" OnClick="fn_Delete" TabOrder="3" Text="Button1" Top="4" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="224" TabOrder="12" Text="제품명" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static9" Left="340" TabOrder="13" Top="35" VAlign="Middle" Width="148"></Static>
+		<Combo CodeColumn="CD" DataColumn="CDNM" Height="19" Id="cmb_PRDCD" ImeMode="none" INDEX="0" InnerDataset="ds_PRDCD" Left="344" OnChanged="cmb_PRDCD_OnChanged" Search="FILTERED" TabOrder="11" Top="39" Width="140"></Combo>
+		<Button Height="25" Id="btnExcel" ImageID="sum_excel" Left="935" OnClick="fn_Excel" TabOrder="14" Text="조회" Top="3" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static12" Left="611" TabOrder="17" Top="35" VAlign="Middle" Width="208"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="495" TabOrder="16" Text="LINE명" Top="35" VAlign="Middle" Width="116"></Static>
+		<Combo CodeColumn="CD" DataColumn="CDNM2" Height="19" Id="cmb_LINCD" ImeMode="none" INDEX="0" InnerDataset="ds_LINCD" Left="615" OnClick="cmb_LINCD_OnClick" Search="FILTERED" TabOrder="15" Top="39" UseIME="FALSE" Width="200"></Combo>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : 제환복
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : OBMZ270.xml
+ * ● PROGRAM DESCRIPTION  : 전라인가동현황-라인/설비 장애상태관리
+ * ● DATE WRITTEN         : 2020.07.22
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+
+function on_LoadCompleted(obj){
+	getTitle();
+	getDesign();
+	getComCode();
+	getPRDCD();	//제품코드
+	getLINCD();	//라인코드
+
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function getComCode(){
+	
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 	
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");  //22
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");            //1048
+	MainGrid.Top = G_ds_design.GetColumn(0,"Top");                //64
+	MainGrid.UserData = MainGrid.Height;
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");           //1048
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	          //32
+	//searchBar.Height = G_ds_design.GetColumn(0,"SBHeight");	      //29
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 제품코드 조회
+ **********************************************************************/ 
+function getPRDCD(){
+	var sKind		= "getPRDCD";						
+	var sMethodName = "service::psogmlib/selectMSTCODE.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_PRDCD=ds_MSTCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //코드
+		sArgument += " SQLID=" + "selectMSTCD";	//알람/전라인의 마스터 코드로 사용
+		sArgument += " GRPCD=" +  quote("PRD");	//제품코드
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	
+	ds_PRDCD.InsertRow(0);
+	ds_PRDCD.SetColumn(0,"CD","");
+	ds_PRDCD.SetColumn(0,"CDNM","전체");
+	ds_PRDCD.SetColumn(0,"CDNM2","전체");
+	cmb_PRDCD.Index=0;
+}
+
+/********************************************************************** 
+ * 내용설명 : 라인코드 조회
+ **********************************************************************/ 
+function getLINCD(){
+	var sKind		= "getLINCD";						
+	var sMethodName = "service::psogmlib/selectMSTCODE.do";     // 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            			// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_LINCD=ds_MSTCODE";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //코드
+		sArgument += " SQLID=" + "selectMSTLINCD_PRD";
+		sArgument += " USETF=" + quote("T"); //제품코드가 있는 라인만
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync = false;
+	
+	ds_LINCD.InsertRow(0);
+	ds_LINCD.SetColumn(0,"CD","");
+	ds_LINCD.SetColumn(0,"CDNM","전체");
+	ds_LINCD.SetColumn(0,"CDNM2","전체");
+	ds_LINCD.SetColumn(0,"PRDCD","");
+	cmb_LINCD.Index=0;
+}
+/********************************************************************** 
+ * 내용설명 : 화면 조회 
+ **********************************************************************/ 
+function getOBMZ270(){
+	
+	var sKind		= "getOBMZ270";						
+	var sMethodName = "service::psogmlib/selectOBMZ270.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                            				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ270=ds_OBMZ270";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(Lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);
+	var str = dialog("Common::PGMLOAD_OPG.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");	
+	http.Sync = false;
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+}
+/********************************************************************** 
+ * 내용설명 : insert, update, delete
+ **********************************************************************/ 
+ function setOBMZ270(){
+	var sKind		= "setOBMZ270";						
+	var sMethodName = "service::psogmlib/saveOBMZ270.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_OBMZ270=ds_OBMZ270:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_OBMZ270_CHECK=ds_OBMZ270_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(svcId=="setOBMZ270"){
+		if (ds_OBMZ270_CHECK.GetRowCount() > 0){
+			for(var i=0;i<ds_OBMZ270_CHECK.GetRowCount();i++){
+				alert("코드 : " +ds_OBMZ270_CHECK.GetColumn(i,"MSTCD") + " = " + ds_OBMZ270_CHECK.GetColumn(i,"RTMSG"));
+			}
+			getOBMZ270();  //error항목이 존재시에는 재조회
+			return;
+		}
+		// tran 실패
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		}else {
+			alert(setPopMessage("1001"));
+			setMessage("1001");	
+			getOBMZ270();
+		}
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "라인설비 장애상태관리";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|라인설비 장애상태관리";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 복사
+ **********************************************************************/ 
+function MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+	}
+	// Ctrl + V
+	if(bCtrl == 1 && nChar == 86) {
+		//grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardPaste(obj, strSeparator);
+	}
+}
+
+function common_OnChanged(obj,strText)
+{
+	ds_OBMZ270.ClearData();
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getOBMZ270();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setOBMZ270();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function cmb_PRDCD_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	//cmb_LINCD_OnClick();
+	cmb_LINCD.Index=0;
+	/*
+	if(cmb_PRDCD.Value != ""){
+		cmb_LINCD.SetFocus();
+	} 
+	*/
+	cmb_LINCD.SetFocus();
+}
+
+function cmb_LINCD_OnClick(obj)
+{
+	if(cmb_PRDCD.Value == ""){
+		ds_LINCD.UnFilter();
+		//ds_LINCD.Filter("PRDCD==''" );
+	} else {
+		ds_LINCD.Filter("PRDCD=='" + cmb_PRDCD.Value + "'||PRDCD==''" );
+	}
+}]]></Script>
+</Window>

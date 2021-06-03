@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="업체재고마스타수정(Excel)" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_CUSMAS1"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SEND">
+				<Contents>
+					<colinfo id="PSPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MKHAD" size="256" summ="default" type="STRING"/>
+					<colinfo id="GIVQY" size="256" summ="default" type="STRING"/>
+					<colinfo id="REQTY" size="256" summ="default" type="STRING"/>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="PYVND" size="256" summ="default" type="STRING"/>
+					<colinfo id="UPERR" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SALE202UC"></Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="25" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="24" Width="24"></File>
+		<Div Height="528" Id="Div1" Left="144" TabOrder="3" Text="Div0" Top="80" Width="778">
+			<Contents>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static6" Left="10" TabOrder="3" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="2" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static11" Left="128" Style="static" TabOrder="1" Top="2" VAlign="Middle" Width="96"></Static>
+				<Combo CodeColumn="code2" DataColumn="code_name" Height="19" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="132" OnChanged="common_OnChanged" TabOrder="1" Top="5" Width="88"></Combo>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static16" Left="128" Style="static" TabOrder="4" Top="59" VAlign="Middle" Width="646"></Static>
+				<Button Height="29" Id="btnSave" ImageID="sum_save" Left="352" OnClick="setSALE202UC" TabOrder="2" TabStop="FALSE" Text="Button0" Top="496" Visible="FALSE" Width="73"></Button>
+				<Edit Border="Default" BorderColor="SCROLLBAR" Enable="FALSE" Height="20" Id="ed_path" ImeMode="none" Left="132" MaxLength="15" TabOrder="3" TabStop="FALSE" Top="62" UpperOnly="TRUE" Width="547"></Edit>
+				<Button ButtonStyle="TRUE" Height="24" Id="btn_search" ImageID="btn2_search2" Left="692" OnClick="Div1_btn_search_OnClick" TabOrder="3" TabStop="FALSE" Top="60" Width="78"></Button>
+				<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_SEND" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="491" ColSizing="TRUE" Enable="true" EndLineColor="default" HeadBorder="Flat" HeadHeight="20" Height="403" Id="MainGrid" InputPanel="FALSE" Left="9" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" OnKeyDown="Div1_MainGrid_OnKeyDown" Right="774" TabOrder="4" TabStop="FALSE" Top="88" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="765">
+					<contents>
+						<format id="Default">
+							<columns>
+								<col width="33"/>
+								<col width="120"/>
+								<col width="200"/>
+								<col width="90"/>
+								<col width="90"/>
+								<col width="90"/>
+							</columns>
+							<head>
+								<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+								<cell bkcolor="#dfdfdf" col="1" display="text" text="생성가능여부"/>
+								<cell bkcolor="#dfdfdf" col="2" display="text" text="DENSO품번"/>
+								<cell bkcolor="#dfdfdf" col="3" display="text" text="업체재고"/>
+								<cell bkcolor="#dfdfdf" col="4" display="text" text="운송수량"/>
+								<cell bkcolor="#dfdfdf" col="5" display="text" text="납입요청"/>
+							</head>
+							<body>
+								<cell align="right" col="0" display="text" expr="currow+1"/>
+								<cell bkcolor="expr:iif(uperr!=&apos;TT&apos;,&apos;red&apos;)" col="1" colid="UPERR" display="text" expr='decode(UPERR,&quot;E1&quot;,&quot;길이(length)ERROR&quot;,&quot;E2&quot;,&quot;숫자ERROR&quot;,&quot;E3&quot;,&quot;업체재고마스타&#32;미등록&quot;)'/>
+								<cell col="2" colid="PSPNO" display="text"/>
+								<cell align="right" col="3" colid="MKHAD" display="number" limit="5"/>
+								<cell align="right" col="4" colid="GIVQY" display="number" limit="5"/>
+								<cell align="right" col="5" colid="REQTY" display="number" limit="5"/>
+							</body>
+						</format>
+					</contents>
+				</Grid>
+				<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static3" Left="128" Style="static" TabOrder="6" Top="30" VAlign="Middle" Width="355"></Static>
+				<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="10" TabOrder="6" Text="업&#32;체&#32;코&#32;드" Top="30" VAlign="Middle" Width="116"></Static>
+				<Edit Height="20" Id="ed_pyvnd" ImeMode="none" Left="132" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="Div1_ed_pyvnd_OnCharChanged" OnKillFocus="Div1_ed_pyvnd_OnKillFocus" TabOrder="5" Top="33" Width="88"></Edit>
+				<Static Height="14" Id="st_pyvnd" Left="228" TabOrder="11" Top="35" Width="225"></Static>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="228" TabOrder="10" Top="50" Width="230"></Static>
+				<Image Cursor="HAND" Height="17" Id="imgMaker" ImageID="ic_search" Left="457" OnClick="Div1_imgMaker_OnClick" Static="FALSE" TabOrder="6" TabStop="FALSE" Top="34" Width="20"></Image>
+				<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static15" Left="10" TabOrder="15" Text="파&#32;일&#32;찿&#32;기" Top="59" VAlign="Middle" Width="116"></Static>
+				<Static Height="18" Id="Static0" Left="504" TabOrder="16" Text="※&#32;해당&#32;ROW에서&#32;Ctrl+C하면&#32;품번이&#32;복사됩니다." Top="496" VAlign="Middle" Width="270"></Static>
+			</Contents>
+		</Div>
+		<Div Height="232" Id="Div2" Left="376" TabOrder="4" Text="Div2" Top="280" Visible="FALSE" Width="374">
+			<Contents>
+				<Static Align="Center" BKColor="red" Border="Flat" Color="white" Font="Default,10,Bold" Height="210" Id="Static0" Left="12" TabOrder="1" Text="DATA&#32;Check중입니다............" Top="9" VAlign="Middle" Width="351"></Static>
+			</Contents>
+		</Div>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="Default,9,Bold" Height="26" Id="Static4" Left="4" TabOrder="5" Text="생&#32;성&#32;구&#32;분" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" BKColor="white" Border="Flat" BorderColor="#b4b4b4" Font="Default,14,Bold" Height="30" Id="searchBar" TabOrder="6" Text="업체재고마스타&#32;수정(EXCEL&#32;DATA로&#32;HOST&#32;UP)" Top="32" VAlign="Middle" Width="1048"></Static>
+	</Form>
+	<Script><![CDATA[ /*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@author                : lee sk
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SALE202UC.xml
+ * ● PROGRAM DESCRIPTION  : 업체재고마스타수정(EXCEL)
+ * ● DATE WRITTEN         : 2014.05.15
+----------------------------------------------------------------*/
+
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js"
+
+var strSeparator = "	";
+
+var Lib1 = G_ds_user.GetColumn(0,"LIB1");
+var Lib2 = G_ds_user.GetColumn(0,"LIB2");
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today();
+
+/********************************************************************** 
+ * 내용설명 : 화면로드
+ * 주요변수 : 
+ **********************************************************************/ 
+function on_LoadCompleted(obj){
+	getTitle();	
+	//getDesign();
+	getComCode();
+	gFcOnTopButtonColor("2.5"); //상단버튼(저장만)
+	Div1.ed_pyvnd.SetFocus();
+	//Div1.ed_pyvnd.Text="1100";
+}
+
+
+/********************************************************************** 
+ * 내용설명 : 사업부 선택 조회
+ * 주요변수 : 
+ **********************************************************************/ 
+function getComCode(){
+
+	http.Sync 	= true;
+
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	Div1.ComboBoxPlant.Value = comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+/********************************************************************** 
+ * 내용설명 : Excel FILE 가져오기
+ * 주요변수 : 
+ **********************************************************************/ 
+function Div1_btn_search_OnClick(obj)
+{
+	
+	if(length(trim(Div1.ed_pyvnd.Text)) != 4){
+		alert(setPopMessage("4671"));//[확인] 거래처코드 확인바랍니다.
+		setMessage("4671");	
+		Div1.ed_pyvnd.SetFocus();
+		return;
+	}
+
+	FileDialog0.Filter = "ALL File(.xls;.xlsx)|*.xls;*.xlsx";	
+	FileDialog0.Type = "OPEN";
+	if (!FileDialog0.Open()) {
+		alert(setPopMessage("1009"));	//  파일 선택 창을 여는데 실패하였습니다.
+		return;
+	}
+	
+	ds_SEND.ClearData();
+	ds_SALE202UC.ClearData();
+	
+	Div2.Visible = true;
+	Div1.Enable = false;
+	SetCapture();
+
+	var file_name = FileDialog0.FileName;
+	var file_path = FileDialog0.FilePath;
+	var path = file_path + "\\" + file_name;
+	setMessageDirect(path);	
+	Div1.ed_path.Text = path;
+	ext_ExcelImportByIndex(path,0,"ds_SEND",1,1,0,2);  
+	//ext_ExcelImportByIndex(strExcelFilename, intSheetIndex, strTargetDatasetID, [intUseColInfo, intExp, intDecimal,intStartRow]); 
+
+
+	if (ds_SEND.GetRowCount() < 1){
+		//alert("[경고]생성할 data가 없습니다. 확인바랍니다.");
+		alert(setPopMessage("6085")); //[경고]생성할 data가 없습니다. 확인바랍니다.
+		setMessage("6085");	
+		Div2.Visible = false;
+		Div1.Enable = true;
+		SetCapture(false);
+		return;
+	}
+	ds_SEND.Sort("PSPNO");
+	//비교할 정보 가져오기
+	check_ALL();
+
+	//excel data 유효성 검사 및 업체재고마스타dataset생성 
+	chkExcelData();
+
+	Div2.Visible = false;
+	Div1.Enable = true;
+	SetCapture(false);
+}
+/********************************************************************** 
+ * 내용설명 : 업체재고마스타를 수정 생성
+ * 주요변수 : 
+ **********************************************************************/ 
+ function setSALE202UC(){
+	if (ds_SEND.GetRowCount() < 1) {
+		//alert("[경고]생성할 data가 없습니다. 확인바랍니다.");
+		alert(setPopMessage("6085")); //[경고]생성할 data가 없습니다. 확인바랍니다.
+		setMessage("6085");			 
+		return;
+	}
+	if(length(trim(Div1.st_pyvnd.Text)) = 0){
+		alert(setPopMessage("4671"));//[확인] 업체 확인바랍니다.
+		setMessage("4671");
+		Div1.ed_pyvnd.SetFocus();
+		return;
+	}
+
+	for(var i=0;i<ds_SEND.GetRowCount();i++){
+		if (ds_SEND.getcolumn(i,"UPERR") != "TT"){
+			//alert("[경고]error항목 존재하니 생성가능여부를 확인하시고 다시 작업바랍니다."); 
+			alert(setPopMessage("6086")); //[경고]error항목 존재하니 생성가능여부를 확인하시고 다시 작업바랍니다.
+			setMessage("6086");
+			return;
+		}
+	}
+	if(confirm("업체코드 " + Div1.ed_pyvnd.Text+ "의 업체재고마스타를 수정합니다."+"생성하시겠습니까? ") == false) return;
+	
+ 	http.Sync = true;
+	var sKind		= "set_SALE202UC";						
+	var sMethodName = "service::pssallib/saveSALE202UC.do";
+	var sInDataSet  = "ds_SEND=ds_SEND";
+	var sOutDataSet = "";
+	var sArgument   = "";
+	sArgument += " LIB2=" + quote(Lib2);
+	//sArgument += " COMPS=" + quote(Div1.ComboBoxPlant.Value);
+	//sArgument += " PYVND=" + quote(Div1.ed_pyvnd.Value);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync = false;
+ }
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+		
+	}else {
+		alert(setPopMessage("1001"));
+		setMessage("1001");	
+	}
+}
+
+function chkExcelData(){
+	//ds_SALE202UC_BOX.ClearData();
+	for(var z=0;z<ds_SEND.GetRowCount();z++){
+		ds_SEND.SetColumn(z,"COMPS",Div1.ComboBoxPlant.Value);
+		ds_SEND.SetColumn(z,"PYVND",Div1.ed_pyvnd.Text);
+		//null이면 '0'입력
+		if(length(trim(ds_SEND.GetColumn(z,"MKHAD"))) < 1) ds_SEND.SetColumn(z,"MKHAD","0");
+		if(length(trim(ds_SEND.GetColumn(z,"GIVQY"))) < 1) ds_SEND.SetColumn(z,"GIVQY","0");
+		if(length(trim(ds_SEND.GetColumn(z,"REQTY"))) < 1) ds_SEND.SetColumn(z,"REQTY","0");
+		ds_SEND.SetColumn(z,"UPERR","TT");
+		var pspno = rtrim(ds_SEND.GetColumn(z,"PSPNO"));
+		var MKHAD = ds_SEND.GetColumn(z,"MKHAD");
+		var GIVQY = ds_SEND.GetColumn(z,"GIVQY");
+		var REQTY = ds_SEND.GetColumn(z,"REQTY");
+		//length check
+		if (length(pspno) < 1) {
+			ds_SEND.SetColumn(z,"UPERR","E1"); //LENGTH 확인
+		}
+		if (length(pspno) > 15 || length(trim(MKHAD)) > 5 || length(trim(GIVQY)) > 5 || length(trim(REQTY)) > 5) {
+			ds_SEND.SetColumn(z,"UPERR","E1"); //LENGTH 확인
+		}
+		//숫자check
+		if (!numberChk(MKHAD) || !numberChk(GIVQY) || !numberChk(REQTY)){ 
+			ds_SEND.SetColumn(z,"UPERR","E2"); //숫자CHECK
+		}
+		
+		//미등록 자료 check
+		var row_sal200 = ds_SALE202UC.FindRow("PSPNO",pspno);
+		if (row_sal200 == -1){
+			ds_SEND.SetColumn(z,"UPERR","E3"); //마스타에 미등록
+		}
+	}
+}
+/*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤 함수들
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setSALE202UC();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.5"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SEND.ClearData();
+}
+function Div1_ed_pyvnd_OnCharChanged(obj,strPreText,strPostText)
+{
+	Div1.st_pyvnd.Text = "";
+}
+
+function Div1_ed_pyvnd_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getOGMPrtno";		
+	var sMethodName = "service::pscomlib/selectCUSMAS1.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_CUSMAS1=ds_CUSMAS1";                
+	var sArgument   = "";
+		sArgument  += " LIB1=" + quote(Lib1);
+		sArgument  += " CUSNO=" + quote(Div1.ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_CUSMAS1.GetRowCount() < 1){
+		alert(setPopMessage("4671"));//[확인] 업체 확인바랍니다.
+		setMessage("4671");	
+		Div1.ed_pyvnd.SetFocus();
+		return;
+	}
+	Div1.st_pyvnd.Text=ds_CUSMAS1.GetColumn(0,"CUSNM");
+	http.usewaitcursor = true;
+}
+function Div1_imgMaker_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(Div1.ed_pyvnd.Text);
+	if (length(trim(Div1.ed_pyvnd.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "B0";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		Div1.ed_pyvnd.Text = rtn[0];
+		Div1.st_pyvnd.Text = rtn[1];
+	}
+}
+
+function check_ALL()
+{
+	http.Sync 	= true;
+	var sKind		= "getSALE202UC_pspno";		
+	var sMethodName = "service::pssallib/selectSALE202UC.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_SALE202UC=ds_SALE202UC";                
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(Div1.ComboBoxPlant.Value);
+		sArgument  += " PYVND=" + quote(Div1.ed_pyvnd.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync 	= false;
+}
+//Clt + C 품번복사
+function Div1_MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	if (bCtrl == true && nChar == 67)
+	{ 
+		ClearClipboard(); // 클립보드를 Clear합니다.
+		SetClipBoard("CF_TEXT",ds_SEND.GetColumn(ds_SEND.currow,"PSPNO")); // 외부 Excel에 Ctrl+c로 보낼수 있는 예제
+	}
+}
+]]></Script>
+</Window>

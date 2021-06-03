@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.EngineTypeDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.EngineTypeDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="tireStd" column="TIRE_STD" javaType="java.lang.String" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="tranYn" column="TRAN_YN" javaType="java.lang.String" />
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,TIRE_STD
+		,MAKER
+		,ENGINE_TYPE
+		,AUTOINSERT
+		,USE_YN
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,TRAN_YN
+
+    FROM TB_BA_ENGINE_TYPE
+
+  </sql>
+
+  <sql id="where_01">
+
+      <if test="criteria.tireStd != null and criteria.tireStd != ''">
+          AND TIRE_STD = #{criteria.tireStd}
+      </if>
+
+      <if test="criteria.maker != null and criteria.maker != ''">
+          AND MAKER = #{criteria.maker}
+      </if>
+
+      <if test="criteria.useYn != null and criteria.useYn != ''">
+          AND USE_YN = #{criteria.useYn}
+      </if>
+
+      <if test="criteria.engineType != null and criteria.engineType != ''">
+          AND ENGINE_TYPE = #{criteria.engineType}
+      </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.EngineTypeDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.EngineTypeDomain">
+
+    INSERT INTO TB_BA_ENGINE_TYPE (
+		ID
+		,TIRE_STD
+		,MAKER
+		,ENGINE_TYPE
+		,AUTOINSERT
+		,USE_YN
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,TRAN_YN
+
+    ) VALUES (
+		#{id}
+		,#{tireStd}
+		,#{maker}
+		,#{engineType}
+		,#{autoinsert}
+		,#{useYn}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+		,#{tranYn}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_BA_ENGINE_TYPE.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.EngineTypeDomain">
+
+    UPDATE TB_BA_ENGINE_TYPE SET
+		TIRE_STD = #{tireStd}
+		,MAKER = #{maker}
+		,ENGINE_TYPE = #{engineType}
+		,AUTOINSERT = #{autoinsert}
+		,USE_YN = #{useYn}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,TRAN_YN = #{tranYn}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.EngineTypeDomain">
+
+    DELETE FROM TB_BA_ENGINE_TYPE
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

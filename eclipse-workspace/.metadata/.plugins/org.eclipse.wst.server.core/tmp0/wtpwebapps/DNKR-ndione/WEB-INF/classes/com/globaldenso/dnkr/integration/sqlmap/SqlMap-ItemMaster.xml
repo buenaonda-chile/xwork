@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.ItemMasterDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="ItemMaster" type="ItemMasterDomain">
+        <result property="itnbr" column="ITNBR" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="ittyp" column="ITTYP" />
+        
+        <result property="gbn" column="GBN" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />        
+    </resultMap>
+
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="ItemMaster" parameterType="ItemMasterDomain">
+		SELECT
+			   ITNBR, ITDSC, ITTYP
+		FROM 
+		      ${lib1}.BM008PR
+		WHERE 'SqlMap-ItemMaster.searchByCondition' = 'SqlMap-ItemMaster.searchByCondition'
+		<if test="itnbr != null and itnbr !='' ">										
+		   AND ITNBR = #{itnbr}									
+		</if>
+		
+		<if test='gbn.equals("1")'>
+		AND ((ITTYP='1' AND ITCLS LIKE '_1')  <!-- FINISHED -->
+			OR
+			(ITTYP='9' AND ITCLS LIKE '_1'))  <!-- A-PART -->
+		</if>
+		<if test='gbn.equals("2")'>
+		AND (ITTYP='1' AND ITCLS LIKE '_3')  <!-- INHOUSE -->
+		</if>
+		<if test='gbn.equals("3")'>
+		AND ((ITTYP='9' AND ITCLS LIKE '_1')  <!-- A-PART --> 
+			OR
+			(ITTYP='4' AND ITCLS LIKE '_4')  <!-- NON DCJ PART -->
+			OR
+			(ITTYP='4' AND ITCLS LIKE '_5') <!--  DCJ PART -->
+			OR
+			(ITTYP='3' AND ITCLS LIKE '_A'))  <!-- NON DCJ ROW MATERIAL -->
+		</if>
+		
+		ORDER BY
+			ITNBR
+    </select>
+
+</mapper>

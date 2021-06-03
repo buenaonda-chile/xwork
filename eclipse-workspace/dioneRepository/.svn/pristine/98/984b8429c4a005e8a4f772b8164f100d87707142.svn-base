@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="664" Id="scm" Left="8" OnLoadCompleted="OnLoadCompleted" OnSize="onSize" PidAttrib="7" Title="공정누락" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1053" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<File Bottom="63" Height="24" Id="File0" Left="119" Right="143" TabOrder="1" Top="39" Width="24"></File>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var USER_ID	= G_ds_user.GetColumn(0,"USER_ID");
+
+function OnLoadCompleted(obj)
+{
+    getTitle();
+	getSsoAccount();	
+	
+	if (File0.IsExistFile('C:\\Program Files\\불량유출방지 시스템\\UpNStart_ALL.exe') = 0) {
+		alert("불량유출방지 System 프로그램을 먼저 설치한 후 재시도 바랍니다.");
+		ExecProc('\\\\10.73.254.164\\net_int\\setup\\setup.exe');
+		close();
+	} else {						
+		ExecProc(quote('C:\\Program Files\\불량유출방지 시스템\\UpNStart_ALL.exe'), quote(ds_ssoaccount.GetColumn(0,"SYSTEM_GRU")));
+		close();
+	}
+}
+
+function getSsoAccount(){
+	http.Sync 		= true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::login/ssoAccounts.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";
+	var sArgument   = "";
+		sArgument 	+= " USER_ID=" + quote(USER_ID);
+		sArgument 	+= " SYSTEM_SEQ=12";
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 김정현
+ * 개발일자 : 2012-10-02
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	}else if(svcId=="getSsoAccount"){
+		// 조회건수가 없을경우
+		if(ds_ssoaccount.rowcount <= 0){
+			alert(setPopMessage("1006"));
+			//close();
+		} 
+	}  
+}]]></Script>
+</Window>

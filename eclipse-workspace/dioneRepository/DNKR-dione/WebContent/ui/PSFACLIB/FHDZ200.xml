@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="st_SNDTMN" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="작업일보&#32;총&#32;작업시간수정" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHDZ200_FHD200" OnColumnChanged="ds_FHDZ200_FHD200_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DHCOMP" size="256" summ="default" type="STRING"/>
+					<colinfo id="DHCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXPCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXJMN" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXJTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXYMN" size="256" summ="default" type="STRING"/>
+					<colinfo id="EXYTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHDZ200_FHD300" OnColumnChanged="ds_FHDZ200_FHD300_OnColumnChanged" UseClientLayout="1">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MGMNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DHCOMP" size="256" summ="default" type="STRING"/>
+					<colinfo id="DHCODE" size="256" summ="default" type="STRING"/>
+					<colinfo id="WRKDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADJMN" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADJTM" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADYMN" size="256" summ="default" type="STRING"/>
+					<colinfo id="ADYTM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHDZ200_FHD100">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_DPART" UseClientLayout="1">
+				<Contents></Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD000PF"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHD100PF_MAGAM"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_FHDZ200_CHECK"></Dataset>
+		</Datasets>
+		<Div BKColor="white" Height="190" Id="displayDiv" TabOrder="24" TabStop="FALSE" Text="Div0" Top="64" Width="1058">
+			<Contents>
+				<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="128" Id="searchBar" TabOrder="69" Top="14" Width="1058"></Static>
+				<Static BKColor="white" Border="Flat" BorderColor="white" Font="굴림,9,Bold" Height="26" Id="st_TITLE2" TabOrder="1" Text="&lt;&#32;제외&#32;시간&#32;&gt;" Top="168" VAlign="Middle" Width="150"></Static>
+				<Static Align="Center" BKColor="white" Border="Flat" BorderColor="white" Font="굴림,9,Bold" Height="26" Id="st_TITLE1" Left="16" TabOrder="2" Text="&lt;&#32;총가동시간&#32;&gt;" Top="1" VAlign="Middle" Width="100"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static7" Left="12" TabOrder="3" Text="총&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;원&#32;:&#32;" Top="30" VAlign="Middle" Width="116"></Static>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static58" Left="133" TabOrder="4" Top="51" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="TOTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_TOTMN" Left="144" Mask="#,###" TabOrder="5" Top="28" Value="MaskEdit0" Width="40"></MaskEdit>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="TOTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_TOTTM" Left="216" Mask="#,###" TabOrder="7" Top="28" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static3" Left="205" TabOrder="6" Top="51" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static5" Left="388" TabOrder="8" Text="결&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;원&#32;:&#32;" Top="30" VAlign="Middle" Width="116"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="OUTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_OUTMN" Left="504" Mask="#,###" TabOrder="10" Top="28" Value="MaskEdit0" Width="40"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static6" Left="493" TabOrder="9" Top="51" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="OUTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_OUTTM" Left="576" Mask="#,###" TabOrder="12" Top="28" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static9" Left="565" TabOrder="11" Top="51" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static12" Left="756" TabOrder="13" Text="잔&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;업&#32;:&#32;" Top="30" VAlign="Middle" Width="116"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="JANTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_JANTMN" Left="872" Mask="#,###" TabOrder="15" Top="28" Value="MaskEdit0" Width="40"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static13" Left="861" TabOrder="14" Top="51" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="JANTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_JANTTM" Left="944" Mask="#,###" TabOrder="17" Top="28" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static14" Left="933" TabOrder="16" Top="51" Width="75"></Static>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static15" Left="133" TabOrder="19" Top="83" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="LEWTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_LEWTMN" Left="144" Mask="#,###" TabOrder="20" Top="60" Value="MaskEdit0" Width="40"></MaskEdit>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="LEWTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="ST_LEWTTM" Left="216" Mask="#,###" TabOrder="22" Top="60" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static16" Left="205" TabOrder="21" Top="83" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static17" Left="388" TabOrder="23" Text="조&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;퇴&#32;:&#32;" Top="62" VAlign="Middle" Width="116"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="LTWTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_LTWTMN" Left="504" Mask="#,###" TabOrder="25" Top="60" Value="MaskEdit0" Width="40"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static18" Left="493" TabOrder="24" Top="83" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="LTWTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_LTWTTM" Left="576" Mask="#,###" TabOrder="27" Top="60" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static19" Left="565" TabOrder="26" Top="83" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static20" Left="756" TabOrder="28" Text="외&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;출&#32;:&#32;" Top="62" VAlign="Middle" Width="116"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="OTWTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_OTWTMN" Left="872" Mask="#,###" TabOrder="30" Top="60" Value="MaskEdit0" Width="40"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static21" Left="861" TabOrder="29" Top="83" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="OTWTTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_OTWTTM" Left="944" Mask="#,###" TabOrder="32" Top="60" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static22" Left="933" TabOrder="31" Top="83" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static23" Left="12" TabOrder="18" Text="지&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;각&#32;:&#32;" Top="62" VAlign="Middle" Width="116"></Static>
+				<Static Height="15" Id="Static29" Left="191" TabOrder="33" Text="명" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static30" Left="191" TabOrder="34" Text="명" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static36" Left="551" TabOrder="35" Text="명" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static37" Left="551" TabOrder="36" Text="명" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static39" Left="919" TabOrder="37" Text="명" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static40" Left="919" TabOrder="38" Text="명" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static38" Left="287" TabOrder="39" Text="분" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static41" Left="287" TabOrder="40" Text="분" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static42" Left="239" TabOrder="41" Text="주간" Top="92" VAlign="Bottom" Width="25"></Static>
+				<Static Height="15" Id="Static43" Left="647" TabOrder="42" Text="분" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static44" Left="647" TabOrder="43" Text="분" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static46" Left="1015" TabOrder="44" Text="분" Top="30" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static47" Left="1015" TabOrder="45" Text="분" Top="62" VAlign="Bottom" Width="15"></Static>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static48" Left="133" TabOrder="47" Top="131" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="SNDTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_SNDTMN" Left="144" Mask="#,###" TabOrder="48" Top="108" Value="MaskEdit0" Width="40"></MaskEdit>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="SNDJTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_SNDJTM" Left="216" Mask="#,###" TabOrder="50" Top="108" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static49" Left="205" TabOrder="49" Top="131" Width="75"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static50" Left="388" TabOrder="51" Text="지&#32;원&#32;받&#32;음&#32;:&#32;" Top="110" VAlign="Middle" Width="116"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="RCVTMN" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_RCVTMN" Left="504" Mask="#,###" TabOrder="53" Top="108" Value="MaskEdit0" Width="40"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static51" Left="493" TabOrder="52" Top="131" Width="50"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="RCVJTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_RCVJTM" Left="576" Mask="#,###" TabOrder="55" Top="108" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static52" Left="565" TabOrder="54" Top="131" Width="75"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="SNDYTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_SNDYTM" Left="312" Mask="#,###" TabOrder="57" Top="108" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static53" Left="301" TabOrder="56" Top="131" Width="75"></Static>
+				<MaskEdit BindDataset="ds_FHDZ200_FHD100" Column="RCVYTM" DisableBKColor="white" DisableColor="black" Enable="FALSE" Height="21" Id="st_RCVYTM" Left="672" Mask="#,###" TabOrder="59" Top="108" Value="MaskEdit0" Width="65"></MaskEdit>
+				<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static54" Left="661" TabOrder="58" Top="131" Width="75"></Static>
+				<Static Height="15" Id="Static55" Left="191" TabOrder="60" Text="명" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static56" Left="551" TabOrder="61" Text="명" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static57" Left="287" TabOrder="62" Text="분" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static59" Left="647" TabOrder="63" Text="분" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static Align="Center" BKColor="white" Border="None" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static60" Left="12" TabOrder="46" Text="지&#32;원&#32;보&#32;냄&#32;:&#32;" Top="110" VAlign="Middle" Width="116"></Static>
+				<Static Height="15" Id="Static24" Left="335" TabOrder="64" Text="야간" Top="92" VAlign="Bottom" Width="25"></Static>
+				<Static Height="15" Id="Static25" Left="695" TabOrder="66" Text="야간" Top="92" VAlign="Bottom" Width="25"></Static>
+				<Static Height="15" Id="Static26" Left="599" TabOrder="65" Text="주간" Top="92" VAlign="Bottom" Width="25"></Static>
+				<Static Height="15" Id="Static27" Left="383" TabOrder="67" Text="분" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static Height="15" Id="Static28" Left="743" TabOrder="68" Text="분" Top="110" VAlign="Bottom" Width="15"></Static>
+				<Static BKColor="white" Border="Flat" BorderColor="white" Font="굴림,9,Bold" Height="26" Id="st_TITLE4" Left="520" TabOrder="70" Text="&lt;&#32;관리&#32;시간&#32;&gt;" Top="168" VAlign="Middle" Width="150"></Static>
+			</Contents>
+		</Div>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="30" Id="searchBar" TabOrder="7" Top="32" Width="1060"></Static>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="2" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="888" OnClick="fn_Search" TabOrder="2" TabStop="FALSE" Text="조회" Top="35" Visible="FALSE" Width="75"></Button>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="120" TabOrder="2" Top="34" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="3" Top="38" Width="88"></Combo>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="568" TabOrder="9" Text="작&#32;업&#32;일&#32;자" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="684" TabOrder="9" Top="34" VAlign="Middle" Width="200"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy-MM-dd" FocusIndex="0" Height="18" Id="cmb_WRKDT" Left="688" OnChanged="common_OnChanged" OnKeyDown="cmb_WRKDT_OnKeyDown" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="5" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Static Height="20" Id="Static10" Left="776" TabOrder="12" Text="(Enter&#32;KEY&#32;Press)" Top="40" VAlign="Middle" Width="104"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static8" Left="224" TabOrder="13" Text="부&#32;서&#32;코&#32;드" Top="34" VAlign="Middle" Width="116"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Color="#333333" Font="굴림,9,Bold" Height="26" Id="Static0" Left="340" Style="static" TabOrder="14" Top="34" VAlign="Middle" Width="220"></Static>
+		<Static Height="14" Id="st_CODE" Left="432" TabOrder="15" Top="40" Width="100"></Static>
+		<Static Border="Flat" BorderColor="SCROLLBAR" Height="2" Id="Static66" Left="428" TabOrder="16" Top="55" Width="105"></Static>
+		<Edit Height="20" Id="ed_CODE" ImeMode="none" Left="345" MaxLength="4" Number="TRUE" OnChanged="common_OnChanged" OnCharChanged="ed_CODE_OnCharChanged" OnKillFocus="ed_CODE_OnKillFocus" TabOrder="4" Top="37" Width="80"></Edit>
+		<Image Cursor="HAND" Height="17" Id="imgCODE" ImageID="ic_search" Left="536" OnClick="imgCODE_OnClick" Static="FALSE" TabOrder="6" TabStop="FALSE" Top="38" Width="20"></Image>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FHDZ200_FHD200" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="595" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="339" Id="MainGrid1" InputPanel="FALSE" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="520" TabOrder="18" TabStop="true" Top="256" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="520">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="120"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="CD"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" rowspan="2" text="내용"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" colspan="2" display="text" text="주간"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" colspan="2" display="text" text="야간"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" row="1" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" row="1" text="시간"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" row="1" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" row="1" text="시간"/>
+					</head>
+					<body>
+						<cell align="center" checklength="Byte" col="0" colid="MGMCD" display="normal"/>
+						<cell align="center" checklength="Byte" col="1" colid="MGMNM" display="normal" limit="4" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="2" colid="EXJMN" display="number" edit="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="3" colid="EXJTM" display="number" edit="number" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="4" colid="EXYMN" display="number" edit="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="5" colid="EXYTM" display="number" edit="number" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AreaSelect="true" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FHDZ200_FHD300" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="595" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="339" Id="MainGrid2" InputPanel="FALSE" Left="522" LineColor="#888888" MinWidth="100" MultiSelect="TRUE" Right="1042" TabOrder="19" TabStop="true" Top="256" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="520">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="30"/>
+						<col width="120"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+						<col width="50"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" color="#002043" display="text" rowspan="2" text="CD"/>
+						<cell bkcolor="#dfdfdf" col="1" color="#002043" display="text" rowspan="2" text="내용"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" colspan="2" display="text" text="주간"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" colspan="2" display="text" text="야간"/>
+						<cell bkcolor="#dfdfdf" col="2" color="#002043" display="text" row="1" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="3" color="#002043" display="text" row="1" text="시간"/>
+						<cell bkcolor="#dfdfdf" col="4" color="#002043" display="text" row="1" text="인원"/>
+						<cell bkcolor="#dfdfdf" col="5" color="#002043" display="text" row="1" text="시간"/>
+					</head>
+					<body>
+						<cell align="center" checklength="Byte" col="0" colid="MGMCD" display="normal"/>
+						<cell align="center" checklength="Byte" col="1" colid="MGMNM" display="normal" limit="4" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="2" colid="ADJMN" display="number" edit="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="3" colid="ADJTM" display="number" edit="number" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="4" colid="ADYMN" display="number" edit="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell align="right" checklength="Byte" col="5" colid="ADYTM" display="number" edit="number" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Grid AreaSelect="TRUE" AutoFit="TRUE" AutoFitEndLine="Hide" BindDataset="ds_FHDZ200_FHD100" BKColor="MENU" BkColor2="LIGHT3D" BkSelColor="lavender" BoldHead="true" Border="Flat" BorderColor="#888888" Bottom="619" ColSelect="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadBorder="Flat" HeadHeight="25" Height="147" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" MinWidth="100" Right="1058" TabOrder="20" TabStop="true" Top="472" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+						<col width="60"/>
+					</columns>
+					<body>
+						<cell checklength="Byte" col="0" display="normal" text="총원"/>
+						<cell checklength="Byte" col="1" colid="TOTMN" display="number" limit="4" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="2" colid="TOTTM" display="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="3" display="normal"/>
+						<cell checklength="Byte" col="4" display="normal" limit="5" LimitDec="0" text="결원" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="5" colid="OUTMN" display="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="6" colid="OUTTM" display="number"/>
+						<cell checklength="Byte" col="7" colid="EYTM" display="normal" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="8" display="normal" limit="5" LimitDec="0" text="잔업" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="9" colid="JANTMN" display="number" limit="5" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="10" colid="JANTTM" display="number" limit="2" LimitDec="0" TrimType="Both" useime="false"/>
+						<cell checklength="Byte" col="0" display="normal" row="1" text="지각"/>
+						<cell checklength="Byte" col="1" display="number" row="1"/>
+						<cell checklength="Byte" col="2" display="number" row="1"/>
+						<cell checklength="Byte" col="3" display="normal" row="1"/>
+						<cell checklength="Byte" col="4" display="normal" row="1" text="조퇴"/>
+						<cell checklength="Byte" col="5" display="number" row="1"/>
+						<cell checklength="Byte" col="6" display="number" row="1"/>
+						<cell checklength="Byte" col="7" display="normal" row="1"/>
+						<cell checklength="Byte" col="8" display="normal" row="1" text="외출"/>
+						<cell checklength="Byte" col="9" display="number" row="1"/>
+						<cell checklength="Byte" col="10" display="number" row="1"/>
+						<cell checklength="Byte" col="0" display="normal" row="2" text="지원보냄"/>
+						<cell checklength="Byte" col="1" colid="SNDTMN" display="number" row="2"/>
+						<cell checklength="Byte" col="2" colid="SNDJTM" display="number" row="2"/>
+						<cell checklength="Byte" col="3" colid="SNDYTM" display="number" row="2"/>
+						<cell checklength="Byte" col="4" display="normal" row="2"/>
+						<cell checklength="Byte" col="5" display="normal" row="2" text="지원받음"/>
+						<cell checklength="Byte" col="6" colid="RCVTMN" display="number" row="2"/>
+						<cell checklength="Byte" col="7" colid="RCVJTM" display="number" row="2"/>
+						<cell checklength="Byte" col="8" colid="RCVYTM" display="number" row="2"/>
+						<cell checklength="Byte" col="9" display="normal" row="2"/>
+						<cell checklength="Byte" col="10" display="normal" row="2"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="27" Id="Button1" ImageID="sum_save" Left="969" OnClick="fn_Save" TabOrder="21" TabStop="FALSE" Text="Button2" Top="34" Visible="FALSE" Width="72"></Button>
+		<Button Height="25" Id="btn_DEL210" ImageID="btn2_delete2" Left="440" OnClick="btn_DEL210" TabOrder="22" TabStop="FALSE" Text="Button1" Top="226" Width="75"></Button>
+		<Button Height="25" Id="btn_DEL310" ImageID="btn2_delete2" Left="968" OnClick="btn_DEL310" TabOrder="23" TabStop="FALSE" Text="Button1" Top="226" Width="75"></Button>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : FHDZ200.xml
+ * ● PROGRAM DESCRIPTION  : 작업일보 총 작업시간수정(PE전용)
+ * ● DATE WRITTEN         : 2014.05.28
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+/*
+실제사용하는 사업부는 DNKE만 사용함.
+RPG로직은 KE/KA공통으로 사용하게 되어있지만 DNKA는 FHDC210을 사용함.
+조회만 KE/KA로 분류하여 조회되로록하며, 그외 팝업 및 CHKSR 은 KA사용하는 로직으로 제외함.
+*/
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("2.3"); //조회, 저장,엑셀
+	getComCode(); //공장구분 선택
+	//ed_CODE.Text="5030";
+	//cmb_WRKDT.Value="20130904";
+	//ed_CODE.Text="5110";
+	//cmb_WRKDT.Value="20040401";
+	//ed_CODE.Text="5030";
+	//cmb_WRKDT.Value="20071119";
+	//MainGrid.UserData = MainGrid.Height;
+
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+		
+	MainGrid1.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid1.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid1.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid1.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid1.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid1.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+
+	MainGrid2.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid2.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid2.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid2.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid2.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid2.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	//MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	displayDiv.searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");
+	//MainGrid1.UserData = MainGrid1.Height;
+	//MainGrid2.UserData = MainGrid2.Height;
+}
+
+function getFHDZ200(){
+
+
+	if(!validationChk()){
+		return;
+	}
+
+//1.마감처리 -> 등록시 마감여부 확인
+	http.Sync=true;
+	var sKind		= "getFHD100PF";		
+	var sMethodName = "service::psfaclib/selectFHD100_MAGAM.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_FHD100PF_MAGAM=ds_FHD100PF_MAGAM";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " DPCODE=" + quote(ed_CODE.Text);
+		sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일자
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	if (ds_FHD100PF_MAGAM.rowcount = 0){
+		//alert("[알림] 마감 처리가 진행하지 않은 날짜입니다.");
+		alert(setPopMessage("4696"));
+		setMessage("4696");	
+		return;
+	}
+
+	var sKind		= "getFHDZ200";						
+	var sMethodName = "service::psfaclib/selectFHDZ200.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";												// 자료 저장 시 보낼 DataSet 명칭
+	var	sOutDataSet = "ds_FHDZ200_FHD200=ds_FHDZ200_FHD200 ds_FHDZ200_FHD300=ds_FHDZ200_FHD300 ds_FHDZ200_FHD100=ds_FHDZ200_FHD100";	// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB1=" + quote(Lib1);
+		sArgument += " LIB2=" + quote(Lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " DHCODE=" + quote(ed_CODE.Text); //부서코드
+		sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일자
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+
+function setFHDZ200(){
+
+	if(!validationChk()){
+		return;
+	}
+	var sKind		= "setFHDZ200";						
+	var sMethodName = "service::psfaclib/saveFHDZ200.do";    // 서버에서 호출 될 Method 명
+	var sInDataSet  = "ds_FHDZ200_FHD200=ds_FHDZ200_FHD200:U ds_FHDZ200_FHD300=ds_FHDZ200_FHD300:U";               //자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_FHDZ200_CHECK=ds_FHDZ200_CHECK";  	   // 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(Lib2);
+		//sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " DHCODE=" + quote(ed_CODE.Text); //부서코드
+		sArgument += " WRKDT=" + quote(cmb_WRKDT.Value); //작업일자
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+	http.Sync=false;
+
+}
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	if(svcId=="getFHDZ200"){
+		if(rtnCd<0){// tran 실패
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		// 조회건수가 없을경우
+		} else if(ds_FHDZ200_FHD100.rowcount<1){
+			//alert("조회된거 없다!");
+			alert(setPopMessage("1003"));
+			setMessage("1003");	
+		// 정상 조회
+		} else {
+			//alert("조회됐다.!");
+			alert(setPopMessage("1004"));
+			setMessage("1004");				
+		}
+	}
+	else if(svcId=="setFHDZ200"){
+		if (ds_FHDZ210_CHECK.rowcount > 0){
+			for(var i=0;i<ds_FHDZ200_CHECK.GetRowCount();i++){
+				alert("코드 : " +ds_FHDZ200_CHECK.GetColumn(i,"MGMCD") +" 코드명 : " +ds_FHDZ200_CHECK.GetColumn(i,"MGMNM") + " = " + ds_FHDZ200_CHECK.GetColumn(i,"RTMSG"));
+			}
+			getFHDZ200();  //error항목이 존재시에는 재조회
+			return;
+		}// tran 실패
+		if(rtnCd<0){
+			alert(setPopMessage("1002"));
+			setMessage("1002");
+		}else{
+			alert(setPopMessage("1001"));
+			setMessage("1001");	
+		}
+	}
+}
+
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	var result = true;
+	ed_CODE.BKColor="white";
+	cmb_WRKDT.BKColor="white";
+		
+	if(length(trim(st_CODE.Text)) == 0){
+		ed_CODE.BKColor="paleturquoise";
+		alert(setPopMessage("6080"));//[알림]작업반을 입력하세요.
+		setMessage("6080");
+		result = false;
+	}else if(cmb_WRKDT.Value == ""){
+		cmb_WRKDT.BKColor="paleturquoise";
+		alert(setPopMessage("6075"));//[알림]작업일자를 입력하세요.
+		setMessage("6075");
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_FHDZ200_FHD200.ClearData();
+	ds_FHDZ200_FHD300.ClearData();
+	ds_FHDZ200_FHD100.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "작업일보 총 작업시간";
+	var arrSheets  =  Array();  
+	
+	arrSheets[0]  = "MainGrid1|제외시간";
+	arrSheets[1]  = "MainGrid2|관리시간";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);	
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 내용설명 : 복사
+ **********************************************************************/ 
+function MainGrid_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	// Ctrl + C
+	if(bCtrl == 1 && nChar == 67) {
+		// grd_Standard.AreaSelect = true;
+		grd_fn_ClipboardCopy(obj, strSeparator);
+	}
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Search()
+{
+	getFHDZ200();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	setFHDZ200();
+}
+
+function fn_print()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("2.3"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+}
+
+function cmb_WRKDT_OnKeyDown(obj,nChar,bShift,bCtrl,bAlt,nLLParam,nHLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+function ed_CODE_OnCharChanged(obj,strPreText,strPostText)
+{
+	st_CODE.Text = "";	
+}
+
+//FHD000PF AND MST650PF 한번에 처리함.(확인됨)
+function ed_CODE_OnKillFocus(obj)
+{
+	if(length(trim(obj.Text)) < 1) return;
+	//득의선Check
+	http.usewaitcursor = false;
+	http.Sync 	= true;
+	var sKind		= "getDPARTMST";		
+	var sMethodName = "service::pscomlib/selectDPARTMasterPopup.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_DPART=ds_Select";
+	var sArgument   = "";
+		sArgument  += " LIB2=" + quote(Lib2);
+		sArgument  += " COMPS=" + quote(ComboBoxPlant.Value);
+		sArgument  += " DPCODE=" + quote(ed_CODE.Text);
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	if (ds_DPART.GetRowCount() < 1){
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+		ed_CODE.SetFocus();
+		return;
+	}
+	st_CODE.Text=ds_DPART.GetColumn(0,"A2");
+	http.usewaitcursor = true;	
+}
+
+function imgCODE_OnClick(obj,nX,nY)
+{
+	var sTemp=trim(ed_CODE.Text);
+	if (length(trim(ed_CODE.Text)) == 0) sTemp="zzzzzzzzzz";
+	var selectnumber = "F6";
+	var rtn = dialog("Common::commonPopup.xml","SEL=" + selectnumber + " " + "CODE=" + sTemp,584,528);
+	if (length(rtn) != 0){
+		ed_CODE.Text = rtn[0];
+		st_CODE.Text = rtn[1];
+	}		
+}
+
+function ds_FHDZ200_FHD200_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if(strColumnID == "EXJMN"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD200.SetColumn(nRow,"EXJMN",0);
+		}
+	}
+	if(strColumnID == "EXJTM"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD200.SetColumn(nRow,"EXJTM",0);
+		}
+	}
+	if(strColumnID == "EXYMN"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD200.SetColumn(nRow,"EXYMN",0);
+		}
+	}
+	if(strColumnID == "EXYTM"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD200.SetColumn(nRow,"EXYTM",0);
+		}
+	}
+}
+
+function ds_FHDZ200_FHD300_OnColumnChanged(obj,nRow,strColumnID,varOldValue,varNewValue,nPivotIndex)
+{
+	if(strColumnID == "ADJMN"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD300.SetColumn(nRow,"ADJMN",0);
+		}
+	}
+	if(strColumnID == "ADJTM"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD300.SetColumn(nRow,"ADJTM",0);
+		}
+	}
+	if(strColumnID == "ADYMN"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD300.SetColumn(nRow,"ADYMN",0);
+		}
+	}
+	if(strColumnID == "ADYTM"){
+		if(varNewValue == ""){
+			ds_FHDZ200_FHD300.SetColumn(nRow,"ADYTM",0);
+		}
+	}
+}
+function btn_DEL210(){
+		var rownm=ds_FHDZ200_FHD200.currow;
+		ds_FHDZ200_FHD200.SetColumn(rownm,"EXJMN",0);
+		ds_FHDZ200_FHD200.SetColumn(rownm,"EXJTM",0);
+		ds_FHDZ200_FHD200.SetColumn(rownm,"EXYMN",0);
+		ds_FHDZ200_FHD200.SetColumn(rownm,"EXYTM",0);
+}
+function btn_DEL310(){
+		var rownm=ds_FHDZ200_FHD300.currow;
+		ds_FHDZ200_FHD300.SetColumn(rownm,"ADJMN",0);
+		ds_FHDZ200_FHD300.SetColumn(rownm,"ADJTM",0);
+		ds_FHDZ200_FHD300.SetColumn(rownm,"ADYMN",0);
+		ds_FHDZ200_FHD300.SetColumn(rownm,"ADYTM",0);
+}]]></Script>
+</Window>

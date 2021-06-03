@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.ResultMasterCostDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.ResultMasterCostDto">
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="mngNo" column="MNG_NO" javaType="java.lang.String" />
+		<result property="serviceSeq" column="SERVICE_SEQ" javaType="java.lang.Long" />
+		<result property="div" column="DIV" javaType="java.lang.String" />
+		<result property="seq" column="SEQ" javaType="java.lang.Long" />
+		<result property="costCd" column="COST_CD" javaType="java.lang.String" />
+		<result property="costValue" column="COST_VALUE" javaType="java.lang.Double" />
+		<result property="regUserId" column="REG_USER_ID" javaType="java.lang.String" />
+		<result property="regDt" column="REG_DT" javaType="java.sql.Date" />
+		<result property="updUserId" column="UPD_USER_ID" javaType="java.lang.String" />
+		<result property="updDt" column="UPD_DT" javaType="java.sql.Date" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+	    <result property="costNm" column="COST_NM" javaType="java.lang.String" />
+
+	  	<result property="id" column="ID" javaType="java.lang.Long" />
+  </resultMap>
+
+  <sql id="select_01">
+
+
+	SELECT  A.*
+	   ,B.ITEM_NM AS COST_NM
+	FROM (
+	  SELECT
+		VINNO
+		,MNG_NO
+		,SERVICE_SEQ
+		,DIV
+		,SEQ
+		,COST_CD
+		,COST_VALUE
+		,REG_USER_ID
+		,REG_DT
+		,UPD_USER_ID
+		,UPD_DT
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ID
+      FROM TB_DC_RESULT_MASTER_COST ) A
+	  LEFT OUTER JOIN (SELECT ITEM_CD, ITEM_NM FROM TB_BA_INCIDENT_COST) B
+	  ON A.COST_CD = B.ITEM_CD
+
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.manageNo != null and criteria.manageNo != ''">
+		  AND MNG_NO = #{criteria.manageNo}
+	  </if>
+
+	  <if test="criteria.mngNo != null and criteria.mngNo != ''">
+		  AND MNG_NO = #{criteria.mngNo}
+	  </if>
+
+	  <if test="criteria.div != null and criteria.div != ''">
+		  AND DIV = #{criteria.div}
+	  </if>
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.ResultMasterCostDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.MNG_NO = #{mngNo}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.COST_CD
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(*) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.ResultMasterCostDomain">
+
+    INSERT INTO TB_DC_RESULT_MASTER_COST (
+		VINNO
+		,MNG_NO
+		,SERVICE_SEQ
+		,DIV
+		,SEQ
+		,COST_CD
+		,COST_VALUE
+		,REG_USER_ID
+		,REG_DT
+		,UPD_USER_ID
+		,UPD_DT
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+	  	,ID
+
+    ) VALUES (
+	  UPPER(#{vinno})
+		,#{mngNo}
+		,#{serviceSeq}
+		,#{div}
+		,#{seq}
+		,#{costCd}
+		,#{costValue}
+		,#{regUserId}
+		,#{regDt}
+		,#{updUserId}
+		,#{updDt}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+	  	,#{id}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_TB_DC_RESULT_MASTER_COST.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.ResultMasterCostDomain">
+
+    UPDATE TB_DC_RESULT_MASTER_COST SET
+		VINNO = UPPER(#{vinno})
+		,MNG_NO = #{mngNo}
+		,SERVICE_SEQ = #{serviceSeq}
+		,DIV = #{div}
+		,SEQ = #{seq}
+		,COST_CD = #{costCd}
+		,COST_VALUE = #{costValue}
+		,UPD_USER_ID = #{updUserId}
+		,UPD_DT = #{updDt}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.ResultMasterCostDomain">
+
+    DELETE FROM TB_DC_RESULT_MASTER_COST
+    WHERE ID = #{id}
+
+  </delete>
+
+  <delete id="delete2" parameterType="com.globaldenso.dicas.business.domain.ResultMasterCostDomain">
+
+    DELETE FROM TB_DC_RESULT_MASTER_COST
+    WHERE MNG_NO = #{mngNo}
+
+  </delete>
+
+</mapper>

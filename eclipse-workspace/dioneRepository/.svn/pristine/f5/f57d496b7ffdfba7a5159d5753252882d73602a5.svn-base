@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+<title>덴소코리아 업무관리시스템</title>
+
+<link rel="stylesheet" media="all" href="/css/common.css">
+<link rel="stylesheet" media="all" href="/css/m/defalut.css">
+<link rel="stylesheet" media="all" href="/css/layout.css">
+
+<link rel="stylesheet" media="all" href="/css/m/login.css?ver=1.0">
+
+<script type="text/javascript" src="/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+		
+//로그인화면 로그인 방법
+	$("a.login-gui-bnt").click(function(){
+		$(".login-gui-cont").fadeIn(300);
+		
+	})
+	$(".close").click(function(){
+		$(".login-gui-cont").fadeOut(300);	
+		$(".loginFail").fadeOut(300);
+	});
+
+	isAuthentic();
+});
+	
+function isAuthentic() {
+	if(getCookie("AUTHENTICATED") === "N") {
+		$('.loginFail p span').text("아이디 또는 비번이 맞지 않습니다.");
+		$(".loginFail").fadeIn(300);
+	}
+}
+
+function getCookie(name) {
+  var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  if (value) {
+  	return value[2];
+  } else {
+  	return null;
+  }
+}
+
+function validChk () {
+	if($('#userId').val().trim().length === 0) {
+		$('.loginFail p span').text("아이디를 입력하세요");
+		$('.loginFail').fadeIn(300);
+		return false;
+	} else if ($('#userPw').val().trim().length === 0) {
+		$('.loginFail p span').text("패스워드를 입력하세요");
+		$('.loginFail').fadeIn(300);
+		return false;
+	} else {
+		return true;
+	}
+}
+</script>
+</head>
+
+<body id="login">
+<div id="wrap">
+    <!-- container:S -->
+    <div id="login-container">
+		<div class="login-cont-wrap">
+			<div class="title-wrap">
+				<h1 class="logo"><img src="/img/login/logo-R.png" alt="덴소코리아로고"></h1>
+				<p class="title"><strong>업무관리시스템</strong>로그인</p>
+			</div><!--title-wrap-->
+
+			<div class="gap"></div>
+
+			<div class="login-guide">
+				<a class="login-gui-bnt fr" href="#n">로그인방법</a>
+				<div class="login-gui-cont cr tl">
+					<div class="wrap">
+						<p class="tit pb5">
+							<span class="fl">로그인방법</span><a class="close fr"></a>
+						</p>
+						<ul>
+							<li><span class="num">1</span>내부직원은 PC의 아이디, 비밀번호를 입력해주세요.</li>
+							<li><span class="num">2</span>외부직원은 발급받으신 아이디, 비밀번호를 입력해주세요.</li>
+						</ul>
+					</div>
+				</div>
+				<div class="loginFail cr tl">
+					<div class="wrap">
+						<p class="tit pb5">
+							<span class="fl">아이디 또는 비번이 맞지 않습니다.</span><a class="close fr"></a>
+						</p>
+					</div>
+				</div>
+			</div><!--login-guide-->
+
+			<div class="ssgap"></div>
+			<form name="loginForm" method="post" action="" onsubmit="">
+				<div class="login-wr">
+					<div class="border tl">
+						<p class="wrap">
+							<input class="loing_input id" id="userId" value="" title="아이디를입력해주세요" name="USER" type="text" placeholder="아이디">
+							
+							<input type=hidden name="SMENC" value="UTF-8" />
+							<input type=hidden name="SMLOCALE" value="" />
+							<input type=hidden name="LOCALE" value="ja" />
+							<input type=hidden name=target value="$$target$$" />
+							<input type=hidden name=smauthreason value="$$smauthreason$$" />
+							<input type=hidden name=postpreservationdata value="$$postpreservationdata$$" />
+							<input type=hidden name=smagentname value="$$smagentname$$" />
+						</p>
+					</div>
+					<div class="border tl">
+						<p class="wrap">
+							<input class="loing_input pw" id="userPw" value="" title="비밀번호를입력해주세요" name="PASSWORD" type="password" placeholder="패스워드">
+						</p>
+					</div>
+				</div><!--login-wr-->
+
+				<div class="ssgap"></div>
+
+				<div class="login-radio">
+					<input name="" value="idSave" id="idSave" type="checkbox"><label for="idSave"><span class="idSave"></span>아이디저장</label> 
+					<div class="fr">
+						<input name="type" value="I" id="mem" type="radio" checked="checked"><label for="mem"	class="type1"><span class="type"></span>내부직원</label>
+						<input name="type" value="O" id="etc" type="radio"><label for="etc"><span class="type"></span>외부업체</label>
+					</div>
+				</div><!--login-radio-->
+
+				<div class="sgap"></div>
+
+				<button type="submit" class="login-bnt" onclick="return validChk();">로그인</button>
+			</form>
+
+			<div class="sgap"></div>
+
+			<div class="bottom-line"></div>
+
+			<div class="ssgap"></div>
+			
+			<p class="login-text">
+				로그인 정보를 잊어버리셨나요?<br>
+				<span>유선상으로 관리자에게 문의해주세요.</span>
+			</p>
+		</div><!--login-cont-wrap-->
+    </div>
+    <!-- container:E -->
+</div>
+<div class="login-bg" id="login-bg">
+	<div>
+		<img src="/img/login-bg.jpg">
+	</div>
+	<!--<div>
+		<img src="/img/login-bg-e1.jpg">
+	</div>
+	<div>
+		<img src="/img/login-bg-e2.jpg">
+	</div>-->
+</div>
+</body>
+</html>

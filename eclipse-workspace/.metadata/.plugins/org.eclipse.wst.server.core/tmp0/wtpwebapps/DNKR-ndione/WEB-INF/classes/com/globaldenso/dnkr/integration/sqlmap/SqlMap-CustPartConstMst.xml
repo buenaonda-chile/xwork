@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.CustPartConstMstDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="CustPartConstMst" type="CustPartConstMstDomain">
+        <result property="selchk" column="SELCHK" />
+  
+        <result property="comps" column="COMPS" /> 
+        <result property="pyvnd" column="PYVND" />
+        <result property="cusnm" column="CUSNM" />
+        <result property="pspno" column="PSPNO" />
+        <result property="itdsc" column="ITDSC" />
+        <result property="mkpno" column="MKPNO" />
+        <result property="mkpnm" column="MKPNM" />    
+        <result property="carcd" column="CARCD" />
+        <result property="carnm" column="CARNM" />
+        <result property="bdycd" column="BDYCD" />
+        <result property="bdynm" column="BDYNM" />
+        <result property="cinbr" column="CINBR" />
+        <result property="qtypr" column="QTYPR" />
+                
+        <result property="oldCinbr" column="OLD_CINBR" />
+        
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" />      
+    </resultMap>
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition" resultMap="CustPartConstMst" parameterType="CustPartConstMstDomain">
+    	<if test='selchk.equals("1")'>
+		SELECT 
+			A.PYVND, TRIM(C.CUSNM) AS CUSNM,  A.PSPNO, TRIM(D.ITDSC) AS ITDSC, 
+			TRIM(B.CPRTN) AS MKPNO, TRIM(B.CPDSC) AS MKPNM,
+			E.CARCD, TRIM(F.MSTSM) AS CARNM, E.BDYCD, TRIM(G.MSTSM) AS BDYNM
+		FROM 
+			(SELECT A.COMPS, A.PYVND, A.PSPNO 
+			FROM PSZDBLIB.SVZ050PF A
+			WHERE 'SqlMap-CustPartConstMst.searchByCondition' = 'SqlMap-CustPartConstMst.searchByCondition'
+				AND A.COMPS = #{comps}
+				AND A.PYVND = #{pyvnd}
+				AND A.PSPNO = #{pspno}
+			GROUP BY A.COMPS, A.PYVND, A.PSPNO )A
+			LEFT OUTER JOIN (
+				SELECT X.CUSNO, X.CPRTN, X.PRTNO, X.CPDSC, X.EDATM	
+				FROM ${lib1}.EM000PR X 
+				WHERE X.EDATM = (SELECT MAX(Y.EDATM) 
+						FROM ${lib1}.EM000PR Y 
+						WHERE X.CUSNO=Y.CUSNO AND X.CPRTN=Y.CPRTN)
+						) B ON A.PYVND=B.CUSNO AND A.PSPNO=B.PRTNO
+			LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.PYVND=C.CUSNO
+			LEFT OUTER JOIN ${lib1}.BM008PR D ON A.PSPNO=D.ITNBR
+			LEFT OUTER JOIN ${lib2}.MST100PF E ON A.COMPS=E.COMPS AND A.PSPNO=E.PRTNO
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF		
+				WHERE GRPCD='CAR') F ON A.COMPS=F.COMPS AND E.CARCD=F.MSTCD
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF		
+				WHERE GRPCD='BDY') G ON A.COMPS=G.COMPS AND E.BDYCD=G.MSTCD
+		</if>
+		
+		<if test='selchk.equals("2")'>										
+		SELECT 
+			A.CUSNO AS PYVND, TRIM(C.CUSNM) AS CUSNM,  A.PRTNO AS PSPNO, TRIM(D.ITDSC) AS ITDSC, 
+			TRIM(A.CPRTN) AS MKPNO, TRIM(A.CPDSC) AS MKPNM,
+			E.CARCD, TRIM(F.MSTSM) AS CARNM, E.BDYCD, TRIM(G.MSTSM) AS BDYNM
+		FROM 
+			${lib1}.EM000PR A
+			LEFT OUTER JOIN ${lib1}.CUSMAS C ON A.CUSNO=C.CUSNO
+			LEFT OUTER JOIN ${lib1}.BM008PR D ON A.PRTNO=D.ITNBR
+			LEFT OUTER JOIN ${lib2}.MST100PF E ON E.COMPS = #{comps} AND A.PRTNO=E.PRTNO
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF		
+				WHERE GRPCD='CAR') F ON F.COMPS = #{comps} AND E.CARCD=F.MSTCD
+			LEFT OUTER JOIN (SELECT * FROM ${lib2}.MST050PF		
+				WHERE GRPCD='BDY') G ON G.COMPS = #{comps} AND E.BDYCD=G.MSTCD
+		WHERE 'SqlMap-CustPartConstMst.searchByCondition' = 'SqlMap-CustPartConstMst.searchByCondition'
+			AND A.CUSNO = #{pyvnd}
+			AND A.PRTNO = #{pspno}
+			AND A.EDATM = (SELECT MAX(Y.EDATM) 
+				FROM ${lib1}.EM000PR Y 
+				WHERE A.CUSNO=Y.CUSNO AND A.CPRTN=Y.CPRTN)	
+		</if>
+    </select>
+	
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchByCondition2" resultMap="CustPartConstMst" parameterType="CustPartConstMstDomain">
+		SELECT 
+			COMPS, PYVND, TRIM(PSPNO) AS PSPNO, TRIM(CINBR) AS CINBR, QTYPR,
+			TRIM(CINBR) AS OLD_CINBR
+		FROM 
+			PSZDBLIB.SVZ050PF
+		WHERE 'SqlMap-CustPartConstMst.searchByCondition2' = 'SqlMap-CustPartConstMst.searchByCondition2'
+			AND COMPS = #{comps}
+			AND	PYVND = #{pyvnd}
+			AND	PSPNO = #{pspno}
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCountEM000PR" resultType="java.lang.Integer" parameterType="CustPartConstMstDomain">
+		SELECT 
+			COUNT(*) CNT
+		FROM 
+			${lib1}.EM000PR A
+		WHERE 
+		      'SqlMap-CustPartConstMst.searchCountEM000PR' = 'SqlMap-CustPartConstMst.searchCountEM000PR'
+		  AND A.CUSNO = #{pyvnd}
+		  AND A.PRTNO = #{pspno}
+		  AND A.EDATM = (SELECT MAX(C.EDATM) FROM ${lib1}.EM000PR C WHERE A.PRTNO=C.PRTNO AND A.CUSNO=C.CUSNO)
+    </select>
+    
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="CustPartConstMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ050PF
+        WHERE 
+             'SqlMap-CustPartConstMst.searchCount' = 'SqlMap-CustPartConstMst.searchCount'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND CINBR = #{cinbr}
+    </select>
+
+    <!-- 検索 SQL文（任意条件 件数取得） -->
+    <select id="searchCount2" resultType="java.lang.Integer" parameterType="CustPartConstMstDomain">
+        SELECT 
+               COUNT(*) CNT 
+        FROM 
+             PSZDBLIB.SVZ050PF
+        WHERE 
+             'SqlMap-CustPartConstMst.searchCount2' = 'SqlMap-CustPartConstMst.searchCount2'										
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND CINBR = #{oldCinbr}
+    </select>
+
+    <!-- 登録 SQL文 -->
+    <insert id="create" parameterType ="CustPartConstMstDomain">
+    	/* SqlMap-CustPartConstMst.create */
+        INSERT INTO PSZDBLIB.SVZ050PF
+        (
+           COMPS, PYVND, PSPNO, CINBR, QTYPR
+        ) VALUES (
+           #{comps}, #{pyvnd}, #{pspno}, #{cinbr}, #{qtypr}
+        )
+    </insert>
+    
+	<!-- 更新 SQL文（主キー） -->
+    <update id="update" parameterType="CustPartConstMstDomain">
+        UPDATE 
+               PSZDBLIB.SVZ050PF
+        SET
+            CINBR = #{cinbr},
+            QTYPR = #{qtypr}
+        WHERE 
+              'SqlMap-CustPartConstMst.update' = 'SqlMap-CustPartConstMst.update'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND CINBR = #{oldCinbr}
+    </update>
+
+    <!-- 削除 SQL文（主キー） -->
+    <delete id="delete" parameterType="CustPartConstMstDomain">
+        DELETE 
+        FROM 
+             PSZDBLIB.SVZ050PF
+        WHERE 
+              'SqlMap-CustPartConstMst.delete' = 'SqlMap-CustPartConstMst.delete'
+          AND COMPS = #{comps}
+          AND PYVND = #{pyvnd}
+          AND PSPNO = #{pspno}
+          AND CINBR = #{cinbr}
+    </delete>
+
+</mapper>

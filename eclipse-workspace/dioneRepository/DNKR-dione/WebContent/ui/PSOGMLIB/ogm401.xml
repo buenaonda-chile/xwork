@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="ogm401" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="월별&#32;계획&#32;대&#32;실적" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm401">
+				<Contents>
+					<colinfo id="GROUP" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="MAKER" size="256" summ="default" type="STRING"/>
+					<colinfo id="MTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="IPDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="RPDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="YEDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DISYN" size="256" summ="default" type="STRING"/>
+					<colinfo id="DIDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="DRESN" size="256" summ="default" type="STRING"/>
+					<colinfo id="J_GUB" size="256" summ="default" type="STRING"/>
+					<colinfo id="JKIND" size="256" summ="default" type="STRING"/>
+					<colinfo id="G_GUB" size="256" summ="default" type="STRING"/>
+					<colinfo id="GCYCL" size="256" summ="default" type="STRING"/>
+					<colinfo id="GNAMT" size="256" summ="default" type="STRING"/>
+					<colinfo id="JSPEC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ACCNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CNOTE" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_title">
+				<Contents>
+					<colinfo id="title" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm401_pre">
+				<Contents>
+					<colinfo id="GROUP" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="MAKER" size="256" summ="default" type="STRING"/>
+					<colinfo id="MTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="IPDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="RPDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="REPNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="YEDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DISYN" size="256" summ="default" type="STRING"/>
+					<colinfo id="DIDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="DRESN" size="256" summ="default" type="STRING"/>
+					<colinfo id="J_GUB" size="256" summ="default" type="STRING"/>
+					<colinfo id="JKIND" size="256" summ="default" type="STRING"/>
+					<colinfo id="G_GUB" size="256" summ="default" type="STRING"/>
+					<colinfo id="GCYCL" size="256" summ="default" type="STRING"/>
+					<colinfo id="GNAMT" size="256" summ="default" type="STRING"/>
+					<colinfo id="JSPEC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ACCNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="CNOTE" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="1" Width="1060"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="2" Top="8" Width="1032"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="3" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="4" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="65" Id="searchBar" TabOrder="3" Top="31" Width="1060"></Static>
+		<Edit Align="CENTER" DisableBKColor="white" DisableColor="black" Enable="FALSE" Font="굴림,14,Bold" Height="35" Id="txtyear" Left="306" TabOrder="4" Top="48" UseIME="FALSE" Width="121"></Edit>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,14,Bold" Height="33" Id="ttitle" Left="427" TabOrder="5" Text="年度&#32;月別&#32;計劃&#32;對&#32;實績" Top="49" VAlign="Middle" Width="230"></Static>
+		<Radio Height="21" Id="rdoggub" INDEX="-1" Left="792" TabOrder="6" Top="69" Width="256">
+			<Contents>
+				<Layout code="1,2,3" height="12" left="10" text="전체" top="2" width="40"/>
+				<Layout code="1" height="12" left="60" text="사내" top="2" width="40"/>
+				<Layout code="2" height="12" left="110" text="사외" top="2" width="40"/>
+				<Layout code="3" height="12" left="160" text="표준기(사외)" top="2" width="90"/>
+			</Contents>
+		</Radio>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static7" Left="16" TabOrder="8" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="45" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="112" TabOrder="7" Top="46" Width="120"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="696" TabOrder="10" Text="교&#32;정&#32;구&#32;분" Top="68" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static2" Left="696" TabOrder="9" Text="기&#32;준&#32;년&#32;월" Top="42" VAlign="Middle" Width="92"></Static>
+		<Calendar Dateformat="yyyy년" Height="20" Id="txtyedat" Left="792" LeftMargin="5" OnKillFocus="txtyedat_OnKillFocus" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="11" Top="43" Value="TODAY" Width="65"></Calendar>
+		<Radio Height="21" Id="sstand" INDEX="-1" Left="863" OnClick="sstand_OnClick" TabOrder="12" Top="43" Width="137">
+			<Contents>
+				<Layout code="04" height="12" left="5" text="4월기준" top="2" width="60"/>
+				<Layout code="01" height="12" left="70" text="1월기준" top="2" width="60"/>
+			</Contents>
+		</Radio>
+		<Grid AreaSelect="true" BindDataset="ds_ogm401" BkColor2="default" BkSelColor="lavender" BoldHead="true" Bottom="624" ColSizing="TRUE" Enable="true" EndLineColor="default" Face3dColor="khaki" HeadHeight="22" Height="528" Id="MainGrid" InputPanel="FALSE" LineColor="#888888" OnHeadClick="MainGrid_OnHeadClick" Right="1058" TabOrder="13" TabStop="FALSE" Top="96" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="GRAYTEXT" WheelScrollRow="1" Width="1058">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="105"/>
+						<col width="120"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="40"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+						<col width="30"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" colspan="2" display="text" rowspan="3" text="部署"/>
+						<cell bkcolor="#dfdfdf" col="2" colspan="39" display="text" text="較正&#32;品目&#32;月別&#32;現況"/>
+						<cell bkcolor="#dfdfdf" col="20" colspan="2" display="text" row="1" text="6"/>
+						<cell bkcolor="#dfdfdf" col="22" colspan="2" display="text" row="1" text="7"/>
+						<cell bkcolor="#dfdfdf" col="24" colspan="2" display="text" row="1" text="8"/>
+						<cell bkcolor="#dfdfdf" col="26" colspan="2" display="text" row="1" text="9"/>
+						<cell bkcolor="#dfdfdf" col="28" colspan="2" display="text" row="1" text="10"/>
+						<cell bkcolor="#dfdfdf" col="30" colspan="2" display="text" row="1" text="11"/>
+						<cell bkcolor="#dfdfdf" col="32" colspan="2" display="text" row="1" text="12"/>
+						<cell bkcolor="#dfdfdf" col="34" colspan="2" display="text" row="1" text="1"/>
+						<cell col="40" display="text" row="1" rowspan="2" text="계"/>
+						<cell bkcolor="#dfdfdf" col="38" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="38" colspan="2" display="text" row="1" text="3"/>
+						<cell bkcolor="#dfdfdf" col="36" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="36" colspan="2" display="text" row="1" text="2"/>
+						<cell bkcolor="#dfdfdf" col="20" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="18" colspan="2" display="text" row="1" text="5"/>
+						<cell bkcolor="#dfdfdf" col="18" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="16" colspan="2" display="text" row="1" text="4"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" row="1" rowspan="2" text="전기"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" row="1" rowspan="2" text="온도"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" row="1" rowspan="2" text="압력"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" row="1" rowspan="2" text="힘"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" row="1" rowspan="2" text="토크"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" row="1" rowspan="2" text="속도"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" row="1" rowspan="2" text="음향&#10;진동"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" row="1" rowspan="2" text="질량"/>
+						<cell bkcolor="#dfdfdf" col="10" display="text" row="1" rowspan="2" text="유량"/>
+						<cell bkcolor="#dfdfdf" col="11" display="text" row="1" rowspan="2" text="길이"/>
+						<cell bkcolor="#dfdfdf" col="12" display="text" row="1" rowspan="2" text="게이지"/>
+						<cell bkcolor="#dfdfdf" col="13" display="text" row="1" rowspan="2" text="치공구"/>
+						<cell bkcolor="#dfdfdf" col="14" display="text" row="1" rowspan="2" text="기타"/>
+						<cell bkcolor="#dfdfdf" col="15" display="text" row="1" rowspan="2" text="계"/>
+						<cell bkcolor="#dfdfdf" col="16" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="17" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="19" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="21" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="22" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="23" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="24" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="25" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="26" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="27" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="28" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="29" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="30" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="31" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="32" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="33" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="34" display="text" row="2" text="계획"/>
+						<cell bkcolor="#dfdfdf" col="35" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="37" display="text" row="2" text="실적"/>
+						<cell bkcolor="#dfdfdf" col="39" display="text" row="2" text="실적"/>
+					</head>
+					<body>
+						<cell align="left" col="0" colid="TIMNM" display="text" Valign="Center"/>
+						<cell align="left" col="1" colid="PRTNM" display="text"/>
+						<cell align="center" col="2" colid="CNT_JNBNO_08" display="text" TrimType="Both"/>
+						<cell align="center" col="3" colid="CNT_JNBNO_04" display="text" TrimType="Both"/>
+						<cell align="center" col="4" colid="CNT_JNBNO_05" display="text" TrimType="Both"/>
+						<cell align="center" col="5" colid="CNT_JNBNO_02" display="text" TrimType="Both"/>
+						<cell align="center" col="6" colid="CNT_JNBNO_03" display="text" TrimType="Both"/>
+						<cell align="center" col="7" colid="CNT_JNBNO_15" display="text" TrimType="Both"/>
+						<cell align="center" col="8" colid="CNT_JNBNO_11" display="text" TrimType="Both"/>
+						<cell align="center" col="9" colid="CNT_JNBNO_09" display="text" TrimType="Both"/>
+						<cell align="center" col="10" colid="CNT_JNBNO_06" display="text" TrimType="Both"/>
+						<cell align="center" col="11" colid="CNT_JNBNO_01" display="text" TrimType="Both"/>
+						<cell align="center" col="12" colid="CNT_JNBNO_16" display="text" TrimType="Both"/>
+						<cell align="center" col="13" colid="CNT_JNBNO_17" display="text" TrimType="Both"/>
+						<cell align="center" col="14" colid="CNT_JNBNO_14" display="text" TrimType="Both"/>
+						<cell align="center" col="15" colid="CNT_JNBNO_TOTAL" display="text" TrimType="Both"/>
+						<cell align="center" col="16" colid="CNT_YEDAT_04" display="text" TrimType="Both"/>
+						<cell align="center" col="17" colid="CNT_RPDAT_04" display="text" TrimType="Both"/>
+						<cell align="center" col="18" colid="CNT_YEDAT_05" display="text" TrimType="Both"/>
+						<cell align="center" col="19" colid="CNT_RPDAT_05" display="text" TrimType="Both"/>
+						<cell align="center" col="20" colid="CNT_YEDAT_06" display="text" TrimType="Both"/>
+						<cell align="center" col="21" colid="CNT_RPDAT_06" display="text" TrimType="Both"/>
+						<cell align="center" col="22" colid="CNT_YEDAT_07" display="text" TrimType="Both"/>
+						<cell align="center" col="23" colid="CNT_RPDAT_07" display="text" TrimType="Both"/>
+						<cell align="center" col="24" colid="CNT_YEDAT_08" display="text" TrimType="Both"/>
+						<cell align="center" col="25" colid="CNT_RPDAT_08" display="text" TrimType="Both"/>
+						<cell align="center" col="26" colid="CNT_YEDAT_09" display="text" TrimType="Both"/>
+						<cell align="center" col="27" colid="CNT_RPDAT_09" display="text" TrimType="Both"/>
+						<cell align="center" col="28" colid="CNT_YEDAT_10" display="text" TrimType="Both"/>
+						<cell align="center" col="29" colid="CNT_RPDAT_10" display="text" TrimType="Both"/>
+						<cell align="center" col="30" colid="CNT_YEDAT_11" display="text" TrimType="Both"/>
+						<cell align="center" col="31" colid="CNT_RPDAT_11" display="text" TrimType="Both"/>
+						<cell align="center" col="32" colid="CNT_YEDAT_12" display="text" TrimType="Both"/>
+						<cell align="center" col="33" colid="CNT_RPDAT_12" display="text" TrimType="Both"/>
+						<cell align="center" col="34" colid="CNT_YEDAT_01" display="text" TrimType="Both"/>
+						<cell align="center" col="35" colid="CNT_RPDAT_01" display="text" TrimType="Both"/>
+						<cell align="center" col="36" colid="CNT_YEDAT_02" display="text" TrimType="Both"/>
+						<cell align="center" col="37" colid="CNT_RPDAT_02" display="text" TrimType="Both"/>
+						<cell align="center" col="38" colid="CNT_YEDAT_03" display="text" TrimType="Both"/>
+						<cell align="center" col="39" colid="CNT_RPDAT_03" display="text" TrimType="Both"/>
+						<cell align="center" col="40" colid="CNT_TOTAL" display="text"/>
+					</body>
+					<summary>
+						<cell align="center" col="0" colspan="2" display="text" text="計"/>
+						<cell align="right" col="2" display="text" expr='SUM(&quot;CNT_JNBNO_08&quot;)' Mask="#,##0"/>
+						<cell align="right" col="3" display="text" expr='SUM(&quot;CNT_JNBNO_04&quot;)' Mask="#,##0"/>
+						<cell align="right" col="4" display="text" expr='SUM(&quot;CNT_JNBNO_05&quot;)' Mask="#,##0"/>
+						<cell align="right" col="5" display="text" expr='SUM(&quot;CNT_JNBNO_02&quot;)' Mask="#,##0"/>
+						<cell align="right" col="6" display="text" expr='SUM(&quot;CNT_JNBNO_03&quot;)' Mask="#,##0"/>
+						<cell align="right" col="7" display="text" expr='SUM(&quot;CNT_JNBNO_15&quot;)' Mask="#,##0"/>
+						<cell align="right" col="8" display="text" expr='SUM(&quot;CNT_JNBNO_11&quot;)' Mask="#,##0"/>
+						<cell align="right" col="9" display="text" expr='SUM(&quot;CNT_JNBNO_09&quot;)' Mask="#,##0"/>
+						<cell align="right" col="10" display="text" expr='SUM(&quot;CNT_JNBNO_06&quot;)' Mask="#,##0"/>
+						<cell align="right" col="11" display="text" expr='SUM(&quot;CNT_JNBNO_01&quot;)' Mask="#,##0"/>
+						<cell align="right" col="12" display="text" expr='SUM(&quot;CNT_JNBNO_16&quot;)' Mask="#,##0"/>
+						<cell align="right" col="13" display="text" expr='SUM(&quot;CNT_JNBNO_17&quot;)' Mask="#,##0"/>
+						<cell align="right" col="14" display="text" expr='SUM(&quot;CNT_JNBNO_14&quot;)' Mask="#,##0"/>
+						<cell align="right" col="15" display="text" expr='SUM(&quot;CNT_JNBNO_TOTAL&quot;)' Mask="#,##0"/>
+						<cell align="right" col="16" display="text" expr='SUM(&quot;CNT_YEDAT_04&quot;)' Mask="#,##0"/>
+						<cell align="right" col="17" display="text" expr='SUM(&quot;CNT_RPDAT_04&quot;)' Mask="#,##0"/>
+						<cell align="right" col="18" display="text" expr='SUM(&quot;CNT_YEDAT_05&quot;)' Mask="#,##0"/>
+						<cell align="right" col="19" display="text" expr='SUM(&quot;CNT_RPDAT_05&quot;)' Mask="#,##0"/>
+						<cell align="right" col="20" display="text" expr='SUM(&quot;CNT_YEDAT_06&quot;)' Mask="#,##0"/>
+						<cell align="right" col="21" display="text" expr='SUM(&quot;CNT_RPDAT_06&quot;)' Mask="#,##0"/>
+						<cell align="right" col="22" display="text" expr='SUM(&quot;CNT_YEDAT_07&quot;)' Mask="#,##0"/>
+						<cell align="right" col="23" display="text" expr='SUM(&quot;CNT_RPDAT_07&quot;)' Mask="#,##0"/>
+						<cell align="right" col="24" display="text" expr='SUM(&quot;CNT_YEDAT_08&quot;)' Mask="#,##0"/>
+						<cell align="right" col="25" display="text" expr='SUM(&quot;CNT_RPDAT_08&quot;)' Mask="#,##0"/>
+						<cell align="right" col="26" display="text" expr='SUM(&quot;CNT_YEDAT_09&quot;)' Mask="#,##0"/>
+						<cell align="right" col="27" display="text" expr='SUM(&quot;CNT_RPDAT_09&quot;)' Mask="#,##0"/>
+						<cell align="right" col="28" display="text" expr='SUM(&quot;CNT_YEDAT_10&quot;)' Mask="#,##0"/>
+						<cell align="right" col="29" display="text" expr='SUM(&quot;CNT_RPDAT_10&quot;)' Mask="#,##0"/>
+						<cell align="right" col="30" display="text" expr='SUM(&quot;CNT_YEDAT_11&quot;)' Mask="#,##0"/>
+						<cell align="right" col="31" display="text" expr='SUM(&quot;CNT_RPDAT_11&quot;)' Mask="#,##0"/>
+						<cell align="right" col="32" display="text" expr='SUM(&quot;CNT_YEDAT_12&quot;)' Mask="#,##0"/>
+						<cell align="right" col="33" display="text" expr='SUM(&quot;CNT_RPDAT_12&quot;)' Mask="#,##0"/>
+						<cell align="right" col="34" display="text" expr='SUM(&quot;CNT_YEDAT_01&quot;)' Mask="#,##0"/>
+						<cell align="right" col="35" display="text" expr='SUM(&quot;CNT_RPDAT_01&quot;)' Mask="#,##0"/>
+						<cell align="right" col="36" display="text" expr='SUM(&quot;CNT_YEDAT_02&quot;)' Mask="#,##0"/>
+						<cell align="right" col="37" display="text" expr='SUM(&quot;CNT_RPDAT_02&quot;)' Mask="#,##0"/>
+						<cell align="right" col="38" display="text" expr='SUM(&quot;CNT_YEDAT_03&quot;)' Mask="#,##0"/>
+						<cell align="right" col="39" display="text" expr='SUM(&quot;CNT_RPDAT_03&quot;)' Mask="#,##0"/>
+						<cell align="right" col="40" display="text" expr='SUM(&quot;CNT_TOTAL&quot;)' Mask="#,##0"/>
+					</summary>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm401.xml
+ * ● PROGRAM DESCRIPTION  : 계측기/조회/장비조회
+ * ● DATE WRITTEN         : 2012.01.17
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+//var Lib2 = "PSCDBLIBYY"; // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today(); //날짜
+var nowTime = GetDate(); //시간
+
+var userId = G_ds_user.GetColumn(0,"USER_ID");
+var userNm = G_ds_user.GetColumn(0,"USER_NAME");
+
+var stdate2 ="";
+var enddate2= "";
+var stdate = "";
+var enddate = "";
+var strval="";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+	rdoggub.Value="'1','2','3'";
+	sstand.Value = "04";
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)
+	txtyedat_OnKillFocus(obj);	
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+//	ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){	
+	//MainGrid.ToolTipText = setPopMessage("2053");
+	MainGrid.BkColor = G_ds_design.GetColumn(0,"BkColor");
+	MainGrid.BkColor2 = G_ds_design.GetColumn(0,"BkColor2");
+	MainGrid.BkSelColor = G_ds_design.GetColumn(0,"BkSelColor");
+	MainGrid.Face3dColor = G_ds_design.GetColumn(0,"Face3dColor");
+	MainGrid.BoldHead = G_ds_design.GetColumn(0,"BoldHead");
+	MainGrid.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	MainGrid.Width = G_ds_design.GetColumn(0,"Width");
+	
+	//searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");	
+}
+
+/********************************************************************** 
+ * 내용설명 : on_LoadCompleted 조회
+ **********************************************************************/ 
+function getOgm401(){
+
+	if(txtyedat.Value==""){
+		alert("기준년월을 선택하세요.");
+		return;
+	}
+	sstand_OnClick();
+
+//alert(stdate+" "+enddate);	
+//alert(strval);	
+	var sKind		= "getOgm401";						
+	var sMethodName = "service::psogmlib/selectOgm401.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm401_pre=ds_ogm401";
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(Lib2);		//Lib
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value);			//사업부
+		//sArgument += "@YEAR=" + quote(txtyear.Text);	//년도
+		sArgument += "@WNDATS=" + quote(stdate);	//년도
+		sArgument += "@WNDATE=" + quote(enddate);	//년도
+		//sArgument += "@WNDATE2=" + quote(enddate2);	//
+		sArgument += "@G_GUB=" + quote(rdoggub.Value);	//교정구분
+		sArgument += "@STRVAL=" + quote(strval);	//조회데이터SQL
+//alert(strval);	
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");	
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+	//값이 없는 부서삭제
+	
+	var rowcnt = ds_ogm401_pre.GetRowCount();
+	for(var i=rowcnt; i >=0; i--){
+		if(length(ds_ogm401_pre.GetColumn(i, "CNT_TOTAL"))==0){
+			ds_ogm401_pre.DeleteRow(i);
+		}
+	}
+	
+	ds_ogm401.Copy(ds_ogm401_pre);
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	// tran 성공	
+	}else if(svcId=="setogm200"){
+		alert(setPopMessage("1001"));
+		setMessage("1001");
+	}	
+}
+
+/********************************************************************** 
+ * 내용설명 : 데이터셋 상태 체크
+ **********************************************************************/ 
+function ds_ogm401_OnRowPosChanged(obj,nOldRow,nRow){
+	//로우타입 insert만 ED박스 enable
+	if(ds_ogm401.GetRowType(ds_ogm401.currow)=="insert"){
+		ed_maker.Enable=true;
+	}else{
+		ed_maker.Enable=false;
+	}
+}
+
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+	
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function Grid0_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+/********************************************************************** 
+ * 개 발 자 : 황규철 
+ * 개발일자 : 2010-12-06
+ * 내용설명 : 엑셀파일로 저장
+ * 주요변수 : 
+ **********************************************************************/ 
+function setExcel()
+{
+	var stitle = txtyear.Text + " "+ttitle.Value;
+	ds_title.InsertRow(0);
+	ds_title.SetColumn(0,"title", stitle);
+	
+	var fName   = "월별계획대실적";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|월별계획대실적";
+	createExcelSheetS3(FileDialog0, fName ,arrSheets ,ds_title);
+
+}
+
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getogm401();
+}
+
+function fn_Input()
+{
+	//if(checkInsertCount("ds_ogm401")== false) return;
+	//ds_ogm401.AddRow();
+}
+
+function fn_Delete()
+{
+	
+}
+
+function fn_Save()
+{
+	setogm401();
+}
+
+function fn_print()
+{
+	alert("fn_print");
+}
+
+function fn_Excel()
+{
+	setExcel();
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	
+}
+
+function txtyedat_OnKillFocus(obj)
+{
+	txtyear.Text=substr(txtyedat.Value,0,4);
+}
+
+
+
+function sstand_OnClick()
+{
+	stdate2 = substr(txtyedat.Value,0,4)+sstand.Value+"01";
+	enddate2= addMonth(stdate2,11); 
+	stdate = substr(stdate2,0,6);
+	enddate = substr(enddate2,0,6);
+	//enddate = substr(enddate2,0,4);
+	//enddate2 = substr(enddate2,4,2);	
+
+	var insdate= substr(stdate,0,4);
+	
+	if(sstand.Value=="01"){
+		ds_ogm401.DeleteAll();
+		MainGrid.SetCellProp("head",18,"Text","1");
+		MainGrid.SetCellProp("head",16,"Text","2");
+		MainGrid.SetCellProp("head",2,"Text","3");		
+		MainGrid.SetCellProp("head",3,"Text","4");
+		MainGrid.SetCellProp("head",4,"Text","5");
+		MainGrid.SetCellProp("head",5,"Text","6");
+		MainGrid.SetCellProp("head",6,"Text","7");		
+		MainGrid.SetCellProp("head",7,"Text","8");
+		MainGrid.SetCellProp("head",8,"Text","9");		
+		MainGrid.SetCellProp("head",9,"Text","10");
+		MainGrid.SetCellProp("head",14,"Text","11");
+		MainGrid.SetCellProp("head",12,"Text","12");
+		
+		strval="";
+		
+		strval += "'4' as m4,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'01'+" then b.yedat end) as cnt_yedat_04,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'01'+" then b.rpdat end) as cnt_rpdat_04,";
+		strval += "'5' as m5,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'02'+" then b.yedat end) as cnt_yedat_05,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'02'+" then b.rpdat end) as cnt_rpdat_05,";
+		strval += "'6' as m6,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'03'+" then b.yedat end) as cnt_yedat_06,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'03'+" then b.rpdat end) as cnt_rpdat_06,";
+		strval += "'7' as m7,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'04'+" then b.yedat end) as cnt_yedat_07,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'04'+"  then b.rpdat end) as cnt_rpdat_07,";
+		strval += "'8' as m8,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'05'+"  then b.yedat end) as cnt_yedat_08,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'05'+" then b.rpdat end) as cnt_rpdat_08,";
+		strval += "'9' as m9,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'06'+" then b.yedat end) as cnt_yedat_09,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'06'+" then b.rpdat end) as cnt_rpdat_09,";
+		strval += "'10' as m10,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'07'+" then b.yedat end) as cnt_yedat_10,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'07'+" then b.rpdat end) as cnt_rpdat_10,";
+		strval += "'11' as m11,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'08'+" then b.yedat end) as cnt_yedat_11,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'08'+" then b.rpdat end) as cnt_rpdat_11,";
+		strval += "'12' as m12,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'09'+" then b.yedat end) as cnt_yedat_12,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'09'+" then b.rpdat end) as cnt_rpdat_12,";
+		strval += "'1' as m1,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'10'+" then b.yedat end) as cnt_yedat_01,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'10'+" then b.rpdat end) as cnt_rpdat_01,";
+		strval += "'2' as m2,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'11'+" then b.yedat end) as cnt_yedat_02,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'11'+" then b.rpdat end) as cnt_rpdat_02,";
+		strval += "'3' as m3,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'12'+" then b.yedat end) as cnt_yedat_03,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'12'+" then b.rpdat end) as cnt_rpdat_03";
+		//strval += "count(b.rpdat) as cnt_total";		
+		
+			
+	}
+	else if(sstand.Value=="04"){
+		ds_ogm401.DeleteAll();
+		MainGrid.SetCellProp("head",18,"Text","4");
+		MainGrid.SetCellProp("head",16,"Text","5");
+		MainGrid.SetCellProp("head",2,"Text","6");		
+		MainGrid.SetCellProp("head",3,"Text","7");
+		MainGrid.SetCellProp("head",4,"Text","8");
+		MainGrid.SetCellProp("head",5,"Text","9");
+		MainGrid.SetCellProp("head",6,"Text","10");		
+		MainGrid.SetCellProp("head",7,"Text","11");
+		MainGrid.SetCellProp("head",8,"Text","12");		
+		MainGrid.SetCellProp("head",9,"Text","1");
+		MainGrid.SetCellProp("head",14,"Text","2");
+		MainGrid.SetCellProp("head",12,"Text","3");	
+		
+		strval="";
+		strval += "'4' as m4,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'04'+" then b.yedat end) as cnt_yedat_04,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'04'+" then b.rpdat end) as cnt_rpdat_04,";
+		strval += "'5' as m5,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'05'+" then b.yedat end) as cnt_yedat_05,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'05'+" then b.rpdat end) as cnt_rpdat_05,";
+		strval += "'6' as m6,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'06'+" then b.yedat end) as cnt_yedat_06,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'06'+" then b.rpdat end) as cnt_rpdat_06,";
+		strval += "'7' as m7,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'07'+" then b.yedat end) as cnt_yedat_07,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'07'+" then b.rpdat end) as cnt_rpdat_07,";
+		strval += "'8' as m8,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'08'+" then b.yedat end) as cnt_yedat_08,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'08'+" then b.rpdat end) as cnt_rpdat_08,";
+		strval += "'9' as m9,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'09'+" then b.yedat end) as cnt_yedat_09,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'09'+" then b.rpdat end) as cnt_rpdat_09,";
+		strval += "'10' as m10,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'10'+" then b.yedat end) as cnt_yedat_10,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'10'+" then b.rpdat end) as cnt_rpdat_10,";
+		strval += "'11' as m11,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'11'+" then b.yedat end) as cnt_yedat_11,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'11'+" then b.rpdat end) as cnt_rpdat_11,";
+		strval += "'12' as m12,";
+		strval += "count(case substr(char(b.yedat),1,6) when "+insdate+'12'+" then b.yedat end) as cnt_yedat_12,";
+		strval += "count(case substr(char(b.rpdat),1,6) when "+insdate+'12'+" then b.rpdat end) as cnt_rpdat_12,";
+		strval += "'1' as m1,";
+		strval += "count(case substr(char(b.yedat),1,6) when " +(parseInt(insdate)+1)+'01'+ " then b.yedat end) as cnt_yedat_01,";
+		strval += "count(case substr(char(b.rpdat),1,6) when " +(parseInt(insdate)+1)+'01'+ " then b.rpdat end) as cnt_rpdat_01,";
+		strval += "'2' as m2,";
+		strval += "count(case substr(char(b.yedat),1,6) when " +(parseInt(insdate)+1)+'02'+ " then b.yedat end) as cnt_yedat_02,";
+		strval += "count(case substr(char(b.rpdat),1,6) when " +(parseInt(insdate)+1)+'02'+ " then b.rpdat end) as cnt_rpdat_02,";
+		strval += "'3' as m3,";
+		strval += "count(case substr(char(b.yedat),1,6) when " +(parseInt(insdate)+1)+'03'+ " then b.yedat end) as cnt_yedat_03,";
+		strval += "count(case substr(char(b.rpdat),1,6) when " +(parseInt(insdate)+1)+'03'+ " then b.rpdat end) as cnt_rpdat_03";
+		//strval += "count(b.rpdat) as cnt_total";		
+	}
+}
+]]></Script>
+</Window>

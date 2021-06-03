@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Font="援대┝,9" Height="504" Id="form" Left="8" OnLoadCompleted="form_OnLoadCompleted" PidAttrib="7" Title="화면&#32;동적&#32;생성" TooltipFont="Default,0" Top="8" Ver="1.0" Width="744" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_left">
+				<Contents>
+					<colinfo id="id" size="256" type="STRING"/>
+					<colinfo id="name" size="256" type="STRING"/>
+					<colinfo id="class" size="256" type="STRING"/>
+					<record>
+						<class>0</class>
+						<id>Admin</id>
+						<name>Admin&#32;Lee</name>
+					</record>
+					<record>
+						<class>1</class>
+						<id>master</id>
+						<name>Manager&#32;Lee</name>
+					</record>
+					<record>
+						<class>0</class>
+						<id>guest</id>
+						<name>Joe&#32;Hoe</name>
+					</record>
+					<record>
+						<class>0</class>
+						<id>outer</id>
+						<name>External&#32;Connect</name>
+					</record>
+					<record>
+						<class>1</class>
+						<id>owner</id>
+						<name>Mine&#32;Mine</name>
+					</record>
+					<record>
+						<class>0</class>
+						<id>dumy</id>
+						<name>Lee</name>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_combo">
+				<Contents>
+					<colinfo id="code" size="256" type="STRING"/>
+					<colinfo id="value" size="256" type="STRING"/>
+					<record>
+						<code>0</code>
+						<value>Customer</value>
+					</record>
+					<record>
+						<code>1</code>
+						<value>Employee</value>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Shape BKColor="#d6ecf0" Bottom="503" Height="471" Id="Shape2" Left="3" LineColor="#3d93b0" Right="739" RoundHeight="1" RoundWidth="1" TabOrder="3" Top="32" Type="RoundRect" Width="736"></Shape>
+		<Button BKColor="#ff9900" Enable="FALSE" Height="28" Id="Button1" Left="11" OnClick="Button1_OnClick" TabOrder="1" Text="Create&#32;Button" Top="232" UserData="Button" Width="104"></Button>
+		<Button BKColor="#ff9900" Height="28" Id="Button3" Left="8" OnClick="Button3_OnClick" Style="button01" TabOrder="2" Text="Create&#32;Tab" Top="264" UserData="Tab" Width="104"></Button>
+	</Form>
+	<Script><![CDATA[
+function form_OnLoadCompleted(obj)
+{
+
+}
+	
+
+function Button1_OnClick(obj)
+{
+	var pos_x = 20;
+	var comps 	= object("Tab_1.Tab"+Tab_1.TabIndex).Components["Button"];	
+	var cnt 	;
+	if(comps==null){
+		cnt 	= pos_x;
+	}else{
+		cnt 	= toString(pos_x*(comps.count()+1));
+	}
+
+	var str 	= "left='"+cnt+"' top='"+cnt+"' width='100' height='25' text='Image_"+toString(cnt)+"' onclick='btnClick'";
+
+	object("Tab_1.Tab"+Tab_1.TabIndex).Create("Button", "button_"+toString(cnt) , str );
+}
+
+
+function Button3_OnClick(obj)
+{
+	createComponent( obj
+					, "Button"
+					, "button_tab"
+					, 'left="10" top="330" width="120" height="40" text="subTab Add" onclick="btnAddTab"');
+
+	createComponent( obj
+					, "Tab"
+					, "Tab_1"
+					, 'left="150" top="250" width="550" height="150" OnChanged="btnClickTab"');
+	btnAddTab();
+	Button1.Enable = true;
+	Button3.Enable = false;
+}
+
+function btnAddTab()
+{
+	var new_id = "Tab"+toString(Tab_1.TabCount);
+	Tab_1.InsertTab(new_id);
+	object("Tab_1."+new_id).text = new_id;
+}
+
+function btnClickTab(obj,nOldIndex,nNewindex){
+	var idx = Tab_1.TabIndex  ;
+}
+
+function createComponent( obj, strCompName,strCompID,strAttrib){
+
+	switch(obj.UserData){
+		case "Button":
+			Create(strCompName, strCompID, strAttrib);
+			break;
+		case "Image":
+			Create(strCompName, strCompID, strAttrib);
+			break;
+
+		case "Tab":
+			Create(strCompName, strCompID, strAttrib);
+			break;
+	}
+}
+
+function form_OnLoadCompleted(obj)
+{
+
+}
+]]></Script>
+</Window>

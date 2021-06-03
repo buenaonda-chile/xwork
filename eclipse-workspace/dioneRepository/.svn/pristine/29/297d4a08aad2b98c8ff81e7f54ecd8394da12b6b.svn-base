@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.MenuRoleDao">
+
+  <resultMap id="menuRoleMap" type="com.globaldenso.dicas.business.dto.MenuRoleDto">
+    <id property="menuId" column="MENU_ID" javaType="java.lang.Long" />
+    <id property="roleCd" column="ROLE_CD" javaType="java.lang.String" />
+    <result property="upperMenuId" column="UPPER_MENU_ID" javaType="java.lang.Long" />
+    <result property="menuKoNm" column="MENU_KO_NM" javaType="java.lang.String" />
+    <result property="menuEnNm" column="MENU_EN_NM" javaType="java.lang.String" />
+    <result property="menuJaNm" column="MENU_JA_NM" javaType="java.lang.String" />
+    <result property="isUse" column="IS_USE" javaType="java.lang.Boolean" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT MENU_ID,
+           ROLE_CD,
+           RGSTR_ID,
+           RGST_DT,
+           UPDTR_ID,
+           UPDT_DT
+    FROM TB_CM_MENU_ROLE
+
+  </sql>
+
+  <sql id="select_02">
+
+    WITH MENU_TREE (
+           MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           MENU_CD,
+           MENU_ORDR,
+           MENU_URL,
+           UPPER_MENU_ID,
+           MENU_ICON,
+           MENU_KO_FULNM,
+           MENU_EN_FULNM,
+           MENU_JA_FULNM,
+           MENU_LVL,
+           PUB_YN
+    ) AS (
+          SELECT MENU_ID,
+                 MENU_KO_NM,
+                 MENU_EN_NM,
+                 MENU_JA_NM,
+                 MENU_CD,
+                 MENU_ORDR,
+                 MENU_URL,
+                 UPPER_MENU_ID,
+                 MENU_ICON,
+                 '' || MENU_KO_NM AS MENU_KO_FULNM,
+                 '' || MENU_EN_NM AS MENU_EN_FULNM,
+                 '' || MENU_JA_NM AS MENU_JA_FULNM,
+                  1 AS MENU_LVL,
+                 PUB_YN
+          FROM TB_CM_MENU
+          <choose>
+            <when test="criteria.upperMenuId != null">
+              WHERE UPPER_MENU_ID = #{criteria.upperMenuId}
+            </when>
+            <otherwise>
+              WHERE UPPER_MENU_ID IS NULL
+            </otherwise>
+          </choose>
+          <if test="criteria.upperMenuId != null">
+
+          </if>
+          UNION ALL
+          SELECT A.MENU_ID,
+                 A.MENU_KO_NM,
+                 A.MENU_EN_NM,
+                 A.MENU_JA_NM,
+                 A.MENU_CD,
+                 A.MENU_ORDR,
+                 A.MENU_URL,
+                 A.UPPER_MENU_ID,
+                 A.MENU_ICON,
+                 B.MENU_KO_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_KO_FULNM,
+                 B.MENU_EN_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_EN_FULNM,
+                 B.MENU_JA_FULNM || ' &gt; ' || A.MENU_KO_NM AS MENU_JA_FULNM,
+                 B.MENU_LVL + 1 AS MENU_LVL,
+                 A.PUB_YN
+          FROM TB_CM_MENU A
+          INNER JOIN MENU_TREE B
+          ON A.UPPER_MENU_ID = B.MENU_ID
+    )
+    SELECT A.MENU_ID,
+           MENU_KO_NM,
+           MENU_EN_NM,
+           MENU_JA_NM,
+           UPPER_MENU_ID,
+           CASE WHEN B.MENU_ID IS NOT NULL THEN 1 ELSE 0 END AS IS_USE
+    FROM MENU_TREE A
+    LEFT OUTER JOIN (
+      SELECT DISTINCT MENU_ID
+        FROM TB_CM_MENU_ROLE A
+        WHERE ROLE_CD = #{criteria.roleCd}
+      ) B
+    ON A.MENU_ID = B.MENU_ID
+    ORDER BY MENU_CD
+
+  </sql>
+
+  <select id="searchByKey" resultMap="menuRoleMap" parameterType="com.globaldenso.dicas.business.domain.MenuRoleDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.MENU_ID = #{menuId}
+      AND AA.ROLE_CD = #{roleCd}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="menuRoleMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+    <include refid="select_02" />
+    ) A
+
+  </select>
+
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.MenuRoleDomain">
+
+    INSERT INTO TB_CM_MENU_ROLE (
+      MENU_ID,
+      ROLE_CD,
+      RGSTR_ID,
+      RGST_DT,
+      UPDTR_ID,
+      UPDT_DT
+    ) VALUES (
+		  #{menuId},
+		  #{roleCd},
+		  #{rgstrId},
+		  #{rgstDt},
+		  #{updtrId},
+		  #{updtDt}
+    )
+
+  </insert>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.MenuRoleDomain">
+
+    DELETE FROM TB_CM_MENU_ROLE
+    WHERE ROLE_CD = #{roleCd}
+    AND MENU_ID = #{menuId}
+
+  </delete>
+
+
+</mapper>

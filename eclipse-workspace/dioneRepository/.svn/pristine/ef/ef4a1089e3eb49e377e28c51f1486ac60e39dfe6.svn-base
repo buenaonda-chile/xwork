@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="456" Id="ogm420_POP" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="통보서발행" TooltipFont="Default,0" Top="8" Ver="1.0" Width="776" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_sortcd">
+				<Contents>
+					<colinfo id="grcd" size="256" summ="default" type="STRING"/>
+					<colinfo id="grnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<grcd>a.mngno</grcd>
+						<grnm>관리번호순</grnm>
+					</record>
+					<record>
+						<grcd>a.group</grcd>
+						<grnm>교정분야순</grnm>
+					</record>
+					<record>
+						<grcd>a.rpdat</grcd>
+						<grnm>교정일자순</grnm>
+					</record>
+					<record>
+						<grcd>b.dptcd</grcd>
+						<grnm>부서순</grnm>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_dptcd">
+				<Contents>
+					<colinfo id="CHK_SEL" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPTNM2" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420_pop"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420_rep">
+				<Contents>
+					<colinfo id="ROWNUM" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNGNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="MNAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="MAKER" size="256" summ="default" type="STRING"/>
+					<colinfo id="MTYPE" size="256" summ="default" type="STRING"/>
+					<colinfo id="JNBNO" size="256" summ="default" type="STRING"/>
+					<colinfo id="YEDAT" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPDPNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_ogm420_rep2">
+				<Contents>
+					<colinfo id="UNM" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPNM" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="14" TabStop="FALSE" Width="778"></Image>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="16" Id="title_text" Left="16" TabOrder="15" Top="8" Width="752"></Static>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="712" Right="736" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="744" Right="768" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="33" Id="searchBar" TabOrder="16" Top="31" Width="776"></Static>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="81" Id="Static0" TabOrder="17" Top="63" Width="776"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static10" Left="13" TabOrder="17" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="37" VAlign="Middle" Width="92"></Static>
+		<Button Cursor="HAND" Height="25" Id="btn2sel1" ImageID="btn2_search2" Left="463" OnClick="btn2sel1_OnClick" TabOrder="10" Text="조회" Top="35" Width="75"></Button>
+		<Button Height="25" Id="btn2excel" ImageID="sum_excel" Left="542" OnClick="btn2excel_OnClick" TabOrder="11" Text="엑셀출력" Top="35" Width="72"></Button>
+		<Button Height="26" Id="btnprint" ImageID="btn2_publ2" Left="616" OnClick="btnprint_OnClick" TabOrder="12" TabStop="FALSE" Text="Button0" Top="35" Width="75"></Button>
+		<Button Height="25" Id="brd2btnclose" ImageID="closeBtn" Left="695" OnClick="brd2btnclose_OnClick" TabOrder="13" TabStop="FALSE" Text="닫기" Top="35" Width="75"></Button>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static4" Left="16" TabOrder="19" Text="교정분야" Top="75" VAlign="Middle" Width="92"></Static>
+		<Static Border="Flat" BorderColor="#b4b4b4" Height="22" Id="grboption2" Left="110" TabOrder="20" Top="74" Width="165"></Static>
+		<Checkbox Height="20" Id="chk_group3" Left="228" TabOrder="4" Text="설비" Top="75" Value="FALSE" Width="41"></Checkbox>
+		<Checkbox Height="20" Id="chk_group2" Left="170" TabOrder="3" Text="검사구" Top="75" Value="FALSE" Width="57"></Checkbox>
+		<Checkbox Height="20" Id="chk_group1" Left="113" TabOrder="2" Text="측정기" Top="75" Value="FALSE" Width="57"></Checkbox>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy년MM월" Height="18" Id="txtyedats" Left="379" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="5" Top="76" Width="80"></Calendar>
+		<Static Align="Center" Height="14" Id="Static2" Left="456" TabOrder="21" Text="~" Top="80" VAlign="Middle" Width="25"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" Dateformat="yyyy년MM월" Height="18" Id="txtyedate" Left="480" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="6" Top="76" Width="80"></Calendar>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static3" Left="285" TabOrder="22" Text="예정년월" Top="75" VAlign="Middle" Width="92"></Static>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static1" Left="15" TabOrder="23" Text="검색부서" Top="106" VAlign="Middle" Width="92"></Static>
+		<Combo CodeColumn="code" DataColumn="cdnm" Editable="TRUE" Height="20" Id="cmbdptcd3" InnerDataset="ds_mst650pf" Left="110" Search="FILTERED" TabOrder="8" Top="105" Width="223"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static5" Left="351" TabOrder="24" Text="교정대상부서" Top="106" VAlign="Middle" Width="92"></Static>
+		<Grid AutoFit="TRUE" BindDataset="ds_ogm420_pop" BkColor2="default" BoldHead="true" Bottom="456" Editable="TRUE" Enable="true" EndLineColor="default" Height="312" Id="Grid" InputPanel="FALSE" LineColor="default" MinWidth="100" OnHeadClick="Grid_OnHeadClick" Right="776" TabOrder="25" TabStop="true" Top="144" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="776">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="25"/>
+						<col width="70"/>
+						<col width="160"/>
+						<col width="90"/>
+						<col width="125"/>
+						<col width="75"/>
+						<col width="70"/>
+						<col width="145"/>
+						<col width="0"/>
+						<col width="0"/>
+					</columns>
+					<head>
+						<cell bkcolor="#dfdfdf" col="0" display="text" text="No"/>
+						<cell bkcolor="#dfdfdf" col="1" display="text" text="관리번호"/>
+						<cell bkcolor="#dfdfdf" col="2" display="text" text="장비명"/>
+						<cell bkcolor="#dfdfdf" col="3" display="text" text="제조회사"/>
+						<cell bkcolor="#dfdfdf" col="4" display="text" text="형식"/>
+						<cell bkcolor="#dfdfdf" col="5" display="text" text="장비번호"/>
+						<cell bkcolor="#dfdfdf" col="6" display="text" text="예정일자"/>
+						<cell bkcolor="#dfdfdf" col="7" display="text" text="사용부서"/>
+						<cell bkcolor="#dfdfdf" col="8" display="text" text="GROUP"/>
+						<cell bkcolor="#dfdfdf" col="9" display="text" text="DPTCD"/>
+					</head>
+					<body>
+						<cell align="right" col="0" colid="ROWNUM" display="text"/>
+						<cell col="1" colid="MNGNO" display="text" TrimType="Both"/>
+						<cell col="2" colid="MNAME" display="text"/>
+						<cell col="3" colid="MAKER" display="text"/>
+						<cell col="4" colid="MTYPE" display="text"/>
+						<cell col="5" colid="JNBNO" display="text"/>
+						<cell col="6" colid="YEDAT" display="text"/>
+						<cell col="7" colid="DPDPNM" display="text"/>
+						<cell col="8" colid="GROUP" display="text"/>
+						<cell col="9" colid="DPTCD" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Combo CodeColumn="grcd" DataColumn="grnm" Height="20" Id="cmbgrbsort3" INDEX="0" InnerDataset="ds_sortcd" Left="661" TabOrder="7" Top="74" Width="101"></Combo>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="20" Id="Static6" Left="566" TabOrder="26" Text="정렬순서" Top="75" VAlign="Middle" Width="92"></Static>
+		<Button Height="25" Id="btn2sel2" ImageID="btn2_ssearch2" Left="672" OnClick="btn2sel2_OnClick" TabOrder="9" Text="대상부서조회" Top="106" Width="75"></Button>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="112" TabOrder="1" Top="37" Width="120"></Combo>
+		<Edit CheckLength="Byte" Height="20" Id="cmbdptcd4" Left="448" MaxLength="16" TabOrder="28" Top="106" UpperOnly="TRUE" UseIME="FALSE" Width="200"></Edit>
+		<Image Cursor="HAND" Height="17" Id="seldpcd" ImageID="ic_search" Left="651" OnClick="seldpcd_OnClick" Static="FALSE" TabOrder="29" Top="106" Width="20"></Image>
+		<Grid BindDataset="ds_dptcd" BkColor2="default" BoldHead="true" Bottom="312" Editable="TRUE" Enable="true" EndLineColor="default" Height="184" Id="Grid_dptcd" InputPanel="FALSE" Left="448" LineColor="default" OnKillFocus="Grid_dptcd_OnKillFocus" Right="680" TabOrder="27" TabStop="true" Top="128" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="FALSE" VLineColor="default" WheelScrollRow="1" Width="232">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="20"/>
+						<col width="187"/>
+					</columns>
+					<body>
+						<cell col="0" colid="CHK_SEL" display="checkbox" edit="checkbox"/>
+						<cell col="1" colid="DPTNM" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : Jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : ogm420_POP.xml
+ * ● PROGRAM DESCRIPTION  : 교정등록_통보서발행
+ * ● DATE WRITTEN         : 2012.02.06
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var scdval = "";
+var subscdval="";
+var dpnmVal ="";
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	getComCode(); //공장구분 선택
+}
+
+function getComCode(){
+	http.Sync 	= true;
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");	
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	ComboBoxPlant.Enable = false; 
+}
+
+
+function brd2btnclose_OnClick(obj)
+{
+	close();
+}
+
+function btn2excel_OnClick(obj)
+{
+	setExcel();
+}
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "교정등록(통보서발행)";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "Grid|교정등록(통보서발행)";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+function getOgm420_pop(dpselcd, selflag){
+	var CheckedCount1 = parseInt(chk_group1.Value)+parseInt(chk_group2.Value)+parseInt(chk_group3.Value);
+	var rvalue;
+	if (CheckedCount1 == 0){
+		rvalue = "('1','2','3')";
+	}else{		
+		rvalue = " (";
+		var checking = 0;
+		if (chk_group1.Value == 1){
+			checking = checking+1;
+			rvalue = rvalue+"'"+"1"+"'";
+		}
+		if (chk_group2.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"2"+"'";
+		}
+		if (chk_group3.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"3"+"'";
+		}
+		rvalue = rvalue+")";
+	}
+
+	var yedats = substr(txtyedats.Value,0,6);
+	var yedate = substr(txtyedate.Value,0,6);
+	
+	if(txtyedats.Value != ""){
+		if(txtyedate.Value == ""){
+			//alert("교정예정년월 종료일을 선택해주세요");
+			alert(setPopMessage("2570"));
+			return;
+		}
+		else if(yedats > yedate)
+		{
+			alert(setPopMessage("3049"));
+			return;
+		}
+	}
+
+	//SQL_tme100pf_06
+	var sKind		= "getOgm420_pop";						
+	var sMethodName = "service::psogmlib/selectOgm420_pop.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm420_pop=ds_ogm420_pop";
+	var sArgument   = "";
+		sArgument += "@LIB2=" + quote(lib2);
+		sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += "@PGROUP=" + quote(rvalue); //교정분야
+		sArgument += "@DPTCD=" + quote(dpselcd);	 //부서
+		sArgument += "@SELORDERBY=" + quote(cmbgrbsort3.Value);	 //정렬순서
+		sArgument += "@YEDATS=" + quote(yedats); //교정예정년월s
+		sArgument += "@YEDATE=" + quote(yedate); //교정예정년월e
+		sArgument += "@SELFLAG=" + quote(selflag); //flag
+		
+	http.Sync = true;
+	var str = dialog("Common::PGMLOAD.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	http.Sync = false;
+	
+	if( selflag == "mainsel" || selflag == "delsel"){
+		var rowcnt = ds_ogm420_pop.GetRowCount();
+		
+		if(ds_dptcd.GetRowCount() > 0){
+			ds_dptcd.DeleteAll();		
+		}
+		for (i =0; i < rowcnt; i++){
+			var dcd = trim(ds_ogm420_pop.GetColumn(i,"DPTCD"));
+			var dnm_sub = trim(ds_ogm420_pop.GetColumn(i,"DPDPNM"));
+			var dnm = dcd + " | " + dnm_sub;
+			
+			var item_chk = ds_dptcd.FindRow("DPTCD", dcd); //부서중복확인
+			if (item_chk < 0 ){ //중복되지 않으면 해당 부서추가
+				var dprow = ds_dptcd.GetRowCount();
+					ds_dptcd.InsertRow(dprow);
+					ds_dptcd.SetColumn(dprow, "CHK_SEL",0);
+					ds_dptcd.SetColumn(dprow, "DPTCD", dcd);
+					ds_dptcd.SetColumn(dprow, "DPTNM", dnm);
+					ds_dptcd.SetColumn(dprow, "DPTNM2", dnm_sub);
+			}
+		}
+	}	
+}
+function btn2sel1_OnClick(obj)
+{
+	var sflag = "mainsel";
+	subscdval="";
+	var getcd = cmbdptcd3.Value;
+	getOgm420_pop(getcd, sflag);	
+	cmbdptcd4.Text="";
+}
+
+function validationChk(){
+
+	var result = true;
+	var PaValue = cmbWnDatS.Value;
+	var UrValue = cmbWnDatE.Value;
+	
+	if (length(cmbsdpcd.Value)==0)
+	{
+		alert(setPopMessage("3051"));
+		result =false;
+	}
+	else if (PaValue == "" || UrValue == "")
+	{
+		alert(setPopMessage("3048"));
+		result = false;
+	}
+	else if(PaValue > UrValue)
+	{
+		alert(setPopMessage("3049"));
+		result =false;
+	}
+	return result;
+}
+
+function Grid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+
+
+
+function Grid_dptcd_OnKillFocus(obj)
+{
+	scdval = "";
+	dpnmVal = "";
+	var nmval = "";
+	//var cdval=" (";
+	var checking = 0;
+	for( i=0; i < ds_dptcd.RowCount(); i++){
+		var chkVal = ds_dptcd.GetColumn(i,"CHK_SEL");
+		if(chkVal == 1){
+			if (checking != 0) {
+				scdval = scdval+", ";
+				dpnmVal = dpnmVal+", ";
+				nmval = nmval+", ";
+			}
+			checking = checking + 1;
+			scdval = scdval + ds_dptcd.GetColumn(i,"DPTCD");			
+			nmval = nmval + ds_dptcd.GetColumn(i,"DPTNM");			
+			dpnmVal = dpnmVal + ds_dptcd.GetColumn(i,"DPTNM2");			
+		}
+	}
+	//cdval = cdval +" )";
+	//alert(cdval);
+	//alert(checking);
+	cmbdptcd4.Text=nmval;
+	Grid_dptcd.Visible = false;
+}
+
+function btn2sel2_OnClick(obj)
+{	
+	if(length(scdval) == 0 ){
+		//alert("교정대상부서를 선택해주세요.");
+		alert(setPopMessage("2569"));
+		return false;
+	}
+	var sflag = "subsel";
+	getOgm420_pop(scdval, sflag);	
+}
+function seldpcd_OnClick(obj,nX,nY)
+{	
+	if(ds_dptcd.GetRowCount()<=0){
+		alert("교정대상부서가 존재하지않습니다.");
+		return;
+	}
+	Grid_dptcd.Visible = true;
+	Grid_dptcd.SetFocus();
+}
+
+/********************************************************************** 
+ * 내용설명 : Report 출력
+ **********************************************************************/ 
+function reportQuery()
+{
+	var CheckedCount1 = parseInt(chk_group1.Value)+parseInt(chk_group2.Value)+parseInt(chk_group3.Value);
+	var rvalue;
+	if (CheckedCount1 == 0){
+		rvalue = "('1','2','3')";
+	}else{		
+		rvalue = " (";
+		var checking = 0;
+		if (chk_group1.Value == 1){
+			checking = checking+1;
+			rvalue = rvalue+"'"+"1"+"'";
+		}
+		if (chk_group2.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"2"+"'";
+		}
+		if (chk_group3.Value == 1){
+			if (checking != 0) rvalue = rvalue+",";
+			checking = checking+1;
+			rvalue = rvalue+"'"+"3"+"'";
+		}
+		rvalue = rvalue+")";
+	}
+
+	var yedats = substr(txtyedats.Value,0,6);
+	var yedate = substr(txtyedate.Value,0,6);
+	
+	if(txtyedats.Value != ""){
+		if(txtyedate.Value == ""){
+			//alert("교정예정년월 종료일을 선택해주세요");
+			alert(setPopMessage("2570"));
+			return;
+		}
+		else if(yedats > yedate)
+		{
+			alert(setPopMessage("3049"));
+			return;
+		}
+	}
+
+	var sKind		= "getogm420_rep";						
+	var sMethodName = "service::psogmlib/selectOgm420_pop.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ogm420_rep=ds_ogm420_pop";
+	var sArgument   = "";
+		sArgument += " LIB2=" + quote(lib2);
+		sArgument += " COMPS=" + quote(ComboBoxPlant.Value); //사업부
+		sArgument += " PGROUP=" + quote(rvalue); //교정분야
+		sArgument += " DPTCD=" + quote(scdval);	 //부서
+		sArgument += " SELORDERBY=" + quote(cmbgrbsort3.Value);	 //정렬순서
+		sArgument += " YEDATS=" + quote(yedats); //교정예정년월s
+		sArgument += " YEDATE=" + quote(yedate); //교정예정년월e
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+}
+
+function btnprint_OnClick(obj)
+{
+	if(length(scdval) == 0 ){
+		//alert("교정대상부서를 선택해주세요.");
+		alert(setPopMessage("2569"));
+		return false;
+	}
+	ds_ogm420_rep2.DeleteAll();
+	ds_ogm420_rep2.InsertRow(0);
+	ds_ogm420_rep2.SetColumn(0,"UNM", userNm);
+	ds_ogm420_rep2.SetColumn(0,"DPNM", dpnmVal);
+	
+	if(length(subscdval)==0){
+		subscdval=scdval;
+	}
+	else{
+		if(length(scdval)==0){
+			return;
+		}
+		else{
+			subscdval=subscdval+","+scdval;	
+		}
+	}
+//alert("scdval==>"+scdval+"subscdval==>"+subscdval);
+
+	reportQuery();
+	var sflag = "delsel";
+	getOgm420_pop(subscdval, sflag);	
+	
+	dialog("psogmlib::ogm420_rep.xml", "",300,300,"TitleBar=false");
+	cmbdptcd4.Text="";
+	scdval="";
+	//선택된 부서목록 삭제
+	//방법1
+	/*
+	for (i=ds_dptcd.GetRowCount(); i>=0; i--){
+		var delchk = ds_dptcd.GetColumn(i, "CHK_SEL");
+		var deldptcd = ds_dptcd.GetColumn(i, "DPTCD");
+		if(delchk==1){
+			ds_dptcd.DeleteRow(i);
+			for (j=ds_ogm420_pop.GetRowCount(); j>=0; j--){
+				var delsubdptcd = ds_ogm420_pop.GetColumn(j, "DPTCD");
+//alert("=="deldptcd+"=="+delsubdptcd+"==");				
+				if(deldptcd==delsubdptcd){
+					ds_ogm420_pop.DeleteRow(j);
+				ds_ogm420_pop.DeleteSelected();
+				}
+			}
+		}
+	}
+	
+	
+	cmbdptcd4.Text="";
+	scdval="";
+	*/
+
+}
+]]></Script>
+</Window>

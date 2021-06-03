@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="max5250">
+	<select id="getScreen" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+		      trim(SCREEN_ID) SCREEN_ID,
+				trim(COL_START) COL_START,
+				trim(COL_LENGTH) COL_LENGTH,
+				trim(COL_HEIGHT) COL_HEIGHT,
+				trim(REC_START) REC_START,
+				trim(REC_LENGTH) REC_LENGTH,
+				trim(REC_HEIGHT) REC_HEIGHT,
+				trim(REC_COUNT) REC_COUNT,
+				trim(REC_END) REC_END,
+				trim(REC_POS) REC_POS,
+				trim(POP_STRROW) POP_STRROW,
+				trim(POP_STRCOL) POP_STRCOL,
+				trim(POP_ENDROW) POP_ENDROW,
+				trim(POP_ENDCOL) POP_ENDCOL,
+				trim(URL) URL,
+				trim(USE_YN) USE_YN,
+				trim(SCR_TYPE) SCR_TYPE,
+				trim(TITLE) TITLE			   
+		from PSZDBLIB.M_MAX_INF
+		where SCREEN_ID like '$SCREEN_ID$%'
+	</select>
+	
+	<select id="getAttr" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+		     trim(SCREEN_ID) SCREEN_ID,
+			trim(COL_START) COL_START,
+			trim(COL_LENGTH) COL_LENGTH,
+			trim(COL_HEIGHT) COL_HEIGHT,
+			trim(REC_START) REC_START,
+			trim(REC_LENGTH) REC_LENGTH,
+			trim(REC_HEIGHT) REC_HEIGHT,
+			trim(REC_COUNT) REC_COUNT,
+			trim(REC_END) REC_END,
+			trim(REC_POS) REC_POS,
+			trim(POP_STRROW) POP_STRROW,
+			trim(POP_STRCOL) POP_STRCOL,
+			trim(POP_ENDROW) POP_ENDROW,
+			trim(POP_ENDCOL) POP_ENDCOL,
+			trim(URL) URL,
+			trim(USE_YN) USE_YN,
+			trim(SCR_TYPE) SCR_TYPE	,
+			trim(TITLE) TITLE			   
+		from PSZDBLIB.M_MAX_INF
+		where SCREEN_ID = #SCREEN_ID#
+	</select>
+	
+	<select id="getSubFileList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+		     trim(SCREEN_ID) SCREEN_ID,
+			trim(COL_START) COL_START,
+			trim(COL_LENGTH) COL_LENGTH,
+			trim(COL_HEIGHT) COL_HEIGHT,
+			trim(REC_START) REC_START,
+			trim(REC_LENGTH) REC_LENGTH,
+			trim(REC_HEIGHT) REC_HEIGHT,
+			trim(REC_COUNT) REC_COUNT,
+			trim(REC_END) REC_END,
+			trim(REC_POS) REC_POS,
+			trim(POP_STRROW) POP_STRROW,
+			trim(POP_STRCOL) POP_STRCOL,
+			trim(POP_ENDROW) POP_ENDROW,
+			trim(POP_ENDCOL) POP_ENDCOL,
+			trim(URL) URL,
+			trim(USE_YN) USE_YN,
+			trim(SCR_TYPE) SCR_TYPE	,
+			trim(TITLE) TITLE				   
+		from PSZDBLIB.M_MAX_INF	where 1=1	
+		<isNotEmpty prepend="" property="USE_YN">
+				and USE_YN = #USE_YN#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insertScreen" parameterClass="java.util.HashMap">
+		INSERT INTO PSZDBLIB.M_MAX_INF (
+			  SCREEN_ID,
+			  TITLE,
+		      COL_START,
+		      COL_LENGTH,
+		      COL_HEIGHT,	      
+		      REC_START,
+		      REC_LENGTH,
+		      REC_HEIGHT,
+		      REC_COUNT,
+		      REC_END,
+		      REC_POS,
+		      SCR_TYPE,
+		      POP_STRROW,
+		      POP_STRCOL,
+		      POP_ENDROW,
+		      POP_ENDCOL,
+		      URL,
+		      USE_YN
+		      ) 
+		      VALUES 
+		      (
+		      #SCREEN_ID#,
+		      #TITLE#,
+		      #COL_START#,
+		      #COL_LENGTH#,
+		      #COL_HEIGHT#,
+		      #REC_START#,
+		      #REC_LENGTH#,
+		      #REC_HEIGHT#,
+		      #REC_COUNT#,
+		      #REC_END#,
+		      #REC_POS#,
+		      #SCR_TYPE#,
+		      #POP_STRROW#,
+		      #POP_STRCOL#,
+		      #POP_ENDROW#,
+		      #POP_ENDCOL#,
+		      #URL#,
+		      #USE_YN#
+		      )
+	</insert>
+	<update id="updateScreen" parameterClass="java.util.HashMap">
+		UPDATE  PSZDBLIB.M_MAX_INF SET	
+			  COL_START = #COL_START#,
+			  TITLE = #TITLE#,
+		      COL_LENGTH =  #COL_LENGTH#,
+		      COL_HEIGHT =  #COL_HEIGHT#,
+		      REC_START = #REC_START#,
+		      REC_LENGTH = #REC_LENGTH#,
+		      REC_HEIGHT = #REC_HEIGHT#,
+		      REC_COUNT = #REC_COUNT#,
+		      REC_END = #REC_END#,
+		      REC_POS = #REC_POS#,
+		      SCR_TYPE = #SCR_TYPE#,
+		      POP_STRROW = #POP_STRROW#,
+		      POP_STRCOL = #POP_STRCOL#,
+		      POP_ENDROW = #POP_ENDROW#,
+		      POP_ENDCOL = #POP_ENDCOL#,
+		      USE_YN = #USE_YN#,
+		      URL = #URL#
+		 WHERE
+		 	 SCREEN_ID = #SCREEN_ID#		   
+	</update>
+	<delete id="deleteScreen" parameterClass="java.util.HashMap">
+		DELETE FROM  PSZDBLIB.M_MAX_INF 	
+		 WHERE
+		 	 SCREEN_ID = #SCREEN_ID#		   
+	</delete>
+</sqlMap>

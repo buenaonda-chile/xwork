@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="624" Id="UserList" Left="8" OnFocus="menu_OnFocus" OnLoadCompleted="on_LoadCompleted" PidAttrib="7" Title="SCRAP&#32;TICKET인쇄" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1062" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ComCode_PLNT"></Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_Class">
+				<Contents>
+					<colinfo id="code1" size="256" summ="default" type="STRING"/>
+					<colinfo id="code_name" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_SZZE201R">
+				<Contents>
+					<colinfo id="MOVNMC" size="256" summ="default" type="STRING"/>
+					<colinfo id="COMPSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="HOUSEC" size="256" summ="default" type="STRING"/>
+					<colinfo id="SLPNOC" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRNDTC" size="256" summ="default" type="STRING"/>
+					<colinfo id="REASNC" size="256" summ="default" type="STRING"/>
+					<colinfo id="ISSDPC" size="256" summ="default" type="STRING"/>
+					<colinfo id="RTNDPC" size="256" summ="default" type="STRING"/>
+					<colinfo id="STKUPC" size="256" summ="default" type="STRING"/>
+					<colinfo id="PRTNOC" size="256" summ="default" type="STRING"/>
+					<colinfo id="UNMSRC" size="256" summ="default" type="STRING"/>
+					<colinfo id="TRQTYC" size="256" summ="default" type="STRING"/>
+					<colinfo id="STKNMC" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPG1S1" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPG1S2" size="256" summ="default" type="STRING"/>
+					<colinfo id="DPG1S3" size="256" summ="default" type="STRING"/>
+					<colinfo id="ITDSC" size="256" summ="default" type="STRING"/>
+					<colinfo id="SDT" size="256" summ="default" type="STRING"/>
+					<colinfo id="STI" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_BU">
+				<Contents>
+					<colinfo id="cd" size="256" summ="default" type="STRING"/>
+					<colinfo id="cdnm" size="256" summ="default" type="STRING"/>
+					<record>
+						<cd></cd>
+						<cdnm>전체</cdnm>
+					</record>
+					<record>
+						<cd>1</cd>
+						<cdnm>생산</cdnm>
+					</record>
+					<record>
+						<cd>2</cd>
+						<cdnm>구매</cdnm>
+					</record>
+					<record>
+						<cd>3</cd>
+						<cdnm>제조</cdnm>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Image FillType="STRETCH" Font="돋움,9,Bold" Height="28" Id="titleBar" ImageID="main_tit_bak" Left="-2" TabOrder="0" TabStop="FALSE" Width="1060"></Image>
+		<FileDialog AppendExtDefault="TRUE" Bottom="24" FileNameList="|" Filter="ALL&#32;File(xls.*)|*.xls" Height="24" Id="FileDialog0" Left="1000" Right="1024" TabOrder="4" Type="Save" Width="24"></FileDialog>
+		<File Bottom="24" Height="24" Id="File" Left="1032" Right="1056" TabOrder="3" Width="24"></File>
+		<Static BKColor="white" Border="Flat" BorderColor="#b4b4b4" Height="32" Id="searchBar" TabOrder="6" Top="32" Width="1060"></Static>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static1" Left="4" TabOrder="6" Text="사&#32;&#32;&#32;업&#32;&#32;&#32;부" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Color="#333333" Font="돋움,9,Bold" Height="13" Id="title_text" Left="16" TabOrder="1" Top="8" Width="1032"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static10" Left="120" TabOrder="11" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="code2" DataColumn="code_name" Enable="FALSE" Height="18" Id="ComboBoxPlant" InnerDataset="ds_ComCode_PLNT" Left="124" OnChanged="common_OnChanged" TabOrder="2" Top="39" Width="88"></Combo>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static11" Left="780" TabOrder="13" Top="35" VAlign="Middle" Width="260"></Static>
+		<Edit AutoSelect="TRUE" AutoSkip="TRUE" CheckLength="Byte" Height="20" Id="ed_SLPNOC1" ImeMode="none" Left="784" MaxLength="10" OnChanged="common_OnChanged" TabOrder="5" Top="38" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Static Align="Center" BKColor="thistle" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static3" Left="664" TabOrder="12" Text="SLIP&#32;&#32;&#32;NO." Top="35" VAlign="Middle" Width="116"></Static>
+		<Edit AutoSelect="TRUE" CheckLength="Byte" Height="20" Id="ed_SLPNOC2" ImeMode="none" Left="904" MaxLength="10" OnKeyDown="ed_SLPNOC2_OnKeyDown" TabOrder="7" Top="38" UpperOnly="TRUE" UseIME="FALSE" Width="88"></Edit>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static22" Left="444" TabOrder="14" Text="전&#32;표&#32;일&#32;자" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static23" Left="560" TabOrder="15" Top="35" VAlign="Middle" Width="96"></Static>
+		<Calendar Border="Flat" BorderColor="SCROLLBAR" FocusIndex="0" Height="20" Id="cmb_TRNDTC" Left="564" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="4" Top="38" Value="TODAY" Width="88"></Calendar>
+		<Static Height="12" Id="Static0" Left="883" TabOrder="16" Text="~" Top="41" Width="24"></Static>
+		<Ubi Bottom="616" Height="552" Id="Ubi0" Right="768" Top="64" utfData="true" Width="768">
+			<_PersistData>&#13;&#10;/6zZzkX3/wAAAQBgTwAAdw05APjy//7//fL4/PcMDwACBVQAWQDfUABFADDv8AABHv7wAzEAMi8BNQH99S8CXgBuSQR0+vn+8C8L&#13;&#10;MgA1agAsOwBrCQBlD28FMgABBJkBmQX+8rME/jQCB0QAZQBmAB9hAHUAbFcD+PeYAvb48PC/+/MFUwBoAsIAZVcBAgOYAg==&#13;&#10;</_PersistData>
+		</Ubi>
+		<Static Align="Center" BKColor="lightsalmon" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static2" Left="224" TabOrder="18" Text="부&#32;서&#32;코&#32;드" Top="35" VAlign="Middle" Width="116"></Static>
+		<Static Align="Center" Border="Flat" BorderColor="#b4b4b4" Font="굴림,9,Bold" Height="26" Id="Static4" Left="340" TabOrder="19" Top="35" VAlign="Middle" Width="96"></Static>
+		<Combo CodeColumn="cd" DataColumn="cdnm" Height="18" Id="cmb_PRSDPC" INDEX="0" InnerDataset="ds_BU" Left="344" OnChanged="common_OnChanged" TabOrder="3" Top="39" Width="88"></Combo>
+		<Button Height="25" Id="btnQuery" ImageID="btn2_search2" Left="776" OnClick="fn_Search" TabOrder="19" Text="조회" Top="72" Visible="FALSE" Width="75"></Button>
+		<Static Height="18" Id="ID03061" Left="995" TabOrder="20" Text="(Enter)" Top="38" VAlign="Middle" Width="40"></Static>
+	</Form>
+	<Script><![CDATA[/*--------------------------------------------------------------
+ * @@version               : 1.0 
+ * @@Revision History      :
+ * @@author                : jae hb
+ * @@see
+ * ● SYSTEM NAME          : DIONE
+ * ● PROGRAM NO.          : SZZE201R.xml
+ * ● PROGRAM DESCRIPTION  : SCRAP TICKET인쇄
+ * ● DATE WRITTEN         : 2013.06.18
+ ----------------------------------------------------------------*/
+#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+//var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function on_LoadCompleted(obj){
+	getTitle();	
+	getDesign();
+	gFcOnTopButtonColor("1.4"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+	getComCode(); //공장구분 선택
+	Ubi0.utfData= MainGrid.Height;
+}
+
+function getComCode(){
+	var sKind		= "getComCode";						
+	var sMethodName = "service::login/selectComCode.do"; 
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ComCode_PLNT=ds_ComCode_PLNT";
+	var sArgument   = "";
+		sArgument   += " CLASS='PLNT'";
+		sArgument   += " CODE1=" + quote(company);		
+	http.Sync=true;
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "");
+	http.Sync=false;
+	ComboBoxPlant.Value=comps;
+	//ComboBoxPlant.Enable = false; 
+}
+
+function getDesign(){
+	Ubi0.HeadHeight = G_ds_design.GetColumn(0,"HeadHeight");
+	searchBar.Width = G_ds_design.GetColumn(0,"Width");
+	searchBar.Top = G_ds_design.GetColumn(0,"SBTop");		
+}
+
+function getSZZE201R(){
+	
+	if(!validationChk()){
+		return;
+	}
+	var slpno2 = "";
+	slpno2 = ed_SLPNOC2.Text;
+	if(slpno2==""){
+		slpno2="9999999999";
+	}
+	var sKind		= "getSZZE201R";						
+	var sMethodName = "service::pssallib/selectSZZE201R.do";     		// 서버에서 호출 될 Method 명
+	var sInDataSet  = "";                             				// 자료 저장 시 보낼 DataSet 명칭
+	var sOutDataSet = "ds_SZZE201R=ds_SZZE201R";    				// 조회 후 돌려 받을 DataSet 명칭
+	var sArgument   = "";
+	sArgument += "@LIB1=" + quote(Lib1);
+	sArgument += "@LIB2=" + quote(Lib2);
+	sArgument += "@COMPS=" + quote(ComboBoxPlant.Value); //사업부
+	sArgument += "@PRSDPC=" + quote(cmb_PRSDPC.Value); //처리부서
+	sArgument += "@SLPNO1=" + quote(ed_SLPNOC1.Text); //SLIP NO FROM
+	sArgument += "@SLPNO2=" + quote(slpno2); //SLIP NO TO
+	sArgument += "@TRNDTS=" + quote(cmb_TRNDTC.Value); //TRANSFER DATE
+	var str = dialog("Common::PGMLOAD_SAL.xml","sKind=" + sKind + " " + "sMethodName=" + sMethodName + " " + "sOutDataSet=" + sOutDataSet + " " + "sArgument=" + sArgument,272,64,"TitleBar=false");
+	if (str == 'T'){  //정상조회
+		alert(setPopMessage("1004"));
+		setMessage("1004");
+	}else if (str == 'B'){   //data값이 없을때
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+	}else if (str == 'E'){   //error발생시
+		alert(setPopMessage("1002"));
+		setMessage("1002");	
+	}
+
+	//Ubi0.setJrfFileDir("http://10.74.139.50/ui/PSSALLIB/REPORT/");
+	//Ubi0.setJrfFileDir("http://10.72.209.23/ui/PSSALLIB/REPORT/");
+	//Ubi0.setJrfFileDir("http://dione.dnpe.co.kr/ui/PSSALLIB/REPORT/");
+//	Ubi0.setJrfFileDir("http://dione.dnke.kr/ui/PSSALLIB/REPORT/");
+	Ubi0.setJrfFileDir(G_baseURL+"ui/PSSALLIB/REPORT/");
+	Ubi0.setJrfFileName("SZZE201R.jrf");
+	Ubi0.SetDataset("ds_SZZE201R", "ds_SZZE201R");	
+	Ubi0.Retrieve();
+
+}
+/********************************************************************** 
+ * 내용설명 : validation 체크
+ **********************************************************************/ 
+ 
+function validationChk(){
+
+	var result = true;
+	
+	if(cmb_TRNDTC.Value =="" || cmb_TRNDTC.Value < 20030101 || cmb_TRNDTC.Value > 99991231){
+		alert(setPopMessage("4021"));
+		setMessage("4021");
+		cmb_TRNDTC.Value="";
+		result = false;
+	}
+	return result;
+}
+
+/********************************************************************** 
+ * 내용설명 : 상위메뉴 변경시 초기화
+ **********************************************************************/ 
+function common_OnChanged(obj,strCode,strText,nOldIndex,nNewIndex)
+{
+	ds_SZZE201R.ClearData();
+}
+
+/********************************************************************** 
+ * 내용설명 : 엑셀파일로 저장
+ **********************************************************************/ 
+function setExcel()
+{
+	var fName   = "SCRAP TICKET인쇄";
+	var arrSheets  =  Array();  
+
+	arrSheets[0]  = "MainGrid|SCRAP TICKET인쇄";
+	createExcelSheetS2(FileDialog0, fName ,arrSheets);
+
+}
+
+/********************************************************************** 
+ * 내용설명 : Sort
+ **********************************************************************/ 
+function MainGrid_OnHeadClick(obj,nCell,nX,nY,nPivotIndex)
+{
+	if(nCell != 0) lib_grid_SetGridSort(obj,nCell);
+}
+ /*--------------------------------------------------------------
+ * 아래 함수는 콩통함수 이므로 모든 화면에 필요
+ * 함수명 변경 불가
+ * 버튼 컨트롤
+----------------------------------------------------------------*/
+function fn_Favorite()
+{
+	alert("fn_Favorite");
+}
+
+function fn_Search()
+{
+	getSZZE201R();
+}
+
+function fn_Input()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Delete()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_Save()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function fn_print()
+{
+	if (ds_SZZE201R.GetRowCount() < 1){
+		alert(setPopMessage("1003"));
+		setMessage("1003");	
+		return;
+	}
+	Ubi0.printset();
+}
+
+function fn_Excel()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");	
+}
+
+function fn_Help()
+{
+	alert(setPopMessage("9999"));
+	setMessage("9999");
+}
+
+function menu_OnFocus(obj)
+{
+	gFcOnTopButtonColor("1.4"); //상단 버튼 활성화 여부 (기본:0,조회:1,변경:2)	1.3
+}
+
+function ed_SLPNOC2_OnKeyDown(obj,nChar,bShift,bCtrl, bAlt,LLParam,HLParam)
+{
+	if(nChar == 13){
+		fn_Search();
+	}
+}
+]]></Script>
+</Window>

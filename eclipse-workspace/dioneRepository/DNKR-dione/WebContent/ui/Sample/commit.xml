@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="535" Id="form" Left="8" PidAttrib="7" Title="New&#32;Form" TooltipFont="Default,0" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="COMPS" size="256" summ="default" type="STRING"/>
+					<colinfo id="GRPCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="FEMCD" size="256" summ="default" type="STRING"/>
+					<colinfo id="FEMNM" size="256" summ="default" type="STRING"/>
+					<record>
+						<COMPS>S1</COMPS>
+						<FEMCD>AA1</FEMCD>
+						<FEMNM>크크</FEMNM>
+						<GRPCD>AAA</GRPCD>
+					</record>
+					<record>
+						<COMPS>S1</COMPS>
+						<FEMCD>BB1</FEMCD>
+						<FEMNM>아아</FEMNM>
+						<GRPCD>BBB</GRPCD>
+					</record>
+					<record>
+						<COMPS>C1</COMPS>
+						<FEMCD>CC1</FEMCD>
+						<FEMNM>tltl</FEMNM>
+						<GRPCD>CCC</GRPCD>
+					</record>
+					<record>
+						<COMPS>S1</COMPS>
+						<FEMCD>DD1</FEMCD>
+						<FEMNM>sdasd</FEMNM>
+						<GRPCD>DDD</GRPCD>
+					</record>
+					<record>
+						<COMPS>C1</COMPS>
+						<FEMCD>BB1</FEMCD>
+						<FEMNM>asdasd</FEMNM>
+						<GRPCD>AAA</GRPCD>
+					</record>
+					<record>
+						<COMPS>H1</COMPS>
+						<FEMCD>AA1</FEMCD>
+						<FEMNM>sdsadas</FEMNM>
+						<GRPCD>AAA</GRPCD>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Button Height="48" Id="Button0" Left="616" OnClick="Button0_OnClick" TabOrder="1" Text="Commit&#32;Test" Top="16" Width="128"></Button>
+		<Grid BindDataset="Dataset0" BkColor2="default" BoldHead="true" Bottom="232" Enable="true" EndLineColor="default" Height="152" Id="Grid0" InputPanel="FALSE" Left="8" LineColor="default" Right="767" TabOrder="2" TabStop="true" Top="80" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="759">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="comps"/>
+						<cell col="1" display="text" text="분류"/>
+						<cell col="2" display="text" text="코드"/>
+						<cell col="3" display="text" text="코드명"/>
+					</head>
+					<body>
+						<cell col="0" colid="comps" display="text"/>
+						<cell col="1" colid="femcd" display="text"/>
+						<cell col="2" colid="femnm" display="text"/>
+						<cell col="3" colid="grpcd" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Button Height="52" Id="Button1" Left="615" OnClick="Button1_OnClick" TabOrder="3" Text="LOCK&#32;Table만" Top="309" Width="131"></Button>
+		<Button Height="52" Id="Button2" Left="615" OnClick="Button2_OnClick" TabOrder="4" Text="LOCK&#32;Table&#32;&amp;&#32;update" Top="381" Width="131"></Button>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+#include "script::Grid_Script.js";
+#include "script::spare_common.js";
+
+var strSeparator = "	";
+var Lib1 = G_ds_user.GetColumn(0,"LIB1"); // cigma library(pereslib,psreslib)
+var Lib2 = G_ds_user.GetColumn(0,"LIB2"); // 회사 library(psedblib,pscdblib)
+var Lib3 = G_ds_user.GetColumn(0,"LIB3"); // 사업부 library(psedblib,pscdblib,pshdblib,pssdblib)
+var company = G_ds_user.GetColumn(0,"COMPANY");
+var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+var nowDate = today();
+
+function Button0_OnClick(obj)
+{
+	http.Sync = true;
+	var sKind		= "SAVE00";						
+	var sMethodName = "service::sample/committest.do";
+	var sInDataSet  = "Dataset0=Dataset0";
+	var sOutDataSet = "";
+	//var arg	= " LIB2=" + quote(Lib2) + " PYYYY=" + quote(ed_yyyy.Value) + " PLNGB=" + quote(cb_plngb.Value);
+	var arg	= " ";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");	
+}
+
+function Button1_OnClick(obj)
+{
+	var sKind		= "SAVE00";						
+	var sMethodName = "service::sample/TableLockTest_mst040pf.do";
+	var sInDataSet  = "Dataset0=Dataset0";
+	var sOutDataSet = "";
+	var arg	= " ";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");
+}
+
+function Button2_OnClick(obj)
+{
+	var sKind		= "SAVE00";						
+	var sMethodName = "service::sample/TableunLockTest.do";
+	var sInDataSet  = "Dataset0=Dataset0";
+	var sOutDataSet = "";
+	var arg	= " ";
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, arg, "callback");	
+}
+
+/********************************************************************** 
+ * 내용설명 : Transaction 리턴후 실행 함수
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+		alert(setPopMessage("1002"));
+		setMessage("1002");
+	}else{
+		alert(setPopMessage("1001"));  // Lock error
+		setMessage("1001");
+	}
+}]]></Script>
+</Window>

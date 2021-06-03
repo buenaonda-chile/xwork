@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.PrdctIndComBaseDao">
+
+<!-- 検索結果をMapで受け取る -->
+    <resultMap id="PrdctIndComBase" type="PrdctIndComBaseDomain">
+        <result property="comps" column="COMPS" />
+        <result property="code" column="CODE" />
+        <result property="name" column="NAME" />
+        <result property="lib1" column="lib1" />
+        <result property="lib2" column="lib2" />
+        <result property="lib3" column="lib3" /> 
+    </resultMap>
+ 
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchItemMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 TRIM(ITNBR) AS CODE
+			,TRIM(ITDSC) AS NAME
+		FROM ${lib1}.BM008PR
+		<if test="code != null and code != ''">			
+			WHERE ITNBR = '${code}'
+		</if> 
+    </select>    
+    
+    <!-- 検索 SQL文（任意条件） -->
+    <select id="searchDeptMaster" resultMap="PrdctIndComBase" parameterType="PrdctIndComBaseDomain">
+		SELECT 
+			 TRIM(CD_DEPT) AS CODE
+			,TRIM(NM_DEPT) AS NAME
+		FROM V_Z_DNKA_MA_DEPT
+		<if test="code != null and code != ''">		
+			AND CD_DEPT like '%' || '${code}' || '%'
+		</if> 
+    </select>        
+
+</mapper>

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dicas.business.dao.VehicleViewDao">
+
+  <resultMap id="codeMap" type="com.globaldenso.dicas.business.dto.VehicleViewDto">
+		<id property="id" column="ID" javaType="java.lang.Long" />
+		<result property="manageNo" column="MANAGE_NO" javaType="java.lang.String" />
+		<result property="masterId" column="MASTER_ID" javaType="java.lang.String" />
+		<result property="tireStd" column="TIRE_STD" javaType="java.lang.String" />
+		<result property="maker" column="MAKER" javaType="java.lang.String" />
+		<result property="vinno" column="VINNO" javaType="java.lang.String" />
+		<result property="carNo" column="CAR_NO" javaType="java.lang.String" />
+		<result property="exhaustReg" column="EXHAUST_REG" javaType="java.lang.String" />
+		<result property="engineType" column="ENGINE_TYPE" javaType="java.lang.String" />
+		<result property="model" column="MODEL" javaType="java.lang.String" />
+		<result property="prodDate" column="PROD_DATE" javaType="java.sql.Date" />
+		<result property="saleDate" column="SALE_DATE" javaType="java.sql.Date" />
+		<result property="registYn" column="REGIST_YN" javaType="java.lang.String" />
+		<result property="remark" column="REMARK" javaType="java.lang.String" />
+		<result property="autoinsert" column="AUTOINSERT" javaType="java.sql.Date" />
+		<result property="saleCountry" column="SALE_COUNTRY" javaType="java.lang.String" />
+		<result property="payment" column="PAYMENT" javaType="java.lang.String" />
+		<result property="useYn" column="USE_YN" javaType="java.lang.String" />
+		<result property="rgstrId" column="RGSTR_ID" javaType="java.lang.Long" />
+		<result property="rgstDt" column="RGST_DT" javaType="java.time.LocalDateTime" />
+		<result property="updtrId" column="UPDTR_ID" javaType="java.lang.Long" />
+		<result property="updtDt" column="UPDT_DT" javaType="java.time.LocalDateTime" />
+		<result property="enginTranYn" column="ENGIN_TRAN_YN" javaType="java.lang.String" />
+		<result property="carTranYn" column="CAR_TRAN_YN" javaType="java.lang.String" />
+		<result property="modelId" column="MODEL_ID" javaType="java.lang.Long" />
+		<result property="receiptDate" column="RECEIPT_DATE" javaType="java.sql.Date" />
+		<result property="condition" column="CONDITION" javaType="java.lang.String" />
+		<result property="consultingExp" column="CONSULTING_EXP" javaType="java.lang.String" />
+		<result property="div" column="DIV" javaType="java.lang.String" />
+		<result property="prodBase" column="PROD_BASE" javaType="java.lang.String" />
+		<result property="inquiryGubun" column="INQUIRY_GUBUN" javaType="java.lang.String" />
+		<result property="cdsdResearchYn" column="CDSD_RESEARCH_YN" javaType="java.lang.Long" />
+		<result property="replacePartNo" column="REPLACE_PART_NO" javaType="java.lang.String" />
+		<result property="exchangeNm" column="REPLACE_PART_NM" javaType="java.lang.String" />
+		<result property="qualityProblemNm" column="QUALITY_PROBLEM_NM" javaType="java.lang.String" />
+		<result property="roNo" column="RO_NO" javaType="java.lang.String" />
+		<result property="gqnetNo" column="GQNET_NO" javaType="java.lang.String" />
+		<result property="receiveDate" column="RECEIVE_DATE" javaType="java.sql.Date" />
+		<result property="resultDegree" column="RESULT_DEGREE" javaType="java.lang.Long" />
+		<result property="officeCity" column="OFFICE_CITY" javaType="java.lang.String" />
+		<result property="officeNm" column="OFFICE_NM" javaType="java.lang.String" />
+		<result property="mainCategory" column="MAIN_CATEGORY" javaType="java.lang.String" />
+
+
+  </resultMap>
+
+  <sql id="select_01">
+
+    SELECT
+		ID
+		,MANAGE_NO
+		,MASTER_ID
+		,TIRE_STD
+		,MAKER
+		,VINNO
+		,CAR_NO
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,MODEL
+		,PROD_DATE
+		,SALE_DATE
+		,REGIST_YN
+		,REMARK
+		,AUTOINSERT
+		,SALE_COUNTRY
+		,PAYMENT
+		,USE_YN
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ENGIN_TRAN_YN
+		,CAR_TRAN_YN
+		,MODEL_ID
+		,RECEIPT_DATE
+		,CONDITION
+		,CONSULTING_EXP
+		,DIV
+		,PROD_BASE
+		,INQUIRY_GUBUN
+		,CDSD_RESEARCH_YN
+		,REPLACE_PART_NO
+		,REPLACE_PART_NM
+		,QUALITY_PROBLEM_NM
+		,RO_NO
+		,GQNET_NO
+		,RECEIVE_DATE
+		,RESULT_DEGREE
+		,OFFICE_CITY
+		,OFFICE_NM
+		,MAIN_CATEGORY
+
+    FROM VIEW_VEHICLE_MASTER
+
+  </sql>
+
+  <sql id="where_01">
+
+	  <if test="criteria.model != null and criteria.model != ''">
+		  AND MODEL LIKE '%'||#{criteria.model}||'%'
+	  </if>
+
+	  <if test="criteria.officeCity != null and criteria.officeCity != ''">
+		  AND OFFICE_CITY = #{criteria.officeCity}
+	  </if>
+
+	  <if test="criteria.officeNm != null and criteria.officeNm != ''">
+		  AND OFFICE_NM LIKE '%'||#{criteria.officeNm}||'%'
+	  </if>
+
+	  <if test="criteria.cdsdResearchYn != null and criteria.cdsdResearchYn != ''">
+		  AND CDSD_RESEARCH_YN = #{criteria.cdsdResearchYn}
+	  </if>
+
+	  <if test="criteria.prodBase != null and criteria.prodBase != ''">
+		  AND PROD_BASE = #{criteria.prodBase}
+	  </if>
+
+	  <if test="criteria.maker != null and criteria.maker != ''">
+		  AND MAKER = #{criteria.maker}
+	  </if>
+
+	  <if test="criteria.tireStd != null and criteria.tireStd != ''">
+		  AND TIRE_STD = #{criteria.tireStd}
+	  </if>
+
+	  <if test="criteria.exchangeNm != null and criteria.exchangeNm != ''">
+		  AND REPLACE_PART_NM LIKE '%'||#{criteria.exchangeNm}||'%'
+	  </if>
+
+	  <if test="criteria.qualityProblemNm != null and criteria.qualityProblemNm != ''">
+		  AND QUALITY_PROBLEM_NM LIKE '%'||#{criteria.qualityProblemNm}||'%'
+	  </if>
+
+	  <if test="criteria.div != null and criteria.div != ''">
+		  AND DIV = #{criteria.div}
+	  </if>
+
+	  <if test="criteria.saleCountry != null and criteria.saleCountry != ''">
+		  AND SALE_COUNTRY = #{criteria.saleCountry}
+	  </if>
+
+	  <if test="criteria.engineType != null and criteria.engineType != ''">
+		  AND ENGINE_TYPE = #{criteria.engineType}
+	  </if>
+
+	  <if test="criteria.exhaustReg != null and criteria.exhaustReg != ''">
+		  AND EXHAUST_REG = #{criteria.exhaustReg}
+	  </if>
+
+	  <if test="criteria.vinno != null and criteria.vinno != ''">
+		  AND VINNO LIKE '%'||UPPER(#{criteria.vinno})||'%'
+	  </if>
+
+	  <if test="criteria.roNo != null and criteria.roNo != ''">
+		  AND RO_NO LIKE '%'||UPPER(#{criteria.roNo})||'%'
+	  </if>
+
+	  <if test="criteria.gqnetNo != null and criteria.gqnetNo != ''">
+		  AND GQNET_NO LIKE '%'||UPPER(#{criteria.gqnetNo})||'%'
+	  </if>
+
+	  <if test="criteria.payment != null and criteria.payment != ''">
+		  AND PAYMENT LIKE '%'||#{criteria.payment}||'%'
+	  </if>
+
+	  <if test="criteria.dateSearchOption != null and criteria.dateSearchOption != ''">
+		  <choose>
+			  <when test="criteria.dateSearchOption =='01'">
+				  AND RECEIPT_DATE = #{criteria.receiptDate}
+			  </when>
+			  <when test="criteria.dateSearchOption =='02'">
+				  AND SALE_DATE = #{criteria.receiptDate}
+			  </when>
+			  <when test="criteria.dateSearchOption =='03'">
+				  AND PROD_DATE = #{criteria.receiptDate}
+			  </when>
+		  </choose>
+	  </if>
+
+
+  </sql>
+
+  <!-- ?? SQL?????? -->
+  <select id="searchByKey" resultMap="codeMap" parameterType="com.globaldenso.dicas.business.domain.VehicleViewDomain">
+
+    SELECT *
+    FROM (
+    <include refid="select_01"/>
+    ) AA
+    WHERE AA.ID = #{id}
+
+  </select>
+
+  <select id="searchByCondition" resultMap="codeMap" parameterType="Map">
+
+    SELECT *
+    FROM (
+         SELECT ROWNUM AS RN, A.*
+          FROM (
+          <include refid="select_01" />
+          <where>
+            <include refid="where_01"/>
+          </where>
+          ) A
+          ORDER BY A.ID
+     ) AA
+
+    <if test="pageable != null">
+      WHERE RN BETWEEN ((${pageable.pageNumber} - 1) * ${pageable.pageSize}) + 1 AND ${pageable.offset}
+    </if>
+    ORDER BY RN
+
+  </select>
+
+   <select id="searchCount" resultType="int" parameterType="Map">
+
+    SELECT COUNT(ID) AS CNT
+    FROM (
+      <include refid="select_01" />
+      <where>
+        <include refid="where_01"/>
+      </where>
+     ) AA
+
+  </select>
+
+  <insert id="create" parameterType="com.globaldenso.dicas.business.domain.VehicleViewDomain">
+
+    INSERT INTO VIEW_VEHICLE_MASTER (
+		ID
+		,MANAGE_NO
+		,MASTER_ID
+		,TIRE_STD
+		,MAKER
+		,VINNO
+		,CAR_NO
+		,EXHAUST_REG
+		,ENGINE_TYPE
+		,MODEL
+		,PROD_DATE
+		,SALE_DATE
+		,REGIST_YN
+		,REMARK
+		,AUTOINSERT
+		,SALE_COUNTRY
+		,PAYMENT
+		,USE_YN
+		,RGSTR_ID
+		,RGST_DT
+		,UPDTR_ID
+		,UPDT_DT
+		,ENGIN_TRAN_YN
+		,CAR_TRAN_YN
+		,MODEL_ID
+		,RECEIPT_DATE
+		,CONDITION
+		,CONSULTING_EXP
+		,DIV
+		,PROD_BASE
+		,INQUIRY_GUBUN
+		,CDSD_RESEARCH_YN
+		,REPLACE_PART_NO
+		,REPLACE_PART_NM
+		,QUALITY_PROBLEM_NM
+		,RO_NO
+		,GQNET_NO
+		,RECEIVE_DATE
+		,RESULT_DEGREE
+	  	,OFFICE_CITY
+	  	,OFFICE_NM
+	  	,MAIN_CATEGORY
+
+    ) VALUES (
+		#{id}
+		,#{manageNo}
+		,#{masterId}
+		,#{tireStd}
+		,#{maker}
+		,UPPER(#{vinno})
+		,#{carNo}
+		,#{exhaustReg}
+		,#{engineType}
+		,#{model}
+		,#{prodDate}
+		,#{saleDate}
+		,#{registYn}
+		,#{remark}
+		,#{autoinsert}
+		,#{saleCountry}
+		,#{payment}
+		,#{useYn}
+		,#{rgstrId}
+		,#{rgstDt}
+		,#{updtrId}
+		,#{updtDt}
+		,#{enginTranYn}
+		,#{carTranYn}
+		,#{modelId}
+		,#{receiptDate}
+		,#{condition}
+		,#{consultingExp}
+		,#{div}
+		,#{prodBase}
+		,#{inquiryGubun}
+		,#{cdsdResearchYn}
+		,#{replacePartNo}
+		,#{replacePartNm}
+		,#{qualityProblemNm}
+		,UPPER(#{roNo})
+		,UPPER({gqnetNo})
+		,#{receiveDate}
+		,#{resultDegree}
+		,#{officeCity}
+		,#{officeNm}
+		,#{mainCategory}
+
+    )
+
+    <selectKey resultType="long" keyProperty="id" order="BEFORE">
+      SELECT SEQ_VIEW_VEHICLE_MASTER.NEXTVAL FROM DUAL
+    </selectKey>
+
+  </insert>
+
+  <update id="update" parameterType="com.globaldenso.dicas.business.domain.VehicleViewDomain">
+
+    UPDATE VIEW_VEHICLE_MASTER SET
+		MANAGE_NO = #{manageNo}
+		,MASTER_ID = #{masterId}
+		,TIRE_STD = #{tireStd}
+		,MAKER = #{maker}
+		,VINNO = UPPER(#{vinno})
+		,CAR_NO = #{carNo}
+		,EXHAUST_REG = #{exhaustReg}
+		,ENGINE_TYPE = #{engineType}
+		,MODEL = #{model}
+		,PROD_DATE = #{prodDate}
+		,SALE_DATE = #{saleDate}
+		,REGIST_YN = #{registYn}
+		,REMARK = #{remark}
+		,AUTOINSERT = #{autoinsert}
+		,SALE_COUNTRY = #{saleCountry}
+		,PAYMENT = #{payment}
+		,USE_YN = #{useYn}
+		,UPDTR_ID = #{updtrId}
+		,UPDT_DT = #{updtDt}
+		,ENGIN_TRAN_YN = #{enginTranYn}
+		,CAR_TRAN_YN = #{carTranYn}
+		,MODEL_ID = #{modelId}
+		,RECEIPT_DATE = #{receiptDate}
+		,CONDITION = #{condition}
+		,CONSULTING_EXP = #{consultingExp}
+		,DIV = #{div}
+		,PROD_BASE = #{prodBase}
+		,INQUIRY_GUBUN = #{inquiryGubun}
+		,CDSD_RESEARCH_YN = #{cdsdResearchYn}
+		,REPLACE_PART_NO = #{replacePartNo}
+		,REPLACE_PART_NM = #{exchangeNm}
+		,QUALITY_PROBLEM_NM = #{qualityProblemNm}
+		,RO_NO = UPPER(#{roNo})
+		,GQNET_NO = UPPER(#{gqnetNo})
+		,RECEIVE_DATE = #{receiveDate}
+		,RESULT_DEGREE = #{resultDegree}
+		,OFFICE_CITY = #{officeCity}
+		,OFFICE_NM = #{officeNm}
+		,MAIN_CATEGORY = #{mainCategory}
+
+    WHERE ID = #{id}
+
+  </update>
+
+  <delete id="delete" parameterType="com.globaldenso.dicas.business.domain.VehicleViewDomain">
+
+    DELETE FROM VIEW_VEHICLE_MASTER
+    WHERE ID = #{id}
+
+  </delete>
+
+
+</mapper>

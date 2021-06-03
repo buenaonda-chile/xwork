@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="664" Id="scm" Left="8" OnLoadCompleted="OnLoadCompleted" OnSize="onSize" PidAttrib="7" Title="MES&#32;System" TooltipFont="Default,0" Top="8" Ver="1.0" Width="1053" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_ssoaccount"></Dataset>
+		</Datasets>
+		<File Bottom="63" Height="24" Id="File0" Left="119" Right="143" TabOrder="1" Top="39" Width="24"></File>
+	</Form>
+	<Script><![CDATA[#include "script::lib_script_common.js";
+
+var USER_ID	= G_ds_user.GetColumn(0,"USER_ID");
+
+function OnLoadCompleted(obj)
+{
+    getTitle();
+	getSsoAccount();
+	if(ds_ssoaccount.rowcount <= 0){
+		return;
+	}
+	var sys_id 	= ds_ssoaccount.GetColumn(0,"SYSTEM_ID");//계정ID
+	var sys_pw 	= ds_ssoaccount.GetColumn(0,"SYSTEM_PW");//계정PW
+	var sys_gr 	= ds_ssoaccount.GetColumn(0,"SYSTEM_GRU");//공장코드(공장별 접속코드가 다른) 
+	//FACTORY = KE :DNKE, KA창원: DNP1, KA홍성: DNH1
+	var sys_comp = G_ds_user.GetColumn(0,"COMPANY");
+
+	//OS XP와 WIn7 두개의 경우만 상대경로로 확인함(64bit고려안함)
+	var getOSxp="";//XP경로
+	var getOSwin7="";//WIN7경로
+	var setPath="";	//위치
+	var getlength=length(AliasToRealPath("%APPDATA%"));
+		getOSxp=AliasToRealPath("%PROGRAMFILES%")+"Miracom Inc\\MESplusV5 EE\\MESClient\\MESClient.exe";
+		//getOSwin7=substr(AliasToRealPath("%APPDATA%"),0,parseInt(getlength)-6)+"Roaming\\Miracom Inc\\MESplusV5 EE\\MESClient\\MESClient.exe";
+		//실제 실행파일
+		getOSwin7=substr(AliasToRealPath("%APPDATA%"),0,parseInt(getlength)-6)+"Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Miracom Inc\\MESplusV5 EE\\MESClient.lnk";
+
+	var getOS=GetDeviceInfo("OSVERSION");//OS정보
+
+	if(getOS=="Windows NT 6.1"){ //WIN7
+		setPath=getOSwin7;
+	}else{//WIN XP
+		setPath=getOSxp;
+	}
+
+	if (!File0.IsExistFile(setPath)) {
+		alert("MES System 프로그램을 먼저 설치한 후 재시도 바랍니다.");
+		close();
+	} else {
+		//실제 프로그램사용인경우(실제프로그램)
+		//ExecProc(setPath + ' -factory:'+sys_gr+' -userId:'+sys_id+' -password:'+sys_pw);
+		
+		//lik파일실행인경우(실제 프로그램, 실행파일)
+		ext_ExecuteProccess(setPath, setPath + ' -factory:'+sys_gr+' -userId:'+sys_id+' -password:'+sys_pw,"");
+		close();
+	}
+}
+
+function getSsoAccount(){
+	http.Sync 		= true;
+	var sKind		= "getSsoAccount";						
+	var sMethodName = "service::login/ssoAccounts.do";
+	var sInDataSet  = "";
+	var sOutDataSet = "ds_ssoaccount=ds_ssoaccount";
+	var sArgument   = "";
+		sArgument 	+= " USER_ID=" + quote(USER_ID);
+		sArgument 	+= " SYSTEM_SEQ=13";
+		
+	Transaction(sKind, sMethodName, sInDataSet, sOutDataSet, sArgument, "callback");
+}
+
+
+/********************************************************************** 
+ * 개 발 자 : 민명규
+ * 개발일자 : 2014-03-21
+ * 내용설명 : Transaction 리턴후 실행 함수
+ * 주요변수 : 
+ * 			- sMethodName	Transaction 고유 ID
+ * 			- ErrorCode 	에러코드
+ * 			- ErrorMSG 		에러 메세지
+ **********************************************************************/ 
+function callback(svcId, rtnCd, rtnMsg){
+	// tran 실패
+	if(rtnCd<0){
+	}else if(svcId=="getSsoAccount"){
+		// 조회건수가 없을경우
+		if(ds_ssoaccount.rowcount <= 0){
+			alert(setPopMessage("1006"));
+			//close();
+		} 
+	}  
+}]]></Script>
+</Window>

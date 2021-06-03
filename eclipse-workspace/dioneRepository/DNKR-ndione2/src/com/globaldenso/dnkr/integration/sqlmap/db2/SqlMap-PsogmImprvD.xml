@@ -1,0 +1,670 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globaldenso.dnkr.integration.dao.db2.PsogmImprvDDao">
+
+	<!-- 보전이력검색 조회 -->
+	<!-- 検索結果をMapで受け取る --> 
+    <resultMap id="PsogmImprvD" type="PsogmImprvDDomain">
+    	<result property="comps" column="COMPS" />
+        <result property="jisno" column="JISNO" />
+        <result property="teima" column="TEIMA" />
+        <result property="daesn" column="DAESN" />
+        <result property="chkan" column="CHKAN" />
+        <result property="kyoru" column="KYORU" />
+        <result property="imgbf" column="IMGBF" />
+        <result property="imgaf" column="IMGAF" />
+        <result property="kcost" column="KCOST" />
+        <result property="aSum" column="A_SUM" />
+        <result property="bSum" column="B_SUM" />
+        <result property="cSum" column="C_SUM" />
+        <result property="dSum" column="D_SUM" />
+        <result property="tSum" column="T_SUM" />
+        <result property="a1hyn" column="A1HYN" />
+        <result property="a1cst" column="A1CST" />
+        <result property="a1hyo" column="A1HYO" />
+        <result property="a2hyo" column="A2HYO" />
+        <result property="a3hyn" column="A3HYN" />
+        <result property="a3cst" column="A3CST" />
+        <result property="a3hyo" column="A3HYO" />
+        <result property="a4hyn" column="A4HYN" />
+        <result property="a4cst" column="A4CST" />
+        <result property="a4aft" column="A4AFT" />
+        <result property="a4hyo" column="A4HYO" />
+        <result property="a5hyn" column="A5HYN" />
+        <result property="a5aft" column="A5AFT" />
+        <result property="a5hyo" column="A5HYO" />
+        <result property="a6hyn" column="A6HYN" />
+        <result property="a6cst" column="A6CST" />
+        <result property="a6aft" column="A6AFT" />
+        <result property="a6hyo" column="A6HYO" />
+        <result property="b1hyn" column="B1HYN" />
+        <result property="b1cst" column="B1CST" />
+        <result property="b1aft" column="B1AFT" />
+        <result property="b1hyo" column="B1HYO" />
+        <result property="b2hyn" column="B2HYN" />
+        <result property="b2cst" column="B2CST" />
+        <result property="b2aft" column="B2AFT" />
+        <result property="b2hyo" column="B2HYO" />
+        <result property="b3hyn" column="B3HYN" />
+        <result property="b3cst" column="B3CST" />
+        <result property="b3aft" column="B3AFT" />
+        <result property="b3hyo" column="B3HYO" />
+        <result property="b4hyn" column="B4HYN" />
+        <result property="b4cst" column="B4CST" />
+        <result property="b4aft" column="B4AFT" />
+        <result property="b4hyo" column="B4HYO" />
+        <result property="c1hyn" column="C1HYN" />
+        <result property="c1cst" column="C1CST" />
+        <result property="c1aft" column="C1AFT" />
+        <result property="c1hyo" column="C1HYO" />
+        <result property="c2hyn" column="C2HYN" />
+        <result property="c2cst" column="C2CST" />
+        <result property="c2aft" column="C2AFT" />
+        <result property="c2hyo" column="C2HYO" />
+        <result property="c3hyn" column="C3HYN" />
+        <result property="c3cst" column="C3CST" />
+        <result property="c3aft" column="C3AFT" />
+        <result property="c3hyo" column="C3HYO" />
+        <result property="c4hyn" column="C4HYN" />
+        <result property="c4cst" column="C4CST" />
+        <result property="c4aft" column="C4AFT" />
+        <result property="c4hyo" column="C4HYO" />
+        <result property="d1hyn" column="D1HYN" />
+        <result property="d1cst" column="D1CST" />
+        <result property="d1aft" column="D1AFT" />
+        <result property="d1hyo" column="D1HYO" />
+        <result property="d2hyn" column="D2HYN" />
+        <result property="d2cst" column="D2CST" />
+        <result property="d2aft" column="D2AFT" />
+        <result property="d2hyo" column="D2HYO" />
+        <result property="d3hyn" column="D3HYN" />
+        <result property="d3cst" column="D3CST" />
+        <result property="d3aft" column="D3AFT" />
+        <result property="d3hyo" column="D3HYO" />
+        <result property="d5hyn" column="D5HYN" />
+        <result property="d5aft" column="D5AFT" />
+        <result property="d5hyo" column="D5HYO" />
+        <result property="d7hyn" column="D7HYN" />
+        <result property="d7cst" column="D7CST" />
+        <result property="d7aft" column="D7AFT" />
+        <result property="d7hyo" column="D7HYO" />
+        <result property="d8hyn" column="D8HYN" />
+        <result property="d8aft" column="D8AFT" />
+        <result property="d8hyo" column="D8HYO" />
+        <result property="dbhyn" column="DBHYN" />
+        <result property="dbcst" column="DBCST" />
+        <result property="dbaft" column="DBAFT" />
+        <result property="dbhyo" column="DBHYO" />
+        <result property="dchyn" column="DCHYN" />
+        <result property="dcaft" column="DCAFT" />
+        <result property="dchyo" column="DCHYO" />
+        <result property="ddhyn" column="DDHYN" />
+        <result property="ddcst" column="DDCST" />
+        <result property="ddaft" column="DDAFT" />
+        <result property="ddhyo" column="DDHYO" />
+        <result property="dehyn" column="DEHYN" />
+        <result property="deaft" column="DEAFT" />
+        <result property="dehyo" column="DEHYO" />
+        <result property="dfhyn" column="DFHYN" />
+        <result property="dfcst" column="DFCST" />
+        <result property="dfaft" column="DFAFT" />
+        <result property="dfhyo" column="DFHYO" />
+        <result property="dghyn" column="DGHYN" />
+        <result property="dgcst" column="DGCST" />
+        <result property="dgaft" column="DGAFT" />
+        <result property="dghyo" column="DGHYO" />
+        <result property="dhhyn" column="DHHYN" />
+        <result property="dhaft" column="DHAFT" />
+        <result property="dhhyo" column="DHHYO" />
+        <result property="dihyn" column="DIHYN" />
+        <result property="dicst" column="DICST" />
+        <result property="diaft" column="DIAFT" />
+        <result property="dihyo" column="DIHYO" />
+        <result property="djhyn" column="DJHYN" />
+        <result property="djcst" column="DJCST" />
+        <result property="djhyo" column="DJHYO" />
+        <result property="addat" column="ADDAT" />
+        <result property="adtim" column="ADTIM" />
+        <result property="adusr" column="ADUSR" />
+        <result property="kornm" column="KORNM" />
+        <result property="dpdpnm" column="DPDPNM" />
+        <result property="mshno" column="MSHNO" />
+        <result property="mshnm" column="MSHNM" />
+        <result property="prtnm" column="PRTNM" />
+        <result property="linnm" column="LINNM" />
+        <result property="daech" column="DAECH" />
+        <result property="imgpath" column="IMGPATH" />
+        <result property="wndat" column="WNDAT" />
+        <result property="lib2" column="LIB2" />
+        <result property="lib3" column="LIB3" />
+    </resultMap>
+    
+    <!-- 検索結果をMapで受け取る --> 
+    <resultMap id="ImprvDImg" type="PsogmImprvDDomain">
+    	<result property="comps" column="COMPS" />
+        <result property="jisno" column="JISNO" />
+        <result property="imgbf" column="IMGBF" />
+        <result property="imgaf" column="IMGAF" />
+    </resultMap>
+
+	<!-- 신규이력등록 > 개선상세 -->
+	<select id="selectOgm204_obj210pf_01" resultMap="PsogmImprvD" parameterType="PsogmImprvDDomain">
+		select 
+				* 
+		from 
+				${lib2}.obj210pf
+		where 
+			comps = #{comps}
+			and jisno = #{jisno}
+	</select>
+    
+    <!-- 신규이력등록 > 개선상세 - 발행(개선상세 리포팅) -->
+    <select id="selectOgm220_rep" resultMap="PsogmImprvD" parameterType="PsogmImprvDDomain">
+		select 
+				  trim(h.kornm) as kornm
+				, trim(c.dpdpnm) as dpdpnm
+				, trim(a.teima) as teima
+				, b.mshno
+				, trim(d.mshnm) as mshnm
+				, trim(e.prtnm) as prtnm
+				, trim(g.linnm) as linnm
+				, trim(a.kyoru) as kyoru
+				, trim(a.daesn) as daesn
+				, trim(a.chkan) as chkan
+				, '${imgpath}' || trim(a.imgbf) as imgbf
+				, '${imgpath}'|| trim(a.imgaf) as imgaf
+				, trim(b.wonin) as wonin
+				, trim(b.daech) as daech
+				, a.a_sum as asum
+				, a.b_sum as bsum
+				, a.c_sum as csum
+				, a.d_sum as dsum
+				, a.t_sum as tsum
+				, trim(b.jisno) as jisno
+				, substr(char(b.wndat),1,4) || '-' || substr(char(b.wndat),5,2) || '-' || substr(char(b.wndat),7,2) as wndat
+		
+		from 
+				${lib2}.obj210pf as a
+			<!-- psdiolib.obj210pf as a //test-->
+		
+			left outer join ${lib2}.obj200pf as b
+			on a.comps = b.comps
+			and a.jisno = b.jisno
+			
+			left outer join ${lib2}.mst650pf as c
+			on a.comps = c.dpcomp 
+			<!-- LIB확인필요 lib1 확실치않음-->
+			and c.dpcode = (select dptcd from ${lib3}.hmd020pf 
+			                         where sabun = b.wrkm1)
+			
+			left outer join ${lib2}.obj100pf as d
+			on b.comps = d.comps
+			and b.mshno = d.mshno
+			
+			left outer join ${lib2}.obc270pf as e
+			on b.comps = e.comps
+			and b.prtcd = e.prtcd
+			
+			left outer join ${lib2}.obc040pf as f
+			on b.comps = f.comps
+			and b.mshno = f.mshno
+			
+			left outer join ${lib2}.obc030pf as g
+			on f.comps = g.comps
+			and f.lincd = g.lincd
+			
+			<!-- LIB확인필요 lib1 확실치않음-->
+			left outer join ${lib3}.hmd020pf as h
+			on b.wrkm1 = h.sabun
+		
+		where 
+				'SqlMap-PsogmImprvD.selectOgm220_rep' = 'SqlMap-PsogmImprvD.selectOgm220_rep'
+			and	a.comps = #{comps}
+			and a.jisno = #{jisno}
+			and g.mline = '1'
+	</select>
+
+	<!-- 개선상세 저장 -->	
+	<!-- var gline_loss_value = 200; //1시간당 설비(라인) 정지 손실비(천원) -->
+	<!-- var gmanpower_loss_value = 30; //1시간당 보전원 노무비(천원) -->
+	<insert id="insertOgm204_obj210pf" parameterType="PsogmImprvDDomain">
+		
+		insert into ${lib2}.obj210pf (
+				/* SqlMap-PsogmImprvD.insertOgm204_obj210pf */
+				comps, jisno, teima, 
+			<if test="daesn != null">
+				daesn,
+			</if>
+			<if test="chkan != null"> 
+				chkan, 
+			</if>
+			<if test="kyoru != null">
+				kyoru, 
+			</if>
+				a_sum, b_sum, c_sum, d_sum, 
+				t_sum, a1hyn, a1cst, 
+				a1hyo,
+				a2hyo, 
+				a3hyn, a3cst, 
+				a3hyo, 
+				a4hyn, a4cst, a4aft, 
+				a4hyo, 
+				a5hyn, a5aft, 
+				a5hyo, 
+				a6hyn, 
+				a6cst, a6aft, 
+				a6hyo, 
+				b1hyn, 
+				b1cst, b1aft, 
+				b1hyo, 
+				b2hyn, 
+				b2cst, b2aft, 
+				b2hyo, 
+				b3hyn, 
+				b3cst, b3aft, 
+				b3hyo, 
+				b4hyn, 
+				b4cst, b4aft, 
+				b4hyo, 
+				c1hyn, 
+				c1cst, c1aft, 
+				c1hyo, 
+				c2hyn, 
+				c2cst, c2aft, 
+				c2hyo, 
+				c3hyn, 
+				c3cst, c3aft, 
+				c3hyo, 
+				c4hyn, 
+				c4cst, c4aft, 
+				c4hyo, 
+				d1hyn, 
+				d1cst, d1aft, 
+				d1hyo, 
+				d2hyn, 
+				d2cst, d2aft, 
+				d2hyo, 
+				d3hyn, 
+				d3cst, d3aft, 
+				d3hyo, 
+				d5hyn,
+				d5aft, 
+				d5hyo, 
+				d7hyn, d7cst, 
+				d7aft, 
+				d7hyo, 
+				d8hyn, d8aft, 
+				d8hyo, 
+				dbhyn, dbcst, dbaft, 
+				dbhyo, 
+				dchyn, dcaft, 
+				dchyo, 
+				ddhyn, ddcst, ddaft, 
+				ddhyo, 
+				dehyn, deaft, 
+				dehyo, 
+				dfhyn, 
+				dfcst, dfaft, 
+				dfhyo, 
+				dghyn, 
+				dgcst, dgaft, 
+				dghyo, 
+				dhhyn, 
+				dhaft, 
+				dhhyo, 
+				dihyn, dicst, 
+				diaft, 
+				dihyo, 
+				djhyn, djcst, 
+				djhyo, 
+				addat, adtim, adusr
+		) values (
+				#{comps}, #{jisno}, #{teima}, 
+			<if test="daesn != null">
+				#{daesn}, 
+			</if>
+			<if test="chkan != null">
+				#{chkan},
+			</if> 
+			<if test="kyoru != null">
+				#{kyoru},
+			</if> 
+				<!-- ${aSum}, --> 
+				(${a1hyn} - ${a1cst} + ${a2hyo} + ${a3hyn} - ${a3cst} + ${a4hyn} - ${a4cst} + ${a4aft} + ${a5hyn} - ${a5aft} + ${a6hyn} - ${a6cst} + ${a6aft}),
+				 
+				<!-- ${bSum}, -->
+				(${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30) + (${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30) + (${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30),
+				 
+				<!-- ${cSum}, -->
+				(${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200) + (${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200) + (${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000) + ${c4hyn} - ${c4cst} + ${c4aft},
+				 
+				<!-- ${dSum}, --> 
+				(${d1hyn} - ${d1cst} + ${d1aft}) + (${d2hyn} - ${d2cst} + ${d2aft}) + (${d3hyn} - ${d3cst} + ${d3aft}) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+				+ (${d5hyn} - ${d5aft}) + (${d7hyn} - ${d7cst} + ${d7aft}) + (${d8hyn} - ${d8aft}) + (${dbhyn} - ${dbcst} + ${dbaft}) + (${dchyn} - ${dcaft})
+				+ (${ddhyn} - ${ddcst} + ${ddaft}) + (${dehyn} - ${deaft}) + (${dfhyn} - ${dfcst} + ${dfaft}) + (${dghyn} - ${dgcst} + ${dgaft}) 
+				+ (${dhhyn} - ${dhaft}) + (${dihyn} - ${dicst} + ${diaft}) + (${djhyn} - ${djcst}),
+				
+				<!-- ${tSum}, --> 
+				(${a1hyn} - ${a1cst} + ${a2hyo} + ${a3hyn} - ${a3cst} + ${a4hyn} - ${a4cst} + ${a4aft} + ${a5hyn} - ${a5aft} + ${a6hyn} - ${a6cst} + ${a6aft})
+				
+				+ (${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30) + (${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30) + (${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+				
+				+ (${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200) + (${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200) + (${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000) + ${c4hyn} - ${c4cst} + ${c4aft}
+				
+				+ (${d1hyn} - ${d1cst} + ${d1aft}) + (${d2hyn} - ${d2cst} + ${d2aft}) + (${d3hyn} - ${d3cst} + ${d3aft}) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+				+ (${d5hyn} - ${d5aft}) + (${d7hyn} - ${d7cst} + ${d7aft}) + (${d8hyn} - ${d8aft}) + (${dbhyn} - ${dbcst} + ${dbaft}) + (${dchyn} - ${dcaft})
+				+ (${ddhyn} - ${ddcst} + ${ddaft}) + (${dehyn} - ${deaft}) + (${dfhyn} - ${dfcst} + ${dfaft}) + (${dghyn} - ${dgcst} + ${dgaft}) 
+				+ (${dhhyn} - ${dhaft}) + (${dihyn} - ${dicst} + ${diaft}) + (${djhyn} - ${djcst}),
+				
+				
+				${a1hyn}, ${a1cst}, 
+				
+				<!-- ${a1hyo}, -->
+				(${a1hyn} - ${a1cst}), 
+				
+				${a2hyo}, 
+				${a3hyn}, ${a3cst}, 
+				
+				<!-- ${a3hyo}, --> 
+				(${a3hyn} - ${a3cst}),
+				
+				${a4hyn}, ${a4cst}, ${a4aft},
+				 
+				<!-- ${a4hyo}, -->
+				(${a4hyn} - ${a4cst} + ${a4aft}),
+				
+				${a5hyn}, ${a5aft},
+				 
+				<!-- ${a5hyo}, -->
+				(${a5hyn} - ${a5aft}),
+				
+				${a6hyn}, ${a6cst}, ${a6aft}, 
+				
+				<!-- ${a6hyo}, --> 
+				(${a6hyn} - ${a6cst} + ${a6aft}),
+				
+				${b1hyn}, ${b1cst}, ${b1aft}, 
+				
+				<!-- ${b1hyo}, --> 
+				(${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30),
+				
+				${b2hyn}, ${b2cst}, ${b2aft}, 
+				
+				<!-- ${b2hyo}, -->
+				(${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30),
+				
+				${b3hyn}, ${b3cst}, ${b3aft}, 
+				
+				<!-- ${b3hyo}, --> 
+				(${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30),
+				
+				${b4hyn}, ${b4cst}, ${b4aft}, 
+				
+				<!-- ${b4hyo}, --> 
+				(${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30),
+				
+				${c1hyn}, ${c1cst}, ${c1aft}, 
+				
+				<!-- ${c1hyo}, -->
+				(${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200),
+				 
+				${c2hyn}, ${c2cst}, ${c2aft}, 
+				
+				<!-- ${c2hyo}, --> 
+				(${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200),
+				
+				${c3hyn}, ${c3cst}, ${c3aft}, 
+				
+				<!-- ${c3hyo}, -->
+				${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000,
+				 
+				${c4hyn}, ${c4cst}, ${c4aft}, 
+				
+				<!-- ${c4hyo}, --> 
+				(${c4hyn} - ${c4cst} + ${c4aft}),
+				
+				${d1hyn}, ${d1cst}, ${d1aft}, 
+				
+				<!-- ${d1hyo}, --> 
+				(${d1hyn} - ${d1cst} + ${d1aft}),
+				
+				${d2hyn}, ${d2cst}, ${d2aft}, 
+				
+				<!-- ${d2hyo}, --> 
+				(${d2hyn} - ${d2cst} + ${d2aft}),
+				
+				${d3hyn}, ${d3cst}, ${d3aft}, 
+				
+				<!-- ${d3hyo}, --> 
+				(${d3hyn} - ${d3cst} + ${d3aft}),
+				
+				${d5hyn}, ${d5aft}, 
+				
+				<!-- ${d5hyo}, --> 
+				(${d5hyn} - ${d5aft}), 
+				
+				${d7hyn}, ${d7cst}, ${d7aft}, 
+				
+				<!-- ${d7hyo}, -->
+				(${d7hyn} - ${d7cst} + ${d7aft}),
+				
+				${d8hyn}, ${d8aft},
+				 
+				<!-- ${d8hyo}, --> 
+				(${d8hyn} - ${d8aft}),
+				
+				${dbhyn}, ${dbcst}, ${dbaft}, 
+				
+				<!-- ${dbhyo}, --> 
+				(${dbhyn} - ${dbcst} + ${dbaft}),
+				
+				${dchyn}, ${dcaft}, 
+				
+				<!-- ${dchyo}, --> 
+				(${dchyn} - ${dcaft}), 
+				
+				${ddhyn}, ${ddcst}, ${ddaft},
+				 
+				<!-- ${ddhyo}, --> 
+				(${ddhyn} - ${ddcst} + ${ddaft}),
+				
+				${dehyn}, ${deaft}, 
+				
+				<!-- ${dehyo}, --> 
+				(${dehyn} - ${deaft}), 
+				
+				${dfhyn}, ${dfcst}, ${dfaft}, 
+				
+				<!-- ${dfhyo}, --> 
+				(${dfhyn} - ${dfcst} + ${dfaft}),
+				
+				${dghyn}, ${dgcst}, ${dgaft}, 
+				
+				<!-- ${dghyo}, --> 
+				(${dghyn} - ${dgcst} + ${dgaft}),
+				
+				${dhhyn}, ${dhaft}, 
+				
+				<!-- ${dhhyo}, -->
+				(${dhhyn} - ${dhaft}), 
+				 
+				${dihyn}, ${dicst}, ${diaft}, 
+				
+				<!-- ${dihyo}, --> 
+				(${dihyn} - ${dicst} + ${diaft}),
+				
+				${djhyn}, ${djcst}, 
+				
+				<!-- ${djhyo}, --> 
+				(${djhyn} - ${djcst}), 
+				
+				#{addat}, #{adtim}, #{adusr}
+		)
+	</insert>
+	
+	
+	<!-- 개선상세 업데이트 -->
+	<!-- var gline_loss_value = 200; //1시간당 설비(라인) 정지 손실비(천원) -->
+	<!-- var gmanpower_loss_value = 30; //1시간당 보전원 노무비(천원) -->
+	<update id="updateOgm204_obj210pf" parameterType="PsogmImprvDDomain">
+		update 
+				${lib2}.obj210pf
+		set  
+		 		teima = #{teima}, 
+		 		daesn = #{daesn}, 
+		 		chkan = #{chkan}, 
+		 		kyoru = #{kyoru}, 
+		 		a_sum = (${a1hyn} - ${a1cst} + ${a2hyo} + ${a3hyn} - ${a3cst} + ${a4hyn} - ${a4cst} + ${a4aft} + ${a5hyn} - ${a5aft} + ${a6hyn} - ${a6cst} + ${a6aft}),
+		 		 
+		 		b_sum = (${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30) + (${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30) 
+		 					+ (${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30),
+		 					 
+		 		c_sum = (${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200) + (${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200) 
+		 					+ (${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000) + ${c4hyn} - ${c4cst} + ${c4aft},
+		 					 
+		 		d_sum = (${d1hyn} - ${d1cst} + ${d1aft}) + (${d2hyn} - ${d2cst} + ${d2aft}) + (${d3hyn} - ${d3cst} + ${d3aft}) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+							+ (${d5hyn} - ${d5aft}) + (${d7hyn} - ${d7cst} + ${d7aft}) + (${d8hyn} - ${d8aft}) + (${dbhyn} - ${dbcst} + ${dbaft}) + (${dchyn} - ${dcaft})
+							+ (${ddhyn} - ${ddcst} + ${ddaft}) + (${dehyn} - ${deaft}) + (${dfhyn} - ${dfcst} + ${dfaft}) + (${dghyn} - ${dgcst} + ${dgaft}) 
+							+ (${dhhyn} - ${dhaft}) + (${dihyn} - ${dicst} + ${diaft}) + (${djhyn} - ${djcst}), 
+							
+		 		t_sum = (${a1hyn} - ${a1cst} + ${a2hyo} + ${a3hyn} - ${a3cst} + ${a4hyn} - ${a4cst} + ${a4aft} + ${a5hyn} - ${a5aft} + ${a6hyn} - ${a6cst} + ${a6aft})
+				
+							+ (${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30) + (${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30) + (${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+							
+							+ (${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200) + (${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200) + (${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000) + ${c4hyn} - ${c4cst} + ${c4aft}
+							
+							+ (${d1hyn} - ${d1cst} + ${d1aft}) + (${d2hyn} - ${d2cst} + ${d2aft}) + (${d3hyn} - ${d3cst} + ${d3aft}) + (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30)
+							+ (${d5hyn} - ${d5aft}) + (${d7hyn} - ${d7cst} + ${d7aft}) + (${d8hyn} - ${d8aft}) + (${dbhyn} - ${dbcst} + ${dbaft}) + (${dchyn} - ${dcaft})
+							+ (${ddhyn} - ${ddcst} + ${ddaft}) + (${dehyn} - ${deaft}) + (${dfhyn} - ${dfcst} + ${dfaft}) + (${dghyn} - ${dgcst} + ${dgaft}) 
+							+ (${dhhyn} - ${dhaft}) + (${dihyn} - ${dicst} + ${diaft}) + (${djhyn} - ${djcst}),
+							 
+		 		a1hyn = ${a1hyn}, 
+		 		a1cst = ${a1cst}, 
+		 		a1hyo = (${a1hyn} - ${a1cst}),
+				a2hyo = ${a2hyo}, 
+				a3hyn = ${a3hyn}, 
+				a3cst = ${a3cst}, 
+				a3hyo = (${a3hyn} - ${a3cst}), 
+				a4hyn = ${a4hyn}, 
+				a4cst = ${a4cst}, 
+				a4aft = ${a4aft}, 
+				a4hyo = (${a4hyn} - ${a4cst} + ${a4aft}), 
+				a5hyn = ${a5hyn}, 
+				a5aft = ${a5aft}, 
+				a5hyo = (${a5hyn} - ${a5aft}), 
+				a6hyn = ${a6hyn}, 
+				a6cst = ${a6cst}, 
+				a6aft = ${a6aft}, 
+				a6hyo = (${a6hyn} - ${a6cst} + ${a6aft}),
+				b1hyn = ${b1hyn}, 
+				b1cst = ${b1cst}, 
+				b1aft = ${b1aft}, 
+				b1hyo = (${b1hyn} * 30 - ${b1cst} + ${b1aft} * 30), 
+				b2hyn = ${b2hyn}, 
+				b2cst = ${b2cst}, 
+				b2aft = ${b2aft}, 
+				b2hyo = (${b2hyn} * 30 - ${b2cst} + ${b2aft} * 30), 
+				b3hyn = ${b3hyn}, 
+				b3cst = ${b3cst}, 
+				b3aft = ${b3aft}, 
+				b3hyo = (${b3hyn} * 30 - ${b3cst} + ${b3aft} * 30), 
+				b4hyn = ${b4hyn}, 
+				b4cst = ${b4cst}, 
+				b4aft = ${b4aft}, 
+				b4hyo = (${b4hyn} * 30 - ${b4cst} + ${b4aft} * 30), 
+				c1hyn = ${c1hyn}, 
+				c1cst = ${c1cst}, 
+				c1aft = ${c1aft}, 
+				c1hyo = (${c1hyn} * 200 - ${c1cst} + ${c1aft} * 200), 
+				c2hyn = ${c2hyn}, 
+				c2cst = ${c2cst}, 
+				c2aft = ${c2aft}, 
+				c2hyo = (${c2hyn} * 200 - ${c2cst} + ${c2aft} * 200), 
+				c3hyn = ${c3hyn}, 
+				c3cst = ${c3cst}, 
+				c3aft = ${c3aft}, 
+				c3hyo = ${c3hyn} * ${c3cst} / 1000 - ${c3aft} * ${c3cst} / 1000, 
+				c4hyn = ${c4hyn}, 
+				c4cst = ${c4cst}, 
+				c4aft = ${c4aft}, 
+				c4hyo = (${c4hyn} - ${c4cst} + ${c4aft}),
+				d1hyn = ${d1hyn}, 
+				d1cst = ${d1cst}, 
+				d1aft = ${d1aft}, 
+				d1hyo = (${d1hyn} - ${d1cst} + ${d1aft}), 
+				d2hyn = ${d2hyn}, 
+				d2cst = ${d2cst}, 
+				d2aft = ${d2aft}, 
+				d2hyo = (${d2hyn} - ${d2cst} + ${d2aft}), 
+				d3hyn = ${d3hyn}, 
+				d3cst = ${d3cst}, 
+				d3aft = ${d3aft}, 
+				d3hyo = (${d3hyn} - ${d3cst} + ${d3aft}), 
+				d5hyn = ${d5hyn}, 
+				d5aft = ${d5aft}, 
+				d5hyo = (${d5hyn} - ${d5aft}), 
+				d7hyn = ${d7hyn},
+				d7cst = ${d7cst}, 
+				d7aft = ${d7aft}, 
+				d7hyo = (${d7hyn} - ${d7cst} + ${d7aft}), 
+				d8hyn = ${d8hyn}, 
+				d8aft = ${d8aft}, 
+				d8hyo = (${d8hyn} - ${d8aft}), 
+				dbhyn = ${dbhyn}, 
+				dbcst = ${dbcst}, 
+				dbaft = ${dbaft}, 
+				dbhyo = (${dbhyn} - ${dbcst} + ${dbaft}), 
+				dchyn = ${dchyn}, 
+				dcaft = ${dcaft}, 
+				dchyo = (${dchyn} - ${dcaft}), 
+				ddhyn = ${ddhyn}, 
+				ddcst = ${ddcst}, 
+				ddaft = ${ddaft},
+				ddhyo = (${ddhyn} - ${ddcst} + ${ddaft}), 
+				dehyn = ${ddhyn}, 
+				deaft = ${deaft}, 
+				dehyo = (${dehyn} - ${deaft}), 
+				dfhyn = ${dfhyn}, 
+				dfcst = ${dfcst}, 
+				dfaft = ${dfaft}, 
+				dfhyo = (${dfhyn} - ${dfcst} + ${dfaft}), 
+				dghyn = ${dghyn}, 
+				dgcst = ${dgcst}, 
+				dgaft = ${dgaft}, 
+				dghyo = (${dghyn} - ${dgcst} + ${dgaft}), 
+				dhhyn = ${dhhyn}, 
+				dhaft = ${dhaft}, 
+				dhhyo = (${dhhyn} - ${dhaft}), 
+				dihyn = ${dihyn}, 
+				dicst = ${dicst}, 
+				diaft = ${diaft}, 
+				dihyo = (${dihyn} - ${dicst} + ${diaft}), 
+				djhyn = ${djhyn}, 
+				djcst = ${djcst}, 
+				djhyo = (${djhyn} - ${djcst}), 
+				chdat = #{addat}, 
+				chtim = #{adtim}, 
+				chusr = #{adusr}
+		 where 
+		 		'SqlMap-PsogmImprvD.updateOgm204_obj210pf' = 'SqlMap-PsogmImprvD.updateOgm204_obj210pf'
+		 	and	comps = #{comps}
+		 	and jisno = #{jisno}
+	
+	</update>
+	
+	<!-- 개선상세 - 도면등록변경 -->	
+	<update id="updateOgm204_obj210pf_addImg" parameterType="PsogmImprvDDomain">
+		update 
+				${lib2}.obj210pf
+		set  
+			<if test="imgbf != null">
+		 		imgbf=#{imgbf}
+	 		</if>
+	 		<if test="imgaf != null">
+		 		imgaf=#{imgaf}
+	 		</if>
+		 where 
+		 		'SqlMap-PsogmImprvD.updateOgm204_obj210pf' = 'SqlMap-PsogmImprvD.updateOgm204_obj210pf'
+		 		and comps=#{comps}
+		 		and jisno=#{jisno}
+	</update>
+</mapper>

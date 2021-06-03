@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="248" Id="form" Left="8" OnLoadCompleted="fn_OnLoadComPlete" PidAttrib="7" Title="패스워드&#32;변경" TooltipFont="Default,0" Top="8" Ver="1.0" Width="296" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_password">
+				<Contents>
+					<colinfo id="USER_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="PASSWORD" size="256" summ="default" type="STRING"/>
+					<colinfo id="MENU_PW" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="ds_loginYn"></Dataset>
+		</Datasets>
+		<Tab Height="248" Id="Tab0" Left="-1" TabOrder="1" Top="-1" Width="295">
+			<Contents>
+				<TabPage Height="225" Id="tab1" Left="2" TabOrder="24" Text="로그인&#32;패스워드" Top="21" Url="Common::PasswordChange1.xml" Width="291"></TabPage>
+				<TabPage Height="225" Id="tab2" Left="2" TabOrder="24" Text="메뉴&#32;접근&#32;패스워드" Top="21" Url="Common::PasswordChange2.xml" Width="291"></TabPage>
+			</Contents>
+		</Tab>
+		<Div BKColor="red" Height="248" Id="Div0" OnKeyDown="Div0_OnKeyDown" TabOrder="2" Text="Div0" Width="296">
+			<Contents>
+				<Static BKColor="BACKGROUND" Color="WINDOW" Height="233" Id="Static0" Left="17" TabOrder="1" Top="6" Width="260"></Static>
+				<Static Color="WINDOW" Font="Default,10" Height="25" Id="Static1" Left="16" TabOrder="2" Text="&#32;&#32;☞&#32;암호가&#32;다음&#32;최소&#32;&#13;&#10;&#32;&#32;&#32;&#32;&#32;&#32;요구&#32;사항을&#32;만족해야&#32;합니다&#32;☜" Top="45" Width="259"></Static>
+				<Static Color="yellow" Font="Default,10" Height="104" Id="Static2" Left="16" TabOrder="3" Text="&#32;&#32;1.&#32;사용자ID와&#32;동일하게&#32;사용하지&#32;않는다.&#13;&#10;&#32;&#32;2.&#32;6자리수&#32;이상이어야&#32;한다.&#13;&#10;&#32;&#32;3.&#32;다음&#32;네&#32;가지&#32;범주&#32;중&#32;세가지의&#32;문자를&#13;&#10;&#32;&#32;&#32;&#32;&#32;포함해야합니다.&#13;&#10;&#32;&#32;&#32;&#32;&#32;1)영문&#32;대문자(A&#32;-&#32;Z)&#13;&#10;&#32;&#32;&#32;&#32;&#32;2)영문&#32;소문자(a&#32;-&#32;z)&#13;&#10;&#32;&#32;&#32;&#32;&#32;3)기본&#32;10개&#32;숫자(0&#32;-&#32;9)&#13;&#10;&#32;&#32;&#32;&#32;&#32;4)알파벳&#32;이외의&#32;문자(예:&#32;@,&#32;$,&#32;#,&#32;%&#32;,&#32;_)" Top="77" Width="259"></Static>
+				<Static Align="Center" BKColor="yellow" Border="Raised" BorderColor="yellow" Color="HIGHLIGHT" Font="Default,10,Bold" Height="25" Id="Static3" Left="46" TabOrder="4" Text="▣&#32;Password관리지침&#32;▣" Top="13" VAlign="Middle" VClip="None" Width="203"></Static>
+				<Static Color="WINDOW" Font="Default,10" Height="17" Id="Static4" Left="16" TabOrder="5" Text="&#32;&#32;☞&#32;정보관리팀&#32;문의전화&#32;☜" Top="200" Width="259"></Static>
+				<Static Color="yellow" Font="Default,10" Height="16" Id="Static5" Left="16" TabOrder="6" Text="&#32;&#32;☎&#32;&#32;DNPE창원&#32;:&#32;055)&#32;600-9232" Top="216" Width="259"></Static>
+				<Button ButtonStyle="TRUE" Cursor="HAND" Height="24" Id="btnCon" ImageID="2_btn" Left="217" OnClick="Div0_btnCon_OnClick" TabOrder="7" Text="확인" Top="210" Width="53"></Button>
+			</Contents>
+		</Div>
+	</Form>
+	<Script><![CDATA[var comps = G_ds_user.GetColumn(0,"PLANT_CD");
+
+function Div0_btnCon_OnClick(obj)
+{
+	Div0.Visible = false;
+}
+
+function Div0_OnKeyDown(obj,objSenderObj,nChar,bShift,bControl,bAlt,nLLParam,nHLParam)
+{
+	if(nChar == 13){
+		Div0.Visible = false;
+	}
+}
+
+function fn_OnLoadComPlete(obj)
+{
+	switch(comps){
+		case "E1" : Div0.Static5.Text = "  ☎  DNPE창원 : 055) 600-9232";
+		case "C1" : Div0.Static5.Text = "  ☎  DNPS창원 : 055) 600-9528";
+		case "H1" : Div0.Static5.Text = "  ☎  DNPS홍성 : 041) 630-2796";
+		case "S1" : Div0.Static5.Text = "  ☎  DNPS화성 : 031)8059-9013";
+	}
+}
+]]></Script>
+</Window>
